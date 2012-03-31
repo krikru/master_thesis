@@ -1,0 +1,54 @@
+%% This is an example of file body.tex
+%% It should be filled with the actual contents of the
+%% article in question, without front matter, abstract, etc.
+
+\section{Topic and approach}
+
+
+\subsection{The ramification problem}
+
+The \emp{ramification problem} for reasoning about actions and change
+has been described as follows by Ginsberg and Smith, \cite{Gin:87t}:
+\begin{quotation}
+   The difficulty is that it is unreasonable to explicitly record
+   all of the consequences of an action, even the immediate ones.
+   For example [...]  For any given action there are essentially
+   an infinite number of possible consequences that depend upon the
+   details of the situation in which the action occurs.
+\end{quotation}
+More concretely, the difference between ramification and the
+simpler case of strict inertia is that strict inertia assumes action
+laws to specify \emp{all} the effects of the action explicitly,
+whereas in ramification the action law only needs to specify
+\emp{some of} the effects; the others are to be deduced. On the
+other hand, the logic cannot do magic; those other effects must also
+be declared somehow. One can think of two specific reasons why
+ramification is useful:
+\begin{enumerate}
+\item  In order to avoid duplication of the same information on the
+  consequent side of several action laws. Suppose, for a trivial example,
+  that both \emp{alive}$(x)$ and \emp{dead}$(x)$ occur as state variables.
+  Under strict inertia, every action that causes a change in \emp{alive}$(x)$
+  must also specify the corresponding change in \emp{dead}$(x)$.
+\item  In order to avoid configuration-dependent action laws. Suppose
+  the scenario world consists of a number of interconnected objects,
+  where a change in one of them may cause changes in neighboring objects,
+  and different scenarios in the same world contain different
+  configurations. If the same action law is going to be used in all
+  scenarios, it must apply regardless of the choice of configuration,
+  and then it is not possible to represent the secondary changes
+  explicitly in the action law.
+\end{enumerate}
+We shall refer to these as the \emp{redundancy} reason and the
+\emp{propagation} reason for ramification, respectively.
+
+
+
+
+
+
+
+
+
+
+

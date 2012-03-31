@@ -1,0 +1,28 @@
+%% This is an example of file affil.tex
+%% It should be filled with the addressing information of
+%% the author(s) of the article.
+%% Please note that this information shall not go on the
+%% front page, just as most books only have the author's name
+%% but not her address on the front cover.
+
+\normalsize{\tt{
+\noindent Linnea L{\"a}rd, Linus Erudit \\
+Department of Computer and Information Science \\
+Link{\"o}öping University \\
+SE-58183 Link{\"o}ping, Sweden
+
+\noindent E-mail: \{linla, liner\}@ida.liu.se \\
+Webpage:  http://www.ida.liu.se/$\sim$linla/, 
+  http://www.ida.liu.se/$\sim$liner/
+}}
+
+
+
+
+
+
+
+
+
+
+

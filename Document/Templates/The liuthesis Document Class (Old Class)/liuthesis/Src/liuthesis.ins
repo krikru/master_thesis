@@ -1,0 +1,38 @@
+\def\batchfile{liuthesis.ins}
+\input docstrip.tex
+
+\askonceonly
+
+%\usedir{tex/latex/hendeby/liuthesis}
+\generate{%
+  \file{liuthesis.cls}
+	{\from{liuthesis.dtx}{class}}
+  \file{ida.ltd}
+	{\from{liuthesis.dtx}{ida}}
+  \file{ifm.ltd}
+	{\from{liuthesis.dtx}{ifm}}
+  \file{ikp_mask.ltd}
+	{\from{liuthesis.dtx}{ikpmask}}
+  \file{ikp_mek.ltd}
+	{\from{liuthesis.dtx}{ikpmek}}
+  \file{mai.ltd}
+	{\from{liuthesis.dtx}{mai}}
+  \file{isy.ltd}
+	{\from{liuthesis.dtx}{isy}}
+  \file{itn.ltd}
+	{\from{liuthesis.dtx}{itn}}
+  \file{ipe.ltd}
+	{\from{liuthesis.dtx}{ipe}}
+}
+
+\Msg{************************************************************}
+\Msg{* Files needed to use liuthesis.cls generated}
+\Msg{* For documentation run:}
+\Msg{*    latex liuthesis.dtx}
+\Msg{*    makeindex -s gind.ist liuthesis.idx}
+\Msg{*    makeindex -s gglo.ist -o liuthesis.gls liuthesis.glo}
+\Msg{*    latex liuthesis.dtx}
+\Msg{*    latex liuthesis.dtx}
+\Msg{************************************************************}
+
+\endbatchfile

@@ -1,0 +1,30 @@
+%% This is an example of file abstract.tex
+%% It should be filled with the actual abstract of the
+%% article in question.
+
+\normalsize{
+The paper analyzes and compares methods for ramification, or for update,
+which are based on minimization of change while respecting static domain
+constraints. The main results are:
+\begin{itemize}
+\item An underlying semantics for propagation oriented ramification,
+    called \emp{causal propagation semantics}
+\item \emp{Comparative assessments} of a number of previously proposed
+    entailment methods for ramification, in particular, methods based
+    on minimization of change after partitioning of the state variables
+    (fluents). This includes the methods previously proposed by del Val
+    and Shoham, by Kartha and Lifschitz, and by our group.
+\item Assessment of two \emp{ranges of sound applicability} for one
+    of those entailment methods, MSCC, relative to causal propagation
+    semantics.
+\item Identification of an essential feature for minimization-based
+    approaches to ramification, namely \emp{changeset-partitioning}.
+\end{itemize}
+  }
+
+
+
+
+
+
+

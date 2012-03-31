@@ -1,0 +1,20 @@
+Exjobbs-sidorna i studiehandboken:
+  http://www.lith.liu.se/sh/rules.html#b3.5
+  
+Checklista för examensarbetare vid IFM:
+  https://www.ifm.liu.se/undergraduate/m_science_in_engineering/physics_y_d_i_it_m/checklista-exjobb/
+  
+Information om examensarbete på IFM:
+  https://www.ifm.liu.se/undergraduate/thesis/
+
+Examensarbeten och uppsatser:
+  http://www.liu.se/insidan/service/tryckeri/exjobb?l=sv
+
+Publicera uppsatser/examensarbeten vid Linköpings universitet:
+  http://www.ep.liu.se/exjobb/index.sv.asp
+
+Publiceringsmallar:
+  http://www.ep.liu.se/templates/index.sv.asp
+
+Writing a Master's Thesis in LaTeX:
+  http://www.control.isy.liu.se/student/exjobb/liuthesis/liuthesis.html

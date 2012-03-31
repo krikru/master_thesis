@@ -1,0 +1,108 @@
+%%
+%% This is file `itn.ltd',
+%% generated with the docstrip utility.
+%%
+%% The original source files were:
+%%
+%% liuthesis.dtx  (with options: `itn')
+%% 
+%% IMPORTANT NOTICE:
+%% 
+%% For the copyright see the source file.
+%% 
+%% Any modified versions of this file must be renamed
+%% with new filenames distinct from itn.ltd.
+%% 
+%% For distribution of the original source see the terms
+%% for copying and modification in the file liuthesis.dtx.
+%% 
+%% This generated file may be distributed as long as the
+%% original source files, as listed above, are part of the
+%% same distribution. (The sources need not necessarily be
+%% in the same archive or directory.)
+
+
+\ProvidesFile{itn.ldt}[2005/08/20 liuthesis defintion for ITN]
+\liuthesisDefinition{ITN}{Department of Science and Technology\\%
+  Linköpings universitet\\%
+  SE-601~74 Norrköping, Sweden}
+
+%%%%%%%%%%%%%%%%%%%%%%%%
+%%     Front page     %%
+%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newcommand{\@makeFrontPage}{%
+  \centering%
+  {\Huge Institutionen för teknik och naturvetenskap}\\%
+  {\LARGE Department of Science and Technology}\\[\stretch{2 }]%
+  {\large\bfseries Examensarbete}\\%
+  \vspace*{\stretch{3 }}%
+  {\parbox{13cm}{\centering\Large\bfseries%
+      \ifLanguageInUse{swedish}{\swe@title}{\@title}}}\\[\stretch{3 }]%
+  Examensarbete utfört i \thesis@subject\\%
+  vid Tekniska högskolan i Linköping\\%
+  av\\[\baselineskip]%
+  {\bfseries \@author}\\[\baselineskip]%
+  \thesis@No\\[.5\baselineskip]%
+  {\small Norrköping \thesis@year}\\[\baselineskip]%
+  \vspace*{\stretch{2 }}%
+  \parbox[b][115mm]{145mm}{\centering%
+    \setlength{\fboxrule}{2mm}%
+    \fbox{\parbox{138mm}{\centering%
+        \vspace*{15mm}\strut\\%
+        \includegraphics[width=75mm]{LiTH_staende_sv}\\%
+        \vspace*{15mm}%
+      }}\\[.5\baselineskip]%
+    Department of Science and Technology \hfill%
+    Linköpings tekniska högskola\\%
+    Linköpings universitet \hfill Linköpings universitet\\%
+    SE-601~74 Norrköping, Sweden \hfill 601~74 Norrköping%
+  }\medskip%
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%
+%%     Title page     %%
+%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newcommand*{\@makeTitlePage}{%
+  \centering \vspace*{\stretch{2 }}%
+  {\parbox{13cm}{\centering\noindent\Large\bfseries%
+      \ifLanguageInUse{swedish}{\swe@title}{\@title}}}\\%
+  \vspace*{\stretch{2 }}%
+  {\large Examensarbete utfört i \thesis@subject\\%
+    vid Tekniska högskolan i Linköping\\%
+    av}\\[\baselineskip]%
+  {\bfseries \@author}\\[\baselineskip]%
+  \thesis@No\\[.5\baselineskip]%
+  \vspace*{\stretch{4 }}%
+  \parbox{10cm}{\raggedright%
+    \rule{10cm}{\z@}%
+    \begin{tabbing}%
+      \hspace*{25mm}\=\quad\=\kill%
+      Handledare:\>\bfseries\@supervisor\\[.5\baselineskip]%
+      Examinator:\>\bfseries\@examiner%
+    \end{tabbing}%
+  }\\[.5\baselineskip]%
+  Norrköping, \thesis@day\ \monthName{\thesis@month}, \thesis@year%
+}
+
+
+
+%% \CharacterTable
+%%  {Upper-case    \A\B\C\D\E\F\G\H\I\J\K\L\M\N\O\P\Q\R\S\T\U\V\W\X\Y\Z
+%%   Lower-case    \a\b\c\d\e\f\g\h\i\j\k\l\m\n\o\p\q\r\s\t\u\v\w\x\y\z
+%%   Digits        \0\1\2\3\4\5\6\7\8\9
+%%   Exclamation   \!     Double quote  \"     Hash (number) \#
+%%   Dollar        \$     Percent       \%     Ampersand     \&
+%%   Acute accent  \'     Left paren    \(     Right paren   \)
+%%   Asterisk      \*     Plus          \+     Comma         \,
+%%   Minus         \-     Point         \.     Solidus       \/
+%%   Colon         \:     Semicolon     \;     Less than     \<
+%%   Equals        \=     Greater than  \>     Question mark \?
+%%   Commercial at \@     Left bracket  \[     Backslash     \\
+%%   Right bracket \]     Circumflex    \^     Underscore    \_
+%%   Grave accent  \`     Left brace    \{     Vertical bar  \|
+%%   Right brace   \}     Tilde         \~}
+\endinput
+%%
+%% End of file `itn.ltd'.

@@ -1,0 +1,95 @@
+%%
+%% This is file `ikp_mask.ltd',
+%% generated with the docstrip utility.
+%%
+%% The original source files were:
+%%
+%% liuthesis.dtx  (with options: `ikpmask')
+%% 
+%% IMPORTANT NOTICE:
+%% 
+%% For the copyright see the source file.
+%% 
+%% Any modified versions of this file must be renamed
+%% with new filenames distinct from ikp_mask.ltd.
+%% 
+%% For distribution of the original source see the terms
+%% for copying and modification in the file liuthesis.dtx.
+%% 
+%% This generated file may be distributed as long as the
+%% original source files, as listed above, are part of the
+%% same distribution. (The sources need not necessarily be
+%% in the same archive or directory.)
+\ProvidesFile{ikp_mask.ldt}[2003/07/29 liuthesis defintion for IKP Maskinkonstruktion]
+\liuthesisDefinition{IKP}{Department of Mechanical Engineering\\%
+  Linköpings universitet\\%
+  SE-581~83 Linköping, Sweden}
+
+%%%%%%%%%%%%%%%%%%%%%%%%
+%%     Front page     %%
+%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newcommand{\@makeFrontPage}{%
+  \centering%
+  \vspace*{\stretch{3 }}%
+  {\parbox{13cm}{\centering\Large\bfseries%
+      \ifLanguageInUse{swedish}{\swe@title}{\@title}}}\\[\stretch{3 }]%
+  Examensarbete utfört i \thesis@subject\\%
+  vid Tekniska högskolan i Linköping\\%
+  av\\[\baselineskip]%
+  {\bfseries \@author}\\[\baselineskip]%
+  \thesis@No\\[.5\baselineskip]%
+  {\small Linköping \thesis@year}\\[\baselineskip]%
+  \vspace*{\stretch{2 }}%
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%
+%%     Title page     %%
+%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newcommand*{\@makeTitlePage}{%
+  \centering \vspace*{\stretch{2 }}%
+  {\parbox{13cm}{\centering\noindent\Large\bfseries%
+      \ifLanguageInUse{swedish}{\swe@title}{\@title}}}\\%
+  \vspace*{\stretch{2 }}%
+  {\large Examensarbete utfört i \thesis@subject\\%
+    vid Tekniska högskolan i Linköping\\%
+    av}\\[\baselineskip]%
+  {\bfseries \@author}\\[\baselineskip]%
+  \thesis@No\\[.5\baselineskip]%
+  \vspace*{\stretch{4 }}%
+  \parbox{10cm}{\raggedright%
+    \rule{10cm}{\z@}%
+    \begin{tabbing}%
+      \hspace*{25mm}\=\quad\=\kill%
+      \ifLanguageInUse{swedish}{Handledare}{Supervisor}:%
+      \>\bfseries \@supervisor\\[.5\baselineskip]%
+      \ifLanguageInUse{swedish}{Examinator}{Examiner}:%
+      \>\bfseries \@examiner%
+    \end{tabbing}%
+  }\\[.5\baselineskip]%
+  Linköping, \thesis@day\ \monthName{\thesis@month}, \thesis@year%
+}
+
+
+
+
+
+%% \CharacterTable
+%%  {Upper-case    \A\B\C\D\E\F\G\H\I\J\K\L\M\N\O\P\Q\R\S\T\U\V\W\X\Y\Z
+%%   Lower-case    \a\b\c\d\e\f\g\h\i\j\k\l\m\n\o\p\q\r\s\t\u\v\w\x\y\z
+%%   Digits        \0\1\2\3\4\5\6\7\8\9
+%%   Exclamation   \!     Double quote  \"     Hash (number) \#
+%%   Dollar        \$     Percent       \%     Ampersand     \&
+%%   Acute accent  \'     Left paren    \(     Right paren   \)
+%%   Asterisk      \*     Plus          \+     Comma         \,
+%%   Minus         \-     Point         \.     Solidus       \/
+%%   Colon         \:     Semicolon     \;     Less than     \<
+%%   Equals        \=     Greater than  \>     Question mark \?
+%%   Commercial at \@     Left bracket  \[     Backslash     \\
+%%   Right bracket \]     Circumflex    \^     Underscore    \_
+%%   Grave accent  \`     Left brace    \{     Vertical bar  \|
+%%   Right brace   \}     Tilde         \~}
+\endinput
+%%
+%% End of file `ikp_mask.ltd'.

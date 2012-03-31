@@ -1,0 +1,2221 @@
+% \def\fileversion{v1.3} \def\filedate{2008/01/08}
+% \CheckSum{1475}
+% \DoNotIndex{\-,\.,\:,\=,\>,\@arabic,\@clubpenalty}
+% \DoNotIndex{\@firstoftwo,\@ll,\@lr,\@m,\@ne}
+% \DoNotIndex{\@openbib@code,\@plus,\@restonecolfalse,\@restonecoltrue}
+% \DoNotIndex{\@secondoftwo,\\,\ ,\abovecaptionskip,\addtolength}
+% \DoNotIndex{\advance,\arabic,\baselineskip,\bbl@afterfi,\begin}
+% \DoNotIndex{\begingroup,\belowcaptionskip,\bfseries,\bigskip}
+% \DoNotIndex{\Box,\box,\boxtimes,\c@enumiv,\centering,\chapter}
+% \DoNotIndex{\clubpenalty,\columnsep,\columnseprule,\csname}
+% \DoNotIndex{\DocInput,\else,\end,\endcsname,\endgroup,\endinput}
+% \DoNotIndex{\endlist,\enlargethispage,\expandafter,\fbox,\fboxrule}
+% \DoNotIndex{\fi,\flushleft,\flushright,\font,\fontdimen,\fontsize}
+% \DoNotIndex{\framebox,\global,\hfil,\hfill,\href,\hrule,\hsixe,\hspace}
+% \DoNotIndex{\if@twocolumn,\if@restonecol,\if@openright,\ifcase,\ifdim}
+% \DoNotIndex{\ifnum,\ifx,\ignorespaces,\item,\jobname,\kill,\labelsep}
+% \DoNotIndex{\labelwidth,\let,\line,\list,\makebox,\marginparwidth}
+% \DoNotIndex{\marginparsep,\markboth,\markright,\mbox,\medskip}
+% \DoNotIndex{\def,\newcommand,\renewcommand,\newcounter,\newenvironment}
+% \DoNotIndex{\newif,\newline,\newlength,\newtheorem,\noindent,\numberline}
+% \DoNotIndex{\oddsidemargin,\onecolumn,\or,\p@,\p@enumiv,\pagenumbering}
+% \DoNotIndex{\pagestyle,\par,\parbox,\parsep,\protect,\put,\quad}
+% \DoNotIndex{\raise,\raisebox,\raggedright,\refstepcounter,\relax}
+% \DoNotIndex{\renewenvironment,\rightmark,\rule,\sbox,\sectionmark}
+% \DoNotIndex{\selectfont,\setlength,\settowidth,\sfcode,\sloppy}
+% \DoNotIndex{\smallskip,\stretch,\strut,\the,\thechapter,\theenumiv}
+% \DoNotIndex{\thepage,\thesection,\thispagestyle,\twocolumn,\unitlength}
+% \DoNotIndex{\unskip,\usebox,\usecounter,\vbox,\vfill,\vspace,\vss,\wd}
+% \DoNotIndex{\widowpenalty,\z@,\DeclareOption,\DeclareOption}
+% \DoNotIndex{\@latex@warning@no@line, \ignorespacesafterend}
+% \DoNotIndex{\textbf, \texttt, \em, \emph, \@tempboxa, \@tempskipa}
+% \DoNotIndex{\hskip, \hspace, \Huge, \large, \Large, \LARGE}
+% \DoNotIndex{\mdseries, \noexpand, \normalfont, \parindet, \parskip}
+% \DoNotIndex{\small, \noindent, \upshape, \parindent}
+% \DoNotIndex{\phantomsection, \thinlines, \thinspace}
+% \DoNotIndex{\includegraphics, \liuthesis@hyperreffalse}
+% \DoNotIndex{\liuthesis@hyperreftrue, \ifLanguageInUse}
+% \DoNotIndex{\clearpage, \cleardoublepage}
+%
+% \newcommand{\opt}[1]{\index{#1 (option)\actualchar\texttt{#1} (option)\encapchar textit}\index{options:\levelchar{\ttfamily #1}\encapchar textit}{\sffamily\bfseries{#1}}}\newenvironment{options}{\begin{list}{}%
+%   {\renewcommand{\makelabel}{\opt}}}%
+%   {\end{list}}
+%
+% \title{The |liuthesis| Class\thanks{This file has version
+%     \fileversion\ last revised \filedate\ by G. Hendeby.}}
+% \author{Gustaf Hendeby (\texttt{hendeby@isy.liu.se}) \and
+%   {\small Contributors: }Johan Henriksson,
+%   Niclas Wiker, Anna Lombardi, Dirk gro\ss e Osterhues}
+% \date{\filedate}
+% \maketitle
+%
+% \begin{abstract}
+%   The |liuthesis| class provides convenient means to write a
+%   master's thesis at Link\"opings universitet --- Institute of
+%   Technology. The class is intended for both beginners and advanced
+%   users and hence the |liuthesis| provides many features, in a
+%   framework allowing for a high degree of personalization.
+% \end{abstract}
+%
+%
+% \section{Introduction}
+% \label{sec:intro}
+%
+% Everyone studying at Link\"opings universitet must sooner or later face
+% the task of writing a report of some size. As if writing a report
+% should not be enough, most often one have to make the layout look
+% acceptable for printing too. Without the right tools, typesetting
+% the report may turn out to be as time consuming as doing the
+% research. \LaTeX\ is a powerful tool, but to effectively typeset a
+% report one needs to have more tools to define a nice looking
+% document layout --- or the document layout will be very time
+% consuming.  When I set out to do my master's thesis, the only
+% package, adapted to the situation at Link\"opings universitet,
+% available was |exdef| by P.~Lindskog\footnote{The |exdef| package
+% was written by P.~Lindskog for \LaTeX, and modified by M.~Jirstrand
+% and M.~\"Ostring to better suit \texttt{tetex}.}.
+%
+% Even though |exdef| is a nice package, I soon found that I wanted
+% more.  I therefore started to design my own ``thesis'' package, or as
+% I found more suitable, a completely new ``thesis'' class. At first
+% this project was only intended for personal use, but people approached
+% me showing interest for the project, and |liuthesis| was
+% born. The |liuthesis| class is built on the solid foundation of the
+% \LaTeX\ |book| class and ideas from |exdef|, and is suitable for
+% master's thesis at Link\"opings universitet --- Institute of
+% Technology. The class includes support for every step of the writing
+% process, including modes for drafts, manuscripts, publishing at
+% Link\"oping University Electronic Press, and much more.
+%
+%
+% \section{Usage}
+% \label{sec:usage}
+%
+% Getting started with the |liuthesis| class is simple, and it will,
+% without need for knowledge of any advanced \LaTeX, produce nice
+% looking master's thesis manuscripts. This document describes the class
+% |liuthesis|.  If, however, a more in depth description of \LaTeX\ and
+% some tips on how to best structure your work is what you are looking
+% for, I recommend reading \cite{oetikerPHS:2004} for a quick introduction,
+% \cite{lamport:1994} and \cite{companion:2004} (the second edition of the
+% book is basically a completely new book compared to
+% \cite{companion:1994}) for more details, and \cite{companionG:1997}
+% for tips on how to produce nice looking figures and other advanced
+% graphics.
+%
+% The |liuthesis| class is used the same way as any other \LaTeX\
+% class.  One difference compared to many other classes you might have
+% come across before is that the class can do much of the standardized
+% work for you.
+%
+% To use the package you need a fairly new version of \LaTeXe{}
+% including some standard packages. The packages most often seen to
+% cause problems are |geometry| (must be newer than July 2002), |crop|
+% (newer than November 2001), and |lmodern| (should be standard in
+% modern \LaTeX{} installations). If these packages are not installed
+% or if older versions are installed strange warnings and errors might
+% be encountered.  For the automatic selection of language for
+% abstract \emph{etc}.\@ to work correctly Swedish hyphenation
+% patterns must probably be activated.  (This is standard behavior for
+% \texttt{tetex}, whereas in MikTeX Swedish language support must be
+% activated using the ``MikTeX Options'' program.)  Furthermore, the
+% class requires \LaTeX\ to have access to some logos in suitable
+% formats (eps/pdf). The Link\"opings university logos are all found
+% at: |http://www.liu.se/logotype/|.  The following files may be
+% needed: |LinkUniv_staende_sv.eps|, |LinkUniv_sigill_pms.eps|,
+% |LiTH_staende_sv.eps|, and |LiTH_staende_eng_sv.eps|. These files
+% are all included in the standard release of this class. However,
+% check this page to make sure the logos are up to date. (If they are
+% not up to date, please let me know!)
+%
+% The rest of this section will first describe the options that can be
+% passed to the class, and after that the basic macros, whereas the
+% more advanced macros, which are intended for the advanced user, are
+% described in Section~\ref{sec:imp} that deals with the
+% implementation of |liuthesis|.
+%
+%
+% \subsection{Options}
+% \label{sec:usage:opt}
+%
+% The |liuthesis| class supports a number of options, the use of some of
+% these are actually necessary for the class to work. Which these
+% options are and how they are used is described below.
+%
+%
+% \subsubsection{Output format}
+% \label{sec:usage:opt:format}
+%
+% Which type of format the document processed by \LaTeX{} possesses
+% depends on four options. Unless the standard format, suitable for
+% proof reading and layout purposes, is what you want, one of the output
+% options below should be selected.
+% \begin{options}
+% \item[print] Produce a document that is suitable to send to the
+%   printer. If you produce a ps-file that you then convert, make sure
+%   to use 900\,dpi and convert all graphics, both
+%   \textsc{b/w} and color, using 600\,dpi for best
+%   result. (Always make sure the resolution of the original pictures
+%   is high enough.)  The resulting document is in \textsc{s5} format,
+%   this could however look a little suspicious in gsview and
+%   Acrobat~Reader since \textsc{s5} is not one of the supported page
+%   sizes. There are no crops or crop-info created with this option.
+%                                 %
+% \item[ePress] This option produce a document that is suitable for
+%   Link\"oping University Electronic Press, \emph{i.e.}, a mandatory
+%   copyright notice is appended to the end. In the produced document
+%   the \textsc{s5} pages are centered on \textsc{a4} pages. This option
+%   suppresses all crops and crop-info.
+%                                 %
+% \item[pdfRelease] The |pdfRelease| option is equivalent to the
+%   |ePress| option in all aspects, except that it leaves out the
+%   copyright notice, and is suitable for publishing on the Web.
+%                                 %
+% \item[draft] The |draft| option is actually a built in \LaTeX\
+%   option worth trying out. Using this option all included graphics
+%   are replaced with boxes, for faster processing, and more
+%   importantly, all over-full lines are emphasized with a black line
+%   in the outer margin. This can be very helpful when proof reading
+%   the manuscript with respect to how it looks in print. This option
+%   allows for both crops and crop-info.
+% \end{options}
+% Only one of theses should be used, the behavior if more than one of
+% these are selected is undefined.
+%
+%
+% \subsubsection{Crops}
+% \label{sec:usage:opt:crop}
+%
+% There are another two options that may be used in conjunction with
+% the above ones, but only takes affect when using the implicit mode,
+% or the |draft| mode. They both are intended to help in the process
+% of checking the layout and proof reading the thesis.
+% \begin{options}
+% \item[crop] When the crop option is active crop marks are placed on
+%   the \textsc{a4} page to indicate where the \textsc{s5} page ends,
+%   as well as where the center of the page is located.
+%                                 %
+% \item[info] Prints some useful information above the \textsc{s5}
+%   page: name of main document, date and time of compilation, the
+%   page number and a global page number.
+% \end{options}
+%
+%
+% \subsubsection{Language Selection}
+% \label{sec:usage:opt:lang}
+%
+% In order to support different languages in the document,
+% \emph{i.e.}, change some of the titles of the environments used and
+% fill out the library page correctly, a language option \emph{must}
+% be specified. There are two different language options to choose
+% among, and hopefully these should be enough: \opt{english} and
+% \opt{swedish}. Make sure to specify exactly one of these as options
+% to the |liuthesis| class or you are likely to encounter strange
+% errors while processing your document through \LaTeX.
+%
+%
+% \subsubsection{Department Specifics}
+% \label{sec:usage:opt:dep}
+%
+% Since the different departments at Link\"opings universitet, \emph{e.g.},
+% \textsc{eki} and \textsc{ifm}, cannot seem to agree on a standard
+% layout for master's thesis, the |liuthesis| class supplies some
+% standard layouts, intended for the different departments. If none of
+% these should be suitable, it is easy to modify the standard ones to
+% provide the layout that is just perfect for you, how to do this is
+% described later on.  One department must always be specified. The
+% standardized definitions are
+% \begin{options}
+% \item[ida] Department of Computer and Information Science (|ida.ltd|)
+%                                 %
+% \item[ifm] Department of Physics and Measurement Technology
+%     (|ifm.ltd|)\\*{\small Contributed by Johan Henriksson.}
+%                                 %
+% \item[ikp\_mask] Department of Mechanical Engineering
+%     (|ikp_mask.ltd|)\\*{\small Contributed by Niclas Wiker.}
+%
+% \item[ikp\_mek] Department of Mechanical Engineering (|ikp_mek.ltd|)\\*
+%     {\small Contributed by Niclas Wiker.}
+%
+% \item[ipe] Department of Production Economics (|ipe.ltd|)\\*
+%     {\small Contributed by Dirk gro\ss e Osterhues.}
+%
+% \item[isy] Department of Electrical Engineering (|isy.ltd|)
+%                                 %
+% \item[itn] Department of Science and Technology (|itn.ltd|)\\*
+%     {\small Contributed by Anna Lombardi.}
+%                                 %
+% \item[mai] Department of Mathematics (|mai.ltd|)
+% \end{options}
+% Basically these options define how the front and title pages
+% look.
+%
+%
+% \subsection{Macros}
+% \label{sec:usage:macro}
+%
+% The |liuthesis| class provides several macros aimed at easing the
+% creative process. These macros can be divided into groups depending
+% on where they are supposed to be used; the front matter, the main
+% matter, or the back matter.
+%
+% \paragraph{Hyperreferences.}
+% \label{sec:usage:macro:hyperref}
+%
+% One decision must be made before doing the set up. Do I want
+% clickable references and some other pdf related stuff in my
+% document. If the answer to this question is yes and it often is, be
+% aware that this is known to introduce strange errors in some cases.
+% Anyhow, to get links use the macro
+% \DescribeMacro{\useHyperRef}|\useHyperRef| (without arguments) to
+% initiate the |hyperref| package with suitable arguments.  Using the
+% |hyperref| package is a bit tricky, the package must be included in
+% the correct order relative to many other packages.  Usually it is a
+% good idea to use |\useHyperRef| as close as possible to
+% |\begin{document}|, but this is not always the right thing to do.
+% Please, read the manuals of the packages you are experiencing
+% problems with.  Manuals of packages interfering with |hyperref|
+% often include a section about how to use them with |hyperref| if it
+% is possible at all.
+%
+%
+%
+% \subsubsection{Front Matter}
+% \label{sec:usage:macro:fm}
+%
+% The front matter is the part of the report including; front, title
+% and library page, abstract(s), acknowledgments, table of content,
+% \emph{etc}.  How these look depends on two things: (1)~Which
+% definition file is in use.  (2)~What information is specified.
+%
+%
+% \paragraph{Setup.}
+% \label{sec:usage:macro:fm:setup}
+%
+% A number of functions should be called, preferably in the preamble of
+% the document, to specify the information that should be present in the
+% front matter.
+%
+% The macro \DescribeMacro{\author}|\author| is used to specify the
+% author(s) of the report. This is done using the only argument,
+% |\author{John Doe}|. The macro is used throughout the entire
+% document, and trying to format the name here is hence not a good
+% idea. The same goes for the title, that you specify using
+% \DescribeMacro{\title}|\title|. You must always provide both a
+% Swedish (first argument) and an English title (second argument),
+% |\title{Svensk titel}{English Title}|.
+%
+% Some information about the report is needed too, and even though
+% some of the information might not be known when starting to write
+% the report. If this is the case wait with defining this information,
+% but do not forget return to complete it later!  Missing information
+% will generate warnings, but the code should compilable anyhow.  (If
+% not, use some phony information for now.)  The
+% \DescribeMacro{\thesisDate}|\thesisDate| should be the date when the
+% report is defended. The syntax to use is |\thesisDate{D}{M}{YYYY}|,
+% for best result leave out leading 0's. Equally important is it to
+% specify the thesis no.\@ \textsc{isrn}, this is done with
+% \DescribeMacro{\thesisNo}|\thesisNo| which take one argument --- the
+% thesis number --- |\thesisNo{LiTH-ISY-EX{-}{-}YY/XXXX{-}{-}SE}|.
+%
+% For the library page the division where the thesis is conducted
+% should be specified, use
+% \DescribeMacro{\thesisDivision}|\thesisDivision{division}|. Using
+% \DescribeMacro{\URL}|\URL| it is possible to give one, or two,
+% \textsc{url} where your report may be accessed from Internet. At
+% least one of these should probably point towards Link\"oping
+% University Electronic Press. \textbf{You need to generate a library
+%   page at their homepage anyhow, make sure the generated pages
+%   matches. If not, please let me know so that |liuthesis| can be
+%   updated to better reflect the current setup.}  The content of the
+% keywords field is specified using
+% \DescribeMacro{\keywords}|\keywords|.  This macro takes one
+% argument.
+%
+% It should be specified on the title page who is/are your
+% supervisor(s) and who is your examiner. There are two commands to do
+% this \DescribeMacro{\supervisor}|\supervisor| and
+% \DescribeMacro{\examiner}|\examiner|, both taking one
+% argument. Names are listed in both of these arguments separated with
+% \DescribeMacro{\AND}|\AND|, \emph{e.g.}, %
+% |\supervisor{Jane Doe \AND J. R. Hacker}|. When doing the work with
+% your master's thesis at some company, it is a nice idea to give the
+% company some credit by indicating where your supervisors work, this
+% is possible using \DescribeMacro{\AT}|\AT| like this %
+% |\supervisor{John Doe \AT Company}|. The same trick works for the
+% examiner as well.  Finally, the title page also state the subject of
+% the master's thesis and this should be indicated using
+% \DescribeMacro{\subject}|\subject| taking one argument.  Specify the
+% subject in Swedish, \emph{e.g.}, ``Reglerteknik''.
+%
+% Three more parts do frequently appear in the front matter; an
+% abstract in English (and one Swedish \emph{Sammanfattning} if your
+% work is in Swedish), acknowledgments, and a table of content (which
+% of course \LaTeX\ automatically generates for you). The abstract,
+% which is also presented on the library page, is generated using
+% \DescribeMacro{\abstract}|\abstract| which takes two arguments. The
+% first argument, the abstract in Swedish (optional) and the abstract
+% in English is supplied as the second argument. If you want the
+% Swedish abstract to appear on a separate page, instead of right
+% below the English one, use
+% \DescribeMacro{\twoAbstractPage}|\twoAbstractPage| in your preamble.
+% This is useful, \emph{e.g.}, if your abstracts are too extensive to
+% fit on one page.  However, it is this my belief that keeping the
+% abstract to less than a page is a good idea.
+% \DescribeMacro{\acknowledgements}|\acknowledgements| takes one
+% argument, the body of the acknowledgments. Once the information is
+% gathered it is time to create the front matter.
+%
+%
+% \paragraph{Generation.}
+% \label{sec:usage:macro:fm:gen}
+%
+% The |liuthesis| class contain one handy command to generate a
+% complete front matter,
+% \DescribeMacro{\makeFrontMatter}|\makeFrontMatter|.
+% |\makeFrontMatter| generates the following, each on an individual
+% right-hand page:
+% \begin{enumerate}
+% \item Front page, can also be generated using
+% \DescribeMacro{\makeFrontPage}|\makeFrontPage|.
+% \item Title page, \DescribeMacro{\makeTitlePage}|\makeTitlePage|.
+% \item Library page,
+% \DescribeMacro{\makeLibraryPage}|\makeLibraryPage|.
+% \item Abstract, \DescribeMacro{\makeAbstract}|\makeAbstract|.
+% \item Acknowledgments,
+% \DescribeMacro{\makeAcknowledgments}|\makeAcknowledgments|.
+% \item Table of Contents, |\tableofcontents| (the standard \LaTeX\
+% command).
+% \end{enumerate}
+% An optional argument to the |\makeFrontMatter| macro allows for easy
+% addition of extra contents to the front matter, \emph{e.g.},
+% |\listoffigures|, |\listoftables|, \emph{etc}.  The entire front
+% matter is paginated using lower case Roman numerals, starting with
+% the title page.  This is accomplished using
+% \DescribeMacro{\frontmatter}|\frontmatter|.
+%
+% If |\makeFrontMatter| does not provide the layout you desire, it is
+% always possible to generate the parts separately and put them
+% together in any order you find suitable.
+%
+%
+% \subsubsection{Main Matter}
+% \label{sec:usage:macro:mm}
+%
+% The main part of the report is supposed to go in the main matter, the
+% |liuthesis| class therefore include some macros and environments to
+% ease the typesetting process. These utilities will be presented in
+% this section.
+%
+% The |liuthesis| class modifies the standard \LaTeX{} behavior in a
+% few ways to in my opinion, create a better looking result. One of
+% this modifications is that text emphasized using |\em| or |\emph{}|
+% is not put in \textit{italic} but instead in \textsl{slanted}. This
+% is for two reasons, I like the slanted text better and it lessens
+% the risk of confusing emphasized text and embedded math.
+%
+% A few environments are predefined in |liuthesis|, these are:
+% \begin{itemize}
+% \item \DescribeEnv{theorem}|theorem|
+% \item \DescribeEnv{lemma}|lemma|
+% \item \DescribeEnv{corollary}|corollary|
+% \item \DescribeEnv{proof}|proof|
+% \item \DescribeEnv{definition}|definition|
+% \item \DescribeEnv{example}|example|
+% \end{itemize}
+% The intended use of these environments should be self evident.  All
+% the environments take an optional argument --- a name. Furthermore,
+% the environments are all numbered within the current chapter.
+%
+% The commands \DescribeMacro{\listofexamples}|\listofexamples|,
+% \DescribeMacro{\listoffigures}|\listoffigures|, and
+% \DescribeMacro{\listoftables}|\listoftables| create lists with all
+% examples, figures and tables in the document, respectively. In order
+% for these to work the document must be passed through \LaTeX\ at least
+% twice, or the page numbers could turn out incorrectly. The same goes
+% for the table of contents.
+%
+%
+% \subsubsection{Back Matter}
+% \label{sec:usage:macro:bm}
+%
+% The macro \DescribeMacro{\backmatter}|\backmatter| starts the back
+% matter. The only difference between the back matter and the main
+% matter is that chapters are allowed to start on both even and odd
+% pages, hence preserving some space if many short appendices are
+% used. It could be a good idea to use the \LaTeX\ command |\appendix|
+% before starting your appendices, hence producing appendices named
+% Appendix followed by a upper case letter instead of a number.
+%
+% When using the |ePress| option a copyright notice, specific for
+% Link\"oping University Electronic Press, is added at the end. This
+% copyright notice can also be produced anywhere in the document using
+% the macro \DescribeMacro{\makeCopyright}|\makeCopyright|, however keep
+% in mind that copyright information is only valid for the document
+% actually published at Link\"oping University Electronic Press.
+%
+%
+% \subsection{Preloaded Packages}
+% \label{sec:usage:pkg}
+%
+% The following packages are preloaded by the |liuthesis| class:
+% \begin{description}
+% \item[|babel|] To get the most commonly used keywords translated.
+% \item[|graphicx|] Preferred package to include graphics into your
+%   report, see~\cite{companion:2004, companionG:1997}.
+% \item[|lmodern|, |fontenc|, and |inputenc|] To allow for \aa, \AA,
+%   \"a, \"A, \"o, \"O, \emph{etc}.\ to be entered without fuzz.
+% \item[|theorem|] Extends the theorem-like environments,
+%   see~\cite[Ch.~8]{companion:2004}.
+% \item[|amsmath|, |amsfonts|, |amssymb|] Some $\mathcal{AMS}$math
+%   stuff, see~\cite[Ch.~8]{companion:2004}.
+% \item[|hyperref|] Used to create hyperreferences in the documents,
+%   these works with acrobat reader and some never versions of gsview.
+% \end{description}
+%
+% \StopEventually{
+% \begin{thebibliography}{MMMMMM}
+%
+% \bibitem[GMS94]{companion:1994}
+%   Michel Gossens, Frank Mittlebach, and Alexander Samarin.
+%   \newblock {\em The {\LaTeX} Companion}.
+%   \newblock Addison-Wesley, 1994.
+%   \newblock ISBN 0-201-54199-8.
+%
+% \bibitem[MGB+04]{companion:2004} Frank Mittelbach, Michel Goossens,
+%   Johannes Braams, David Carlisle, and Chris Rowley.
+%   \newblock {\em The {\LaTeX} Companion Professional}.
+%   \newblock Addison-Wesley, 2 edition, April 22 2004.
+%   \newblock ISBN 0-201-36299-6.
+%
+% \bibitem[GRM97]{companionG:1997}
+%   Michel Gossens, Sebastian Rahtz, and Frank Mittlebach.
+%   \newblock {\em The {\LaTeX} Graphics Companion}.
+%   \newblock Addison-Wesley, 1997.
+%   \newblock ISBN 0-201-85469-4.
+%
+% \bibitem[Lam94]{lamport:1994}
+%   Leslie Lamport.
+%   \newblock {\em {\LaTeX}: a document preparation system}.
+%   \newblock Addison-Wesley, 2 edition, 1994.
+%   \newblock ISBN 0-201-52983-1.
+%
+% \bibitem[OPH+04]{oetikerPHS:2004} Tobias Oetiker, Hubert Partl,
+%   Irene Hyna, and Elisabeth Schlegl.
+%   \newblock The not so short introduction to {\LaTeXe} --- or
+%   {\LaTeXe} in 133 minutes.
+%   \newblock URL: \texttt{http://www.ctan.org}
+%   \texttt{/tex-archive/info/lshort/english/lshort.pdf}, Version
+%   4.17, 27 September 2005.
+%   \newblock Included with complete {\LaTeX}\ distributions.
+%
+% \end{thebibliography}}
+%
+%
+% \section{Implementation}
+% \label{sec:imp}
+%
+% Now to the implementation of the class.  This part of the
+% documentation is only provided for those interested in doing
+% something special in their thesis, and those with a genuine interest
+% in \TeX.  The description of the main code is sparse. The code is
+% pretty straight forward, with few interesting details, and therefore
+% I do not find it interesting to comment. However, it might be of
+% interest how the definition files are constructed. Explaining that
+% code enables others to write new definition files on demand. Only
+% one definition file will be explained, the one for \textsc{isy}.
+% \iffalse
+%<*driver>
+\documentclass[a4paper, 10pt]{ltxdoc} \usepackage{xspace}
+\usepackage{lmodern} \usepackage[T1]{fontenc}
+\usepackage[latin1]{inputenc} \usepackage[bookmarks,
+hyperindex]{hyperref} \EnableCrossrefs \RecordChanges \CodelineIndex
+\begin{document}
+\DocInput {liuthesis.dtx}
+  \PrintChanges
+  \PrintIndex
+\end{document}
+%</driver>
+% \fi
+%
+% \subsection{The Class Code}
+% \label{sec:imp:cls}
+%
+% Here follows the class implementation, starting with some
+% initiations and packages needed immediately.
+%    \begin{macrocode}
+%<*class>
+\ProvidesClass{liuthesis}[2007/01/13 liuthesis Class v. 1.3]
+\NeedsTeXFormat{LaTeX2e}
+%    \end{macrocode}
+% Prepare \LaTeX\ to handle Swedish letters (\aa, \"a, \"o) in a
+% straightforward way.
+%    \begin{macrocode}
+\RequirePackage{lmodern}
+\RequirePackage[T1]{fontenc}
+\RequirePackage[latin1]{inputenc}
+\RequirePackage[swedish, english]{babel}
+%    \end{macrocode}
+%
+% The following code sets up some macros for usage in definition
+% files,
+% \begin{macro}{\liuthesisDefinition}
+%    \begin{macrocode}
+\newcommand*{\liuthesisDefinition}[2]{%
+  \ClassInfo{liuthesis}{Loaded definition file '\CurrentOption.ltd'}%
+  \newcommand*{\thesis@divTAG}{#1}%
+  \newcommand*{\@address}{#2}}
+
+%    \end{macrocode}
+% \end{macro}
+% and allows for optional use of |hyperref|.
+%    \begin{macrocode}
+\newif\ifliuthesis@hyperref \liuthesis@hyperreffalse
+\newcommand*\phantomsection{\relax}
+\newcommand*\href[2][]{#1}
+\newcommand*\pdfbookmark[3][]{\relax}
+
+%    \end{macrocode}
+%
+% Below, definitions are provided to give multilingual support. So far
+% only English and Swedish are provided, it should however not be too
+% difficult to add other languages.  (If you do, please, let me know
+% so that I can include the translation in the next release of
+% |liuthesis|.)  All that is needed is to translate a few terms into
+% new the target language. The rest is taken care of by the |babel|
+% package.
+%    \begin{macrocode}
+
+%%%%%%%%%%%%%%%%%%%%%
+%%%   Language    %%%
+%%%%%%%%%%%%%%%%%%%%%
+
+\def\acknowledgementsname{Acknowledgments}%
+\def\corollaryname{Corollary}
+\def\definitionname{Definition}
+\def\examplename{Example}
+\def\lemmaname{Lemma}
+\def\listexamplename{List of Examples}
+\def\theoremname{Theorem}
+\newcommand*{\monthName}[1]{\ifcase#1\or
+  January\or February\or March\or
+  April\or May\or June\or
+  July\or August\or September\or
+  October\or November\or December\else Unknown\fi}
+
+\addto{\captionsenglish}{%
+  \def\acknowledgementsname{Acknowledgments}%
+  \def\corollaryname{Corollary}%
+  \def\definitionname{Definition}%
+  \def\examplename{Example}%
+  \def\lemmaname{Lemma}%
+  \def\listexamplename{List of Examples}%
+  \def\theoremname{Theorem}%
+  \renewcommand*{\monthName}[1]{\ifcase#1\or%
+    January\or February\or March\or%
+    April\or May\or June\or%
+    July\or August\or September\or%
+    October\or November\or December\else Unknown\fi}%
+}
+\addto{\captionsswedish}{%
+  \def\acknowledgementsname{Tack}%
+  \def\corollaryname{Korrolarium}%
+  \def\definitionname{Definition}%
+  \def\examplename{Exempel}%
+  \def\lemmaname{Lemma}%
+  \def\listexamplename{Exempellista}%
+  \def\theoremname{Sats}%
+  \renewcommand*{\monthName}[1]{\ifcase#1\or%
+    januari\or februari\or mars\or%
+    april\or maj\or juni\or%
+    juli\or augusti\or september\or%
+    oktober\or november\or december\else Unknown\fi}%
+}
+\DeclareOption{english}{%
+  \AtBeginDocument{\selectlanguage{english}}%
+}
+
+\DeclareOption{swedish}{%
+  \AtBeginDocument{\selectlanguage{swedish}}%
+}
+%    \end{macrocode}
+%
+% The following macros help define crop marks used to indicate the
+% \textsc{s5} page on the \textsc{a4} paper, and some page info, when
+% those options are selected.
+%    \begin{macrocode}
+
+%%%%%%%%%%%%%%%%%%%%%
+%%% CROP SETTINGS %%%
+%%%%%%%%%%%%%%%%%%%%%
+
+\newcommand*{\@ul}{\relax}\newcommand*{\@ur}{\relax}%
+\newcommand*{\@ll}{\relax}\newcommand*{\@lr}{\relax}%
+\newcommand*{\@info}{\relax}%
+\DeclareOption{crop}{% To get crop marks
+  \renewcommand*{\@ul}{\begin{picture}(0,0)%
+      \unitlength1mm%
+      \thinlines%
+      \put(0,0){\line(-5,0){2}}%
+      \put(0,0){\line(0,5){2}}%
+    \end{picture}}%
+  \renewcommand*{\@ur}{\begin{picture}(0,0)%
+      \unitlength1mm%
+      \thinlines%
+      \put(0,0){\line(5,0){2}}%
+      \put(0,0){\line(0,5){2}}%
+    \end{picture}}%
+  \renewcommand*{\@ll}{\begin{picture}(0,0)%
+      \unitlength1mm%
+      \thinlines%
+      \put(0,0){\line(-5,0){2}}%
+      \put(0,0){\line(0,-5){2}}%
+    \end{picture}}%
+  \renewcommand*{\@lr}{\begin{picture}(0,0)%
+    \unitlength1mm%
+    \thinlines%
+    \put(0,0){\line(5,0){2}}%
+    \put(0,0){\line(0,-5){2}}%
+  \end{picture}}%
+\PassOptionsToPackage{axes}{crop}}
+
+\DeclareOption{info}{%
+  \renewcommand*{\@info}{{%
+    \global\advance\CROP@index\@ne%
+    \def\x{\discretionary{}{}{\hbox{\kern.5em---\kern.5em}}}%
+    \advance\paperwidth-20\p@%
+    \dimen@5mm%
+    \ifx\CROP@pagecolor\@empty%
+    \else%
+      \advance\dimen@\CROP@overlap%
+    \fi%
+    \hb@xt@\z@{%
+      \hss%
+      \vbox to\z@{%
+        \centering%
+        \hsize\paperwidth%
+        \vss%
+        \normalfont%
+        \small%
+        \CROP@font{%
+          \texttt{\jobname}:~\the\year-\two@digits{\the\month}%
+          -\two@digits{\the\day}\:\:%
+          \CROP@time\x\thepage(\the\CROP@index)\strut%
+        }%
+        \vskip\dimen@%
+      }%
+      \hss
+    }%
+  }}%
+}
+
+\DeclareOption{noCrop}{%
+  \renewcommand*{\@ul}{\relax}\renewcommand*{\@ur}{\relax}%
+  \renewcommand*{\@ll}{\relax}\renewcommand*{\@lr}{\relax}%
+  \renewcommand*{\@info}{\relax}%
+}
+
+%    \end{macrocode}
+%
+% The page layouts, \emph{i.e.}, |print|, |pdfrelease|, |ePress|, and
+% |draft| layout, are defined below. The macro used to use hyper
+% references |\useHyperRef| is also defined here in lack of better
+% placement.
+%    \begin{macrocode}
+%%%%%%%%%%%%%%%%%%%%%
+%%%  PAGE LAYOUT  %%%
+%%%%%%%%%%%%%%%%%%%%%
+%    \end{macrocode}
+% \begin{macro}{\useHyperRef}
+%    \begin{macrocode}
+\newcommand*{\useHyperRef}{%
+  \liuthesis@hyperreftrue%
+  \let\pdfbookmark=\undefined%
+  \usepackage[hyperindex, bookmarks,%
+              plainpages=false, naturalnames=true]{hyperref}[2000/09/29]}
+\PassOptionsToPackage{off, a4, center}{crop} % S5 centered on A4 with crops
+%    \end{macrocode}
+% \end{macro}
+%    \begin{macrocode}
+\DeclareOption{print}{% S5 format
+  \PassOptionsToPackage{off, noaxes, width=165mm, height=240mm}{crop}%
+  \ExecuteOptions{noCrop}%
+}
+
+\DeclareOption{pdfRelease}{% Release in pdf format without copyright notice
+  \PassOptionsToPackage{off, noaxes, a4, center}{crop}%
+  \ExecuteOptions{noCrop}%
+  \renewcommand*{\useHyperRef}{%
+    \liuthesis@hyperreftrue%
+    \let\pdfbookmark=\undefined%
+    \usepackage[hyperindex, bookmarks,%
+                plainpages=false, naturalnames=true]{hyperref}[2000/09/29]}
+}
+
+\DeclareOption{ePress}{% S5 centered on A4
+  \AtEndDocument{\clearemptydoublepage\makeCopyright}%
+  \ExecuteOptions{pdfRelease}%
+}
+
+\DeclareOption{draft}{% S5 centered on A4 DRAFT
+  \PassOptionsToPackage{off, a4, center}{crop} % S5 centered on A4 with crops
+  \ClassInfo{liuthesis}{This is a DRAFT mode and should hence NOT be
+    used for other purposes. Pictures are blank and overful hboxes
+    stand out.}
+}
+%    \end{macrocode}
+% Adjust the margin paragraph width to match the margin available,
+% this must be done when leaving the class in order for the proper
+% page layout info to be available.
+%    \begin{macrocode}
+\AtEndOfClass{%
+  \setlength{\marginparwidth}{\oddsidemargin}%
+  \addtolength{\marginparwidth}{-\marginparsep}%
+  \addtolength{\marginparwidth}{-\p@}%
+}
+%    \end{macrocode}
+% This codes tries to interpret all unrecognized option as definition
+% files (|.ltd|). If it is not a definition file it is passed to the
+% base class |book| and is marked as unused.
+%    \begin{macrocode}
+\DeclareOption*{\InputIfFileExists{\CurrentOption.ltd}%
+  {}{\PassOptionsToClass{\CurrentOption}{book}\OptionNotUsed}}%
+\ProcessOptions\relax
+
+%    \end{macrocode}
+% Make sure that a definition file is loaded, before loading the base
+% class |book|.
+%    \begin{macrocode}
+\ifx\thesis@divTAG\relax
+  \ClassError{liuthesis}{No division definition found.}
+\else
+  \ClassInfo{liuthesis}{Loading division definition \thesis@divTAG.}
+\fi
+
+\LoadClass[twoside]{book}
+%    \end{macrocode}
+% \begin{macro}{\clearemptydoublepage}
+% A handy macro to get a right-hand side page without a page
+% number on any empty pages that are inserted.
+%    \begin{macrocode}
+\newcommand*\clearemptydoublepage{\clearpage\if@twoside \ifodd\c@page\else
+  \thispagestyle{empty}\hbox{}\newpage\if@twocolumn\hbox{}\newpage\fi\fi\fi}
+%    \end{macrocode}
+% \end{macro}
+% Redefines |\em| and |\emph{}| to use a slanted font instead of an
+% italic one.
+%    \begin{macrocode}
+\DeclareRobustCommand\em%
+        {\@nomath\em \ifdim \fontdimen\@ne\font >\z@
+                       \upshape \else \slshape \fi}
+%    \end{macrocode}
+% Include some required packages, to be able to continue.
+%    \begin{macrocode}
+\RequirePackage{graphicx}
+\RequirePackage[dvips=false, pdftex=false, vtex=false,%
+  twoside, papersize={165mm,240mm}, body={125mm,195mm},%
+  bindingoffset=4mm, marginparsep=3mm, portrait,%
+  twocolumn=false, vmarginratio={4:5}]{geometry}[2002/07/08]
+
+\RequirePackage{crop}[2001/11/16]
+\RequirePackage[intlimits]{amsmath}
+\RequirePackage{amsfonts, amssymb}
+%    \end{macrocode}
+% Create some helper functions to create crops.
+%    \begin{macrocode}
+\cropdef[\@info]{\@ul}{\@ur}{\@ll}{\@lr}{liuthesiscrop}
+\crop[liuthesiscrop,font=\mdseries\upshape\scriptsize]
+%    \end{macrocode}
+%
+% The |\ifLanguageInUse| macro is used internally to do things
+% depending on active language.
+% \begin{macro}{\ifLanguageInUse}
+%    \begin{macrocode}
+\newcommand*{\ifLanguageInUse}[1]{%
+  \expandafter\ifx\csname l@#1\endcsname\relax
+  \expandafter\@secondoftwo
+  \else
+  \bbl@afterfi{\ifnum\csname l@#1\endcsname=\language
+    \expandafter\@firstoftwo
+    \else
+    \expandafter\@secondoftwo
+    \fi}%
+  \fi}
+%    \end{macrocode}
+% \end{macro}
+%
+% Introduce some macros to produce front page, title page, and library
+% card.
+%    \begin{macrocode}
+
+%%%%%%%%%%%%%%%%%%%%%%%%
+%%        Info        %%
+%%%%%%%%%%%%%%%%%%%%%%%%
+
+%    \end{macrocode}
+% \begin{macro}{\author}
+%    \begin{macrocode}
+\renewcommand*{\author}[1]{\renewcommand*{\@author}{#1}%
+  \ifliuthesis@hyperref\hypersetup{pdfauthor={#1}}\fi}%
+%    \end{macrocode}
+% \end{macro}
+%    \begin{macrocode}
+\newcommand*{\thesis@day}{%
+  \@latex@warning@no@line{No \noexpand\thesisDate given}}%
+%    \end{macrocode}
+% \begin{macro}{\thesisDate}
+%    \begin{macrocode}
+\newcommand*{\thesisDate}[3]{%
+  \newcommand*{\thesis@month}{#1}%
+  \renewcommand*{\thesis@day}{#2}%
+  \newcommand*{\thesis@year}{#3}%
+}
+%    \end{macrocode}
+% \end{macro}
+%    \begin{macrocode}
+\newcommand*{\thesis@division}{%
+  \@latex@warning@no@line{No \noexpand\thesisDivision given}}%
+%    \end{macrocode}
+% \begin{macro}{\thesisDivision}
+%    \begin{macrocode}
+\newcommand*{\thesisDivision}[1]{\renewcommand*{\thesis@division}{#1}}%
+%    \end{macrocode}
+% \end{macro}
+%    \begin{macrocode}
+\newcommand*{\thesis@subject}{%
+  \@latex@warning@no@line{No \noexpand\subject given}}%
+%    \end{macrocode}
+% \begin{macro}{\subject}
+%    \begin{macrocode}
+\newcommand*{\subject}[1]{\renewcommand*{\thesis@subject}{#1}%
+  \ifliuthesis@hyperref\hypersetup{pdfsubject={#1}}\fi}%
+%    \end{macrocode}
+% \end{macro}
+%    \begin{macrocode}
+\newcommand*{\thesis@No}{%
+  \@latex@warning@no@line{No \noexpand\thesisNo given}}%
+%    \end{macrocode}
+% \begin{macro}{\thesisNo}
+%    \begin{macrocode}
+\newcommand*{\thesisNo}[1]{\renewcommand*{\thesis@No}{#1}}%
+%    \end{macrocode}
+% \end{macro}
+% \begin{macro}{\title}
+%    \begin{macrocode}
+\renewcommand*{\title}[2]{\newcommand*{\swe@title}{#1}%
+  \renewcommand*{\@title}{#2}%
+  \ifliuthesis@hyperref%
+  \ifLanguageInUse{english}{\hypersetup{pdftitle={#2}}}%
+  {\hypersetup{pdftitle={#1}}}\fi}%
+%    \end{macrocode}
+% \end{macro}
+%    \begin{macrocode}
+\newcommand*{\URL@b}{\@latex@warning@no@line{No \noexpand\URL given}}%
+\newcommand*{\URL@a}{}%
+%    \end{macrocode}
+% \begin{macro}{\URL}
+%    \begin{macrocode}
+\newcommand*{\URL}[2][]{%
+  \renewcommand*{\URL@a}{#1}\renewcommand*{\URL@b}{#2}}%
+%    \end{macrocode}
+% \end{macro}
+% \begin{macro}{\keywords}
+%    \begin{macrocode}
+\newcommand*{\keywords}[1]{\newcommand*{\@keywords}{#1}%
+  \ifliuthesis@hyperref\hypersetup{pdfkeywords={#1}}\fi}%
+%    \end{macrocode}
+% \end{macro}
+%    \begin{macrocode}
+\newcommand{\@abstract}{%
+  \@latex@warning@no@line{No \noexpand\abstract given}}%
+%    \end{macrocode}
+% \begin{macro}{\abstract}
+%    \begin{macrocode}
+\newcommand{\abstract}[2][]{%
+  \renewcommand{\@abstract}{\ignorespacesafterend\noindent #2\unskip}%
+  \newcommand{\swe@abstract}{\ignorespacesafterend\noindent #1\unskip}}%
+%    \end{macrocode}
+% \end{macro}
+%    \begin{macrocode}
+\newcommand{\@acknowledgements}{%
+  \@latex@warning@no@line{No \noexpand\acknowledgements given}}%
+%    \end{macrocode}
+% \begin{macro}{\acknowledgements}
+%    \begin{macrocode}
+\newcommand{\acknowledgements}[1]{%
+  \renewcommand{\@acknowledgements}{%
+    \ignorespacesafterend\noindent#1\unskip}}%
+%    \end{macrocode}
+% \end{macro}
+%    \begin{macrocode}
+\newcommand*{\@supervisor}{%
+  \@latex@warning@no@line{No \noexpand\supervisor given}}%
+%    \end{macrocode}
+% \begin{macro}{\supervisor}
+%    \begin{macrocode}
+\newcommand*{\supervisor}[1]{%
+  \renewcommand{\@supervisor}{\ignorespaces#1\ignorespaces}}%
+%    \end{macrocode}
+% \end{macro}
+%    \begin{macrocode}
+\newcommand*{\@examiner}{%
+  \@latex@warning@no@line{No \noexpand\examiner given}}%
+%    \end{macrocode}
+% \begin{macro}{\examiner}
+%    \begin{macrocode}
+\newcommand*{\examiner}[1]{%
+  \renewcommand{\@examiner}{\ignorespaces#1\ignorespaces}}
+%    \end{macrocode}
+% \end{macro}
+%    \begin{macrocode}
+\newcommand*{\AND}{\\\>\bfseries\ignorespaces}%
+\newcommand*{\AT}{\\\>\>\small\ignorespaces}%
+%    \end{macrocode}
+%
+% Define the library card. Numerous |\makebox|'s with zero width to
+% avoid overfull boxes.
+%    \begin{macrocode}
+
+%%%%%%%%%%%%%%%%%%%%%%%%
+%%    Library page    %%
+%%%%%%%%%%%%%%%%%%%%%%%%
+
+%    \end{macrocode}
+% \begin{macro}{\makeLibraryPage}
+%    \begin{macrocode}
+\newcommand{\makeLibraryPage}{%
+  \cleardoublepage \thispagestyle{empty}%
+  \pdfbookmark[1]{Library Page}{LibraryPage}%
+  \enlargethispage*{27mm} {\centering%
+  \vspace*{-11mm}
+  \hspace*{3mm}%
+  \makebox[\z@][l]{%
+    \begin{minipage}[t][212mm]{126mm}%
+      \scriptsize \setlength{\unitlength}{1mm}%
+      \fontsize{7}{8\p@} \selectfont%
+      \begin{picture}(126,212)(0,0)%
+        %% Department and division
+        \put(0,190){\makebox[\z@][l]{\framebox(92,22){}}}%
+        \put(1,191){\includegraphics[width=20mm]{LiTH_sigill_sv}}%
+        \put(25,209){\parbox[t]{5cm}{\textbf{Avdelning, Institution}\\%
+            Division, Department}}%
+        \put(28,197){\parbox[c]{64mm}{\thesis@division\\\@address}}%
+        %% Date
+        \put(93,190){\makebox[\z@][l]{\framebox(33,22){}}}%
+        \put(94,209){\parbox[t]{5cm}{\textbf{Datum}\\%
+            Date}}%      % Must be Swedish style
+        \put(95,197){\thesis@year-%
+          \ifnum\thesis@month<10 0\fi\thesis@month-%
+          \ifnum\thesis@day<10 0\fi\thesis@day}%
+        %% Language
+        \put(0,157){\makebox[\z@][t]{\framebox(30,32){}}}%
+        \put(1,186){\parbox[t]{3cm}{\textbf{Språk}\\Language}}%
+        \put(1,178){$\Box$ Svenska/Swedish}%
+        \put(1,174){$\Box$ Engelska/English}%
+        \put(1,162){$\Box$} \put(5,162){\line(1,0){20}}%
+        \ifLanguageInUse{english}{\put(1,174){$\boxtimes$}}{%
+          \ifLanguageInUse{swedish}{\put(1,178){$\boxtimes$}}{}}%
+        %% Report category
+        \put(31,157){\makebox[\z@][t]{\framebox(30,32){}}}%
+        \put(32,186){\parbox[t]{5cm}{\textbf{Rapporttyp}\\Report category}}%
+        \put(32,178){$\Box$ Licentiatavhandling}%
+        \put(32,174){$\Box$ Examensarbete}%
+        \put(32,170){$\Box$ C-uppsats}%
+        \put(32,166){$\Box$ D-uppsats}%
+        \put(32,162){$\Box$ Övrig rapport}%
+        \put(32,158){$\Box$} \put(35,158){\line(1,0){20}}%
+        \put(32,174){$\boxtimes$}  % set kind of report
+        %% URL
+        \put(0,143){\makebox[\z@][t]{\framebox(61,13){}}}%
+        \put(1,153){\textbf{URL för elektronisk version}}%
+        \put(3,148){\begingroup%
+          \sbox{\@tempboxa}{\mbox{\URL@a}}%
+          \fontsize{5}{8\p@} \selectfont%
+          \ifdim\wd\@tempboxa > \z@%
+            \parbox[c]{58mm}{\href{\URL@a}{\texttt{\URL@a}}\\%
+              \href{\URL@b}{\texttt{\URL@b}}}%
+          \else%
+            \parbox[c]{58mm}{\href{\URL@b}{\texttt{\URL@b}}}%
+          \fi\endgroup}%
+        %% ISBN etc
+        \put(62,143){\makebox[\z@][t]{\framebox(64,46){}}}%
+        \put(63,186){\textbf{ISBN}}%
+        \put(63,181){\line(1,0){62}}\put(69,182){---}%
+        \put(63,178){\textbf{ISRN}}%
+        \put(63,171){\line(1,0){62}} \put(70,174){\thesis@No}%
+        \put(63,168){\parbox[t]{5cm}{\textbf{Serietitel och serienummer}\\%
+            Title of series, numbering}}%
+        \put(102,168){\textbf{ISSN}}%
+        \put(102,163){\line(1,0){23}} \put(102,164){---}%
+        %% Title
+        \put(0,108){\makebox[\z@][t]{\framebox(126,34){}}}%
+        \put(1,138){\parbox[t]{5cm}{\textbf{Titel}\\Title}}%
+        \put(17,138){\parbox[t]{100mm}{\swe@title\par\smallskip\@title}}%
+        \put(1,117){\parbox[t]{5cm}{\textbf{Författare}\\Author}}%
+        \put(17,117){\@author}%
+        %% Abstract
+        \put(0,12){\makebox[\z@][t]{\framebox(126,95){}}}%
+        \put(1,104){\parbox[t]{5cm}{\textbf{Sammanfattning}\\Abstract}}%
+        \put(17,96){\parbox[t]{100mm}{%
+            \setlength{\parindent}{1.5em}\@abstract}}%
+        %% Keywords
+        \put(0,0){\makebox[\z@][t]{\framebox(126,11){}}}%
+        \put(1,8){\parbox[t]{5cm}{\textbf{Nyckelord}\\Keywords}}%
+        \put(17,5){\parbox[t]{100mm}{\@keywords}}
+      \end{picture}%
+    \end{minipage}%
+  }}%
+  \clearemptydoublepage%
+}
+%    \end{macrocode}
+% \end{macro}
+%
+% Define the acknowledgement page.
+%    \begin{macrocode}
+
+%%%%%%%%%%%%%%%%%%%%%%%%
+%%  Acknowledgements  %%
+%%%%%%%%%%%%%%%%%%%%%%%%
+%    \end{macrocode}
+% \begin{macro}{\makeAcknowledgments}
+%    \begin{macrocode}
+\newcommand*{\makeAcknowledgements}{%
+  \clearemptydoublepage%
+  \pdfbookmark[1]{Acknowledgments}{Acknowledgments}%
+  \chapter*{\acknowledgementsname}%
+  \@acknowledgements%
+  \clearemptydoublepage%
+}
+%    \end{macrocode}
+% \end{macro}
+%
+% Define the abstract page.
+%    \begin{macrocode}
+
+%%%%%%%%%%%%%%%%%%%%%%%%
+%%      Abstract      %%
+%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newcommand{\lt@twoAbstractPages}{}
+%    \end{macrocode}
+% \begin{macro}{\twoAbstractPage}
+%   To put the Swedish and the English abstract on separate right-hand
+%   side pages, separate them with a |\clearemptydoublepage|.
+%    \begin{macrocode}
+\newcommand{\twoAbstractPage}{%
+  \renewcommand{\lt@twoAbstractPages}{\clearemptydoublepage}}
+%    \end{macrocode}
+% \end{macro}
+% \begin{macro}{\makeAbstract}
+%    \begin{macrocode}
+\newcommand*{\makeAbstract}{%
+  \clearemptydoublepage \thispagestyle{plain}%
+  \pdfbookmark[1]{Abstract}{Abstract}%
+  \begingroup
+    \selectlanguage{english}
+    \vspace*{-3\baselineskip}%
+    \@makeschapterhead{\abstractname}  % MIGHT CHANGE!!!
+    \vspace*{-1.5\baselineskip}%
+    \@abstract%
+  \endgroup
+  \vfill \sbox{\@tempboxa}{\mbox{\swe@abstract}}%
+  \ifdim\wd\@tempboxa > \z@%
+    \lt@twoAbstractPages
+    \begingroup
+      \selectlanguage{swedish}
+      \thispagestyle{plain}
+      \vspace*{-3\baselineskip}%
+      \@makeschapterhead{\abstractname} %MIGHT CHANGE!!!
+      \vspace*{-1.5\baselineskip}%
+      \swe@abstract%
+    \endgroup
+  \fi%
+  \vfill \clearemptydoublepage%
+}
+%    \end{macrocode}
+% \end{macro}
+%
+% Define the copyright notice, as defined by ePress on August 9, 2005.
+% Do not change this page unless this copyright notice changes.
+%    \begin{macrocode}
+
+%%%%%%%%%%%%%%%%%%%%%%%%
+%%  Copyright notice  %%
+%%%%%%%%%%%%%%%%%%%%%%%%
+
+%    \end{macrocode}
+% \begin{macro}{\makeCopyright}
+%    \begin{macrocode}
+\newcommand*{\makeCopyright}{\begingroup%
+  \cleardoublepage \thispagestyle{empty}%
+    \pdfbookmark[-1]{Copyright}{Copyright}%%
+  \selectlanguage{swedish}%
+  \vspace*{-22mm}%
+% Handles the case that the parskip package is in use.
+  \setlength\parskip{0\p@ \@plus \p@} \setlength{\parindent}{15\p@}%
+  \hfill%
+  \includegraphics[height=18mm]{LinkUniv_staende_pms}%
+  %
+  \vspace{3\baselineskip} \selectlanguage{swedish}%
+  \par\noindent{\fontsize{12pt}{14pt}\selectfont%
+    \normalfont\large\bfseries Upphovsrätt}\\[1.5ex]
+  \fontsize{10pt}{12pt}\selectfont
+  Detta dokument hålls tillgängligt på Internet --- eller dess
+  framtida ersättare --- under 25 år från publiceringsdatum under
+  förutsättning att inga extraordinära omständigheter uppstår.
+  \par
+  Tillgång till dokumentet innebär tillstånd för var och en att läsa,
+  ladda ner, skriva ut enstaka kopior för enskilt bruk och att använda
+  det oförändrat för icke\-kommersiell forskning och för undervisning.
+  Överföring av upphovsrätten vid en senare tidpunkt kan inte
+  upphäva detta tillstånd. All annan användning av dokumentet kräver
+  upphovsmannens medgivande. För att garantera äktheten, säkerheten
+  och tillgängligheten finns det lösningar av teknisk och
+  administrativ art.
+  \par
+  Upphovsmannens ideella rätt innefattar rätt att bli nämnd som
+  upphovsman i den omfattning som god sed kräver vid användning av
+  dokumentet på ovan be\-skrivna sätt samt skydd mot att dokumentet
+  ändras eller presenteras i sådan form eller i sådant sammanhang som
+  är kränkande för upphovsmannens litterära eller konstnärliga
+  anseende eller egenart.
+  \par
+  För ytterligare information om Linköping University Electronic Press
+  se förlagets hemsida
+  \href{http://www.ep.liu.se/}{\texttt{http://www.ep.liu.se/}}
+  %
+  \vspace*{4\baselineskip}%
+  \selectlanguage{english}%
+  \par\noindent{\fontsize{12pt}{14pt}\selectfont%
+    \normalfont\large\bfseries Copyright}\\[1.5ex]
+  \fontsize{10pt}{12pt}\selectfont
+  The publishers will keep this document online on the Internet --- or
+  its possible replacement --- for a period of 25 years from the date
+  of publication barring exceptional circumstances.
+  \par
+  The online availability of the document implies a permanent permission
+  for anyone to read, to download, to print out single copies for his/her
+  own use and to use it unchanged for any non-commercial research and
+  educational purpose. Subsequent transfers of copyright cannot revoke
+  this permission. All other uses of the document are conditional on the
+  consent of the copyright owner. The publisher has taken technical and
+  administrative measures to assure authenticity, security and
+  accessibility.
+  \par
+  According to intellectual property law the author has the right to
+  be mentioned when his/her work is accessed as described above and to
+  be protected against infringement.
+  \par
+  For additional information about the Linköping University Electronic
+  Press and its procedures for publication and for assurance of
+  document integrity, please refer to its www home page:
+  \href{http://www.ep.liu.se/}{\texttt{http://www.ep.liu.se/}} \par
+       {\vspace*{\baselineskip} \flushright \textcopyright\ \@author
+  \clearpage} \endgroup
+}
+%    \end{macrocode}
+% \end{macro}
+%
+% Define some environments.
+%    \begin{macrocode}
+
+%%%%%%%%%%%%%%%%%%%%%%%%
+%%    Environments    %%
+%%%%%%%%%%%%%%%%%%%%%%%%
+
+\RequirePackage{theorem}
+\theorembodyfont{\normalfont\slshape}
+%    \end{macrocode}
+% \begin{environment}{theorem}
+%    \begin{macrocode}
+\newtheorem{theorem}{\theoremname}[chapter]
+%    \end{macrocode}
+% \end{environment}
+% \begin{environment}{lemma}
+%    \begin{macrocode}
+\newtheorem{lemma}{\lemmaname}[chapter]
+%    \end{macrocode}
+% \end{environment}
+% \begin{environment}{definition}
+%    \begin{macrocode}
+\newtheorem{definition}{\definitionname}[chapter]
+%    \end{macrocode}
+% \end{environment}
+% \begin{environment}{corollaryname}
+%    \begin{macrocode}
+\newtheorem{corollary}{\corollaryname}[chapter]
+
+%%% Proof%%%
+%    \end{macrocode}
+% \end{environment}
+% \begin{environment}{proof}
+%    \begin{macrocode}
+\newenvironment{proof}[1][]{
+    \sbox{\@tempboxa}{\mbox{#1}}%
+    \par\noindent%
+    \ifdim\wd\@tempboxa > \z@%
+      \textbf{\proofname~(#1)}%
+    \else%
+      \textbf{\proofname}%
+    \fi%
+    \begingroup\small%
+  }%
+  {%
+    \endgroup%
+    \hspace*{\stretch{ 1}}$\Box$\par\bigskip%
+    \ignorespacesafterend%
+}
+%    \end{macrocode}
+% \end{environment}
+%    \begin{macrocode}
+
+%%% Example %%%
+%    \end{macrocode}
+% \begin{macro}{\listofexamples}
+%    \begin{macrocode}
+\DeclareRobustCommand*{\listofexamples}{%
+  \section*{\listexamplename}%
+  \@starttoc{xmp}%
+}
+%    \end{macrocode}
+% \end{macro}
+%    \begin{macrocode}
+\newcommand*{\l@example}{\l@figure}%
+\newcounter{Example}[chapter]%
+\renewcommand*{\theExample}{\thechapter.\arabic{Example}}%
+\newlength{\examplelinewidth}
+\setlength{\examplelinewidth}{.8pt}
+%    \end{macrocode}
+% \begin{environment}{example}
+%   The |example| and |example*| environments are defined using
+%   helper-functions to reuse as much code as possible and to avoid
+%   duplicate copies of the same code.  One problem here is to keep
+%   the separating line at the beginning and end of the example at the
+%   same page as the rest of the example text.  Any suggestions on how
+%   to improve this code are welcome.
+%    \begin{macrocode}
+\newenvironment{example}[1][]{%
+  \refstepcounter{Example}%
+  \sbox{\@tempboxa}{\ignorespaces#1\unskip}%
+  \ifdim \wd\@tempboxa>\z@%
+    \sbox{\@tempboxa}{\textbf{%
+        \thinspace\ignorespaces%
+        \examplename\unskip~\theExample:~#1\thinspace}}%
+  \else%
+    \sbox{\@tempboxa}{\textbf{\thinspace\examplename~\theExample\thinspace}}%
+  \fi%
+  \addcontentsline{xmp}{example}{\protect\numberline{\theExample}#1}%
+  \@example%
+}%
+{\@endexample}
+
+\newenvironment{example*}[1][]{%
+  \sbox{\@tempboxa}{\ignorespaces#1\unskip}%
+  \ifdim \wd\@tempboxa>\z@%
+    \sbox{\@tempboxa}{\textbf{%
+        \thinspace\ignorespaces\examplename:~#1\thinspace}}%
+  \else%
+    \sbox{\@tempboxa}{\textbf{\thinspace\examplename\thinspace}}%
+  \fi%
+  \@example%
+}%
+{\@endexample}
+
+\newcommand*\@example{%
+  \setlength{\@tempskipa}{\linewidth}%
+  \addtolength{\@tempskipa}{-\wd\@tempboxa}%
+  \addtolength{\@tempskipa}{-1em}%
+  \pagebreak[2]%
+  \strut\\[.5\baselineskip]%
+  \hspace*{-\examplelinewidth}\hspace*{-.5em}%
+  \rule[\examplelinewidth]{\examplelinewidth}{1ex}%
+  \rule[1ex]{2em}{\examplelinewidth}%
+  \raisebox{.6ex}{\box\@tempboxa}%
+  \rule[1ex]{\@tempskipa}{\examplelinewidth}%
+  \rule[\examplelinewidth]{\examplelinewidth}{1ex}%
+  \nopagebreak[4]\hspace*{-\examplelinewidth}\hspace*{-.5em}%
+  \vspace*{-1.5ex}%
+  \begin{trivlist}\nopagebreak[4]\item\@afterindentfalse%
+}
+
+\newcommand*\@endexample{%
+  \nopagebreak[4]\unskip\end{trivlist}\unskip%
+  \nopagebreak[4]\vspace*{-1ex}%
+  \hspace*{-\examplelinewidth}\hspace*{-.5em}%
+  \rule{\examplelinewidth}{1ex}\rule{\linewidth}{\examplelinewidth}%
+  \rule{1em}{\examplelinewidth}\rule{\examplelinewidth}{1ex}%
+  \hspace*{-\examplelinewidth}\hspace*{-.5em}\\[.5\baselineskip]%
+  \pagebreak[2]%
+  \ignorespacesafterend%
+}
+%    \end{macrocode}
+% \end{environment}
+%
+% Define the headings to be used.
+%    \begin{macrocode}
+
+%%%%%%%%%%%%%%%%%%%%%%%%
+%%      Headings      %%
+%%%%%%%%%%%%%%%%%%%%%%%%
+
+%    \end{macrocode}
+% \begin{macro}{\chaptermark}
+%    \begin{macrocode}
+\DeclareRobustCommand*{\chaptermark}[1]{\markboth{#1}{}}
+%    \end{macrocode}
+% \end{macro}
+% \begin{macro}{\sectionmark}
+%    \begin{macrocode}
+\DeclareRobustCommand*{\sectionmark}[1]{\markright{\thesection~#1}{}}
+\renewcommand*{\ps@headings}{%
+  \renewcommand*{\@oddfoot}{}%
+  \renewcommand*{\@evenfoot}{}%
+  \renewcommand*{\@evenhead}{%
+    \setlength{\@tempskipa}{\textwidth}%
+    \addtolength{\@tempskipa}{-.25em}%
+    \parbox{\@tempskipa}{\bfseries \thepage\hfill\ \ \leftmark%
+      \vspace*{2\p@}\hrule}}%
+  \renewcommand*{\@oddhead}{%
+    \setlength{\@tempskipa}{\textwidth}%
+    \addtolength{\@tempskipa}{-.25em}%
+    \parbox{\@tempskipa}{\bfseries\rightmark\hfill\ \ \thepage
+      \vspace*{2\p@}\hrule}%
+}}
+%    \end{macrocode}
+% \end{macro}
+%
+% Redefine the |thebibliography| environment to have |hyperref| work
+% propertly, and the page heads to be consistent.
+%    \begin{macrocode}
+
+%%%%%%%%%%%%%%%%%%%%%%%%
+%%    Bibliography    %%
+%%%%%%%%%%%%%%%%%%%%%%%%
+
+%    \end{macrocode}
+% \begin{environment}{thebibliography}
+%    \begin{macrocode}
+\renewenvironment{thebibliography}[1]{%
+  \chapter*{\bibname}%
+  \phantomsection\addcontentsline{toc}{chapter}{\bibname}%
+  \markboth{\bibname}{\bibname}%
+  \list{\@biblabel{\@arabic\c@enumiv}}%
+  {\settowidth{\labelwidth}{\@biblabel{#1}}%
+            \setlength{\leftmargin}{\labelwidth}%
+            \addtolength{\leftmargin}{\labelsep}%
+            \@openbib@code%
+            \usecounter{enumiv}%
+            \let\p@enumiv\@empty%
+            \renewcommand\theenumiv{\@arabic\c@enumiv}}%
+      \sloppy%
+      \clubpenalty4000%
+      \@clubpenalty \clubpenalty%
+      \widowpenalty4000%
+      \sfcode`\.\@m}%
+{\def\@noitemerr%
+  {\@latex@warning{Empty `thebibliography' environment}}%
+  \endlist}%
+%    \end{macrocode}
+% \end{environment}
+%
+% Redefine the |theindex| environment to enable for |hyperref| to work
+% propertly, and the page heads to be consistent.
+%    \begin{macrocode}
+
+%%%%%%%%%%%%%%%%%%%%%%%%
+%%       Index        %%
+%%%%%%%%%%%%%%%%%%%%%%%%
+
+%    \end{macrocode}
+% \begin{environment}{theindex}
+%    \begin{macrocode}
+\renewenvironment{theindex}
+               {\if@twocolumn
+                  \@restonecolfalse
+                \else
+                  \@restonecoltrue
+                \fi
+                \columnseprule \z@
+                \columnsep 35\p@
+                \twocolumn[\@makeschapterhead{\indexname}]%
+                \phantomsection\addcontentsline{toc}{chapter}{\indexname}%
+                \markboth{\indexname}{\indexname}%
+                \thispagestyle{plain}\setlength{\parindent}{\z@}%
+                \setlength{\parskip}{\z@ \@plus .3\p@}%
+                \let\item\@idxitem}%
+               {\if@restonecol\onecolumn\else\clearpage\fi}
+%    \end{macrocode}
+% \end{environment}
+%
+% Redefine the macros used for sectioning to suit our other
+% definitions. For instance, allow for chapters to start on right
+% pages in the backmatter.
+%    \begin{macrocode}
+
+%%%%%%%%%%%%%%%%%%%%%%%%
+%%     Sectioning     %%
+%%%%%%%%%%%%%%%%%%%%%%%%
+
+%    \end{macrocode}
+% \begin{macro}{\frontmatter}
+%    \begin{macrocode}
+\renewcommand{\frontmatter}{%
+  \thispagestyle{empty}%
+  \cleardoublepage%
+  \@mainmatterfalse%
+  \pagenumbering{roman}}
+%    \end{macrocode}
+% \end{macro}
+% \begin{macro}{\mainmatter}
+%    \begin{macrocode}
+\renewcommand{\mainmatter}{%
+  \thispagestyle{empty}%
+  \cleardoublepage%
+  \pagestyle{headings}
+  \@mainmattertrue%
+  \pagenumbering{arabic}}
+%    \end{macrocode}
+% \end{macro}
+% \begin{macro}{\backmatter}
+%    \begin{macrocode}
+\renewcommand*{\backmatter}{%
+  \if@openright%
+    \clearemptydoublepage%
+  \else%
+    \clearpage%
+  \fi%
+%  \@mainmatterfalse%
+  \@openrightfalse}
+%    \end{macrocode}
+% \end{macro}
+% \begin{macro}{\makeFrontMatter}
+%    \begin{macrocode}
+\newcommand{\makeFrontMatter}[1][]{%
+  \makeFrontPage\thispagestyle{empty}\clearemptydoublepage%
+  \frontmatter\makeTitlePage \thispagestyle{empty}\clearemptydoublepage%
+  \makeLibraryPage\thispagestyle{empty}\clearemptydoublepage%
+  \pagestyle{headings}\makeAbstract%
+  \thispagestyle{empty}\clearemptydoublepage%
+  \makeAcknowledgements\thispagestyle{empty}\clearemptydoublepage%
+  \tableofcontents%
+  #1%
+  \clearemptydoublepage\mainmatter%
+}
+%    \end{macrocode}
+% \end{macro}
+%
+% Define some macros to create lists of environments.  Furthermore,
+% redefine the caption to better stand out from the regular text.
+%    \begin{macrocode}
+
+%%%%%%%%%%%%%%%%%%%%%%%%
+%%       Other        %%
+%%%%%%%%%%%%%%%%%%%%%%%%
+
+%    \end{macrocode}
+% \begin{macro}{\tableofcontents}
+%    \begin{macrocode}
+\DeclareRobustCommand*{\tableofcontents}{%
+  \chapter*{\contentsname\markboth{\contentsname}{\contentsname}}%
+  \@starttoc{toc}%
+}
+%    \end{macrocode}
+% \end{macro}
+% \begin{macro}{\listoffigures}
+%    \begin{macrocode}
+\DeclareRobustCommand*{\listoffigures}{%
+  \section*{\listfigurename}%
+  \@starttoc{lof}%
+}
+%    \end{macrocode}
+% \end{macro}
+% \begin{macro}{\listoftables}
+%    \begin{macrocode}
+\DeclareRobustCommand*{\listoftables}{%
+  \section*{\listtablename}%
+  \@starttoc{lot}%
+}
+%    \end{macrocode}
+% \end{macro}
+
+% \begin{macro}{\chapter}
+% It looks better if empty pages before a new chapter has no head or
+% foot.
+%    \begin{macrocode}
+
+\renewcommand\chapter{\if@openright\clearemptydoublepage\else\clearpage\fi
+  \thispagestyle{plain}%
+  \global\@topnum\z@
+  \@afterindentfalse
+  \secdef\@chapter\@schapter}
+%    \end{macrocode}
+% \end{macro}
+%    \begin{macrocode}
+
+\renewcommand{\@makecaption}[2]{%
+  \vspace{\abovecaptionskip}
+  \begin{small}
+    \sbox{\@tempboxa}{\textbf{#1.} #2}
+    \ifdim \wd\@tempboxa > \hsize
+      \textbf{#1.} #2\par
+    \else
+      \global \@minipagefalse
+      \parbox{\hsize}{\centering \usebox{\@tempboxa}\hfil}
+    \fi
+  \end{small}
+  \vspace{\belowcaptionskip}
+}
+%    \end{macrocode}
+% Footnotes looks better if the footnote rule is a little wider.
+% \begin{macro}{\footnoterule}
+%    \begin{macrocode}
+
+\renewcommand{\footnoterule}{\vspace*{-3\p@}
+  \noindent\rule{.5\textwidth}{.5\p@}\vspace*{2.6\p@}
+}
+%    \end{macrocode}
+% \end{macro}
+% This makes the bookmarks look somewhat better in pdf-files.
+%    \begin{macrocode}
+\AtBeginDocument{\pdfbookmark[0]{Preface}{Preface}}
+%    \end{macrocode}
+%
+% Create the front page and the title page.
+% \begin{macro}{\makeFrontPage}
+%    \begin{macrocode}
+\newcommand*\makeFrontPage{%
+  \setcounter{page}{-1}%
+  \begingroup\normalfont%
+  \cleardoublepage%
+  \pdfbookmark[1]{Front Page}{FrontPage}%
+  \thispagestyle{empty}%
+  \vspace*{-17mm}\hspace*{-13mm}%
+  \raisebox{\z@}[\z@][\z@]{%
+    \begin{minipage}[t][230mm]{145mm}%
+      \@makeFrontPage
+    \end{minipage}}%
+  \endgroup\clearemptydoublepage%
+}
+%    \end{macrocode}
+% \end{macro}
+% \begin{macro}{\makeTitlePage}
+%    \begin{macrocode}
+\newcommand*\makeTitlePage{%
+  \cleardoublepage \thispagestyle{empty} \normalfont%
+  \pdfbookmark[1]{Title Page}{TitlePage}%
+  \vspace*{-17mm}\hspace*{-13mm}%
+  \raisebox{\z@}[\z@][\z@]{%
+    \begin{minipage}[t][220mm]{145mm}%
+      \@makeTitlePage%
+    \end{minipage}}%
+  \clearemptydoublepage%
+}
+%    \end{macrocode}
+% \end{macro}
+
+%</class>
+%
+% \subsection{Definition File}
+% \label{sec:imp:ldt}
+% 
+% Below follows the definition file for \textsc{isy}. The structure of
+% the file is really simple, so do not hesitate to make your own
+% definition file to suit your needs. And if you do, please submit
+% your new definition to me, and I might just include them in later
+% releases of this class.
+%
+% The first two lines of a definition file must be the following two.
+% The first line tells \LaTeX\ what file it is reading. The second
+% command tells |liuthesis| that it has encountered a definition file.
+% It does also define the address to print on the library page.
+%    \begin{macrocode}
+%<*isy>
+\ProvidesFile{isy.ldt}[2004/11/12 liuthesis defintion for ISY]
+\liuthesisDefinition{ISY}{Department of Electrical Engineering\\%
+  Linköpings universitet\\%
+  SE-581~83 Linköping, Sweden}
+%    \end{macrocode}
+% 
+% Define how the front page. A definition file must define the macro
+% |\@makeFrontPage|, \emph{i.e.}, the look of the front page.  This
+% macro is automatically included at an empty page when the
+% |\makeFrontPage| is executed.
+%    \begin{macrocode}
+
+%%%%%%%%%%%%%%%%%%%%%%%%
+%%     Front page     %%
+%%%%%%%%%%%%%%%%%%%%%%%%
+
+%    \end{macrocode}
+% \begin{macro}{\@makeFrontPage}
+%    \begin{macrocode}
+\newcommand{\@makeFrontPage}{%
+  \centering%
+  {\Huge Institutionen för systemteknik}\\%
+  {\LARGE Department of Electrical Engineering}\\[\stretch{2 }]%
+  {\large\bfseries Examensarbete}\\%
+  \vspace*{\stretch{3 }}%
+  {\parbox{13cm}{\centering\Large\bfseries%
+      \ifLanguageInUse{english}{\@title}{\swe@title}}}\\[\stretch{3 }]%
+  Examensarbete utfört i \thesis@subject\\%
+  vid Tekniska högskolan vid Linköpings universitet\\%
+  av\\[\baselineskip]%
+  {\bfseries \@author}\\[\baselineskip]%
+  \thesis@No\\[.5\baselineskip]%
+  {\small Linköping \thesis@year}\\[\baselineskip]%
+  \vspace*{\stretch{2 }}%
+  \parbox[b][115mm]{145mm}{\centering%
+    \setlength{\fboxrule}{2mm}%
+    \fbox{\parbox{138mm}{\centering%
+        \vspace*{15mm}\strut\\%
+        \includegraphics[width=75mm]{LiTH_staende_sv}\\%
+        \vspace*{15mm}%
+      }}\\[.5\baselineskip]%
+    Department of Electrical Engineering \hfill%
+    Linköpings tekniska högskola\\%
+    Linköpings universitet \hfill Linköpings universitet\\%
+    SE-581~83 Linköping, Sweden \hfill 581~83 Linköping%
+  }%
+}
+%    \end{macrocode}
+% \end{macro}
+% 
+% Define how the title page. A definition file must define the macro
+% |\@makeTitlePage|, \emph{i.e.}, the look of the title page.  This
+% works just like with the front page.
+%    \begin{macrocode}
+
+%%%%%%%%%%%%%%%%%%%%%%%%
+%%     Title page     %%
+%%%%%%%%%%%%%%%%%%%%%%%%
+
+%    \end{macrocode}
+% \begin{macro}{\@makeTitlePage}
+%    \begin{macrocode}
+\newcommand*{\@makeTitlePage}{%
+  \centering \vspace*{\stretch{2 }}%
+  {\parbox{13cm}{\centering\noindent\Large\bfseries%
+      \ifLanguageInUse{english}{\@title}{\swe@title}}}\\%
+  \vspace*{\stretch{2 }}%
+  {\large Examensarbete utfört i \thesis@subject\\%
+    vid Tekniska högskolan vid Linköpings universitet\\%
+    av}\\[\baselineskip]%
+  {\bfseries \@author}\\[\baselineskip]%
+  \thesis@No\\[.5\baselineskip]%
+  \vspace*{\stretch{4 }}%
+  \parbox{10cm}{\raggedright%
+    \rule{10cm}{\z@}%
+    \begin{tabbing}%
+      \hspace*{25mm}\=\quad\=\kill%
+      Handledare:\>\bfseries\@supervisor\\[.5\baselineskip]%
+      Examinator:\>\bfseries\@examiner%
+    \end{tabbing}%
+  }\\[.5\baselineskip]%
+  Linköping, \thesis@day\ \monthName{\thesis@month}, \thesis@year%
+}
+%</isy>
+%    \end{macrocode}
+% \end{macro}
+% \iffalse
+%<*ifm>
+\ProvidesFile{ifm.ldt}[2002/01/08 liuthesis defintion for IFM]
+\liuthesisDefinition{IFM}{Department of Physics and Measurement Technology\\%
+  Linköpings universitet\\%
+  SE-581~83 Linköping, Sweden}
+
+%%%%%%%%%%%%%%%%%%%%%%%%
+%%     Front page     %%
+%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newcommand{\@makeFrontPage}{%
+  \centering%
+  \ifLanguageInUse{swedish}{%
+    {\LARGE Institutionen för Fysik och Mätteknik}\\[\stretch{2 }]%
+    {\Large Examensarbete}\\%
+    \vspace*{\stretch{3 }}%
+    {\parbox{13cm}{\centering\Large\bfseries\swe@title}}\\[\stretch{3 }]%
+    {\Large \@author}\\[\baselineskip]%
+    \thesis@No\\[.5\baselineskip]%
+    \vspace*{\stretch{2 }}%
+    \parbox[b][115mm]{145mm}{\centering%
+      \parbox{138mm}{\centering%
+        \vspace*{15mm}\strut\\%
+        \includegraphics[scale=0.6]{LiTH_staende_sv}\\%
+        \vspace*{15mm}%
+      }\\[.5\baselineskip]%
+      Institutionen för fysik och mätteknik\\%
+      Linköpings universitet\\%
+      581~83 Linköping%
+    }\medskip}{%
+    {\LARGE Department of Physics and Measurement Technology}\\[\stretch{2 }]%
+    {\Large Master's Thesis}\\%
+    \vspace*{\stretch{3 }}%
+    {\parbox{13cm}{\centering\Large\bfseries\@title}}\\[\stretch{3 }]%
+    {\Large \@author}\\[\baselineskip]%
+    \thesis@No\\[.5\baselineskip]%
+    \vspace*{\stretch{2 }}%
+    \parbox[b][115mm]{145mm}{\centering%
+      \parbox{138mm}{\centering%
+        \vspace*{15mm}\strut\\%
+        \includegraphics[height=75mm]{LiTH_staende_eng_sv}\\%
+        \vspace*{15mm}%
+      }\\[.5\baselineskip]%
+      Department of Physics and Measurement Technology\\%
+      Linköpings universitet\\%
+      SE-581~83 Linköping, Sweden
+    }\medskip}%
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%
+%%     Title page     %%
+%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newcommand*{\@makeTitlePage}{%
+  \centering \vspace*{\stretch{1 }}%
+  \ifLanguageInUse{swedish}{Examensarbete}{Master's Thesis}\\%
+  \thesis@No\\[.5\baselineskip]%
+  \vspace*{\stretch{1 }}%
+  {\parbox{13cm}{\centering\noindent\Large\bfseries%
+      \ifLanguageInUse{swedish}{\swe@title}{\@title}}}\\%
+  \vspace*{\stretch{1 }}%
+  {\large \@author}\\[\baselineskip]%
+  \vspace*{\stretch{4 }}%
+  \parbox{10cm}{\raggedright%
+    \rule{10cm}{\z@}%
+    \begin{tabbing}%
+      \hspace*{25mm}\=\quad\=\kill%
+      \ifLanguageInUse{swedish}{Handledare:}{Supervisor:}\>\bfseries
+      \@supervisor\\[.5\baselineskip]%
+      \ifLanguageInUse{swedish}{Examinator:}{Examiner:}%
+      \>\bfseries \@examiner%
+    \end{tabbing}%
+  }\\[.5\baselineskip]%
+  Linköping, \thesis@day\ \monthName{\thesis@month}, \thesis@year%
+}
+
+%</ifm>
+%<*mai>
+\ProvidesFile{mai.ldt}[2002/01/08 liuthesis defintion for MAI]
+\liuthesisDefinition{MAI}{Department of Mathematics\\%
+  Linköpings universitet\\%
+  SE-581~83 Linköping, Sweden}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%
+%%     Front page     %%
+%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newcommand{\@makeFrontPage}{%
+  \centering%
+  {\Huge Matematiska Institutionen}\\[1ex]%
+  {\LARGE Department of Mathematics}\\[\stretch{2 }]%
+  {\Large\bfseries\ifLanguageInUse{swedish}%
+    {Examensarbete}{Master's Thesis}}\\%
+  \vspace*{\stretch{3 }}%
+  {\parbox{13cm}{\centering\LARGE\bfseries%
+      \ifLanguageInUse{swedish}{\swe@title}{\@title}}}\\[\stretch{3 }]%
+  {\large\bfseries\@author}\\[\baselineskip]%
+  Reg Nr:\quad\thesis@No\\
+  Linköping \thesis@year\\[.5\baselineskip]%
+  \vspace*{\stretch{2 }}%
+  \parbox[b][115mm]{145mm}{\centering%
+    \parbox{138mm}{\centering%
+      \vspace*{15mm}\strut\\%
+      \ifLanguageInUse{swedish}{
+        \includegraphics[width=75mm]{LiTH_staende_sv}}{%
+        \includegraphics[width=75mm]{LiTH_staende_eng_sv}}\\%
+      \vspace*{15mm}%
+    }\\[.5\baselineskip]%
+    \ifLanguageInUse{swedish}%
+    {Matematiska institutionen\\%
+      Linköpings universitet\\%
+      581~83 Linköping}%
+    {Department of Mathematics\\%
+      Linköpings universitet\\%
+      SE-581~83 Linköping, Sweden}
+  }\medskip%
+}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%
+%%     Title page     %%
+%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newcommand*{\@makeTitlePage}{%
+  \centering \vspace*{\stretch{1 }}%
+  {\parbox{13cm}{\centering\noindent\Large\bfseries%
+      \ifLanguageInUse{swedish}{\swe@title}{\@title}}}\\[1.5\baselineskip]%
+  {\large \thesis@subject}\\[1.5\baselineskip]%
+  {\bfseries \@author}\\[\baselineskip]%
+  \thesis@No\\[.5\baselineskip]%
+  \vspace*{\stretch{2 }}%
+  \parbox{10cm}{\raggedright%
+    \rule{10cm}{\z@}%
+    \begin{tabbing}%
+      \hspace*{25mm}\=\quad\=\kill%
+      Handledare:\>\bfseries \@supervisor\\[.5\baselineskip]%
+      Examinator:\>\bfseries \@examiner%
+    \end{tabbing}%
+  }\\[.5\baselineskip]%
+  Linköping, \thesis@day\ \monthName{\thesis@month}, \thesis@year%
+}
+%</mai>
+%<*ida>
+\ProvidesFile{ida.ldt}[2002/01/08 liuthesis defintion for IFM]
+\liuthesisDefinition{IDA}{Department of Computer and Information Science\\%
+  Linköpings universitet\\%
+  SE-581~83 Linköping, Sweden}
+
+% Thanks Niclas Wiker, PhD student at IKP, for the implementation of
+% this definition.
+
+%%%%%%%%%%%%%%%%%%%%%%%%
+%%     Front page     %%
+%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newcommand{\@makeFrontPage}{%
+  \centering%
+  {\Huge Institutionen för datavetenskap}\\[1ex]%
+  {\LARGE Department of Computer and Information Science}\\[\stretch{2 }]%
+  {\Large\bfseries\ifLanguageInUse{swedish}%
+    {Examensarbete}{Master's Thesis}}\\%
+  \vspace*{\stretch{3 }}%
+  {\parbox{13cm}{\centering\LARGE\bfseries%
+      \ifLanguageInUse{swedish}{\swe@title}{\@title}}}\\[\stretch{3 }]%
+  {\large\bfseries\@author}\\[\baselineskip]%
+  Reg Nr:\quad\thesis@No\\
+  Linköping \thesis@year\\[.5\baselineskip]%
+  \vspace*{\stretch{2 }}%
+  \parbox[b][115mm]{145mm}{\centering%
+    \parbox{138mm}{\centering%
+      \vspace*{15mm}\strut\\%
+      \ifLanguageInUse{swedish}{
+        \includegraphics[width=75mm]{LiTH_staende_sv}}{%
+        \includegraphics[width=75mm]{LiTH_staende_eng_sv}}\\%
+      \vspace*{15mm}%
+    }\\[.5\baselineskip]%
+    \ifLanguageInUse{swedish}%
+    {Institutionen för datavetenskap\\%
+      Linköpings universitet\\%
+      581~83 Linköping}%
+    {Department of Computer and Information Science\\%
+      Linköpings universitet\\%
+      SE-581~83 Linköping, Sweden}
+  }%
+}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%
+%%     Title page     %%
+%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newcommand*{\@makeTitlePage}{%
+  \centering
+  {\Huge Institutionen för datavetenskap}\\[1ex]%
+  {\LARGE Department of Computer and Information Science}\\[\stretch{2 }]%
+  {\Large\bfseries\ifLanguageInUse{swedish}%
+    {Examensarbete}{Master's Thesis}}\\%
+  \vspace*{\stretch{.5 }}%
+  {\parbox{13cm}{\centering\LARGE\bfseries%
+      \ifLanguageInUse{swedish}{\swe@title}{\@title}}}\\[\stretch{.5 }]%
+  {\large\bfseries\@author}\\[\baselineskip]%
+  Reg Nr:\quad\thesis@No\\
+  Linköping \thesis@year\\[.5\baselineskip]%
+  \vspace*{\stretch{2 }}%
+  \parbox{10cm}{\raggedright%
+    \rule{10cm}{\z@}%
+    \begin{tabbing}%
+      \hspace*{25mm}\=\quad\=\kill%
+      \ifLanguageInUse{swedish}{Handledare:}%
+      {Supervisor:}\>\bfseries \@supervisor\\[.5\baselineskip]%
+      \ifLanguageInUse{swedish}{Examinator:}%
+      {Examiner:}\>\bfseries \@examiner%
+    \end{tabbing}%
+  }\\[\stretch{2 }]%
+
+  \ifLanguageInUse{swedish}%
+  {Institutionen för datavetenskap\\%
+    Linköpings universitet\\%
+    581~83 Linköping}%
+  {Department of Computer and Information Science\\%
+    Linköpings universitet\\%
+    SE-581~83 Linköping, Sweden}%
+}
+%</ida>
+%<*ikpmek>
+\ProvidesFile{ikp_mek.ldt}[2003/04/01 liuthesis defintion for IKP Mekaniksystem]
+\liuthesisDefinition{IKP}{Department of Mechanical Engineering\\%
+  Linköpings universitet\\%
+  SE-581~83 Linköping, Sweden}
+
+% Thanks Niclas Wiker, PhD student at IKP, for the implementation of
+% this definition.
+
+%%%%%%%%%%%%%%%%%%%%%%%%
+%%     Front page     %%
+%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newcommand{\@makeFrontPage}{%
+  \centering%
+  \vspace*{\stretch{3 }}%
+  {\parbox{13cm}{\centering\Large\bfseries%
+      \ifLanguageInUse{swedish}{\swe@title}{\@title}}}\\[\stretch{3 }]%
+  Examensarbete utfört i \thesis@subject\\%
+  vid Tekniska högskolan vid Linköpings universitet\\%
+  av\\[\baselineskip]%
+  {\bfseries \@author}\\[\baselineskip]%
+  \thesis@No\\[.5\baselineskip]%
+  {\small Linköping \thesis@year}\\[\baselineskip]%
+  \vspace*{\stretch{2 }}%
+}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%
+%%     Title page     %%
+%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newcommand*{\@makeTitlePage}{%
+  \centering \vspace*{\stretch{2 }}%
+  {\parbox{13cm}{\centering\noindent\Large\bfseries%
+      \ifLanguageInUse{swedish}{\swe@title}{\@title}}}\\%
+  \vspace*{\stretch{2 }}%
+  {\large Examensarbete utfört i \thesis@subject\\%
+    vid Tekniska högskolan vid Linköpings universitet\\%
+    av}\\[\baselineskip]%
+  {\bfseries \@author}\\[\baselineskip]%
+  \thesis@No\\[.5\baselineskip]%
+  \vspace*{\stretch{4 }}%
+  \parbox{10cm}{\raggedright%
+    \rule{10cm}{\z@}%
+    \begin{tabbing}%
+      \hspace*{25mm}\=\quad\=\kill%
+      Handledare:\>\bfseries \@supervisor\\[.5\baselineskip]%
+      Examinator:\>\bfseries \@examiner%
+    \end{tabbing}%
+  }\\[.5\baselineskip]%
+  Linköping, \thesis@day\ \monthName{\thesis@month}, \thesis@year%
+}
+%</ikpmek>
+%<*ikpmask>
+\ProvidesFile{ikp_mask.ldt}[2003/07/29 liuthesis defintion for IKP Maskinkonstruktion]
+\liuthesisDefinition{IKP}{Department of Mechanical Engineering\\%
+  Linköpings universitet\\%
+  SE-581~83 Linköping, Sweden}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%
+%%     Front page     %%
+%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newcommand{\@makeFrontPage}{%
+  \centering%
+  \vspace*{\stretch{3 }}%
+  {\parbox{13cm}{\centering\Large\bfseries%
+      \ifLanguageInUse{swedish}{\swe@title}{\@title}}}\\[\stretch{3 }]%
+  Examensarbete utfört i \thesis@subject\\%
+  vid Tekniska högskolan vid Linköpings universitet\\%
+  av\\[\baselineskip]%
+  {\bfseries \@author}\\[\baselineskip]%
+  \thesis@No\\[.5\baselineskip]%
+  {\small Linköping \thesis@year}\\[\baselineskip]%
+  \vspace*{\stretch{2 }}%
+}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%
+%%     Title page     %%
+%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newcommand*{\@makeTitlePage}{%
+  \centering \vspace*{\stretch{2 }}%
+  {\parbox{13cm}{\centering\noindent\Large\bfseries%
+      \ifLanguageInUse{swedish}{\swe@title}{\@title}}}\\%
+  \vspace*{\stretch{2 }}%
+  {\large Examensarbete utfört i \thesis@subject\\%
+    vid Tekniska högskolan vid Linköpings universitet\\%
+    av}\\[\baselineskip]%
+  {\bfseries \@author}\\[\baselineskip]%
+  \thesis@No\\[.5\baselineskip]%
+  \vspace*{\stretch{4 }}%
+  \parbox{10cm}{\raggedright%
+    \rule{10cm}{\z@}%
+    \begin{tabbing}%
+      \hspace*{25mm}\=\quad\=\kill%
+      \ifLanguageInUse{swedish}{Handledare}{Supervisor}:%
+      \>\bfseries \@supervisor\\[.5\baselineskip]%
+      \ifLanguageInUse{swedish}{Examinator}{Examiner}:%
+      \>\bfseries \@examiner%
+    \end{tabbing}%
+  }\\[.5\baselineskip]%
+  Linköping, \thesis@day\ \monthName{\thesis@month}, \thesis@year%
+}
+%</ikpmask>
+
+% The ITN specification is thanks to Anna Lombardi, ITN.
+
+%<*itn>
+\ProvidesFile{itn.ldt}[2005/08/20 liuthesis defintion for ITN]
+\liuthesisDefinition{ITN}{Department of Science and Technology\\%
+  Linköpings universitet\\%
+  SE-601~74 Norrköping, Sweden}
+
+%%%%%%%%%%%%%%%%%%%%%%%%
+%%     Front page     %%
+%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newcommand{\@makeFrontPage}{%
+  \centering%
+  {\Huge Institutionen för teknik och naturvetenskap}\\%
+  {\LARGE Department of Science and Technology}\\[\stretch{2 }]%
+  {\large\bfseries Examensarbete}\\%
+  \vspace*{\stretch{3 }}%
+  {\parbox{13cm}{\centering\Large\bfseries%
+      \ifLanguageInUse{swedish}{\swe@title}{\@title}}}\\[\stretch{3 }]%
+  Examensarbete utfört i \thesis@subject\\%
+  vid Tekniska högskolan vid Linköpings universitet\\%
+  av\\[\baselineskip]%
+  {\bfseries \@author}\\[\baselineskip]%
+  \thesis@No\\[.5\baselineskip]%
+  {\small Norrköping \thesis@year}\\[\baselineskip]%
+  \vspace*{\stretch{2 }}%
+  \parbox[b][115mm]{145mm}{\centering%
+    \setlength{\fboxrule}{2mm}%
+    \fbox{\parbox{138mm}{\centering%
+        \vspace*{15mm}\strut\\%
+        \includegraphics[width=75mm]{LiTH_staende_sv}\\%
+        \vspace*{15mm}%
+      }}\\[.5\baselineskip]%
+    Department of Science and Technology \hfill%
+    Linköpings tekniska högskola\\%
+    Linköpings universitet \hfill Linköpings universitet\\%
+    SE-601~74 Norrköping, Sweden \hfill 601~74 Norrköping%
+  }\medskip%
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%
+%%     Title page     %%
+%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newcommand*{\@makeTitlePage}{%
+  \centering \vspace*{\stretch{2 }}%
+  {\parbox{13cm}{\centering\noindent\Large\bfseries%
+      \ifLanguageInUse{swedish}{\swe@title}{\@title}}}\\%
+  \vspace*{\stretch{2 }}%
+  {\large Examensarbete utfört i \thesis@subject\\%
+    vid Tekniska högskolan vid Linköpings universitet\\%
+    av}\\[\baselineskip]%
+  {\bfseries \@author}\\[\baselineskip]%
+  \thesis@No\\[.5\baselineskip]%
+  \vspace*{\stretch{4 }}%
+  \parbox{10cm}{\raggedright%
+    \rule{10cm}{\z@}%
+    \begin{tabbing}%
+      \hspace*{25mm}\=\quad\=\kill%
+      Handledare:\>\bfseries\@supervisor\\[.5\baselineskip]%
+      Examinator:\>\bfseries\@examiner%
+    \end{tabbing}%
+  }\\[.5\baselineskip]%
+  Norrköping, \thesis@day\ \monthName{\thesis@month}, \thesis@year%
+}
+%</itn>
+
+
+%<*ipe>
+\ProvidesFile{ipe.ldt}[2006/10/14 liuthesis defintion for IPE]
+\liuthesisDefinition{IPE}{Department of Production Economics\\%
+  Linköpings universitet\\%
+  SE-581~83 Linköping, Sweden}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%
+%%     Front page     %%
+%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\@makeFrontPage}{%
+  \centering%
+  {\Huge Institutionen för produktionsekonomi}\\[1ex]%
+  {\LARGE Department of Production Economics}\\[\stretch{2 }]%
+  {\Large\bfseries\ifLanguageInUse{swedish}%
+    {Examensarbete}{Master's Thesis}}\\%
+  \vspace*{\stretch{3 }}%
+  {\parbox{13cm}{\centering\LARGE\bfseries%
+      \ifLanguageInUse{swedish}{\swe@title}{\@title}}}\\[\stretch{3 }]%
+  {\large\bfseries\@author}\\[\baselineskip]%
+  Reg Nr:\quad\thesis@No\\
+  Linköping \thesis@year\\[.5\baselineskip]%
+  \vspace*{\stretch{2 }}%
+  \parbox[b][115mm]{145mm}{\centering%
+    \parbox{138mm}{\centering%
+      \vspace*{15mm}\strut\\%
+      \ifLanguageInUse{swedish}{
+        \includegraphics[width=85mm]{LiTH_staende_sv}}{%
+        \includegraphics[width=85mm]{LiTH_staende_eng_sv}}\\%
+      \vspace*{15mm}%
+    }\\[.5\baselineskip]%
+    \ifLanguageInUse{swedish}%
+    {Institutionen för produktionsekonomi\\%
+      Linköpings universitet\\%
+      581~83 Linköping}%
+    {Department of Production Economics\\%
+      Linköpings universitet\\%
+      SE-581~83 Linköping, Sweden}
+  }\medskip%
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%
+%%     Title page     %%
+%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newcommand*{\@makeTitlePage}{%
+  \centering
+  {\Huge \emph{} \newline \emph{} \\ Institutionen för produktionsekonomi}\\[1ex]%
+  {\LARGE Department of Production Economics}\\[\stretch{2 }]%
+  {\Large\bfseries\ifLanguageInUse{swedish}%
+    {Examensarbete}{Master's Thesis}}\\%
+  \vspace*{\stretch{.5 }}%
+  {\parbox{13cm}{\centering\LARGE\bfseries%
+      \ifLanguageInUse{swedish}{\swe@title}{\@title}}}\\[\stretch{.5 }]%
+  {\large\bfseries\@author}\\[\baselineskip]%
+  Reg Nr:\quad\thesis@No\\
+  Linköping \thesis@year\\[.5\baselineskip]%
+  \vspace*{\stretch{2 }}%
+  \parbox{10cm}{\raggedright%
+    \rule{10cm}{\z@}%
+    \begin{tabbing}%
+      \hspace*{25mm}\=\quad\=\kill%
+      \ifLanguageInUse{swedish}{Handledare:}%
+      {Supervisor:}\>\bfseries \@supervisor\\[.5\baselineskip]%
+      \ifLanguageInUse{swedish}{Examinator:}%
+      {Examiner:}\>\bfseries \@examiner%
+    \end{tabbing}%
+  }\\[\stretch{2 }]%
+
+  \ifLanguageInUse{swedish}%
+  {Institutionen för produktionsekonomi\\%
+    Linköpings universitet\\%
+    581~83 Linköping}%
+  {Department of Production Economics\\%
+    Linköpings universitet\\%
+    SE-581~83 Linköping, Sweden}
+  \medskip%
+}
+%</ipe>
+% \fi
+
+% \Finale
+
+%% \CharacterTable
+%%  {Upper-case    \A\B\C\D\E\F\G\H\I\J\K\L\M\N\O\P\Q\R\S\T\U\V\W\X\Y\Z
+%%   Lower-case    \a\b\c\d\e\f\g\h\i\j\k\l\m\n\o\p\q\r\s\t\u\v\w\x\y\z
+%%   Digits        \0\1\2\3\4\5\6\7\8\9
+%%   Exclamation   \!     Double quote  \"     Hash (number) \#
+%%   Dollar        \$     Percent       \%     Ampersand     \&
+%%   Acute accent  \'     Left paren    \(     Right paren   \)
+%%   Asterisk      \*     Plus          \+     Comma         \,
+%%   Minus         \-     Point         \.     Solidus       \/
+%%   Colon         \:     Semicolon     \;     Less than     \<
+%%   Equals        \=     Greater than  \>     Question mark \?
+%%   Commercial at \@     Left bracket  \[     Backslash     \\
+%%   Right bracket \]     Circumflex    \^     Underscore    \_
+%%   Grave accent  \`     Left brace    \{     Vertical bar  \|
+%%   Right brace   \}     Tilde         \~}
+\endinput
