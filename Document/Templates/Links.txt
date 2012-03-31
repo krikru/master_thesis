@@ -16,5 +16,8 @@ Publicera uppsatser/examensarbeten vid Linköpings universitet:
 Publiceringsmallar:
   http://www.ep.liu.se/templates/index.sv.asp
 
+Ett ledande svenskt Open Access-förlag (Electronic press):
+  http://www.ep.liu.se/index.sv.asp
+
 Writing a Master's Thesis in LaTeX:
   http://www.control.isy.liu.se/student/exjobb/liuthesis/liuthesis.html
