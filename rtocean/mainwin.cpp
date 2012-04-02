@@ -6,6 +6,10 @@ mainwin::mainwin(QWidget *parent) :
     ui(new Ui::mainwin)
 {
     ui->setupUi(this);
+
+
+    // Start simulation directly when application has finished loading
+    QTimer::singleShot(0, this, SLOT(start_simulation()));
 }
 
 mainwin::~mainwin()
