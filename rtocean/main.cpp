@@ -1,11 +1,31 @@
+
+////////////////////////////////////////////////////////////////
+// INCLUDE FILES
+////////////////////////////////////////////////////////////////
+
+// OpenGL
+//#include <GL/glut.h>
+
+// Qt
 #include <QtGui/QApplication>
+
+// Widgets
 #include "mainwin.h"
+
+////////////////////////////////////////////////////////////////
+// MAIN FUNCTION
+////////////////////////////////////////////////////////////////
 
 int main(int argc, char *argv[])
 {
-    QApplication a(argc, argv);
-    mainwin w;
-    w.show();
+    // Init glut
+    //glutInit(&argc, argv);
 
-    return a.exec();
+    // Init application
+    QApplication app(argc, argv);
+    mainwin win;
+    win.show();
+
+    // "Start" application
+    return app.exec();
 }
