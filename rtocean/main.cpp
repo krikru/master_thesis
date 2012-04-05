@@ -4,7 +4,7 @@
 ////////////////////////////////////////////////////////////////
 
 // OpenGL
-#include <GL/glut.h>
+//#include <GL/glut.h>
 
 // Qt
 #include <QtGui/QApplication>
@@ -19,7 +19,7 @@
 int main(int argc, char *argv[])
 {
     // Init glut
-    glutInit(&argc, argv);
+    //glutInit(&argc, argv);
 
     // Init application
     QApplication app(argc, argv);
