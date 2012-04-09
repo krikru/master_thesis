@@ -15,7 +15,7 @@ using std::logic_error;
 // CONSTRUCTORS AND DESTRUCTOR
 ////////////////////////////////////////////////////////////////
 
-octcell::octcell(pftype size, pftype x_pos, pftype y_pos, pftype z_pos, octcell *children)
+octcell::octcell(pftype size, pftype x_pos, pftype y_pos, pftype z_pos, octcell **children)
 {
     s = size;
     x = x_pos;
@@ -27,7 +27,12 @@ octcell::octcell(pftype size, pftype x_pos, pftype y_pos, pftype z_pos, octcell 
 octcell::~octcell()
 {
     if (c) {
-        delete[] c;
+        for (int i = 0; i < MAX_NUM_CHILDREN; i++) {
+            if (c[i]) {
+                delete c[i];
+            }
+        }
+        delete c;
     }
 }
 
@@ -43,7 +48,11 @@ void octcell::refine()
     }
 #endif
 
-    c = new octcell[MAX_NUM_CHILDREN];
+    // Create children
+    c = new *octcell[MAX_NUM_CHILDREN];
+    for (int i = 0; i < MAX_NUM_CHILDREN; i++) {
+        c[i] = new octcell;
+    }
 
     pftype s_2 = 0.5 * s;
     // Assign sizes

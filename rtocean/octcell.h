@@ -26,7 +26,7 @@ public:
     /*******************************
      * Constructors and destructor *
      *******************************/
-    octcell(pftype size, pftype x_pos, pftype y_pos, pftype z_pos, octcell *children = 0);
+    octcell(pftype size, pftype x_pos, pftype y_pos, pftype z_pos, octcell **children);
     ~octcell();
 
 public:
@@ -38,13 +38,12 @@ public:
     pftype y; /* Y-position of first corner */
     pftype z; /* Z-position of first corner */
 
-    octcell *c; /* An array containing the possible children (will be NULL if the cell doesn't have any children). Note that all children may not exist(). */
+    octcell **c; /* The possible children
 
 public:
     /******************
      * Public methods *
      ******************/
-    bool exists() {return s;}
     void refine();
 
 private:
@@ -52,7 +51,7 @@ private:
     /*************************
      * Disabled constructors *
      *************************/
-    octcell() {} // Default constructor prevented from global use
+    octcell(); // Default constructor prevented from all use
     octcell(octcell&); // Default constructor prevented from all use
 };
 

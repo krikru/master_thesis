@@ -2,4 +2,5 @@
 
 fvmoctree::fvmoctree()
 {
+    root = NULL;
 }
