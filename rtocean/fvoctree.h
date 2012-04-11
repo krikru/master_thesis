@@ -1,5 +1,5 @@
-#ifndef FVMOCTREE_H
-#define FVMOCTREE_H
+#ifndef FVOCTREE_H
+#define FVOCTREE_H
 
 ////////////////////////////////////////////////////////////////
 // INCLUDE FILES
@@ -11,13 +11,14 @@
 // CLASS DEFINITION
 ////////////////////////////////////////////////////////////////
 
-class fvmoctree
+class fvoctree
 {
 public:
-    fvmoctree();
+    fvoctree();
+    ~fvoctree();
 
 public:
     octcell *root;
 };
 
-#endif // FVMOCTREE_H
+#endif // FVOCTREE_H

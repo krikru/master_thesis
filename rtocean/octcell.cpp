@@ -7,6 +7,7 @@
 #include <stdexcept>
 //using std::exception;
 using std::logic_error;
+using std::out_of_range;
 
 // Own includes
 #include "octcell.h"
@@ -40,30 +41,96 @@ octcell::~octcell()
 // PUBLIC METHODS
 ////////////////////////////////////////////////////////////////
 
+bool octcell::has_child_array()
+{
+    return c;
+}
+
+bool octcell::is_leaf()
+{
+    return !c;
+}
+
 void octcell::refine()
 {
 #if DEBUG
-    if (c) {
-        throw logic_error("Trying to refine a cell that already has children");
+    if (has_child_array()) {
+        throw logic_error("Trying to refine a cell that already has child array");
+    }
+#endif
+
+    // Create child array
+    c = new octcell*[MAX_NUM_CHILDREN];
+    // Create new values for children
+    pftype s_2 = 0.5 * s;
+    pftype x_2 = x + s_2;
+    pftype y_2 = y + s_2;
+    pftype z_2 = z + s_2;
+    // Assign values to children
+    c[0] = new octcell(s_2, x  , y  , z  );
+    c[1] = new octcell(s_2, x_2, y  , z  );
+    c[2] = new octcell(s_2, x  , y_2, z  );
+    c[3] = new octcell(s_2, x_2, y_2, z  );
+    c[4] = new octcell(s_2, x  , y  , z_2);
+    c[5] = new octcell(s_2, x_2, y  , z_2);
+    c[6] = new octcell(s_2, x  , y_2, z_2);
+    c[7] = new octcell(s_2, x_2, y_2, z_2);
+}
+
+void octcell::unleaf()
+{
+#if DEBUG
+    if (has_child_array()) {
+        throw logic_error("Trying to unleaf a cell that already has child array");
     }
 #endif
 
     // Create children
-    c = new *octcell[MAX_NUM_CHILDREN];
+    c = new octcell*[MAX_NUM_CHILDREN];
     for (int i = 0; i < MAX_NUM_CHILDREN; i++) {
-        c[i] = new octcell;
+        c[i] = 0;
     }
+}
+
+
+octcell* octcell::add_child(int idx)
+{
+#if DEBUG
+    if (is_leaf()) {
+        throw logic_error("Trying to add a child cell to a leaf cell (it first has to be un-leafed)");
+    }
+    if (idx < 0 || idx >= MAX_NUM_CHILDREN) {
+        throw out_of_range("Trying to add a child cell with index out of bound");
+    }
+    if (c[idx]) {
+        throw logic_error("Trying to add a child cell that already exist");
+    }
+#endif
 
     pftype s_2 = 0.5 * s;
-    // Assign sizes
-    c[0].s = c[1].s = c[2].s = c[3].s = c[4].s = c[5].s = c[6].s = c[7].s = s_2;
-    // Assign x-positions
-    c[0].x = c[2].x = c[4].x = c[6].x = x;
-    c[1].x = c[3].x = c[5].x = c[7].x = x + s_2;
-    // Assign y-positions
-    c[0].y = c[1].y = c[4].y = c[5].y = y;
-    c[2].y = c[3].y = c[6].y = c[7].y = y + s_2;
-    // Assign z-positions
-    c[0].z = c[1].z = c[2].z = c[3].z = z;
-    c[4].z = c[5].z = c[6].z = c[7].z = z + s_2;
+    pftype x1 = x + ((idx >> 0) & 1) * s_2;
+    pftype y1 = y + ((idx >> 1) & 1) * s_2;
+    pftype z1 = z + ((idx >> 2) & 1) * s_2;
+
+    c[idx] = new octcell(s_2, x1, y1, z1);
+
+    return c[idx];
+}
+
+void octcell::remove_child(int idx)
+{
+#if DEBUG
+    if (is_leaf()) {
+        throw logic_error("Trying to remove a child cell from a leaf cell");
+    }
+    if (idx < 0 || idx >= MAX_NUM_CHILDREN) {
+        throw out_of_range("Trying to remove a child cell with index out of bound");
+    }
+    if (!c[idx]) {
+        throw logic_error("Trying to remove a child cell that doesn't exist");
+    }
+#endif
+
+    delete c[idx];
+    c[idx] = 0;
 }

@@ -21,12 +21,13 @@
  */
 class octcell
 {
+public:
     static const int MAX_NUM_CHILDREN = 8;
 public:
     /*******************************
      * Constructors and destructor *
      *******************************/
-    octcell(pftype size, pftype x_pos, pftype y_pos, pftype z_pos, octcell **children);
+    octcell(pftype size, pftype x_pos, pftype y_pos, pftype z_pos, octcell **children = 0);
     ~octcell();
 
 public:
@@ -38,13 +39,18 @@ public:
     pftype y; /* Y-position of first corner */
     pftype z; /* Z-position of first corner */
 
-    octcell **c; /* The possible children
+    octcell **c; /* The possible children */
 
 public:
     /******************
      * Public methods *
      ******************/
-    void refine();
+    bool has_child_array();
+    bool is_leaf();
+    void refine(); // Creates new child cells
+    void unleaf(); // Doesn't create new child cells
+    octcell* add_child(int idx);
+    void remove_child(int idx);
 
 private:
 

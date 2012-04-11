@@ -24,6 +24,7 @@ int main(int argc, char *argv[])
     // Init application
     QApplication app(argc, argv);
     mainwin win;
+    win.showMaximized();
     win.show();
 
     // "Start" application

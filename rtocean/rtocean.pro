@@ -13,18 +13,18 @@ TEMPLATE = app
 SOURCES += main.cpp\
         mainwin.cpp \
     viswidget.cpp \
-    fvmoctree.cpp \
     octcell.cpp \
-    octcellface.cpp
+    octcellface.cpp \
+    fvoctree.cpp
 
 HEADERS  += mainwin.h \
     viswidget.h \
     definitions.h \
-    fvmoctree.h \
     octcell.h \
     octcellface.h \
     base_int_vec3.h \
-    base_float_vec3.h
+    base_float_vec3.h \
+    fvoctree.h
 
 FORMS    += mainwin.ui
 
