@@ -1,0 +1,34 @@
+#ifndef OCTFACE_H
+#define OCTFACE_H
+
+////////////////////////////////////////////////////////////////
+// INCLUDE FILES
+////////////////////////////////////////////////////////////////
+
+// Own includes
+#include "octcell.h"
+
+////////////////////////////////////////////////////////////////
+// CLASS DEFINTION
+////////////////////////////////////////////////////////////////
+
+class octface
+{
+public:
+    octface();
+
+public:
+
+    /* Cells that are connected */
+    octcell *c1;
+    octcell *c2;
+
+    /* Distance between cells */
+    pfvec3 dist;
+    pftype dist_abs;
+
+    /* Surface */
+    pftype s_area;
+};
+
+#endif // OCTFACE_H

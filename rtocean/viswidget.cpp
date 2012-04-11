@@ -12,6 +12,9 @@
 // OpenGL
 #include <GL/glu.h>
 
+// Own includes
+#include "message_handler.h"
+
 ////////////////////////////////////////////////////////////////
 // CONSTRUCTORS AND DESTRUCTOR
 ////////////////////////////////////////////////////////////////
@@ -28,50 +31,74 @@ viswidget::viswidget(QWidget *parent) :
 
 void viswidget::initializeGL()
 {
-    glClearColor(0.2, 0.2, 0.2, 1);
+    try
+    {
+        glClearColor(0.2, 0.2, 0.2, 1);
+    }
+    catch (std::exception &e) {
+        message_handler::inform_about_exception("viswidget::initializeGL()", e, true);
+    }
 }
 
 void viswidget::paintGL()
 {
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    try
+    {
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 #if 0
-    glBegin(GL_TRIANGLES);
-    {
-        glColor3f(1, 0, 0);
-        glVertex3f(-0.5, -0.5, 1);
-        glColor3f(0, 1, 0);
-        glVertex3f( 0.5, -0.5, 1);
-        glColor3f(0, 0, 1);
-        glVertex3f( 0.0,  0.5, 1);
-    }
-    glEnd();
+        glBegin(GL_TRIANGLES);
+        {
+            glColor3f(1, 0, 0);
+            glVertex3f(-0.5, -0.5, 1);
+            glColor3f(0, 1, 0);
+            glVertex3f( 0.5, -0.5, 1);
+            glColor3f(0, 0, 1);
+            glVertex3f( 0.0,  0.5, 1);
+        }
+        glEnd();
 
-    draw_line(0, 0, 0, 1, 1, 0, 100, 120, 120, 120);
+        draw_line(0, 0, 0, 1, 1, 0, 100, 120, 120, 120);
 #else
-    fvoctree tree;
-    octcell *c = tree.root = new octcell(1, -1.0/3, -1.0/3, 0);
-    c->unleaf();
-    c->add_child(0);
-    //c = c->add_child(7);
-    c = c->add_child(8);
-    c->refine();
-    c->c[0]->refine();
-    c->remove_child(7);
+        fvoctree tree;
+        octcell *c = tree.root = new octcell(1, -1.0/3, -1.0/3, 0);
+        c->refine();
+        c = c->c[octcell::child_index(0, 1, 0)];
+        c->refine();
+        c = c->c[octcell::child_index(0, 0, 0)];
+        c->refine();
+        c = c->c[octcell::child_index(0, 1, 0)];
+        c->refine();
+        for (int i = 0; i < 2; i++) {
+            c = c->c[octcell::child_index(0, 1, 0)];
+            c->refine();
+        }
 
-    visualize_fvoctree(&tree);
+
+        visualize_fvoctree(&tree);
 #endif
+    }
+    catch (std::exception &e) {
+        message_handler::inform_about_exception("viswidget::paintGL()", e, true);
+    }
 }
 
 void viswidget::resizeGL(int w, int h)
 {
-    glViewport(0, 0, w, h);
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-    gluPerspective(90, 1, 0.01, 100);
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
-    gluLookAt(0, 0, 2, 0, 0, 0, 0, 1, 0);
+    try
+    {
+        glViewport(0, 0, w, h);
+        glMatrixMode(GL_PROJECTION);
+        glLoadIdentity();
+        gluPerspective(45, 1, 0.01, 100);
+        //gluPerspective(90, 1, 0.01, 100);
+        glMatrixMode(GL_MODELVIEW);
+        glLoadIdentity();
+        gluLookAt(0, 0, 2.5, 0, 0, 0, 0, 1, 0);
+    }
+    catch (std::exception &e) {
+        message_handler::inform_about_exception("viswidget::resizeGL()", e, true);
+    }
 }
 
 void viswidget::visualize_octcell(octcell *cell, bool recursively)
@@ -88,7 +115,7 @@ void viswidget::visualize_octcell(octcell *cell, bool recursively)
         set_line_style(1, 128, 128, 128, 255);
     }
     else {
-        set_line_style(2, 255, 255, 255, 255);
+        set_line_style(1, 255, 255, 255, 255);
     }
 
     quick_draw_line(x1, y1, z1, x2, y1, z1);
@@ -109,7 +136,7 @@ void viswidget::visualize_octcell(octcell *cell, bool recursively)
     glPopAttrib();
 
     if (recursively && cell->has_child_array()) {
-        for (int i = 0; i < octcell::MAX_NUM_CHILDREN; i++) {
+        for (uint i = 0; i < octcell::MAX_NUM_CHILDREN; i++) {
             if (cell->c[i]) {
                 visualize_octcell(cell->c[i], recursively);
             }

@@ -15,7 +15,9 @@ SOURCES += main.cpp\
     viswidget.cpp \
     octcell.cpp \
     octcellface.cpp \
-    fvoctree.cpp
+    fvoctree.cpp \
+    message_handler.cpp \
+    octface.cpp
 
 HEADERS  += mainwin.h \
     viswidget.h \
@@ -24,7 +26,10 @@ HEADERS  += mainwin.h \
     octcellface.h \
     base_int_vec3.h \
     base_float_vec3.h \
-    fvoctree.h
+    fvoctree.h \
+    callback.h \
+    message_handler.h \
+    octface.h
 
 FORMS    += mainwin.ui
 

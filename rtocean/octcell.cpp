@@ -16,19 +16,21 @@ using std::out_of_range;
 // CONSTRUCTORS AND DESTRUCTOR
 ////////////////////////////////////////////////////////////////
 
+//octcell::octcell(pftype size, pftype x_pos, pftype y_pos, pftype z_pos, pftype desired_level_of_detail, octcell **children)
 octcell::octcell(pftype size, pftype x_pos, pftype y_pos, pftype z_pos, octcell **children)
 {
     s = size;
     x = x_pos;
     y = y_pos;
     z = z_pos;
+    //dlod = desired_level_of_detail;
     c = children;
 }
 
 octcell::~octcell()
 {
     if (c) {
-        for (int i = 0; i < MAX_NUM_CHILDREN; i++) {
+        for (uint i = 0; i < MAX_NUM_CHILDREN; i++) {
             if (c[i]) {
                 delete c[i];
             }
@@ -38,8 +40,29 @@ octcell::~octcell()
 }
 
 ////////////////////////////////////////////////////////////////
-// PUBLIC METHODS
+// PUBLIC NON-STATIC METHODS
 ////////////////////////////////////////////////////////////////
+
+/************
+ * Geometry *
+ ************/
+
+#if 0
+bool octcell::has_desired_level_of_detail()
+{
+    return dlod;
+}
+#endif
+
+pfvec3 octcell::cell_center()
+{
+    pftype s_2 = 0.5 * s;
+    return pfvec3(x + s_2, y + s_2, z + s_2);
+}
+
+/************
+ * Children *
+ ************/
 
 bool octcell::has_child_array()
 {
@@ -87,13 +110,13 @@ void octcell::unleaf()
 
     // Create children
     c = new octcell*[MAX_NUM_CHILDREN];
-    for (int i = 0; i < MAX_NUM_CHILDREN; i++) {
+    for (uint i = 0; i < MAX_NUM_CHILDREN; i++) {
         c[i] = 0;
     }
 }
 
 
-octcell* octcell::add_child(int idx)
+octcell* octcell::add_child(uint idx)
 {
 #if DEBUG
     if (is_leaf()) {
@@ -108,16 +131,16 @@ octcell* octcell::add_child(int idx)
 #endif
 
     pftype s_2 = 0.5 * s;
-    pftype x1 = x + ((idx >> 0) & 1) * s_2;
-    pftype y1 = y + ((idx >> 1) & 1) * s_2;
-    pftype z1 = z + ((idx >> 2) & 1) * s_2;
+    pftype x1 = x + ((idx >> DIR_X) & 1) * s_2;
+    pftype y1 = y + ((idx >> DIR_Y) & 1) * s_2;
+    pftype z1 = z + ((idx >> DIR_Z) & 1) * s_2;
 
     c[idx] = new octcell(s_2, x1, y1, z1);
 
     return c[idx];
 }
 
-void octcell::remove_child(int idx)
+void octcell::remove_child(uint idx)
 {
 #if DEBUG
     if (is_leaf()) {
@@ -133,4 +156,13 @@ void octcell::remove_child(int idx)
 
     delete c[idx];
     c[idx] = 0;
+}
+
+////////////////////////////////////////////////////////////////
+// PUBLIC STATIC METHODS
+////////////////////////////////////////////////////////////////
+
+uint octcell::child_index(uint x, uint y, uint z)
+{
+    return (x << DIR_X) | (y << DIR_Y) | (z << DIR_Z);
 }
