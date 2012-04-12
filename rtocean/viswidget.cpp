@@ -61,11 +61,11 @@ void viswidget::paintGL()
         draw_line(0, 0, 0, 1, 1, 0, 100, 120, 120, 120);
 #else
         fvoctree tree;
-        octcell *c = tree.root = new octcell(1, -1.0/3, -1.0/3, 0);
+        octcell *c = tree.root = new octcell(1, 0, 0, 0);
         c->refine();
         c = c->c[octcell::child_index(0, 1, 0)];
         c->refine();
-        c = c->c[octcell::child_index(0, 0, 0)];
+        c = c->c[octcell::child_index(1, 0, 0)];
         c->refine();
         c = c->c[octcell::child_index(0, 1, 0)];
         c->refine();
@@ -90,11 +90,14 @@ void viswidget::resizeGL(int w, int h)
         glViewport(0, 0, w, h);
         glMatrixMode(GL_PROJECTION);
         glLoadIdentity();
-        gluPerspective(45, 1, 0.01, 100);
+        glTranslated(-1.0/6, -1.0/4, 0);
+        gluPerspective(45, (GLdouble)w/h, 0.01, 100);
         //gluPerspective(90, 1, 0.01, 100);
+
         glMatrixMode(GL_MODELVIEW);
         glLoadIdentity();
-        gluLookAt(0, 0, 2.5, 0, 0, 0, 0, 1, 0);
+        gluLookAt(1.0/3, 1.0/3, 2.5, 1.0/3, 1.0/3, 0.5, 0, 1, 0);
+        //gluLookAt(1.0/3, 1.0/3, 2.5, 0.5, 0.5, 0.5, 0, 1, 0);
     }
     catch (std::exception &e) {
         message_handler::inform_about_exception("viswidget::resizeGL()", e, true);

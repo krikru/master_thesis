@@ -28,7 +28,7 @@ public:
      * Constructors and destructor *
      *******************************/
     //octcell(pftype size, pftype x_pos, pftype y_pos, pftype z_pos, pftype desired_level_of_detail = 0, octcell **children = 0);
-    octcell(pftype size, pftype x_pos, pftype y_pos, pftype z_pos, octcell **children = 0);
+    octcell(pftype size, pftype x_pos, pftype y_pos, pftype z_pos, uint internal_layer_advancement = 0, octcell **children = 0);
     ~octcell();
 
 public:
@@ -40,15 +40,15 @@ public:
      * --------
      *
      * The cell is a cube that stretches from (x, y, z) to (x + s, y + s, z + s)
-     *
-     * The cell size should be smaller than or equal to the desired level of detail (dlod)
      */
     pftype s; /* Size of the cell (the length of an edge) */
     pftype x; /* X-position of first corner */
     pftype y; /* Y-position of first corner */
     pftype z; /* Z-position of first corner */
 
-    //pftype dlod; /* Desired level of feature */
+    /* Level of detail */
+    uint ila; /* Internal layer advancement, the advancement of the cell in the layer in terms of cells: 1, 2, ..., t_n (0 = unknown) */
+    //bool changed; /* Whether the ila has changed since last update or not */
 
     /* Children */
     octcell **c; /* The possible children */
@@ -59,8 +59,9 @@ public:
      *****************************/
 
     /* Geometry */
-    //bool has_desired_level_of_detail();
     pfvec3 cell_center();
+
+    /* Level of detail */
 
     /* Children */
     bool has_child_array();

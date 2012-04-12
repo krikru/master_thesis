@@ -16,14 +16,13 @@ using std::out_of_range;
 // CONSTRUCTORS AND DESTRUCTOR
 ////////////////////////////////////////////////////////////////
 
-//octcell::octcell(pftype size, pftype x_pos, pftype y_pos, pftype z_pos, pftype desired_level_of_detail, octcell **children)
-octcell::octcell(pftype size, pftype x_pos, pftype y_pos, pftype z_pos, octcell **children)
+octcell::octcell(pftype size, pftype x_pos, pftype y_pos, pftype z_pos, uint internal_layer_advancement, octcell **children)
 {
     s = size;
     x = x_pos;
     y = y_pos;
     z = z_pos;
-    //dlod = desired_level_of_detail;
+    ila = internal_layer_advancement;
     c = children;
 }
 
@@ -47,18 +46,15 @@ octcell::~octcell()
  * Geometry *
  ************/
 
-#if 0
-bool octcell::has_desired_level_of_detail()
-{
-    return dlod;
-}
-#endif
-
 pfvec3 octcell::cell_center()
 {
     pftype s_2 = 0.5 * s;
     return pfvec3(x + s_2, y + s_2, z + s_2);
 }
+
+/*******************
+ * Level of detail *
+ *******************/
 
 /************
  * Children *
