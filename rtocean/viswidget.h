@@ -25,8 +25,12 @@ public:
     void paintGL();
     void resizeGL(int w, int h);
 
-    void visualize_octcell(octcell *cell, bool recursively);
+    void visualize_octcell_recursively(octcell *cell, bool recursively);
     void visualize_fvoctree(fvoctree *tree);
+
+    /* test functions (remove when finished testing) */
+    void move_fvoctree(fvoctree *tree);
+    void move_octcell(octcell *c);
     
 signals:
     

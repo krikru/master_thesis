@@ -5,6 +5,10 @@
 
 // Standard includes
 #include <cmath>
+#include <time.h>
+#include <iostream>
+using std::cout;
+using std::endl;
 
 // Widgets
 #include "viswidget.h"
@@ -44,39 +48,30 @@ void viswidget::paintGL()
 {
     try
     {
+        static fvoctree* tree = 0;
+        double t1, t2;
+
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-#if 0
-        glBegin(GL_TRIANGLES);
-        {
-            glColor3f(1, 0, 0);
-            glVertex3f(-0.5, -0.5, 1);
-            glColor3f(0, 1, 0);
-            glVertex3f( 0.5, -0.5, 1);
-            glColor3f(0, 0, 1);
-            glVertex3f( 0.0,  0.5, 1);
-        }
-        glEnd();
-
-        draw_line(0, 0, 0, 1, 1, 0, 100, 120, 120, 120);
-#else
-        fvoctree tree;
-        octcell *c = tree.root = new octcell(1, 0, 0, 0);
-        c->refine();
-        c = c->c[octcell::child_index(0, 1, 0)];
-        c->refine();
-        c = c->c[octcell::child_index(1, 0, 0)];
-        c->refine();
-        c = c->c[octcell::child_index(0, 1, 0)];
-        c->refine();
-        for (int i = 0; i < 2; i++) {
-            c = c->c[octcell::child_index(0, 1, 0)];
-            c->refine();
+        if (tree == 0) {
+            cout << "Generating octree... " << endl;
+            t1 = (double)clock()/CLOCKS_PER_SEC;
+            tree = new fvoctree(0, 0);
+            t2 = (double)clock()/CLOCKS_PER_SEC;
+            cout << "Took " << t2-t1 << " seconds." << endl << endl;
         }
 
+        cout << "Moving octree... " << endl;
+        t1 = (double)clock()/CLOCKS_PER_SEC;
+        move_fvoctree(tree);
+        t2 = (double)clock()/CLOCKS_PER_SEC;
+        cout << "Took " << t2-t1 << " seconds." << endl << endl;
 
-        visualize_fvoctree(&tree);
-#endif
+        cout << "Visualizing octree... " << endl;
+        t1 = (double)clock()/CLOCKS_PER_SEC;
+        visualize_fvoctree(tree);
+        t2 = (double)clock()/CLOCKS_PER_SEC;
+        cout << "Took " << t2-t1 << " seconds." << endl << endl;
     }
     catch (std::exception &e) {
         message_handler::inform_about_exception("viswidget::paintGL()", e, true);
@@ -92,19 +87,17 @@ void viswidget::resizeGL(int w, int h)
         glLoadIdentity();
         glTranslated(-1.0/6, -1.0/4, 0);
         gluPerspective(45, (GLdouble)w/h, 0.01, 100);
-        //gluPerspective(90, 1, 0.01, 100);
 
         glMatrixMode(GL_MODELVIEW);
         glLoadIdentity();
-        gluLookAt(1.0/3, 1.0/3, 2.5, 1.0/3, 1.0/3, 0.5, 0, 1, 0);
-        //gluLookAt(1.0/3, 1.0/3, 2.5, 0.5, 0.5, 0.5, 0, 1, 0);
+        gluLookAt(1.0/3, -1.5, 1.0/3, 1.0/3, 0.5, 1.0/3, 0, 0, 1);
     }
     catch (std::exception &e) {
         message_handler::inform_about_exception("viswidget::resizeGL()", e, true);
     }
 }
 
-void viswidget::visualize_octcell(octcell *cell, bool recursively)
+void viswidget::visualize_octcell_recursively(octcell *cell, bool recursively)
 {
     pftype x1 = cell->x;
     pftype y1 = cell->y;
@@ -113,35 +106,35 @@ void viswidget::visualize_octcell(octcell *cell, bool recursively)
     pftype y2 = y1 + cell->s;
     pftype z2 = z1 + cell->s;
 
-    glPushAttrib(GL_ALL_ATTRIB_BITS);
-    if (cell->has_child_array()) {
+    if (DRAW_PARENT_CELLS && cell->has_child_array()) {
         set_line_style(1, 128, 128, 128, 255);
     }
-    else {
-        set_line_style(1, 255, 255, 255, 255);
+
+    if (DRAW_PARENT_CELLS || cell->is_leaf()) {
+        quick_draw_line(x1, y1, z1, x2, y1, z1);
+        quick_draw_line(x1, y1, z1, x1, y2, z1);
+        quick_draw_line(x1, y1, z1, x1, y1, z2);
+
+        quick_draw_line(x2, y1, z1, x2, y2, z1);
+        quick_draw_line(x2, y1, z1, x2, y1, z2);
+        quick_draw_line(x1, y2, z1, x2, y2, z1);
+        quick_draw_line(x1, y2, z1, x1, y2, z2);
+        quick_draw_line(x1, y1, z2, x2, y1, z2);
+        quick_draw_line(x1, y1, z2, x1, y2, z2);
+
+        quick_draw_line(x1, y2, z2, x2, y2, z2);
+        quick_draw_line(x2, y1, z2, x2, y2, z2);
+        quick_draw_line(x2, y2, z1, x2, y2, z2);
     }
 
-    quick_draw_line(x1, y1, z1, x2, y1, z1);
-    quick_draw_line(x1, y1, z1, x1, y2, z1);
-    quick_draw_line(x1, y1, z1, x1, y1, z2);
-
-    quick_draw_line(x2, y1, z1, x2, y2, z1);
-    quick_draw_line(x2, y1, z1, x2, y1, z2);
-    quick_draw_line(x1, y2, z1, x2, y2, z1);
-    quick_draw_line(x1, y2, z1, x1, y2, z2);
-    quick_draw_line(x1, y1, z2, x2, y1, z2);
-    quick_draw_line(x1, y1, z2, x1, y2, z2);
-
-    quick_draw_line(x1, y2, z2, x2, y2, z2);
-    quick_draw_line(x2, y1, z2, x2, y2, z2);
-    quick_draw_line(x2, y2, z1, x2, y2, z2);
-
-    glPopAttrib();
+    if (DRAW_PARENT_CELLS && cell->has_child_array()) {
+        set_line_style(1, 255, 255, 255, 255);
+    }
 
     if (recursively && cell->has_child_array()) {
         for (uint i = 0; i < octcell::MAX_NUM_CHILDREN; i++) {
             if (cell->c[i]) {
-                visualize_octcell(cell->c[i], recursively);
+                visualize_octcell_recursively(cell->c[i], recursively);
             }
         }
     }
@@ -150,7 +143,31 @@ void viswidget::visualize_octcell(octcell *cell, bool recursively)
 void viswidget::visualize_fvoctree(fvoctree *tree)
 {
     if (tree->root) {
-        visualize_octcell(tree->root, true);
+        glPushAttrib(GL_ALL_ATTRIB_BITS);
+        set_line_style(1, 255, 255, 255, 255);
+        visualize_octcell_recursively(tree->root, true);
+        glPopAttrib();
+    }
+
+
+}
+
+void viswidget::move_fvoctree(fvoctree *tree)
+{
+    if (tree->root) {
+        move_octcell(tree->root);
+    }
+}
+
+void viswidget::move_octcell(octcell *c)
+{
+    c->x += 0.01;
+    if (c->c) {
+        for (uint i = 0; i < octcell::MAX_NUM_CHILDREN; i++) {
+            if (c->c[i]) {
+                move_octcell(c->c[i]);
+            }
+        }
     }
 }
 
@@ -161,10 +178,14 @@ void viswidget::visualize_fvoctree(fvoctree *tree)
 void viswidget::set_line_style(GLfloat width, GLubyte  r, GLubyte g, GLubyte b, GLubyte a)
 {
     glDisable(GL_TEXTURE_2D);
+#if  DRAW_SMOOTH_LINES
     glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    /* Smooth lines */
     glEnable(GL_LINE_SMOOTH);
+#else
+    glDisable(GL_BLEND);
+    glDisable(GL_LINE_SMOOTH);
+#endif
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glColor4ub(r, g, b, a);
 
     glLineWidth(width);
