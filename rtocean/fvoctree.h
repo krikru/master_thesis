@@ -23,7 +23,8 @@ public:
 
     /* Private methods */
 private:
-    int refine_octcell(octcell* c, pftype surface, pftype bottom, pftype accuracy);
+    static pftype size_accuracy(pfvec3 r);
+    int refine_octcell(octcell* c, pftype surface, pftype bottom, pftype (*accuracy_function)(pfvec3));
 };
 
 #endif // FVOCTREE_H

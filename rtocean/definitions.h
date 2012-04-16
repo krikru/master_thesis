@@ -95,4 +95,12 @@ enum DIRECTION {
     }
 #endif
 
+#define  BEGIN_TAKE_TIME(action)            \
+    cout << (action) << endl;               \
+    t1 = (double)clock()/CLOCKS_PER_SEC;
+
+#define  END_TAKE_TIME()                                      \
+    t2 = (double)clock()/CLOCKS_PER_SEC;                      \
+    cout << "Took " << t2-t1 << " seconds." << endl << endl;
+
 #endif  /* DEFINITIONS_H */

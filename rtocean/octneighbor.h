@@ -1,5 +1,5 @@
-#ifndef OCTFACE_H
-#define OCTFACE_H
+#ifndef OCTNEIGHBOR_H
+#define OCTNEIGHBOR_H
 
 ////////////////////////////////////////////////////////////////
 // INCLUDE FILES
@@ -12,16 +12,15 @@
 // CLASS DEFINTION
 ////////////////////////////////////////////////////////////////
 
-class octface
+class octneighbor
 {
 public:
-    octface();
+    //octneighbor();
 
 public:
 
-    /* Cells that are connected */
-    octcell *c1;
-    octcell *c2;
+    /* Neighbor */
+    octcell *n;
 
     /* Distance between cells */
     pfvec3 dist;
@@ -31,4 +30,4 @@ public:
     pftype s_area;
 };
 
-#endif // OCTFACE_H
+#endif // OCTNEIGHBOR_H

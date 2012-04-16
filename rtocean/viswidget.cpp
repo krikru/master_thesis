@@ -54,24 +54,19 @@ void viswidget::paintGL()
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         if (tree == 0) {
-            cout << "Generating octree... " << endl;
-            t1 = (double)clock()/CLOCKS_PER_SEC;
+            BEGIN_TAKE_TIME("Generating octree... ");
             tree = new fvoctree(0, 0);
-            t2 = (double)clock()/CLOCKS_PER_SEC;
-            cout << "Took " << t2-t1 << " seconds." << endl << endl;
+            END_TAKE_TIME();
         }
 
-        cout << "Moving octree... " << endl;
-        t1 = (double)clock()/CLOCKS_PER_SEC;
+        BEGIN_TAKE_TIME("Moving octree... ");
         move_fvoctree(tree);
-        t2 = (double)clock()/CLOCKS_PER_SEC;
-        cout << "Took " << t2-t1 << " seconds." << endl << endl;
+        END_TAKE_TIME();
 
-        cout << "Visualizing octree... " << endl;
-        t1 = (double)clock()/CLOCKS_PER_SEC;
+
+        BEGIN_TAKE_TIME("Visualizing octree... ");
         visualize_fvoctree(tree);
-        t2 = (double)clock()/CLOCKS_PER_SEC;
-        cout << "Took " << t2-t1 << " seconds." << endl << endl;
+        END_TAKE_TIME();
     }
     catch (std::exception &e) {
         message_handler::inform_about_exception("viswidget::paintGL()", e, true);
@@ -107,7 +102,8 @@ void viswidget::visualize_octcell_recursively(octcell *cell, bool recursively)
     pftype z2 = z1 + cell->s;
 
     if (DRAW_PARENT_CELLS && cell->has_child_array()) {
-        set_line_style(1, 128, 128, 128, 255);
+        //set_line_style(1, 128, 128, 128, 255);
+        glColor4ub(128, 128, 128, 255);
     }
 
     if (DRAW_PARENT_CELLS || cell->is_leaf()) {
@@ -128,7 +124,8 @@ void viswidget::visualize_octcell_recursively(octcell *cell, bool recursively)
     }
 
     if (DRAW_PARENT_CELLS && cell->has_child_array()) {
-        set_line_style(1, 255, 255, 255, 255);
+        //set_line_style(1, 255, 255, 255, 255);
+        glColor4ub(255, 255, 255, 255);
     }
 
     if (recursively && cell->has_child_array()) {
@@ -152,6 +149,7 @@ void viswidget::visualize_fvoctree(fvoctree *tree)
 
 }
 
+// TODO: Remove move_fvoctree() and move_octcell().
 void viswidget::move_fvoctree(fvoctree *tree)
 {
     if (tree->root) {

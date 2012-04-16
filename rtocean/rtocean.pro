@@ -14,22 +14,20 @@ SOURCES += main.cpp\
         mainwin.cpp \
     viswidget.cpp \
     octcell.cpp \
-    octcellface.cpp \
     fvoctree.cpp \
     message_handler.cpp \
-    octface.cpp
+    octneighbor.cpp
 
 HEADERS  += mainwin.h \
     viswidget.h \
     definitions.h \
     octcell.h \
-    octcellface.h \
     base_int_vec3.h \
     base_float_vec3.h \
     fvoctree.h \
     callback.h \
     message_handler.h \
-    octface.h
+    octneighbor.h
 
 FORMS    += mainwin.ui
 

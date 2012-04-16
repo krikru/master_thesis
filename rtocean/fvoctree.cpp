@@ -37,7 +37,7 @@ fvoctree::fvoctree(pftype surface, pftype bottom)
         c->refine();
     }
 #else
-    refine_octcell(c, surface, bottom, 0.01);
+    refine_octcell(c, surface, bottom, size_accuracy);
 #endif
 }
 
@@ -52,7 +52,12 @@ fvoctree::~fvoctree()
 // PRIVATE METHODS
 ////////////////////////////////////////////////////////////////
 
-int fvoctree::refine_octcell(octcell* c, pftype surface, pftype bottom, pftype accuracy)
+pftype fvoctree::size_accuracy(pfvec3 r)
+{
+    return 0.01 + 0.03 * r.e[DIR_X];
+}
+
+int fvoctree::refine_octcell(octcell* c, pftype surface, pftype bottom, pftype (* accuracy_function)(pfvec3))
 {
     static int tot_num_cells = 1;
     static int num_leaf_cells = 1;
@@ -67,7 +72,7 @@ int fvoctree::refine_octcell(octcell* c, pftype surface, pftype bottom, pftype a
         // Cell is under the surface, keep it
         return 0;
     }
-    if (s <= accuracy) {
+    if (s <= accuracy_function(c->cell_center())) {
         // Accuracy is good enough, quit refining
         return 0;
     }
@@ -76,7 +81,7 @@ int fvoctree::refine_octcell(octcell* c, pftype surface, pftype bottom, pftype a
     tot_num_cells += 8;
     num_leaf_cells += 7;
     for (uint i = 0; i < octcell::MAX_NUM_CHILDREN; i++) {
-        if (refine_octcell(c->c[i], surface, bottom, accuracy)) {
+        if (refine_octcell(c->c[i], surface, bottom, accuracy_function)) {
             c->remove_child(i);
             tot_num_cells--;
             num_leaf_cells--;
