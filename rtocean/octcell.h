@@ -51,7 +51,7 @@ public:
     //bool changed; /* Whether the ila has changed since last update or not */
 
     /* Children */
-    octcell **c; /* The possible children */
+    octcell **_c; /* The possible children */
 
     /* Neighbors */
     nlist neighborlist;
@@ -67,8 +67,10 @@ public:
     /* Level of detail */
 
     /* Children */
-    bool has_child_array();
-    bool is_leaf();
+    inline bool has_child_array();
+    inline bool is_leaf();
+    inline octcell* get_child(uint idx);
+    inline octcell* set_child(uint idx, octcell* child);
     void refine(); // Creates new child array and new children
     void unleaf(); // Creates new child array but no children
     octcell* add_child(uint idx);
@@ -76,6 +78,7 @@ public:
 
     /* Neighbors */
     void generate_all_internal_neighbors();
+    nlnode* get_first_neighbor_list_node();
 
 public:
     /*************************
@@ -83,11 +86,11 @@ public:
      *************************/
     /* Neighbors */
     void make_neighbors(octcell* c1, octcell* c2);
-    void generate_all_neighbors_in_interface(octcell* c1, octcell* c2, DIRECTION normal_direction);
+    void generate_all_cross_cell_neighbors(octcell* c1, octcell* c2, uint normal_direction);
 
     /* Indexes */
     inline static uint child_index(uint x, uint y, uint z);
-    inline static uint index_offset(DIRECTION dir);
+    inline static uint index_offset(uint dir);
 
 private:
     /*************************

@@ -5,9 +5,6 @@
 // INCLUDE FILES
 ////////////////////////////////////////////////////////////////
 
-//TODO: Remove include files and move typedefs using them to other files
-// Own includes
-#include "base_float_vec3.h"
 
 ////////////////////////////////////////////////////////////////
 // COMPILER DEFINITIONS
@@ -19,10 +16,12 @@
 // COMPILE TIME OPTIONS
 ////////////////////////////////////////////////////////////////
 
-//#define  DEBUG              0
-#define  DEBUG              1
-#define  DRAW_SMOOTH_LINES  0
-#define  DRAW_PARENT_CELLS  1
+//#define  DEBUG                      0
+#define  DEBUG                      1
+#define  ELABORATE                  0
+#define  DRAW_SMOOTH_LINES          0
+#define  DRAW_PARENT_CELLS          1
+#define  DRAW_NEIGHBOR_CONNECTIONS  1
 
 ////////////////////////////////////////////////////////////////
 // MISCELANEOUS DEFINITIONS
@@ -41,18 +40,33 @@ typedef  double                  pftype;
 typedef  float                   pftype;
 #endif
 
-typedef base_float_vec3<pftype>  pfvec3;
-
 ////////////////////////////////////////////////////////////////
 // ENUMS
 ////////////////////////////////////////////////////////////////
 
+//TODO: The real order should be X, Y, Z (change back if it isn't)
+#if ELABORATE
+enum DIRECTION {
+    DIR_Y,
+    DIR_X,
+    DIR_Z,
+    NUM_DIRECTIONS
+};
+#else
 enum DIRECTION {
     DIR_X,
     DIR_Y,
     DIR_Z,
     NUM_DIRECTIONS
 };
+#endif
+
+//TODO: Make this work
+#if (DIR_X == 0) && (DIR_Y == 1) && (DIR_Z == 2)
+#define  XYZ_COORDINATE_SYSTEM  1
+#else
+#define  XYZ_COORDINATE_SYSTEM  0
+#endif
 
 ////////////////////////////////////////////////////////////////
 // CONSTANTS
@@ -99,12 +113,16 @@ enum DIRECTION {
     }
 #endif
 
-#define  BEGIN_TAKE_TIME(action)            \
-    cout << (action) << endl;               \
-    t1 = (double)clock()/CLOCKS_PER_SEC;
+#define  BEGIN_TAKE_TIME(action)              \
+    if (DEBUG) {                              \
+        cout << (action) << endl;             \
+        t1 = (double)clock()/CLOCKS_PER_SEC;  \
+    }
 
-#define  END_TAKE_TIME()                                      \
-    t2 = (double)clock()/CLOCKS_PER_SEC;                      \
-    cout << "Took " << t2-t1 << " seconds." << endl << endl;
+#define  END_TAKE_TIME()                                          \
+    if (DEBUG) {                                                  \
+        t2 = (double)clock()/CLOCKS_PER_SEC;                      \
+        cout << "Took " << t2-t1 << " seconds." << endl << endl;  \
+    }
 
 #endif  /* DEFINITIONS_H */

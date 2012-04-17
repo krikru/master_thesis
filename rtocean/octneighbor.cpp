@@ -25,7 +25,7 @@ octneighbor::octneighbor()
 #endif
 }
 
-octneighbor::initialize(nlnode* neighbor_list_entry, octcell* neighbor_cell, pfvec3 distance, pftype distance_absolute_value, pftype cell_face_area)
+void octneighbor::initialize(nlnode* neighbor_list_entry, octcell* neighbor_cell, pfvec3 distance, pftype distance_absolute_value, pftype cell_face_area)
 {
     nle      = neighbor_list_entry    ;
     n        = neighbor_cell          ;

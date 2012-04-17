@@ -24,18 +24,18 @@ octcell::octcell(pftype size, pftype x_pos, pftype y_pos, pftype z_pos, uint lev
     z = z_pos;
     lvl = level;
     ila = internal_layer_advancement;
-    c = children;
+    _c = children;
 }
 
 octcell::~octcell()
 {
-    if (c) {
+    if (has_child_array()) {
         for (uint i = 0; i < MAX_NUM_CHILDREN; i++) {
-            if (c[i]) {
-                delete c[i];
+            if (get_child(i)) {
+                delete get_child(i);
             }
         }
-        delete c;
+        delete _c;
     }
 }
 
@@ -50,7 +50,16 @@ octcell::~octcell()
 pfvec3 octcell::cell_center()
 {
     pftype s_2 = 0.5 * s;
+    //TODO: Stop making tests!!
+#if XYZ_COORDINATE_SYSTEM
     return pfvec3(x + s_2, y + s_2, z + s_2);
+#else
+    pfvec3 cc;
+    cc[DIR_X] = x + s_2;
+    cc[DIR_Y] = y + s_2;
+    cc[DIR_Z] = z + s_2;
+    return cc;
+#endif
 }
 
 /*******************
@@ -63,12 +72,36 @@ pfvec3 octcell::cell_center()
 
 bool octcell::has_child_array()
 {
-    return c;
+    return _c;
 }
 
 bool octcell::is_leaf()
 {
-    return !c;
+    return !_c;
+}
+
+octcell* octcell::get_child(uint idx) {
+#if DEBUG
+    if (is_leaf()) {
+        throw logic_error("Trying to get a child from a leaf cell");
+    }
+    if (idx >= MAX_NUM_CHILDREN) {
+        throw out_of_range("Trying to get a child with an index that is too high");
+    }
+#endif
+    return _c[idx];
+}
+
+octcell* octcell::set_child(uint idx, octcell* child) {
+#if DEBUG
+    if (is_leaf()) {
+        throw logic_error("Trying to set a child for a leaf cell");
+    }
+    if (idx >= MAX_NUM_CHILDREN) {
+        throw out_of_range("Trying to get a child with an index that is too high");
+    }
+#endif
+    return _c[idx] = child;
 }
 
 void octcell::refine()
@@ -80,7 +113,7 @@ void octcell::refine()
 #endif
 
     // Create child array
-    c = new octcell*[MAX_NUM_CHILDREN];
+    _c = new octcell*[MAX_NUM_CHILDREN];
     // Create new values for children
     pftype s_2 = 0.5 * s;
     pftype x_2 = x + s_2;
@@ -88,14 +121,14 @@ void octcell::refine()
     pftype z_2 = z + s_2;
     uint   new_level = lvl + 1;
     // Assign values to children
-    c[0] = new octcell(s_2, x  , y  , z  , new_level);
-    c[1] = new octcell(s_2, x_2, y  , z  , new_level);
-    c[2] = new octcell(s_2, x  , y_2, z  , new_level);
-    c[3] = new octcell(s_2, x_2, y_2, z  , new_level);
-    c[4] = new octcell(s_2, x  , y  , z_2, new_level);
-    c[5] = new octcell(s_2, x_2, y  , z_2, new_level);
-    c[6] = new octcell(s_2, x  , y_2, z_2, new_level);
-    c[7] = new octcell(s_2, x_2, y_2, z_2, new_level);
+    set_child(0, new octcell(s_2, x  , y  , z  , new_level));
+    set_child(1, new octcell(s_2, x_2, y  , z  , new_level));
+    set_child(2, new octcell(s_2, x  , y_2, z  , new_level));
+    set_child(3, new octcell(s_2, x_2, y_2, z  , new_level));
+    set_child(4, new octcell(s_2, x  , y  , z_2, new_level));
+    set_child(5, new octcell(s_2, x_2, y  , z_2, new_level));
+    set_child(6, new octcell(s_2, x  , y_2, z_2, new_level));
+    set_child(7, new octcell(s_2, x_2, y_2, z_2, new_level));
 }
 
 void octcell::unleaf()
@@ -107,9 +140,9 @@ void octcell::unleaf()
 #endif
 
     // Create children
-    c = new octcell*[MAX_NUM_CHILDREN];
+    _c = new octcell*[MAX_NUM_CHILDREN];
     for (uint i = 0; i < MAX_NUM_CHILDREN; i++) {
-        c[i] = 0;
+        set_child(i, 0);
     }
 }
 
@@ -123,7 +156,7 @@ octcell* octcell::add_child(uint idx)
     if (idx < 0 || idx >= MAX_NUM_CHILDREN) {
         throw out_of_range("Trying to add a child cell with index out of bound");
     }
-    if (c[idx]) {
+    if (get_child(idx)) {
         throw logic_error("Trying to add a child cell that already exist");
     }
 #endif
@@ -133,9 +166,9 @@ octcell* octcell::add_child(uint idx)
     pftype y1 = y + ((idx >> DIR_Y) & 1) * s_2;
     pftype z1 = z + ((idx >> DIR_Z) & 1) * s_2;
 
-    c[idx] = new octcell(s_2, x1, y1, z1);
+    set_child(idx, new octcell(s_2, x1, y1, z1, lvl + 1));
 
-    return c[idx];
+    return get_child(idx);
 }
 
 void octcell::remove_child(uint idx)
@@ -147,36 +180,45 @@ void octcell::remove_child(uint idx)
     if (idx < 0 || idx >= MAX_NUM_CHILDREN) {
         throw out_of_range("Trying to remove a child cell with index out of bound");
     }
-    if (!c[idx]) {
-        throw logic_error("Trying to remove a child cell that doesn't exist");
+    if (!get_child(idx)) {
+        throw logic_error("Trying to remove a child cell that does not exist");
     }
 #endif
 
-    delete c[idx];
-    c[idx] = 0;
+    delete get_child(idx);
+    set_child(idx, 0);
 }
 
 void octcell::generate_all_internal_neighbors()
 {
-    //TODO: Add DEBUG check around all cout's
-#if DEBUG
     if (is_leaf()) {
-        throw logic_error("Trying to generate beighbors within a leaf node");
+        return;
     }
-#endif
-    //TODO: Optimize
+    //TODO: Optimize:
     for (uint i1 = 0; i1 < MAX_NUM_CHILDREN; i1++) {
-        if (c[i1]) {
-            /* First child exists */
-            for (DIRECTION dir = 0; dir < NUM_DIRECTIONS; dir++) {
+        if (get_child(i1)) {
+            /* Child exists */
+            /* Generate all internal neighbors in the child cell */
+            get_child(i1)->generate_all_internal_neighbors();
+            /* Generate all cross-child cell neighbors from this child to children with larger indexes */
+            for (uint dir = 0; dir < NUM_DIRECTIONS; dir++) {
+                if (i1 >> dir & 1) {
+                    /* There is no neighbor in this direction */
+                    continue;
+                }
                 uint i2 = i1 + index_offset(dir);
-                if (i2 < MAX_NUM_CHILDREN && c[i2]) {
+                if (i2 < MAX_NUM_CHILDREN && get_child(i2)) {
                     /* Second child also exists, generate neighbors in interface */
-                    generate_all_neighbors_in_interface(c1, c2, dir);
+                    generate_all_cross_cell_neighbors(get_child(i1), get_child(i2), dir);
                 }
             }
         }
     }
+}
+
+nlnode* octcell::get_first_neighbor_list_node()
+{
+    return neighborlist.h;
 }
 
 ////////////////////////////////////////////////////////////////
@@ -191,69 +233,72 @@ void octcell::make_neighbors(octcell* c1, octcell* c2)
     pftype dist_abs = dist.length();
     pftype min_s = MIN(c1->s, c2->s);
     pftype area = min_s*min_s;
-    node1->v.n = c2;
-    node2->v.n = c1;
-    node1->v.dist =  dist;
-    node2->v.dist = -dist;
-    node1->v.dist_abs = dist_abs;
-    node2->v.dist_abs = dist_abs;
-    node1->v.cf_area = area;
-    node2->v.cf_area = area;
+    node1->v.initialize(node1, c2,  dist, dist_abs, area);
+    node2->v.initialize(node2, c1, -dist, dist_abs, area);
 }
 
-void octcell::generate_all_neighbors_in_interface(octcell* c1, octcell* c2, DIRECTION normal_direction)
+void octcell::generate_all_cross_cell_neighbors(octcell* c1, octcell* c2, uint normal_direction)
 {
     // The normal direction will point from c1 to c2 (not the other way around)
 #if  DEBUG
     // Control cell sizes
+    if (c1 == c2) {
+        throw logic_error("Trying to generate neighbors between a cell and itself");
+    }
     if (c1->lvl != c2->lvl) {
-        throw logic_error("Trying to build generate neighbors between cells of different sizes")
+        throw logic_error("Trying to build generate neighbors between cells of different sizes");
+    }
+    // Control distance
+    pftype sqr_dist = (c2->cell_center() - c1->cell_center()).sqr_length();
+    pftype goal_sqrt_dist = c1->s * c1->s;
+    if (sqr_dist > 1.5 * goal_sqrt_dist) {
+        throw logic_error("Trying to generate neighbors between unconnected cells");
+    }
+    if (sqr_dist < 0.75 * goal_sqrt_dist) {
+        throw logic_error("Trying to generate neighbors between intersecting cells");
     }
 #endif
+
     if (c1->is_leaf() && c2->is_leaf()) {
         // Both nodes are leaf nodes, add them to each others neighbor lists
         make_neighbors(c1, c2);
     }
     else if (c1->is_leaf() && !(c2->is_leaf())) {
         /* The children of c2 will be leaf nodes */
-        c2->generate_all_internal_neighbors();
         // TODO: Optimize
         for (uint i = 0; i < MAX_NUM_CHILDREN; i++) {
             if ((i >> normal_direction & 1) == 0) {
                 /* Potential child cell with this index in c2 borders to c1 */
-                if (c2->c[i]) {
+                if (c2->get_child(i)) {
                     /* Child exists */
-                    make_neighbors(c1, c2->c[i]);
+                    make_neighbors(c1, c2->get_child(i));
                 }
             }
         }
     }
     else if (!(c1->is_leaf()) && c2->is_leaf()) {
         /* The children of c1 will be leaf nodes */
-        c1->generate_all_internal_neighbors();
         // TODO: Optimize
         for (uint i = 0; i < MAX_NUM_CHILDREN; i++) {
             if (i >> normal_direction & 1) {
                 /* Potential child cell with this index in c1 borders to c2 */
-                if (c1->c[i]) {
+                if (c1->get_child(i)) {
                     /* Child exists */
-                    make_neighbors(c1->c[i], c2);
+                    make_neighbors(c1->get_child(i), c2);
                 }
             }
         }
     }
     else {
         /* Both c1 and c2 have children */
-        c1->generate_all_internal_neighbors();
-        c2->generate_all_internal_neighbors();
         // TODO: Optimize
         uint dir_offset = 1 << normal_direction;
         for (uint i = 0; i < MAX_NUM_CHILDREN; i++) {
             if (i >> normal_direction & 1) {
                 /* Potential child cell with this index in c1 borders to c2 */
-                if (c1->c[i] && c2->c[i-dir_offset]) {
+                if (c1->get_child(i) && c2->get_child(i-dir_offset)) {
                     /* Children exist in both c1 and c2 */
-                    generate_all_neighbors_in_interface(c1->c[i], c2->c[i-dir_offset]);
+                    generate_all_cross_cell_neighbors(c1->get_child(i), c2->get_child(i-dir_offset), normal_direction);
                 }
             }
         }
@@ -265,7 +310,7 @@ uint octcell::child_index(uint x, uint y, uint z)
     return (x << DIR_X) | (y << DIR_Y) | (z << DIR_Z);
 }
 
-uint octcell::index_offset(DIRECTION dir)
+uint octcell::index_offset(uint dir)
 {
     return 1 << dir;
 }

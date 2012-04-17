@@ -42,6 +42,7 @@ public:
 private:
     static inline void set_line_style(GLfloat width, GLubyte  r, GLubyte g, GLubyte b, GLubyte a);
     static inline void quick_draw_line(GLfloat ax, GLfloat ay, GLfloat az, GLfloat bx, GLfloat by, GLfloat bz);
+    static inline void quick_draw_line(pfvec3 p1, pfvec3 p2);
     static void draw_line(GLfloat ax, GLfloat ay, GLfloat az, GLfloat bx, GLfloat by, GLfloat bz, GLfloat width, GLubyte  r, GLubyte g, GLubyte b, GLubyte a = 255);
 };
 

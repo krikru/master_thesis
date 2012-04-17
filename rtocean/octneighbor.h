@@ -47,6 +47,10 @@ public:
     /* Surface */
     pftype cf_area;
 
+public:
+    /* Public methods */
+    void initialize(nlnode* neighbor_list_entry, octcell* neighbor_cell, pfvec3 distance, pftype distance_absolute_value, pftype cell_face_area);
+
 private:
     /*************************
      * Disabled constructors *

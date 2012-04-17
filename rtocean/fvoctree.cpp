@@ -26,18 +26,19 @@ fvoctree::fvoctree(pftype surface, pftype bottom)
     octcell *c = root = new octcell(1, 0, 0, 0, 0);
 #if 0
     c->refine();
-    c = c->c[octcell::child_index(0, 1, 0)];
+    c = c->get_child(octcell::child_index(0, 1, 0));
     c->refine();
-    c = c->c[octcell::child_index(1, 0, 0)];
+    c = c->get_child(octcell::child_index(1, 0, 0));
     c->refine();
-    c = c->c[octcell::child_index(0, 1, 0)];
+    c = c->get_child(octcell::child_index(0, 1, 0));
     c->refine();
     for (int i = 0; i < 2; i++) {
-        c = c->c[octcell::child_index(0, 1, 0)];
+        c = c->get_child(octcell::child_index(0, 1, 0));
         c->refine();
     }
 #else
     refine_octcell(c, surface, bottom, size_accuracy);
+    generate_neighbor_lists();
 #endif
 }
 
@@ -81,16 +82,18 @@ int fvoctree::refine_octcell(octcell* c, pftype surface, pftype bottom, pftype (
     tot_num_cells += 8;
     num_leaf_cells += 7;
     for (uint i = 0; i < octcell::MAX_NUM_CHILDREN; i++) {
-        if (refine_octcell(c->c[i], surface, bottom, accuracy_function)) {
+        if (refine_octcell(c->get_child(i), surface, bottom, accuracy_function)) {
             c->remove_child(i);
             tot_num_cells--;
             num_leaf_cells--;
         }
     }
+#if DEBUG
 #if 0
     cout << "Total number of cells: " << tot_num_cells << endl;
     cout << "Number of leaf cells:  " << num_leaf_cells << endl;
     cout << endl;
+#endif
 #endif
     return 0;
 }
@@ -98,6 +101,6 @@ int fvoctree::refine_octcell(octcell* c, pftype surface, pftype bottom, pftype (
 void fvoctree::generate_neighbor_lists()
 {
     if (root) {
-        root->refine_neighbor_list();
+        root->generate_all_internal_neighbors();
     }
 }

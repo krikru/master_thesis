@@ -130,11 +130,23 @@ void viswidget::visualize_octcell_recursively(octcell *cell, bool recursively)
 
     if (recursively && cell->has_child_array()) {
         for (uint i = 0; i < octcell::MAX_NUM_CHILDREN; i++) {
-            if (cell->c[i]) {
-                visualize_octcell_recursively(cell->c[i], recursively);
+            if (cell->get_child(i)) {
+                visualize_octcell_recursively(cell->get_child(i), recursively);
             }
         }
     }
+
+    nlnode* nn = cell->get_first_neighbor_list_node();
+    if (DRAW_NEIGHBOR_CONNECTIONS && nn) {
+        glColor4ub(0, 0, 255, 255);
+        pfvec3 center1 = cell->cell_center();
+        for (; nn; nn = nn->n) {
+            pfvec3 center2 = nn->v.n->cell_center();
+            quick_draw_line(center1, (center1*.55 + center2*.45));
+        }
+        glColor4ub(255, 255, 255, 255);
+    }
+
 }
 
 void viswidget::visualize_fvoctree(fvoctree *tree)
@@ -160,10 +172,10 @@ void viswidget::move_fvoctree(fvoctree *tree)
 void viswidget::move_octcell(octcell *c)
 {
     c->x += 0.01;
-    if (c->c) {
+    if (c->has_child_array()) {
         for (uint i = 0; i < octcell::MAX_NUM_CHILDREN; i++) {
-            if (c->c[i]) {
-                move_octcell(c->c[i]);
+            if (c->get_child(i)) {
+                move_octcell(c->get_child(i));
             }
         }
     }
@@ -195,6 +207,12 @@ void viswidget::quick_draw_line(GLfloat ax, GLfloat ay, GLfloat az, GLfloat bx, 
     glVertex3f(ax, ay, az);
     glVertex3f(bx, by, bz);
     glEnd();
+}
+
+void viswidget::quick_draw_line(pfvec3 p1, pfvec3 p2)
+{
+    quick_draw_line(p1.e[DIR_X], p1.e[DIR_Y], p1.e[DIR_Z],
+                    p2.e[DIR_X], p2.e[DIR_Y], p2.e[DIR_Z]);
 }
 
 void viswidget::draw_line(GLfloat ax, GLfloat ay, GLfloat az, GLfloat bx, GLfloat by, GLfloat bz, GLfloat width, GLubyte  r, GLubyte g, GLubyte b, GLubyte a)
