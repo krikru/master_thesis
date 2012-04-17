@@ -23,7 +23,7 @@ fvoctree::fvoctree(pftype surface, pftype bottom)
 {
     bottom = bottom;
     surface = surface;
-    octcell *c = root = new octcell(1, 0, 0, 0);
+    octcell *c = root = new octcell(1, 0, 0, 0, 0);
 #if 0
     c->refine();
     c = c->c[octcell::child_index(0, 1, 0)];
@@ -93,4 +93,11 @@ int fvoctree::refine_octcell(octcell* c, pftype surface, pftype bottom, pftype (
     cout << endl;
 #endif
     return 0;
+}
+
+void fvoctree::generate_neighbor_lists()
+{
+    if (root) {
+        root->refine_neighbor_list();
+    }
 }

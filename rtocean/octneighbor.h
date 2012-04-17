@@ -6,7 +6,22 @@
 ////////////////////////////////////////////////////////////////
 
 // Own includes
-#include "octcell.h"
+#include "definitions.h"
+#include "dllist.h"
+
+////////////////////////////////////////////////////////////////
+// PREDECLARATIONS
+////////////////////////////////////////////////////////////////
+
+class octneighbor;
+class octcell;
+
+////////////////////////////////////////////////////////////////
+// TYPEDEFS
+////////////////////////////////////////////////////////////////
+
+typedef  dllist<octneighbor>   nlist ;
+typedef  dllnode<octneighbor>  nlnode;
 
 ////////////////////////////////////////////////////////////////
 // CLASS DEFINTION
@@ -15,19 +30,28 @@
 class octneighbor
 {
 public:
-    //octneighbor();
+    octneighbor();
 
 public:
 
+    /* Neighbor list */
+    nlnode* nle; // The object's entry in the neighbor list
+
     /* Neighbor */
-    octcell *n;
+    octcell* n;
 
     /* Distance between cells */
     pfvec3 dist;
     pftype dist_abs;
 
     /* Surface */
-    pftype s_area;
+    pftype cf_area;
+
+private:
+    /*************************
+     * Disabled constructors *
+     *************************/
+    octneighbor(octneighbor&); // Copy constructor prevented from all use
 };
 
 #endif // OCTNEIGHBOR_H

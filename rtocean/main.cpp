@@ -3,6 +3,11 @@
 // INCLUDE FILES
 ////////////////////////////////////////////////////////////////
 
+// Standard includes
+#include <iostream>
+using std::cout;
+using std::endl;
+
 // OpenGL
 //#include <GL/glut.h>
 

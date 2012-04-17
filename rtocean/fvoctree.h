@@ -25,6 +25,13 @@ public:
 private:
     static pftype size_accuracy(pfvec3 r);
     int refine_octcell(octcell* c, pftype surface, pftype bottom, pftype (*accuracy_function)(pfvec3));
+    void generate_neighbor_lists();
+
+private:
+    /*************************
+     * Disabled constructors *
+     *************************/
+    fvoctree(fvoctree&); // Copy constructor prevented from all use
 };
 
 #endif // FVOCTREE_H

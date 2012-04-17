@@ -16,7 +16,8 @@ SOURCES += main.cpp\
     octcell.cpp \
     fvoctree.cpp \
     message_handler.cpp \
-    octneighbor.cpp
+    octneighbor.cpp \
+    dllnode.cpp
 
 HEADERS  += mainwin.h \
     viswidget.h \
@@ -27,7 +28,9 @@ HEADERS  += mainwin.h \
     fvoctree.h \
     callback.h \
     message_handler.h \
-    octneighbor.h
+    octneighbor.h \
+    dllist.h \
+    dllnode.h
 
 FORMS    += mainwin.ui
 

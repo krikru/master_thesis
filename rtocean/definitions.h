@@ -5,6 +5,7 @@
 // INCLUDE FILES
 ////////////////////////////////////////////////////////////////
 
+//TODO: Remove include files and move typedefs using them to other files
 // Own includes
 #include "base_float_vec3.h"
 
@@ -18,7 +19,7 @@
 // COMPILE TIME OPTIONS
 ////////////////////////////////////////////////////////////////
 
-//#define  DEBUG  0
+//#define  DEBUG              0
 #define  DEBUG              1
 #define  DRAW_SMOOTH_LINES  0
 #define  DRAW_PARENT_CELLS  1
@@ -80,6 +81,9 @@ enum DIRECTION {
 ////////////////////////////////////////////////////////////////
 // MACROS
 ////////////////////////////////////////////////////////////////
+
+#define  MIN(x, y)  ((y) < (x) ? (y) : (x))
+#define  MAX(x, y)  ((y) > (x) ? (y) : (x))
 
 #define  TEMP_SWAP(x, y, temp) { \
     (temp) = (x);                \

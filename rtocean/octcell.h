@@ -7,7 +7,7 @@
 
 // Own includes
 #include "definitions.h"
-//#include "octface.h"
+#include "octneighbor.h"
 
 ////////////////////////////////////////////////////////////////
 // CLASS DEFINITION
@@ -27,8 +27,7 @@ public:
     /*******************************
      * Constructors and destructor *
      *******************************/
-    //octcell(pftype size, pftype x_pos, pftype y_pos, pftype z_pos, pftype desired_level_of_detail = 0, octcell **children = 0);
-    octcell(pftype size, pftype x_pos, pftype y_pos, pftype z_pos, uint internal_layer_advancement = 0, octcell **children = 0);
+    octcell(pftype size, pftype x_pos, pftype y_pos, pftype z_pos, uint level, uint internal_layer_advancement = 0, octcell **children = 0);
     ~octcell();
 
 public:
@@ -47,11 +46,15 @@ public:
     pftype z; /* Z-position of first corner */
 
     /* Level of detail */
+    uint lvl; /* The level of the cell, 0 = root */
     uint ila; /* Internal layer advancement, the advancement of the cell in the layer in terms of cells: 1, 2, ..., t_n (0 = unknown) */
     //bool changed; /* Whether the ila has changed since last update or not */
 
     /* Children */
     octcell **c; /* The possible children */
+
+    /* Neighbors */
+    nlist neighborlist;
 
 public:
     /*****************************
@@ -71,19 +74,27 @@ public:
     octcell* add_child(uint idx);
     void remove_child(uint idx);
 
+    /* Neighbors */
+    void generate_all_internal_neighbors();
+
 public:
     /*************************
      * Public static methods *
      *************************/
-    static uint child_index(uint x, uint y, uint z);
+    /* Neighbors */
+    void make_neighbors(octcell* c1, octcell* c2);
+    void generate_all_neighbors_in_interface(octcell* c1, octcell* c2, DIRECTION normal_direction);
+
+    /* Indexes */
+    inline static uint child_index(uint x, uint y, uint z);
+    inline static uint index_offset(DIRECTION dir);
 
 private:
-
     /*************************
      * Disabled constructors *
      *************************/
     octcell(); // Default constructor prevented from all use
-    octcell(octcell&); // Default constructor prevented from all use
+    octcell(octcell&); // Copy constructor prevented from all use
 };
 
 #endif // OCTCELL_H
