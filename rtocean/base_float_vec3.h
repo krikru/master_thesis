@@ -29,7 +29,7 @@ public:
     base_float_vec3<T>(const ivec3& source); // Conversion constructor
     base_float_vec3<T>(T e0, T e1, T e2);    // Other constructor
 
-    base_float_vec3<T>& operator =(const ivec3&);
+    base_float_vec3<T>& operator =(const ivec3&); // Conversion
     base_float_vec3<T>& operator+=(const base_float_vec3<T>&);
     base_float_vec3<T>& operator-=(const base_float_vec3<T>&);
     //base_float_vec3<T>& operator&=(const base_float_vec3<T>&); // Yet to define

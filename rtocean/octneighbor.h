@@ -36,20 +36,25 @@ public:
 
     /* Neighbor list */
     nlnode* nle; // The object's entry in the neighbor list
+    nlnode* mnle; // The matching entry in the neighbor's neighbor list
 
     /* Neighbor */
     octcell* n;
 
     /* Distance between cells */
-    pfvec3 dist;
+    pfvec  dist;
     pftype dist_abs;
 
     /* Surface */
     pftype cf_area;
 
+    /* Direction of the octneighbor */
+    uint dir;
+    bool rev_dir;
+
 public:
     /* Public methods */
-    void initialize(nlnode* neighbor_list_entry, octcell* neighbor_cell, pfvec3 distance, pftype distance_absolute_value, pftype cell_face_area);
+    void initialize(nlnode* neighbor_list_entry, nlnode* matching_neighbor_list_entry, octcell* neighbor_cell, pfvec distance, pftype distance_absolute_value, pftype cell_face_area, uint direction, bool reverse_direction);
 
 private:
     /*************************

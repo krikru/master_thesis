@@ -10,14 +10,22 @@
 // CONSTRUCTORS AND DESTRUCTOR
 ////////////////////////////////////////////////////////////////
 
-octcell::octcell(pftype size, pftype x_pos, pftype y_pos, pftype z_pos, uint level, uint internal_layer_advancement, octcell **children)
+#if  NUM_DIRECTIONS == 2
+octcell::octcell(pftype size, pftype x_pos, pftype y_pos, uint level, uint internal_layer_advancement, octcell **children) :
+#elif NUM_DIRECTIONS == 3
+octcell::octcell(pftype size, pftype x_pos, pftype y_pos, pftype z_pos, uint level, uint internal_layer_advancement, octcell **children) :
+#endif
+    neighborlist()
 {
     s = size;
     x = x_pos;
     y = y_pos;
+#if  NUM_DIRECTIONS == 3
     z = z_pos;
+#endif
     lvl = level;
-    ila = internal_layer_advancement;
+    //ila = internal_layer_advancement;
+    internal_layer_advancement = internal_layer_advancement;
     _c = children;
 }
 
@@ -41,17 +49,22 @@ octcell::~octcell()
  * Geometry *
  ************/
 
-pfvec3 octcell::cell_center()
+pfvec octcell::cell_center()
 {
     pftype s_2 = 0.5 * s;
-    //TODO: Stop making tests!!
 #if XYZ_COORDINATE_SYSTEM
-    return pfvec3(x + s_2, y + s_2, z + s_2);
+#if    NUM_DIRECTIONS == 2
+    return pfvec(x + s_2, y + s_2);
+#elif  NUM_DIRECTIONS == 3
+    return pfvec(x + s_2, y + s_2, z + s_2);
+#endif
 #else
-    pfvec3 cc;
+    pfvec cc;
     cc[DIR_X] = x + s_2;
     cc[DIR_Y] = y + s_2;
+#if  NUM_DIRECTIONS == 3
     cc[DIR_Z] = z + s_2;
+#endif
     return cc;
 #endif
 }
@@ -78,17 +91,31 @@ void octcell::refine()
     pftype s_2 = 0.5 * s;
     pftype x_2 = x + s_2;
     pftype y_2 = y + s_2;
+#if  NUM_DIRECTIONS == 3
     pftype z_2 = z + s_2;
+#endif
     uint   new_level = lvl + 1;
     // Assign values to children
-    set_child(0, new octcell(s_2, x  , y  , z  , new_level));
-    set_child(1, new octcell(s_2, x_2, y  , z  , new_level));
-    set_child(2, new octcell(s_2, x  , y_2, z  , new_level));
-    set_child(3, new octcell(s_2, x_2, y_2, z  , new_level));
-    set_child(4, new octcell(s_2, x  , y  , z_2, new_level));
-    set_child(5, new octcell(s_2, x_2, y  , z_2, new_level));
-    set_child(6, new octcell(s_2, x  , y_2, z_2, new_level));
-    set_child(7, new octcell(s_2, x_2, y_2, z_2, new_level));
+#if  NUM_DIRECTIONS == 2
+    set_child(child_index(0, 0), new octcell(s_2, x  , y  , new_level));
+    set_child(child_index(1, 0), new octcell(s_2, x_2, y  , new_level));
+    set_child(child_index(0, 1), new octcell(s_2, x  , y_2, new_level));
+    set_child(child_index(1, 1), new octcell(s_2, x_2, y_2, new_level));
+#elif  NUM_DIRECTIONS == 3
+    set_child(child_index(0, 0, 0), new octcell(s_2, x  , y  , z  , new_level));
+    set_child(child_index(1, 0, 0), new octcell(s_2, x_2, y  , z  , new_level));
+    set_child(child_index(0, 1, 0), new octcell(s_2, x  , y_2, z  , new_level));
+    set_child(child_index(1, 1, 0), new octcell(s_2, x_2, y_2, z  , new_level));
+    set_child(child_index(0, 0, 1), new octcell(s_2, x  , y  , z_2, new_level));
+    set_child(child_index(1, 0, 1), new octcell(s_2, x_2, y  , z_2, new_level));
+    set_child(child_index(0, 1, 1), new octcell(s_2, x  , y_2, z_2, new_level));
+    set_child(child_index(1, 1, 1), new octcell(s_2, x_2, y_2, z_2, new_level));
+#else
+    //TODO: Remove (no number of dimensions left)
+    for (uint i = 0; i < octcell::MAX_NUM_CHILDREN; i++) {
+        set_child(i, new octcell(s_2, (i >> DIR_X & 1) ? x_2 : x, (i >> DIR_Y & 1) ? y_2 : y, (i >> DIR_Z & 1) ? z_2 : z, new_level));
+    }
+#endif
 }
 
 void octcell::unleaf()
@@ -124,9 +151,12 @@ octcell* octcell::add_child(uint idx)
     pftype s_2 = 0.5 * s;
     pftype x1 = x + ((idx >> DIR_X) & 1) * s_2;
     pftype y1 = y + ((idx >> DIR_Y) & 1) * s_2;
+#if  NUM_DIRECTIONS == 3
     pftype z1 = z + ((idx >> DIR_Z) & 1) * s_2;
-
     set_child(idx, new octcell(s_2, x1, y1, z1, lvl + 1));
+#else
+    set_child(idx, new octcell(s_2, x1, y1, lvl + 1));
+#endif
 
     return get_child(idx);
 }
@@ -185,16 +215,16 @@ nlnode* octcell::get_first_neighbor_list_node()
 // PUBLIC STATIC METHODS
 ////////////////////////////////////////////////////////////////
 
-void octcell::make_neighbors(octcell* c1, octcell* c2)
+void octcell::make_neighbors(octcell* c1, octcell* c2, uint direction)
 {
     nlnode* node1 = c1->neighborlist.add_new_element();
     nlnode* node2 = c2->neighborlist.add_new_element();
-    pfvec3 dist = c2->cell_center() - c1->cell_center();
+    pfvec dist = c2->cell_center() - c1->cell_center();
     pftype dist_abs = dist.length();
     pftype min_s = MIN(c1->s, c2->s);
     pftype area = min_s*min_s;
-    node1->v.initialize(node1, c2,  dist, dist_abs, area);
-    node2->v.initialize(node2, c1, -dist, dist_abs, area);
+    node1->v.initialize(node1, node2, c2,  dist, dist_abs, area, direction, false);
+    node2->v.initialize(node2, node1, c1, -dist, dist_abs, area, direction, true );
 }
 
 void octcell::generate_all_cross_cell_neighbors(octcell* c1, octcell* c2, uint normal_direction)
@@ -221,7 +251,7 @@ void octcell::generate_all_cross_cell_neighbors(octcell* c1, octcell* c2, uint n
 
     if (c1->is_leaf() && c2->is_leaf()) {
         // Both nodes are leaf nodes, add them to each others neighbor lists
-        make_neighbors(c1, c2);
+        make_neighbors(c1, c2, normal_direction);
     }
     else if (c1->is_leaf() && !(c2->is_leaf())) {
         // TODO: Optimize
@@ -234,7 +264,7 @@ void octcell::generate_all_cross_cell_neighbors(octcell* c1, octcell* c2, uint n
                         generate_all_cross_cell_neighbors(c1, c2->get_child(i), normal_direction);
                     }
                     else {
-                        make_neighbors(c1, c2->get_child(i));
+                        make_neighbors(c1, c2->get_child(i), normal_direction);
                     }
                 }
             }
@@ -252,7 +282,7 @@ void octcell::generate_all_cross_cell_neighbors(octcell* c1, octcell* c2, uint n
                         generate_all_cross_cell_neighbors(c1->get_child(i), c2, normal_direction);
                     }
                     else {
-                        make_neighbors(c1->get_child(i), c2);
+                        make_neighbors(c1->get_child(i), c2, normal_direction);
                     }
                 }
             }

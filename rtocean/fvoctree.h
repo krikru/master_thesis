@@ -23,8 +23,8 @@ public:
 
     /* Private methods */
 private:
-    static pftype size_accuracy(pfvec3 r);
-    int refine_octcell(octcell* c, pftype surface, pftype bottom, pftype (*accuracy_function)(pfvec3));
+    static pftype size_accuracy(pfvec r);
+    int refine_octcell(octcell* c, pftype surface, pftype bottom, pftype (*accuracy_function)(pfvec));
     void generate_neighbor_lists();
 
 private:

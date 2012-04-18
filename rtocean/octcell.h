@@ -28,12 +28,16 @@ using std::out_of_range;
 class octcell
 {
 public:
-    static const uint MAX_NUM_CHILDREN = 8;
+    static const uint MAX_NUM_CHILDREN = 1 << NUM_DIRECTIONS;
 public:
     /*******************************
      * Constructors and destructor *
      *******************************/
+#if  NUM_DIRECTIONS == 2
+    octcell(pftype size, pftype x_pos, pftype y_pos, uint level, uint internal_layer_advancement = 0, octcell **children = 0);
+#elif  NUM_DIRECTIONS == 3
     octcell(pftype size, pftype x_pos, pftype y_pos, pftype z_pos, uint level, uint internal_layer_advancement = 0, octcell **children = 0);
+#endif
     ~octcell();
 
 public:
@@ -49,11 +53,13 @@ public:
     pftype s; /* Size of the cell (the length of an edge) */
     pftype x; /* X-position of first corner */
     pftype y; /* Y-position of first corner */
+#if  NUM_DIRECTIONS == 3
     pftype z; /* Z-position of first corner */
+#endif
 
     /* Level of detail */
     uint lvl; /* The level of the cell, 0 = root */
-    uint ila; /* Internal layer advancement, the advancement of the cell in the layer in terms of cells: 1, 2, ..., t_n (0 = unknown) */
+    //uint ila; /* Internal layer advancement, the advancement of the cell in the layer in terms of cells: 1, 2, ..., t_n (0 = unknown) */
     //bool changed; /* Whether the ila has changed since last update or not */
 
     /* Children */
@@ -68,7 +74,7 @@ public:
      *****************************/
 
     /* Geometry */
-    pfvec3 cell_center();
+    pfvec  cell_center();
 
     /* Level of detail */
 
@@ -91,11 +97,15 @@ public:
      * Public static methods *
      *************************/
     /* Neighbors */
-    void make_neighbors(octcell* c1, octcell* c2);
+    void make_neighbors(octcell* c1, octcell* c2, uint direction);
     void generate_all_cross_cell_neighbors(octcell* c1, octcell* c2, uint normal_direction);
 
     /* Indexes */
+#if  NUM_DIRECTIONS == 2
+    static uint child_index(uint x, uint y);
+#elif  NUM_DIRECTIONS == 3
     static uint child_index(uint x, uint y, uint z);
+#endif
     static uint index_offset(uint dir);
 
 private:
@@ -157,9 +167,17 @@ octcell* octcell::set_child(uint idx, octcell* child) {
  ***********/
 
 inline
+#if  NUM_DIRECTIONS == 2
+uint octcell::child_index(uint x, uint y)
+#elif  NUM_DIRECTIONS == 3
 uint octcell::child_index(uint x, uint y, uint z)
+#endif
 {
+#if    NUM_DIRECTIONS == 2
+    return (x << DIR_X) | (y << DIR_Y);
+#elif  NUM_DIRECTIONS == 3
     return (x << DIR_X) | (y << DIR_Y) | (z << DIR_Z);
+#endif
 }
 
 inline

@@ -12,13 +12,22 @@ using std::endl;
 
 // Own includes
 #include "definitions.h"
+#if    NUM_DIRECTIONS == 3
 #include "base_float_vec3.h"
+#elif  NUM_DIRECTIONS == 2
+#include "base_float_vec2.h"
+#endif
+
 
 ////////////////////////////////////////////////////////////////
 // TYPEDEFS
 ////////////////////////////////////////////////////////////////
 
-typedef base_float_vec3<pftype>  pfvec3;
+#if    NUM_DIRECTIONS == 3
+typedef base_float_vec3<pftype>  pfvec;
+#elif  NUM_DIRECTIONS == 2
+typedef base_float_vec2<pftype>  pfvec;
+#endif
 
 ////////////////////////////////////////////////////////////////
 // CLASS DEFINITION

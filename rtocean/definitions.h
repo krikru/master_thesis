@@ -18,10 +18,12 @@
 
 //#define  DEBUG                      0
 #define  DEBUG                      1
+#define  NUM_DIRECTIONS             2
 #define  ELABORATE                  0
+#define  XYZ_COORDINATE_SYSTEM      1
 #define  DRAW_SMOOTH_LINES          0
-#define  DRAW_CELL_CUBES            0
-#define  DRAW_PARENT_CELLS          0
+#define  DRAW_CELL_CUBES            1
+#define  DRAW_PARENT_CELLS          1
 #define  DRAW_NEIGHBOR_CONNECTIONS  1
 
 ////////////////////////////////////////////////////////////////
@@ -29,6 +31,26 @@
 ////////////////////////////////////////////////////////////////
 
 #define  USE_DOUBLE_PRECISION_FOR_PHYSICS      0
+
+/* Graphics */
+/* 0 to 1 */
+const float  BACKGROUND_R           = 1;
+const float  BACKGROUND_G           = 1;
+const float  BACKGROUND_B           = 1;
+const float  BACKGROUND_A           = 1;
+/* 0 to 255 */
+const float  LEAF_CUBE_R            = 0;
+const float  LEAF_CUBE_G            = 0;
+const float  LEAF_CUBE_B            = 0;
+const float  LEAF_CUBE_A            = 1;
+const float  PARENT_CUBE_R          = .75;
+const float  PARENT_CUBE_G          = .75;
+const float  PARENT_CUBE_B          = .75;
+const float  PARENT_CUBE_A          = 1;
+const float  NEIGHBOR_CONNECTION_R  = 0;
+const float  NEIGHBOR_CONNECTION_G  = 0;
+const float  NEIGHBOR_CONNECTION_B  = 1;
+const float  NEIGHBOR_CONNECTION_A  = 1;
 
 ////////////////////////////////////////////////////////////////
 // TYPEDEFS
@@ -45,28 +67,20 @@ typedef  float                   pftype;
 // ENUMS
 ////////////////////////////////////////////////////////////////
 
+//TODO: Generalize the code so it works for 1, 2 and 3 dimensions
 //TODO: The real order should be X, Y, Z (change back if it isn't)
-#if ELABORATE
-enum DIRECTION {
-    DIR_Y,
-    DIR_X,
-    DIR_Z,
-    NUM_DIRECTIONS
-};
-#else
+#if XYZ_COORDINATE_SYSTEM
 enum DIRECTION {
     DIR_X,
     DIR_Y,
-    DIR_Z,
-    NUM_DIRECTIONS
+    DIR_Z
 };
-#endif
-
-//TODO: Make this work
-#if (DIR_X == 0) && (DIR_Y == 1) && (DIR_Z == 2)
-#define  XYZ_COORDINATE_SYSTEM  1
 #else
-#define  XYZ_COORDINATE_SYSTEM  0
+enum DIRECTION {
+    DIR_Y,
+    DIR_X,
+    DIR_Z
+};
 #endif
 
 ////////////////////////////////////////////////////////////////

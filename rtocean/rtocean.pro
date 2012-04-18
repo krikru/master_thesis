@@ -30,7 +30,8 @@ HEADERS  += mainwin.h \
     message_handler.h \
     octneighbor.h \
     dllist.h \
-    dllnode.h
+    dllnode.h \
+    base_float_vec2.h
 
 FORMS    += mainwin.ui
 
