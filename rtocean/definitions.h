@@ -20,7 +20,7 @@
 #define  DEBUG                      1
 #define  NUM_DIRECTIONS             2
 #define  ELABORATE                  0
-#define  XYZ_COORDINATE_SYSTEM      1
+#define  LOGICAL_AXIS_ORDER         1
 #define  DRAW_SMOOTH_LINES          0
 #define  DRAW_CELL_CUBES            1
 #define  DRAW_PARENT_CELLS          1
@@ -69,7 +69,7 @@ typedef  float                   pftype;
 
 //TODO: Generalize the code so it works for 1, 2 and 3 dimensions
 //TODO: The real order should be X, Y, Z (change back if it isn't)
-#if XYZ_COORDINATE_SYSTEM
+#if LOGICAL_AXIS_ORDER
 enum DIRECTION {
     DIR_X,
     DIR_Y,

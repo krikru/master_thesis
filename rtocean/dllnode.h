@@ -43,9 +43,14 @@ public:
     ~dllnode<T>();
 
 public:
+    /* Public member variables */
     T           v; // Value;
     dllnode<T>* n; // Next node
     dllnode<T>* p; // Previous node
+
+public:
+    /* Public methods */
+    void remove();
 
 private:
     /*************************
@@ -87,6 +92,25 @@ dllnode<T>::dllnode(T value, dllnode<T>* next_node) :
 template<typename T>
 dllnode<T>::~dllnode()
 {
+}
+
+////////////////////////////////////////////////////////////////
+// CONSTRUCTORS AND DESTRUCTUR
+////////////////////////////////////////////////////////////////
+
+template<typename T>
+void dllnode<T>::remove()
+{
+    // Update previous node (there is always one)
+    p->n = n;
+
+    // Update next node if there is one
+    if (n) {
+        n->p = p;
+    }
+
+    // Delete the node
+    delete this;
 }
 
 #endif // DLLNODE_H

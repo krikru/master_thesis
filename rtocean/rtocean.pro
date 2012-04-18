@@ -31,7 +31,8 @@ HEADERS  += mainwin.h \
     octneighbor.h \
     dllist.h \
     dllnode.h \
-    base_float_vec2.h
+    base_float_vec2.h \
+    base_dllnode.h
 
 FORMS    += mainwin.ui
 

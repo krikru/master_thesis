@@ -37,6 +37,26 @@ int main(int argc, char *argv[])
         win.showMaximized();
         win.show();
 
+        {
+            dllist<int> l;
+            dllnode<int>* e1 = l.add_existing_element(1);
+            dllnode<int>* e2 = l.add_new_element();
+            e2->v = 2;
+            l.add_existing_element(3);
+            l.add_existing_element(4);
+            l.add_existing_element(5);
+            l.add_existing_element(6);
+            l.add_existing_element(7);
+            l.add_existing_element(8);
+            l.add_existing_element(9);
+            l.add_existing_element(10);
+
+            for (dllnode<int>* e = l.get_first_element(); e; e = e->n) {
+                cout << e->v << endl;
+            }
+        }
+        return 0;
+
         // "Start" application
         return app.exec();
     }

@@ -52,7 +52,7 @@ octcell::~octcell()
 pfvec octcell::cell_center()
 {
     pftype s_2 = 0.5 * s;
-#if XYZ_COORDINATE_SYSTEM
+#if LOGICAL_AXIS_ORDER
 #if    NUM_DIRECTIONS == 2
     return pfvec(x + s_2, y + s_2);
 #elif  NUM_DIRECTIONS == 3
@@ -208,7 +208,13 @@ void octcell::generate_all_internal_neighbors()
 
 nlnode* octcell::get_first_neighbor_list_node()
 {
-    return neighborlist.h;
+    return neighborlist.get_first_element();
+}
+
+void octcell::unneighbor(nlnode* neighbor_list_entry)
+{
+    neighbor_list_entry->v.mnle->remove();
+    neighbor_list_entry->remove();
 }
 
 ////////////////////////////////////////////////////////////////

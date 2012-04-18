@@ -91,6 +91,7 @@ public:
     /* Neighbors */
     void generate_all_internal_neighbors();
     nlnode* get_first_neighbor_list_node();
+    void unneighbor(nlnode* neighbor_list_entry);
 
 public:
     /*************************

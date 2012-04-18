@@ -37,18 +37,18 @@ fvoctree::fvoctree(pftype surface, pftype bottom)
         c->refine();
     }
 #else
-    refine_octcell(c, surface, bottom, size_accuracy);
+    refine_subtree(c, surface, bottom, size_accuracy);
     //TODO: Remove the refinement of selected octcells
-#if  NUM_DIRECTIONS == 2
 #if 0
+#if  NUM_DIRECTIONS == 2
     c->get_child(octcell::child_index(1, 0))->refine();
     c->get_child(octcell::child_index(1, 0))->get_child(octcell::child_index(0, 0))->refine();
     c->get_child(octcell::child_index(1, 1))->refine();
-#endif
 #elif  NUM_DIRECTIONS == 3
     c->get_child(octcell::child_index(1, 0, 0))->refine();
     c->get_child(octcell::child_index(1, 0, 0))->get_child(octcell::child_index(0, 0, 0))->refine();
     c->get_child(octcell::child_index(1, 1, 0))->refine();
+#endif
 #endif
     generate_neighbor_lists();
 #endif
@@ -70,7 +70,7 @@ pftype fvoctree::size_accuracy(pfvec r)
     return 0.01 + 0.03 * r.e[DIR_X];
 }
 
-int fvoctree::refine_octcell(octcell* c, pftype surface, pftype bottom, pftype (*accuracy_function)(pfvec))
+int fvoctree::refine_subtree(octcell* c, pftype surface, pftype bottom, pftype (*accuracy_function)(pfvec))
 {
     static int tot_num_cells = 1;
     static int num_leaf_cells = 1;
@@ -102,7 +102,7 @@ int fvoctree::refine_octcell(octcell* c, pftype surface, pftype bottom, pftype (
     tot_num_cells += octcell::MAX_NUM_CHILDREN;
     num_leaf_cells += octcell::MAX_NUM_CHILDREN - 1;
     for (uint i = 0; i < octcell::MAX_NUM_CHILDREN; i++) {
-        if (refine_octcell(c->get_child(i), surface, bottom, accuracy_function)) {
+        if (refine_subtree(c->get_child(i), surface, bottom, accuracy_function)) {
             c->remove_child(i);
             tot_num_cells--;
             num_leaf_cells--;
