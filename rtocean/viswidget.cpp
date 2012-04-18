@@ -105,7 +105,7 @@ void viswidget::resizeGL(int w, int h)
 
         glMatrixMode(GL_MODELVIEW);
         glLoadIdentity();
-#if NUM_DIRECTIONS == 2
+#if  NUM_DIRECTIONS == 2
         gluLookAt(.5, .5, -1.5, .5, .5, 0, 0, 1, 0);
 #elif  NUM_DIRECTIONS == 3
         // From front
@@ -123,13 +123,11 @@ void viswidget::visualize_octcell_recursively(octcell *cell, bool recursively)
 {
 #if DRAW_CELL_CUBES
     pftype x1 = cell->x;
-    pftype y1 = cell->y;
-#if  NUM_DIRECTIONS == 3
-    pftype z1 = cell->z;
-#endif
     pftype x2 = x1 + cell->s;
+    pftype y1 = cell->y;
     pftype y2 = y1 + cell->s;
 #if  NUM_DIRECTIONS == 3
+    pftype z1 = cell->z;
     pftype z2 = z1 + cell->s;
 #endif
 
@@ -178,7 +176,7 @@ void viswidget::visualize_octcell_recursively(octcell *cell, bool recursively)
     if (DRAW_NEIGHBOR_CONNECTIONS && nn) {
         quick_set_color(NEIGHBOR_CONNECTION_R, NEIGHBOR_CONNECTION_G, NEIGHBOR_CONNECTION_B, NEIGHBOR_CONNECTION_A);
         pfvec center1 = cell->cell_center();
-        for (; nn; nn = nn->n) {
+        for (; nn; nn = nn->get_next_node()) {
             pfvec center2 = nn->v.n->cell_center();
             quick_draw_line(center1, .5*(center1 + center2));
         }

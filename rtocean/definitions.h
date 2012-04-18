@@ -17,28 +17,25 @@
 ////////////////////////////////////////////////////////////////
 
 //#define  DEBUG                      0
+/* Essential */
 #define  DEBUG                      1
 #define  NUM_DIRECTIONS             2
-#define  ELABORATE                  0
 #define  LOGICAL_AXIS_ORDER         1
+
+/* VIsualization */
 #define  DRAW_SMOOTH_LINES          0
 #define  DRAW_CELL_CUBES            1
 #define  DRAW_PARENT_CELLS          1
 #define  DRAW_NEIGHBOR_CONNECTIONS  1
 
-////////////////////////////////////////////////////////////////
-// MISCELANEOUS DEFINITIONS
-////////////////////////////////////////////////////////////////
-
-#define  USE_DOUBLE_PRECISION_FOR_PHYSICS      0
+/* Precision */
+#define  USE_DOUBLE_PRECISION_FOR_PHYSICS  0
 
 /* Graphics */
-/* 0 to 1 */
 const float  BACKGROUND_R           = 1;
 const float  BACKGROUND_G           = 1;
 const float  BACKGROUND_B           = 1;
 const float  BACKGROUND_A           = 1;
-/* 0 to 255 */
 const float  LEAF_CUBE_R            = 0;
 const float  LEAF_CUBE_G            = 0;
 const float  LEAF_CUBE_B            = 0;

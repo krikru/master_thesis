@@ -18,6 +18,8 @@ using std::endl;
 #include "base_float_vec2.h"
 #endif
 
+#include "base_dllnode.h"
+
 
 ////////////////////////////////////////////////////////////////
 // TYPEDEFS
@@ -34,7 +36,7 @@ typedef base_float_vec2<pftype>  pfvec;
 ////////////////////////////////////////////////////////////////
 
 template<typename T>
-class dllnode
+class dllnode : public base_dllnode
 {
 public:
     // Constructors and destructor
@@ -44,13 +46,13 @@ public:
 
 public:
     /* Public member variables */
-    T           v; // Value;
-    dllnode<T>* n; // Next node
-    dllnode<T>* p; // Previous node
+    T v; // Value;
 
 public:
     /* Public methods */
-    void remove();
+    dllnode<T>*   get_next_node();
+    base_dllnode* get_previous_node();
+    void remove_from_list();
 
 private:
     /*************************
@@ -73,19 +75,18 @@ template<> dllnode<int>::~dllnode();
 
 /* Constructor using the default constructor of the type */
 template<typename T>
-dllnode<T>::dllnode(dllnode<T>* next_node)
+dllnode<T>::dllnode(dllnode<T>* next_node) :
+    base_dllnode(next_node),
+    v()
 {
-    n = next_node;
-    p = 0;
 }
 
 /* Constructor using the copy constructor of the type */
 template<typename T>
 dllnode<T>::dllnode(T value, dllnode<T>* next_node) :
+    base_dllnode(next_node),
     v(value)
 {
-    n = next_node;
-    p = 0;
 }
 
 /* Destructor */
@@ -95,11 +96,25 @@ dllnode<T>::~dllnode()
 }
 
 ////////////////////////////////////////////////////////////////
-// CONSTRUCTORS AND DESTRUCTUR
+// PUBLIC METHODS
 ////////////////////////////////////////////////////////////////
 
 template<typename T>
-void dllnode<T>::remove()
+inline
+dllnode<T>* dllnode<T>::get_next_node()
+{
+    return static_cast<dllnode<T>*>(n);
+}
+
+template<typename T>
+inline
+base_dllnode* dllnode<T>::get_previous_node()
+{
+    return p;
+}
+
+template<typename T>
+void dllnode<T>::remove_from_list()
 {
     // Update previous node (there is always one)
     p->n = n;

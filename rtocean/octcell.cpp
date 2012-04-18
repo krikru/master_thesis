@@ -206,17 +206,6 @@ void octcell::generate_all_internal_neighbors()
     }
 }
 
-nlnode* octcell::get_first_neighbor_list_node()
-{
-    return neighborlist.get_first_element();
-}
-
-void octcell::unneighbor(nlnode* neighbor_list_entry)
-{
-    neighbor_list_entry->v.mnle->remove();
-    neighbor_list_entry->remove();
-}
-
 ////////////////////////////////////////////////////////////////
 // PUBLIC STATIC METHODS
 ////////////////////////////////////////////////////////////////

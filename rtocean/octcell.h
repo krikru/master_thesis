@@ -163,6 +163,23 @@ octcell* octcell::set_child(uint idx, octcell* child) {
     return _c[idx] = child;
 }
 
+/*************
+ * Neighbors *
+ *************/
+
+inline
+nlnode* octcell::get_first_neighbor_list_node()
+{
+    return neighborlist.get_first_element();
+}
+
+inline
+void octcell::unneighbor(nlnode* neighbor_list_entry)
+{
+    neighbor_list_entry->v.mnle->remove_from_list();
+    neighbor_list_entry->remove_from_list();
+}
+
 /***********
  * Indexes *
  ***********/

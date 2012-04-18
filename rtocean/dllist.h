@@ -21,7 +21,7 @@ public:
 
 private:
     /* Private member variables */
-    dllnode<T> h; // Head
+    base_dllnode h; // Head
 
 public:
     // Public methods
@@ -55,8 +55,8 @@ dllist<T>::~dllist()
     dllnode<T>* current_node;
     dllnode<T>* next_node;
     // TODO: Optimize this loop
-    for (current_node = h.n; current_node; current_node = next_node) {
-        next_node = current_node->n;
+    for (current_node = get_first_element(); current_node; current_node = next_node) {
+        next_node = current_node->get_next_node();
         delete current_node;
     }
 }
@@ -69,7 +69,7 @@ dllist<T>::~dllist()
 template<typename T>
 dllnode<T>* dllist<T>::add_new_element()
 {
-    dllnode<T>* node = new dllnode<T>(h.n);
+    dllnode<T>* node = new dllnode<T>(get_first_element());
     if (h.n) {
         h.n->p = node;
     }
@@ -81,7 +81,7 @@ dllnode<T>* dllist<T>::add_new_element()
 template<typename T>
 dllnode<T>* dllist<T>::add_existing_element(T element)
 {
-    dllnode<T>* node = new dllnode<T>(element, h.n);
+    dllnode<T>* node = new dllnode<T>(element, get_first_element());
     if (h.n) {
         h.n->p = node;
     }
@@ -94,7 +94,7 @@ template<typename T>
 inline
 dllnode<T>* dllist<T>::get_first_element()
 {
-    return h.n;
+    return static_cast<dllnode<T>*>(h.n);
 }
 
 #endif // DLLIST_H
