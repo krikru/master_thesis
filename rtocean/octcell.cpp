@@ -3,12 +3,6 @@
 // INCLUDE FILES
 ////////////////////////////////////////////////////////////////
 
-// Standard includes
-#include <stdexcept>
-//using std::exception;
-using std::logic_error;
-using std::out_of_range;
-
 // Own includes
 #include "octcell.h"
 
@@ -69,40 +63,6 @@ pfvec3 octcell::cell_center()
 /************
  * Children *
  ************/
-
-bool octcell::has_child_array()
-{
-    return _c;
-}
-
-bool octcell::is_leaf()
-{
-    return !_c;
-}
-
-octcell* octcell::get_child(uint idx) {
-#if DEBUG
-    if (is_leaf()) {
-        throw logic_error("Trying to get a child from a leaf cell");
-    }
-    if (idx >= MAX_NUM_CHILDREN) {
-        throw out_of_range("Trying to get a child with an index that is too high");
-    }
-#endif
-    return _c[idx];
-}
-
-octcell* octcell::set_child(uint idx, octcell* child) {
-#if DEBUG
-    if (is_leaf()) {
-        throw logic_error("Trying to set a child for a leaf cell");
-    }
-    if (idx >= MAX_NUM_CHILDREN) {
-        throw out_of_range("Trying to get a child with an index that is too high");
-    }
-#endif
-    return _c[idx] = child;
-}
 
 void octcell::refine()
 {
@@ -246,16 +206,16 @@ void octcell::generate_all_cross_cell_neighbors(octcell* c1, octcell* c2, uint n
         throw logic_error("Trying to generate neighbors between a cell and itself");
     }
     if (c1->lvl != c2->lvl) {
-        throw logic_error("Trying to build generate neighbors between cells of different sizes");
+        //throw logic_error("Trying to build generate neighbors between cells of different sizes");
     }
     // Control distance
     pftype sqr_dist = (c2->cell_center() - c1->cell_center()).sqr_length();
     pftype goal_sqrt_dist = c1->s * c1->s;
     if (sqr_dist > 1.5 * goal_sqrt_dist) {
-        throw logic_error("Trying to generate neighbors between unconnected cells");
+        //throw logic_error("Trying to generate neighbors between unconnected cells");
     }
     if (sqr_dist < 0.75 * goal_sqrt_dist) {
-        throw logic_error("Trying to generate neighbors between intersecting cells");
+        //throw logic_error("Trying to generate neighbors between intersecting cells");
     }
 #endif
 
@@ -264,14 +224,18 @@ void octcell::generate_all_cross_cell_neighbors(octcell* c1, octcell* c2, uint n
         make_neighbors(c1, c2);
     }
     else if (c1->is_leaf() && !(c2->is_leaf())) {
-        /* The children of c2 will be leaf nodes */
         // TODO: Optimize
         for (uint i = 0; i < MAX_NUM_CHILDREN; i++) {
             if ((i >> normal_direction & 1) == 0) {
                 /* Potential child cell with this index in c2 borders to c1 */
                 if (c2->get_child(i)) {
                     /* Child exists */
-                    make_neighbors(c1, c2->get_child(i));
+                    if (c2->get_child(i)->has_child_array()) {
+                        generate_all_cross_cell_neighbors(c1, c2->get_child(i), normal_direction);
+                    }
+                    else {
+                        make_neighbors(c1, c2->get_child(i));
+                    }
                 }
             }
         }
@@ -284,7 +248,12 @@ void octcell::generate_all_cross_cell_neighbors(octcell* c1, octcell* c2, uint n
                 /* Potential child cell with this index in c1 borders to c2 */
                 if (c1->get_child(i)) {
                     /* Child exists */
-                    make_neighbors(c1->get_child(i), c2);
+                    if (c1->get_child(i)->has_child_array()) {
+                        generate_all_cross_cell_neighbors(c1->get_child(i), c2, normal_direction);
+                    }
+                    else {
+                        make_neighbors(c1->get_child(i), c2);
+                    }
                 }
             }
         }
@@ -305,12 +274,3 @@ void octcell::generate_all_cross_cell_neighbors(octcell* c1, octcell* c2, uint n
     }
 }
 
-uint octcell::child_index(uint x, uint y, uint z)
-{
-    return (x << DIR_X) | (y << DIR_Y) | (z << DIR_Z);
-}
-
-uint octcell::index_offset(uint dir)
-{
-    return 1 << dir;
-}

@@ -20,7 +20,8 @@
 #define  DEBUG                      1
 #define  ELABORATE                  0
 #define  DRAW_SMOOTH_LINES          0
-#define  DRAW_PARENT_CELLS          1
+#define  DRAW_CELL_CUBES            0
+#define  DRAW_PARENT_CELLS          0
 #define  DRAW_NEIGHBOR_CONNECTIONS  1
 
 ////////////////////////////////////////////////////////////////
@@ -95,6 +96,8 @@ enum DIRECTION {
 ////////////////////////////////////////////////////////////////
 // MACROS
 ////////////////////////////////////////////////////////////////
+
+// TODO: Make some of these inline functions instead
 
 #define  MIN(x, y)  ((y) < (x) ? (y) : (x))
 #define  MAX(x, y)  ((y) > (x) ? (y) : (x))

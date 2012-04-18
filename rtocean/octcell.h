@@ -5,6 +5,12 @@
 // INCLUDE FILES
 ////////////////////////////////////////////////////////////////
 
+// Standard includes
+#include <stdexcept>
+//using std::exception;
+using std::logic_error;
+using std::out_of_range;
+
 // Own includes
 #include "definitions.h"
 #include "octneighbor.h"
@@ -67,10 +73,10 @@ public:
     /* Level of detail */
 
     /* Children */
-    inline bool has_child_array();
-    inline bool is_leaf();
-    inline octcell* get_child(uint idx);
-    inline octcell* set_child(uint idx, octcell* child);
+    bool has_child_array();
+    bool is_leaf();
+    octcell* get_child(uint idx);
+    octcell* set_child(uint idx, octcell* child);
     void refine(); // Creates new child array and new children
     void unleaf(); // Creates new child array but no children
     octcell* add_child(uint idx);
@@ -89,8 +95,8 @@ public:
     void generate_all_cross_cell_neighbors(octcell* c1, octcell* c2, uint normal_direction);
 
     /* Indexes */
-    inline static uint child_index(uint x, uint y, uint z);
-    inline static uint index_offset(uint dir);
+    static uint child_index(uint x, uint y, uint z);
+    static uint index_offset(uint dir);
 
 private:
     /*************************
@@ -99,5 +105,67 @@ private:
     octcell(); // Default constructor prevented from all use
     octcell(octcell&); // Copy constructor prevented from all use
 };
+
+////////////////////////////////////////////////////////////////
+// INLINE MEMBER FUNCTIONS
+////////////////////////////////////////////////////////////////
+
+/************
+ * Children *
+ ************/
+
+inline
+bool octcell::has_child_array()
+{
+    return _c;
+}
+
+inline
+bool octcell::is_leaf()
+{
+    return !_c;
+}
+
+inline
+octcell* octcell::get_child(uint idx) {
+#if DEBUG
+    if (is_leaf()) {
+        throw logic_error("Trying to get a child from a leaf cell");
+    }
+    if (idx >= MAX_NUM_CHILDREN) {
+        throw out_of_range("Trying to get a child with an index that is too high");
+    }
+#endif
+    return _c[idx];
+}
+
+inline
+octcell* octcell::set_child(uint idx, octcell* child) {
+#if DEBUG
+    if (is_leaf()) {
+        throw logic_error("Trying to set a child for a leaf cell");
+    }
+    if (idx >= MAX_NUM_CHILDREN) {
+        throw out_of_range("Trying to get a child with an index that is too high");
+    }
+#endif
+    return _c[idx] = child;
+}
+
+/***********
+ * Indexes *
+ ***********/
+
+inline
+uint octcell::child_index(uint x, uint y, uint z)
+{
+    return (x << DIR_X) | (y << DIR_Y) | (z << DIR_Z);
+}
+
+inline
+uint octcell::index_offset(uint dir)
+{
+    return 1 << dir;
+}
 
 #endif // OCTCELL_H

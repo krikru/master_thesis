@@ -26,6 +26,8 @@ using std::endl;
 viswidget::viswidget(QWidget *parent) :
     QGLWidget(parent)
 {
+    connect(&frame_timer, SIGNAL(timeout()), this, SLOT(updateGL()));
+    frame_timer.start(16);
 }
 
 
@@ -59,10 +61,22 @@ void viswidget::paintGL()
             END_TAKE_TIME();
         }
 
+#if 0
         BEGIN_TAKE_TIME("Moving octree... ");
         move_fvoctree(tree);
         END_TAKE_TIME();
-
+#endif
+        /* Rotate alpha degrees around the axis (ax, ay, az) through the point (x, y, z) */
+        GLdouble alpha = 0.2;
+        GLdouble ax = .5;
+        GLdouble ay = 0;
+        GLdouble az = 1;
+        GLdouble x = 0.5;
+        GLdouble y = 0.5;
+        GLdouble z = 0.5;
+        glTranslated( x,  y,  z);
+        glRotated(alpha, ax, ay, az);
+        glTranslated(-x, -y, -z);
 
         BEGIN_TAKE_TIME("Visualizing octree... ");
         visualize_fvoctree(tree);
@@ -85,7 +99,10 @@ void viswidget::resizeGL(int w, int h)
 
         glMatrixMode(GL_MODELVIEW);
         glLoadIdentity();
+        // From front
         gluLookAt(1.0/3, -1.5, 1.0/3, 1.0/3, 0.5, 1.0/3, 0, 0, 1);
+        //From below
+        //gluLookAt(1.0/3, 1.0/3, -1.5, 1.0/3, 1.0/3, .5, 0, -1, 0);
     }
     catch (std::exception &e) {
         message_handler::inform_about_exception("viswidget::resizeGL()", e, true);
@@ -94,6 +111,7 @@ void viswidget::resizeGL(int w, int h)
 
 void viswidget::visualize_octcell_recursively(octcell *cell, bool recursively)
 {
+#if DRAW_CELL_CUBES
     pftype x1 = cell->x;
     pftype y1 = cell->y;
     pftype z1 = cell->z;
@@ -127,6 +145,7 @@ void viswidget::visualize_octcell_recursively(octcell *cell, bool recursively)
         //set_line_style(1, 255, 255, 255, 255);
         glColor4ub(255, 255, 255, 255);
     }
+#endif
 
     if (recursively && cell->has_child_array()) {
         for (uint i = 0; i < octcell::MAX_NUM_CHILDREN; i++) {
@@ -142,9 +161,11 @@ void viswidget::visualize_octcell_recursively(octcell *cell, bool recursively)
         pfvec3 center1 = cell->cell_center();
         for (; nn; nn = nn->n) {
             pfvec3 center2 = nn->v.n->cell_center();
-            quick_draw_line(center1, (center1*.55 + center2*.45));
+            quick_draw_line(center1, .5*(center1 + center2));
         }
+#if DRAW_CELL_CUBES
         glColor4ub(255, 255, 255, 255);
+#endif
     }
 
 }

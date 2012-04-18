@@ -38,6 +38,10 @@ fvoctree::fvoctree(pftype surface, pftype bottom)
     }
 #else
     refine_octcell(c, surface, bottom, size_accuracy);
+    //TODO: Remove the refinement of selected octcells
+    c->get_child(octcell::child_index(1, 0, 0))->refine();
+    c->get_child(octcell::child_index(1, 0, 0))->get_child(octcell::child_index(0, 0, 0))->refine();
+    c->get_child(octcell::child_index(1, 1, 0))->refine();
     generate_neighbor_lists();
 #endif
 }
