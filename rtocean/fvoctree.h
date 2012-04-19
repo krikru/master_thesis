@@ -24,8 +24,10 @@ public:
     /* Private methods */
 private:
     static pftype size_accuracy(pfvec r);
-    int refine_subtree(octcell* c, pftype surface, pftype bottom, pftype (*accuracy_function)(pfvec));
+    bool refine_subtree(octcell* c, pftype surface, pftype bottom, pftype (*accuracy_function)(pfvec));
+#if  GENERATE_NEIGHBORS_STATICALLY
     void generate_neighbor_lists();
+#endif
 
 private:
     /*************************

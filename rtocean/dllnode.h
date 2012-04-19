@@ -12,9 +12,9 @@ using std::endl;
 
 // Own includes
 #include "definitions.h"
-#if    NUM_DIRECTIONS == 3
+#if    NUM_DIMENSIONS == 3
 #include "base_float_vec3.h"
-#elif  NUM_DIRECTIONS == 2
+#elif  NUM_DIMENSIONS == 2
 #include "base_float_vec2.h"
 #endif
 
@@ -25,9 +25,9 @@ using std::endl;
 // TYPEDEFS
 ////////////////////////////////////////////////////////////////
 
-#if    NUM_DIRECTIONS == 3
+#if    NUM_DIMENSIONS == 3
 typedef base_float_vec3<pftype>  pfvec;
-#elif  NUM_DIRECTIONS == 2
+#elif  NUM_DIMENSIONS == 2
 typedef base_float_vec2<pftype>  pfvec;
 #endif
 
@@ -50,9 +50,9 @@ public:
 
 public:
     /* Public methods */
-    dllnode<T>*   get_next_node();
+    dllnode<T>*   get_next_node    ();
     base_dllnode* get_previous_node();
-    void remove_from_list();
+    void          remove_from_list ();
 
 private:
     /*************************

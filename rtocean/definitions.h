@@ -19,14 +19,23 @@
 //#define  DEBUG                      0
 /* Essential */
 #define  DEBUG                      1
-#define  NUM_DIRECTIONS             2
+#define  NUM_DIMENSIONS             3 /* 2 or 3 */
 #define  LOGICAL_AXIS_ORDER         1
+#define  GENERATE_NEIGHBORS_STATICALLY   0
+#define  GENERATE_NEIGHBORS_DYNAMICALLY  1
+
+/* Program speed */
+#define  FRAME_MS                   (1000/60)
 
 /* VIsualization */
+#define  TEST_DEPTH                 1
 #define  DRAW_SMOOTH_LINES          0
 #define  DRAW_CELL_CUBES            1
 #define  DRAW_PARENT_CELLS          1
 #define  DRAW_NEIGHBOR_CONNECTIONS  1
+#define  MARK_MIDDLE_OF_CONNECTION  0
+#define  MIDDLE_MARK_SIZE           0.05
+#define  PARENT_CUBE_DIST_SCALEING  1.0001
 
 /* Precision */
 #define  USE_DOUBLE_PRECISION_FOR_PHYSICS  0
@@ -48,6 +57,10 @@ const float  NEIGHBOR_CONNECTION_R  = 0;
 const float  NEIGHBOR_CONNECTION_G  = 0;
 const float  NEIGHBOR_CONNECTION_B  = 1;
 const float  NEIGHBOR_CONNECTION_A  = 1;
+const float  MIDDLE_MARK_R          = 1;
+const float  MIDDLE_MARK_G          = 0;
+const float  MIDDLE_MARK_B          = 0;
+const float  MIDDLE_MARK_A          = 1;
 
 ////////////////////////////////////////////////////////////////
 // TYPEDEFS
@@ -78,6 +91,15 @@ enum DIRECTION {
     DIR_X,
     DIR_Z
 };
+#endif
+
+#if    NUM_DIMENSIONS == 2
+#define  HORIZONTAL_DIRECTION1  DIR_X
+#define  UP_DIRECTION           DIR_Y
+#elif  NUM_DIMENSIONS == 3
+#define  HORIZONTAL_DIRECTION1  DIR_X
+#define  HORIZONTAL_DIRECTION2  DIR_Y
+#define  UP_DIRECTION           DIR_Z
 #endif
 
 ////////////////////////////////////////////////////////////////

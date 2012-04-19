@@ -28,16 +28,12 @@ using std::out_of_range;
 class octcell
 {
 public:
-    static const uint MAX_NUM_CHILDREN = 1 << NUM_DIRECTIONS;
+    static const uint MAX_NUM_CHILDREN = 1 << NUM_DIMENSIONS;
 public:
     /*******************************
      * Constructors and destructor *
      *******************************/
-#if  NUM_DIRECTIONS == 2
-    octcell(pftype size, pftype x_pos, pftype y_pos, uint level, uint internal_layer_advancement = 0, octcell **children = 0);
-#elif  NUM_DIRECTIONS == 3
-    octcell(pftype size, pftype x_pos, pftype y_pos, pftype z_pos, uint level, uint internal_layer_advancement = 0, octcell **children = 0);
-#endif
+    octcell(pftype size, pfvec pos, uint level, uint internal_layer_advancement = 0, octcell **children = 0);
     ~octcell();
 
 public:
@@ -51,10 +47,15 @@ public:
      * The cell is a cube that stretches from (x, y, z) to (x + s, y + s, z + s)
      */
     pftype s; /* Size of the cell (the length of an edge) */
+    //TODO: Change tho vector instead of separate coordinates
+#if 1
+    pfvec  r; /* Position of the first corner */
+#else
     pftype x; /* X-position of first corner */
     pftype y; /* Y-position of first corner */
-#if  NUM_DIRECTIONS == 3
+#if  NUM_DIMENSIONS == 3
     pftype z; /* Z-position of first corner */
+#endif
 #endif
 
     /* Level of detail */
@@ -89,7 +90,9 @@ public:
     void remove_child(uint idx);
 
     /* Neighbors */
+#if  GENERATE_NEIGHBORS_STATICALLY
     void generate_all_internal_neighbors();
+#endif
     nlnode* get_first_neighbor_list_node();
     void unneighbor(nlnode* neighbor_list_entry);
 
@@ -102,10 +105,12 @@ public:
     void generate_all_cross_cell_neighbors(octcell* c1, octcell* c2, uint normal_direction);
 
     /* Indexes */
-#if  NUM_DIRECTIONS == 2
-    static uint child_index(uint x, uint y);
-#elif  NUM_DIRECTIONS == 3
-    static uint child_index(uint x, uint y, uint z);
+#if  NUM_DIMENSIONS == 2
+    static uint child_index(uint dir0, uint dir1);
+    static uint child_index_xy(uint x, uint y);
+#elif  NUM_DIMENSIONS == 3
+    static uint child_index(uint dir0, uint dir1, uint dir2);
+    static uint child_index_xyz(uint x, uint y, uint z);
 #endif
     static uint index_offset(uint dir);
 
@@ -120,6 +125,22 @@ private:
 ////////////////////////////////////////////////////////////////
 // INLINE MEMBER FUNCTIONS
 ////////////////////////////////////////////////////////////////
+
+/************
+ * Geometry *
+ ************/
+
+inline
+pfvec octcell::cell_center()
+{
+    pftype s_2 = 0.5 * s;
+    //TODO: Create function for generating the vector added to r
+#if    NUM_DIMENSIONS == 2
+    return r + pfvec(s_2, s_2);
+#elif  NUM_DIMENSIONS == 3
+    return r + pfvec(s_2, s_2, s_2);
+#endif
+}
 
 /************
  * Children *
@@ -163,6 +184,27 @@ octcell* octcell::set_child(uint idx, octcell* child) {
     return _c[idx] = child;
 }
 
+inline
+void octcell::remove_child(uint idx)
+{
+    octcell* c = get_child(idx);
+#if DEBUG
+    if (is_leaf()) {
+        throw logic_error("Trying to remove a child cell from a leaf cell");
+    }
+    if (idx < 0 || idx >= MAX_NUM_CHILDREN) {
+        throw out_of_range("Trying to remove a child cell with index out of bound");
+    }
+    if (!c) {
+        throw logic_error("Trying to remove a child cell that does not exist");
+    }
+#endif
+
+    /* Remove child */
+    delete c;
+    set_child(idx, 0);
+}
+
 /*************
  * Neighbors *
  *************/
@@ -185,15 +227,29 @@ void octcell::unneighbor(nlnode* neighbor_list_entry)
  ***********/
 
 inline
-#if  NUM_DIRECTIONS == 2
-uint octcell::child_index(uint x, uint y)
-#elif  NUM_DIRECTIONS == 3
-uint octcell::child_index(uint x, uint y, uint z)
+#if  NUM_DIMENSIONS == 2
+uint octcell::child_index(uint dir0, uint dir1)
+#elif  NUM_DIMENSIONS == 3
+uint octcell::child_index(uint dir0, uint dir1, uint dir2)
 #endif
 {
-#if    NUM_DIRECTIONS == 2
+#if    NUM_DIMENSIONS == 2
+    return (dir0 << 0) | (dir1 << 1);
+#elif  NUM_DIMENSIONS == 3
+    return (dir0 << 0) | (dir1 << 1) | (dir2 << 2);
+#endif
+}
+
+inline
+#if  NUM_DIMENSIONS == 2
+uint octcell::child_index_xy(uint x, uint y)
+#elif  NUM_DIMENSIONS == 3
+uint octcell::child_index_xyz(uint x, uint y, uint z)
+#endif
+{
+#if    NUM_DIMENSIONS == 2
     return (x << DIR_X) | (y << DIR_Y);
-#elif  NUM_DIRECTIONS == 3
+#elif  NUM_DIMENSIONS == 3
     return (x << DIR_X) | (y << DIR_Y) | (z << DIR_Z);
 #endif
 }

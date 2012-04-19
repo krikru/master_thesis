@@ -26,7 +26,10 @@ public:
     void paintGL();
     void resizeGL(int w, int h);
 
-    void visualize_octcell_recursively(octcell *cell, bool recursively);
+    void quick_draw_cell(octcell* cell);
+    void set_up_model_view_matrix(GLdouble scale_factor = 1);
+    void visualize_leaf_cells_and_neighbor_connections_recursively(octcell* cell);
+    void visualize_parent_cells_recursively(octcell* cell);
     void visualize_fvoctree(fvoctree *tree);
 
     /* test functions (remove when finished testing) */
@@ -49,6 +52,9 @@ private:
 private:
     /* Private member variables */
     QTimer frame_timer;
+    int gl_width;
+    int gl_height;
+    GLdouble t; // Time
 };
 
 #endif // VISWIDGET_H

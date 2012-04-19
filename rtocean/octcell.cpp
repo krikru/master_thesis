@@ -10,19 +10,11 @@
 // CONSTRUCTORS AND DESTRUCTOR
 ////////////////////////////////////////////////////////////////
 
-#if  NUM_DIRECTIONS == 2
-octcell::octcell(pftype size, pftype x_pos, pftype y_pos, uint level, uint internal_layer_advancement, octcell **children) :
-#elif NUM_DIRECTIONS == 3
-octcell::octcell(pftype size, pftype x_pos, pftype y_pos, pftype z_pos, uint level, uint internal_layer_advancement, octcell **children) :
-#endif
+octcell::octcell(pftype size, pfvec pos, uint level, uint internal_layer_advancement, octcell **children) :
     neighborlist()
 {
     s = size;
-    x = x_pos;
-    y = y_pos;
-#if  NUM_DIRECTIONS == 3
-    z = z_pos;
-#endif
+    r = pos;
     lvl = level;
     //ila = internal_layer_advancement;
     internal_layer_advancement = internal_layer_advancement;
@@ -31,6 +23,15 @@ octcell::octcell(pftype size, pftype x_pos, pftype y_pos, pftype z_pos, uint lev
 
 octcell::~octcell()
 {
+    /* Remove neighbor connections */
+    nlnode* node = get_first_neighbor_list_node();
+    nlnode* next_node;
+    for (; node; node = next_node) {
+        next_node = node->get_next_node();
+        unneighbor(node);
+    }
+
+    /* Delete potential children */
     if (has_child_array()) {
         for (uint i = 0; i < MAX_NUM_CHILDREN; i++) {
             if (get_child(i)) {
@@ -44,30 +45,6 @@ octcell::~octcell()
 ////////////////////////////////////////////////////////////////
 // PUBLIC NON-STATIC METHODS
 ////////////////////////////////////////////////////////////////
-
-/************
- * Geometry *
- ************/
-
-pfvec octcell::cell_center()
-{
-    pftype s_2 = 0.5 * s;
-#if LOGICAL_AXIS_ORDER
-#if    NUM_DIRECTIONS == 2
-    return pfvec(x + s_2, y + s_2);
-#elif  NUM_DIRECTIONS == 3
-    return pfvec(x + s_2, y + s_2, z + s_2);
-#endif
-#else
-    pfvec cc;
-    cc[DIR_X] = x + s_2;
-    cc[DIR_Y] = y + s_2;
-#if  NUM_DIRECTIONS == 3
-    cc[DIR_Z] = z + s_2;
-#endif
-    return cc;
-#endif
-}
 
 /*******************
  * Level of detail *
@@ -87,33 +64,87 @@ void octcell::refine()
 
     // Create child array
     _c = new octcell*[MAX_NUM_CHILDREN];
+
     // Create new values for children
-    pftype s_2 = 0.5 * s;
-    pftype x_2 = x + s_2;
-    pftype y_2 = y + s_2;
-#if  NUM_DIRECTIONS == 3
-    pftype z_2 = z + s_2;
-#endif
+    pftype s_2 = 0.5*s;
+    pfvec corners[2];
+    corners[0] = r;
+    corners[1] = cell_center();
     uint   new_level = lvl + 1;
+
     // Assign values to children
-#if  NUM_DIRECTIONS == 2
-    set_child(child_index(0, 0), new octcell(s_2, x  , y  , new_level));
-    set_child(child_index(1, 0), new octcell(s_2, x_2, y  , new_level));
-    set_child(child_index(0, 1), new octcell(s_2, x  , y_2, new_level));
-    set_child(child_index(1, 1), new octcell(s_2, x_2, y_2, new_level));
-#elif  NUM_DIRECTIONS == 3
-    set_child(child_index(0, 0, 0), new octcell(s_2, x  , y  , z  , new_level));
-    set_child(child_index(1, 0, 0), new octcell(s_2, x_2, y  , z  , new_level));
-    set_child(child_index(0, 1, 0), new octcell(s_2, x  , y_2, z  , new_level));
-    set_child(child_index(1, 1, 0), new octcell(s_2, x_2, y_2, z  , new_level));
-    set_child(child_index(0, 0, 1), new octcell(s_2, x  , y  , z_2, new_level));
-    set_child(child_index(1, 0, 1), new octcell(s_2, x_2, y  , z_2, new_level));
-    set_child(child_index(0, 1, 1), new octcell(s_2, x  , y_2, z_2, new_level));
-    set_child(child_index(1, 1, 1), new octcell(s_2, x_2, y_2, z_2, new_level));
-#else
-    //TODO: Remove (no number of dimensions left)
-    for (uint i = 0; i < octcell::MAX_NUM_CHILDREN; i++) {
-        set_child(i, new octcell(s_2, (i >> DIR_X & 1) ? x_2 : x, (i >> DIR_Y & 1) ? y_2 : y, (i >> DIR_Z & 1) ? z_2 : z, new_level));
+    pfvec new_r;
+    for (uint i = 0; i < MAX_NUM_CHILDREN; i++) {
+        for (uint dir = 0; dir < NUM_DIMENSIONS; dir++) {
+            new_r[dir] = corners[(i >> dir) & 1][dir];
+        }
+        set_child(i, new octcell(s_2, new_r, new_level));
+    }
+
+#if  GENERATE_NEIGHBORS_DYNAMICALLY
+
+    /* Create new neighbors between child cells */
+    for (uint i1 = 0; i1 < MAX_NUM_CHILDREN; i1++) {
+        for (uint dir = 0; dir < NUM_DIMENSIONS; dir++) {
+            uint i2 = i1 | index_offset(dir);
+            if (i2 >= MAX_NUM_CHILDREN || i2 < 0) {
+                i2 = i2;
+            }
+            if (i2 > i1) {
+                make_neighbors(get_child(i1), get_child(i2), dir);
+            }
+        }
+    }
+
+    /* Refine existing neighbors */
+    nlnode* node = get_first_neighbor_list_node();
+    nlnode* next_node;
+    /* Loop through all neighbors on the parent (this) level */
+    for (; node; node = next_node) {
+        uint dir = node->v.dir;
+        bool rev_dir = node->v.rev_dir;
+        octcell* neighbor = node->v.n;
+        if (neighbor->lvl <= lvl) {
+            /* Neighbor cell is at least as large as this cell */
+            /* Make half on the child cells (on the correct side of the cell) neighbors with this neighbor */
+            // TODO: Optimize loop
+            for (uint i = 0; i < MAX_NUM_CHILDREN; i++) {
+                /* The direction between the neighbors is reversed */
+                if ((i >> dir & 1) ^ rev_dir) {
+                    /* Child cell is adjactent */
+                    if (rev_dir) {
+                        make_neighbors(neighbor, get_child(i), dir);
+                    }
+                    else {
+                        make_neighbors(get_child(i), neighbor, dir);
+                    }
+                }
+            }
+        }
+        else {
+            /* Neighbor cell is smaller than this cell, only one of the child cells get this as a neighbor */
+            /* Calculate index of neighbor cell */
+            uint idx = 0;
+            for (uint dir2 = 0; dir2 < NUM_DIMENSIONS; dir2++) {
+                if (dir2 == dir) {
+                    /* dir2 is parallel to dir */
+                    idx |= (!(rev_dir) << dir2);
+                }
+                else {
+                    /* dir2 is orthogonal to dir */
+                    idx |= ((cell_center()[dir2] < neighbor->cell_center()[dir2]) << dir2);
+                }
+            }
+            /* Index calculated, make neighbor */
+            if (rev_dir) {
+                make_neighbors(neighbor, get_child(idx), dir);
+            }
+            else {
+                make_neighbors(get_child(idx), neighbor, dir);
+            }
+        }
+        next_node = node->get_next_node();
+        unneighbor(node);
     }
 #endif
 }
@@ -149,36 +180,16 @@ octcell* octcell::add_child(uint idx)
 #endif
 
     pftype s_2 = 0.5 * s;
-    pftype x1 = x + ((idx >> DIR_X) & 1) * s_2;
-    pftype y1 = y + ((idx >> DIR_Y) & 1) * s_2;
-#if  NUM_DIRECTIONS == 3
-    pftype z1 = z + ((idx >> DIR_Z) & 1) * s_2;
-    set_child(idx, new octcell(s_2, x1, y1, z1, lvl + 1));
-#else
-    set_child(idx, new octcell(s_2, x1, y1, lvl + 1));
-#endif
+    pfvec r1;
+    for (uint dir = 0; dir < NUM_DIMENSIONS; dir++) {
+        r1[dir] = r[dir] + ((idx >> dir) & 1) * s_2;
+    }
+    set_child(idx, new octcell(s_2, r1, lvl + 1));
 
     return get_child(idx);
 }
 
-void octcell::remove_child(uint idx)
-{
-#if DEBUG
-    if (is_leaf()) {
-        throw logic_error("Trying to remove a child cell from a leaf cell");
-    }
-    if (idx < 0 || idx >= MAX_NUM_CHILDREN) {
-        throw out_of_range("Trying to remove a child cell with index out of bound");
-    }
-    if (!get_child(idx)) {
-        throw logic_error("Trying to remove a child cell that does not exist");
-    }
-#endif
-
-    delete get_child(idx);
-    set_child(idx, 0);
-}
-
+#if  GENERATE_NEIGHBORS_STATICALLY
 void octcell::generate_all_internal_neighbors()
 {
     if (is_leaf()) {
@@ -191,13 +202,9 @@ void octcell::generate_all_internal_neighbors()
             /* Generate all internal neighbors in the child cell */
             get_child(i1)->generate_all_internal_neighbors();
             /* Generate all cross-child cell neighbors from this child to children with larger indexes */
-            for (uint dir = 0; dir < NUM_DIRECTIONS; dir++) {
-                if (i1 >> dir & 1) {
-                    /* There is no neighbor in this direction */
-                    continue;
-                }
-                uint i2 = i1 + index_offset(dir);
-                if (i2 < MAX_NUM_CHILDREN && get_child(i2)) {
+            for (uint dir = 0; dir < NUM_DIMENSIONS; dir++) {
+                uint i2 = i1 | index_offset(dir);
+                if (i2 > i1 && get_child(i2)) {
                     /* Second child also exists, generate neighbors in interface */
                     generate_all_cross_cell_neighbors(get_child(i1), get_child(i2), dir);
                 }
@@ -205,6 +212,7 @@ void octcell::generate_all_internal_neighbors()
         }
     }
 }
+#endif
 
 ////////////////////////////////////////////////////////////////
 // PUBLIC STATIC METHODS
@@ -222,6 +230,7 @@ void octcell::make_neighbors(octcell* c1, octcell* c2, uint direction)
     node2->v.initialize(node2, node1, c1, -dist, dist_abs, area, direction, true );
 }
 
+#if  GENERATE_NEIGHBORS_STATICALLY
 void octcell::generate_all_cross_cell_neighbors(octcell* c1, octcell* c2, uint normal_direction)
 {
     // The normal direction will point from c1 to c2 (not the other way around)
@@ -244,11 +253,12 @@ void octcell::generate_all_cross_cell_neighbors(octcell* c1, octcell* c2, uint n
     }
 #endif
 
-    if (c1->is_leaf() && c2->is_leaf()) {
+    if (c1->is_leaf() && c2->is_leaf()) { /* CASE 1 */
         // Both nodes are leaf nodes, add them to each others neighbor lists
         make_neighbors(c1, c2, normal_direction);
     }
-    else if (c1->is_leaf() && !(c2->is_leaf())) {
+    else if (c1->is_leaf() && !(c2->is_leaf())) { /* CASE 2 */
+        /* c1 is a leaf cell but c2 has child cells */
         // TODO: Optimize
         for (uint i = 0; i < MAX_NUM_CHILDREN; i++) {
             if ((i >> normal_direction & 1) == 0) {
@@ -265,8 +275,8 @@ void octcell::generate_all_cross_cell_neighbors(octcell* c1, octcell* c2, uint n
             }
         }
     }
-    else if (!(c1->is_leaf()) && c2->is_leaf()) {
-        /* The children of c1 will be leaf nodes */
+    else if (!(c1->is_leaf()) && c2->is_leaf()) {  /* CASE 3 */
+        /* c2 is a leaf cell but c1 has child cells */
         // TODO: Optimize
         for (uint i = 0; i < MAX_NUM_CHILDREN; i++) {
             if (i >> normal_direction & 1) {
@@ -283,7 +293,7 @@ void octcell::generate_all_cross_cell_neighbors(octcell* c1, octcell* c2, uint n
             }
         }
     }
-    else {
+    else {  /* CASE 4 */
         /* Both c1 and c2 have children */
         // TODO: Optimize
         uint dir_offset = 1 << normal_direction;
@@ -298,4 +308,5 @@ void octcell::generate_all_cross_cell_neighbors(octcell* c1, octcell* c2, uint n
         }
     }
 }
+#endif
 
