@@ -50,9 +50,10 @@ public:
 
 public:
     /* Public methods */
-    dllnode<T>*   get_next_node    ();
-    base_dllnode* get_previous_node();
-    void          remove_from_list ();
+    dllnode<T>*   get_next_node              ();
+    base_dllnode* get_previous_node          ();
+    dllnode<T>*   remove_from_list_and_keep  ();
+    void          remove_from_list_and_delete();
 
 private:
     /*************************
@@ -114,7 +115,8 @@ base_dllnode* dllnode<T>::get_previous_node()
 }
 
 template<typename T>
-void dllnode<T>::remove_from_list()
+inline
+dllnode<T>* dllnode<T>::remove_from_list_and_keep()
 {
     // Update previous node (there is always one)
     p->n = n;
@@ -125,7 +127,14 @@ void dllnode<T>::remove_from_list()
     }
 
     // Delete the node
-    delete this;
+    return this;
+}
+
+template<typename T>
+inline
+void dllnode<T>::remove_from_list_and_delete()
+{
+    delete remove_from_list_and_keep();
 }
 
 #endif // DLLNODE_H

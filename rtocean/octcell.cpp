@@ -9,34 +9,45 @@
 // CONSTRUCTORS AND DESTRUCTOR
 ////////////////////////////////////////////////////////////////
 
-octcell::octcell(pftype size, pfvec pos, uint level, uint internal_layer_advancement, octcell **children) :
-    neighborlist()
+octcell::octcell(pftype size, pfvec pos, uint level, uint internal_layer_advancement) :
+    leaf_neighbor_list(),
+    coarse_neighbor_list()
 {
     s = size;
     r = pos;
     lvl = level;
     //ila = internal_layer_advancement;
     internal_layer_advancement = internal_layer_advancement;
-    _c = children;
-#if  DEBUG
-    if (children) {
-        throw logic_error("Creating cell with already generated children");
-    }
-#endif
+    _c = 0;
 }
 
 octcell::~octcell()
 {
-    /* Remove neighbor connections */
-    nlnode* node = get_first_neighbor_list_node();
+    nlnode* node;
     nlnode* next_node;
-    for (; node; node = next_node) {
+    /* Remove leaf neighbor connections */
+    for (node = get_first_leaf_neighbor_list_node(); node; node = next_node) {
+#if  DEBUG
+        throw logic_error("Cell being deleted has leaf neighbor connections");
+#endif
         next_node = node->get_next_node();
-        unneighbor(node);
+        un_leaf_neighbor(node);
+    }
+
+    /* Remove coarse neighbor connections */
+    for (node = get_first_coarse_neighbor_list_node(); node; node = next_node) {
+#if  DEBUG
+        throw logic_error("Cell being deleted has coarse neighbor connections");
+#endif
+        next_node = node->get_next_node();
+        un_coarse_neighbor(node);
     }
 
     /* Delete potential children */
     if (has_child_array()) {
+#if  DEBUG
+        throw logic_error("Cell being deleted has child array");
+#endif
         for (uint i = 0; i < MAX_NUM_CHILDREN; i++) {
             if (get_child(i)) {
                 delete get_child(i);
@@ -100,13 +111,13 @@ void octcell::refine()
                 i2 = i2;
             }
             if (i2 > i1) {
-                make_neighbors(get_child(i1), get_child(i2), dim, new_level);
+                make_leaf_neighbors(get_child(i1), get_child(i2), dim, new_level);
             }
         }
     }
 
     /* Refine existing neighbors */
-    nlnode* node = get_first_neighbor_list_node();
+    nlnode* node = get_first_leaf_neighbor_list_node();
     nlnode* next_node;
     /* Loop through all neighbors on the parent (this) level */
     for (; node; node = next_node) {
@@ -123,10 +134,10 @@ void octcell::refine()
                 if (positive_direction_of_child(i, dim) ^ rev_dir) {
                     /* Child cell is adjactent */
                     if (rev_dir) {
-                        make_neighbors(neighbor, get_child(i), dim, lowest_connection_level);
+                        make_leaf_neighbors(neighbor, get_child(i), dim, lowest_connection_level);
                     }
                     else {
-                        make_neighbors(get_child(i), neighbor, dim, lowest_connection_level);
+                        make_leaf_neighbors(get_child(i), neighbor, dim, lowest_connection_level);
                     }
                 }
             }
@@ -147,26 +158,39 @@ void octcell::refine()
             }
             /* Index calculated, make neighbor */
             if (rev_dir) {
-                make_neighbors(neighbor, get_child(idx), dim, lowest_connection_level);
+                make_leaf_neighbors(neighbor, get_child(idx), dim, lowest_connection_level);
             }
             else {
-                make_neighbors(get_child(idx), neighbor, dim, lowest_connection_level);
+                make_leaf_neighbors(get_child(idx), neighbor, dim, lowest_connection_level);
             }
         }
         next_node = node->get_next_node();
-        unneighbor(node);
+        make_leaf_neighbor_coarse_neighbor_or_throw_away(node);
+        //un_leaf_neighbor(node);
     }
 #endif
 }
 
 void octcell::coarsen()
 {
+#if  DEBUG
+    static int count = 0;
+#endif
     /* This function will make the cell a leaf cell */
     if (is_leaf()) {
         throw logic_error("Trying to coarsen a leaf cell");
     }
 
     for (uint idx = 0; idx < MAX_NUM_CHILDREN; idx++) {
+        //TODO: Remove these test variables
+#if  DEBUG
+        count++;
+        uint this_count = count;
+        this_count = this_count;
+        if (count == 3) {
+            count = count;
+        }
+#endif
         octcell* c = get_child(idx);
         if (!c) {
             /* This child does not exist */
@@ -183,22 +207,22 @@ void octcell::coarsen()
             connected_with_neighbor[dir] = false;
         }
         /* Loop through all neighbors of the children and see which to keep (steal) and which to throw away */
-        nlnode* node = c->get_first_neighbor_list_node();
+        nlnode* node = c->get_first_leaf_neighbor_list_node();
         nlnode* next_node;
         for (; node; node = next_node) {
             next_node = node->get_next_node();
             if (node->v.low_lvl > lvl) {
                 /* The neighbor connection is internal within this cell, remove connection */
-                c->unneighbor(node);
+                c->un_leaf_neighbor(node);
                 continue; /* Continue with next neighbor connection */
             }
             octcell* neighbor = node->v.n;
-            if (neighbor->lvl < lvl) {
+            if (neighbor->lvl > lvl) {
                 /*
                  * This neighbor is smaller than this cell and therefore only has one
                  * neighbor connection to this cell, keep connection
                  */
-                steal_child_neighbor_connection(node);
+                steal_child_leaf_neighbor_connection(node);
             }
             else {
                 /*
@@ -208,11 +232,11 @@ void octcell::coarsen()
                 uint dir = direction(node->v.dim, node->v.rev_dir);
                 if (connected_with_neighbor[dir]) {
                     /* This cell is already connected with the neighbor, remove connection */
-                    c->unneighbor(node);
+                    c->un_leaf_neighbor(node);
                 }
                 else {
                     /* This cell has not yet connected to neighbor, so keep connection */
-                    steal_child_neighbor_connection(node);
+                    steal_child_leaf_neighbor_connection(node);
                     connected_with_neighbor[dir] = true;
                 }
             }
@@ -275,6 +299,7 @@ void octcell::generate_all_internal_neighbors()
     if (is_leaf()) {
         return;
     }
+    uint child_level = lvl + 1;
     //TODO: Optimize:
     for (uint i1 = 0; i1 < MAX_NUM_CHILDREN; i1++) {
         if (get_child(i1)) {
@@ -283,10 +308,10 @@ void octcell::generate_all_internal_neighbors()
             get_child(i1)->generate_all_internal_neighbors();
             /* Generate all cross-child cell neighbors from this child to children with larger indexes */
             for (uint dim = 0; dim < NUM_DIMENSIONS; dim++) {
-                uint i2 = i1 | index_offset(dim);
+                uint i2 = i1 | child_index_offset(dim);
                 if (i2 > i1 && get_child(i2)) {
                     /* Second child also exists, generate neighbors in interface */
-                    generate_all_cross_cell_neighbors(get_child(i1), get_child(i2), dim);
+                    generate_all_cross_cell_neighbors(get_child(i1), get_child(i2), dim, child_level);
                 }
             }
         }
@@ -298,23 +323,60 @@ void octcell::generate_all_internal_neighbors()
 // PUBLIC STATIC METHODS
 ////////////////////////////////////////////////////////////////
 
-void octcell::make_neighbors(octcell* c1, octcell* c2, uint dimension, uint lowest_level)
+void octcell::make_leaf_neighbors(octcell* c1, octcell* c2, uint dimension, uint lowest_level)
 {
+#if  DEBUG
+    if (!(c1 && c2)) {
+        throw logic_error("Trying to make a cell neighbor using a null pointer");
+    }
+    if (c1 == c2) {
+        throw logic_error("Trying to make a cell neighbor with itself");
+    }
+#endif
     /* Create elements to work with */
-    nlnode* node1 = c1->neighborlist.add_new_element();
-    nlnode* node2 = c2->neighborlist.add_new_element();
+    nlnode* node1 = c1->leaf_neighbor_list.add_new_element();
+    nlnode* node2 = c2->leaf_neighbor_list.add_new_element();
     /* Calculate properties */
     pfvec dist = c2->cell_center() - c1->cell_center();
     pftype dist_abs = dist.length();
     pftype min_s = MIN(c1->s, c2->s);
     pftype area = min_s*min_s;
     /* Set properties */
-    node1->v.set(node1, node2, c2,  dist, dist_abs, area, dimension, false, lowest_level);
-    node2->v.set(node2, node1, c1, -dist, dist_abs, area, dimension, true , lowest_level);
+    node1->v.set(c2, node2,  dist, dist_abs, area, dimension, false, lowest_level);
+    node2->v.set(c1, node1, -dist, dist_abs, area, dimension, true , lowest_level);
+}
+
+void octcell::make_coarse_neighbors(octcell* c1, octcell* c2, uint dimension, uint lowest_level)
+{
+#if  DEBUG
+    if (!(c1 && c2)) {
+        throw logic_error("Trying to make a cell neighbor using a null pointer");
+    }
+    if (c1 == c2) {
+        throw logic_error("Trying to make a cell neighbor with itself");
+    }
+    if (c1->lvl != c2->lvl) {
+        throw logic_error("Trying to make two cells on different levels coarse neighbors");
+    }
+    if (c1->is_leaf() && c2->is_leaf()) {
+        throw logic_error("Trying to make two leaf cells coarse neighbors");
+    }
+#endif
+    /* Create elements to work with */
+    nlnode* node1 = c1->coarse_neighbor_list.add_new_element();
+    nlnode* node2 = c2->coarse_neighbor_list.add_new_element();
+    /* Calculate properties */
+    pfvec dist = c2->cell_center() - c1->cell_center();
+    pftype dist_abs = dist.length();
+    pftype min_s = MIN(c1->s, c2->s);
+    pftype area = min_s*min_s;
+    /* Set properties */
+    node1->v.set(c2, node2,  dist, dist_abs, area, dimension, false, lowest_level);
+    node2->v.set(c1, node1, -dist, dist_abs, area, dimension, true , lowest_level);
 }
 
 #if  GENERATE_NEIGHBORS_STATICALLY
-void octcell::generate_all_cross_cell_neighbors(octcell* c1, octcell* c2, uint normal_dimension)
+void octcell::generate_all_cross_cell_neighbors(octcell* c1, octcell* c2, uint normal_dimension, uint lowest_level)
 {
     // The normal will point from c1 to c2 (not the other way around)
 #if  DEBUG
@@ -338,7 +400,7 @@ void octcell::generate_all_cross_cell_neighbors(octcell* c1, octcell* c2, uint n
 
     if (c1->is_leaf() && c2->is_leaf()) { /* CASE 1 */
         // Both nodes are leaf nodes, add them to each others neighbor lists
-        make_neighbors(c1, c2, normal_dimension);
+        make_neighbors(c1, c2, normal_dimension, lowest_level);
     }
     else if (c1->is_leaf() && !(c2->is_leaf())) { /* CASE 2 */
         /* c1 is a leaf cell but c2 has child cells */
@@ -349,10 +411,10 @@ void octcell::generate_all_cross_cell_neighbors(octcell* c1, octcell* c2, uint n
                 if (c2->get_child(i)) {
                     /* Child exists */
                     if (c2->get_child(i)->has_child_array()) {
-                        generate_all_cross_cell_neighbors(c1, c2->get_child(i), normal_dimension);
+                        generate_all_cross_cell_neighbors(c1, c2->get_child(i), normal_dimension, lowest_level);
                     }
                     else {
-                        make_neighbors(c1, c2->get_child(i), normal_dimension);
+                        make_neighbors(c1, c2->get_child(i), normal_dimension, lowest_level);
                     }
                 }
             }
@@ -367,10 +429,10 @@ void octcell::generate_all_cross_cell_neighbors(octcell* c1, octcell* c2, uint n
                 if (c1->get_child(i)) {
                     /* Child exists */
                     if (c1->get_child(i)->has_child_array()) {
-                        generate_all_cross_cell_neighbors(c1->get_child(i), c2, normal_dimension);
+                        generate_all_cross_cell_neighbors(c1->get_child(i), c2, normal_dimension, lowest_level);
                     }
                     else {
-                        make_neighbors(c1->get_child(i), c2, normal_dimension);
+                        make_neighbors(c1->get_child(i), c2, normal_dimension, lowest_level);
                     }
                 }
             }
@@ -385,7 +447,7 @@ void octcell::generate_all_cross_cell_neighbors(octcell* c1, octcell* c2, uint n
                 /* Potential child cell with this index in c1 borders to c2 */
                 if (c1->get_child(i) && c2->get_child(i-dim_offset)) {
                     /* Children exist in both c1 and c2 */
-                    generate_all_cross_cell_neighbors(c1->get_child(i), c2->get_child(i-dim_offset), normal_dimension);
+                    generate_all_cross_cell_neighbors(c1->get_child(i), c2->get_child(i-dim_offset), normal_dimension, lowest_level);
                 }
             }
         }
@@ -397,12 +459,26 @@ void octcell::generate_all_cross_cell_neighbors(octcell* c1, octcell* c2, uint n
 // PRIVATE NON-STATIC METHODS
 ////////////////////////////////////////////////////////////////
 
-void octcell::steal_child_neighbor_connection(nlnode* child_node)
+void octcell::steal_child_leaf_neighbor_connection(nlnode* child_node)
 {
+#if RUN_SAFE
+    /* Make this sell a neighbor */
+    uint dim = child_node->v.dim;
+    bool rev_dir = child_node->v.rev_dir;
+    uint low_lvl = child_node->v.low_lvl;
+    if (rev_dir) {
+        make_leaf_neighbors(child_node->v.n, this, dim, low_lvl);
+    }
+    else {
+        make_leaf_neighbors(this, child_node->v.n, dim, low_lvl);
+    }
+    /* And remove the child cell as a neighbor */
+    child_node->v.cnle->v.n->un_leaf_neighbor(child_node);
+#elif 1
     /* Create and extract elements to work with */
     octcell* neighbor = child_node->v.n;
-    nlnode* new_node = neighborlist.add_new_element();
-    nlnode* matching_node = child_node->v.mnle;
+    nlnode* new_node = leaf_neighbor_list.add_new_element();
+    nlnode* corresponding_node = child_node->v.cnle;
     /* Calculate properties */
     pfvec dist = neighbor->cell_center() - cell_center();
     pftype dist_abs = dist.length();
@@ -412,8 +488,37 @@ void octcell::steal_child_neighbor_connection(nlnode* child_node)
     bool rev_dir = child_node->v.rev_dir;
     uint low_lvl = child_node->v.low_lvl;
     /* Set properties */
-    new_node     ->v.set(new_node     , matching_node, neighbor,  dist, dist_abs, area, dim,  rev_dir, low_lvl);
-    matching_node->v.set(matching_node, new_node     , this    , -dist, dist_abs, area, dim, !rev_dir, low_lvl);
+    new_node          ->v.set(neighbor, corresponding_node,  dist, dist_abs, area, dim,  rev_dir, low_lvl);
+    corresponding_node->v.set(this    , new_node          , -dist, dist_abs, area, dim, !rev_dir, low_lvl);
     /* Remove neighbor connection for the child */
-    child_node->remove_from_list();
+    child_node->remove_from_list_and_delete();
+#else
+    //TODO: Write code (use remove_from_list_and_keep() instead and make something of it)
+#endif
+}
+
+void octcell::make_leaf_neighbor_coarse_neighbor_or_throw_away(nlnode* list_entry)
+{
+    //TODO: Optimize:
+    octcell* neighbor = list_entry->v.n;
+    if (lvl == neighbor->lvl) {
+    //if (false) {
+        make_leaf_neighbor_coarse_neighbor(list_entry);
+    }
+    else {
+        un_leaf_neighbor(list_entry);
+    }
+}
+
+void octcell::make_leaf_neighbor_coarse_neighbor(nlnode* list_entry)
+{
+    /* Move to coarse neighbor list in this cell */
+    list_entry->remove_from_list_and_keep();
+    coarse_neighbor_list.add_existing_node(list_entry);
+
+    /* Move to coarse neighbor list in neighbor cell */
+    octcell* neighbor = list_entry->v.n;
+    nlnode* matching_list_entry = list_entry->v.cnle;
+    matching_list_entry->remove_from_list_and_keep();
+    neighbor->coarse_neighbor_list.add_existing_node(matching_list_entry);
 }

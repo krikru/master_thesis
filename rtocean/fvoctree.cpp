@@ -45,15 +45,13 @@ fvoctree::fvoctree(pftype surface, pftype bottom)
     //c->get_child(octcell::child_index_xy(1, 0))->refine();
     //c->get_child(octcell::child_index_xy(1, 0))->get_child(octcell::child_index_xy(0, 0))->refine();
     //c->get_child(octcell::child_index_xy(1, 1))->refine();
-#elif  NUM_DIMENSIONS == 3
-    c->get_child(octcell::child_index_xyz(1, 0, 0))->refine();
-    c->get_child(octcell::child_index_xyz(1, 0, 0))->get_child(octcell::child_index_xyz(0, 0, 0))->refine();
-    c->get_child(octcell::child_index_xyz(1, 1, 0))->refine();
-    c = c->get_child(octcell::child_index_xyz(0, 0, 1));
+#if 0
+    c = c->get_child(octcell::child_index_xy(0, 1));
     if (!c) {
         throw logic_error("Child node pointer is NULL! Cannot do what was planned :P");
     }
-    c= c->get_child(octcell::child_index_xyz(0, 1, 0));
+    c = c->get_child(octcell::child_index_xy(1, 0));
+    //c = c->get_child(octcell::child_index_xy(0, 0));
     if (!c) {
         throw logic_error("Child node pointer is NULL! Cannot do what was planned :P");
     }
@@ -61,6 +59,27 @@ fvoctree::fvoctree(pftype surface, pftype bottom)
         throw logic_error("Node is a leaf! Cannot do what was planned (coarsen it) :P");
     }
     c->coarsen();
+#endif
+#elif  NUM_DIMENSIONS == 3
+#if 0
+    c->get_child(octcell::child_index_xyz(1, 0, 0))->refine();
+    c->get_child(octcell::child_index_xyz(1, 0, 0))->get_child(octcell::child_index_xyz(0, 0, 0))->refine();
+    c->get_child(octcell::child_index_xyz(1, 1, 0))->refine();
+    c = c->get_child(octcell::child_index_xyz(0, 0, 1));
+    if (!c) {
+        throw logic_error("Child node pointer is NULL! Cannot do what was planned :P");
+    }
+    c = c->get_child(octcell::child_index_xyz(0, 1, 0));
+    if (!c) {
+        throw logic_error("Child node pointer is NULL! Cannot do what was planned :P");
+    }
+    if (c->is_leaf()) {
+        throw logic_error("Node is a leaf! Cannot do what was planned (coarsen it) :P");
+    }
+    c->coarsen();
+#else
+    //root->coarsen();
+#endif
 #endif
 #endif
 #if  GENERATE_NEIGHBORS_STATICALLY
@@ -94,7 +113,7 @@ bool fvoctree::refine_subtree(octcell* c, pftype surface, pftype bottom, pftype 
     pftype s = c->s;
 
     pftype height = c->r[UP_DIMENSION];
-#if  NUM_DIMENSIONS == 2
+#if    NUM_DIMENSIONS == 2
     pftype min_surf_height = 0.55 + 0.2*c->r[HORIZONTAL_DIMENSION1];
     pftype max_surf_height = 0.55 + 0.2*(c->r[HORIZONTAL_DIMENSION1]+s);
 #elif  NUM_DIMENSIONS == 3
@@ -119,7 +138,7 @@ bool fvoctree::refine_subtree(octcell* c, pftype surface, pftype bottom, pftype 
     num_leaf_cells += octcell::MAX_NUM_CHILDREN - 1;
     for (uint i = 0; i < octcell::MAX_NUM_CHILDREN; i++) {
         if (refine_subtree(c->get_child(i), surface, bottom, accuracy_function)) {
-            c->remove_child(i);
+            c->remove_child_and_neighbor_connections(i);
             tot_num_cells--;
             num_leaf_cells--;
         }

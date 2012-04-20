@@ -26,7 +26,10 @@ private:
 public:
     // Public methods
     dllnode<T>* add_new_element();
+#if 0
     dllnode<T>* add_existing_element(T element);
+#endif
+    dllnode<T>* add_existing_node(dllnode<T>* node);
     dllnode<T>* get_first_element();
     //void remove_node(dllnode<T>* node);
 
@@ -69,24 +72,44 @@ dllist<T>::~dllist()
 template<typename T>
 dllnode<T>* dllist<T>::add_new_element()
 {
+    /* Create new empty node and assign correct pointer values */
     dllnode<T>* node = new dllnode<T>(get_first_element());
+    node->p = &h;
+    /* Update pointers in nodes already existing in list */
     if (h.n) {
         h.n->p = node;
     }
     h.n = node;
-    node->p = &h;
     return node;
 }
 
+#if 0
 template<typename T>
 dllnode<T>* dllist<T>::add_existing_element(T element)
 {
+    /* Create new node and assign correct pointer values */
     dllnode<T>* node = new dllnode<T>(element, get_first_element());
+    node->p = &h;
+    /* Update pointers in nodes already existing in list */
     if (h.n) {
         h.n->p = node;
     }
     h.n = node;
+    return node;
+}
+#endif
+
+template<typename T>
+dllnode<T>* dllist<T>::add_existing_node(dllnode<T>* node)
+{
+    /* Update pointers in node */
+    node->n = get_first_element();
     node->p = &h;
+    /* Update pointers in nodes already existing in list */
+    if (h.n) {
+        h.n->p = node;
+    }
+    h.n = node;
     return node;
 }
 

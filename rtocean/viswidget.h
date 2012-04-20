@@ -22,6 +22,8 @@ class viswidget : public QGLWidget
 public:
     explicit viswidget(QWidget *parent = 0);
 
+public:
+    /* Public methods */
     void initializeGL();
     void paintGL();
     void resizeGL(int w, int h);
@@ -29,6 +31,7 @@ public:
     void quick_draw_cell(octcell* cell);
     void set_up_model_view_matrix(GLdouble scale_factor = 1);
     void visualize_leaf_cells_and_neighbor_connections_recursively(octcell* cell);
+    void visualize_coarse_neighbor_connections_recursively(octcell* cell);
     void visualize_parent_cells_recursively(octcell* cell);
     void visualize_fvoctree(fvoctree *tree);
 

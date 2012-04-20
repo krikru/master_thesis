@@ -181,15 +181,17 @@ void viswidget::visualize_leaf_cells_and_neighbor_connections_recursively(octcel
         }
     }
 
-    /* Draw neighbor connections */
-    nlnode* nn = cell->get_first_neighbor_list_node();
-    if (DRAW_NEIGHBOR_CONNECTIONS && nn) {
+    nlnode* lnn = cell->get_first_leaf_neighbor_list_node();
+    nlnode* cnn = cell->get_first_coarse_neighbor_list_node();
+
+    /* Draw leaf neighbor connections */
+    if (DRAW_NEIGHBOR_CONNECTIONS && lnn) {
         pfvec center1 = cell->cell_center();
 
         /* Draw everything but the middle of the connection  */
-        quick_set_color(NEIGHBOR_CONNECTION_R, NEIGHBOR_CONNECTION_G, NEIGHBOR_CONNECTION_B, NEIGHBOR_CONNECTION_A);
-        for (; nn; nn = nn->get_next_node()) {
-            pfvec center2 = nn->v.n->cell_center();
+        quick_set_color(LEAF_NEIGHBOR_CONNECTION_R, LEAF_NEIGHBOR_CONNECTION_G, LEAF_NEIGHBOR_CONNECTION_B, LEAF_NEIGHBOR_CONNECTION_A);
+        for (; lnn; lnn = lnn->get_next_node()) {
+            pfvec center2 = lnn->v.n->cell_center();
 #if  MARK_MIDDLE_OF_CONNECTION
             quick_draw_line(center1, center1 + (.5-MIDDLE_MARK_SIZE)*(center2-center1));
 #else
@@ -200,14 +202,86 @@ void viswidget::visualize_leaf_cells_and_neighbor_connections_recursively(octcel
 #if  MARK_MIDDLE_OF_CONNECTION
         /* Mark middle of connections */
         quick_set_color(MIDDLE_MARK_R, MIDDLE_MARK_G, MIDDLE_MARK_B, MIDDLE_MARK_A);
-        for (nn = cell->get_first_neighbor_list_node(); nn; nn = nn->get_next_node()) {
-            pfvec center2 = nn->v.n->cell_center();
+        for (lnn = cell->get_first_leaf_neighbor_list_node(); lnn; lnn = lnn->get_next_node()) {
+            pfvec center2 = cnn->v.n->cell_center();
+            quick_draw_line(center1 + (.5-MIDDLE_MARK_SIZE)*(center2-center1), .5*(center1 + center2));
+        }
+#endif
+
+#if DRAW_CELL_CUBES
+        if (!cnn || DRAW_COARSE_NEIGHBOR_CONNETCIONS_SEPARATELY) {
+            quick_set_color(LEAF_CUBE_R, LEAF_CUBE_G, LEAF_CUBE_B, LEAF_CUBE_A);
+        }
+#endif
+    }
+
+#if  !DRAW_COARSE_NEIGHBOR_CONNETCIONS_SEPARATELY
+    /* Draw coarse neighbor connections */
+    if (DRAW_NEIGHBOR_CONNECTIONS && cnn) {
+        pfvec center1 = cell->cell_center();
+
+        /* Draw everything but the middle of the connection  */
+        quick_set_color(COARSE_NEIGHBOR_CONNECTION_R, COARSE_NEIGHBOR_CONNECTION_G, COARSE_NEIGHBOR_CONNECTION_B, COARSE_NEIGHBOR_CONNECTION_A);
+        for (; cnn; cnn = cnn->get_next_node()) {
+            pfvec center2 = cnn->v.n->cell_center();
+#if  MARK_MIDDLE_OF_CONNECTION
+            quick_draw_line(center1, center1 + (.5-MIDDLE_MARK_SIZE)*(center2-center1));
+#else
+            quick_draw_line(center1, .5*(center1 + center2));
+#endif
+        }
+
+#if  MARK_MIDDLE_OF_CONNECTION
+        /* Mark middle of connections */
+        quick_set_color(MIDDLE_MARK_R, MIDDLE_MARK_G, MIDDLE_MARK_B, MIDDLE_MARK_A);
+        for (cnn = cell->get_first_coarse_neighbor_list_node(); cnn; cnn = cnn->get_next_node()) {
+            pfvec center2 = cnn->v.n->cell_center();
             quick_draw_line(center1 + (.5-MIDDLE_MARK_SIZE)*(center2-center1), .5*(center1 + center2));
         }
 #endif
 
 #if DRAW_CELL_CUBES
         quick_set_color(LEAF_CUBE_R, LEAF_CUBE_G, LEAF_CUBE_B, LEAF_CUBE_A);
+#endif
+    }
+#endif
+}
+
+void viswidget::visualize_coarse_neighbor_connections_recursively(octcell* cell)
+{
+
+    if (cell->has_child_array()) {
+        for (uint i = 0; i < octcell::MAX_NUM_CHILDREN; i++) {
+            if (cell->get_child(i)) {
+                visualize_coarse_neighbor_connections_recursively(cell->get_child(i));
+            }
+        }
+    }
+
+    nlnode* cnn = cell->get_first_coarse_neighbor_list_node();
+
+    /* Draw coarse neighbor connections */
+    if (cnn) {
+        pfvec center1 = cell->cell_center();
+
+        /* Draw everything but the middle of the connection  */
+        quick_set_color(COARSE_NEIGHBOR_CONNECTION_R, COARSE_NEIGHBOR_CONNECTION_G, COARSE_NEIGHBOR_CONNECTION_B, COARSE_NEIGHBOR_CONNECTION_A);
+        for (; cnn; cnn = cnn->get_next_node()) {
+            pfvec center2 = cnn->v.n->cell_center();
+#if  MARK_MIDDLE_OF_CONNECTION
+            quick_draw_line(center1, center1 + (.5-MIDDLE_MARK_SIZE)*(center2-center1));
+#else
+            quick_draw_line(center1, .5*(center1 + center2));
+#endif
+        }
+
+#if  MARK_MIDDLE_OF_CONNECTION
+        /* Mark middle of connections */
+        quick_set_color(MIDDLE_MARK_R, MIDDLE_MARK_G, MIDDLE_MARK_B, MIDDLE_MARK_A);
+        for (cnn = cell->get_first_coarse_neighbor_list_node(); cnn; cnn = cnn->get_next_node()) {
+            pfvec center2 = cnn->v.n->cell_center();
+            //quick_draw_line(center1 + (.5-MIDDLE_MARK_SIZE)*(center2-center1), .5*(center1 + center2));
+        }
 #endif
     }
 }
@@ -232,7 +306,7 @@ void viswidget::visualize_fvoctree(fvoctree *tree)
 #if  DRAW_CELL_CUBES
 #if  !(TEST_DEPTH && DRAW_CHILD_CELLS_FIRST_IF_DEPTH_TESTING) && DRAW_PARENT_CELLS
         set_line_style(1, PARENT_CUBE_R, PARENT_CUBE_G, PARENT_CUBE_B, PARENT_CUBE_A);
-        set_up_model_view_matrix(PARENT_CUBE_DIST_SCALEING);
+        set_up_model_view_matrix(PARENT_CUBE_DIST_SCALING);
         visualize_parent_cells_recursively(tree->root);
 #endif
         set_line_style(1, LEAF_CUBE_R, LEAF_CUBE_G, LEAF_CUBE_B, LEAF_CUBE_A);
@@ -241,9 +315,13 @@ void viswidget::visualize_fvoctree(fvoctree *tree)
 #endif
         set_up_model_view_matrix();
         visualize_leaf_cells_and_neighbor_connections_recursively(tree->root);
+#if  DRAW_NEIGHBOR_CONNECTIONS && DRAW_COARSE_NEIGHBOR_CONNETCIONS_SEPARATELY
+        set_up_model_view_matrix(COARSE_NEIGHBOR_CONNECTIONS_DIST_SCALING);
+        visualize_coarse_neighbor_connections_recursively(tree->root);
+#endif
 #if  DRAW_CELL_CUBES && TEST_DEPTH && DRAW_CHILD_CELLS_FIRST_IF_DEPTH_TESTING && DRAW_PARENT_CELLS
         set_line_style(1, PARENT_CUBE_R, PARENT_CUBE_G, PARENT_CUBE_B, PARENT_CUBE_A);
-        set_up_model_view_matrix(PARENT_CUBE_DIST_SCALEING);
+        set_up_model_view_matrix(PARENT_CUBE_DIST_SCALING);
         visualize_parent_cells_recursively(tree->root);
 #endif
         glPopAttrib();

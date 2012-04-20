@@ -19,8 +19,9 @@
 //#define  DEBUG                      0
 /* Essential */
 #define  DEBUG                      1
-#define  RUN_SAFE                   1
-#define  NUM_DIMENSIONS             3 /* 2 or 3 */
+#define  RUN_SAFE                   0
+#define  ELABORATE                  0
+#define  NUM_DIMENSIONS             2 /* 2 or 3 */
 #define  NUM_DIRECTIONS             (2*NUM_DIMENSIONS)
 #define  LOGICAL_AXIS_ORDER         1
 #define  GENERATE_NEIGHBORS_STATICALLY   0
@@ -32,13 +33,15 @@
 /* VIsualization */
 #define  TEST_DEPTH                 1
 #define  DRAW_CHILD_CELLS_FIRST_IF_DEPTH_TESTING  1
+#define  DRAW_COARSE_NEIGHBOR_CONNETCIONS_SEPARATELY 1
 #define  DRAW_SMOOTH_LINES          0
 #define  DRAW_CELL_CUBES            1
 #define  DRAW_PARENT_CELLS          1
 #define  DRAW_NEIGHBOR_CONNECTIONS  1
-#define  MARK_MIDDLE_OF_CONNECTION  0
+#define  MARK_MIDDLE_OF_CONNECTION  1
 #define  MIDDLE_MARK_SIZE           0.05
-#define  PARENT_CUBE_DIST_SCALEING  1.0001
+#define  PARENT_CUBE_DIST_SCALING   1.0001
+#define  COARSE_NEIGHBOR_CONNECTIONS_DIST_SCALING  (1/PARENT_CUBE_DIST_SCALING)
 
 /* Precision */
 #define  USE_DOUBLE_PRECISION_FOR_PHYSICS  0
@@ -56,10 +59,14 @@ const float  PARENT_CUBE_R          = .75;
 const float  PARENT_CUBE_G          = .75;
 const float  PARENT_CUBE_B          = .75;
 const float  PARENT_CUBE_A          = 1;
-const float  NEIGHBOR_CONNECTION_R  = 0;
-const float  NEIGHBOR_CONNECTION_G  = 0;
-const float  NEIGHBOR_CONNECTION_B  = 1;
-const float  NEIGHBOR_CONNECTION_A  = 1;
+const float  LEAF_NEIGHBOR_CONNECTION_R  = 0;
+const float  LEAF_NEIGHBOR_CONNECTION_G  = 0;
+const float  LEAF_NEIGHBOR_CONNECTION_B  = 1;
+const float  LEAF_NEIGHBOR_CONNECTION_A  = 1;
+const float  COARSE_NEIGHBOR_CONNECTION_R  = 0;
+const float  COARSE_NEIGHBOR_CONNECTION_G  = 1;
+const float  COARSE_NEIGHBOR_CONNECTION_B  = 0;
+const float  COARSE_NEIGHBOR_CONNECTION_A  = 1;
 const float  MIDDLE_MARK_R          = 1;
 const float  MIDDLE_MARK_G          = 0;
 const float  MIDDLE_MARK_B          = 0;
