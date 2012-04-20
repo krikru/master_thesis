@@ -35,7 +35,7 @@ public:
 public:
 
     /* Neighbor list */
-    nlnode* nle; // The object's entry in the neighbor list
+    nlnode* nle; // The object's entry in the neighbor list //TODO: Remove this member; it is superfluous
     nlnode* mnle; // The matching entry in the neighbor's neighbor list
 
     /* Neighbor */
@@ -49,12 +49,16 @@ public:
     pftype cf_area;
 
     /* Direction of the octneighbor */
-    uint dir;
+    uint dim;
     bool rev_dir;
+
+    /* Level of detail */
+    uint low_lvl; // Lowest level of detail the neighbor is still relevant for
 
 public:
     /* Public methods */
-    void initialize(nlnode* neighbor_list_entry, nlnode* matching_neighbor_list_entry, octcell* neighbor_cell, pfvec distance, pftype distance_absolute_value, pftype cell_face_area, uint direction, bool reverse_direction);    void remove();
+    void set(nlnode* neighbor_list_entry, nlnode* matching_neighbor_list_entry, octcell* neighbor_cell, pfvec distance, pftype distance_absolute_value, pftype cell_face_area, uint dimension, bool reverse_direction, uint lowest_level);
+    void remove();
 
 private:
     /*************************

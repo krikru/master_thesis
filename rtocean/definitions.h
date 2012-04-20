@@ -19,7 +19,9 @@
 //#define  DEBUG                      0
 /* Essential */
 #define  DEBUG                      1
+#define  RUN_SAFE                   1
 #define  NUM_DIMENSIONS             3 /* 2 or 3 */
+#define  NUM_DIRECTIONS             (2*NUM_DIMENSIONS)
 #define  LOGICAL_AXIS_ORDER         1
 #define  GENERATE_NEIGHBORS_STATICALLY   0
 #define  GENERATE_NEIGHBORS_DYNAMICALLY  1
@@ -29,6 +31,7 @@
 
 /* VIsualization */
 #define  TEST_DEPTH                 1
+#define  DRAW_CHILD_CELLS_FIRST_IF_DEPTH_TESTING  1
 #define  DRAW_SMOOTH_LINES          0
 #define  DRAW_CELL_CUBES            1
 #define  DRAW_PARENT_CELLS          1
@@ -80,26 +83,26 @@ typedef  float                   pftype;
 //TODO: Generalize the code so it works for 1, 2 and 3 dimensions
 //TODO: The real order should be X, Y, Z (change back if it isn't)
 #if LOGICAL_AXIS_ORDER
-enum DIRECTION {
-    DIR_X,
-    DIR_Y,
-    DIR_Z
+enum DIMENSION {
+    DIM_X,
+    DIM_Y,
+    DIM_Z
 };
 #else
-enum DIRECTION {
-    DIR_Y,
-    DIR_X,
-    DIR_Z
+enum DIMENSION {
+    DIM_Y,
+    DIM_X,
+    DIM_Z
 };
 #endif
 
 #if    NUM_DIMENSIONS == 2
-#define  HORIZONTAL_DIRECTION1  DIR_X
-#define  UP_DIRECTION           DIR_Y
+#define  HORIZONTAL_DIMENSION1  DIM_X
+#define  UP_DIMENSION           DIM_Y
 #elif  NUM_DIMENSIONS == 3
-#define  HORIZONTAL_DIRECTION1  DIR_X
-#define  HORIZONTAL_DIRECTION2  DIR_Y
-#define  UP_DIRECTION           DIR_Z
+#define  HORIZONTAL_DIMENSION1  DIM_X
+#define  HORIZONTAL_DIMENSION2  DIM_Y
+#define  UP_DIMENSION           DIM_Z
 #endif
 
 ////////////////////////////////////////////////////////////////

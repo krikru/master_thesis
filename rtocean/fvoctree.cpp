@@ -49,6 +49,18 @@ fvoctree::fvoctree(pftype surface, pftype bottom)
     c->get_child(octcell::child_index_xyz(1, 0, 0))->refine();
     c->get_child(octcell::child_index_xyz(1, 0, 0))->get_child(octcell::child_index_xyz(0, 0, 0))->refine();
     c->get_child(octcell::child_index_xyz(1, 1, 0))->refine();
+    c = c->get_child(octcell::child_index_xyz(0, 0, 1));
+    if (!c) {
+        throw logic_error("Child node pointer is NULL! Cannot do what was planned :P");
+    }
+    c= c->get_child(octcell::child_index_xyz(0, 1, 0));
+    if (!c) {
+        throw logic_error("Child node pointer is NULL! Cannot do what was planned :P");
+    }
+    if (c->is_leaf()) {
+        throw logic_error("Node is a leaf! Cannot do what was planned (coarsen it) :P");
+    }
+    c->coarsen();
 #endif
 #endif
 #if  GENERATE_NEIGHBORS_STATICALLY
@@ -70,7 +82,7 @@ fvoctree::~fvoctree()
 
 pftype fvoctree::size_accuracy(pfvec r)
 {
-    return 0.02 + 0.1 * r.e[DIR_X];
+    return 0.02 + 0.1 * r.e[DIM_X];
 }
 
 /* Returns true if the cell should be removed from the simulation */
@@ -81,13 +93,13 @@ bool fvoctree::refine_subtree(octcell* c, pftype surface, pftype bottom, pftype 
     static int num_leaf_cells = 1;
     pftype s = c->s;
 
-    pftype height = c->r[UP_DIRECTION];
+    pftype height = c->r[UP_DIMENSION];
 #if  NUM_DIMENSIONS == 2
-    pftype min_surf_height = 0.55 + 0.2*c->r[HORIZONTAL_DIRECTION1];
-    pftype max_surf_height = 0.55 + 0.2*(c->r[HORIZONTAL_DIRECTION1]+s);
+    pftype min_surf_height = 0.55 + 0.2*c->r[HORIZONTAL_DIMENSION1];
+    pftype max_surf_height = 0.55 + 0.2*(c->r[HORIZONTAL_DIMENSION1]+s);
 #elif  NUM_DIMENSIONS == 3
-    pftype min_surf_height = 0.55 + 0.2*c->r[HORIZONTAL_DIRECTION1] + 0.1*c->r[HORIZONTAL_DIRECTION2];
-    pftype max_surf_height = 0.55 + 0.2*(c->r[HORIZONTAL_DIRECTION1]+s) + 0.1*(c->r[HORIZONTAL_DIRECTION2]+s);
+    pftype min_surf_height = 0.55 + 0.2*c->r[HORIZONTAL_DIMENSION1] + 0.1*c->r[HORIZONTAL_DIMENSION2];
+    pftype max_surf_height = 0.55 + 0.2*(c->r[HORIZONTAL_DIMENSION1]+s) + 0.1*(c->r[HORIZONTAL_DIMENSION2]+s);
 #endif
     if (height >= max_surf_height) {
         // Cell is over the surface, remove it

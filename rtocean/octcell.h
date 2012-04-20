@@ -7,7 +7,7 @@
 
 // Standard includes
 #include <stdexcept>
-//using std::exception;
+using std::exception;
 using std::logic_error;
 using std::out_of_range;
 
@@ -82,11 +82,13 @@ public:
     /* Children */
     bool has_child_array();
     bool is_leaf();
+    void make_leaf();
     octcell* get_child(uint idx);
     octcell* set_child(uint idx, octcell* child);
     void refine(); // Creates new child array and new children
-    void unleaf(); // Creates new child array but no children
-    octcell* add_child(uint idx);
+    void coarsen(); // Decreases the level of detail ro this level
+    //void unleaf(); // Creates new child array but no children
+    //octcell* add_child(uint idx);
     void remove_child(uint idx);
 
     /* Neighbors */
@@ -101,18 +103,30 @@ public:
      * Public static methods *
      *************************/
     /* Neighbors */
-    void make_neighbors(octcell* c1, octcell* c2, uint direction);
-    void generate_all_cross_cell_neighbors(octcell* c1, octcell* c2, uint normal_direction);
+    void make_neighbors(octcell* c1, octcell* c2, uint dimension, uint lowest_level);
+#if  GENERATE_NEIGHBORS_STATICALLY
+    void generate_all_cross_cell_neighbors(octcell* c1, octcell* c2, uint normal_dimension);
+#endif
 
     /* Indexes */
 #if  NUM_DIMENSIONS == 2
-    static uint child_index(uint dir0, uint dir1);
+    static uint child_index(uint dim0, uint dim1);
     static uint child_index_xy(uint x, uint y);
 #elif  NUM_DIMENSIONS == 3
-    static uint child_index(uint dir0, uint dir1, uint dir2);
+    static uint child_index(uint dim0, uint dim1, uint dim2);
     static uint child_index_xyz(uint x, uint y, uint z);
 #endif
-    static uint index_offset(uint dir);
+    static uint child_index_offset(uint dim);
+    static uint direction(uint dim, bool rev_dir);
+    static uint dimension(uint dir);
+    static bool reverse_direction(uint dir);
+    static bool positive_direction_of_child(uint child_index, uint dim);
+
+private:
+    /******************************
+     * Private non-static methods *
+     ******************************/
+void steal_child_neighbor_connection(nlnode* child_node);
 
 private:
     /*************************
@@ -156,6 +170,22 @@ inline
 bool octcell::is_leaf()
 {
     return !_c;
+}
+
+inline
+void octcell::make_leaf()
+{
+#if  DEBUG
+    if (is_leaf()) {
+        throw logic_error("Trying to make a leaf cell a leaf");
+    }
+    for (uint i = 0; i < MAX_NUM_CHILDREN; i++) {
+        if (get_child(i)) {
+            throw logic_error("Trying to make a cell with at least one child a leaf cell");
+        }
+    }
+#endif
+    delete[] _c;
 }
 
 inline
@@ -228,15 +258,15 @@ void octcell::unneighbor(nlnode* neighbor_list_entry)
 
 inline
 #if  NUM_DIMENSIONS == 2
-uint octcell::child_index(uint dir0, uint dir1)
+uint octcell::child_index(uint dim0, uint dim1)
 #elif  NUM_DIMENSIONS == 3
-uint octcell::child_index(uint dir0, uint dir1, uint dir2)
+uint octcell::child_index(uint dim0, uint dim1, uint dim2)
 #endif
 {
 #if    NUM_DIMENSIONS == 2
-    return (dir0 << 0) | (dir1 << 1);
+    return (dim0 << 0) | (dim1 << 1);
 #elif  NUM_DIMENSIONS == 3
-    return (dir0 << 0) | (dir1 << 1) | (dir2 << 2);
+    return (dim0 << 0) | (dim1 << 1) | (dim2 << 2);
 #endif
 }
 
@@ -248,16 +278,40 @@ uint octcell::child_index_xyz(uint x, uint y, uint z)
 #endif
 {
 #if    NUM_DIMENSIONS == 2
-    return (x << DIR_X) | (y << DIR_Y);
+    return (x << DIM_X) | (y << DIM_Y);
 #elif  NUM_DIMENSIONS == 3
-    return (x << DIR_X) | (y << DIR_Y) | (z << DIR_Z);
+    return (x << DIM_X) | (y << DIM_Y) | (z << DIM_Z);
 #endif
 }
 
 inline
-uint octcell::index_offset(uint dir)
+uint octcell::child_index_offset(uint dim)
 {
-    return 1 << dir;
+    return 1 << dim;
+}
+
+inline
+uint octcell::direction(uint dim, bool rev_dir)
+{
+    return (dim << 1) | rev_dir;
+}
+
+inline
+uint octcell::dimension(uint dir)
+{
+    return dir >> 1;
+}
+
+inline
+bool octcell::reverse_direction(uint dir)
+{
+    return dir & 1;
+}
+
+inline
+bool octcell::positive_direction_of_child(uint child_index, uint dim)
+{
+    return (child_index >> dim) & 1;
 }
 
 #endif // OCTCELL_H

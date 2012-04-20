@@ -115,25 +115,25 @@ void viswidget::quick_draw_cell(octcell* cell)
     //TODO: Optimize
     pfvec r2 = 2*cell->cell_center() - cell->r;
 #if    NUM_DIMENSIONS == 2
-    quick_draw_line(r1[DIR_X], r1[DIR_Y], 0, r2[DIR_X], r1[DIR_Y], 0);
-    quick_draw_line(r2[DIR_X], r1[DIR_Y], 0, r2[DIR_X], r2[DIR_Y], 0);
-    quick_draw_line(r2[DIR_X], r2[DIR_Y], 0, r1[DIR_X], r2[DIR_Y], 0);
-    quick_draw_line(r1[DIR_X], r2[DIR_Y], 0, r1[DIR_X], r1[DIR_Y], 0);
+    quick_draw_line(r1[DIM_X], r1[DIM_Y], 0, r2[DIM_X], r1[DIM_Y], 0);
+    quick_draw_line(r2[DIM_X], r1[DIM_Y], 0, r2[DIM_X], r2[DIM_Y], 0);
+    quick_draw_line(r2[DIM_X], r2[DIM_Y], 0, r1[DIM_X], r2[DIM_Y], 0);
+    quick_draw_line(r1[DIM_X], r2[DIM_Y], 0, r1[DIM_X], r1[DIM_Y], 0);
 #elif  NUM_DIMENSIONS == 3
-    quick_draw_line(r1[DIR_X], r1[DIR_Y], r1[DIR_Z], r2[DIR_X], r1[DIR_Y], r1[DIR_Z]);
-    quick_draw_line(r1[DIR_X], r1[DIR_Y], r1[DIR_Z], r1[DIR_X], r2[DIR_Y], r1[DIR_Z]);
-    quick_draw_line(r1[DIR_X], r1[DIR_Y], r1[DIR_Z], r1[DIR_X], r1[DIR_Y], r2[DIR_Z]);
+    quick_draw_line(r1[DIM_X], r1[DIM_Y], r1[DIM_Z], r2[DIM_X], r1[DIM_Y], r1[DIM_Z]);
+    quick_draw_line(r1[DIM_X], r1[DIM_Y], r1[DIM_Z], r1[DIM_X], r2[DIM_Y], r1[DIM_Z]);
+    quick_draw_line(r1[DIM_X], r1[DIM_Y], r1[DIM_Z], r1[DIM_X], r1[DIM_Y], r2[DIM_Z]);
 
-    quick_draw_line(r2[DIR_X], r1[DIR_Y], r1[DIR_Z], r2[DIR_X], r2[DIR_Y], r1[DIR_Z]);
-    quick_draw_line(r2[DIR_X], r1[DIR_Y], r1[DIR_Z], r2[DIR_X], r1[DIR_Y], r2[DIR_Z]);
-    quick_draw_line(r1[DIR_X], r2[DIR_Y], r1[DIR_Z], r2[DIR_X], r2[DIR_Y], r1[DIR_Z]);
-    quick_draw_line(r1[DIR_X], r2[DIR_Y], r1[DIR_Z], r1[DIR_X], r2[DIR_Y], r2[DIR_Z]);
-    quick_draw_line(r1[DIR_X], r1[DIR_Y], r2[DIR_Z], r2[DIR_X], r1[DIR_Y], r2[DIR_Z]);
-    quick_draw_line(r1[DIR_X], r1[DIR_Y], r2[DIR_Z], r1[DIR_X], r2[DIR_Y], r2[DIR_Z]);
+    quick_draw_line(r2[DIM_X], r1[DIM_Y], r1[DIM_Z], r2[DIM_X], r2[DIM_Y], r1[DIM_Z]);
+    quick_draw_line(r2[DIM_X], r1[DIM_Y], r1[DIM_Z], r2[DIM_X], r1[DIM_Y], r2[DIM_Z]);
+    quick_draw_line(r1[DIM_X], r2[DIM_Y], r1[DIM_Z], r2[DIM_X], r2[DIM_Y], r1[DIM_Z]);
+    quick_draw_line(r1[DIM_X], r2[DIM_Y], r1[DIM_Z], r1[DIM_X], r2[DIM_Y], r2[DIM_Z]);
+    quick_draw_line(r1[DIM_X], r1[DIM_Y], r2[DIM_Z], r2[DIM_X], r1[DIM_Y], r2[DIM_Z]);
+    quick_draw_line(r1[DIM_X], r1[DIM_Y], r2[DIM_Z], r1[DIM_X], r2[DIM_Y], r2[DIM_Z]);
 
-    quick_draw_line(r1[DIR_X], r2[DIR_Y], r2[DIR_Z], r2[DIR_X], r2[DIR_Y], r2[DIR_Z]);
-    quick_draw_line(r2[DIR_X], r1[DIR_Y], r2[DIR_Z], r2[DIR_X], r2[DIR_Y], r2[DIR_Z]);
-    quick_draw_line(r2[DIR_X], r2[DIR_Y], r1[DIR_Z], r2[DIR_X], r2[DIR_Y], r2[DIR_Z]);
+    quick_draw_line(r1[DIM_X], r2[DIM_Y], r2[DIM_Z], r2[DIM_X], r2[DIM_Y], r2[DIM_Z]);
+    quick_draw_line(r2[DIM_X], r1[DIM_Y], r2[DIM_Z], r2[DIM_X], r2[DIM_Y], r2[DIM_Z]);
+    quick_draw_line(r2[DIM_X], r2[DIM_Y], r1[DIM_Z], r2[DIM_X], r2[DIM_Y], r2[DIM_Z]);
 #endif
 }
 
@@ -230,7 +230,7 @@ void viswidget::visualize_fvoctree(fvoctree *tree)
     if (tree->root) {
         glPushAttrib(GL_ALL_ATTRIB_BITS);
 #if  DRAW_CELL_CUBES
-#if  DRAW_PARENT_CELLS
+#if  !(TEST_DEPTH && DRAW_CHILD_CELLS_FIRST_IF_DEPTH_TESTING) && DRAW_PARENT_CELLS
         set_line_style(1, PARENT_CUBE_R, PARENT_CUBE_G, PARENT_CUBE_B, PARENT_CUBE_A);
         set_up_model_view_matrix(PARENT_CUBE_DIST_SCALEING);
         visualize_parent_cells_recursively(tree->root);
@@ -241,6 +241,11 @@ void viswidget::visualize_fvoctree(fvoctree *tree)
 #endif
         set_up_model_view_matrix();
         visualize_leaf_cells_and_neighbor_connections_recursively(tree->root);
+#if  DRAW_CELL_CUBES && TEST_DEPTH && DRAW_CHILD_CELLS_FIRST_IF_DEPTH_TESTING && DRAW_PARENT_CELLS
+        set_line_style(1, PARENT_CUBE_R, PARENT_CUBE_G, PARENT_CUBE_B, PARENT_CUBE_A);
+        set_up_model_view_matrix(PARENT_CUBE_DIST_SCALEING);
+        visualize_parent_cells_recursively(tree->root);
+#endif
         glPopAttrib();
     }
 
@@ -257,7 +262,7 @@ void viswidget::move_fvoctree(fvoctree *tree)
 
 void viswidget::move_octcell(octcell *c)
 {
-    c->r[DIR_X] += 0.01;
+    c->r[DIM_X] += 0.01;
     if (c->has_child_array()) {
         for (uint i = 0; i < octcell::MAX_NUM_CHILDREN; i++) {
             if (c->get_child(i)) {
@@ -306,11 +311,11 @@ void viswidget::quick_draw_line(GLfloat ax, GLfloat ay, GLfloat az, GLfloat bx, 
 void viswidget::quick_draw_line(pfvec p1, pfvec p2)
 {
 #if    NUM_DIMENSIONS == 2
-    quick_draw_line(p1.e[DIR_X], p1.e[DIR_Y], 0,
-                    p2.e[DIR_X], p2.e[DIR_Y], 0);
+    quick_draw_line(p1.e[DIM_X], p1.e[DIM_Y], 0,
+                    p2.e[DIM_X], p2.e[DIM_Y], 0);
 #elif  NUM_DIMENSIONS == 3
-    quick_draw_line(p1.e[DIR_X], p1.e[DIR_Y], p1.e[DIR_Z],
-                    p2.e[DIR_X], p2.e[DIR_Y], p2.e[DIR_Z]);
+    quick_draw_line(p1.e[DIM_X], p1.e[DIM_Y], p1.e[DIM_Z],
+                    p2.e[DIM_X], p2.e[DIM_Y], p2.e[DIM_Z]);
 #endif
 }
 
