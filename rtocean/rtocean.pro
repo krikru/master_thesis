@@ -33,7 +33,9 @@ HEADERS  += mainwin.h \
     dllist.h \
     dllnode.h \
     base_float_vec2.h \
-    base_dllnode.h
+    base_dllnode.h \
+    math_functions.h \
+    compile_time.h
 
 FORMS    += mainwin.ui
 

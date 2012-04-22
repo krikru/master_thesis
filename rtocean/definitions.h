@@ -5,6 +5,7 @@
 // INCLUDE FILES
 ////////////////////////////////////////////////////////////////
 
+#include <stdint.h>
 
 ////////////////////////////////////////////////////////////////
 // COMPILER DEFINITIONS
@@ -35,11 +36,14 @@
 #define  DRAW_CHILD_CELLS_FIRST_IF_DEPTH_TESTING  1
 #define  DRAW_COARSE_NEIGHBOR_CONNETCIONS_SEPARATELY 1
 #define  DRAW_SMOOTH_LINES          0
+#define  LINE_WIDTH                 (DRAW_SMOOTH_LINES ? 1.5 : 1)
 #define  DRAW_CELL_CUBES            1
 #define  DRAW_PARENT_CELLS          1
 #define  DRAW_NEIGHBOR_CONNECTIONS  1
 #define  MARK_MIDDLE_OF_CONNECTION  1
 #define  MIDDLE_MARK_SIZE           0.05
+#define  RANDOMIZE_NEIGHBOR_CONNECTION_MIDPOINTS     0
+#define  NEIGHBOR_CONNECTION_MIDPOINT_RANDOMIZATION  0.1
 #define  PARENT_CUBE_DIST_SCALING   1.0001
 #define  COARSE_NEIGHBOR_CONNECTIONS_DIST_SCALING  (1/PARENT_CUBE_DIST_SCALING)
 
@@ -47,17 +51,21 @@
 #define  USE_DOUBLE_PRECISION_FOR_PHYSICS  0
 
 /* Graphics */
-const float  BACKGROUND_R           = 1;
-const float  BACKGROUND_G           = 1;
-const float  BACKGROUND_B           = 1;
+const float  BACKGROUND_BRIGHTNESS  = 0;
+const float  LEAF_CUBE_BRIGHTNESS   = BACKGROUND_BRIGHTNESS >= 0.5 ? 0   :   1;
+const float  PARENT_CUBE_BRIGHTNESS = BACKGROUND_BRIGHTNESS >= 0.5 ? BACKGROUND_BRIGHTNESS-.25 : BACKGROUND_BRIGHTNESS+.25;
+
+const float  BACKGROUND_R           = BACKGROUND_BRIGHTNESS;
+const float  BACKGROUND_G           = BACKGROUND_BRIGHTNESS;
+const float  BACKGROUND_B           = BACKGROUND_BRIGHTNESS;
 const float  BACKGROUND_A           = 1;
-const float  LEAF_CUBE_R            = 0;
-const float  LEAF_CUBE_G            = 0;
-const float  LEAF_CUBE_B            = 0;
+const float  LEAF_CUBE_R            = LEAF_CUBE_BRIGHTNESS;
+const float  LEAF_CUBE_G            = LEAF_CUBE_BRIGHTNESS;
+const float  LEAF_CUBE_B            = LEAF_CUBE_BRIGHTNESS;
 const float  LEAF_CUBE_A            = 1;
-const float  PARENT_CUBE_R          = .75;
-const float  PARENT_CUBE_G          = .75;
-const float  PARENT_CUBE_B          = .75;
+const float  PARENT_CUBE_R          = PARENT_CUBE_BRIGHTNESS;
+const float  PARENT_CUBE_G          = PARENT_CUBE_BRIGHTNESS;
+const float  PARENT_CUBE_B          = PARENT_CUBE_BRIGHTNESS;
 const float  PARENT_CUBE_A          = 1;
 const float  LEAF_NEIGHBOR_CONNECTION_R  = 0;
 const float  LEAF_NEIGHBOR_CONNECTION_G  = 0;
@@ -76,12 +84,22 @@ const float  MIDDLE_MARK_A          = 1;
 // TYPEDEFS
 ////////////////////////////////////////////////////////////////
 
-typedef  unsigned int            uint ;
 #if USE_DOUBLE_PRECISION_FOR_PHYSICS
 typedef  double                  pftype;
 #else
 typedef  float                   pftype;
 #endif
+
+typedef unsigned int uint;
+
+typedef    int8_t    int8;
+typedef   uint8_t   uint8, byte;
+typedef   int16_t   int16;
+typedef  uint16_t  uint16;
+typedef   int32_t   int32;
+typedef  uint32_t  uint32;
+typedef   int64_t   int64;
+typedef  uint64_t  uint64;
 
 ////////////////////////////////////////////////////////////////
 // ENUMS
@@ -118,7 +136,7 @@ enum DIMENSION {
 
 /* Mathematical constants */
 #ifndef _MATH_H_
-#define M_E         2.7182818284590452354  // Euler's number
+#define M_E         2.7182818284590452354  // e, Euler's number
 #define M_LOG2E		1.4426950408889634074  // log_2(e)
 #define M_LOG10E	0.43429448190325182765 // log_10(e)
 #define M_LN2		0.69314718055994530942 // ln(2)
@@ -132,6 +150,9 @@ enum DIMENSION {
 #define M_SQRT2		1.41421356237309504880 // sqrt(2)
 #define M_SQRT1_2	0.70710678118654752440 // sqrt(1/2)
 #endif
+
+/* More mathematical constants */
+#define M_2PI           6.28318530717958647693 // 2*pi
 
 /* Physical constants */
 #define P_G         9.82000000000000000000 // [m/s^2] Gravitational acceleration

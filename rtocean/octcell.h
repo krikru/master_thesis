@@ -88,6 +88,7 @@ public:
     octcell* set_child(uint idx, octcell* child);
     void refine(); // Creates new child array and new children
     void coarsen(); // Decreases the level of detail ro this level
+    void find_and_connect_to_all_leaf_neighbors(octcell* neighbor, uint dim, bool pos_dir);
     //void unleaf(); // Creates new child array but no children
     //octcell* add_child(uint idx);
     void remove_child_and_neighbor_connections(uint idx);
@@ -124,16 +125,18 @@ public:
     static uint child_index_xyz(uint x, uint y, uint z);
 #endif
     static uint child_index_offset(uint dim);
-    static uint direction(uint dim, bool rev_dir);
+    static uint direction(uint dim, bool pos_dir, bool);
     static uint dimension(uint dir);
-    static bool reverse_direction(uint dir);
+    static bool positive_direction(uint dir);
     static bool positive_direction_of_child(uint child_index, uint dim);
+    static uint child_index_flip_direction(uint child_index, uint dim);
 
 private:
     /******************************
      * Private non-static methods *
      ******************************/
 void steal_child_leaf_neighbor_connection(nlnode* child_node);
+void make_coarse_neighbor_leaf_neighbor(nlnode* list_entry);
 void make_leaf_neighbor_coarse_neighbor(nlnode* list_entry);
 void make_leaf_neighbor_coarse_neighbor_or_throw_away(nlnode* list_entry);
 
@@ -371,9 +374,9 @@ uint octcell::child_index_offset(uint dim)
 }
 
 inline
-uint octcell::direction(uint dim, bool rev_dir)
+uint octcell::direction(uint dim, bool pos_dir, bool lalala)
 {
-    return (dim << 1) | rev_dir;
+    return (dim << 1) | pos_dir;
 }
 
 inline
@@ -383,7 +386,7 @@ uint octcell::dimension(uint dir)
 }
 
 inline
-bool octcell::reverse_direction(uint dir)
+bool octcell::positive_direction(uint dir)
 {
     return dir & 1;
 }
@@ -392,6 +395,12 @@ inline
 bool octcell::positive_direction_of_child(uint child_index, uint dim)
 {
     return (child_index >> dim) & 1;
+}
+
+inline
+uint octcell::child_index_flip_direction(uint child_index, uint dim)
+{
+    return child_index ^ (1 << dim);
 }
 
 #endif // OCTCELL_H

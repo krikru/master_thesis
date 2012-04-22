@@ -45,8 +45,9 @@ fvoctree::fvoctree(pftype surface, pftype bottom)
     //c->get_child(octcell::child_index_xy(1, 0))->refine();
     //c->get_child(octcell::child_index_xy(1, 0))->get_child(octcell::child_index_xy(0, 0))->refine();
     //c->get_child(octcell::child_index_xy(1, 1))->refine();
-#if 0
+#if 1
     c = c->get_child(octcell::child_index_xy(0, 1));
+    //c = c->get_child(octcell::child_index_xy(1, 1));
     if (!c) {
         throw logic_error("Child node pointer is NULL! Cannot do what was planned :P");
     }
@@ -61,11 +62,11 @@ fvoctree::fvoctree(pftype surface, pftype bottom)
     c->coarsen();
 #endif
 #elif  NUM_DIMENSIONS == 3
-#if 0
+#if 1
     c->get_child(octcell::child_index_xyz(1, 0, 0))->refine();
     c->get_child(octcell::child_index_xyz(1, 0, 0))->get_child(octcell::child_index_xyz(0, 0, 0))->refine();
     c->get_child(octcell::child_index_xyz(1, 1, 0))->refine();
-    c = c->get_child(octcell::child_index_xyz(0, 0, 1));
+    c = root->get_child(octcell::child_index_xyz(0, 0, 1));
     if (!c) {
         throw logic_error("Child node pointer is NULL! Cannot do what was planned :P");
     }
@@ -83,7 +84,7 @@ fvoctree::fvoctree(pftype surface, pftype bottom)
 #endif
 #endif
 #if  GENERATE_NEIGHBORS_STATICALLY
-    generate_neighbor_lists();
+    generate_leaf_neighbor_lists();
 #endif
 #endif
 }
@@ -154,10 +155,10 @@ bool fvoctree::refine_subtree(octcell* c, pftype surface, pftype bottom, pftype 
 }
 
 #if  GENERATE_NEIGHBORS_STATICALLY
-void fvoctree::generate_neighbor_lists()
+void fvoctree::generate_leaf_neighbor_lists()
 {
     if (root) {
-        root->generate_all_internal_neighbors();
+        root->generate_all_internal_leaf_neighbors();
     }
 }
 #endif

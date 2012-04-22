@@ -26,7 +26,7 @@ private:
     static pftype size_accuracy(pfvec r);
     bool refine_subtree(octcell* c, pftype surface, pftype bottom, pftype (*accuracy_function)(pfvec));
 #if  GENERATE_NEIGHBORS_STATICALLY
-    void generate_neighbor_lists();
+    void generate_leaf_neighbor_lists();
 #endif
 
 private:

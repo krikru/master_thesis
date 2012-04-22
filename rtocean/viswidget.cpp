@@ -65,7 +65,7 @@ void viswidget::paintGL()
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        if (tree == 0) {
+        if (!tree) {
             BEGIN_TAKE_TIME("Generating octree... ");
             tree = new fvoctree(0, 0);
             END_TAKE_TIME();
@@ -181,21 +181,25 @@ void viswidget::visualize_leaf_cells_and_neighbor_connections_recursively(octcel
         }
     }
 
-    nlnode* lnn = cell->get_first_leaf_neighbor_list_node();
-    nlnode* cnn = cell->get_first_coarse_neighbor_list_node();
-
+#if DRAW_NEIGHBOR_CONNECTIONS
     /* Draw leaf neighbor connections */
-    if (DRAW_NEIGHBOR_CONNECTIONS && lnn) {
+    nlnode* lnn = cell->get_first_leaf_neighbor_list_node();
+    if (lnn) {
         pfvec center1 = cell->cell_center();
 
         /* Draw everything but the middle of the connection  */
         quick_set_color(LEAF_NEIGHBOR_CONNECTION_R, LEAF_NEIGHBOR_CONNECTION_G, LEAF_NEIGHBOR_CONNECTION_B, LEAF_NEIGHBOR_CONNECTION_A);
         for (; lnn; lnn = lnn->get_next_node()) {
             pfvec center2 = lnn->v.n->cell_center();
+            pfvec diff = center2 - center1;
+#if  RANDOMIZE_NEIGHBOR_CONNECTION_MIDPOINTS
+            pfvec ovec = diff.random_equal_lenth_orthogonal_vector();
+            diff += ovec * uniform(0, NEIGHBOR_CONNECTION_MIDPOINT_RANDOMIZATION);
+#endif
 #if  MARK_MIDDLE_OF_CONNECTION
-            quick_draw_line(center1, center1 + (.5-MIDDLE_MARK_SIZE)*(center2-center1));
+            quick_draw_line(center1, center1 + (.5-MIDDLE_MARK_SIZE)*diff);
 #else
-            quick_draw_line(center1, .5*(center1 + center2));
+            quick_draw_line(center1, center1 +  .5                  *diff);
 #endif
         }
 
@@ -203,13 +207,14 @@ void viswidget::visualize_leaf_cells_and_neighbor_connections_recursively(octcel
         /* Mark middle of connections */
         quick_set_color(MIDDLE_MARK_R, MIDDLE_MARK_G, MIDDLE_MARK_B, MIDDLE_MARK_A);
         for (lnn = cell->get_first_leaf_neighbor_list_node(); lnn; lnn = lnn->get_next_node()) {
-            pfvec center2 = cnn->v.n->cell_center();
+            pfvec center2 = lnn->v.n->cell_center();
             quick_draw_line(center1 + (.5-MIDDLE_MARK_SIZE)*(center2-center1), .5*(center1 + center2));
         }
 #endif
 
 #if DRAW_CELL_CUBES
-        if (!cnn || DRAW_COARSE_NEIGHBOR_CONNETCIONS_SEPARATELY) {
+        if (!cell->get_first_coarse_neighbor_list_node() ||
+            DRAW_COARSE_NEIGHBOR_CONNETCIONS_SEPARATELY  ) {
             quick_set_color(LEAF_CUBE_R, LEAF_CUBE_G, LEAF_CUBE_B, LEAF_CUBE_A);
         }
 #endif
@@ -217,17 +222,23 @@ void viswidget::visualize_leaf_cells_and_neighbor_connections_recursively(octcel
 
 #if  !DRAW_COARSE_NEIGHBOR_CONNETCIONS_SEPARATELY
     /* Draw coarse neighbor connections */
-    if (DRAW_NEIGHBOR_CONNECTIONS && cnn) {
+    nlnode* cnn = cell->get_first_coarse_neighbor_list_node();
+    if (cnn) {
         pfvec center1 = cell->cell_center();
 
         /* Draw everything but the middle of the connection  */
         quick_set_color(COARSE_NEIGHBOR_CONNECTION_R, COARSE_NEIGHBOR_CONNECTION_G, COARSE_NEIGHBOR_CONNECTION_B, COARSE_NEIGHBOR_CONNECTION_A);
         for (; cnn; cnn = cnn->get_next_node()) {
             pfvec center2 = cnn->v.n->cell_center();
+            pfvec diff = center2 - center1;
+#if  RANDOMIZE_NEIGHBOR_CONNECTION_MIDPOINTS
+            pfvec ovec = diff.random_equal_lenth_orthogonal_vector();
+            diff += ovec * uniform(0, NEIGHBOR_CONNECTION_MIDPOINT_RANDOMIZATION);
+#endif
 #if  MARK_MIDDLE_OF_CONNECTION
-            quick_draw_line(center1, center1 + (.5-MIDDLE_MARK_SIZE)*(center2-center1));
+            quick_draw_line(center1, center1 + (.5-MIDDLE_MARK_SIZE)*diff);
 #else
-            quick_draw_line(center1, .5*(center1 + center2));
+            quick_draw_line(center1, center1 +  .5                  *diff);
 #endif
         }
 
@@ -244,7 +255,8 @@ void viswidget::visualize_leaf_cells_and_neighbor_connections_recursively(octcel
         quick_set_color(LEAF_CUBE_R, LEAF_CUBE_G, LEAF_CUBE_B, LEAF_CUBE_A);
 #endif
     }
-#endif
+#endif // !DRAW_COARSE_NEIGHBOR_CONNETCIONS_SEPARATELY
+#endif // DRAW_NEIGHBOR_CONNECTIONS
 }
 
 void viswidget::visualize_coarse_neighbor_connections_recursively(octcell* cell)
@@ -258,9 +270,8 @@ void viswidget::visualize_coarse_neighbor_connections_recursively(octcell* cell)
         }
     }
 
-    nlnode* cnn = cell->get_first_coarse_neighbor_list_node();
-
     /* Draw coarse neighbor connections */
+    nlnode* cnn = cell->get_first_coarse_neighbor_list_node();
     if (cnn) {
         pfvec center1 = cell->cell_center();
 
@@ -268,10 +279,15 @@ void viswidget::visualize_coarse_neighbor_connections_recursively(octcell* cell)
         quick_set_color(COARSE_NEIGHBOR_CONNECTION_R, COARSE_NEIGHBOR_CONNECTION_G, COARSE_NEIGHBOR_CONNECTION_B, COARSE_NEIGHBOR_CONNECTION_A);
         for (; cnn; cnn = cnn->get_next_node()) {
             pfvec center2 = cnn->v.n->cell_center();
+            pfvec diff = center2 - center1;
+#if  RANDOMIZE_NEIGHBOR_CONNECTION_MIDPOINTS
+            pfvec ovec = diff.random_equal_lenth_orthogonal_vector();
+            diff += ovec * uniform(0, NEIGHBOR_CONNECTION_MIDPOINT_RANDOMIZATION);
+#endif
 #if  MARK_MIDDLE_OF_CONNECTION
-            quick_draw_line(center1, center1 + (.5-MIDDLE_MARK_SIZE)*(center2-center1));
+            quick_draw_line(center1, center1 + (.5-MIDDLE_MARK_SIZE)*diff);
 #else
-            quick_draw_line(center1, .5*(center1 + center2));
+            quick_draw_line(center1, center1 +  .5                  *diff);
 #endif
         }
 
@@ -280,7 +296,7 @@ void viswidget::visualize_coarse_neighbor_connections_recursively(octcell* cell)
         quick_set_color(MIDDLE_MARK_R, MIDDLE_MARK_G, MIDDLE_MARK_B, MIDDLE_MARK_A);
         for (cnn = cell->get_first_coarse_neighbor_list_node(); cnn; cnn = cnn->get_next_node()) {
             pfvec center2 = cnn->v.n->cell_center();
-            //quick_draw_line(center1 + (.5-MIDDLE_MARK_SIZE)*(center2-center1), .5*(center1 + center2));
+            quick_draw_line(center1 + (.5-MIDDLE_MARK_SIZE)*(center2-center1), .5*(center1 + center2));
         }
 #endif
     }
@@ -305,13 +321,13 @@ void viswidget::visualize_fvoctree(fvoctree *tree)
         glPushAttrib(GL_ALL_ATTRIB_BITS);
 #if  DRAW_CELL_CUBES
 #if  !(TEST_DEPTH && DRAW_CHILD_CELLS_FIRST_IF_DEPTH_TESTING) && DRAW_PARENT_CELLS
-        set_line_style(1, PARENT_CUBE_R, PARENT_CUBE_G, PARENT_CUBE_B, PARENT_CUBE_A);
+        set_line_style(LINE_WIDTH, PARENT_CUBE_R, PARENT_CUBE_G, PARENT_CUBE_B, PARENT_CUBE_A);
         set_up_model_view_matrix(PARENT_CUBE_DIST_SCALING);
         visualize_parent_cells_recursively(tree->root);
 #endif
-        set_line_style(1, LEAF_CUBE_R, LEAF_CUBE_G, LEAF_CUBE_B, LEAF_CUBE_A);
+        set_line_style(LINE_WIDTH, LEAF_CUBE_R, LEAF_CUBE_G, LEAF_CUBE_B, LEAF_CUBE_A);
 #else
-        set_line_style(1, NEIGHBOR_CONNECTION_R, NEIGHBOR_CONNECTION_G, NEIGHBOR_CONNECTION_B, NEIGHBOR_CONNECTION_A);
+        set_line_style(LINE_WIDTH, LEAF_NEIGHBOR_CONNECTION_R, LEAF_NEIGHBOR_CONNECTION_G, LEAF_NEIGHBOR_CONNECTION_B, LEAF_NEIGHBOR_CONNECTION_A);
 #endif
         set_up_model_view_matrix();
         visualize_leaf_cells_and_neighbor_connections_recursively(tree->root);
@@ -320,7 +336,7 @@ void viswidget::visualize_fvoctree(fvoctree *tree)
         visualize_coarse_neighbor_connections_recursively(tree->root);
 #endif
 #if  DRAW_CELL_CUBES && TEST_DEPTH && DRAW_CHILD_CELLS_FIRST_IF_DEPTH_TESTING && DRAW_PARENT_CELLS
-        set_line_style(1, PARENT_CUBE_R, PARENT_CUBE_G, PARENT_CUBE_B, PARENT_CUBE_A);
+        set_line_style(LINE_WIDTH, PARENT_CUBE_R, PARENT_CUBE_G, PARENT_CUBE_B, PARENT_CUBE_A);
         set_up_model_view_matrix(PARENT_CUBE_DIST_SCALING);
         visualize_parent_cells_recursively(tree->root);
 #endif

@@ -47,14 +47,14 @@ public:
 
     /* Direction of the octneighbor */
     uint dim;
-    bool rev_dir;
+    bool pos_dir;
 
     /* Level of detail */
     uint low_lvl; // Lowest level of detail the neighbor is still relevant for
 
 public:
     /* Public methods */
-    void set(octcell* neighbor_cell, nlnode* corresponding_neighbor_list_entry, pfvec distance, pftype distance_absolute_value, pftype cell_face_area, uint dimension, bool reverse_direction, uint lowest_level);
+    void set(octcell* neighbor_cell, nlnode* corresponding_neighbor_list_entry, pfvec distance, pftype distance_absolute_value, pftype cell_face_area, uint dimension, bool positive_direction, uint lowest_level);
     void remove();
 
 private:

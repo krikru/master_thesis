@@ -5,13 +5,13 @@
  * Include files
  ****************************************************************/
 
-#include <cmath>
 #include <stdexcept>
 //using std::exception;
 using std::domain_error;
 //using std::invalid_argument;
 
 /* Own includes */
+#include "math_functions.h"
 #include "base_int_vec3.h"
 
 /****************************************************************
@@ -49,10 +49,12 @@ public:
 
     bool              operator==(const base_float_vec3<T>&) const;
 
-    T                  length    () const;
-    T                  sqr_length() const;
-    base_float_vec3<T> normalized() const;
-    void               normalize ()      ;
+    T                  length                              () const;
+    T                  sqr_length                          () const;
+    void               normalize                           ()      ;
+    base_float_vec3<T> normalized                          () const;
+    base_float_vec3<T> random_equal_lenth_orthogonal_vector() const;
+    base_float_vec3<T> random_normalized_orthogonal_vector () const;
 };
 
 typedef  base_float_vec3<float >  fvec3;
@@ -232,6 +234,16 @@ T base_float_vec3<T>::sqr_length() const
 
 template<typename T>
 inline
+void base_float_vec3<T>::normalize()
+{
+    T len = length();
+    if (!len) throw domain_error("Trying to normalize a zero-length base_float_vec3<T>");
+    T k = 1/len;
+    for (int i = 0; i < 3; i++) e[i] *= k;
+}
+
+template<typename T>
+inline
 base_float_vec3<T> base_float_vec3<T>::normalized() const
 {
     T len = length();
@@ -242,12 +254,30 @@ base_float_vec3<T> base_float_vec3<T>::normalized() const
 
 template<typename T>
 inline
-void base_float_vec3<T>::normalize()
+base_float_vec3<T> base_float_vec3<T>::random_equal_lenth_orthogonal_vector() const
 {
-    T len = length();
-    if (!len) throw domain_error("Trying to normalize a zero-length base_float_vec3<T>");
-    T k = 1/len;
-    for (int i = 0; i < 3; i++) e[i] *= k;
+    if (!e[0] && !e[1] && !e[2]) throw domain_error("Trying to get an orthogonal vector to a zero-length base_float_vec3<T>");
+    base_float_vec3<T> n = this->normalized();
+    base_float_vec3<T> vec1 = n.e[0] ? base_float_vec3<T>(0, 1, 0) : base_float_vec3<T>(1, 0, 0);
+    vec1 -= (n*vec1)*n;
+    vec1 *= sqrt(this->sqr_length() / vec1.sqr_length());
+    base_float_vec3<T> vec2 = n & vec1;
+    double angle = uniform(0, M_2PI);
+    return sin(angle)*vec1 + cos(angle)*vec2;
+}
+
+template<typename T>
+inline
+base_float_vec3<T> base_float_vec3<T>::random_normalized_orthogonal_vector() const
+{
+    if (!e[0] && !e[1] && !e[2]) throw domain_error("Trying to get an orthogonal vector to a zero-length base_float_vec3<T>");
+    base_float_vec3<T> n = this->normalized();
+    base_float_vec3<T> vec1 = n.e[0] ? base_float_vec3<T>(0, 1, 0) : base_float_vec3<T>(1, 0, 0);
+    vec1 -= (n*vec1)*n;
+    vec1.normalize();
+    base_float_vec3<T> vec2 = n & vec1;
+    double angle = uniform(0, M_2PI);
+    return sin(angle)*vec1 + cos(angle)*vec2;
 }
 
 /****************************************************************

@@ -5,13 +5,13 @@
  * Include files
  ****************************************************************/
 
-#include <cmath>
 #include <stdexcept>
 //using std::exception;
 using std::domain_error;
 //using std::invalid_argument;
 
 /* Own includes */
+#include "math_functions.h"
 //#include "base_int_vec2.h"
 
 /****************************************************************
@@ -49,10 +49,14 @@ public:
 
     bool              operator==(const base_float_vec2<T>&) const;
 
-    T                  length    () const;
-    T                  sqr_length() const;
-    base_float_vec2<T> normalized() const;
-    void               normalize ()      ;
+    T                  length                              () const;
+    T                  sqr_length                          () const;
+    void               normalize                           ()      ;
+    base_float_vec2<T> normalized                          () const;
+    base_float_vec2<T> rotated_clockwise                   () const;
+    base_float_vec2<T> rotated_counterclockwise            () const;
+    base_float_vec2<T> random_equal_lenth_orthogonal_vector() const;
+    base_float_vec2<T> random_normalized_orthogonal_vector () const;
 };
 
 typedef  base_float_vec2<float >  fvec2;
@@ -222,6 +226,16 @@ T base_float_vec2<T>::sqr_length() const
 
 template<typename T>
 inline
+void base_float_vec2<T>::normalize()
+{
+    T len = length();
+    if (!len) throw domain_error("Trying to normalize a zero-length base_float_vec2<T>");
+    T k = 1/len;
+    for (int i = 0; i < 2; i++) e[i] *= k;
+}
+
+template<typename T>
+inline
 base_float_vec2<T> base_float_vec2<T>::normalized() const
 {
     T len = length();
@@ -232,12 +246,36 @@ base_float_vec2<T> base_float_vec2<T>::normalized() const
 
 template<typename T>
 inline
-void base_float_vec2<T>::normalize()
+base_float_vec2<T> base_float_vec2<T>::rotated_clockwise() const
 {
-    T len = length();
-    if (!len) throw domain_error("Trying to normalize a zero-length base_float_vec2<T>");
-    T k = 1/len;
-    for (int i = 0; i < 2; i++) e[i] *= k;
+    return base_float_vec2<T>(e[1], -e[0]);
+}
+
+template<typename T>
+inline
+base_float_vec2<T> base_float_vec2<T>::rotated_counterclockwise() const
+{
+    return base_float_vec2<T>(-e[1], e[0]);
+}
+
+template<typename T>
+inline
+base_float_vec2<T> base_float_vec2<T>::random_equal_lenth_orthogonal_vector() const
+{
+    if (rand() & 1) {
+        // Rotate counterclockwise
+        return rotated_clockwise();
+    }
+    else {
+        return rotated_counterclockwise();
+    }
+}
+
+template<typename T>
+inline
+base_float_vec2<T> base_float_vec2<T>::random_normalized_orthogonal_vector() const
+{
+    return random_equal_lenth_orthogonal_vector().normalized();
 }
 
 /****************************************************************
