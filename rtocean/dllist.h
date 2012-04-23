@@ -30,7 +30,7 @@ public:
     dllnode<T>* add_existing_element(T element);
 #endif
     dllnode<T>* add_existing_node(dllnode<T>* node);
-    dllnode<T>* get_first_element();
+    dllnode<T>* get_first_node();
     //void remove_node(dllnode<T>* node);
 
 private:
@@ -58,7 +58,7 @@ dllist<T>::~dllist()
     dllnode<T>* current_node;
     dllnode<T>* next_node;
     // TODO: Optimize this loop
-    for (current_node = get_first_element(); current_node; current_node = next_node) {
+    for (current_node = get_first_node(); current_node; current_node = next_node) {
         next_node = current_node->get_next_node();
         delete current_node;
     }
@@ -73,7 +73,7 @@ template<typename T>
 dllnode<T>* dllist<T>::add_new_element()
 {
     /* Create new empty node and assign correct pointer values */
-    dllnode<T>* node = new dllnode<T>(get_first_element());
+    dllnode<T>* node = new dllnode<T>(get_first_node());
     node->p = &h;
     /* Update pointers in nodes already existing in list */
     if (h.n) {
@@ -103,7 +103,7 @@ template<typename T>
 dllnode<T>* dllist<T>::add_existing_node(dllnode<T>* node)
 {
     /* Update pointers in node */
-    node->n = get_first_element();
+    node->n = get_first_node();
     node->p = &h;
     /* Update pointers in nodes already existing in list */
     if (h.n) {
@@ -115,7 +115,7 @@ dllnode<T>* dllist<T>::add_existing_node(dllnode<T>* node)
 
 template<typename T>
 inline
-dllnode<T>* dllist<T>::get_first_element()
+dllnode<T>* dllist<T>::get_first_node()
 {
     return static_cast<dllnode<T>*>(h.n);
 }

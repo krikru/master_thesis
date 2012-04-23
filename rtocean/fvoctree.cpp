@@ -139,7 +139,7 @@ bool fvoctree::refine_subtree(octcell* c, pftype surface, pftype bottom, pftype 
     num_leaf_cells += octcell::MAX_NUM_CHILDREN - 1;
     for (uint i = 0; i < octcell::MAX_NUM_CHILDREN; i++) {
         if (refine_subtree(c->get_child(i), surface, bottom, accuracy_function)) {
-            c->remove_child_and_neighbor_connections(i);
+            c->remove_child(i);
             tot_num_cells--;
             num_leaf_cells--;
         }

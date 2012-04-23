@@ -25,16 +25,15 @@
 #define  NUM_DIMENSIONS             2 /* 2 or 3 */
 #define  NUM_DIRECTIONS             (2*NUM_DIMENSIONS)
 #define  LOGICAL_AXIS_ORDER         1
-#define  GENERATE_NEIGHBORS_STATICALLY   0
-#define  GENERATE_NEIGHBORS_DYNAMICALLY  1
+#define  GENERATE_NEIGHBORS_STATICALLY               0
+#define  GENERATE_NEIGHBORS_DYNAMICALLY              1
 
 /* Program speed */
 #define  FRAME_MS                   (1000/60)
 
 /* VIsualization */
 #define  TEST_DEPTH                 1
-#define  DRAW_CHILD_CELLS_FIRST_IF_DEPTH_TESTING  1
-#define  DRAW_COARSE_NEIGHBOR_CONNETCIONS_SEPARATELY 1
+#define  DRAW_CHILD_CELLS_FIRST_IF_DEPTH_TESTING     1
 #define  DRAW_SMOOTH_LINES          0
 #define  LINE_WIDTH                 (DRAW_SMOOTH_LINES ? 1.5 : 1)
 #define  DRAW_CELL_CUBES            1
@@ -45,7 +44,7 @@
 #define  RANDOMIZE_NEIGHBOR_CONNECTION_MIDPOINTS     0
 #define  NEIGHBOR_CONNECTION_MIDPOINT_RANDOMIZATION  0.1
 #define  PARENT_CUBE_DIST_SCALING   1.0001
-#define  COARSE_NEIGHBOR_CONNECTIONS_DIST_SCALING  (1/PARENT_CUBE_DIST_SCALING)
+#define  NEIGHBOR_CONNECTIONS_DIST_SCALING           (1/PARENT_CUBE_DIST_SCALING)
 
 /* Precision */
 #define  USE_DOUBLE_PRECISION_FOR_PHYSICS  0
@@ -53,7 +52,7 @@
 /* Graphics */
 const float  BACKGROUND_BRIGHTNESS  = 0;
 const float  LEAF_CUBE_BRIGHTNESS   = BACKGROUND_BRIGHTNESS >= 0.5 ? 0   :   1;
-const float  PARENT_CUBE_BRIGHTNESS = BACKGROUND_BRIGHTNESS >= 0.5 ? BACKGROUND_BRIGHTNESS-.25 : BACKGROUND_BRIGHTNESS+.25;
+const float  PARENT_CUBE_BRIGHTNESS = BACKGROUND_BRIGHTNESS >= 0.5 ? BACKGROUND_BRIGHTNESS-0.25 : BACKGROUND_BRIGHTNESS+0.25;
 
 const float  BACKGROUND_R           = BACKGROUND_BRIGHTNESS;
 const float  BACKGROUND_G           = BACKGROUND_BRIGHTNESS;
@@ -67,17 +66,34 @@ const float  PARENT_CUBE_R          = PARENT_CUBE_BRIGHTNESS;
 const float  PARENT_CUBE_G          = PARENT_CUBE_BRIGHTNESS;
 const float  PARENT_CUBE_B          = PARENT_CUBE_BRIGHTNESS;
 const float  PARENT_CUBE_A          = 1;
-const float  LEAF_NEIGHBOR_CONNECTION_R  = 0;
-const float  LEAF_NEIGHBOR_CONNECTION_G  = 0;
-const float  LEAF_NEIGHBOR_CONNECTION_B  = 1;
-const float  LEAF_NEIGHBOR_CONNECTION_A  = 1;
-const float  COARSE_NEIGHBOR_CONNECTION_R  = 0;
-const float  COARSE_NEIGHBOR_CONNECTION_G  = 1;
-const float  COARSE_NEIGHBOR_CONNECTION_B  = 0;
-const float  COARSE_NEIGHBOR_CONNECTION_A  = 1;
-const float  MIDDLE_MARK_R          = 1;
-const float  MIDDLE_MARK_G          = 0;
-const float  MIDDLE_MARK_B          = 0;
+// Red
+const float  LOWER_LOD_NON_LEAF_NEIGHBOR_CONNECTION_R  = 1;
+const float  LOWER_LOD_NON_LEAF_NEIGHBOR_CONNECTION_G  = 0;
+const float  LOWER_LOD_NON_LEAF_NEIGHBOR_CONNECTION_B  = 0;
+const float  LOWER_LOD_NON_LEAF_NEIGHBOR_CONNECTION_A  = 1;
+// Yellow
+const float  LOWER_LOD_LEAF_NEIGHBOR_CONNECTION_R      = 1;
+const float  LOWER_LOD_LEAF_NEIGHBOR_CONNECTION_G      = 1;
+const float  LOWER_LOD_LEAF_NEIGHBOR_CONNECTION_B      = 0;
+const float  LOWER_LOD_LEAF_NEIGHBOR_CONNECTION_A      = 1;
+// Green
+const float  SAME_LOD_NON_LEAF_NEIGHBOR_CONNECTION_R   = 0;
+const float  SAME_LOD_NON_LEAF_NEIGHBOR_CONNECTION_G   = 1;
+const float  SAME_LOD_NON_LEAF_NEIGHBOR_CONNECTION_B   = 0;
+const float  SAME_LOD_NON_LEAF_NEIGHBOR_CONNECTION_A   = 1;
+// Cyan
+const float  SAME_LOD_LEAF_NEIGHBOR_CONNECTION_R       = 0;
+const float  SAME_LOD_LEAF_NEIGHBOR_CONNECTION_G       = 1;
+const float  SAME_LOD_LEAF_NEIGHBOR_CONNECTION_B       = 1;
+const float  SAME_LOD_LEAF_NEIGHBOR_CONNECTION_A       = 1;
+// Blue
+const float  HIGHER_LOD_NEIGHBOR_CONNECTION_R          = 0;
+const float  HIGHER_LOD_NEIGHBOR_CONNECTION_G          = 0;
+const float  HIGHER_LOD_NEIGHBOR_CONNECTION_B          = 1;
+const float  HIGHER_LOD_NEIGHBOR_CONNECTION_A          = 1;
+const float  MIDDLE_MARK_R          = 0.5;
+const float  MIDDLE_MARK_G          = 0.5;
+const float  MIDDLE_MARK_B          = 0.5;
 const float  MIDDLE_MARK_A          = 1;
 
 ////////////////////////////////////////////////////////////////

@@ -21,11 +21,11 @@
 octneighbor::octneighbor()
 {
 #if DEBUG
-    set(0, 0, pfvec(), 0, 0, 0, 0, 0);
+    set(0, 0, pfvec(), 0, 0, 0, 0);
 #endif
 }
 
-void octneighbor::set(octcell* neighbor_cell, nlnode* corresponding_neighbor_list_entry, pfvec distance, pftype distance_absolute_value, pftype cell_face_area, uint dimension, bool positive_direction, uint lowest_level)
+void octneighbor::set(octcell* neighbor_cell, nlnode* corresponding_neighbor_list_entry, pfvec distance, pftype distance_absolute_value, pftype cell_face_area, uint dimension, bool positive_direction)
 {
     n        = neighbor_cell                    ;
     cnle     = corresponding_neighbor_list_entry;
@@ -34,5 +34,4 @@ void octneighbor::set(octcell* neighbor_cell, nlnode* corresponding_neighbor_lis
     cf_area  = cell_face_area                   ;
     dim      = dimension                        ;
     pos_dir  = positive_direction               ;
-    low_lvl  = lowest_level                     ;
 }

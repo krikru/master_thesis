@@ -18,7 +18,8 @@ SOURCES += main.cpp\
     message_handler.cpp \
     octneighbor.cpp \
     dllnode.cpp \
-    base_dllnode.cpp
+    base_dllnode.cpp \
+    nlistset.cpp
 
 HEADERS  += mainwin.h \
     viswidget.h \
@@ -35,7 +36,8 @@ HEADERS  += mainwin.h \
     base_float_vec2.h \
     base_dllnode.h \
     math_functions.h \
-    compile_time.h
+    compile_time.h \
+    nlset.h
 
 FORMS    += mainwin.ui
 

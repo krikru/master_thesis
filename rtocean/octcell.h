@@ -13,7 +13,7 @@ using std::out_of_range;
 
 // Own includes
 #include "definitions.h"
-#include "octneighbor.h"
+#include "nlset.h"
 
 ////////////////////////////////////////////////////////////////
 // CLASS DEFINITION
@@ -44,19 +44,11 @@ public:
      * Geometry
      * --------
      *
-     * The cell is a cube that stretches from (x, y, z) to (x + s, y + s, z + s)
+     * The cell is a cube with size s and the first corner in r
      */
     pftype s; /* Size of the cell (the length of an edge) */
     //TODO: Change tho vector instead of separate coordinates
-#if 1
     pfvec  r; /* Position of the first corner */
-#else
-    pftype x; /* X-position of first corner */
-    pftype y; /* Y-position of first corner */
-#if  NUM_DIMENSIONS == 3
-    pftype z; /* Z-position of first corner */
-#endif
-#endif
 
     /* Level of detail */
     uint lvl; /* The level of the cell, 0 = root */
@@ -67,8 +59,13 @@ public:
     octcell **_c; /* The possible children */
 
     /* Neighbors */
-    nlist leaf_neighbor_list; /* Lists all leaf neighbors. This list is empty if this is a parent cell. */
-    nlist coarse_neighbor_list; /* These connections are between cells on the same level and involves at least one non-leaf cell. */
+    //nlist leaf_neighbor_list; /* Lists all leaf neighbors. This list is empty if this is a parent cell. */
+    //nlist coarse_neighbor_list; /* These connections are between cells on the same level and involves at least one non-leaf cell. */
+    /*
+     * This array contains neighbor lists that together contain all neighbors, leaf cell and parent cells,
+     * that differ no more than one level of detail from this cell
+     */
+    nlist neighbor_lists[NUM_NEIGHBOR_LISTS];
 
 public:
     /*****************************
@@ -86,35 +83,51 @@ public:
     void make_leaf();
     octcell* get_child(uint idx);
     octcell* set_child(uint idx, octcell* child);
-    void refine(); // Creates new child array and new children
-    void coarsen(); // Decreases the level of detail ro this level
+    void refine(); // Creates a new full child array
+    void coarsen(); // Decreases the level of detail to this level by removing the children and the child array
+#if 0
+    void refine2(); // Creates a new full child array
+    void coarsen2(); // Decreases the level of detail to this level
+#endif
+    void move_neighbor_connection_to_other_list(nlnode* node, uint new_list_index);
+    void break_all_neighbor_connections();
+#if 0
     void find_and_connect_to_all_leaf_neighbors(octcell* neighbor, uint dim, bool pos_dir);
+#endif
     //void unleaf(); // Creates new child array but no children
     //octcell* add_child(uint idx);
+#if 0
     void remove_child_and_neighbor_connections(uint idx);
+#endif
     void remove_child(uint idx);
 
     /* Neighbors */
 #if  GENERATE_NEIGHBORS_STATICALLY
     void generate_all_internal_leaf_neighbors();
 #endif
+#if 0
     nlnode* get_first_leaf_neighbor_list_node();
     nlnode* get_first_coarse_neighbor_list_node();
     void remove_all_leaf_neighbor_connections();
     void remove_all_coarse_neighbor_connections();
+#endif
 
 public:
     /*************************
      * Public static methods *
      *************************/
     /* Neighbors */
+#if 0
     static void make_leaf_neighbors(octcell* c1, octcell* c2, uint dimension, uint lowest_level);
     static void make_coarse_neighbors(octcell* c1, octcell* c2, uint dimension, uint lowest_level);
+#endif
 #if  GENERATE_NEIGHBORS_STATICALLY
     static void generate_all_cross_cell_leaf_neighbors(octcell* c1, octcell* c2, uint normal_dimension, uint lowest_level);
 #endif
+#if 0
     static void un_leaf_neighbor(nlnode* leaf_neighbor_list_entry);
     static void un_coarse_neighbor(nlnode* coarse_neighbor_list_entry);
+#endif
 
     /* Indexes */
 #if  NUM_DIMENSIONS == 2
@@ -135,10 +148,13 @@ private:
     /******************************
      * Private non-static methods *
      ******************************/
+void make_neighbors(octcell* cell1, octcell* cell2, uint cell1_neighbor_list_idx, uint cell2_neighbor_list_idx, uint dimension, bool pos_dir);
+#if 0
 void steal_child_leaf_neighbor_connection(nlnode* child_node);
 void make_coarse_neighbor_leaf_neighbor(nlnode* list_entry);
 void make_leaf_neighbor_coarse_neighbor(nlnode* list_entry);
 void make_leaf_neighbor_coarse_neighbor_or_throw_away(nlnode* list_entry);
+#endif
 
 private:
     /**************************
@@ -251,9 +267,10 @@ void octcell::remove_child(uint idx)
 
     /* Remove child */
     delete c;
-    c = set_child(idx, 0);
+    set_child(idx, 0);
 }
 
+#if 0
 inline
 void octcell::remove_child_and_neighbor_connections(uint idx)
 {
@@ -277,21 +294,23 @@ void octcell::remove_child_and_neighbor_connections(uint idx)
     delete c;
     c = set_child(idx, 0);
 }
+#endif
 
 /*************
  * Neighbors *
  *************/
 
+#if 0
 inline
 nlnode* octcell::get_first_leaf_neighbor_list_node()
 {
-    return leaf_neighbor_list.get_first_element();
+    return leaf_neighbor_list.get_first_node();
 }
 
 inline
 nlnode* octcell::get_first_coarse_neighbor_list_node()
 {
-    return coarse_neighbor_list.get_first_element();
+    return coarse_neighbor_list.get_first_node();
 }
 
 inline
@@ -305,6 +324,7 @@ void octcell::un_coarse_neighbor(nlnode* coarse_neighbor_list_entry)
 {
     _un_neighbor(coarse_neighbor_list_entry);
 }
+#endif
 
 inline
 void octcell::_un_neighbor(nlnode* list_entry)
@@ -313,6 +333,7 @@ void octcell::_un_neighbor(nlnode* list_entry)
     list_entry->remove_from_list_and_delete();
 }
 
+#if 0
 inline
 void octcell::remove_all_leaf_neighbor_connections()
 {
@@ -334,6 +355,7 @@ void octcell::remove_all_coarse_neighbor_connections()
         un_leaf_neighbor(current_node);
     }
 }
+#endif
 
 /***********
  * Indexes *
