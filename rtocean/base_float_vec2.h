@@ -81,7 +81,7 @@ base_float_vec2<T>::base_float_vec2()
     e[0] = e[1] = 0.0;
 }
 
-#if 0
+#if  0
 template<typename T>
 inline
 base_float_vec2<T>::base_float_vec2(const ivec2& source)
@@ -99,7 +99,7 @@ base_float_vec2<T>::base_float_vec2(T e0, T e1)
     e[1] = e1;
 }
 
-#if 0
+#if  0
 template<typename T>
 inline
 base_float_vec2<T>& base_float_vec2<T>::operator=(const ivec2& rhs)

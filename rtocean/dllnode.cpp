@@ -3,7 +3,7 @@
 template<>
 dllnode<int>::~dllnode()
 {
-#if DEBUG
+#if  DEBUG
     cout << "Deleted node with value " << v << endl;
 #endif
 }

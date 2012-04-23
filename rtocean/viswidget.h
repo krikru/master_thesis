@@ -34,6 +34,7 @@ public:
     void visualize_parent_cells_recursively(octcell* cell);
     void visualize_neighbor_connections_recursively(octcell* cell);
     void visualize_neighbor_connections_recursively(octcell* cell, uint neighbor_list_index);
+    void visualize_finest_neighbor_connections_recursively(octcell* cell);
     void visualize_fvoctree(fvoctree *tree);
 
     /* test functions (remove when finished testing) */

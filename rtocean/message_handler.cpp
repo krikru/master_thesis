@@ -36,7 +36,7 @@ void message_handler::inform_about_exception(std::string caller, std::exception 
     std::cerr << "Unexpected error occured in " << caller << std::endl;
     std::cerr << "\tCaught: " << error.what() << std::endl;
     std::cerr << "\tType: " << typeid(error).name() << std::endl;
-#if 0
+#if  0
     display_error_message("Unexpected error occured in " + caller + "\nType: " + typeid(error).name() + "\n\n\"" + error.what() + "\"");
 #endif
     if (terminate) exit(1);

@@ -81,7 +81,7 @@ void viswidget::paintGL()
             END_TAKE_TIME();
         }
 
-#if 0
+#if  0
         BEGIN_TAKE_TIME("Moving octree... ");
         move_fvoctree(tree);
         END_TAKE_TIME();
@@ -207,6 +207,10 @@ void viswidget::visualize_parent_cells_recursively(octcell* cell)
 
 void viswidget::visualize_neighbor_connections_recursively(octcell* cell)
 {
+#if  VISUALIZE_ONLY_FINEST_NEIGHBOR_CONNECTIONS
+    quick_set_color(FINEST_NEIGHBOR_CONNECTION_R, FINEST_NEIGHBOR_CONNECTION_G, FINEST_NEIGHBOR_CONNECTION_B, FINEST_NEIGHBOR_CONNECTION_A);
+    visualize_finest_neighbor_connections_recursively(cell);
+#else
     for (uint i = 0; i < NUM_NEIGHBOR_LISTS; i++) {
         quick_set_color(NEIGHBOR_CONNECTION_R[i],
                         NEIGHBOR_CONNECTION_G[i],
@@ -214,6 +218,54 @@ void viswidget::visualize_neighbor_connections_recursively(octcell* cell)
                         NEIGHBOR_CONNECTION_A[i]);
         visualize_neighbor_connections_recursively(cell, i);
     }
+#endif
+}
+
+void viswidget::visualize_finest_neighbor_connections_recursively(octcell* cell)
+{
+    if (cell->has_child_array()) {
+        for (uint i = 0; i < octcell::MAX_NUM_CHILDREN; i++) {
+            if (cell->get_child(i)) {
+                visualize_finest_neighbor_connections_recursively(cell->get_child(i));
+            }
+        }
+        return;
+    }
+
+    /* Draw neighbor connections to leaf cells */
+    pfvec center1 = cell->cell_center();
+    nlset leaf_set;
+
+    /* Draw everything but the middle of the connection  */
+    leaf_set.add_neighbor_list(&cell->neighbor_lists[NL_LOWER_LEVEL_OF_DETAIL_LEAF]);
+    leaf_set.add_neighbor_list(&cell->neighbor_lists[NL_SAME_LEVEL_OF_DETAIL_LEAF ]);
+    leaf_set.add_neighbor_list(&cell->neighbor_lists[NL_HIGHER_LEVEL_OF_DETAIL    ]);
+    for (nlnode* node = leaf_set.get_first_node(); node; node = leaf_set.get_next_node()) {
+        pfvec center2 = node->v.n->cell_center();
+        pfvec diff = center2 - center1;
+#if  RANDOMIZE_NEIGHBOR_CONNECTION_MIDPOINTS
+        pfvec ovec = diff.random_equal_lenth_orthogonal_vector();
+        diff += ovec * uniform(0, NEIGHBOR_CONNECTION_MIDPOINT_RANDOMIZATION);
+#endif
+#if  MARK_MIDDLE_OF_CONNECTION
+        quick_draw_line(center1, center1 + (.5-MIDDLE_MARK_SIZE)*diff);
+#else
+        quick_draw_line(center1, center1 +  .5                  *diff);
+#endif
+    }
+
+#if  MARK_MIDDLE_OF_CONNECTION
+    /* Mark middle of connections */
+    quick_set_color(MIDDLE_MARK_R, MIDDLE_MARK_G, MIDDLE_MARK_B, MIDDLE_MARK_A);
+    leaf_set.add_neighbor_list(&cell->neighbor_lists[NL_LOWER_LEVEL_OF_DETAIL_LEAF]);
+    leaf_set.add_neighbor_list(&cell->neighbor_lists[NL_SAME_LEVEL_OF_DETAIL_LEAF ]);
+    leaf_set.add_neighbor_list(&cell->neighbor_lists[NL_HIGHER_LEVEL_OF_DETAIL    ]);
+    for (nlnode* node = leaf_set.get_first_node(); node; node = leaf_set.get_next_node()) {
+        pfvec center2 = node->v.n->cell_center();
+        quick_draw_line(center1 + (.5-MIDDLE_MARK_SIZE)*(center2-center1), .5*(center1 + center2));
+    }
+    quick_set_color(FINEST_NEIGHBOR_CONNECTION_R, FINEST_NEIGHBOR_CONNECTION_G, FINEST_NEIGHBOR_CONNECTION_B, FINEST_NEIGHBOR_CONNECTION_A);
+#endif
 }
 
 void viswidget::visualize_neighbor_connections_recursively(octcell* cell, uint neighbor_list_index)
@@ -227,7 +279,7 @@ void viswidget::visualize_neighbor_connections_recursively(octcell* cell, uint n
         }
     }
 
-    /* Draw coarse neighbor connections */
+    /* Draw neighbor connections */
     nlnode* node = cell->neighbor_lists[neighbor_list_index].get_first_node();
     if (node) {
         pfvec center1 = cell->cell_center();

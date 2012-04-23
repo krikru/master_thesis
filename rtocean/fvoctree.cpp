@@ -24,7 +24,7 @@ fvoctree::fvoctree(pftype surface, pftype bottom)
     bottom = bottom;
     surface = surface;
     octcell *c = root = new octcell(1, pfvec(), 0);
-#if 0
+#if  0
     c->refine();
     c = c->get_child(octcell::child_index(0, 1, 0));
     c->refine();
@@ -144,8 +144,8 @@ bool fvoctree::refine_subtree(octcell* c, pftype surface, pftype bottom, pftype 
             num_leaf_cells--;
         }
     }
-#if DEBUG
-#if 0
+#if  DEBUG
+#if  0
     cout << "Total number of cells: " << tot_num_cells << endl;
     cout << "Number of leaf cells:  " << num_leaf_cells << endl;
     cout << endl;

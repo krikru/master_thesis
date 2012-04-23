@@ -20,9 +20,6 @@
 /* Default constructor */
 octneighbor::octneighbor()
 {
-#if DEBUG
-    set(0, 0, pfvec(), 0, 0, 0, 0);
-#endif
 }
 
 void octneighbor::set(octcell* neighbor_cell, nlnode* corresponding_neighbor_list_entry, pfvec distance, pftype distance_absolute_value, pftype cell_face_area, uint dimension, bool positive_direction)

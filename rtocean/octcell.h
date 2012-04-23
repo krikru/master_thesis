@@ -184,7 +184,7 @@ void octcell::make_leaf()
 
 inline
 octcell* octcell::get_child(uint idx) {
-#if DEBUG
+#if  DEBUG
     if (is_leaf()) {
         throw logic_error("Trying to get a child from a leaf cell");
     }
@@ -197,7 +197,7 @@ octcell* octcell::get_child(uint idx) {
 
 inline
 octcell* octcell::set_child(uint idx, octcell* child) {
-#if DEBUG
+#if  DEBUG
     if (is_leaf()) {
         throw logic_error("Trying to set a child for a leaf cell");
     }
@@ -212,7 +212,7 @@ inline
 void octcell::remove_child(uint idx)
 {
     octcell* c = get_child(idx);
-#if DEBUG
+#if  DEBUG
     if (is_leaf()) {
         throw logic_error("Trying to remove a child cell from a leaf cell");
     }

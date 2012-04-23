@@ -26,7 +26,7 @@ private:
 public:
     // Public methods
     dllnode<T>* add_new_element();
-#if 0
+#if  0
     dllnode<T>* add_existing_element(T element);
 #endif
     dllnode<T>* add_existing_node(dllnode<T>* node);
@@ -83,7 +83,7 @@ dllnode<T>* dllist<T>::add_new_element()
     return node;
 }
 
-#if 0
+#if  0
 template<typename T>
 dllnode<T>* dllist<T>::add_existing_element(T element)
 {

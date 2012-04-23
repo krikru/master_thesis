@@ -49,7 +49,7 @@ octcell::~octcell()
 
 void octcell::refine()
 {
-#if DEBUG
+#if  DEBUG
     if (has_child_array()) {
         throw logic_error("Trying to refine a cell that already has child array");
     }
@@ -74,7 +74,15 @@ void octcell::refine()
         set_child(i, new octcell(s_2, new_r, new_level));
     }
 
-    /* Find neighbors on this and the childrens' level */
+    /***************************
+     * +---------------------+ *
+     * |                     | *
+     * |  AHEAD: MOUNT CODE  | *
+     * |                     | *
+     * +---------------------+ *
+     ***************************/
+
+    /* Find neighbors on this and the childrens' and the childrens' childrens' level */
     nlset same_level_set;
     same_level_set.add_neighbor_list(&neighbor_lists[NL_SAME_LEVEL_OF_DETAIL_LEAF]);
     same_level_set.add_neighbor_list(&neighbor_lists[NL_SAME_LEVEL_OF_DETAIL_NON_LEAF]);
@@ -125,13 +133,21 @@ void octcell::refine()
         n->move_neighbor_connection_to_other_list(node->v.cnle, NL_SAME_LEVEL_OF_DETAIL_NON_LEAF);
     } // node
 
-    /* This cell is no longer a leaf cell, update other end of the connections to the higher level */
+    /*
+     * This cell is no longer a leaf cell, update other end of the connections to
+     * the higher level
+     */
     nlnode* node = neighbor_lists[NL_HIGHER_LEVEL_OF_DETAIL].get_first_node();
     nlnode* next_node;
     for (; node; node = next_node) {
         next_node = node->get_next_node();
         node->v.n->move_neighbor_connection_to_other_list(node->v.cnle, NL_LOWER_LEVEL_OF_DETAIL_NON_LEAF);
     }
+
+    /*
+     * The lower level neighbors do not need to be updated, because they have only
+     * one list for cells at this level anyway
+     */
 
     // Create all neighbor connections internally between the child cells
     // TODO: Optimize
@@ -184,6 +200,11 @@ void octcell::coarsen()
         next_node = node->get_next_node();
         node->v.n->move_neighbor_connection_to_other_list(node->v.cnle, NL_LOWER_LEVEL_OF_DETAIL_LEAF);
     }
+
+    /*
+     * The lower level neighbors do not need to be updated, because they have only
+     * one list for cells at this level anyway
+     */
 }
 
 void octcell::move_neighbor_connection_to_other_list(nlnode* node, uint new_list_index)
@@ -240,7 +261,6 @@ void octcell::make_neighbors(octcell* cell1, octcell* cell2, uint cell1_neighbor
          (cell2_neighbor_list_idx == NL_LOWER_LEVEL_OF_DETAIL_NON_LEAF)) ) {
          throw logic_error("Error when making neighbors: Both cells are claimed to be on the lower level");
     }
-    cell1_neighbor_list_idx = cell1_neighbor_list_idx;
 #endif
     /* Create elements to work with */
     nlnode* node1 = cell1->neighbor_lists[cell1_neighbor_list_idx].add_new_element();

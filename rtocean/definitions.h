@@ -17,7 +17,6 @@
 // COMPILE TIME OPTIONS
 ////////////////////////////////////////////////////////////////
 
-//#define  DEBUG                      0
 /* Essential */
 #define  DEBUG                      1
 #define  RUN_SAFE                   0
@@ -39,6 +38,7 @@
 #define  DRAW_CELL_CUBES            1
 #define  DRAW_PARENT_CELLS          1
 #define  DRAW_NEIGHBOR_CONNECTIONS  1
+#define  VISUALIZE_ONLY_FINEST_NEIGHBOR_CONNECTIONS  1
 #define  MARK_MIDDLE_OF_CONNECTION  1
 #define  MIDDLE_MARK_SIZE           0.05
 #define  RANDOMIZE_NEIGHBOR_CONNECTION_MIDPOINTS     0
@@ -91,6 +91,11 @@ const float  HIGHER_LOD_NEIGHBOR_CONNECTION_R          = 0;
 const float  HIGHER_LOD_NEIGHBOR_CONNECTION_G          = 0;
 const float  HIGHER_LOD_NEIGHBOR_CONNECTION_B          = 1;
 const float  HIGHER_LOD_NEIGHBOR_CONNECTION_A          = 1;
+
+const float  FINEST_NEIGHBOR_CONNECTION_R = 0;
+const float  FINEST_NEIGHBOR_CONNECTION_G = 0;
+const float  FINEST_NEIGHBOR_CONNECTION_B = 1;
+const float  FINEST_NEIGHBOR_CONNECTION_A = 1;
 const float  MIDDLE_MARK_R          = 0.5;
 const float  MIDDLE_MARK_G          = 0.5;
 const float  MIDDLE_MARK_B          = 0.5;
@@ -188,7 +193,7 @@ enum DIMENSION {
     (y) = (temp);                \
     }
 
-#if 0
+#if  0
 #define  XOR_SWAP(x, y) { \
     (x) ^= (y)            \
     (y) ^= (x)            \
@@ -196,16 +201,21 @@ enum DIMENSION {
     }
 #endif
 
+#if  DEBUG
 #define  BEGIN_TAKE_TIME(action)              \
-    if (DEBUG) {                              \
+    {                                         \
         cout << (action) << endl;             \
         t1 = (double)clock()/CLOCKS_PER_SEC;  \
     }
 
 #define  END_TAKE_TIME()                                          \
-    if (DEBUG) {                                                  \
+    {                                                             \
         t2 = (double)clock()/CLOCKS_PER_SEC;                      \
         cout << "Took " << t2-t1 << " seconds." << endl << endl;  \
     }
+#else
+#define  BEGIN_TAKE_TIME(action) {}
+#define  END_TAKE_TIME()         {}
+#endif
 
 #endif  /* DEFINITIONS_H */

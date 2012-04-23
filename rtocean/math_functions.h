@@ -17,7 +17,7 @@
 // PUBLIC FUNCTIONS
 ////////////////////////////////////////////////////////////////
 
-#if 0
+#if  0
 /* Integer uniform distribution */
 template<typename T>
 inline T integer_uniform(T a, T b)
