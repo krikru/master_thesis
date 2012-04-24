@@ -6,6 +6,7 @@
 ////////////////////////////////////////////////////////////////
 
 // Standard includes
+#include <time.h>
 
 // Qt includes
 #include <QMainWindow>
@@ -33,13 +34,20 @@ private slots:
     // Overload the close event slot
     void closeEvent(QCloseEvent *event);
 
-    // Create a slot for starting the simulation
     void start_simulation();
-    
+
+    // Slots connected to UI items
     void on_actionAbout_rtocean_triggered();
 
 private:
+    /* Private methods */
+    void do_events();
+    static void do_events(void* mainwin_object);
+
+private:
     Ui::mainwin *ui;
+    watersystem system;
+    clock_t     last_time_letting_system_evolve;
 };
 
 #endif // MAINWIN_H

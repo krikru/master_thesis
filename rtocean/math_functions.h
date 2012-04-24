@@ -51,7 +51,6 @@ inline T uniform(T a, int b)
 /*
  * Integer uniform distribution
  */
-template<typename T>
 inline int integer_uniform(int a, int b)
 {
     return a + rand() % (b + 1 - a);
@@ -70,5 +69,36 @@ inline double uniform(double a, double b)
     return a + rand()/(RAND_MAX + double(1)) * (b - a);
 }
 #endif
+
+////////////////////////////////////////////////////////////////
+//
+////////////////////////////////////////////////////////////////
+
+/* Powers */
+template<typename T>
+inline
+T inline_int_pow(T base, int e)
+{
+    // Cover all the possible values of the exponent
+    if (e > 1) {
+        T a = inline_int_pow(base, e >> 1);
+        if (e & 1) {
+            return a*a*base;
+        }
+        else {
+            return a*a;
+        }
+    }
+    else if (e == 1) {
+        return base;
+    }
+    else if (e < 0) {
+        return 1/inline_int_pow(base, -e);
+    }
+    else {
+        /* e is zero (will not happen if inline_int_pow is the caller) */
+        return 1;
+    }
+}
 
 #endif // MATH_FUNCTIONS_H

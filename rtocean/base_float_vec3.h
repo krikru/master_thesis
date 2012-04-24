@@ -133,7 +133,9 @@ template<typename T>
 inline
 base_float_vec3<T>& base_float_vec3<T>::operator/=(const T den)
 {
+#if  DEBUG
     if (!den) throw domain_error("Trying to divide a vector by zero");
+#endif
     *this *= 1/den;
     return *this;
 }
@@ -206,7 +208,9 @@ template<typename T>
 inline
 base_float_vec3<T> base_float_vec3<T>::operator/(const T den) const
 {
+#if  DEBUG
     if(!den) throw domain_error("Not defined to divide with zero");
+#endif
     T k = 1/den;
     return base_float_vec3<T>(e[0]*k, e[1]*k, e[2]*k);
 }
@@ -237,7 +241,9 @@ inline
 void base_float_vec3<T>::normalize()
 {
     T len = length();
+#if  DEBUG
     if (!len) throw domain_error("Trying to normalize a zero-length base_float_vec3<T>");
+#endif
     T k = 1/len;
     for (int i = 0; i < 3; i++) e[i] *= k;
 }
@@ -247,7 +253,9 @@ inline
 base_float_vec3<T> base_float_vec3<T>::normalized() const
 {
     T len = length();
+#if  DEBUG
     if (!len) throw domain_error("Trying to normalize a zero-length base_float_vec3<T>");
+#endif
     T k = 1/len;
     return base_float_vec3<T>(e[0]/k, e[1]*k, e[2]*k);
 }
@@ -256,7 +264,9 @@ template<typename T>
 inline
 base_float_vec3<T> base_float_vec3<T>::random_equal_lenth_orthogonal_vector() const
 {
+#if  DEBUG
     if (!e[0] && !e[1] && !e[2]) throw domain_error("Trying to get an orthogonal vector to a zero-length base_float_vec3<T>");
+#endif
     base_float_vec3<T> n = this->normalized();
     base_float_vec3<T> vec1 = n.e[0] ? base_float_vec3<T>(0, 1, 0) : base_float_vec3<T>(1, 0, 0);
     vec1 -= (n*vec1)*n;
@@ -270,7 +280,9 @@ template<typename T>
 inline
 base_float_vec3<T> base_float_vec3<T>::random_normalized_orthogonal_vector() const
 {
+#if  DEBUG
     if (!e[0] && !e[1] && !e[2]) throw domain_error("Trying to get an orthogonal vector to a zero-length base_float_vec3<T>");
+#endif
     base_float_vec3<T> n = this->normalized();
     base_float_vec3<T> vec1 = n.e[0] ? base_float_vec3<T>(0, 1, 0) : base_float_vec3<T>(1, 0, 0);
     vec1 -= (n*vec1)*n;

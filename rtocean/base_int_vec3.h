@@ -102,7 +102,9 @@ template<typename T>
 inline
 base_int_vec3<T>& base_int_vec3<T>::operator/=(const T den)
 {
+#if  DEBUG
     if (!den) throw domain_error("Trying to divide a vector by zero");
+#endif
     for (T i = 0; i < 3; i++) e[i] /= den;
     return *this;
 }
@@ -175,7 +177,9 @@ template<typename T>
 inline
 base_int_vec3<T> base_int_vec3<T>::operator/(const T den) const
 {
+#if  DEBUG
     if(!den) throw domain_error("Not defined to divide with zero");
+#endif
     return base_int_vec3<T>(e[0]/den, e[1]/den, e[2]/den);
 }
 

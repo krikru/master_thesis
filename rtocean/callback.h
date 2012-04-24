@@ -6,25 +6,31 @@
 ////////////////////////////////////////////////////////////////
 
 template<typename T>
-struct callback
+class callback
 {
 public:
-    // Variables
-    T func;
-    void *param;
-
-    // Constructor
+    /* Constructors */
     callback();
-    callback(T function);
-    callback(T function, void *parameter);
+    callback(T function, void* parameter);
+
+public:
+    /* Public member variables */
+    T     func;
+    void* param;
+
+public:
+    /* Public methods */
+    bool is_defined();
+    bool has_parameter();
 };
 
 ////////////////////////////////////////////////////////////////
-// PUBLIC MEMBER FUNCTIONS
+// CONSTRUCTORS
 ////////////////////////////////////////////////////////////////
 
 // Constructor
 template<typename T>
+inline
 callback<T>::callback()
 {
     func  = 0;
@@ -32,17 +38,29 @@ callback<T>::callback()
 }
 
 template<typename T>
-callback<T>::callback(T function)
-{
-    func  = function;
-    param = 0       ;
-}
-
-template<typename T>
-callback<T>::callback(T function, void *parameter)
+inline
+callback<T>::callback(T function, void* parameter)
 {
     func  = function ;
     param = parameter;
+}
+
+////////////////////////////////////////////////////////////////
+// PUBLIC MEMBER FUNCTIONS
+////////////////////////////////////////////////////////////////
+
+template<typename T>
+inline
+bool callback<T>::is_defined()
+{
+    return func;
+}
+
+template<typename T>
+inline
+bool callback<T>::has_parameter()
+{
+    return param;
 }
 
 #endif  /* CALLBACK_H */

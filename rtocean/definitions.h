@@ -19,7 +19,7 @@
 
 /* Essential */
 #define  DEBUG                      1
-#define  RUN_SAFE                   0
+#define  RUN_SAFE                   1
 #define  ELABORATE                  0
 #define  NUM_DIMENSIONS             2 /* 2 or 3 */
 #define  NUM_DIRECTIONS             (2*NUM_DIMENSIONS)
@@ -29,6 +29,11 @@
 
 /* Program speed */
 #define  FRAME_MS                   (1000/60)
+#define  SIMULATION_TIME_STEP       pftype(FRAME_MS/1000.0) // [s]
+
+/* Navier-Stokes */
+#define  USE_ARTIFICIAL_COMPRESSIBILITY              1
+#define  ARTIFICIAL_COMPRESSIBILITY_FACTOR           1.0
 
 /* VIsualization */
 #define  TEST_DEPTH                 1
@@ -37,7 +42,8 @@
 #define  LINE_WIDTH                 (DRAW_SMOOTH_LINES ? 1.5 : 1)
 #define  DRAW_CELL_CUBES            1
 #define  DRAW_PARENT_CELLS          1
-#define  DRAW_NEIGHBOR_CONNECTIONS  1
+#define  DRAW_ONLY_SURFACE_CELLS    1
+#define  DRAW_NEIGHBOR_CONNECTIONS  0
 #define  VISUALIZE_ONLY_FINEST_NEIGHBOR_CONNECTIONS  1
 #define  MARK_MIDDLE_OF_CONNECTION  1
 #define  MIDDLE_MARK_SIZE           0.05
@@ -173,10 +179,14 @@ enum DIMENSION {
 #endif
 
 /* More mathematical constants */
-#define M_2PI           6.28318530717958647693 // 2*pi
+#define  M_2PI               6.28318530717958647693 // 2*pi
 
 /* Physical constants */
-#define P_G         9.82000000000000000000 // [m/s^2] Gravitational acceleration
+#define  P_G                 9.82000000000000000000 // [m/s^2] Gravitational acceleration
+#define  P_WATER_DENSITY     1000.00000000000000000 // [kg/m^3] The density of water
+#define  P_WATER_TEMP        10.0000000000000000000 // [°C] The water temperature in degrees Celcius
+#define  P_WATER_VISCOUSITY  (0.001614 - 0.0000306 * P_WATER_TEMP) // [Pa*s] The viscousity of the water, see http://en.wikipedia.org/wiki/Viscosity#Viscosity_of_water
+
 
 ////////////////////////////////////////////////////////////////
 // MACROS

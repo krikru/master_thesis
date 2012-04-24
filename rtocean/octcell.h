@@ -40,15 +40,17 @@ public:
     /***************************
      * Public member variables *
      ***************************/
-    /*
-     * Geometry
-     * --------
-     *
-     * The cell is a cube with size s and the first corner in r
-     */
+    /* Geometry */
+
+    // The cell is a cube with size s and the first corner in r
     pftype s; /* Size of the cell (the length of an edge) */
-    //TODO: Change tho vector instead of separate coordinates
     pfvec  r; /* Position of the first corner */
+
+    /* Navier-Stokes */
+    pftype rp; /* Reduced pressure = pressure/density */
+    bool   surface_cell;
+    pftype vof; /* The volume of the fluid that is currently in this cell (only relevant for surface cells) */
+    /*Since the velocities are located in the cell faces, they are stored in the octneighbors */
 
     /* Level of detail */
     uint lvl; /* The level of the cell, 0 = root */
@@ -74,6 +76,9 @@ public:
 
     /* Geometry */
     pfvec  cell_center();
+    pftype get_side_area();
+    pftype get_cell_volume();
+    pftype get_volume_of_fluid();
 
     /* Level of detail */
 
@@ -147,6 +152,29 @@ pfvec octcell::cell_center()
 #elif  NUM_DIMENSIONS == 3
     return r + pfvec(s_2, s_2, s_2);
 #endif
+}
+
+inline
+pftype octcell::get_side_area()
+{
+    return inline_int_pow(s, NUM_DIMENSIONS-1);
+}
+
+inline
+pftype octcell::get_cell_volume()
+{
+    return inline_int_pow(s, NUM_DIMENSIONS);
+}
+
+inline
+pftype octcell::get_volume_of_fluid()
+{
+    if (surface_cell) {
+        return vof;
+    }
+    else {
+        return get_cell_volume();
+    }
 }
 
 /************

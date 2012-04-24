@@ -113,7 +113,7 @@ bool fvoctree::refine_subtree(octcell* c, pftype surface, pftype bottom, pftype 
     static int num_leaf_cells = 1;
     pftype s = c->s;
 
-    pftype height = c->r[UP_DIMENSION];
+    pftype lowest_cell_height = c->r[UP_DIMENSION];
 #if    NUM_DIMENSIONS == 2
     pftype min_surf_height = 0.55 + 0.2*c->r[HORIZONTAL_DIMENSION1];
     pftype max_surf_height = 0.55 + 0.2*(c->r[HORIZONTAL_DIMENSION1]+s);
@@ -121,16 +121,28 @@ bool fvoctree::refine_subtree(octcell* c, pftype surface, pftype bottom, pftype 
     pftype min_surf_height = 0.55 + 0.2*c->r[HORIZONTAL_DIMENSION1] + 0.1*c->r[HORIZONTAL_DIMENSION2];
     pftype max_surf_height = 0.55 + 0.2*(c->r[HORIZONTAL_DIMENSION1]+s) + 0.1*(c->r[HORIZONTAL_DIMENSION2]+s);
 #endif
-    if (height >= max_surf_height) {
+    if (lowest_cell_height >= max_surf_height) {
         // Cell is over the surface, remove it
         return true;
     }
-    if (height + s <= min_surf_height) {
-        // Cell is under the surface, keep it
-        return false;
-    }
-    if (s <= accuracy_function(c->cell_center())) {
-        // Accuracy is good enough, quit refining
+    if (lowest_cell_height + s <= min_surf_height     ||  // Cell is under the surface, keep it but stop refining
+        s <= accuracy_function(c->cell_center()) ) { // Accuracy is good enough, stop refining
+        // Calculate properties
+        pftype mean_height = lowest_cell_height + s/2;
+        pftype mean_surface_height = (min_surf_height + max_surf_height)/2;
+        c->rp = (mean_surface_height - mean_height) * P_G;
+        if (lowest_cell_height + s > min_surf_height) {
+            /* Cell is a surface cell */
+            c->surface_cell = true;
+            /* Estimate vof */
+            pftype mean_diff = (MAX(min_surf_height - lowest_cell_height, 0) + MIN(max_surf_height - lowest_cell_height, s))/2;
+            c->vof = mean_diff * c->get_side_area();
+#if  DEBUG
+            if (c->vof < 0 || c->vof > c->get_cell_volume()) {
+                throw logic_error("VOF incorrectly calculated");
+            }
+#endif
+        }
         return false;
     }
     // Cell is a surface cell and not fine enough, refine it and treat the children recursivelly

@@ -16,6 +16,9 @@ octcell::octcell(pftype size, pfvec pos, uint level, uint internal_layer_advance
     lvl = level;
     //ila = internal_layer_advancement;
     internal_layer_advancement = internal_layer_advancement;
+#if  RUN_SAFE
+    rp = 0;
+#endif
     _c = 0;
 }
 
@@ -171,13 +174,27 @@ void octcell::coarsen()
     }
 #endif
 
+    surface_cell = false;
+    vof = 0;
+    rp = 0;
     for (uint idx = 0; idx < MAX_NUM_CHILDREN; idx++) {
         octcell* c = get_child(idx);
         if (c) {
             /* Child exists, remove it */
+            if (c->has_child_array()) {
+                /* Coarsen it to get updated properties */
+                c->coarsen();
+            }
+            if (c->surface_cell) {
+                surface_cell = true;
+            }
+            pftype child_water_volume = c->get_volume_of_fluid();
+            vof += child_water_volume;
+            rp += child_water_volume * c->rp;
             remove_child(idx);
         }
     }
+    rp /= vof;
     make_leaf();
 
     /*
@@ -259,7 +276,7 @@ void octcell::make_neighbors(octcell* cell1, octcell* cell2, uint cell1_neighbor
          (cell1_neighbor_list_idx == NL_LOWER_LEVEL_OF_DETAIL_NON_LEAF)) &&
         ((cell2_neighbor_list_idx == NL_LOWER_LEVEL_OF_DETAIL_LEAF) ||
          (cell2_neighbor_list_idx == NL_LOWER_LEVEL_OF_DETAIL_NON_LEAF)) ) {
-         throw logic_error("Error when making neighbors: Both cells are claimed to be on the lower level");
+        throw logic_error("Error when making neighbors: Both cells are claimed to be on the lower level");
     }
 #endif
     /* Create elements to work with */
@@ -271,6 +288,6 @@ void octcell::make_neighbors(octcell* cell1, octcell* cell2, uint cell1_neighbor
     pftype min_s = MIN(cell1->s, cell2->s);
     pftype area = min_s*min_s;
     /* Set properties */
-    node1->v.set(cell2, node2,  dist, dist_abs, area, dimension,  pos_dir);
-    node2->v.set(cell1, node1, -dist, dist_abs, area, dimension, !pos_dir);
+    node1->v.set(cell2, node2, dimension,  pos_dir, 0,  dist, dist_abs, area);
+    node2->v.set(cell1, node1, dimension, !pos_dir, 0, -dist, dist_abs, area);
 }

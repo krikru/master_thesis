@@ -137,7 +137,9 @@ template<typename T>
 inline
 base_float_vec2<T>& base_float_vec2<T>::operator/=(const T den)
 {
+#if  DEBUG
     if (!den) throw domain_error("Trying to divide a vector by zero");
+#endif
     *this *= 1/den;
     return *this;
 }
@@ -198,7 +200,9 @@ template<typename T>
 inline
 base_float_vec2<T> base_float_vec2<T>::operator/(const T den) const
 {
+#if  DEBUG
     if(!den) throw domain_error("Not defined to divide with zero");
+#endif
     T k = 1/den;
     return base_float_vec2<T>(e[0]*k, e[1]*k);
 }
@@ -229,7 +233,9 @@ inline
 void base_float_vec2<T>::normalize()
 {
     T len = length();
+#if  DEBUG
     if (!len) throw domain_error("Trying to normalize a zero-length base_float_vec2<T>");
+#endif
     T k = 1/len;
     for (int i = 0; i < 2; i++) e[i] *= k;
 }
@@ -239,7 +245,9 @@ inline
 base_float_vec2<T> base_float_vec2<T>::normalized() const
 {
     T len = length();
+#if  DEBUG
     if (!len) throw domain_error("Trying to normalize a zero-length base_float_vec2<T>");
+#endif
     T k = 1/len;
     return base_float_vec2<T>(e[0]/k, e[1]*k);
 }

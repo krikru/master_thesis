@@ -19,7 +19,8 @@ SOURCES += main.cpp\
     octneighbor.cpp \
     dllnode.cpp \
     base_dllnode.cpp \
-    nlistset.cpp
+    nlistset.cpp \
+    watersystem.cpp
 
 HEADERS  += mainwin.h \
     viswidget.h \
@@ -37,7 +38,8 @@ HEADERS  += mainwin.h \
     base_dllnode.h \
     math_functions.h \
     compile_time.h \
-    nlset.h
+    nlset.h \
+    watersystem.h
 
 FORMS    += mainwin.ui
 
