@@ -62,8 +62,12 @@ void viswidget::paintGL()
     static bool first_time_called = true;
     if (first_time_called) {
         first_time_called = false;
-        connect(&frame_timer, SIGNAL(timeout()), this, SLOT(updateGL()));
-        frame_timer.start(FRAME_MS);
+        //connect(&frame_timer, SIGNAL(timeout()), this, SLOT(updateGL()));
+        //frame_timer.start(FRAME_MS);
+        t = 0;
+    }
+    else {
+        t += FRAME_MS*.001;
     }
 
     try
@@ -193,7 +197,7 @@ void viswidget::visualize_leaf_cells_recursively(octcell* cell)
             return;
         }
 #endif
-        quick_draw_cell(cell, true);
+        quick_draw_cell(cell, DRAW_WATER_LEVEL);
         return;
     }
 

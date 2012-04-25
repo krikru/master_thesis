@@ -12,7 +12,7 @@ using std::domain_error;
 
 /* Own includes */
 #include "math_functions.h"
-//#include "base_int_vec2.h"
+#include "base_int_vec2.h"
 
 /****************************************************************
  * Class definition
@@ -26,7 +26,7 @@ public:
 
     /* Constructors */
     base_float_vec2<T>();                    // Default constructor
-    //base_float_vec2<T>(const ivec2& source); // Conversion constructor
+    base_float_vec2<T>(const ivec2& source); // Conversion constructor
     base_float_vec2<T>(T e0, T e1);          // Other constructor
 
     //base_float_vec2<T>& operator =(const ivec2&); // Conversion
@@ -81,7 +81,6 @@ base_float_vec2<T>::base_float_vec2()
     e[0] = e[1] = 0.0;
 }
 
-#if  0
 template<typename T>
 inline
 base_float_vec2<T>::base_float_vec2(const ivec2& source)
@@ -89,7 +88,6 @@ base_float_vec2<T>::base_float_vec2(const ivec2& source)
     e[0] = T(source.e[0]);
     e[1] = T(source.e[1]);
 }
-#endif
 
 template<typename T>
 inline

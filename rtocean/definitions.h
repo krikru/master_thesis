@@ -21,8 +21,8 @@
 #define  DEBUG                      1
 #define  RUN_SAFE                   1
 #define  ELABORATE                  0
-#define  NUM_DIMENSIONS             2 /* 2 or 3 */
-#define  NUM_DIRECTIONS             (2*NUM_DIMENSIONS)
+#define  NUM_DIMENSIONS             3 /* 2 or 3 */
+//#define  NUM_DIRECTIONS             (2*NUM_DIMENSIONS)
 #define  LOGICAL_AXIS_ORDER         1
 #define  GENERATE_NEIGHBORS_STATICALLY               0
 #define  GENERATE_NEIGHBORS_DYNAMICALLY              1
@@ -42,18 +42,23 @@
 #define  LINE_WIDTH                 (DRAW_SMOOTH_LINES ? 1.5 : 1)
 #define  DRAW_CELL_CUBES            1
 #define  DRAW_PARENT_CELLS          1
-#define  DRAW_ONLY_SURFACE_CELLS    1
-#define  DRAW_NEIGHBOR_CONNECTIONS  0
-#define  VISUALIZE_ONLY_FINEST_NEIGHBOR_CONNECTIONS  1
-#define  MARK_MIDDLE_OF_CONNECTION  1
+#define  DRAW_ONLY_SURFACE_CELLS    0
+#define  DRAW_WATER_LEVEL           0
+#define  DRAW_NEIGHBOR_CONNECTIONS  1
+#define  VISUALIZE_ONLY_FINEST_NEIGHBOR_CONNECTIONS  0
+#define  MARK_MIDDLE_OF_CONNECTION  0
 #define  MIDDLE_MARK_SIZE           0.05
 #define  RANDOMIZE_NEIGHBOR_CONNECTION_MIDPOINTS     0
 #define  NEIGHBOR_CONNECTION_MIDPOINT_RANDOMIZATION  0.1
-#define  PARENT_CUBE_DIST_SCALING   1.0001
+#define  PARENT_CUBE_DIST_SCALING   1.0003
 #define  NEIGHBOR_CONNECTIONS_DIST_SCALING           (1/PARENT_CUBE_DIST_SCALING)
 
 /* Precision */
 #define  USE_DOUBLE_PRECISION_FOR_PHYSICS  0
+
+/* Tests */
+#define  SIZE_ACCURACY_FACTOR              1
+#define  TEST_REFINING_AND_COARSENING      0
 
 /* Graphics */
 const float  BACKGROUND_BRIGHTNESS  = 0;

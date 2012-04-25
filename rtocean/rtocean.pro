@@ -39,7 +39,8 @@ HEADERS  += mainwin.h \
     math_functions.h \
     compile_time.h \
     nlset.h \
-    watersystem.h
+    watersystem.h \
+    base_int_vec2.h
 
 FORMS    += mainwin.ui
 

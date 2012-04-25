@@ -25,9 +25,12 @@ using std::endl;
 // TYPEDEFS
 ////////////////////////////////////////////////////////////////
 
+// TODO: Move to some more appropriate header?
 #if    NUM_DIMENSIONS == 3
+typedef base_int_vec3   <int  >  ivec ;
 typedef base_float_vec3<pftype>  pfvec;
 #elif  NUM_DIMENSIONS == 2
+typedef base_int_vec2  <int   >  ivec ;
 typedef base_float_vec2<pftype>  pfvec;
 #endif
 

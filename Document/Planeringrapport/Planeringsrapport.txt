@@ -1,0 +1,138 @@
+Planeringsrapport
+
+Preliminär titel på examensarbetet
+----------------------------------
+
+Vågmodell och fartygsmodell för simulering av sjögång
+
+Preliminär beskrivning av angrepssätt
+-------------------------------------
+
+  Beskrivning av arbetet hittills
+  -------------------------------
+
+Jag har hittills undersökt två egna idéer för hur vattenvågor kan modelleras, samt en stor mängd forskningsraporter redan existerande och utprovade modeller. Dessa modeller kan i princip delas upp i fyra kategorier:
+
+1. De tvådimensionella där man modellerar vattenytan med någon slags partiell differentialekvation
+2. De tvådimensionella där man representerar ytan i frekvensdomänen och tidsutvecklar varje frekvens oberoende av de andra efter någon given dispersionsrelation
+3. De tredimensionella där man modellerar både vattenytan och det som händer under ytan med volymselement, och
+4. De tredimensionella där man representerar vattnet som partiklar.
+
+*****
+
+1.
+
+I den första kategorin representeraa vattenytan av en höjdkarta i rumsdomänen (en skalärvärd funktion av x och y). Metoderna som faller i den här kategorin verkar främst använda Boussinesqapproximationen och användas för att modellera vågor med mycket lång våglängd i grunt vatten, d.v.s. då våglängden är många gånger (> 20 ggr.) större än vattendjupet. Det är tydligen inte fallet för mig, så det spåret gav mig inte så mycket.
+
+*****
+
+2.
+
+I den andra kategorin representeras vattenytan av en höjdkarta i frekvensdomänen, och varje amplitud multipliceras vid varje tidssteg med en fasfaktor som beror på tidsstegets längd, vågtalet och vattendjupet enligt någon given dispersionsrelation. Höjdkartan transformeras sedan till rumsdomänen i slutet av varje tidssteg. De här metoderna genererar väldigt realistiska havsvågor och kan hantera vågor av alla våglängder och på alla djup, men det finns inget naturligt sätt att modellera interaktionen med föremål på havsytan. Det går att få till med en del trixande men framgång bygger mer på empiri än teori. Dessutom är metoden dålig på att hantera varierande vattendjup, då vattendjupet är en funktion av position och inte av frekvens, vilket är ett problem då man tidsutvecklar systemet i frekvensdomänen och inte i rumsdomänen. Den här metoden går på O(n log n) tid per tidssteg, där n är antalet datapunkter ytan är diskretiserad med.
+
+*****
+
+3.
+
+I den tredje kategorin kan vattnet representeras på en mängd olika sätt.
+
+Det vanligaste sättet, i alla fall då man vill få med interaktion med föremål ytan, är att använda finita volymmetoden, FVM, med ett fixt nät samt någon ytterligare metod för att modellera eventuella gränsskikt som rör på sig (gränsskikten mellan vatten och luft och mellan vatten och fartyg i mitt fall). I FVM brukar man göra antagandet att vattnet är inkompresibelt, vilket förhindrar att simuleringen blir instabil på grund av snabba oscillationer skapade av stående ljudvågor. Detta är annars ett problem om tidssteget i simuleringen är så pass stort att förhållandet mellan sträckan ljudet hinner färdas på ett tidssteg och cellstorleken blir för stort. Ett problem med FVM är dock att den tenderar att smeta ut de alra finaste detaljerna under advektion.
+
+ ---
+
+Finita elementmetoden, FEM, går också att använda och ska ha vissa numeriska fördelar gemtemot FVM, men är både krångligare att implementera och mer beräkningskrävande. Dels är det inte möjligt att bibehålla en regelbunden mesh då meshpunkterna flyttar sig med flödet, vilket gör differentiering av de olika fälten mer komplicerad. Och dels måste man mesha om nätet då och då eftersom cellerna dras ut och kan blir för långsmala, eller till och med komplexa och få cellväggar som går igenom varandra. FEM har inte samma tendens att smeta ut detaljer som FMV har, förutom vid ommeshning. Jag vet dock inte om man kan ta till samma knep med inkompresibilitet och förhindra stående ljudvågor här som med FVM.
+
+I både FVM och FEM representeras vattnet av tredimensionella celler, eller volymselement, som omfattar alla fluider man vill inkludera i simuleringen.
+
+ ---
+
+En tredje metod som tydligen används rätt mycket i våganalyser är randelementmetoden (BEM), i vilken man ställer upp fullständigt tredimensionella partiella differentialekvationer, vilka sedan formuleras om som integralekvationer. På så sätt behöver man bara modelera ytelementen för att fullständigt kunna beskriva allting som sker även under ytan och man kan med relativt lite beräkningskraft men ändå med stor noggrannhet simulera och analysera så komplexa fall som vågor som bryter. Dock måste man, förutom att anta att vattnet är invisköst och inkompresibelt, också anta att vattnet är ett rotationsfritt potentialflöde, vilket förhindrar existensen av virvlar i vattnet. Det gör det även omöjligt att simulera vattnet efter att en våg har brutit eftersom en sluten loop bildas och hastighetspotentialen får en diskonuitet där gränsskiktet möter sig självt. Därför lämpar sig inte modellen för användning om man inte säkert vet att vågorna inte kommer att bryta.
+
+Det är möjligt att man kan specialhantera diskonuiteten och modellera den likt ett branch cut för en flervärd komplex funktion, där man representerar branch cuttet som en endimensionell kurva längst med vattenytan. Diskonuiteten storlek associeras till kurvan och denna kommer även att vara styrkan (röremängdsmoment per massa) på den virvel som bildas under vattnet efter att vågen har slagit ihop helt.
+
+Jag vet dock inte hur bra den här modellen klarar att simulera interaktionen med fartyg, då krafterna från fartygen möjligtvis skulle kunna skapa ytterliggare virvlar i vattnet vilket skulle kunna koplicera det hela ytterliggare. Dessutom vet jag inte riktigt hur integralekvationen ser ut än, så jag vet inte ens om det är möjligt att modellera virvlar på det sättet som jag beskrev.
+
+*****
+
+4.
+
+I den fjärde kategorin representeras allt vatten som partiklar som ömsom trycker och drar i varandra, där interaktionen ofta beskrivs av en Lennard-Jones potential eller linnande. Genom att de trycker på varandra förhindrar man att vattnet trycks ihop och genom att de drar i varandra kan man simulera ytspänning. Den här typen av metoder är väldigt beräkningskrävande då man behöver ganska tätt med partiklar för att kunna skapa en gämn yta, och är tvungen att ha partiklar hela vägen ner under ytan till botten. Därför skulle en av de här metoderna kräva O(n*m)partiklar i mitt fall, där n är ytstorleken och m är havsdjupet, vilket skulle göra att varje tidssteg krävde O(n*m) tid, vilket inte lämpar sig för realtidssimulering av hav.
+
+Den finns metoder för att anpassa storleken på partiklarna till det området som simuleras, dock fungerar de bara så länge som partiklarna inte blandas med varandra, om man inte på något sätt långsamt ändrar storlek på partiklarna efterhand som de sprider sig och blandas med partiklar av annan storlek.
+
+De här metoderna verkar användas mycket inom filmindustrin då det är relativt lätt att skapa verklighetstrogna animationer av vatten som hoppar och skvätten. De kan på ett naturligt sätt bilda tunna vattenskikt då ett vattenflöde slår i en vägg och slungar upp vatten i luften. Partikelmetoder har också använts i samverkan med finita volymmetoden för att få finare detaljer vid gränsskikt och kunna simulera tunna vattenskikt.
+
+*****
+
+Nu tänkte jag kort beskriva de idéer jag har funderat på.
+
+Min första idé var att använda dispersionsrellationen som härleds inom Airy vågteori och att sedan, med hjälp av en metod lik den Erwin Schrödinger använde då han utvecklade schrödingerekvationen, ta fram en partiell differentialekvation som beskriver vågornas rörelse. Jag lyckades få fram en andra gradens partiell differentialekvation som jag kan visa.
+
+För att försäkra mig om att massan konserverades, skulle jag transformera den partiella differentialekvationen för vattenhöjden som var av andra ordningen till två partiella differentialekvationer av första ordningen för vattenhöjden och för det totala horisontella vattenflödet per kvadratmeter. På så sätt skulle bara massa skyfflas runt enligt flödesfältet beskrivning. Den här uppdelningen i två partiella differentialekvationer innebar att jag skulle vara tvungen att använda ett så kallat staggered grid, då jag annars skulle kunna få statiska schackrute-mönster eller ränder på ytan vilket inte är särskilt naturligt. Efter det hade jag tänkt generalisera ekvationerna till en ekvationer som klarade av även varierande vattendjup.
+
+Dock innehöll differentialekvationen en rumslig faltningsoperator som jag tror skulle ha blivit ganska dyr att utvärdera. Man hade visserligen kunnat använda en variant av Fast Multipole Method (FMM) för att utföra faltningen, men kostnaden hade förmodligen fortfarande varit ganska hög, vilket skulle ha gjort simuleringen långsam. Tidskomplexiteten för den här metoden skulle vara O(n) per tidssteg, där n är antalet punkter som vattenytan är diskretiserad med.
+
+Ett annat problem med den här metoden är hur interaktionen med fartyg ska modelleras. Ska vattenhöjden strikt följa skrovet på fartyget och hur vad ska i sådana fall differentialekvationerna modifieras vid randen till fartyget och under skrovet? Om vattenhöjden inte följer skrovet, hur ska vattnet i sådana fall interagera med fartyget över huvud taget?
+
+Den här modellen har jag nu lagt ner. Den har inga direkta fördelar gemtemot min andra idé som jag snart ska beskriva, och det skulle ha inneburit för mycket arbete för en så enkel modell på grund av faltningsoperatorn som jag skulle ha behövt skriva en FMM-algoritm för. Dessutom vet jag inte hur den skulle bete sig i alla lägen, och den är inte perfekt, ens i teorin. Jag tror dock att den skulle bete sig bra, till och med mycket bra så länge den inte behöver interagera med något fartyg, vågorna inte blir så stora att det är risk att de bryter, och bottentopografin är relativt snäll.
+
+*****
+
+Min andra idé vilken jag är inne på nu beskriver en modell som är ett specialfall av finita volymmetoden, där volymselementen är kubiska och vars sidstorlek dubblas regelbundet när man kommer längre och längre ner under vattenytan. Man kan visa att det totala antalet volymselement är begränsat av en geometrisk summa som innehåller antal element på ytan, n, så det totala antalet element är O(n). 
+
+I varje tidssteg ställs en poissonekvation upp för trycket, vilken ser till att det totala flödet in i varje volymselement är noll. Vid de fall rändernas acceleration är känt sätts randvilkoret som att tryckderivatan ska vara minus vattnets desitet gånger accelerationen av randen i normalriktningen. Accelerationen av gränsskikt mot fartyg antas vara kännt sedan föregående tidssteg. Accelerationen av gränsskiktet mot luften är okänd men där ska trycket alltid vara noll om inte luften också ska simuleras. Om luften också ska simuleras (till exempel för att få vindvågor att bildas automatiskt när det blåser) är inte det gränsskiktet någon rand. Då får man istället ha tak och väggar för det luftrum som simuleras som rand; vilkoren för denna får sedan bestämmas efter behov. Den eulerska accelerationen av alla fluider beskrivs av Navier-Stokes ekvationer eller någon förenklad variant och beror på tryckgradienten. Accelerationen av flytande föremål bestäms av gravitationen samt en ytintegral av trycket utmed gränsskiktet. Ändringen av rörelsemängdsmoment bestäms på motsvarande sätt.
+
+Poissonekvationen löses sedan med någon snabb lösare, vilket just nu ser ut att bli en multigrid-lösare, vilket tydligen är det senaste för att snabbt lösa poisson-ekvationer iterativt. En fullständig lösning är inte möjlig i realtid.
+
+Gränsskiktet representeras med volume of fluid method (VOF), vilket innebär att jag använder volymselement som är delvis fyllda med vatten. För att veta vad i elementet som är vatten och vad som är luft används sedan något som kallas för en level set method. Denna kan vara väldigt simpel och bara anta att allt vatten ligger längst ner i elementen, eller lite mer sofistikerad och använda gradienten av utfyllnadsgraden för de intilligande elementen i gränsskiktet, och anpassa en yta i elementet med gradienten som normal som avdelar vatten från luft. Avdelningen mellan luft och vatten används sedan när man förflyffar vätska mellan volymselement för att på så sätt veta när nästa cell ska börja fyllas på, till exempel när vattenytan stiger upp i ett nytt lager av celler.
+
+  Planerat fortsatt tillvägagångssätt
+  -----------------------------------
+
+Som det ser ut nu ska jag snart börja implementera modellen i kod. Det som återstår nu är att ta reda på hur poissonekvationen för trycket ska se ut mer i detalj, hur multigrid-lösaren för poissonekvationen fungerar, vilken level set-metod jag ska använda (även om jag förmodligen kommer att börja implementera den allra simplaste) samt mer i detalj hur vattenmassa skiftas mellan gränsskiktselementen och hur man ser till att ingen element blir överfyllt. Jag måste också fundera ut hur min struktur för att representera volymselement ska se ut för att se elementens position, göra det enkelt att se vilka element som gränsar till varandra samt se till att poissonekvationen kan lösas så snabbt som möjligt. Det ska också gå att mesha om volymselementen på ett lätt sätt mellan varje frame då gränsskiktet mot luften och även de mot fartyg rör på sig.
+
+Under implementationens gång kommer jag förmodligen att göra enkla testproblem för att testa och se att mina slutgiltiga modeller fungerar som de ska.
+
+Språket jag ska koda i är C++ och jag kommer att utveckla modellen i Qt Creator och koda den som som ett API, så att den lätt går att implementera i simulatorprogrammet när den är färdig.
+
+Under tiden kommer jag skriva på raporten vid sidan av med jämna mellanrum, för att notera försök, framsteg, resultat och slutsattser, samt metoder som inte fungerar. I den här raporten kommer det tydligt framgå hur alla de metoder jag har använt mig av fungerar, eller ges referenser till källor där de finns beskrivna.
+
+Planerad litteraturbas
+----------------------
+
+Boktitlar:
+
+* Advances in numerical simulation of nonlinear water waves
+* The interaction of ocean waves and wind
+
++ diverse böcker inom beräkningsbar strömningsmekanik (vilka troligen inte blir så aktuella)
+
+En uppsjö av tidigare forskningsrapporter hämtade från internet som i detalj beskriver alla metoder jag kan tänkas behöva.
+
+Tidplan för examensarbetets genomförande
+----------------------------------------
+
+Startdatum: Tisdag vecka 8 2012 (2012-02-21)
+
+Planerat datum för halvtidskontroll: Fredag vecka 17 2012 (2012-04-27)
+
+Preliminär deadline (allt utom framläggningen): Fredag vecka 28 2012 (2012-07-13)
+
+Planerat datum för framläggning: Fredag vecka 35 2012 (2012-08-31) (var det väl vi sade?)
+
+På fredag den här veckan (vecka 12) är det 16 veckor kvar till deadline, och fem veckor till haltidskontroll. Jag räknar med att börja koda den här eller nästa vecka, och att implementationen ska vara klar några veckor innan deadline så att jag hinner testa och utvärdera modellen. Jag tycker att det är rimligt att ta hälften till två tredjedelar av återstående tid (8–10 veckor) till implementeringen, i vilken finjustering och optimering ingår, och resterande tid (6–8 veckor) till tester och utvärdering. Jag planerar därför preliminärt att vara färdig med implementationen fredag vecka 20. Jag lägger medvetet mycket planerad tid på utvärderingen för att jag ska ha något att ta av om implementationen skulle ta längre tid än planerat.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

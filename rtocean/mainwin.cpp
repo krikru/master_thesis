@@ -56,8 +56,8 @@ void mainwin::closeEvent(QCloseEvent *event)
         if (system.is_operating()) {
             // Ask the user whether to quit the application or not
             QMessageBox msg_box;
-            msg_box.setText("Question to user:");
-            msg_box.setInformativeText("An operation is currently performed by the simulated system. Do you want to abort the operation and quit the application?");
+            msg_box.setText("Operation in process");
+            msg_box.setInformativeText("An operation is currently performed by the simulation. Do you want to abort the operation?");
             msg_box.setStandardButtons(QMessageBox::Abort | QMessageBox::Cancel);
             msg_box.setDefaultButton(QMessageBox::Cancel);
             int result = msg_box.exec();
@@ -109,7 +109,7 @@ void mainwin::do_events()
 {
     base_float_vec2<float> time_per_frame();
 
-    ui->visualization_vw->paintGL();
+    ui->visualization_vw->updateGL();
     QApplication::processEvents(QEventLoop::AllEvents);
 }
 

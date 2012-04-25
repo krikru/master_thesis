@@ -187,7 +187,7 @@ template<typename T>
 inline
 T base_int_vec3<T>::sqr_length() const
 {
-    return (e[0]*e[0] + e[1]*e[1] + e[2]*e[2]);
+    return e[0]*e[0] + e[1]*e[1] + e[2]*e[2];
 }
 
 /****************************************************************

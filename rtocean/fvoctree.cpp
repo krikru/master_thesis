@@ -24,28 +24,14 @@ fvoctree::fvoctree(pftype surface, pftype bottom)
     bottom = bottom;
     surface = surface;
     octcell *c = root = new octcell(1, pfvec(), 0);
-#if  0
-    c->refine();
-    c = c->get_child(octcell::child_index(0, 1, 0));
-    c->refine();
-    c = c->get_child(octcell::child_index(1, 0, 0));
-    c->refine();
-    c = c->get_child(octcell::child_index(0, 1, 0));
-    c->refine();
-    for (int i = 0; i < 2; i++) {
-        c = c->get_child(octcell::child_index(0, 1, 0));
-        c->refine();
-    }
-#else
     refine_subtree(c, surface, bottom, size_accuracy);
     //TODO: Remove the refinement of selected octcells
-#if 1
 #if  NUM_DIMENSIONS == 2
     c->get_child(octcell::child_index_xy(0, 0))->refine();
     //c->get_child(octcell::child_index_xy(1, 0))->refine();
     //c->get_child(octcell::child_index_xy(1, 0))->get_child(octcell::child_index_xy(0, 0))->refine();
     //c->get_child(octcell::child_index_xy(1, 1))->refine();
-#if 1
+#if TEST_REFINING_AND_COARSENING
     c = c->get_child(octcell::child_index_xy(0, 1));
     //c = c->get_child(octcell::child_index_xy(1, 1));
     if (!c) {
@@ -60,9 +46,9 @@ fvoctree::fvoctree(pftype surface, pftype bottom)
         throw logic_error("Node is a leaf! Cannot do what was planned (coarsen it) :P");
     }
     c->coarsen();
-#endif
+#endif // TEST_REFINING_AND_COARSENING
 #elif  NUM_DIMENSIONS == 3
-#if 1
+#if  TEST_REFINING_AND_COARSENING
     c->get_child(octcell::child_index_xyz(1, 0, 0))->refine();
     c->get_child(octcell::child_index_xyz(1, 0, 0))->get_child(octcell::child_index_xyz(0, 0, 0))->refine();
     c->get_child(octcell::child_index_xyz(1, 1, 0))->refine();
@@ -78,15 +64,12 @@ fvoctree::fvoctree(pftype surface, pftype bottom)
         throw logic_error("Node is a leaf! Cannot do what was planned (coarsen it) :P");
     }
     c->coarsen();
-#else
-    //root->coarsen();
-#endif
-#endif
-#endif
+#endif  // TEST_REFINING_AND_COARSENING
+#endif  // NUM_DIMENSIONS == 2, 3
+
 #if  GENERATE_NEIGHBORS_STATICALLY
     generate_leaf_neighbor_lists();
-#endif
-#endif
+#endif  // GENERATE_NEIGHBORS_STATICALLY
 }
 
 fvoctree::~fvoctree()
@@ -102,7 +85,7 @@ fvoctree::~fvoctree()
 
 pftype fvoctree::size_accuracy(pfvec r)
 {
-    return 0.02 + 0.1 * r.e[DIM_X];
+    return SIZE_ACCURACY_FACTOR*(0.02 + 0.1 * r.e[DIM_X]);
 }
 
 /* Returns true if the cell should be removed from the simulation */

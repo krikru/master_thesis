@@ -58,7 +58,7 @@ private:
 
 private:
     /* Private member variables */
-    QTimer frame_timer;
+    GLdouble t;
     int gl_width;
     int gl_height;
     watersystem* system_to_visualize;
