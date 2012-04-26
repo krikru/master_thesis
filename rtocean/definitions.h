@@ -21,7 +21,7 @@
 #define  DEBUG                      1
 #define  RUN_SAFE                   1
 #define  ELABORATE                  0
-#define  NUM_DIMENSIONS             3 /* 2 or 3 */
+#define  NUM_DIMENSIONS             2 /* 2 or 3 */
 //#define  NUM_DIRECTIONS             (2*NUM_DIMENSIONS)
 #define  LOGICAL_AXIS_ORDER         1
 #define  GENERATE_NEIGHBORS_STATICALLY               0
@@ -31,9 +31,14 @@
 #define  FRAME_MS                   (1000/60)
 #define  SIMULATION_TIME_STEP       pftype(FRAME_MS/1000.0) // [s]
 
+/* Grid */
+#define  LOD_LAYER_THICKNESS        2    // [Number of cells]
+#define  SURFACE_HEIGHT             0.65  // [m]
+#define  SURFACE_ACCURACY           0.02 // [m] Maximum size of the surface cells
+
 /* Navier-Stokes */
 #define  USE_ARTIFICIAL_COMPRESSIBILITY              1
-#define  ARTIFICIAL_COMPRESSIBILITY_FACTOR           1.0
+#define  ARTIFICIAL_COMPRESSIBILITY_FACTOR           1.0 // [Pa] How much the pressure would (Delta pressure = ARTIFICIAL_COMPRESSIBILITY_FACTOR * Delta dencity / dencity)
 
 /* VIsualization */
 #define  TEST_DEPTH                 1
@@ -41,11 +46,11 @@
 #define  DRAW_SMOOTH_LINES          0
 #define  LINE_WIDTH                 (DRAW_SMOOTH_LINES ? 1.5 : 1)
 #define  DRAW_CELL_CUBES            1
-#define  DRAW_PARENT_CELLS          1
+#define  DRAW_PARENT_CELLS          0
 #define  DRAW_ONLY_SURFACE_CELLS    0
-#define  DRAW_WATER_LEVEL           0
-#define  DRAW_NEIGHBOR_CONNECTIONS  1
-#define  VISUALIZE_ONLY_FINEST_NEIGHBOR_CONNECTIONS  0
+#define  DRAW_WATER_LEVEL           1
+#define  DRAW_NEIGHBOR_CONNECTIONS  0
+#define  VISUALIZE_ONLY_FINEST_NEIGHBOR_CONNECTIONS  1
 #define  MARK_MIDDLE_OF_CONNECTION  0
 #define  MIDDLE_MARK_SIZE           0.05
 #define  RANDOMIZE_NEIGHBOR_CONNECTION_MIDPOINTS     0
@@ -155,11 +160,11 @@ enum DIMENSION {
 
 #if    NUM_DIMENSIONS == 2
 #define  HORIZONTAL_DIMENSION1  DIM_X
-#define  UP_DIMENSION           DIM_Y
+#define  VERTICAL_DIMENSION     DIM_Y
 #elif  NUM_DIMENSIONS == 3
 #define  HORIZONTAL_DIMENSION1  DIM_X
 #define  HORIZONTAL_DIMENSION2  DIM_Y
-#define  UP_DIMENSION           DIM_Z
+#define  VERTICAL_DIMENSION     DIM_Z
 #endif
 
 ////////////////////////////////////////////////////////////////

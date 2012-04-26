@@ -77,7 +77,7 @@ public:
     /* Geometry */
     pfvec  cell_center();
     pftype get_side_area();
-    pftype get_cell_volume();
+    pftype get_total_volume();
     pftype get_volume_of_fluid();
 
     /* Level of detail */
@@ -113,6 +113,8 @@ public:
     static uint child_index_offset(uint dim);
     static bool positive_direction_of_child(uint child_index, uint dim);
     static uint child_index_flip_direction(uint child_index, uint dim);
+    static pftype cube_side_area(pftype side_length);
+    static pftype cube_volume(pftype side_length);
 
 private:
     /******************************
@@ -135,7 +137,7 @@ private:
 };
 
 ////////////////////////////////////////////////////////////////
-// INLINE MEMBER FUNCTIONS
+// INLINE NON-STATIC MEMBER FUNCTIONS
 ////////////////////////////////////////////////////////////////
 
 /************
@@ -157,13 +159,13 @@ pfvec octcell::cell_center()
 inline
 pftype octcell::get_side_area()
 {
-    return inline_int_pow(s, NUM_DIMENSIONS-1);
+    return cube_side_area(s);
 }
 
 inline
-pftype octcell::get_cell_volume()
+pftype octcell::get_total_volume()
 {
-    return inline_int_pow(s, NUM_DIMENSIONS);
+    return cube_volume(s);
 }
 
 inline
@@ -173,7 +175,7 @@ pftype octcell::get_volume_of_fluid()
         return vof;
     }
     else {
-        return get_cell_volume();
+        return get_total_volume();
     }
 }
 
@@ -257,6 +259,10 @@ void octcell::remove_child(uint idx)
     set_child(idx, 0);
 }
 
+////////////////////////////////////////////////////////////////
+// INLINE STATIC MEMBER FUNCTIONS
+////////////////////////////////////////////////////////////////
+
 /*************
  * Neighbors *
  *************/
@@ -316,6 +322,20 @@ inline
 uint octcell::child_index_flip_direction(uint child_index, uint dim)
 {
     return child_index ^ (1 << dim);
+}
+
+/* Geometry */
+
+inline
+pftype octcell::cube_side_area(pftype side_length)
+{
+    return inline_int_pow(side_length, NUM_DIMENSIONS-1);
+}
+
+inline
+pftype octcell::cube_volume(pftype side_length)
+{
+    return inline_int_pow(side_length, NUM_DIMENSIONS);
 }
 
 #endif // OCTCELL_H

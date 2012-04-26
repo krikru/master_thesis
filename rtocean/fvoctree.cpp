@@ -27,11 +27,11 @@ fvoctree::fvoctree(pftype surface, pftype bottom)
     refine_subtree(c, surface, bottom, size_accuracy);
     //TODO: Remove the refinement of selected octcells
 #if  NUM_DIMENSIONS == 2
+#if TEST_REFINING_AND_COARSENING
     c->get_child(octcell::child_index_xy(0, 0))->refine();
     //c->get_child(octcell::child_index_xy(1, 0))->refine();
     //c->get_child(octcell::child_index_xy(1, 0))->get_child(octcell::child_index_xy(0, 0))->refine();
     //c->get_child(octcell::child_index_xy(1, 1))->refine();
-#if TEST_REFINING_AND_COARSENING
     c = c->get_child(octcell::child_index_xy(0, 1));
     //c = c->get_child(octcell::child_index_xy(1, 1));
     if (!c) {
@@ -85,7 +85,21 @@ fvoctree::~fvoctree()
 
 pftype fvoctree::size_accuracy(pfvec r)
 {
-    return SIZE_ACCURACY_FACTOR*(0.02 + 0.1 * r.e[DIM_X]);
+    /*
+#define  LOD_LAYER_THICKNESS        2
+#define  SURFACE_HEIGHT             0.5 // [m]
+#define  SURFACE_ACCURACY           0.02 // [m] Maximum size of the surface cells
+      */
+
+    if (r.e[VERTICAL_DIMENSION] < SURFACE_HEIGHT) {
+        /* Cell is under the surface */
+        return SURFACE_ACCURACY + (SURFACE_HEIGHT-r.e[VERTICAL_DIMENSION])
+                * (1/(LOD_LAYER_THICKNESS + 0.5));
+    }
+    else {
+        return SURFACE_ACCURACY;
+    }
+    //return SIZE_ACCURACY_FACTOR*(0.02 + 0.1 * r.e[DIM_X]);
 }
 
 /* Returns true if the cell should be removed from the simulation */
@@ -96,7 +110,7 @@ bool fvoctree::refine_subtree(octcell* c, pftype surface, pftype bottom, pftype 
     static int num_leaf_cells = 1;
     pftype s = c->s;
 
-    pftype lowest_cell_height = c->r[UP_DIMENSION];
+    pftype lowest_cell_height = c->r[VERTICAL_DIMENSION];
 #if    NUM_DIMENSIONS == 2
     pftype min_surf_height = 0.55 + 0.2*c->r[HORIZONTAL_DIMENSION1];
     pftype max_surf_height = 0.55 + 0.2*(c->r[HORIZONTAL_DIMENSION1]+s);
@@ -108,9 +122,14 @@ bool fvoctree::refine_subtree(octcell* c, pftype surface, pftype bottom, pftype 
         // Cell is over the surface, remove it
         return true;
     }
+#if 0
     if (lowest_cell_height + s <= min_surf_height     ||  // Cell is under the surface, keep it but stop refining
         s <= accuracy_function(c->cell_center()) ) { // Accuracy is good enough, stop refining
-        // Calculate properties
+#else
+    if (s <= accuracy_function(c->cell_center())) { // Accuracy is good enough, stop refining
+#endif
+        /* Stop refining */
+        /* Calculate properties */
         pftype mean_height = lowest_cell_height + s/2;
         pftype mean_surface_height = (min_surf_height + max_surf_height)/2;
         c->rp = (mean_surface_height - mean_height) * P_G;
@@ -118,13 +137,17 @@ bool fvoctree::refine_subtree(octcell* c, pftype surface, pftype bottom, pftype 
             /* Cell is a surface cell */
             c->surface_cell = true;
             /* Estimate vof */
-            pftype mean_diff = (MAX(min_surf_height - lowest_cell_height, 0) + MIN(max_surf_height - lowest_cell_height, s))/2;
-            c->vof = mean_diff * c->get_side_area();
+            pftype mean_height_diff = (MAX(min_surf_height - lowest_cell_height, 0) + MIN(max_surf_height - lowest_cell_height, s))/2;
+            c->vof = mean_height_diff * c->get_side_area();
 #if  DEBUG
-            if (c->vof < 0 || c->vof > c->get_cell_volume()) {
+            if (c->vof < 0 || c->vof > c->get_total_volume()) {
                 throw logic_error("VOF incorrectly calculated");
             }
 #endif
+        }
+        else {
+            /* Cell is not a surface cell */
+            c->surface_cell = false;
         }
         return false;
     }
