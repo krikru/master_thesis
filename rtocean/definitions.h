@@ -29,7 +29,8 @@
 
 /* Program speed */
 #define  FRAME_MS                   (1000/60)
-#define  SIMULATION_TIME_STEP       pftype(FRAME_MS/1000.0) // [s]
+//#define  SIMULATION_TIME_STEP       (FRAME_MS/1000.0) // [s]
+#define  SIMULATION_TIME_STEP       .001 // [s]
 
 /* Grid */
 #define  MIN_LOD_LAYER_THICKNESS    1    // [Number of cells]
@@ -163,7 +164,7 @@ enum DIMENSION {
 #endif
 
 #if    NUM_DIMENSIONS == 2
-#define  HORIZONTAL_DIMENSION1  DIM_X
+#define  HORIZONTAL_DIMENSION   DIM_X
 #define  VERTICAL_DIMENSION     DIM_Y
 #elif  NUM_DIMENSIONS == 3
 #define  HORIZONTAL_DIMENSION1  DIM_X

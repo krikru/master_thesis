@@ -160,12 +160,20 @@ void viswidget::quick_draw_cell(octcell* cell)
 void viswidget::quick_draw_cell_water_level(octcell* cell)
 {
 #if    NUM_DIMENSIONS == 2
-    pftype x1 = cell->r.e[DIM_X];
-    //TODO: Optimize
-    pftype x2 = (2*cell->cell_center() - cell->r).e[DIM_X];
-    pftype y = cell->r.e[DIM_Y] + cell->vof / cell->get_side_area();
-    quick_draw_line(x1, y, 0, x2, y, 0);
+    pftype h_min = cell->r.e[HORIZONTAL_DIMENSION];
+    pftype h_max = h_min + cell->s;
+    pftype vert = cell->r.e[VERTICAL_DIMENSION] + cell->vof / cell->get_side_area();
+    quick_draw_line(h_min, vert, 0, h_max, vert, 0);
 #elif  NUM_DIMENSIONS == 3
+    pftype h1_min = cell->r.e[HORIZONTAL_DIMENSION1];
+    pftype h1_max = h1_min + cell->s;
+    pftype h2_min = cell->r.e[HORIZONTAL_DIMENSION2];
+    pftype h2_max = h2_min + cell->s;
+    pftype vert = cell->r.e[VERTICAL_DIMENSION] + cell->vof / cell->get_side_area();
+    quick_draw_line(h1_min, h2_min, vert, h1_max, h2_min, vert);
+    quick_draw_line(h1_max, h2_min, vert, h1_max, h2_max, vert);
+    quick_draw_line(h1_max, h2_max, vert, h1_min, h2_max, vert);
+    quick_draw_line(h1_min, h2_max, vert, h1_min, h2_min, vert);
 #endif
 }
 
@@ -373,7 +381,7 @@ void viswidget::visualize_fvoctree(fvoctree *tree)
     draw_water_level_recursively(tree->root);
 #endif
 #if  DRAW_CELL_CUBES
-#if  !(TEST_DEPTH && DRAW_CHILD_CELLS_FIRST_IF_DEPTH_TESTING) && DRAW_PARENT_CELLS
+#if  !(TEST_DEPTH && DRAW_CHILD_CELLS_FIRST_IF_DEPTH_TESTING) && DRAW_PARENT_CELLS && !DRAW_ONLY_SURFACE_CELLS
     /* Draw parent cells */
     set_line_style(LINE_WIDTH, PARENT_CUBE_R, PARENT_CUBE_G, PARENT_CUBE_B, PARENT_CUBE_A);
     set_up_model_view_matrix(PARENT_CUBE_DIST_SCALING);
@@ -387,7 +395,7 @@ void viswidget::visualize_fvoctree(fvoctree *tree)
     set_line_style(LINE_WIDTH, LEAF_CUBE_R, LEAF_CUBE_G, LEAF_CUBE_B, LEAF_CUBE_A);
     set_up_model_view_matrix();
     visualize_leaf_cells_recursively(tree->root);
-#if DRAW_PARENT_CELLS
+#if DRAW_PARENT_CELLS && !DRAW_ONLY_SURFACE_CELLS
     /* Draw parent cells */
     set_line_style(LINE_WIDTH, PARENT_CUBE_R, PARENT_CUBE_G, PARENT_CUBE_B, PARENT_CUBE_A);
     set_up_model_view_matrix(PARENT_CUBE_DIST_SCALING);

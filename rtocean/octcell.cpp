@@ -46,6 +46,7 @@ octcell::~octcell()
  * Simulation *
  **************/
 
+#if 0
 void octcell::update_pressure()
 {
     /* No advection term implemented */
@@ -70,6 +71,7 @@ void octcell::update_pressure()
     Artificial compressibility not used; not yet supported
 #endif
 }
+#endif
 
 /*******************
  * Level of detail *

@@ -106,8 +106,8 @@ bool fvoctree::refine_subtree(octcell* c, pftype surface, pftype bottom, pftype 
 
     pftype lowest_cell_height = c->r[VERTICAL_DIMENSION];
 #if    NUM_DIMENSIONS == 2
-    pftype min_surf_height = 0.5501 + 0.2*c->r[HORIZONTAL_DIMENSION1];
-    pftype max_surf_height = 0.5501 + 0.2*(c->r[HORIZONTAL_DIMENSION1]+s);
+    pftype min_surf_height = 0.5501 + 0.2*c->r[HORIZONTAL_DIMENSION];
+    pftype max_surf_height = 0.5501 + 0.2*(c->r[HORIZONTAL_DIMENSION]+s);
 #elif  NUM_DIMENSIONS == 3
     pftype min_surf_height = 0.55 + 0.2*c->r[HORIZONTAL_DIMENSION1] + 0.1*c->r[HORIZONTAL_DIMENSION2];
     pftype max_surf_height = 0.55 + 0.2*(c->r[HORIZONTAL_DIMENSION1]+s) + 0.1*(c->r[HORIZONTAL_DIMENSION2]+s);
@@ -145,7 +145,7 @@ bool fvoctree::refine_subtree(octcell* c, pftype surface, pftype bottom, pftype 
         }
         return false;
     }
-    // Cell is a surface cell and not fine enough, refine it and treat the children recursivelly
+    // Cell is not fine enough, refine it and then handle the children recursivelly
     c->refine();
     tot_num_cells += octcell::MAX_NUM_CHILDREN;
     num_leaf_cells += octcell::MAX_NUM_CHILDREN - 1;
@@ -162,6 +162,9 @@ bool fvoctree::refine_subtree(octcell* c, pftype surface, pftype bottom, pftype 
     cout << "Number of leaf cells:  " << num_leaf_cells << endl;
     cout << endl;
 #endif
+    if (!c->get_number_of_children()) {
+        throw logic_error("Cell has no children and is not a leaf cell, yet it is allowed to exist");
+    }
 #endif
     return 0;
 }

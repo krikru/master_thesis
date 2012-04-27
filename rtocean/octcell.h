@@ -81,7 +81,8 @@ public:
     pftype get_volume_of_fluid();
 
     /* Simulation */
-    void update_pressure();
+    //void update_pressure();
+    void un_surface_cell();
 
     /* Level of detail */
 
@@ -91,6 +92,7 @@ public:
     void make_leaf();
     octcell* get_child(uint idx);
     octcell* set_child(uint idx, octcell* child);
+    uint get_number_of_children();
     void refine(); // Creates a new full child array
     void coarsen(); // Decreases the level of detail to this level by removing the children and the child array
     void remove_child(uint idx);
@@ -182,6 +184,16 @@ pftype octcell::get_volume_of_fluid()
     }
 }
 
+/**************
+ * Simulation *
+ **************/
+
+inline
+void octcell::un_surface_cell()
+{
+    surface_cell = false;
+}
+
 /************
  * Children *
  ************/
@@ -239,6 +251,22 @@ octcell* octcell::set_child(uint idx, octcell* child) {
     }
 #endif
     return _c[idx] = child;
+}
+
+inline
+uint octcell::get_number_of_children() {
+#if  DEBUG
+    if (is_leaf()) {
+        throw logic_error("Trying to get number of children for a leaf cell");
+    }
+#endif
+    uint num = 0;
+    for (uint idx = 0; idx < MAX_NUM_CHILDREN; idx++) {
+        if (get_child(idx)) {
+            num++;
+        }
+    }
+    return num;
 }
 
 inline

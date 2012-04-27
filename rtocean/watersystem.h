@@ -67,7 +67,7 @@ private:
     void _evolve();
 
     /* Simulation */
-    void advect_and_update_pressure();
+    bool advect_and_update_pressure_recursively(octcell* cell);
     void update_velocities_recursively(octcell* cell);
 
     /* Thread safety */
