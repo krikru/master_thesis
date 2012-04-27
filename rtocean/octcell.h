@@ -80,6 +80,9 @@ public:
     pftype get_total_volume();
     pftype get_volume_of_fluid();
 
+    /* Simulation */
+    void update_pressure();
+
     /* Level of detail */
 
     /* Children */

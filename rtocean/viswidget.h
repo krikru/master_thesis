@@ -36,8 +36,10 @@ public slots:
 public:
 
 private:
-    void quick_draw_cell(octcell* cell, bool draw_water_level = false);
+    void quick_draw_cell(octcell* cell);
+    void quick_draw_cell_water_level(octcell* cell);
     void set_up_model_view_matrix(GLdouble scale_factor = 1);
+    void draw_water_level_recursively(octcell* cell);
     void visualize_leaf_cells_recursively(octcell* cell);
     void visualize_parent_cells_recursively(octcell* cell);
     void visualize_neighbor_connections_recursively(octcell* cell);

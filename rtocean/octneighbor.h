@@ -64,9 +64,9 @@ public:
     /* Public methods */
     void set(octcell* neighbor_cell, nlnode* corresponding_neighbor_list_entry, uint dimension, bool positive_direction, pftype water_velocity_in_the_positive_direction, pfvec distance, pftype distance_absolute_value, pftype cell_face_area);
 
-    /* Navier-Stokes */
+    /* Simulation */
     bool should_calculate_new_velocity();
-    void quick_update_velocity(octcell* cell1, octcell* cell2);
+    void update_velocity(octcell* cell1, octcell* cell2, pftype dt);
 
 private:
     /*************************

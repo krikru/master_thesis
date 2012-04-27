@@ -129,7 +129,7 @@ void viswidget::set_system_to_visualize(watersystem* system)
 // PRIVATE FUNCTIONS
 ////////////////////////////////////////////////////////////////
 
-void viswidget::quick_draw_cell(octcell* cell, bool draw_water_level)
+void viswidget::quick_draw_cell(octcell* cell)
 {
     pfvec r1 = cell->r;
     //TODO: Optimize
@@ -139,10 +139,6 @@ void viswidget::quick_draw_cell(octcell* cell, bool draw_water_level)
     quick_draw_line(r2[DIM_X], r1[DIM_Y], 0, r2[DIM_X], r2[DIM_Y], 0);
     quick_draw_line(r2[DIM_X], r2[DIM_Y], 0, r1[DIM_X], r2[DIM_Y], 0);
     quick_draw_line(r1[DIM_X], r2[DIM_Y], 0, r1[DIM_X], r1[DIM_Y], 0);
-    if (draw_water_level) {
-        pftype height = cell->vof / cell->get_side_area();
-        quick_draw_line(r1[DIM_X], r1[DIM_Y] + height, 0, r2[DIM_X], r1[DIM_Y] + height, 0);
-    }
 #elif  NUM_DIMENSIONS == 3
     quick_draw_line(r1[DIM_X], r1[DIM_Y], r1[DIM_Z], r2[DIM_X], r1[DIM_Y], r1[DIM_Z]);
     quick_draw_line(r1[DIM_X], r1[DIM_Y], r1[DIM_Z], r1[DIM_X], r2[DIM_Y], r1[DIM_Z]);
@@ -158,6 +154,18 @@ void viswidget::quick_draw_cell(octcell* cell, bool draw_water_level)
     quick_draw_line(r1[DIM_X], r2[DIM_Y], r2[DIM_Z], r2[DIM_X], r2[DIM_Y], r2[DIM_Z]);
     quick_draw_line(r2[DIM_X], r1[DIM_Y], r2[DIM_Z], r2[DIM_X], r2[DIM_Y], r2[DIM_Z]);
     quick_draw_line(r2[DIM_X], r2[DIM_Y], r1[DIM_Z], r2[DIM_X], r2[DIM_Y], r2[DIM_Z]);
+#endif
+}
+
+void viswidget::quick_draw_cell_water_level(octcell* cell)
+{
+#if    NUM_DIMENSIONS == 2
+    pftype x1 = cell->r.e[DIM_X];
+    //TODO: Optimize
+    pftype x2 = (2*cell->cell_center() - cell->r).e[DIM_X];
+    pftype y = cell->r.e[DIM_Y] + cell->vof / cell->get_side_area();
+    quick_draw_line(x1, y, 0, x2, y, 0);
+#elif  NUM_DIMENSIONS == 3
 #endif
 }
 
@@ -197,13 +205,29 @@ void viswidget::visualize_leaf_cells_recursively(octcell* cell)
             return;
         }
 #endif
-        quick_draw_cell(cell, DRAW_WATER_LEVEL);
+        quick_draw_cell(cell);
         return;
     }
 
     for (uint i = 0; i < octcell::MAX_NUM_CHILDREN; i++) {
         if (cell->get_child(i)) {
             visualize_leaf_cells_recursively(cell->get_child(i));
+        }
+    }
+}
+
+void viswidget::draw_water_level_recursively(octcell* cell)
+{
+    if (cell->is_leaf()) {
+        if (cell->surface_cell) {
+            quick_draw_cell_water_level(cell);
+        }
+        return;
+    }
+
+    for (uint i = 0; i < octcell::MAX_NUM_CHILDREN; i++) {
+        if (cell->get_child(i)) {
+            draw_water_level_recursively(cell->get_child(i));
         }
     }
 }
@@ -344,6 +368,10 @@ void viswidget::visualize_fvoctree(fvoctree *tree)
         return;
     }
     glPushAttrib(GL_ALL_ATTRIB_BITS);
+#if DRAW_WATER_LEVEL
+    set_line_style(LINE_WIDTH, SURFACE_R, SURFACE_G, SURFACE_B, SURFACE_A);
+    draw_water_level_recursively(tree->root);
+#endif
 #if  DRAW_CELL_CUBES
 #if  !(TEST_DEPTH && DRAW_CHILD_CELLS_FIRST_IF_DEPTH_TESTING) && DRAW_PARENT_CELLS
     /* Draw parent cells */

@@ -42,6 +42,35 @@ octcell::~octcell()
 // PUBLIC NON-STATIC METHODS
 ////////////////////////////////////////////////////////////////
 
+/**************
+ * Simulation *
+ **************/
+
+void octcell::update_pressure()
+{
+    /* No advection term implemented */
+#if  USE_ARTIFICIAL_COMPRESSIBILITY
+    if (surface_cell) {
+        /* Assume a pressure that is increasing linearly from the surface and down; allow negative pressures for points above the surface */
+        rp = (vof/get_side_area() - 0.5*s) * P_G;
+    }
+    else {
+        pftype rp_increase = 0;
+        nlset lists;
+        lists.add_neighbor_list(&neighbor_lists[NL_HIGHER_LEVEL_OF_DETAIL]);
+        lists.add_neighbor_list(&neighbor_lists[NL_SAME_LEVEL_OF_DETAIL_LEAF]);
+        lists.add_neighbor_list(&neighbor_lists[NL_LOWER_LEVEL_OF_DETAIL_LEAF]);
+        for (nlnode* node = lists.get_first_node(); node; node = lists.get_next_node()) {
+            rp_increase += (node->v.pos_dir ? -1 : 1) * node->v.vel * node->v.cf_area;
+        }
+        rp_increase /= get_total_volume();
+        rp += rp_increase;
+    }
+#else
+    Artificial compressibility not used; not yet supported
+#endif
+}
+
 /*******************
  * Level of detail *
  *******************/

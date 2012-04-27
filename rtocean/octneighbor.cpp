@@ -35,7 +35,9 @@ void octneighbor::set(octcell* neighbor_cell, nlnode* corresponding_neighbor_lis
     cf_area  = cell_face_area                   ;
 }
 
-void quick_update_velocity(octcell* cell1, octcell* cell2)
+void octneighbor::update_velocity(octcell* cell1, octcell* cell2, pftype dt)
 {
-    //vel +=
+    /* No advection term implemented */
+    vel += (cell1->rp - cell2->rp - dist[VERTICAL_DIMENSION] * P_G) / dist_abs * dt;
+    cnle->v.vel = vel;
 }

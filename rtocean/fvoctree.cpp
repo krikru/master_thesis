@@ -85,16 +85,10 @@ fvoctree::~fvoctree()
 
 pftype fvoctree::size_accuracy(pfvec r)
 {
-    /*
-#define  LOD_LAYER_THICKNESS        2
-#define  SURFACE_HEIGHT             0.5 // [m]
-#define  SURFACE_ACCURACY           0.02 // [m] Maximum size of the surface cells
-      */
-
     if (r.e[VERTICAL_DIMENSION] < SURFACE_HEIGHT) {
         /* Cell is under the surface */
         return SURFACE_ACCURACY + (SURFACE_HEIGHT-r.e[VERTICAL_DIMENSION])
-                * (1/(LOD_LAYER_THICKNESS + 0.5));
+                * (1/(MIN_LOD_LAYER_THICKNESS + 0.5));
     }
     else {
         return SURFACE_ACCURACY;
@@ -112,8 +106,8 @@ bool fvoctree::refine_subtree(octcell* c, pftype surface, pftype bottom, pftype 
 
     pftype lowest_cell_height = c->r[VERTICAL_DIMENSION];
 #if    NUM_DIMENSIONS == 2
-    pftype min_surf_height = 0.55 + 0.2*c->r[HORIZONTAL_DIMENSION1];
-    pftype max_surf_height = 0.55 + 0.2*(c->r[HORIZONTAL_DIMENSION1]+s);
+    pftype min_surf_height = 0.5501 + 0.2*c->r[HORIZONTAL_DIMENSION1];
+    pftype max_surf_height = 0.5501 + 0.2*(c->r[HORIZONTAL_DIMENSION1]+s);
 #elif  NUM_DIMENSIONS == 3
     pftype min_surf_height = 0.55 + 0.2*c->r[HORIZONTAL_DIMENSION1] + 0.1*c->r[HORIZONTAL_DIMENSION2];
     pftype max_surf_height = 0.55 + 0.2*(c->r[HORIZONTAL_DIMENSION1]+s) + 0.1*(c->r[HORIZONTAL_DIMENSION2]+s);

@@ -66,6 +66,10 @@ private:
     /* Control */
     void _evolve();
 
+    /* Simulation */
+    void advect_and_update_pressure();
+    void update_velocities_recursively(octcell* cell);
+
     /* Thread safety */
     void start_operation();
     void finish_operation();

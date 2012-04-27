@@ -32,7 +32,7 @@
 #define  SIMULATION_TIME_STEP       pftype(FRAME_MS/1000.0) // [s]
 
 /* Grid */
-#define  LOD_LAYER_THICKNESS        2    // [Number of cells]
+#define  MIN_LOD_LAYER_THICKNESS    1    // [Number of cells]
 #define  SURFACE_HEIGHT             0.65  // [m]
 #define  SURFACE_ACCURACY           0.02 // [m] Maximum size of the surface cells
 
@@ -46,7 +46,7 @@
 #define  DRAW_SMOOTH_LINES          0
 #define  LINE_WIDTH                 (DRAW_SMOOTH_LINES ? 1.5 : 1)
 #define  DRAW_CELL_CUBES            1
-#define  DRAW_PARENT_CELLS          0
+#define  DRAW_PARENT_CELLS          1
 #define  DRAW_ONLY_SURFACE_CELLS    0
 #define  DRAW_WATER_LEVEL           1
 #define  DRAW_NEIGHBOR_CONNECTIONS  0
@@ -74,6 +74,10 @@ const float  BACKGROUND_R           = BACKGROUND_BRIGHTNESS;
 const float  BACKGROUND_G           = BACKGROUND_BRIGHTNESS;
 const float  BACKGROUND_B           = BACKGROUND_BRIGHTNESS;
 const float  BACKGROUND_A           = 1;
+const float  SURFACE_R              = 0;
+const float  SURFACE_G              = 0;
+const float  SURFACE_B              = 1;
+const float  SURFACE_A              = 1;
 const float  LEAF_CUBE_R            = LEAF_CUBE_BRIGHTNESS;
 const float  LEAF_CUBE_G            = LEAF_CUBE_BRIGHTNESS;
 const float  LEAF_CUBE_B            = LEAF_CUBE_BRIGHTNESS;

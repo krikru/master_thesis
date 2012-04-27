@@ -70,6 +70,36 @@ int watersystem::run_simulation(pftype time_step)
 void watersystem::_evolve()
 {
     t += dt;
+    advect_and_update_pressure();
+    update_velocities_recursively(w->root);
+}
+
+void watersystem::advect_and_update_pressure()
+{
+}
+
+void watersystem::update_velocities_recursively(octcell* cell)
+{
+    if (cell->has_child_array()) {
+        for (uint idx = 0; idx < octcell::MAX_NUM_CHILDREN; idx++) {
+            octcell* c = cell->get_child(idx);
+            if (c) {
+                /* Child exists */
+                update_velocities_recursively(c);
+            }
+        }
+    }
+    else {
+        nlset lists;
+        lists.add_neighbor_list(&cell->neighbor_lists[NL_HIGHER_LEVEL_OF_DETAIL]);
+        lists.add_neighbor_list(&cell->neighbor_lists[NL_SAME_LEVEL_OF_DETAIL_LEAF]);
+        lists.add_neighbor_list(&cell->neighbor_lists[NL_LOWER_LEVEL_OF_DETAIL_LEAF]);
+        for (nlnode* node = lists.get_first_node(); node; node = lists.get_next_node()) {
+            if (node->v.should_calculate_new_velocity()) {
+                node->v.update_velocity(cell, node->v.n, dt);
+            }
+        }
+    }
 }
 
 /* Thread safety */
