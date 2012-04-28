@@ -75,7 +75,7 @@ public:
      *****************************/
 
     /* Geometry */
-    pfvec  cell_center();
+    pfvec  get_cell_center();
     pftype get_side_area();
     pftype get_total_volume();
     pftype get_volume_of_fluid();
@@ -150,7 +150,7 @@ private:
  ************/
 
 inline
-pfvec octcell::cell_center()
+pfvec octcell::get_cell_center()
 {
     pftype s_2 = 0.5 * s;
     //TODO: Create function for generating the vector added to r

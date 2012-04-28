@@ -54,6 +54,7 @@ void mainwin::closeEvent(QCloseEvent *event)
     try
     {
         if (system.is_operating()) {
+#if 0
             // Ask the user whether to quit the application or not
             QMessageBox msg_box;
             msg_box.setText("Operation in process");
@@ -65,10 +66,9 @@ void mainwin::closeEvent(QCloseEvent *event)
                 event->ignore();
                 return;
             }
-            else {
-                system.abort_ongoing_operation();
-                ui->statusBar->showMessage("Aborting operation...");
-            }
+#endif
+            system.abort_ongoing_operation();
+            ui->statusBar->showMessage("Aborting operation...");
         }
     }
     catch (std::exception &e) {

@@ -18,6 +18,13 @@ using std::endl;
 
 // Own includes
 #include "message_handler.h"
+#include "base_float_vec3.h"
+
+////////////////////////////////////////////////////////////////
+// TYPEDEFS
+////////////////////////////////////////////////////////////////
+
+typedef base_float_vec3<GLfloat> color3;
 
 ////////////////////////////////////////////////////////////////
 // STATIC VARIABLES
@@ -129,11 +136,75 @@ void viswidget::set_system_to_visualize(watersystem* system)
 // PRIVATE FUNCTIONS
 ////////////////////////////////////////////////////////////////
 
+
+void viswidget::draw_pressure(octcell* cell)
+{
+    /* Calculate color */
+    /*
+     * In rising order: White, blue, cyan, green, yellow, red, black
+     */
+    const uint NUM_TRANSITIONS = 6;
+    const color3 colors[] = {color3(1, 1, 1),
+                             color3(0, 0, 1),
+                             color3(0, 1, 1),
+                             color3(0, 1, 0),
+                             color3(1, 1, 0),
+                             color3(1, 0, 0),
+                             color3(0, 0, 0)};
+    pftype q = NUM_TRANSITIONS * (cell->rp / P_G - (SURFACE_HEIGHT - cell->get_cell_center().e[VERTICAL_DIMENSION]) + 0.5);
+    q = MAX(q, 0);
+    uint idx1 = uint(q);
+    uint idx2 = MIN(idx1 + 1, NUM_TRANSITIONS);
+    q -= idx1;
+    color3 c = (1-q)*colors[idx1] + q*colors[idx2];
+    quick_set_color(c[0], c[1], c[2], 1);
+
+#if    NUM_DIMENSIONS == 2
+    /* Vertices */
+    pfvec p00 = cell->r;
+    pfvec p01 = p00;
+    p01[DIM_X] += cell->s;
+    pfvec p10 = p00;
+    p10[DIM_Y] += cell->s;
+    pfvec p11 = p10 + p01 - p00;
+
+    /* Draw triangle*/
+    quick_draw_triangle(p00, p01, p10);
+    quick_draw_triangle(p11, p10, p01);
+
+#elif  NUM_DIMENSIONS == 3
+    /* Don't draw pressure */
+#endif
+}
+
+void viswidget::quick_draw_cell_water_level(octcell* cell)
+{
+#if    NUM_DIMENSIONS == 2
+    pfvec p0 = cell->r;
+    p0.e[VERTICAL_DIMENSION] += cell->vof / cell->get_side_area();
+    pfvec p1 = p0;
+    p1.e[HORIZONTAL_DIMENSION1] += cell->s;
+    quick_draw_line(p0, p1);
+#elif  NUM_DIMENSIONS == 3
+    pfvec p00 = cell->r;
+    p00.e[VERTICAL_DIMENSION] += cell->vof / cell->get_side_area();
+    pfvec p01 = p00;
+    p01.e[HORIZONTAL_DIMENSION1] += cell->s;
+    pfvec p10 = p00;
+    p10.e[HORIZONTAL_DIMENSION2] += cell->s;
+    pfvec p11 = p10 + p01 - p00;
+    quick_draw_line(p00, p01);
+    quick_draw_line(p01, p11);
+    quick_draw_line(p11, p10);
+    quick_draw_line(p10, p00);
+#endif
+}
+
 void viswidget::quick_draw_cell(octcell* cell)
 {
     pfvec r1 = cell->r;
     //TODO: Optimize
-    pfvec r2 = 2*cell->cell_center() - cell->r;
+    pfvec r2 = 2*cell->get_cell_center() - cell->r;
 #if    NUM_DIMENSIONS == 2
     quick_draw_line(r1[DIM_X], r1[DIM_Y], 0, r2[DIM_X], r1[DIM_Y], 0);
     quick_draw_line(r2[DIM_X], r1[DIM_Y], 0, r2[DIM_X], r2[DIM_Y], 0);
@@ -154,26 +225,6 @@ void viswidget::quick_draw_cell(octcell* cell)
     quick_draw_line(r1[DIM_X], r2[DIM_Y], r2[DIM_Z], r2[DIM_X], r2[DIM_Y], r2[DIM_Z]);
     quick_draw_line(r2[DIM_X], r1[DIM_Y], r2[DIM_Z], r2[DIM_X], r2[DIM_Y], r2[DIM_Z]);
     quick_draw_line(r2[DIM_X], r2[DIM_Y], r1[DIM_Z], r2[DIM_X], r2[DIM_Y], r2[DIM_Z]);
-#endif
-}
-
-void viswidget::quick_draw_cell_water_level(octcell* cell)
-{
-#if    NUM_DIMENSIONS == 2
-    pftype h_min = cell->r.e[HORIZONTAL_DIMENSION];
-    pftype h_max = h_min + cell->s;
-    pftype vert = cell->r.e[VERTICAL_DIMENSION] + cell->vof / cell->get_side_area();
-    quick_draw_line(h_min, vert, 0, h_max, vert, 0);
-#elif  NUM_DIMENSIONS == 3
-    pftype h1_min = cell->r.e[HORIZONTAL_DIMENSION1];
-    pftype h1_max = h1_min + cell->s;
-    pftype h2_min = cell->r.e[HORIZONTAL_DIMENSION2];
-    pftype h2_max = h2_min + cell->s;
-    pftype vert = cell->r.e[VERTICAL_DIMENSION] + cell->vof / cell->get_side_area();
-    quick_draw_line(h1_min, h2_min, vert, h1_max, h2_min, vert);
-    quick_draw_line(h1_max, h2_min, vert, h1_max, h2_max, vert);
-    quick_draw_line(h1_max, h2_max, vert, h1_min, h2_max, vert);
-    quick_draw_line(h1_min, h2_max, vert, h1_min, h2_min, vert);
 #endif
 }
 
@@ -220,6 +271,21 @@ void viswidget::visualize_leaf_cells_recursively(octcell* cell)
     for (uint i = 0; i < octcell::MAX_NUM_CHILDREN; i++) {
         if (cell->get_child(i)) {
             visualize_leaf_cells_recursively(cell->get_child(i));
+        }
+    }
+}
+
+
+void viswidget::draw_pressure_recursively(octcell* cell)
+{
+    if (cell->is_leaf()) {
+        draw_pressure(cell);
+        return;
+    }
+
+    for (uint i = 0; i < octcell::MAX_NUM_CHILDREN; i++) {
+        if (cell->get_child(i)) {
+            draw_pressure_recursively(cell->get_child(i));
         }
     }
 }
@@ -286,11 +352,11 @@ void viswidget::visualize_neighbor_connections_recursively(octcell* cell, uint n
     /* Draw neighbor connections */
     nlnode* node = cell->neighbor_lists[neighbor_list_index].get_first_node();
     if (node) {
-        pfvec center1 = cell->cell_center();
+        pfvec center1 = cell->get_cell_center();
 
         /* Draw everything but the middle of the connection  */
         for (; node; node = node->get_next_node()) {
-            pfvec center2 = node->v.n->cell_center();
+            pfvec center2 = node->v.n->get_cell_center();
             pfvec diff = center2 - center1;
 #if  RANDOMIZE_NEIGHBOR_CONNECTION_MIDPOINTS
             pfvec ovec = diff.random_equal_lenth_orthogonal_vector();
@@ -330,7 +396,7 @@ void viswidget::visualize_finest_neighbor_connections_recursively(octcell* cell)
     }
 
     /* Draw neighbor connections to leaf cells */
-    pfvec center1 = cell->cell_center();
+    pfvec center1 = cell->get_cell_center();
     nlset leaf_set;
 
     /* Draw everything but the middle of the connection  */
@@ -338,7 +404,7 @@ void viswidget::visualize_finest_neighbor_connections_recursively(octcell* cell)
     leaf_set.add_neighbor_list(&cell->neighbor_lists[NL_SAME_LEVEL_OF_DETAIL_LEAF ]);
     leaf_set.add_neighbor_list(&cell->neighbor_lists[NL_HIGHER_LEVEL_OF_DETAIL    ]);
     for (nlnode* node = leaf_set.get_first_node(); node; node = leaf_set.get_next_node()) {
-        pfvec center2 = node->v.n->cell_center();
+        pfvec center2 = node->v.n->get_cell_center();
         pfvec diff = center2 - center1;
 #if  RANDOMIZE_NEIGHBOR_CONNECTION_MIDPOINTS
         pfvec ovec = diff.random_equal_lenth_orthogonal_vector();
@@ -376,7 +442,12 @@ void viswidget::visualize_fvoctree(fvoctree *tree)
         return;
     }
     glPushAttrib(GL_ALL_ATTRIB_BITS);
+#if DRAW_PRESSURE
+    set_up_model_view_matrix(PRESSURE_DISTANCE_SCALING);
+    draw_pressure_recursively(tree->root);
+#endif
 #if DRAW_WATER_LEVEL
+    set_up_model_view_matrix();
     set_line_style(LINE_WIDTH, SURFACE_R, SURFACE_G, SURFACE_B, SURFACE_A);
     draw_water_level_recursively(tree->root);
 #endif
@@ -505,6 +576,30 @@ void viswidget::set_line_style(GLfloat width, GLfloat  r, GLfloat g, GLfloat b, 
     glLineWidth(width);
 }
 
+void viswidget::quick_draw_triangle(pftype x1, pftype y1, pftype z1,
+                                    pftype x2, pftype y2, pftype z2,
+                                    pftype x3, pftype y3, pftype z3)
+{
+    glBegin(GL_TRIANGLES);
+    glVertex3f(x1, y1, z1);
+    glVertex3f(x2, y2, z2);
+    glVertex3f(x3, y3, z3);
+    glEnd();
+}
+
+void viswidget::quick_draw_triangle(pfvec p1, pfvec p2, pfvec p3)
+{
+#if    NUM_DIMENSIONS == 2
+    quick_draw_triangle(p1[DIM_X], p1[DIM_Y], 0,
+                        p2[DIM_X], p2[DIM_Y], 0,
+                        p3[DIM_X], p3[DIM_Y], 0);
+#elif  NUM_DIMENSIONS == 3
+    quick_draw_triangle(p1[DIM_X], p1[DIM_Y], p1[DIM_Z],
+                        p2[DIM_X], p2[DIM_Y], p2[DIM_Z],
+                        p3[DIM_X], p3[DIM_Y], p3[DIM_Z]);
+#endif
+}
+
 void viswidget::quick_draw_line(GLfloat ax, GLfloat ay, GLfloat az, GLfloat bx, GLfloat by, GLfloat bz)
 {
     glBegin(GL_LINES);
@@ -531,3 +626,5 @@ void viswidget::draw_line(GLfloat ax, GLfloat ay, GLfloat az, GLfloat bx, GLfloa
     quick_draw_line(ax, ay, az, bx, by, bz);
     glPopAttrib();
 }
+
+

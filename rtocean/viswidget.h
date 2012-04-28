@@ -36,9 +36,11 @@ public slots:
 public:
 
 private:
-    void quick_draw_cell(octcell* cell);
+    void draw_pressure(octcell* cell);
     void quick_draw_cell_water_level(octcell* cell);
+    void quick_draw_cell(octcell* cell);
     void set_up_model_view_matrix(GLdouble scale_factor = 1);
+    void draw_pressure_recursively(octcell* cell);
     void draw_water_level_recursively(octcell* cell);
     void visualize_leaf_cells_recursively(octcell* cell);
     void visualize_parent_cells_recursively(octcell* cell);
@@ -50,6 +52,8 @@ private:
     static void init_neighbor_connection_colors();
     static void quick_set_color(GLfloat r, GLfloat g, GLfloat b, GLfloat a);
     static void set_line_style(GLfloat width, GLfloat r, GLfloat g, GLfloat b, GLfloat a);
+    static void quick_draw_triangle(pftype x1, pftype y1, pftype z1, pftype x2, pftype y2, pftype z2,pftype x3, pftype y3, pftype z3);
+    static void quick_draw_triangle(pfvec p1, pfvec p2, pfvec p3);
     static void quick_draw_line(GLfloat ax, GLfloat ay, GLfloat az, GLfloat bx, GLfloat by, GLfloat bz);
     static void quick_draw_line(pfvec p1, pfvec p2);
     static void draw_line(GLfloat ax, GLfloat ay, GLfloat az, GLfloat bx, GLfloat by, GLfloat bz, GLfloat width, GLfloat  r, GLfloat g, GLfloat b, GLfloat a = 1);

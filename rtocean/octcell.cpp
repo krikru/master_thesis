@@ -96,7 +96,7 @@ void octcell::refine()
     pftype s_2 = 0.5*s;
     pfvec corners[2];
     corners[0] = r;
-    corners[1] = cell_center();
+    corners[1] = get_cell_center();
     uint   new_level = lvl + 1;
 
     // Create children with new values
@@ -314,7 +314,7 @@ void octcell::make_neighbors(octcell* cell1, octcell* cell2, uint cell1_neighbor
     nlnode* node1 = cell1->neighbor_lists[cell1_neighbor_list_idx].add_new_element();
     nlnode* node2 = cell2->neighbor_lists[cell2_neighbor_list_idx].add_new_element();
     /* Calculate properties */
-    pfvec dist = cell2->cell_center() - cell1->cell_center();
+    pfvec dist = cell2->get_cell_center() - cell1->get_cell_center();
     pftype dist_abs = dist.length();
     pftype min_s = MIN(cell1->s, cell2->s);
     pftype area = cube_side_area(min_s);

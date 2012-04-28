@@ -87,7 +87,7 @@ pftype fvoctree::size_accuracy(pfvec r)
 {
     if (r.e[VERTICAL_DIMENSION] < SURFACE_HEIGHT) {
         /* Cell is under the surface */
-        return SURFACE_ACCURACY + (SURFACE_HEIGHT-r.e[VERTICAL_DIMENSION])
+        return SURFACE_ACCURACY + (SURFACE_HEIGHT - r.e[VERTICAL_DIMENSION])
                 * (1/(MIN_LOD_LAYER_THICKNESS + 0.5));
     }
     else {
@@ -106,8 +106,22 @@ bool fvoctree::refine_subtree(octcell* c, pftype surface, pftype bottom, pftype 
 
     pftype lowest_cell_height = c->r[VERTICAL_DIMENSION];
 #if    NUM_DIMENSIONS == 2
-    pftype min_surf_height = 0.5501 + 0.2*c->r[HORIZONTAL_DIMENSION];
-    pftype max_surf_height = 0.5501 + 0.2*(c->r[HORIZONTAL_DIMENSION]+s);
+#if 0
+    pftype hdiff = .24118956;
+    pftype local_surface_height = c->get_cell_center().e[HORIZONTAL_DIMENSION1] > .5 ? SURFACE_HEIGHT + hdiff/2 : SURFACE_HEIGHT - hdiff/2;
+    pftype min_surf_height = local_surface_height;
+    pftype max_surf_height = local_surface_height;
+#else
+#if 1
+    pftype left_edge_height = 0.5501;
+    pftype slope = 0.4;
+#else
+    pftype left_edge_height = 0.9501;
+    pftype slope = -0.4;
+#endif
+    pftype min_surf_height = left_edge_height + slope*(c->r[HORIZONTAL_DIMENSION1] + (slope < 0 ? s : 0));
+    pftype max_surf_height = left_edge_height + slope*(c->r[HORIZONTAL_DIMENSION1] + (slope > 0 ? s : 0));
+#endif
 #elif  NUM_DIMENSIONS == 3
     pftype min_surf_height = 0.55 + 0.2*c->r[HORIZONTAL_DIMENSION1] + 0.1*c->r[HORIZONTAL_DIMENSION2];
     pftype max_surf_height = 0.55 + 0.2*(c->r[HORIZONTAL_DIMENSION1]+s) + 0.1*(c->r[HORIZONTAL_DIMENSION2]+s);
@@ -120,7 +134,7 @@ bool fvoctree::refine_subtree(octcell* c, pftype surface, pftype bottom, pftype 
     if (lowest_cell_height + s <= min_surf_height     ||  // Cell is under the surface, keep it but stop refining
         s <= accuracy_function(c->cell_center()) ) { // Accuracy is good enough, stop refining
 #else
-    if (s <= accuracy_function(c->cell_center())) { // Accuracy is good enough, stop refining
+    if (s <= accuracy_function(c->get_cell_center())) { // Accuracy is good enough, stop refining
 #endif
         /* Stop refining */
         /* Calculate properties */
