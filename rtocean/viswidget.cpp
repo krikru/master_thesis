@@ -152,11 +152,31 @@ void viswidget::draw_pressure(octcell* cell)
                              color3(1, 0, 0),
                              color3(0, 0, 0)};
     pftype q = NUM_TRANSITIONS * (cell->rp / P_G - (SURFACE_HEIGHT - cell->get_cell_center().e[VERTICAL_DIMENSION]) + 0.5);
-    q = MAX(q, 0);
+    q = MIN(MAX(q, 0), NUM_TRANSITIONS);
     uint idx1 = uint(q);
     uint idx2 = MIN(idx1 + 1, NUM_TRANSITIONS);
     q -= idx1;
     color3 c = (1-q)*colors[idx1] + q*colors[idx2];
+#if  DEBUG
+    if (q < 0) {
+        throw domain_error("q < 0");
+    }
+    if (q > 1) {
+        throw domain_error("q < 0");
+    }
+    if (idx1 < 0) {
+        throw domain_error("idx1 < 0");
+    }
+    if (idx1 > NUM_TRANSITIONS) {
+        throw domain_error("idx1 > NUM_TRANSITIONS");
+    }
+    if (idx2 < 0) {
+        throw domain_error("idx2 < 0");
+    }
+    if (idx2 > NUM_TRANSITIONS) {
+        throw domain_error("idx2 > NUM_TRANSITIONS");
+    }
+#endif
     quick_set_color(c[0], c[1], c[2], 1);
 
 #if    NUM_DIMENSIONS == 2

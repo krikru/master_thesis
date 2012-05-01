@@ -33,13 +33,14 @@
 #define  SIMULATION_TIME_STEP       .001 // [s]
 
 /* Grid */
-#define  MIN_LOD_LAYER_THICKNESS    1    // [Number of cells]
-#define  SURFACE_HEIGHT             0.65  // [m]
+#define  MIN_LOD_LAYER_THICKNESS    2    // [Number of cells]
+#define  SURFACE_HEIGHT             0.65 // [m]
 #define  SURFACE_ACCURACY           0.02 // [m] Maximum size of the surface cells
 
 /* Navier-Stokes */
 #define  USE_ARTIFICIAL_COMPRESSIBILITY              1
-#define  ARTIFICIAL_COMPRESSIBILITY_FACTOR           1.0 // [Pa] How much the pressure would (Delta pressure = ARTIFICIAL_COMPRESSIBILITY_FACTOR * Delta dencity / dencity)
+/* 122.92: Works; 122.93: Doesn't work. (dt = 0.001, maximal spatial resolution = 0.02) */
+#define  ARTIFICIAL_COMPRESSIBILITY_FACTOR           10.00 // [Pa] (Delta reduced pressure = ARTIFICIAL_COMPRESSIBILITY_FACTOR * Delta dencity / dencity)
 
 /* VIsualization */
 #define  TEST_DEPTH                 1
