@@ -1,6 +1,57 @@
-%Comment
-\documentclass[]{report}
+\documentclass{report}
+
+% Available sectioning commands for report: \part{}, \chapter{}, \section{}, \subsection{}, \subsubsection{}, \paragraph{}, \subparagraph{}.
+
+% "-": Hyphen, used to join words and to separate syllables in words
+% "$-$": Minus
+% "--": En-dash, used for number ranges, to mark off nested clausees and phrases (use)
+% "---": Em-dash, used to mark off nested clausees and phrases (don't use)
+
+% Packages
+\usepackage{hyperref} % Will link to pages
+%\usepackage{url} % Will not link to pages
+\usepackage{graphicx}
+\usepackage{./Packages/titlepic/titlepic}
+%\usepackage{titlepic}
+
+\hypersetup{pdfborder = {0 0 0}} % Remove the frame around links
+
+%Define commands
+\newcommand{\comment}[1]{}
+\newcommand{\HRule}{\rule{\linewidth}{0.5mm}}
 
 \begin{document}
-Hello world!
+
+\begin{titlepage}
+% Top matter
+\title{Simulating Ocean Waves and Ships on a Tree Structure}
+\author{Kristofer Krus}
+\date{\today}
+\titlepic{\includegraphics[width=0.6\textwidth, clip=true]{./Images/lith_en_vert_col.pdf}}
+\maketitle
+%\texttt{krikr808@student.liu.se}
+\end{titlepage}
+
+\section*{Copyright}
+The publishers will keep this document online on the Internet --- or its possible replacement -- for a period of 25 years starting from the date of publication barring exceptional circumstances.
+
+The online availability of the document implies permanent permission for anyone to read, to download, or to print out single copies for his/hers own use and to use it unchanged for non-commercial research and educational purpose. Subsequent transfers of copyright cannot revoke this permission. All other uses of the document are conditional upon the consent of the copyright owner. The publisher has taken technical and administrative measures to assure authenticity, security and accessibility.
+According to intellectual property law the author has the right to be mentioned when his/her work is accessed as described above and to be protected against infringement.
+
+For additional information about the Linköping University Electronic Press and its procedures for publication and for assurance of document integrity, please refer to its www home page: \url{http://www.ep.liu.se/}.
+
+% Abstract
+\begin{abstract}
+    Your abstract goes here...
+\end{abstract}
+
+\chapter{Method}
+
+\chapter{Earlier works}
+
+\section{Spectral analysis methods}
+
+\appendix
+\chapter{Derivation of twodimensional PDEs for varying intermediate depth water waves}
+
 \end{document}
