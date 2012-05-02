@@ -48,8 +48,8 @@ public:
 
     /* Navier-Stokes */
     pftype rp; /* Reduced pressure = pressure/density */
-    bool   surface_cell;
-    pftype vof; /* The volume of the fluid that is currently in this cell (only relevant for surface cells) */
+    pftype alpha; /* The amount of the volume in this cell that is currently water */
+    pfvec  alpha_grad; /* The gradient of alpha */
     /*Since the velocities are located in the cell faces, they are stored in the octneighbors */
 
     /* Level of detail */
@@ -82,7 +82,8 @@ public:
 
     /* Simulation */
     //void update_pressure();
-    void un_surface_cell();
+    bool is_bulk_cell();
+    bool is_surface_cell();
 
     /* Level of detail */
 
@@ -176,12 +177,7 @@ pftype octcell::get_total_volume()
 inline
 pftype octcell::get_volume_of_fluid()
 {
-    if (surface_cell) {
-        return vof;
-    }
-    else {
-        return get_total_volume();
-    }
+    return alpha * get_total_volume();
 }
 
 /**************
@@ -189,9 +185,13 @@ pftype octcell::get_volume_of_fluid()
  **************/
 
 inline
-void octcell::un_surface_cell()
-{
-    surface_cell = false;
+bool octcell::is_bulk_cell() {
+    return (alpha >= 1);
+}
+
+inline
+bool octcell::is_surface_cell() {
+    return (alpha < 1);
 }
 
 /************

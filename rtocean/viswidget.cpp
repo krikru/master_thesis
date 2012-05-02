@@ -201,13 +201,13 @@ void viswidget::quick_draw_cell_water_level(octcell* cell)
 {
 #if    NUM_DIMENSIONS == 2
     pfvec p0 = cell->r;
-    p0.e[VERTICAL_DIMENSION] += cell->vof / cell->get_side_area();
+    p0.e[VERTICAL_DIMENSION] += cell->alpha * cell->s;
     pfvec p1 = p0;
     p1.e[HORIZONTAL_DIMENSION1] += cell->s;
     quick_draw_line(p0, p1);
 #elif  NUM_DIMENSIONS == 3
     pfvec p00 = cell->r;
-    p00.e[VERTICAL_DIMENSION] += cell->vof / cell->get_side_area();
+    p00.e[VERTICAL_DIMENSION] += cell->alpha * cell->s;
     pfvec p01 = p00;
     p01.e[HORIZONTAL_DIMENSION1] += cell->s;
     pfvec p10 = p00;
@@ -313,7 +313,7 @@ void viswidget::draw_pressure_recursively(octcell* cell)
 void viswidget::draw_water_level_recursively(octcell* cell)
 {
     if (cell->is_leaf()) {
-        if (cell->surface_cell) {
+        if (cell->is_surface_cell()) {
             quick_draw_cell_water_level(cell);
         }
         return;

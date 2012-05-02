@@ -143,19 +143,18 @@ bool fvoctree::refine_subtree(octcell* c, pftype surface, pftype bottom, pftype 
         c->rp = (mean_surface_height - mean_height) * P_G;
         if (lowest_cell_height + s > min_surf_height) {
             /* Cell is a surface cell */
-            c->surface_cell = true;
-            /* Estimate vof */
+            /* Estimate alpha */
             pftype mean_height_diff = (MAX(min_surf_height - lowest_cell_height, 0) + MIN(max_surf_height - lowest_cell_height, s))/2;
-            c->vof = mean_height_diff * c->get_side_area();
+            c->alpha = mean_height_diff / c->s;
 #if  DEBUG
-            if (c->vof < 0 || c->vof > c->get_total_volume()) {
-                throw logic_error("VOF incorrectly calculated");
+            if (c->alpha < 0 || c->alpha > 1) {
+                throw logic_error("alpha incorrectly calculated");
             }
 #endif
         }
         else {
             /* Cell is not a surface cell */
-            c->surface_cell = false;
+            c->alpha = 1;
         }
         return false;
     }

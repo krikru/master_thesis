@@ -205,8 +205,7 @@ void octcell::coarsen()
     }
 #endif
 
-    surface_cell = false;
-    vof = 0;
+    alpha = 0;
     rp = 0;
     for (uint idx = 0; idx < MAX_NUM_CHILDREN; idx++) {
         octcell* c = get_child(idx);
@@ -216,16 +215,15 @@ void octcell::coarsen()
                 /* Coarsen it to get updated properties */
                 c->coarsen();
             }
-            if (c->surface_cell) {
-                surface_cell = true;
-            }
-            pftype child_water_volume = c->get_volume_of_fluid();
-            vof += child_water_volume;
-            rp += child_water_volume * c->rp;
+            alpha += c->alpha;
+            rp += c->alpha * c->rp;
             remove_child(idx);
         }
     }
-    rp /= vof;
+    if (alpha) {
+        rp /= alpha;
+        alpha *= (pftype(1)/MAX_NUM_CHILDREN);
+    }
     make_leaf();
 
     /*

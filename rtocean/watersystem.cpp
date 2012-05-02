@@ -70,10 +70,127 @@ int watersystem::run_simulation(pftype time_step)
 void watersystem::_evolve()
 {
     t += dt;
-    advect_and_update_pressure_recursively(w->root);
+    if (0) {
+        //advect_and_update_pressure();
+    } else {
+        advect_and_update_pressure_recursively(w->root);
+    }
     update_velocities_recursively(w->root);
 }
 
+#if 0
+void watersystem::advect_and_update_pressure()
+{
+    //TODO: Ensure mass conservation (current alpha advection do not conserve the mass)
+    /* Advect alpha */
+    calculate_alpha_gradient_recursively(w->root);
+    advect_alpha_recursively(w->root);
+
+    /* Sharpen alpha */
+    calculate_alpha_gradient_recursively(w->root);
+
+    /* Update pressure */
+    update_pressure_recursively(w->root);
+}
+
+void watersystem::calculate_alpha_gradient_recursively(octcell* cell)
+{
+    if (cell->has_child_array()) {
+        for (uint idx = 0; idx < octcell::MAX_NUM_CHILDREN; idx++) {
+            octcell* c = cell->get_child(idx);
+            if (c) {
+                /* Child exists */
+                calculate_alpha_gradient_recursively(c);
+            }
+        }
+        return;
+    }
+
+    /* Calculate alpha gradient */
+    cell->alpha_grad = pfvec(); // Reset alpha gradient
+    nlset lists;
+    lists.add_neighbor_list(&cell->neighbor_lists[NL_HIGHER_LEVEL_OF_DETAIL]);
+    lists.add_neighbor_list(&cell->neighbor_lists[NL_SAME_LEVEL_OF_DETAIL_LEAF]);
+    lists.add_neighbor_list(&cell->neighbor_lists[NL_LOWER_LEVEL_OF_DETAIL_LEAF]);
+    for (nlnode* node = lists.get_first_node(); node; node = lists.get_next_node()) {
+        cell->alpha_grad.e[node->v.dim] += (node->v.n->alpha - cell->alpha) * (node->v.pos_dir ? node->v.cf_area : -node->v.cf_area);
+    }
+    for (uint dim = 0; dim < NUM_DIMENSIONS; dim++) {
+        cell->alpha_grad.e[dim] /= 2 * cell->get_total_volume();
+    }
+}
+
+void watersystem::advect_alpha_recursively(octcell* cell)
+{
+    if (cell->has_child_array()) {
+        for (uint idx = 0; idx < octcell::MAX_NUM_CHILDREN; idx++) {
+            octcell* c = cell->get_child(idx);
+            if (c) {
+                /* Child exists */
+                advect_alpha_recursively(c);
+            }
+        }
+        return;
+    }
+
+    /* Calculate mean velocity */
+    pfvec v = pfvec(); // Velocity
+    nlset lists;
+    lists.add_neighbor_list(&cell->neighbor_lists[NL_HIGHER_LEVEL_OF_DETAIL]);
+    lists.add_neighbor_list(&cell->neighbor_lists[NL_SAME_LEVEL_OF_DETAIL_LEAF]);
+    lists.add_neighbor_list(&cell->neighbor_lists[NL_LOWER_LEVEL_OF_DETAIL_LEAF]);
+    for (nlnode* node = lists.get_first_node(); node; node = lists.get_next_node()) {
+        v.e[node->v.dim] += node->v.vel * node->v.cf_area;
+    }
+    for (uint dim = 0; dim < NUM_DIMENSIONS; dim++) {
+        v.e[dim] /= 2 * cell->get_side_area();
+    }
+
+    /* Update alpha */
+    cell->alpha -= cell->alpha_grad * v * dt;
+}
+
+void watersystem::update_pressure_recursively(octcell* cell)
+{
+    if (cell->has_child_array()) {
+        /* */
+        for (uint idx = 0; idx < octcell::MAX_NUM_CHILDREN; idx++) {
+            octcell* c = cell->get_child(idx);
+            if (c) {
+                /* Child exists */
+                calculate_alpha_gradient_recursively(c);
+            }
+        }
+        return;
+    }
+
+    /* TODO: Update the code for updating pressure */
+    /* Update pressure */
+    pftype in_flux = 0;
+    nlset lists;
+    lists.add_neighbor_list(&cell->neighbor_lists[NL_HIGHER_LEVEL_OF_DETAIL]);
+    lists.add_neighbor_list(&cell->neighbor_lists[NL_SAME_LEVEL_OF_DETAIL_LEAF]);
+    lists.add_neighbor_list(&cell->neighbor_lists[NL_LOWER_LEVEL_OF_DETAIL_LEAF]);
+    for (nlnode* node = lists.get_first_node(); node; node = lists.get_next_node()) {
+        in_flux += (node->v.pos_dir ? -1 : +1) * node->v.vel * node->v.cf_area;
+    }
+
+#if  USE_ARTIFICIAL_COMPRESSIBILITY
+    /* Move volume into or from cell */
+    pftype in_volume = in_flux * dt;
+    if (cell->is_surface_cell()) {
+        cell->rp += in_volume / cell->get_side_area() * P_G;
+    }
+    else {
+        cell->rp += in_volume / cell->get_total_volume() * ARTIFICIAL_COMPRESSIBILITY_FACTOR;
+    }
+#else
+    "don't know what to do now"
+#endif
+}
+#endif
+
+//TODO: Remove this function once replaced
 /* Returns true if the cell should be removed from the simulation, false otherwise*/
 bool watersystem::advect_and_update_pressure_recursively(octcell* cell)
 {
@@ -119,8 +236,8 @@ bool watersystem::advect_and_update_pressure_recursively(octcell* cell)
 
     /* Move volume into or from cell */
     pftype in_volume = in_flux * dt;
-    if (cell->surface_cell) {
-        cell->vof += in_volume;
+    if (cell->is_surface_cell()) {
+        cell->alpha += in_volume/cell->get_total_volume();
 #if  USE_ARTIFICIAL_COMPRESSIBILITY
         cell->rp += in_volume / cell->get_side_area() * P_G;
 #endif
