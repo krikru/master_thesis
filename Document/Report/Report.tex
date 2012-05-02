@@ -10,9 +10,12 @@
 % Packages
 \usepackage{hyperref} % Will link to pages
 %\usepackage{url} % Will not link to pages
-\usepackage{graphicx}
-\usepackage{./Packages/titlepic/titlepic}
-%\usepackage{titlepic}
+\usepackage{graphicx} % Necessary in order to include images
+%\usepackage{./Packages/titlepic/titlepic}
+\usepackage{titlepic} % Necessary in order to be able to have an image on the title page
+\usepackage[round, authoryear]{natbib} % Harward style referencing
+%\usepackage[square, numbers]{natbib} % Harward style referencing
+
 
 \hypersetup{pdfborder = {0 0 0}} % Remove the frame around links
 
@@ -22,7 +25,7 @@
 
 \begin{document}
 
-\begin{titlepage}
+%\begin{titlepage}
 % Top matter
 \title{Simulating Ocean Waves and Ships on a Tree Structure}
 \author{Kristofer Krus}
@@ -30,28 +33,49 @@
 \titlepic{\includegraphics[width=0.6\textwidth, clip=true]{./Images/lith_en_vert_col.pdf}}
 \maketitle
 %\texttt{krikr808@student.liu.se}
-\end{titlepage}
+%\end{titlepage}
 
 \section*{Copyright}
-The publishers will keep this document online on the Internet --- or its possible replacement -- for a period of 25 years starting from the date of publication barring exceptional circumstances.
+The publishers will keep this document online on the Internet -- or its possible replacement -- for a period of 25 years starting from the date of publication barring exceptional circumstances.
 
 The online availability of the document implies permanent permission for anyone to read, to download, or to print out single copies for his/hers own use and to use it unchanged for non-commercial research and educational purpose. Subsequent transfers of copyright cannot revoke this permission. All other uses of the document are conditional upon the consent of the copyright owner. The publisher has taken technical and administrative measures to assure authenticity, security and accessibility.
+
 According to intellectual property law the author has the right to be mentioned when his/her work is accessed as described above and to be protected against infringement.
 
 For additional information about the Linköping University Electronic Press and its procedures for publication and for assurance of document integrity, please refer to its www home page: \url{http://www.ep.liu.se/}.
+%\hypersetup{colorlinks=true, urlcolor=cyan} % Remove the frame around links
 
 % Abstract
 \begin{abstract}
     Your abstract goes here...
 \end{abstract}
 
-\chapter{Method}
+% Table of contents and various lists
+\tableofcontents
+\listoffigures
+\listoftables
 
-\chapter{Earlier works}
+\chapter{Introduction}
+
+\section{Earlier works}
+
+\chapter{Method}
 
 \section{Spectral analysis methods}
 
 \appendix
-\chapter{Derivation of twodimensional PDEs for varying intermediate depth water waves}
+%\chapter{Derivation of twodimensional PDEs for water waves at random intermediate depths}
+\chapter{Derivation of twodimensional PDEs for water waves at varying depths}
+
+\begin{thebibliography}{99}
+    
+    \bibitem{lamport94}
+    Leslie Lamport,
+    \emph{\LaTeX: A Document Preparation System}.
+    Addison Wesley, Massachusetts,
+    2nd Edition,
+    1994.
+    
+\end{thebibliography}
 
 \end{document}
