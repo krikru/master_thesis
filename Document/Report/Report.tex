@@ -1,13 +1,18 @@
-\documentclass{report}
+\documentclass[a4paper]{report}
 
-% Available sectioning commands for report: \part{}, \chapter{}, \section{}, \subsection{}, \subsubsection{}, \paragraph{}, \subparagraph{}.
+% Available sectioning commands for report: \part{}, \part{}, \chapter{}, \section{}, \subsection{}, \paragraph{}, \subparagraph{}.
 
 % "-": Hyphen, used to join words and to separate syllables in words
 % "$-$": Minus
 % "--": En-dash, used for number ranges, to mark off nested clausees and phrases (use)
 % "---": Em-dash, used to mark off nested clausees and phrases (don't use)
 
+% % % % % % %
+% PREAMBLE  %
+% % % % % % %
+
 % Packages
+\usepackage{etoolbox} % Includes the macro \ifstrequal
 \usepackage{hyperref} % Will link to pages
 %\usepackage{url} % Will not link to pages
 \usepackage{graphicx} % Necessary in order to include images
@@ -23,7 +28,34 @@
 \newcommand{\comment}[1]{}
 \newcommand{\HRule}{\rule{\linewidth}{0.5mm}}
 
+\makeatletter
+\newcommand{\showsectioning}[3]{%
+    \begingroup
+    \def\@tempa{#3}%
+    \def\@tempb{ \par}%
+    \ifcase0%
+    \ifx\@tempa\@empty 1\else
+    \ifx\@tempa\space  1\else
+    \ifx\@tempa\@tempb 1\fi\fi\fi
+    \relax
+    \endgroup
+    #1{#2} #3%
+    \else
+    \endgroup
+    \fi
+}
+\makeatother
+\newcommand\showpart{\showsectioning\part}
+\newcommand\showchapter{\showsectioning\chapter}
+\newcommand\showsection{\showsectioning\section}
+\newcommand\showsubsection{\showsectioning\subsection}
+\newcommand\showsubsubsection{\showsectioning\subsubsection}
+
 \begin{document}
+
+% % % % % % % %
+% TOP MATTER  %
+% % % % % % % %
 
 %\begin{titlepage}
 % Top matter
@@ -31,9 +63,14 @@
 \author{Kristofer Krus}
 \date{\today}
 \titlepic{\includegraphics[width=0.6\textwidth, clip=true]{./Images/lith_en_vert_col.pdf}}
+%\includegraphics[width=0.6\textwidth, clip=true]{./Images/lith_en_vert_col.pdf}
 \maketitle
 %\texttt{krikr808@student.liu.se}
 %\end{titlepage}
+
+% % % % % % % % % %
+% COMPYRIGHT NOTE %
+% % % % % % % % % %
 
 \section*{Copyright}
 The publishers will keep this document online on the Internet -- or its possible replacement -- for a period of 25 years starting from the date of publication barring exceptional circumstances.
@@ -45,7 +82,10 @@ According to intellectual property law the author has the right to be mentioned 
 For additional information about the Linköping University Electronic Press and its procedures for publication and for assurance of document integrity, please refer to its www home page: \url{http://www.ep.liu.se/}.
 %\hypersetup{colorlinks=true, urlcolor=cyan} % Remove the frame around links
 
-% Abstract
+% % % % % % %
+% ABSTRACT  %
+% % % % % % %
+
 \begin{abstract}
     Your abstract goes here...
 \end{abstract}
@@ -55,13 +95,169 @@ For additional information about the Linköping University Electronic Press and 
 \listoffigures
 \listoftables
 
-\chapter{Introduction}
+% % % % % % % % %
+% INTRODUCTION  %
+% % % % % % % % %
 
-\section{Earlier works}
+\showpart{Introduction}{
 
-\chapter{Method}
+\showchapter{Motivation}{
+}
 
-\section{Spectral analysis methods}
+\showchapter{Difficulties}{
+
+\begin{itemize}
+    \item Wave dispersion
+    \item Different depths gives different speeds
+    \item The water should interact with moving objects
+\end{itemize}
+
+}
+
+\showchapter{Earlier approaches}{
+
+\showsection{Twodimensional methods}{
+
+\showsubsection{Twodimensional PDEs for shallow water}{
+}
+
+\showsubsection{Spectral analysis methods}{
+
+References:
+\begin{itemize}
+    \item REAL TIME MODELLING OF MULTISPECTRAL OCEAN SCENES
+    \item GPU-based simulation of Radar sea clutter
+\end{itemize}
+}
+
+}
+
+\showsection{iSection name}{ \showsubsection{iSubsection name}{ } }
+
+\showsection{Section name}{
+
+\showsubsection{Subsection name}{
+}
+
+}
+
+\showsection{Threedimensional methods}{
+\showsubsection{Particles}{
+}\showsubsection{Boundary element method}{
+}\showsubsection{Finite element method}{
+}\showsubsection{Finite volume method with tall cells}{
+}\showsubsection{Finite volume method with octrees}{
+}} % Section Threedimensional methods
+
+\showsection{Twodimensional and threedimensional hybrid methods}{
+} % Twodimensional and threedimensional hybrid methods
+
+} % Chapter earlier approaches
+
+} % Part Introduction
+
+% % % % % %
+% METHOD  %
+% % % % % %
+
+\part{Method}
+
+\chapter{Finite volume method}
+
+\section{Artificial compression}
+
+\subsection{Instability}
+
+\section{Incompressible Navier-Stokes equations}
+
+\section{Gauss-Seidel method}
+
+\subsection{Preconditioned conjugate gradient method}
+
+\begin{itemize}
+    \item Extension of the gradient descent
+\end{itemize}
+
+\subsection{Multigrid method}
+
+\section{Semicompressible water}
+
+\chapter{Octrees}
+
+\section{The differentiating problem}
+
+\subsection{Velocity advection term}
+
+\section{Multilevel acceleration}
+
+\section{Wave reflection}
+
+\subsection{Perfectly matched layer}
+
+\chapter{Surface capturing}
+
+\section{Level set method}
+
+\subsection{Marching cubes}
+
+\section{Volume of fluid method}
+
+\subsection{Interface reconstruction}
+%\section{Internal alpha distribution}
+
+\subsection{Advection of the interface}
+
+\subsection{Smearing}
+
+\subsubsection{Upwind leapfrog}
+
+\subsubsection{Lanczos resampling}
+
+\section{Coupled Level Set/Volume of Fluid  method}
+
+\chapter{Interaction with moving objects}
+
+\chapter{Wind waves}
+
+\section{Spectral analysis method}
+
+\section{Air-water interaction}
+
+\chapter{Splash and foam}
+
+\chapter{Parallellization}
+
+\section{Space filling curves}
+
+\chapter{Conservation laws}
+
+\begin{itemize}
+    \item Mass
+    \item Energy
+    \item Momentum
+    \item Angular momentum
+    \item (d/dt)(Center of mass) - momentum = 0
+\end{itemize}
+
+% % % % % % % % % % % % % %
+% RESULTS AND CONCLUSIONS %
+% % % % % % % % % % % % % %
+
+\part{Results and conclusions}
+
+\chapter{Results}
+
+\section{Speed}
+
+\section{Accuracy}
+
+\chapter{Conclusions}
+
+% % % % % % %
+% APENDIZES %
+% % % % % % %
+
+\part{Appendixes}
 
 \appendix
 %\chapter{Derivation of twodimensional PDEs for water waves at random intermediate depths}
@@ -69,6 +265,7 @@ For additional information about the Linköping University Electronic Press and 
 
 \begin{thebibliography}{99}
     
+    %TODO: Remove this bibitem
     \bibitem{lamport94}
     Leslie Lamport,
     \emph{\LaTeX: A Document Preparation System}.
