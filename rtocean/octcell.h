@@ -87,6 +87,8 @@ public:
     //void update_pressure();
     bool is_bulk_cell();
     bool is_surface_cell();
+    bool is_empty();
+    bool is_non_empty();
 
     /* Level of detail */
 
@@ -195,6 +197,16 @@ bool octcell::is_bulk_cell() {
 inline
 bool octcell::is_surface_cell() {
     return (alpha < 1);
+}
+
+inline
+bool octcell::is_empty() {
+    return (alpha <= 0);
+}
+
+inline
+bool octcell::is_non_empty() {
+    return !is_empty();
 }
 
 /************

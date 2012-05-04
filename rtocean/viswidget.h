@@ -37,10 +37,14 @@ public:
 
 private:
     void draw_pressure_deviation(octcell* cell);
+    void quick_mark_bulk_cell(octcell* cell);
+    void quick_mark_empty_cell(octcell* cell);
     void quick_draw_cell_water_level(octcell* cell);
     void quick_draw_cell(octcell* cell);
     void set_up_model_view_matrix(GLdouble scale_factor = 1);
     void draw_pressure_recursively(octcell* cell);
+    void mark_bulk_cells_recursively(octcell* cell);
+    void mark_empty_cells_recursively(octcell* cell);
     void draw_water_level_recursively(octcell* cell);
     void visualize_leaf_cells_recursively(octcell* cell);
     void visualize_parent_cells_recursively(octcell* cell);
@@ -52,6 +56,7 @@ private:
     static void init_neighbor_connection_colors();
     static void quick_set_color(GLfloat r, GLfloat g, GLfloat b, GLfloat a);
     static void set_line_style(GLfloat width, GLfloat r, GLfloat g, GLfloat b, GLfloat a);
+    static void quick_draw_circle(pfvec mid, pfvec e1, pfvec e2, uint num_lines);
     static void quick_draw_triangle(pftype x1, pftype y1, pftype z1, pftype x2, pftype y2, pftype z2,pftype x3, pftype y3, pftype z3);
     static void quick_draw_triangle(pfvec p1, pfvec p2, pfvec p3);
     static void quick_draw_line(GLfloat ax, GLfloat ay, GLfloat az, GLfloat bx, GLfloat by, GLfloat bz);

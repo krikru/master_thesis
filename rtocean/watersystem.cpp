@@ -118,8 +118,28 @@ void watersystem::calculate_delta_alpha_recursively(octcell* cell)
         if (node->v.vel_out < 0) {
             cell->dalpha -= node->v.vel_out * (node->v.n->alpha - cell->alpha) * node->v.cf_area;
         }
+#if  DEBUG
+#if  !QUICKFIX1
+        if (node->v.vel_out * dt * 4 < -cell->s) {
+            throw domain_error("Velocity to high for alpha advection");
+        }
+#endif
+#endif
     }
     cell->dalpha *= dt / cell->get_total_volume();
+#if  QUICKFIX1
+    if (cell->dalpha < -cell->alpha) {
+        cell->dalpha = -cell->alpha;
+    }
+    else if (cell->dalpha > (1-cell->alpha)) {
+        cell->dalpha = (1-cell->alpha);
+#if  DEBUG
+        if (cell->alpha + cell->dalpha > 1) {
+            throw logic_error("Damn...");
+        }
+#endif
+    }
+#endif
 }
 
 void watersystem::advect_alpha_recursively(octcell* cell)
@@ -135,8 +155,54 @@ void watersystem::advect_alpha_recursively(octcell* cell)
         return;
     }
 
+    /* Check if cell goes from empty to non-empty */
+    if (cell->is_empty() && cell->dalpha) {
+        /* Set velocities on faces to empty cells */
+        pfvec mean_vel;
+        pfvec area;
+        /* Loop though neighbors */
+        nlset lists;
+        lists.add_neighbor_list(&cell->neighbor_lists[NL_HIGHER_LEVEL_OF_DETAIL]);
+        lists.add_neighbor_list(&cell->neighbor_lists[NL_SAME_LEVEL_OF_DETAIL_LEAF]);
+        lists.add_neighbor_list(&cell->neighbor_lists[NL_LOWER_LEVEL_OF_DETAIL_LEAF]);
+        for (nlnode* node = lists.get_first_node(); node; node = lists.get_next_node()) {
+            if (node->v.n->is_non_empty()) {
+                area.e[node->v.dim] += node->v.cf_area;
+                mean_vel.e[node->v.dim] += node->v.cf_area * node->v.get_signed_dir() * node->v.vel_out;
+            }
+        }
+        for (uint dim = 0; dim < NUM_DIMENSIONS; dim++) {
+            if (area.e[dim]) {
+                mean_vel.e[dim] /= area[dim];
+            }
+            else {
+                /* Don't know the velocity in this direction */
+                // TODO: Find out the velocity in some other way
+                //mean_vel[dim] = 0; This componentis already 0
+            }
+        }
+        /* Loop though neighbors */
+        lists.add_neighbor_list(&cell->neighbor_lists[NL_HIGHER_LEVEL_OF_DETAIL]);
+        lists.add_neighbor_list(&cell->neighbor_lists[NL_SAME_LEVEL_OF_DETAIL_LEAF]);
+        lists.add_neighbor_list(&cell->neighbor_lists[NL_LOWER_LEVEL_OF_DETAIL_LEAF]);
+        for (nlnode* node = lists.get_first_node(); node; node = lists.get_next_node()) {
+            if (node->v.n->is_empty()) {
+                /* The velocity out for this neighbor connection currently contains humbug, initialize it */
+                node->v.set_velocity_out(mean_vel[node->v.dim]*node->v.get_signed_dir());
+            }
+        }
+    }
+
     /* Update alpha */
     cell->alpha += cell->dalpha;
+#if  DEBUG
+    if (cell->alpha < 0) {
+        throw logic_error("Alpha < 0 after advection");
+    }
+    else if (cell->alpha > 1) {
+        throw logic_error("Alpha > 1 after advection");
+    }
+#endif
 }
 
 void watersystem::calculate_alpha_gradient_recursively(octcell* cell)
@@ -154,6 +220,7 @@ void watersystem::calculate_alpha_gradient_recursively(octcell* cell)
 
     /* Calculate alpha gradient */
     cell->alpha_grad_coeff = pfvec(); // Reset alpha gradient
+    /* Loop though neighbors */
     nlset lists;
     lists.add_neighbor_list(&cell->neighbor_lists[NL_HIGHER_LEVEL_OF_DETAIL]);
     lists.add_neighbor_list(&cell->neighbor_lists[NL_SAME_LEVEL_OF_DETAIL_LEAF]);
@@ -169,6 +236,8 @@ void watersystem::calculate_alpha_gradient_recursively(octcell* cell)
 
 void watersystem::sharpen_alpha_recursively(octcell* cell)
 {
+    static int count = 0;
+
     if (cell->has_child_array()) {
         for (uint idx = 0; idx < octcell::MAX_NUM_CHILDREN; idx++) {
             octcell* c = cell->get_child(idx);
@@ -180,6 +249,11 @@ void watersystem::sharpen_alpha_recursively(octcell* cell)
         return;
     }
 
+    count++;
+    if (count == 273996) {
+        count = count;
+    }
+
     /* Sharpen alpha */
     if (cell->alpha <= 0 || cell->alpha >= 1) {
         /* Cell needs no sharpening */
@@ -187,28 +261,99 @@ void watersystem::sharpen_alpha_recursively(octcell* cell)
     }
 
     /* Determine if the cell should donate or accept and how much */
-    pftype tot_deriv = 0;
+    pftype abs_deriv_sum = 0;
     for (uint dim = 0; dim < NUM_DIMENSIONS; dim++) {
-        tot_deriv += abs(cell->alpha_grad[dim]);
+        abs_deriv_sum += ABS(cell->alpha_grad_coeff[dim]);
     }
-    if (!tot_deriv) {
+    if (!abs_deriv_sum) {
         /* No way to transport alpha */
         return;
     }
-    pftype min_rel_cap_up   = 3/tot_deriv;
-    pftype min_rel_cap_down = min_rel_cap_up;
+#if  DEBUG
+    if (abs_deriv_sum < 0) {
+        throw logic_error("Derivative sum < 0");
+    }
+#endif
+    pftype donate_factor = 3/abs_deriv_sum;
+    pftype accept_factor = donate_factor;
     /* Loop through neighbors */
     nlset lists;
     lists.add_neighbor_list(&cell->neighbor_lists[NL_HIGHER_LEVEL_OF_DETAIL]);
     lists.add_neighbor_list(&cell->neighbor_lists[NL_SAME_LEVEL_OF_DETAIL_LEAF]);
     lists.add_neighbor_list(&cell->neighbor_lists[NL_LOWER_LEVEL_OF_DETAIL_LEAF]);
     for (nlnode* node = lists.get_first_node(); node; node = lists.get_next_node()) {
-        if (cell->alpha_grad_coeff[node->v.dim] * node->get_signed_dir() > 0)) {
-            /* Upp, donor */
+        pftype dir_alpha_grad_coeff = cell->alpha_grad_coeff[node->v.dim] * node->v.get_signed_dir();
+        if      (dir_alpha_grad_coeff > 0) {
+            /* Positive derivative, this cell is a donor */
+            pftype real_cap = (1 - node->v.n->alpha) / dir_alpha_grad_coeff;
+            if (real_cap < donate_factor) {
+                donate_factor = real_cap;
+            }
         }
-        else if (node->v.pos_dir == (cell->alpha_grad_coeff[node->v.dim] < 0)) {
-            /* Upp, donor */
+        else if (dir_alpha_grad_coeff < 0) {
+            /* Negative derivative, this cell is an acceptor */
+            pftype real_cap = node->v.n->alpha / -dir_alpha_grad_coeff;
+            if (real_cap < accept_factor) {
+                accept_factor = real_cap;
+            }
         }
+    }
+#if  DEBUG
+    if (donate_factor < 0) {
+        throw logic_error("Donate factor < 0");
+    }
+    if (accept_factor < 0) {
+        throw logic_error("Accept factor < 0");
+    }
+#endif
+    if (donate_factor > accept_factor) {
+        donate_factor = MIN(donate_factor, accept_factor + cell->alpha       / abs_deriv_sum);
+    }
+    else {
+        accept_factor = MIN(accept_factor, donate_factor + (1 - cell->alpha) / abs_deriv_sum);
+    }
+    /* Donate and accept alpha */
+    /* Loop through neighbors */
+    lists.add_neighbor_list(&cell->neighbor_lists[NL_HIGHER_LEVEL_OF_DETAIL]);
+    lists.add_neighbor_list(&cell->neighbor_lists[NL_SAME_LEVEL_OF_DETAIL_LEAF]);
+    lists.add_neighbor_list(&cell->neighbor_lists[NL_LOWER_LEVEL_OF_DETAIL_LEAF]);
+    for (nlnode* node = lists.get_first_node(); node; node = lists.get_next_node()) {
+        pftype dir_alpha_grad_coeff = cell->alpha_grad_coeff[node->v.dim] * node->v.get_signed_dir();
+        /* Positive derivative, this cell is a donor */
+        if (dir_alpha_grad_coeff > 0) {
+            /* Positive derivative, this cell is a donor */
+            pftype transported_alpha = donate_factor * dir_alpha_grad_coeff;
+#if  DEBUG
+            if (transported_alpha < 0) {
+                throw logic_error("Transported alpha has wrong sign 1");
+            }
+#endif
+            cell->alpha -= transported_alpha;
+            node->v.n->alpha += transported_alpha;
+            if (node->v.n->alpha > 1) {
+                node->v.n->alpha = 1;
+            }
+        }
+        else {
+            /* Negative derivative, this cell is an acceptor */
+            pftype transported_alpha = accept_factor * dir_alpha_grad_coeff;
+#if  DEBUG
+            if (transported_alpha > 0) {
+                throw logic_error("Transported alpha has wrong sign 2");
+            }
+#endif
+            cell->alpha -= transported_alpha;
+            node->v.n->alpha += transported_alpha;
+            if (node->v.n->alpha < 0) {
+                node->v.n->alpha = 0;
+            }
+        }
+    }
+    if (cell->alpha < 0) {
+        cell->alpha = 0;
+    }
+    else if (cell->alpha > 1) {
+        cell->alpha = 1;
     }
 }
 

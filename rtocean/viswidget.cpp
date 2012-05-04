@@ -198,6 +198,31 @@ void viswidget::draw_pressure_deviation(octcell* cell)
 #endif
 }
 
+void viswidget::quick_mark_bulk_cell(octcell* cell)
+{
+#if    NUM_DIMENSIONS == 2
+    pftype rad = 0.4 * cell->s;
+    pfvec e_x, e_y;
+    e_x.e[DIM_X] = 1;
+    e_y.e[DIM_Y] = 1;
+    quick_draw_circle(cell->get_cell_center(), rad* e_y, rad * e_x, NUM_LINES_IN_CIRCLES);
+#elif  NUM_DIMENSIONS == 3
+#endif
+}
+
+void viswidget::quick_mark_empty_cell(octcell* cell)
+{
+#if    NUM_DIMENSIONS == 2
+    pftype x0 = cell->r.e[DIM_X];
+    pftype x1 = x0 + cell->s;
+    pftype y0 = cell->r.e[DIM_Y];
+    pftype y1 = y0 + cell->s;
+    quick_draw_line(x0, y0, 0, x1, y1, 0);
+    quick_draw_line(x0, y1, 0, x1, y0, 0);
+#elif  NUM_DIMENSIONS == 3
+#endif
+}
+
 void viswidget::quick_draw_cell_water_level(octcell* cell)
 {
 #if    NUM_DIMENSIONS == 2
@@ -307,6 +332,38 @@ void viswidget::draw_pressure_recursively(octcell* cell)
     for (uint i = 0; i < octcell::MAX_NUM_CHILDREN; i++) {
         if (cell->get_child(i)) {
             draw_pressure_recursively(cell->get_child(i));
+        }
+    }
+}
+
+void viswidget::mark_bulk_cells_recursively(octcell* cell)
+{
+    if (cell->is_leaf()) {
+        if (cell->is_bulk_cell()) {
+            quick_mark_bulk_cell(cell);
+        }
+        return;
+    }
+
+    for (uint i = 0; i < octcell::MAX_NUM_CHILDREN; i++) {
+        if (cell->get_child(i)) {
+            mark_bulk_cells_recursively(cell->get_child(i));
+        }
+    }
+}
+
+void viswidget::mark_empty_cells_recursively(octcell* cell)
+{
+    if (cell->is_leaf()) {
+        if (cell->is_empty()) {
+            quick_mark_empty_cell(cell);
+        }
+        return;
+    }
+
+    for (uint i = 0; i < octcell::MAX_NUM_CHILDREN; i++) {
+        if (cell->get_child(i)) {
+            mark_empty_cells_recursively(cell->get_child(i));
         }
     }
 }
@@ -485,7 +542,7 @@ void viswidget::visualize_fvoctree(fvoctree *tree)
 #else
     /* Draw leaf cells */
     set_line_style(LINE_WIDTH, LEAF_CUBE_R, LEAF_CUBE_G, LEAF_CUBE_B, LEAF_CUBE_A);
-    set_up_model_view_matrix();
+    set_up_model_view_matrix(LEAF_CUBE_DIST_SCALING);
     visualize_leaf_cells_recursively(tree->root);
 #if DRAW_PARENT_CELLS && !DRAW_ONLY_SURFACE_CELLS
     /* Draw parent cells */
@@ -495,6 +552,20 @@ void viswidget::visualize_fvoctree(fvoctree *tree)
 #endif // DRAW_PARENT_CELLS
 #endif // Parent/leaf cell order
 #endif // DRAW_CELL_CUBES
+
+#if  MARK_BULK_CELLS
+    /* Mark bulk cells */
+    set_line_style(BULK_CELL_MARK_LINE_WIDTH, BULK_CELL_MARK_R, BULK_CELL_MARK_G, BULK_CELL_MARK_B, BULK_CELL_MARK_A);
+    set_up_model_view_matrix(BULK_CELL_MARK_SCALING);
+    mark_bulk_cells_recursively(tree->root);
+#endif
+
+#if  MARK_EMPTY_CELLS
+    /* Mark empty cells */
+    set_line_style(EMPTY_CELL_MARK_LINE_WIDTH, EMPTY_CELL_MARK_R, EMPTY_CELL_MARK_G, EMPTY_CELL_MARK_B, EMPTY_CELL_MARK_A);
+    set_up_model_view_matrix(EMPTY_CELL_MARK_SCALING);
+    mark_empty_cells_recursively(tree->root);
+#endif
 
 #if  DRAW_NEIGHBOR_CONNECTIONS
     set_up_model_view_matrix(NEIGHBOR_CONNECTIONS_DIST_SCALING);
@@ -609,6 +680,21 @@ void viswidget::set_line_style(GLfloat width, GLfloat  r, GLfloat g, GLfloat b, 
     quick_set_color(r, g, b, a);
 
     glLineWidth(width);
+}
+
+void viswidget::quick_draw_circle(pfvec mid, pfvec e1, pfvec e2, uint num_lines)
+{
+   glBegin(GL_LINE_LOOP);
+   for (uint i = 0; i < num_lines; i++) {
+       pftype angle = i * M_2PI / num_lines;
+       pfvec r = mid + cos(angle)*e1 + sin(angle)*e2;
+#if    NUM_DIMENSIONS == 2
+       glVertex3f(r.e[DIM_X], r.e[DIM_Y], 0);
+#elif  NUM_DIMENSIONS == 3
+       glVertex3f(r.e[DIM_X], r.e[DIM_Y], r.e[DIM_Z]);
+#endif
+   }
+   glEnd();
 }
 
 void viswidget::quick_draw_triangle(pftype x1, pftype y1, pftype z1,

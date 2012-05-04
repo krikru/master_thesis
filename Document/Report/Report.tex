@@ -28,6 +28,7 @@
 \newcommand{\comment}[1]{}
 \newcommand{\HRule}{\rule{\linewidth}{0.5mm}}
 
+\iftrue
 \makeatletter
 \newcommand{\showsectioning}[3]{%
     \begingroup
@@ -45,6 +46,11 @@
     \fi
 }
 \makeatother
+\else
+\newcommand{\showsectioning}[3]{%
+    #1{#2} #3%
+}
+\fi
 \newcommand\showpart{\showsectioning\part}
 \newcommand\showchapter{\showsectioning\chapter}
 \newcommand\showsection{\showsectioning\section}
@@ -73,6 +79,9 @@
 % % % % % % % % % %
 
 \section*{Copyright}
+\iffalse
+\thispagestyle{empty}
+\fi
 The publishers will keep this document online on the Internet -- or its possible replacement -- for a period of 25 years starting from the date of publication barring exceptional circumstances.
 
 The online availability of the document implies permanent permission for anyone to read, to download, or to print out single copies for his/hers own use and to use it unchanged for non-commercial research and educational purpose. Subsequent transfers of copyright cannot revoke this permission. All other uses of the document are conditional upon the consent of the copyright owner. The publisher has taken technical and administrative measures to assure authenticity, security and accessibility.
@@ -92,8 +101,8 @@ For additional information about the Linköping University Electronic Press and 
 
 % Table of contents and various lists
 \tableofcontents
-\listoffigures
 \listoftables
+\listoffigures
 
 % % % % % % % % %
 % INTRODUCTION  %
@@ -121,7 +130,7 @@ For additional information about the Linköping University Electronic Press and 
 \showsubsection{Twodimensional PDEs for shallow water}{
 }
 
-\showsubsection{Spectral analysis methods}{
+\showsubsection{Spectral methods}{
 
 References:
 \begin{itemize}
@@ -132,22 +141,24 @@ References:
 
 }
 
-\showsection{iSection name}{ \showsubsection{iSubsection name}{ } }
-
-\showsection{Section name}{
-
-\showsubsection{Subsection name}{
-}
-
-}
-
 \showsection{Threedimensional methods}{
+
 \showsubsection{Particles}{
-}\showsubsection{Boundary element method}{
-}\showsubsection{Finite element method}{
-}\showsubsection{Finite volume method with tall cells}{
-}\showsubsection{Finite volume method with octrees}{
-}} % Section Threedimensional methods
+}
+
+\showsubsection{Boundary element method}{
+}
+
+\showsubsection{Finite element method}{
+}
+
+\showsubsection{Finite volume method with tall cells}{
+}
+
+\showsubsection{Finite volume method with octrees}{
+}
+
+} % Section Threedimensional methods
 
 \showsection{Twodimensional and threedimensional hybrid methods}{
 } % Twodimensional and threedimensional hybrid methods
@@ -263,6 +274,18 @@ References:
 %\chapter{Derivation of twodimensional PDEs for water waves at random intermediate depths}
 \chapter{Derivation of twodimensional PDEs for water waves at varying depths}
 
+% % % % % % % % %
+% BIBLIOGRAPHY  %
+% % % % % % % % %
+
+\iffalse
+
+\bibliographystyle{plain}
+\bibliography{sample1,sample2,...,samplen}
+% Note the lack of whitespace between the commas and the next bib file.
+
+\else
+
 \begin{thebibliography}{99}
     
     %TODO: Remove this bibitem
@@ -274,5 +297,7 @@ References:
     1994.
     
 \end{thebibliography}
+
+\fi
 
 \end{document}

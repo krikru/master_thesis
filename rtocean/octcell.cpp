@@ -62,7 +62,7 @@ void octcell::update_pressure()
         lists.add_neighbor_list(&neighbor_lists[NL_SAME_LEVEL_OF_DETAIL_LEAF]);
         lists.add_neighbor_list(&neighbor_lists[NL_LOWER_LEVEL_OF_DETAIL_LEAF]);
         for (nlnode* node = lists.get_first_node(); node; node = lists.get_next_node()) {
-            rp_increase += (node->v.pos_dir ? -1 : 1) * node->v.vel * node->v.cf_area;
+            rp_increase += node->v.get_signed_dir() * node->v.vel * node->v.cf_area;
         }
         rp_increase /= get_total_volume();
         rp += rp_increase;

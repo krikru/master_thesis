@@ -20,7 +20,7 @@
 /* Essential */
 #define  DEBUG                      1
 #define  RUN_SAFE                   1
-#define  ELABORATE                  0
+#define  QUICKFIX1                  1
 #define  NUM_DIMENSIONS             2 /* 2 or 3 */
 //#define  NUM_DIRECTIONS             (2*NUM_DIMENSIONS)
 #define  LOGICAL_AXIS_ORDER         1
@@ -30,7 +30,8 @@
 /* Program speed */
 #define  FRAME_MS                   (1000/60)
 //#define  SIMULATION_TIME_STEP       (FRAME_MS/1000.0) // [s]
-#define  SIMULATION_TIME_STEP       .001 // [s]
+//#define  SIMULATION_TIME_STEP       .001 // [s]
+#define  SIMULATION_TIME_STEP       .0001 // [s]
 
 /* Grid */
 #define  MIN_LOD_LAYER_THICKNESS    2    // [Number of cells]
@@ -47,6 +48,11 @@
 #define  DRAW_CHILD_CELLS_FIRST_IF_DEPTH_TESTING     1
 #define  DRAW_SMOOTH_LINES          0
 #define  LINE_WIDTH                 (DRAW_SMOOTH_LINES ? 1.5 : 1)
+#define  BULK_CELL_MARK_LINE_WIDTH  3
+#define  EMPTY_CELL_MARK_LINE_WIDTH 3
+#define  NUM_LINES_IN_CIRCLES       16
+#define  MARK_EMPTY_CELLS           1
+#define  MARK_BULK_CELLS            1
 #define  DRAW_PRESSURE              1
 #define  DRAW_CELL_CUBES            1
 #define  DRAW_PARENT_CELLS          1
@@ -58,9 +64,14 @@
 #define  MIDDLE_MARK_SIZE           0.05
 #define  RANDOMIZE_NEIGHBOR_CONNECTION_MIDPOINTS     0
 #define  NEIGHBOR_CONNECTION_MIDPOINT_RANDOMIZATION  0.1
-#define  PARENT_CUBE_DIST_SCALING   1.0003
-#define  NEIGHBOR_CONNECTIONS_DIST_SCALING           (1/PARENT_CUBE_DIST_SCALING)
-#define  PRESSURE_DISTANCE_SCALING  (PARENT_CUBE_DIST_SCALING*PARENT_CUBE_DIST_SCALING)
+/* Scalings to prevent the same z-value */
+#define  SCALE_FACTOR               1.0003
+#define  PRESSURE_DISTANCE_SCALING  (SCALE_FACTOR * SCALE_FACTOR)
+#define  PARENT_CUBE_DIST_SCALING   SCALE_FACTOR
+#define  LEAF_CUBE_DIST_SCALING     1
+#define  EMPTY_CELL_MARK_SCALING    1
+#define  BULK_CELL_MARK_SCALING     1
+#define  NEIGHBOR_CONNECTIONS_DIST_SCALING           (1 / SCALE_FACTOR)
 
 /* Precision */
 #define  USE_DOUBLE_PRECISION_FOR_PHYSICS  0
@@ -124,6 +135,15 @@ const float  MIDDLE_MARK_R          = 0.5;
 const float  MIDDLE_MARK_G          = 0.5;
 const float  MIDDLE_MARK_B          = 0.5;
 const float  MIDDLE_MARK_A          = 1;
+
+const float  BULK_CELL_MARK_R       = 0.5;
+const float  BULK_CELL_MARK_G       = 0.5;
+const float  BULK_CELL_MARK_B       = 0.5;
+const float  BULK_CELL_MARK_A       = 1;
+const float  EMPTY_CELL_MARK_R      = 1;
+const float  EMPTY_CELL_MARK_G      = 0;
+const float  EMPTY_CELL_MARK_B      = 0;
+const float  EMPTY_CELL_MARK_A      = 1;
 
 ////////////////////////////////////////////////////////////////
 // TYPEDEFS
@@ -212,6 +232,7 @@ enum DIMENSION {
 
 // TODO: Make some of these inline functions instead
 
+#define  ABS(x)     ((x) >= 0 ? (x) : -(x))
 #define  MIN(x, y)  ((y) < (x) ? (y) : (x))
 #define  MAX(x, y)  ((y) > (x) ? (y) : (x))
 
