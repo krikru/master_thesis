@@ -48,9 +48,12 @@ public:
 
     /* Navier-Stokes */
     pftype rp; /* Reduced pressure = pressure/density */
-    pftype alpha; /* The amount of the volume in this cell that is currently water */
-    pfvec  alpha_grad; /* The gradient of alpha */
     /*Since the velocities are located in the cell faces, they are stored in the octneighbors */
+
+    /* Volume of fluid method */
+    pftype alpha; /* [1] The amount of the volume in this cell that is currently water */
+    pftype dalpha; /* [1] How much alpha should increase during this time step */
+    pfvec  alpha_grad_coeff; /* [1] The gradient of alpha time the cell size */
 
     /* Level of detail */
     uint lvl; /* The level of the cell, 0 = root */

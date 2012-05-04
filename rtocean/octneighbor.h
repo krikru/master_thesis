@@ -51,7 +51,7 @@ public:
      *****************/
 
     /* Water flow */
-    pftype vel; /* Velocity of the water in the positive direction (dist if pos_dir = true, -dist otherwise) */
+    pftype vel_out; /* Velocity of the water in the direction out from the cell, towards the neighbor cell */
 
     /* Distance between cells */
     pfvec  dist;
@@ -62,7 +62,8 @@ public:
 
 public:
     /* Public methods */
-    void set(octcell* neighbor_cell, nlnode* corresponding_neighbor_list_entry, uint dimension, bool positive_direction, pftype water_velocity_in_the_positive_direction, pfvec distance, pftype distance_absolute_value, pftype cell_face_area);
+    void set(octcell* neighbor_cell, nlnode* corresponding_neighbor_list_entry, uint dimension, bool positive_direction, pftype water_velocity_in_the_out_direction, pfvec distance, pftype distance_absolute_value, pftype cell_face_area);
+    int  get_signed_dir();
 
     /* Simulation */
     bool should_calculate_new_velocity();
@@ -74,6 +75,12 @@ private:
      *************************/
     octneighbor(octneighbor&); // Copy constructor prevented from all use
 };
+
+inline
+int octneighbor::get_signed_dir()
+{
+    return pos_dir ? 1 : -1;
+}
 
 inline
 bool octneighbor::should_calculate_new_velocity()

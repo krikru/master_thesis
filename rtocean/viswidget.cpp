@@ -137,7 +137,7 @@ void viswidget::set_system_to_visualize(watersystem* system)
 ////////////////////////////////////////////////////////////////
 
 
-void viswidget::draw_pressure(octcell* cell)
+void viswidget::draw_pressure_deviation(octcell* cell)
 {
     /* Calculate color */
     /*
@@ -177,7 +177,8 @@ void viswidget::draw_pressure(octcell* cell)
         throw domain_error("idx2 > NUM_TRANSITIONS");
     }
 #endif
-    quick_set_color(c[0], c[1], c[2], 1);
+    //quick_set_color(c[0], c[1], c[2], 1);
+    quick_set_color(c[0], c[1], c[2], cell->alpha);
 
 #if    NUM_DIMENSIONS == 2
     /* Vertices */
@@ -299,7 +300,7 @@ void viswidget::visualize_leaf_cells_recursively(octcell* cell)
 void viswidget::draw_pressure_recursively(octcell* cell)
 {
     if (cell->is_leaf()) {
-        draw_pressure(cell);
+        draw_pressure_deviation(cell);
         return;
     }
 
@@ -574,20 +575,34 @@ void viswidget::init_neighbor_connection_colors()
 
 void viswidget::quick_set_color(GLfloat r, GLfloat g, GLfloat b, GLfloat a)
 {
+    static bool blending_enabled = false;
+    if (a < 1 && !blending_enabled) {
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        blending_enabled = true;
+    }
+    GLfloat back_light = 0;
+    r = r*a + back_light*(1-a);
+    g = g*a + back_light*(1-a);
+    b = b*a + back_light*(1-a);
     glColor4f(r, g, b, a);
 }
 
 void viswidget::set_line_style(GLfloat width, GLfloat  r, GLfloat g, GLfloat b, GLfloat a)
 {
+    static bool blending_enabled = false;
+    if (a < 1 && !blending_enabled) {
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        blending_enabled = true;
+    }
     glDisable(GL_TEXTURE_2D);
 #if  TEST_DEPTH
     glEnable(GL_DEPTH_TEST);
 #endif
 #if  DRAW_SMOOTH_LINES
-    glEnable(GL_BLEND);
     glEnable(GL_LINE_SMOOTH);
 #else
-    glDisable(GL_BLEND);
     glDisable(GL_LINE_SMOOTH);
 #endif
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);

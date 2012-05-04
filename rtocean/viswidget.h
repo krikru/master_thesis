@@ -36,7 +36,7 @@ public slots:
 public:
 
 private:
-    void draw_pressure(octcell* cell);
+    void draw_pressure_deviation(octcell* cell);
     void quick_draw_cell_water_level(octcell* cell);
     void quick_draw_cell(octcell* cell);
     void set_up_model_view_matrix(GLdouble scale_factor = 1);
