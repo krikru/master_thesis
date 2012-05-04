@@ -69,7 +69,7 @@ private:
     /* Simulation */
     void advect_and_update_pressure();
     void calculate_delta_alpha_recursively(octcell* cell);
-    void advect_alpha_recursively(octcell* cell);
+    void clamp_advect_alpha_recursively(octcell* cell);
     void calculate_alpha_gradient_recursively(octcell* cell);
     void sharpen_alpha_recursively(octcell* cell);
     void update_pressure_recursively(octcell* cell);

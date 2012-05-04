@@ -20,18 +20,18 @@
 /* Essential */
 #define  DEBUG                      1
 #define  RUN_SAFE                   1
-#define  QUICKFIX1                  1
 #define  NUM_DIMENSIONS             2 /* 2 or 3 */
 //#define  NUM_DIRECTIONS             (2*NUM_DIMENSIONS)
 #define  LOGICAL_AXIS_ORDER         1
 #define  GENERATE_NEIGHBORS_STATICALLY               0
 #define  GENERATE_NEIGHBORS_DYNAMICALLY              1
 
-/* Program speed */
+/* Simulation parameters */
 #define  FRAME_MS                   (1000/60)
 //#define  SIMULATION_TIME_STEP       (FRAME_MS/1000.0) // [s]
 //#define  SIMULATION_TIME_STEP       .001 // [s]
 #define  SIMULATION_TIME_STEP       .0001 // [s]
+#define  INTERFACE_THICKNESS_IN_CELLS                4.0 // [1] The number of cells that will make out the interface
 
 /* Grid */
 #define  MIN_LOD_LAYER_THICKNESS    2    // [Number of cells]

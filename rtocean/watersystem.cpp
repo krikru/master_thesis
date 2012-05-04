@@ -84,16 +84,19 @@ void watersystem::advect_and_update_pressure()
     //TODO: Ensure mass conservation (current alpha advection do not conserve the mass)
     /* Advect alpha */
     calculate_delta_alpha_recursively(w->root);
-    advect_alpha_recursively(w->root);
+    clamp_advect_alpha_recursively(w->root);
 
+#if 0
     /* Sharpen alpha */
     calculate_alpha_gradient_recursively(w->root);
     sharpen_alpha_recursively(w->root);
+#endif
 
     /* Update pressure */
     update_pressure_recursively(w->root);
 }
 
+#if 0
 void watersystem::calculate_delta_alpha_recursively(octcell* cell)
 {
     if (cell->has_child_array()) {
@@ -141,15 +144,80 @@ void watersystem::calculate_delta_alpha_recursively(octcell* cell)
     }
 #endif
 }
-
-void watersystem::advect_alpha_recursively(octcell* cell)
+#else
+void watersystem::calculate_delta_alpha_recursively(octcell* cell)
 {
     if (cell->has_child_array()) {
         for (uint idx = 0; idx < octcell::MAX_NUM_CHILDREN; idx++) {
             octcell* c = cell->get_child(idx);
             if (c) {
                 /* Child exists */
-                advect_alpha_recursively(c);
+                calculate_delta_alpha_recursively(c);
+            }
+        }
+        return;
+    }
+
+    /* Calculate mean velocity and alpha gradient */
+    cell->alpha_grad_coeff = pfvec(); // Reset alpha gradient
+    pfvec mean_vel;
+    pfvec area;
+    /* Loop though neighbors */
+    nlset lists;
+    lists.add_neighbor_list(&cell->neighbor_lists[NL_HIGHER_LEVEL_OF_DETAIL]);
+    lists.add_neighbor_list(&cell->neighbor_lists[NL_SAME_LEVEL_OF_DETAIL_LEAF]);
+    lists.add_neighbor_list(&cell->neighbor_lists[NL_LOWER_LEVEL_OF_DETAIL_LEAF]);
+    for (nlnode* node = lists.get_first_node(); node; node = lists.get_next_node()) {
+        //cell->alpha_grad.e[node->v.dim] += (node->v.n->alpha - cell->alpha) * (node->v.pos_dir ? node->v.cf_area : -node->v.cf_area);
+        cell->alpha_grad_coeff.e[node->v.dim] += (node->v.n->alpha - cell->alpha) * (node->v.pos_dir ? node->v.cf_area : -node->v.cf_area);
+        if (node->v.n->is_non_empty()) {
+            area.e[node->v.dim] += node->v.cf_area;
+            mean_vel.e[node->v.dim] += node->v.cf_area * node->v.get_signed_dir() * node->v.vel_out;
+        }
+    }
+    for (uint dim = 0; dim < NUM_DIMENSIONS; dim++) {
+        if (area.e[dim]) {
+            mean_vel.e[dim] /= area[dim];
+        }
+        else {
+            /* Don't know the velocity in this direction */
+            // TODO: Find out the velocity in some other way
+            //mean_vel[dim] = 0; This componentis already 0
+        }
+    }
+
+    //TODO: Optimize
+    pftype ideal_length = 1/(INTERFACE_THICKNESS_IN_CELLS * cell->s); // [1/m]
+    pftype square_length = cell->alpha_grad_coeff.sqr_length(); // [1/m]
+    if (!square_length) {
+        return;
+    }
+    pftype real_length = sqrt(square_length);
+    pftype start_distance_in_cells;
+    if (cell->alpha <= 0 || cell->alpha >= 1) {
+        /* The cell will need some start distance before getting into the interface */
+        pftype cells_from_interface = 1/((ideal_length - 2*real_length)/ideal_length); // [1] How many cells outside the interface
+        start_distance_in_cells = MAX(cells_from_interface, 0); // [1] The start distance in cells before reaching the interface
+    }
+    else {
+        /* The cell is already in the interface and needs no start distance */
+        start_distance_in_cells = 0;
+    }
+    /* Give the gradient it's proper magnitude */
+    cell->alpha_grad_coeff *= ideal_length / real_length;
+    cell->dalpha = -cell->alpha_grad_coeff * mean_vel * dt;
+    cell->dalpha -= (cell->dalpha > 0 ? 1 : -1)/INTERFACE_THICKNESS_IN_CELLS * start_distance_in_cells;
+}
+#endif
+
+void watersystem::clamp_advect_alpha_recursively(octcell* cell)
+{
+    if (cell->has_child_array()) {
+        for (uint idx = 0; idx < octcell::MAX_NUM_CHILDREN; idx++) {
+            octcell* c = cell->get_child(idx);
+            if (c) {
+                /* Child exists */
+                clamp_advect_alpha_recursively(c);
             }
         }
         return;
@@ -195,14 +263,12 @@ void watersystem::advect_alpha_recursively(octcell* cell)
 
     /* Update alpha */
     cell->alpha += cell->dalpha;
-#if  DEBUG
     if (cell->alpha < 0) {
-        throw logic_error("Alpha < 0 after advection");
+        cell->alpha = 0;
     }
     else if (cell->alpha > 1) {
-        throw logic_error("Alpha > 1 after advection");
+        cell->alpha = 1;
     }
-#endif
 }
 
 void watersystem::calculate_alpha_gradient_recursively(octcell* cell)
