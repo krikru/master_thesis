@@ -129,8 +129,7 @@ void watersystem::calculate_cell_face_properties_recursivelly(octcell* cell)
     for (nlnode* node = lists.get_first_node(); node; node = lists.get_next_node()) {
         if (node->v.vel_out > 0) {
             // UPWIND Scheme (smearing) //TODO: Change to better scheme!!!
-            node->v.water_density = cell->water_density;
-            node->v.total_density = cell->total_density;
+            node->v.set_densities(cell->water_density, cell->total_density);
         }
     }
 }
@@ -415,12 +414,45 @@ void watersystem::advect_cell_properties_recursivelly(octcell* cell)
         in_total_flux -= node->v.total_density * volume_flux_out;
     }
 
+#if 1
     pftype mass_flux_to_density_factor = dt/cell->get_cube_volume();
     pftype in_water_density = in_water_flux * mass_flux_to_density_factor;
     pftype in_total_density = in_total_flux * mass_flux_to_density_factor;
 
+    if (dt) {
+        throw logic_error("dt is non-zero");
+    }
+    if (mass_flux_to_density_factor) {
+        throw logic_error("mass_flux_to_density_factor is non-zero");
+    }
+    if (in_water_density) {
+        throw logic_error("in_water_density is non-zero");
+    }
+    if (in_total_density) {
+        throw logic_error("in_total_density is non-zero");
+    }
+#else
+
+    float C = in_total_flux;
+
+
+    float A = 0;
+    float B = C * A;
+    if (A) {
+        throw logic_error("A is non-zero");
+    }
+    if (B) {
+        throw logic_error("B is non-zero");
+    }
+
+    pftype in_water_density = 0;
+    pftype in_total_density = 0;
+#endif
+
+#if 1
     cell->water_density += in_water_density;
     cell->total_density += in_total_density;
+#endif
 
 #if  USE_ARTIFICIAL_COMPRESSIBILITY
     /* Update pressure */

@@ -30,7 +30,8 @@
 #define  FRAME_MS                   (1000/60)
 //#define  SIMULATION_TIME_STEP       (FRAME_MS/1000.0) // [s]
 //#define  SIMULATION_TIME_STEP       .001 // [s]
-#define  SIMULATION_TIME_STEP       .001 // [s]
+//#define  SIMULATION_TIME_STEP       .001 // [s]
+#define  SIMULATION_TIME_STEP       .00 // [s]
 #define  INTERFACE_THICKNESS_IN_CELLS                4.0 // [1] The number of cells that will make out the interface
 
 /* Grid */

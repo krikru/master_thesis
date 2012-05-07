@@ -71,6 +71,7 @@ public:
     /* Public methods */
     void set(octcell* neighbor_cell, nlnode* corresponding_neighbor_list_entry, uint dimension, bool positive_direction, pftype water_velocity_in_the_out_direction, pfvec distance, pftype distance_absolute_value, pftype cell_face_area);
     void set_velocity_out(pftype velocity_out);
+    void set_densities(pftype new_water_density, pftype new_total_density);
     int  get_signed_dir();
 
     /* Simulation */
