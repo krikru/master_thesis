@@ -151,7 +151,7 @@ void viswidget::draw_pressure_deviation(octcell* cell)
                              color3(1, 1, 0),
                              color3(1, 0, 0),
                              color3(0, 0, 0)};
-    pftype q = NUM_TRANSITIONS * (cell->rp / P_G - (SURFACE_HEIGHT - cell->get_cell_center().e[VERTICAL_DIMENSION]) + 0.5);
+    pftype q = NUM_TRANSITIONS * (cell->p / (P_G * P_WATER_DENSITY) - (SURFACE_HEIGHT - cell->get_cell_center().e[VERTICAL_DIMENSION]) + 0.5);
     q = MIN(MAX(q, 0), NUM_TRANSITIONS);
     uint idx1 = uint(q);
     uint idx2 = MIN(idx1 + 1, NUM_TRANSITIONS);
@@ -178,7 +178,7 @@ void viswidget::draw_pressure_deviation(octcell* cell)
     }
 #endif
     //quick_set_color(c[0], c[1], c[2], 1);
-    quick_set_color(c[0], c[1], c[2], cell->alpha);
+    quick_set_color(c[0], c[1], c[2], cell->get_alpha());
 
 #if    NUM_DIMENSIONS == 2
     /* Vertices */
@@ -198,7 +198,7 @@ void viswidget::draw_pressure_deviation(octcell* cell)
 #endif
 }
 
-void viswidget::quick_mark_bulk_cell(octcell* cell)
+void viswidget::quick_mark_water_cell(octcell* cell)
 {
 #if    NUM_DIMENSIONS == 2
     pftype rad = 0.4 * cell->s;
@@ -210,7 +210,7 @@ void viswidget::quick_mark_bulk_cell(octcell* cell)
 #endif
 }
 
-void viswidget::quick_mark_empty_cell(octcell* cell)
+void viswidget::quick_air_empty_cell(octcell* cell)
 {
 #if    NUM_DIMENSIONS == 2
     pftype x0 = cell->r.e[DIM_X];
@@ -227,7 +227,7 @@ void viswidget::quick_draw_cell_water_level(octcell* cell)
 {
 #if    NUM_DIMENSIONS == 2
     pfvec p0 = cell->r;
-    p0.e[VERTICAL_DIMENSION] += cell->alpha * cell->s;
+    p0.e[VERTICAL_DIMENSION] += cell->get_alpha() * cell->s;
     pfvec p1 = p0;
     p1.e[HORIZONTAL_DIMENSION1] += cell->s;
     quick_draw_line(p0, p1);
@@ -336,34 +336,34 @@ void viswidget::draw_pressure_recursively(octcell* cell)
     }
 }
 
-void viswidget::mark_bulk_cells_recursively(octcell* cell)
+void viswidget::mark_water_cells_recursively(octcell* cell)
 {
     if (cell->is_leaf()) {
-        if (cell->is_bulk_cell()) {
-            quick_mark_bulk_cell(cell);
+        if (cell->is_water_cell()) {
+            quick_mark_water_cell(cell);
         }
         return;
     }
 
     for (uint i = 0; i < octcell::MAX_NUM_CHILDREN; i++) {
         if (cell->get_child(i)) {
-            mark_bulk_cells_recursively(cell->get_child(i));
+            mark_water_cells_recursively(cell->get_child(i));
         }
     }
 }
 
-void viswidget::mark_empty_cells_recursively(octcell* cell)
+void viswidget::mark_air_cells_recursively(octcell* cell)
 {
     if (cell->is_leaf()) {
-        if (cell->is_empty()) {
-            quick_mark_empty_cell(cell);
+        if (cell->is_air_cell()) {
+            quick_air_empty_cell(cell);
         }
         return;
     }
 
     for (uint i = 0; i < octcell::MAX_NUM_CHILDREN; i++) {
         if (cell->get_child(i)) {
-            mark_empty_cells_recursively(cell->get_child(i));
+            mark_air_cells_recursively(cell->get_child(i));
         }
     }
 }
@@ -371,7 +371,7 @@ void viswidget::mark_empty_cells_recursively(octcell* cell)
 void viswidget::draw_water_level_recursively(octcell* cell)
 {
     if (cell->is_leaf()) {
-        if (cell->is_surface_cell()) {
+        if (cell->is_mixed_cell()) {
             quick_draw_cell_water_level(cell);
         }
         return;
@@ -557,14 +557,14 @@ void viswidget::visualize_fvoctree(fvoctree *tree)
     /* Mark bulk cells */
     set_line_style(BULK_CELL_MARK_LINE_WIDTH, BULK_CELL_MARK_R, BULK_CELL_MARK_G, BULK_CELL_MARK_B, BULK_CELL_MARK_A);
     set_up_model_view_matrix(BULK_CELL_MARK_SCALING);
-    mark_bulk_cells_recursively(tree->root);
+    mark_water_cells_recursively(tree->root);
 #endif
 
 #if  MARK_EMPTY_CELLS
     /* Mark empty cells */
     set_line_style(EMPTY_CELL_MARK_LINE_WIDTH, EMPTY_CELL_MARK_R, EMPTY_CELL_MARK_G, EMPTY_CELL_MARK_B, EMPTY_CELL_MARK_A);
     set_up_model_view_matrix(EMPTY_CELL_MARK_SCALING);
-    mark_empty_cells_recursively(tree->root);
+    mark_air_cells_recursively(tree->root);
 #endif
 
 #if  DRAW_NEIGHBOR_CONNECTIONS

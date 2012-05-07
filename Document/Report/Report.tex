@@ -28,35 +28,6 @@
 \newcommand{\comment}[1]{}
 \newcommand{\HRule}{\rule{\linewidth}{0.5mm}}
 
-\iftrue
-\makeatletter
-\newcommand{\showsectioning}[3]{%
-    \begingroup
-    \def\@tempa{#3}%
-    \def\@tempb{ \par}%
-    \ifcase0%
-    \ifx\@tempa\@empty 1\else
-    \ifx\@tempa\space  1\else
-    \ifx\@tempa\@tempb 1\fi\fi\fi
-    \relax
-    \endgroup
-    #1{#2} #3%
-    \else
-    \endgroup
-    \fi
-}
-\makeatother
-\else
-\newcommand{\showsectioning}[3]{%
-    #1{#2} #3%
-}
-\fi
-\newcommand\showpart{\showsectioning\part}
-\newcommand\showchapter{\showsectioning\chapter}
-\newcommand\showsection{\showsectioning\section}
-\newcommand\showsubsection{\showsectioning\subsection}
-\newcommand\showsubsubsection{\showsectioning\subsubsection}
-
 \begin{document}
 
 % % % % % % % %
@@ -82,6 +53,7 @@
 \iffalse
 \thispagestyle{empty}
 \fi
+
 The publishers will keep this document online on the Internet -- or its possible replacement -- for a period of 25 years starting from the date of publication barring exceptional circumstances.
 
 The online availability of the document implies permanent permission for anyone to read, to download, or to print out single copies for his/hers own use and to use it unchanged for non-commercial research and educational purpose. Subsequent transfers of copyright cannot revoke this permission. All other uses of the document are conditional upon the consent of the copyright owner. The publisher has taken technical and administrative measures to assure authenticity, security and accessibility.
@@ -108,12 +80,11 @@ For additional information about the Linköping University Electronic Press and 
 % INTRODUCTION  %
 % % % % % % % % %
 
-\showpart{Introduction}{
+\part{Introduction}
 
-\showchapter{Motivation}{
-}
+\chapter{Motivation}
 
-\showchapter{Difficulties}{
+\chapter{Difficulties}
 
 \begin{itemize}
     \item Wave dispersion
@@ -121,51 +92,33 @@ For additional information about the Linköping University Electronic Press and 
     \item The water should interact with moving objects
 \end{itemize}
 
-}
+\chapter{Earlier approaches}
 
-\showchapter{Earlier approaches}{
+\section{Twodimensional methods}
 
-\showsection{Twodimensional methods}{
+\subsection{Twodimensional PDEs for shallow water}
 
-\showsubsection{Twodimensional PDEs for shallow water}{
-}
-
-\showsubsection{Spectral methods}{
+\subsection{Spectral methods}
 
 References:
 \begin{itemize}
-    \item REAL TIME MODELLING OF MULTISPECTRAL OCEAN SCENES
-    \item GPU-based simulation of Radar sea clutter
+    \item \textit{REAL TIME MODELLING OF MULTISPECTRAL OCEAN SCENES}
+    \item \textit{GPU-based simulation of Radar sea clutter}
 \end{itemize}
-}
 
-}
+\section{Threedimensional methods}
 
-\showsection{Threedimensional methods}{
+\subsection{Particles}
 
-\showsubsection{Particles}{
-}
+\subsection{Boundary element method}
 
-\showsubsection{Boundary element method}{
-}
+\subsection{Finite element method}
 
-\showsubsection{Finite element method}{
-}
+\subsection{Finite volume method with tall cells}
 
-\showsubsection{Finite volume method with tall cells}{
-}
+\subsection{Finite volume method with octrees}
 
-\showsubsection{Finite volume method with octrees}{
-}
-
-} % Section Threedimensional methods
-
-\showsection{Twodimensional and threedimensional hybrid methods}{
-} % Twodimensional and threedimensional hybrid methods
-
-} % Chapter earlier approaches
-
-} % Part Introduction
+\section{Twodimensional and threedimensional hybrid methods}
 
 % % % % % %
 % METHOD  %
@@ -195,6 +148,8 @@ References:
 
 \chapter{Octrees}
 
+\section{Determining level of detail}
+
 \section{The differentiating problem}
 
 \subsection{Velocity advection term}
@@ -205,7 +160,9 @@ References:
 
 \subsection{Perfectly matched layer}
 
-\chapter{Surface capturing}
+\chapter{Surface representation}
+
+There are both surface trackibng methods and surface capturing methods.
 
 \section{Level set method}
 
@@ -213,16 +170,77 @@ References:
 
 \section{Volume of fluid method}
 
+\begin{itemize}
+    \item Comparsion: \textit{\href{http://capfluidicslit.mme.pdx.edu/reference/Numerics/Gopala_ChemEngJ2008_VOFMethodsFreeSurfaceFlow.pdf}{Volume of fluid methods for immiscible-fluid and free-surface flows}}
+\end{itemize}
+
+
 \subsection{Interface reconstruction}
 %\section{Internal alpha distribution}
 
-\subsection{Advection of the interface}
+\subsection{Geometric advection schemes}
 
-\subsection{Smearing}
+\begin{itemize}
+    \item A simple (at least so it seems) scheme: \textit{\href{http://www.lmm.jussieu.fr/~zaleski/nota02.pdf}{A geometrical area-preserving Volume-of-Fluid advection method}}
+\end{itemize}
 
-\subsubsection{Upwind leapfrog}
+\subsection{Algebraic advection schemes}
 
-\subsubsection{Lanczos resampling}
+\subsubsection{Smearing}
+
+\subsubsection{Convection boundedness criterion (CBC)}
+
+\begin{itemize}
+    \item Normalised Variable Diagram (NVD)
+    \item \textit{\href{http://warminski.pollub.plwww.ptmts.org.pl/Waclaw-Koron-2-08.pdf}{Comparison of CICSAM and HRIC High-resolution Schemes for Interface Capturing}}
+    \item \textit{\href{http://proceedings.fyper.com/eccomascfd2006/documents/85.pdf}{MODELING OF THE WAVE BREAKING WITH CICSAM AND HRIC HIGH-RESOLUTION SCHEMES}}
+\end{itemize}
+
+\subsubsection{Hyper-C flux limiter}
+
+\begin{itemize}
+    \item Reference: \textit{\href{http://www.water.tkk.fi/wr/kurssit/Yhd-12.112/TVD1.pdf}{The Ultimate Conservative Difference Scheme Applied to Unsteady One-Dimensional Advection}}
+\end{itemize}
+
+\paragraph{Floating mixed cells}
+
+\begin{itemize}
+    \item Remedy: \textit{\href{https://e-reports-ext.llnl.gov/pdf/245038.pdf}{A Simple Advection Scheme for Material Interface}}
+\end{itemize}
+
+\subsubsection{Compressive Interface Capturing Scheme for Arbitrary Meshes (CICSAM)}
+
+\begin{itemize}
+    \item Reference: \textit{\href{http://ac.els-cdn.com/S0021999199962769/1-s2.0-S0021999199962769-main.pdf?_tid=85161b57da5f4401e55c9d07495e24ea&acdnat=1336167249_a59e4f578adbacf3bff69936c48cdd57}{A Method for Capturing Sharp Fluid Interfaces on Arbitrary Meshes}}
+    \item Test with different Courant numbers: \textit{\href{http://www.marin.nl/upload_mm/8/2/c/1807524470_1999999096_2007-ECCOMAS_HoekstraVazAbeilBunnik.pdf}{Free Surface Flow Modelling with Interface Capturing Techniques}}
+    \item Improvement 1: \textit{\href{http://powerlab.fsb.hr/ped/kturbo/openfoam/docs/HenrikRuschePhD2002.pdf}{Computational Fluid Dynamics of Dispersed Two-Phase Flows at High Phase Fractions}}
+\end{itemize}
+
+\subsubsection{High Resolution Interface Capturing (HRIC) scheme}
+
+\begin{itemize}
+    \item Described here: \textit{\href{http://warminski.pollub.plwww.ptmts.org.pl/Waclaw-Koron-2-08.pdf}{Comparison of CICSAM and HRIC High-resolution Schemes for Interface Capturing}}
+\end{itemize}
+
+\subsubsection{Inter-Gamma Scheme}
+
+\begin{itemize}
+    \item Reference: \textit{\href{http://powerlab.fsb.hr/ped/kturbo/openfoam/docs/InterTrack.pdf}{Interface Tracking Capabilities of the Inter-Gamma Differencing Scheme}}
+\end{itemize}
+
+\subsubsection{Constrained Interpolation Profile (CIP) method}
+
+%TODO: Used for advecting fluid interfaces??
+
+\begin{itemize}
+    \item Reference: \textit{\href{http://www.mech.titech.ac.jp/~ryuutai/paper/JCP2001CIPReviewYabe.pdf}{The Constrained Interpolation Profile Method for Multiphase Analysis}}
+\end{itemize}
+
+\subsection{Alpha noise due to a non-zero velocity divergence}
+
+\begin{itemize}
+    \item Remedy: Advect both water volume and total volume and then define alpha as the ration between them
+\end{itemize}
 
 \section{Coupled Level Set/Volume of Fluid  method}
 
@@ -230,7 +248,7 @@ References:
 
 \chapter{Wind waves}
 
-\section{Spectral analysis method}
+\section{Spectral methods}
 
 \section{Air-water interaction}
 

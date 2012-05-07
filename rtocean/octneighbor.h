@@ -46,6 +46,13 @@ public:
     uint dim;
     bool pos_dir;
 
+    /*******************
+     * Volume of fluid *
+     *******************/
+
+    pftype water_density; /* [1] The volume of the water divided by the volujme of the cell (between 0 and total_vol_coeff) */
+    pftype total_density; /* [1] The volume of the water and air divided by the volujme of the cell (should stay around 1) */
+
     /*****************
      * Navier-Stokes *
      *****************/

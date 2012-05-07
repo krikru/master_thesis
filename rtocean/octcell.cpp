@@ -16,9 +16,6 @@ octcell::octcell(pftype size, pfvec pos, uint level, uint internal_layer_advance
     lvl = level;
     //ila = internal_layer_advancement;
     internal_layer_advancement = internal_layer_advancement;
-#if  RUN_SAFE
-    rp = 0;
-#endif
     _c = 0;
 }
 
@@ -205,8 +202,8 @@ void octcell::coarsen()
     }
 #endif
 
-    alpha = 0;
-    rp = 0;
+    water_density = 0;
+    total_density = 0;
     for (uint idx = 0; idx < MAX_NUM_CHILDREN; idx++) {
         octcell* c = get_child(idx);
         if (c) {
@@ -215,15 +212,13 @@ void octcell::coarsen()
                 /* Coarsen it to get updated properties */
                 c->coarsen();
             }
-            alpha += c->alpha;
-            rp += c->alpha * c->rp;
+            water_density += c->water_density;
+            total_density += c->total_density;
             remove_child(idx);
         }
     }
-    if (alpha) {
-        rp /= alpha;
-        alpha *= (pftype(1)/MAX_NUM_CHILDREN);
-    }
+    water_density *= (pftype(1)/MAX_NUM_CHILDREN);
+    total_density *= (pftype(1)/MAX_NUM_CHILDREN);
     make_leaf();
 
     /*

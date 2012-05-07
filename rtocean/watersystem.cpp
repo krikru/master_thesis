@@ -6,6 +6,29 @@
 #include "watersystem.h"
 
 ////////////////////////////////////////////////////////////////
+// MACROS
+////////////////////////////////////////////////////////////////
+
+#define  DECLARE_RECURSIVE_LEAF_CELL_FUNCTION(function, cell)        \
+    if ((cell)->has_child_array()) {                                 \
+        for (uint idx = 0; idx < octcell::MAX_NUM_CHILDREN; idx++) { \
+            octcell* c = (cell)->get_child(idx);                     \
+            if (c) {                                                 \
+                /* Child exists */                                   \
+                (function)(c);                                       \
+            }                                                        \
+        }                                                            \
+        return;                                                      \
+    }
+
+#define  LOOP_THROUGH_ALL_LEAF_NEIGHBORS(cell, node)                                  \
+    for (nlset lists,                                                                 \
+    lists.add_neighbor_list(&(cell)->neighbor_lists[NL_HIGHER_LEVEL_OF_DETAIL]),      \
+    lists.add_neighbor_list(&(cell)->neighbor_lists[NL_SAME_LEVEL_OF_DETAIL_LEAF]),   \
+    lists.add_neighbor_list(&(cell)->neighbor_lists[NL_LOWER_LEVEL_OF_DETAIL_LEAF]),  \
+    nlnode* node = lists.get_first_node(); node; node = lists.get_next_node())
+
+////////////////////////////////////////////////////////////////
 // CONSTRUCTORS AND DESTRUCTOR
 ////////////////////////////////////////////////////////////////
 
@@ -70,11 +93,7 @@ int watersystem::run_simulation(pftype time_step)
 void watersystem::_evolve()
 {
     t += dt;
-#if 1
     advect_and_update_pressure();
-#else
-    advect_and_update_pressure_recursively(w->root);
-#endif
     update_velocities_recursively(w->root);
 }
 
@@ -83,8 +102,9 @@ void watersystem::advect_and_update_pressure()
 {
     //TODO: Ensure mass conservation (current alpha advection do not conserve the mass)
     /* Advect alpha */
-    calculate_delta_alpha_recursively(w->root);
-    clamp_advect_alpha_recursively(w->root);
+    //calculate_delta_alpha_recursively(w->root);
+    calculate_cell_face_properties_recursivelly(w->root);
+    //clamp_advect_alpha_recursively(w->root);
 
 #if 0
     /* Sharpen alpha */
@@ -93,7 +113,26 @@ void watersystem::advect_and_update_pressure()
 #endif
 
     /* Update pressure */
-    update_pressure_recursively(w->root);
+    advect_cell_properties_recursivelly(w->root);
+    //update_pressure_recursively(w->root);
+}
+
+void watersystem::calculate_cell_face_properties_recursivelly(octcell* cell)
+{
+    DECLARE_RECURSIVE_LEAF_CELL_FUNCTION(calculate_cell_face_properties_recursivelly, cell);
+
+    /* Loop through neighbors */
+    nlset lists;
+    lists.add_neighbor_list(&cell->neighbor_lists[NL_HIGHER_LEVEL_OF_DETAIL]);
+    lists.add_neighbor_list(&cell->neighbor_lists[NL_SAME_LEVEL_OF_DETAIL_LEAF]);
+    lists.add_neighbor_list(&cell->neighbor_lists[NL_LOWER_LEVEL_OF_DETAIL_LEAF]);
+    for (nlnode* node = lists.get_first_node(); node; node = lists.get_next_node()) {
+        if (node->v.vel_out > 0) {
+            // UPWIND Scheme (smearing) //TODO: Change to better scheme!!!
+            node->v.water_density = cell->water_density;
+            node->v.total_density = cell->total_density;
+        }
+    }
 }
 
 #if 0
@@ -144,7 +183,7 @@ void watersystem::calculate_delta_alpha_recursively(octcell* cell)
     }
 #endif
 }
-#else
+#elif 0
 void watersystem::calculate_delta_alpha_recursively(octcell* cell)
 {
     if (cell->has_child_array()) {
@@ -208,8 +247,38 @@ void watersystem::calculate_delta_alpha_recursively(octcell* cell)
     cell->dalpha = -cell->alpha_grad_coeff * mean_vel * dt;
     cell->dalpha -= (cell->dalpha > 0 ? 1 : -1)/INTERFACE_THICKNESS_IN_CELLS * start_distance_in_cells;
 }
+#elif 0
+void watersystem::calculate_delta_alpha_recursively(octcell* cell)
+{
+    if (cell->has_child_array()) {
+        for (uint idx = 0; idx < octcell::MAX_NUM_CHILDREN; idx++) {
+            octcell* c = cell->get_child(idx);
+            if (c) {
+                /* Child exists */
+                calculate_delta_alpha_recursively(c);
+            }
+        }
+        return;
+    }
+
+    /* Calculate mean velocity and alpha gradient */
+    cell->dalpha = 0; // Reset alpha gradient
+    /* Loop though neighbors */
+    nlset lists;
+    lists.add_neighbor_list(&cell->neighbor_lists[NL_HIGHER_LEVEL_OF_DETAIL]);
+    lists.add_neighbor_list(&cell->neighbor_lists[NL_SAME_LEVEL_OF_DETAIL_LEAF]);
+    lists.add_neighbor_list(&cell->neighbor_lists[NL_LOWER_LEVEL_OF_DETAIL_LEAF]);
+    for (nlnode* node = lists.get_first_node(); node; node = lists.get_next_node()) {
+        if (node->v.vel_out < 0) {
+            cell->dalpha -= node->v.vel_out * (node->v.n->alpha - cell->alpha)*node->v.cf_area;
+        }
+    }
+    cell->dalpha /= cell->get_side_area();
+    cell->dalpha *= dt;
+}
 #endif
 
+#if 0
 void watersystem::clamp_advect_alpha_recursively(octcell* cell)
 {
     if (cell->has_child_array()) {
@@ -223,8 +292,13 @@ void watersystem::clamp_advect_alpha_recursively(octcell* cell)
         return;
     }
 
-    /* Check if cell goes from empty to non-empty */
-    if (cell->is_empty() && cell->dalpha) {
+    /* Calculate d-alpha */
+    pftype dwater_density;
+    pftype dtotal_density;
+    // TODO: Add code for calculating dwater_vol_coeff and dtotal_vol_coeff
+
+    /* Check if cell goes from air cell to non-air cell */
+    if (cell->is_air_cell() && dwater_density) {
         /* Set velocities on faces to empty cells */
         pfvec mean_vel;
         pfvec area;
@@ -234,7 +308,8 @@ void watersystem::clamp_advect_alpha_recursively(octcell* cell)
         lists.add_neighbor_list(&cell->neighbor_lists[NL_SAME_LEVEL_OF_DETAIL_LEAF]);
         lists.add_neighbor_list(&cell->neighbor_lists[NL_LOWER_LEVEL_OF_DETAIL_LEAF]);
         for (nlnode* node = lists.get_first_node(); node; node = lists.get_next_node()) {
-            if (node->v.n->is_non_empty()) {
+            if (node->v.n->is_non_air_cell()) {
+                /* This velocity is relevant, use it to calculate mean velocity vector */
                 area.e[node->v.dim] += node->v.cf_area;
                 mean_vel.e[node->v.dim] += node->v.cf_area * node->v.get_signed_dir() * node->v.vel_out;
             }
@@ -254,23 +329,33 @@ void watersystem::clamp_advect_alpha_recursively(octcell* cell)
         lists.add_neighbor_list(&cell->neighbor_lists[NL_SAME_LEVEL_OF_DETAIL_LEAF]);
         lists.add_neighbor_list(&cell->neighbor_lists[NL_LOWER_LEVEL_OF_DETAIL_LEAF]);
         for (nlnode* node = lists.get_first_node(); node; node = lists.get_next_node()) {
-            if (node->v.n->is_empty()) {
+            if (node->v.n->is_air_cell()) {
                 /* The velocity out for this neighbor connection currently contains humbug, initialize it */
                 node->v.set_velocity_out(mean_vel[node->v.dim]*node->v.get_signed_dir());
             }
         }
     }
 
-    /* Update alpha */
-    cell->alpha += cell->dalpha;
-    if (cell->alpha < 0) {
-        cell->alpha = 0;
+    /* Update volumes */
+
+    cell->water_density += dwater_density;
+    cell->total_density += dtotal_density;
+    if (cell->water_density < 0) {
+#if  DEBUG
+        throw logic_error("Water density becaue negative");
+#endif
+        //cell->water_density = 0;
     }
-    else if (cell->alpha > 1) {
-        cell->alpha = 1;
+    else if (cell->water_density > cell->total_density) {
+#if  DEBUG
+        throw logic_error("Water density becaue larger than total density");
+#endif
+        //cell->water_density = cell->total_density;
     }
 }
+#endif
 
+#if 0
 void watersystem::calculate_alpha_gradient_recursively(octcell* cell)
 {
     if (cell->has_child_array()) {
@@ -299,131 +384,9 @@ void watersystem::calculate_alpha_gradient_recursively(octcell* cell)
         cell->alpha_grad_coeff.e[dim] /= 2 * cell->get_side_area();
     }
 }
-
-void watersystem::sharpen_alpha_recursively(octcell* cell)
-{
-    static int count = 0;
-
-    if (cell->has_child_array()) {
-        for (uint idx = 0; idx < octcell::MAX_NUM_CHILDREN; idx++) {
-            octcell* c = cell->get_child(idx);
-            if (c) {
-                /* Child exists */
-                sharpen_alpha_recursively(c);
-            }
-        }
-        return;
-    }
-
-    count++;
-    if (count == 273996) {
-        count = count;
-    }
-
-    /* Sharpen alpha */
-    if (cell->alpha <= 0 || cell->alpha >= 1) {
-        /* Cell needs no sharpening */
-        return;
-    }
-
-    /* Determine if the cell should donate or accept and how much */
-    pftype abs_deriv_sum = 0;
-    for (uint dim = 0; dim < NUM_DIMENSIONS; dim++) {
-        abs_deriv_sum += ABS(cell->alpha_grad_coeff[dim]);
-    }
-    if (!abs_deriv_sum) {
-        /* No way to transport alpha */
-        return;
-    }
-#if  DEBUG
-    if (abs_deriv_sum < 0) {
-        throw logic_error("Derivative sum < 0");
-    }
 #endif
-    pftype donate_factor = 3/abs_deriv_sum;
-    pftype accept_factor = donate_factor;
-    /* Loop through neighbors */
-    nlset lists;
-    lists.add_neighbor_list(&cell->neighbor_lists[NL_HIGHER_LEVEL_OF_DETAIL]);
-    lists.add_neighbor_list(&cell->neighbor_lists[NL_SAME_LEVEL_OF_DETAIL_LEAF]);
-    lists.add_neighbor_list(&cell->neighbor_lists[NL_LOWER_LEVEL_OF_DETAIL_LEAF]);
-    for (nlnode* node = lists.get_first_node(); node; node = lists.get_next_node()) {
-        pftype dir_alpha_grad_coeff = cell->alpha_grad_coeff[node->v.dim] * node->v.get_signed_dir();
-        if      (dir_alpha_grad_coeff > 0) {
-            /* Positive derivative, this cell is a donor */
-            pftype real_cap = (1 - node->v.n->alpha) / dir_alpha_grad_coeff;
-            if (real_cap < donate_factor) {
-                donate_factor = real_cap;
-            }
-        }
-        else if (dir_alpha_grad_coeff < 0) {
-            /* Negative derivative, this cell is an acceptor */
-            pftype real_cap = node->v.n->alpha / -dir_alpha_grad_coeff;
-            if (real_cap < accept_factor) {
-                accept_factor = real_cap;
-            }
-        }
-    }
-#if  DEBUG
-    if (donate_factor < 0) {
-        throw logic_error("Donate factor < 0");
-    }
-    if (accept_factor < 0) {
-        throw logic_error("Accept factor < 0");
-    }
-#endif
-    if (donate_factor > accept_factor) {
-        donate_factor = MIN(donate_factor, accept_factor + cell->alpha       / abs_deriv_sum);
-    }
-    else {
-        accept_factor = MIN(accept_factor, donate_factor + (1 - cell->alpha) / abs_deriv_sum);
-    }
-    /* Donate and accept alpha */
-    /* Loop through neighbors */
-    lists.add_neighbor_list(&cell->neighbor_lists[NL_HIGHER_LEVEL_OF_DETAIL]);
-    lists.add_neighbor_list(&cell->neighbor_lists[NL_SAME_LEVEL_OF_DETAIL_LEAF]);
-    lists.add_neighbor_list(&cell->neighbor_lists[NL_LOWER_LEVEL_OF_DETAIL_LEAF]);
-    for (nlnode* node = lists.get_first_node(); node; node = lists.get_next_node()) {
-        pftype dir_alpha_grad_coeff = cell->alpha_grad_coeff[node->v.dim] * node->v.get_signed_dir();
-        /* Positive derivative, this cell is a donor */
-        if (dir_alpha_grad_coeff > 0) {
-            /* Positive derivative, this cell is a donor */
-            pftype transported_alpha = donate_factor * dir_alpha_grad_coeff;
-#if  DEBUG
-            if (transported_alpha < 0) {
-                throw logic_error("Transported alpha has wrong sign 1");
-            }
-#endif
-            cell->alpha -= transported_alpha;
-            node->v.n->alpha += transported_alpha;
-            if (node->v.n->alpha > 1) {
-                node->v.n->alpha = 1;
-            }
-        }
-        else {
-            /* Negative derivative, this cell is an acceptor */
-            pftype transported_alpha = accept_factor * dir_alpha_grad_coeff;
-#if  DEBUG
-            if (transported_alpha > 0) {
-                throw logic_error("Transported alpha has wrong sign 2");
-            }
-#endif
-            cell->alpha -= transported_alpha;
-            node->v.n->alpha += transported_alpha;
-            if (node->v.n->alpha < 0) {
-                node->v.n->alpha = 0;
-            }
-        }
-    }
-    if (cell->alpha < 0) {
-        cell->alpha = 0;
-    }
-    else if (cell->alpha > 1) {
-        cell->alpha = 1;
-    }
-}
 
-void watersystem::update_pressure_recursively(octcell* cell)
+void watersystem::advect_cell_properties_recursivelly(octcell* cell)
 {
     if (cell->has_child_array()) {
         /* */
@@ -431,7 +394,7 @@ void watersystem::update_pressure_recursively(octcell* cell)
             octcell* c = cell->get_child(idx);
             if (c) {
                 /* Child exists */
-                update_pressure_recursively(c);
+                advect_cell_properties_recursivelly(c);
             }
         }
         return;
@@ -439,24 +402,47 @@ void watersystem::update_pressure_recursively(octcell* cell)
 
     /* TODO: Update the code for updating pressure */
     /* Update pressure */
-    pftype in_flux = 0;
+    pftype in_water_flux = 0; // [kg/s]
+    pftype in_total_flux = 0; // [kg/s]
     /* Loop through neighbors */
     nlset lists;
     lists.add_neighbor_list(&cell->neighbor_lists[NL_HIGHER_LEVEL_OF_DETAIL]);
     lists.add_neighbor_list(&cell->neighbor_lists[NL_SAME_LEVEL_OF_DETAIL_LEAF]);
     lists.add_neighbor_list(&cell->neighbor_lists[NL_LOWER_LEVEL_OF_DETAIL_LEAF]);
     for (nlnode* node = lists.get_first_node(); node; node = lists.get_next_node()) {
-        in_flux -= node->v.vel_out * node->v.cf_area;
+        pftype volume_flux_out = node->v.vel_out * node->v.cf_area; // [m^3/s]
+        in_water_flux -= node->v.water_density * volume_flux_out;
+        in_total_flux -= node->v.total_density * volume_flux_out;
     }
 
+    pftype mass_flux_to_density_factor = dt/cell->get_cube_volume();
+    pftype in_water_density = in_water_flux * mass_flux_to_density_factor;
+    pftype in_total_density = in_total_flux * mass_flux_to_density_factor;
+
+    cell->water_density += in_water_density;
+    cell->total_density += in_total_density;
+
 #if  USE_ARTIFICIAL_COMPRESSIBILITY
-    /* Move volume into or from cell */
-    pftype in_volume = in_flux * dt;
-    if (cell->is_surface_cell()) {
-        cell->rp += in_volume / cell->get_side_area() * P_G;
+    /* Update pressure */
+    if (cell->is_water_cell()) {
+        cell->p = (cell->water_density - P_WATER_DENSITY) * ARTIFICIAL_COMPRESSIBILITY_FACTOR;
+        if (cell->p < 0) {
+            cell->p = 0; // Vacuum partly fills the cell
+        }
+    }
+    else if (cell->is_air_cell()) {
+        cell->p = cell->total_density * (NORMAL_PRESSURE / P_NORMAL_AIR_DENSITY);
+        //cell->p = 0; // This is for zero atmospheric pressure
     }
     else {
-        cell->rp += in_volume / cell->get_total_volume() * ARTIFICIAL_COMPRESSIBILITY_FACTOR;
+        /* Calculate pressure for a mixed cell */
+        //TODO: Optimize
+        pftype k = ARTIFICIAL_COMPRESSIBILITY_FACTOR;
+        pftype q = NORMAL_PRESSURE;
+        pftype a = cell->get_air_density()/P_NORMAL_AIR_DENSITY;
+        pftype w = cell->water_density/P_WATER_DENSITY;
+        pftype d = q*a/k;
+        cell->p = k/2*(sqrt(SQUARE(d + 1 - w) + 4*d*w) + d + w + 1);
     }
 #else
     "don't know what to do now"

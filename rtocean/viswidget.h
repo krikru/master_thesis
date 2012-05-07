@@ -37,14 +37,14 @@ public:
 
 private:
     void draw_pressure_deviation(octcell* cell);
-    void quick_mark_bulk_cell(octcell* cell);
-    void quick_mark_empty_cell(octcell* cell);
+    void quick_mark_water_cell(octcell* cell);
+    void quick_air_empty_cell(octcell* cell);
     void quick_draw_cell_water_level(octcell* cell);
     void quick_draw_cell(octcell* cell);
     void set_up_model_view_matrix(GLdouble scale_factor = 1);
     void draw_pressure_recursively(octcell* cell);
-    void mark_bulk_cells_recursively(octcell* cell);
-    void mark_empty_cells_recursively(octcell* cell);
+    void mark_water_cells_recursively(octcell* cell);
+    void mark_air_cells_recursively(octcell* cell);
     void draw_water_level_recursively(octcell* cell);
     void visualize_leaf_cells_recursively(octcell* cell);
     void visualize_parent_cells_recursively(octcell* cell);

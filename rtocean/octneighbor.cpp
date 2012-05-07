@@ -44,6 +44,11 @@ void octneighbor::set_velocity_out(pftype velocity_out)
 void octneighbor::update_velocity(octcell* cell1, octcell* cell2, pftype dt)
 {
     /* No advection term implemented */
-    vel_out += (cell1->rp - cell2->rp - dist[VERTICAL_DIMENSION] * P_G) / dist_abs * dt;
+    pftype distance = cell1->s + cell2->s;
+    pftype average_total_density = (cell1->total_density*cell1->s + cell2->total_density*cell2->s) / distance;
+    average_total_density = MIN(average_total_density, P_WATER_DENSITY); // Prevent nasty circulation behaviours in the water
+    //TDO: Prevevt circulation behaviour even in the air
+    distance *= 0.5;
+    vel_out += ((cell1->p - cell2->p) / (distance * average_total_density) - dist[VERTICAL_DIMENSION] * P_G) * dt;
     cnle->v.vel_out = -vel_out;
 }

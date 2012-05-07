@@ -140,21 +140,23 @@ bool fvoctree::refine_subtree(octcell* c, pftype surface, pftype bottom, pftype 
         /* Calculate properties */
         pftype mean_height = lowest_cell_height + s/2;
         pftype mean_surface_height = (min_surf_height + max_surf_height)/2;
-        c->rp = (mean_surface_height - mean_height) * P_G;
+        c->p = (mean_surface_height - mean_height) * (P_G * P_WATER_DENSITY);
         if (lowest_cell_height + s > min_surf_height) {
             /* Cell is a surface cell */
             /* Estimate alpha */
             pftype mean_height_diff = (MAX(min_surf_height - lowest_cell_height, 0) + MIN(max_surf_height - lowest_cell_height, s))/2;
-            c->alpha = mean_height_diff / c->s;
+            c->water_density = mean_height_diff / c->s * P_WATER_DENSITY;
+            c->total_density = (P_WATER_DENSITY - c->water_density)*(P_NORMAL_AIR_DENSITY / P_WATER_DENSITY);
 #if  DEBUG
-            if (c->alpha < 0 || c->alpha > 1) {
-                throw logic_error("alpha incorrectly calculated");
+            if (c->water_density < 0 || c->water_density > P_WATER_DENSITY) {
+                throw logic_error("Water density incorrectly calculated");
             }
 #endif
         }
         else {
             /* Cell is not a surface cell */
-            c->alpha = 1;
+            c->water_density = P_WATER_DENSITY + c->p*(1/ARTIFICIAL_COMPRESSIBILITY_FACTOR);
+            c->total_density = c->water_density;
         }
         return false;
     }

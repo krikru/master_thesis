@@ -47,13 +47,12 @@ public:
     pfvec  r; /* Position of the first corner */
 
     /* Navier-Stokes */
-    pftype rp; /* Reduced pressure = pressure/density */
+    pftype p; /* Reduced pressure = pressure/density */
     /*Since the velocities are located in the cell faces, they are stored in the octneighbors */
 
-    /* Volume of fluid method */
-    pftype alpha; /* [1] The amount of the volume in this cell that is currently water */
-    pftype dalpha; /* [1] How much alpha should increase during this time step */
-    pfvec  alpha_grad_coeff; /* [1] The gradient of alpha time the cell size */
+    /* Volume of fluid */
+    pftype water_density; /* [kg/m^3] The mass of water divided by the volume of the cell (between 0 and total_density) */
+    pftype total_density; /* [kg/m^3] The total mass of the water and air divided by the volume of the cell */
 
     /* Level of detail */
     uint lvl; /* The level of the cell, 0 = root */
@@ -80,15 +79,17 @@ public:
     /* Geometry */
     pfvec  get_cell_center();
     pftype get_side_area();
-    pftype get_total_volume();
-    pftype get_volume_of_fluid();
+    pftype get_cube_volume();
+    pftype get_volume_of_water();
 
     /* Simulation */
-    //void update_pressure();
-    bool is_bulk_cell();
-    bool is_surface_cell();
-    bool is_empty();
-    bool is_non_empty();
+    bool is_water_cell();
+    bool is_non_water_cell();
+    bool is_air_cell();
+    bool is_non_air_cell();
+    bool is_mixed_cell();
+    pftype get_air_density();
+    pftype get_alpha();
 
     /* Level of detail */
 
@@ -174,15 +175,15 @@ pftype octcell::get_side_area()
 }
 
 inline
-pftype octcell::get_total_volume()
+pftype octcell::get_cube_volume()
 {
     return cube_volume(s);
 }
 
 inline
-pftype octcell::get_volume_of_fluid()
+pftype octcell::get_volume_of_water()
 {
-    return alpha * get_total_volume();
+    return water_density * (1/P_WATER_DENSITY) * get_cube_volume();
 }
 
 /**************
@@ -190,23 +191,38 @@ pftype octcell::get_volume_of_fluid()
  **************/
 
 inline
-bool octcell::is_bulk_cell() {
-    return (alpha >= 1);
+bool octcell::is_water_cell() {
+    return water_density >= total_density;
 }
 
 inline
-bool octcell::is_surface_cell() {
-    return (alpha < 1);
+bool octcell::is_non_water_cell() {
+    return !is_water_cell();
 }
 
 inline
-bool octcell::is_empty() {
-    return (alpha <= 0);
+bool octcell::is_air_cell() {
+    return water_density <= 0;
 }
 
 inline
-bool octcell::is_non_empty() {
-    return !is_empty();
+bool octcell::is_non_air_cell() {
+    return !is_air_cell();
+}
+
+inline
+bool octcell::is_mixed_cell() {
+    return is_non_water_cell() && is_non_air_cell();
+}
+
+inline
+pftype octcell::get_air_density() {
+    return total_density - water_density;
+}
+
+inline
+pftype octcell::get_alpha() {
+    return water_density/total_density;
 }
 
 /************

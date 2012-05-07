@@ -30,7 +30,7 @@
 #define  FRAME_MS                   (1000/60)
 //#define  SIMULATION_TIME_STEP       (FRAME_MS/1000.0) // [s]
 //#define  SIMULATION_TIME_STEP       .001 // [s]
-#define  SIMULATION_TIME_STEP       .0001 // [s]
+#define  SIMULATION_TIME_STEP       .001 // [s]
 #define  INTERFACE_THICKNESS_IN_CELLS                4.0 // [1] The number of cells that will make out the interface
 
 /* Grid */
@@ -41,7 +41,8 @@
 /* Navier-Stokes */
 #define  USE_ARTIFICIAL_COMPRESSIBILITY              1
 /* 122.92: Works; 122.93: Doesn't work. (dt = 0.001, maximal spatial resolution = 0.02) */
-#define  ARTIFICIAL_COMPRESSIBILITY_FACTOR           10.00 // [Pa] (Delta reduced pressure = ARTIFICIAL_COMPRESSIBILITY_FACTOR * Delta dencity / dencity)
+#define  ARTIFICIAL_COMPRESSIBILITY_FACTOR           10.00 // [Pa] (Delta pressure = ARTIFICIAL_COMPRESSIBILITY_FACTOR * Delta total volume coefficient)
+#define  NORMAL_PRESSURE                             (1 * P_1ATM)
 
 /* VIsualization */
 #define  TEST_DEPTH                 1
@@ -221,10 +222,18 @@ enum DIMENSION {
 
 /* Physical constants */
 #define  P_G                 9.82000000000000000000 // [m/s^2] Gravitational acceleration
-#define  P_WATER_DENSITY     1000.00000000000000000 // [kg/m^3] The density of water
-#define  P_WATER_TEMP        10.0000000000000000000 // [°C] The water temperature in degrees Celcius
-#define  P_WATER_VISCOUSITY  (0.001614 - 0.0000306 * P_WATER_TEMP) // [Pa*s] The viscousity of the water, see http://en.wikipedia.org/wiki/Viscosity#Viscosity_of_water
+#define  P_1ATM              101325.0               // [Pa] The atmospheric pressure
+#define  P_MAX_WATER_DENSITY 999.9720               // [kg/m^3] The density of waterat +4 °C, see http://en.wikipedia.org/wiki/Properties_of_water#Density_of_water_and_ice
 
+/* Independent physical constant variables */
+//#define  P_AIR_PRESSURE      (1.0 * P_1ATM)            // [Pa] The atmospheric pressure //Not necessary to have
+#define  P_WATER_TEMP        10.0000000000000000000 // [°C] The water temperature in degrees Celcius
+#define  P_AIR_TEMP          10.0000000000000000000 // [°C] The air temperature in degrees Celcius
+#define  P_WATER_DENSITY     P_MAX_WATER_DENSITY    // [kg/m^3] The density of waterat
+
+/* Dependent physical constant variables */
+#define  P_NORMAL_AIR_DENSITY  ((1.2898   - 0.00432   * P_AIR_TEMP  ) * NORMAL_PRESSURE / P_1ATM) // [kg/m^3] The density of air, see http://en.wikipedia.org/wiki/Density_of_air#Temperature_and_pressure
+#define  P_WATER_VISCOUSITY    (0.001614 - 0.0000306 * P_WATER_TEMP) // [Pa*s] The viscousity of the water, see http://en.wikipedia.org/wiki/Viscosity#Viscosity_of_water
 
 ////////////////////////////////////////////////////////////////
 // MACROS
@@ -235,6 +244,7 @@ enum DIMENSION {
 #define  ABS(x)     ((x) >= 0 ? (x) : -(x))
 #define  MIN(x, y)  ((y) < (x) ? (y) : (x))
 #define  MAX(x, y)  ((y) > (x) ? (y) : (x))
+#define  SQUARE(x)  ((x) * (x))
 
 #define  TEMP_SWAP(x, y, temp) { \
     (temp) = (x);                \
