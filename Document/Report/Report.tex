@@ -1,4 +1,12 @@
-\documentclass[a4paper]{report}
+%\DeclareOption{s5paper}
+%    {\setlength\paperheight {240mm}%
+%     \setlength\paperwidth  {165mm}}
+% S5: 165 x 242 mm (This is also called statsformat (in Swedish), it.s a special government format used in Sweden) 
+% Standard format for master thesis works, according to LIU-tryck
+
+\documentclass[]{report}
+%\documentclass[a4paper]{report}
+%\documentclass[s5paper]{report}
 
 % Available sectioning commands for report: \part{}, \part{}, \chapter{}, \section{}, \subsection{}, \paragraph{}, \subparagraph{}.
 
@@ -12,17 +20,29 @@
 % % % % % % %
 
 % Packages
+
+% Miscellaneous tools
 \usepackage{etoolbox} % Includes the macro \ifstrequal
-\usepackage{hyperref} % Will link to pages
-%\usepackage{url} % Will not link to pages
+% Paper size
+\iffalse
+    \usepackage{./Packages/s5paper/s5paper}
+\fi
+% Linking
+\iftrue
+    \usepackage{hyperref} % Links to pages
+    \hypersetup{pdfborder = {0 0 0}} % Remove the frame around links
+\else
+    \usepackage{url} % Doesn't link to pages
+\fi
+% Graphics
 \usepackage{graphicx} % Necessary in order to include images
-%\usepackage{./Packages/titlepic/titlepic}
 \usepackage{titlepic} % Necessary in order to be able to have an image on the title page
-\usepackage[round, authoryear]{natbib} % Harward style referencing
-%\usepackage[square, numbers]{natbib} % Harward style referencing
-
-
-\hypersetup{pdfborder = {0 0 0}} % Remove the frame around links
+% Referencing
+\iftrue
+    \usepackage[round, authoryear]{natbib} % Harward style referencing
+\else
+    \usepackage[square, numbers]{natbib} %
+\fi
 
 %Define commands
 \newcommand{\comment}[1]{}
@@ -219,7 +239,7 @@ There are both surface trackibng methods and surface capturing methods.
 \subsubsection{High Resolution Interface Capturing (HRIC) scheme}
 
 \begin{itemize}
-    \item Described here: \textit{\href{http://warminski.pollub.plwww.ptmts.org.pl/Waclaw-Koron-2-08.pdf}{Comparison of CICSAM and HRIC High-resolution Schemes for Interface Capturing}}
+    \item Described here: \textit{\href{http://warminski.pollub.plwww.ptmts.org.pl/Waclaw-Koron-2-08.pdf}{Comparison of CICSAM and HRIC High-resolution Sche\-mes for Interface Capturing}}
 \end{itemize}
 
 \subsubsection{Inter-Gamma Scheme}

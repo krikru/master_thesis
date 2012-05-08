@@ -414,7 +414,7 @@ void watersystem::advect_cell_properties_recursivelly(octcell* cell)
         in_total_flux -= node->v.total_density * volume_flux_out;
     }
 
-#if 1
+#if 0
     pftype mass_flux_to_density_factor = dt/cell->get_cube_volume();
     pftype in_water_density = in_water_flux * mass_flux_to_density_factor;
     pftype in_total_density = in_total_flux * mass_flux_to_density_factor;
@@ -438,10 +438,13 @@ void watersystem::advect_cell_properties_recursivelly(octcell* cell)
 
     float A = 0;
     float B = C * A;
+    cout << "C = " << C << endl;
     if (A) {
+        cout << "A = " << A << endl;
         throw logic_error("A is non-zero");
     }
     if (B) {
+        cout << "B = " << B << endl;
         throw logic_error("B is non-zero");
     }
 

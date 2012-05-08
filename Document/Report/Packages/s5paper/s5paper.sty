@@ -1,0 +1,62 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{s5paper}[2006/08/28 author: Pedher Johansson]
+\RequirePackage{calc}
+\RequirePackage{keyval}
+
+% Paper size
+\newdimen\extra@margin
+\extra@margin0pt
+\define@key{s5paper}{margin}{\setlength{\extra@margin}{#1}}
+
+\def\ProcessOptionsWithKV#1{%
+  \let\@tempc\relax
+  \let\@tempa\@empty
+  \@for\CurrentOption:=\@classoptionslist\do{%
+    \@ifundefined{KV@#1@\CurrentOption}%
+    {}%
+    {%
+      \edef\@tempa{\@tempa,\CurrentOption,}%
+      \@expandtwoargs\@removeelement\CurrentOption
+        \@unusedoptionlist\@unusedoptionlist
+    }%
+  }%
+  \edef\@tempa{%
+    \noexpand\setkeys{#1}{%
+      \@tempa\@ptionlist{\@currname.\@currext}%
+    }%
+  }%
+  \@tempa
+  \let\CurrentOption\@empty
+  \AtEndOfPackage{\let\@unprocessedoptions\relax}}
+\ProcessOptionsWithKV{s5paper}
+
+
+\setlength\paperheight {238mm}%
+\setlength\paperwidth  {165mm}%
+\advance\paperheight2\extra@margin
+\advance\paperwidth2\extra@margin
+\hoffset 0in
+\voffset 0in
+\topmargin 8mm
+\advance\topmargin -1in
+\advance\topmargin\extra@margin
+\oddsidemargin 24mm
+\advance\oddsidemargin -1in
+\advance\oddsidemargin\extra@margin
+\evensidemargin 21mm
+\advance\evensidemargin-1in
+\advance\evensidemargin\extra@margin
+\headheight 10mm
+\headsep 8mm
+\footskip 9mm
+\marginparwidth 17mm
+\marginparsep 2mm
+\marginparpush 1em
+
+\setlength{\textheight}{190mm}
+\setlength{\textwidth}{\paperwidth-2in-\hoffset-\oddsidemargin-\evensidemargin}%
+
+\ifx\pdftexversion\undefined\else
+  \setlength{\pdfpagewidth}{\paperwidth}
+  \setlength{\pdfpageheight}{\paperheight}
+\fi
