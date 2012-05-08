@@ -144,14 +144,14 @@ void viswidget::draw_pressure_deviation(octcell* cell)
      * In rising order: White, blue, cyan, green, yellow, red, black
      */
     const uint NUM_TRANSITIONS = 6;
-    const color3 colors[] = {color3(1, 1, 1),
-                             color3(0, 0, 1),
-                             color3(0, 1, 1),
-                             color3(0, 1, 0),
-                             color3(1, 1, 0),
-                             color3(1, 0, 0),
-                             color3(0, 0, 0)};
-    pftype q = NUM_TRANSITIONS * (cell->p / (P_G * P_WATER_DENSITY) - (SURFACE_HEIGHT - cell->get_cell_center().e[VERTICAL_DIMENSION]) + 0.5);
+    const color3 colors[] = {color3(1, 1, 1),  // White
+                             color3(0, 0, 1),  // Blue
+                             color3(0, 1, 1),  // Cyan
+                             color3(0, 1, 0),  // Green
+                             color3(1, 1, 0),  // Yellow
+                             color3(1, 0, 0),  // Red
+                             color3(0, 0, 0)}; // Black
+    pftype q = NUM_TRANSITIONS * ((cell->p - NORMAL_PRESSURE) / (P_G * P_WATER_DENSITY) - (SURFACE_HEIGHT - cell->get_cell_center().e[VERTICAL_DIMENSION]) + 0.5);
     q = MIN(MAX(q, 0), NUM_TRANSITIONS);
     uint idx1 = uint(q);
     uint idx2 = MIN(idx1 + 1, NUM_TRANSITIONS);

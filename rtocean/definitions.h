@@ -25,6 +25,7 @@
 #define  LOGICAL_AXIS_ORDER         1
 #define  GENERATE_NEIGHBORS_STATICALLY               0
 #define  GENERATE_NEIGHBORS_DYNAMICALLY              1
+#define  NO_ATMOSPHERE                               1
 
 /* Simulation parameters */
 #define  FRAME_MS                   (1000/60)
@@ -43,7 +44,7 @@
 #define  USE_ARTIFICIAL_COMPRESSIBILITY              1
 /* 122.92: Works; 122.93: Doesn't work. (dt = 0.001, maximal spatial resolution = 0.02) */
 #define  ARTIFICIAL_COMPRESSIBILITY_FACTOR           10.00 // [Pa] (Delta pressure = ARTIFICIAL_COMPRESSIBILITY_FACTOR * Delta total volume coefficient)
-#define  NORMAL_PRESSURE                             (1 * P_1ATM)
+#define  NORMAL_PRESSURE                             (NO_ATMOSPHERE ? 0.0 : 1 * P_1ATM)
 
 /* VIsualization */
 #define  TEST_DEPTH                 1
@@ -246,6 +247,7 @@ enum DIMENSION {
 #define  MIN(x, y)  ((y) < (x) ? (y) : (x))
 #define  MAX(x, y)  ((y) > (x) ? (y) : (x))
 #define  SQUARE(x)  ((x) * (x))
+#define  ISNAN(x)   ((x) != (x))
 
 #define  TEMP_SWAP(x, y, temp) { \
     (temp) = (x);                \

@@ -41,20 +41,45 @@ void octneighbor::set_velocity_out(pftype velocity_out)
     cnle->v.vel_out = -velocity_out;
 }
 
-void octneighbor::set_densities(pftype new_water_density, pftype new_total_density)
+void octneighbor::set_volume_coefficients(pftype water_volume_coefficient, pftype total_volume_coefficient)
 {
-    cnle->v.water_density = water_density = new_water_density;
-    cnle->v.total_density = total_density = new_total_density;
+#if  DEBUG
+    if (ISNAN(water_volume_coefficient)) {
+        throw logic_error("Trying to set a NaN water_volume_coefficient in cell");
+    }
+    if (ISNAN(total_volume_coefficient)) {
+        throw logic_error("Trying to set a NaN total_volume_coefficient in cell");
+    }
+    if (water_volume_coefficient < 0) {
+        throw logic_error("Trying to set a negative water_volume_coefficient in cell");
+    }
+    if (total_volume_coefficient < 0) {
+        throw logic_error("Trying to set a negative total_volume_coefficient in cell");
+    }
+    if (water_volume_coefficient > total_volume_coefficient) {
+        throw logic_error("Trying to set a higher water_volume_coefficient than total_volume_coefficient in cell");
+    }
+#endif
+    water_vol_coeff = water_volume_coefficient;
+    total_vol_coeff = total_volume_coefficient;
+    cnle->v.water_vol_coeff = water_volume_coefficient;
+    cnle->v.total_vol_coeff = total_volume_coefficient;
 }
 
 void octneighbor::update_velocity(octcell* cell1, octcell* cell2, pftype dt)
 {
     /* No advection term implemented */
     pftype distance = cell1->s + cell2->s;
+#if  !NO_ATMOSPHERE
     pftype average_total_density = (cell1->total_density*cell1->s + cell2->total_density*cell2->s) / distance;
+#endif
     //average_total_density = MIN(average_total_density, P_WATER_DENSITY); // Prevent nasty circulation behaviours in the water
     //TDO: Prevevt circulation behaviour even in the air
     distance *= 0.5;
+#if  NO_ATMOSPHERE
+    vel_out += ((cell1->p - cell2->p) / (distance * P_WATER_DENSITY) - dist[VERTICAL_DIMENSION] * P_G) * dt;
+#else
     vel_out += ((cell1->p - cell2->p) / (distance * average_total_density) - dist[VERTICAL_DIMENSION] * P_G * (average_total_density > P_WATER_DENSITY ? P_WATER_DENSITY/average_total_density : 1)) * dt;
+#endif
     cnle->v.vel_out = -vel_out;
 }

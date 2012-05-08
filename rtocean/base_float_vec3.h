@@ -36,7 +36,7 @@ public:
     base_float_vec3<T>& operator*=(const T                  );
     base_float_vec3<T>& operator/=(const T                  );
     T&                  operator[](const int)      ;
-    T                   operator[](const int) const;
+    const T&            operator[](const int) const;
 
     base_float_vec3<T> operator-() const;
 
@@ -149,7 +149,7 @@ T& base_float_vec3<T>::operator[](const int i)
 
 template<typename T>
 inline
-T base_float_vec3<T>::operator[](const int i) const
+const T& base_float_vec3<T>::operator[](const int i) const
 {
     return e[i];
 }

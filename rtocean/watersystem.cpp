@@ -9,6 +9,7 @@
 // MACROS
 ////////////////////////////////////////////////////////////////
 
+#if 0
 #define  DECLARE_RECURSIVE_LEAF_CELL_FUNCTION(function, cell)        \
     if ((cell)->has_child_array()) {                                 \
         for (uint idx = 0; idx < octcell::MAX_NUM_CHILDREN; idx++) { \
@@ -27,6 +28,7 @@
     lists.add_neighbor_list(&(cell)->neighbor_lists[NL_SAME_LEVEL_OF_DETAIL_LEAF]),   \
     lists.add_neighbor_list(&(cell)->neighbor_lists[NL_LOWER_LEVEL_OF_DETAIL_LEAF]),  \
     nlnode* node = lists.get_first_node(); node; node = lists.get_next_node())
+#endif
 
 ////////////////////////////////////////////////////////////////
 // CONSTRUCTORS AND DESTRUCTOR
@@ -94,7 +96,7 @@ void watersystem::_evolve()
 {
     t += dt;
     advect_and_update_pressure();
-    update_velocities_recursively(w->root);
+    //update_velocities_recursively(w->root);
 }
 
 #if 1
@@ -119,7 +121,16 @@ void watersystem::advect_and_update_pressure()
 
 void watersystem::calculate_cell_face_properties_recursivelly(octcell* cell)
 {
-    DECLARE_RECURSIVE_LEAF_CELL_FUNCTION(calculate_cell_face_properties_recursivelly, cell);
+    if (cell->has_child_array()) {
+        for (uint idx = 0; idx < octcell::MAX_NUM_CHILDREN; idx++) {
+            octcell* c = cell->get_child(idx);
+            if (c) {
+                /* Child exists */
+                calculate_cell_face_properties_recursivelly(c);
+            }
+        }
+        return;
+    }
 
     /* Loop through neighbors */
     nlset lists;
@@ -129,7 +140,7 @@ void watersystem::calculate_cell_face_properties_recursivelly(octcell* cell)
     for (nlnode* node = lists.get_first_node(); node; node = lists.get_next_node()) {
         if (node->v.vel_out > 0) {
             // UPWIND Scheme (smearing) //TODO: Change to better scheme!!!
-            node->v.set_densities(cell->water_density, cell->total_density);
+            node->v.set_volume_coefficients(cell->water_vol_coeff, cell->total_vol_coeff);
         }
     }
 }
@@ -414,31 +425,23 @@ void watersystem::advect_cell_properties_recursivelly(octcell* cell)
         if (node->v.n->has_child_array()) {
             throw logic_error("Neighbor supposed to be a leaf cell but is not");
         }
-        if (node->v.total_density != node->v.total_density) {
+        if (ISNAN(node->v.total_density)) {
             //cout << node->v.n->get_cell_center().e[0] << ", " << cout << node->v.n->get_cell_center().e[1] << endl;
-            //exit;
+            //exit();
             if (node->v.pos_dir) {
-                node->v.n->water_density = 0;
+                //node->v.n->water_density = 0;
             }
             else {
-                node->v.n->water_density = 0.001;
+                //node->v.n->water_density = node->v.total_density/2;
             }
         }
 #endif
-        if (volume_flux_out) { // Prevents cases when
+        if (1) { // Prevents cases when
+        //if (volume_flux_out) { // Prevents cases when
             in_water_flux -= node->v.water_density * volume_flux_out;
             in_total_flux -= node->v.total_density * volume_flux_out;
         }
     }
-
-#if  DEBUG
-    if (in_water_flux != in_water_flux) {
-        throw logic_error("in_water_flux is NaN");
-    }
-    if (in_total_flux != in_total_flux) {
-        throw logic_error("in_total_flux is NaN");
-    }
-#endif
 
     pftype mass_flux_to_density_factor = dt/cell->get_cube_volume();
     pftype in_water_density = in_water_flux * mass_flux_to_density_factor;
@@ -459,34 +462,58 @@ void watersystem::advect_cell_properties_recursivelly(octcell* cell)
     }
 #endif
 
-    cell->water_density += in_water_density;
-    cell->total_density += in_total_density;
+    cell->set_densities(cell->water_density + in_water_density,
+                        cell->total_density + in_total_density);
+
+#if  DEBUG
+    if (cell->water_density < 0) {
+        throw logic_error("Water density became negative");
+    }
+    if (cell->total_density < 0) {
+        throw logic_error("Total density became negative");
+    }
+    if (cell->water_density > cell->total_density) {
+        throw logic_error("Water density became larger than total density");
+    }
+#endif
 
 #if  USE_ARTIFICIAL_COMPRESSIBILITY
     /* Update pressure */
+#if  NO_ATMOSPHERE
+    cell->p = (cell->water_vol_coeff - 1) * ARTIFICIAL_COMPRESSIBILITY_FACTOR;
+    if (cell->p < 0) { // Don't allow negative pressure
+        cell->p = 0; // Vacuum partly fills the cell
+    }
+#else
     if (cell->is_water_cell()) {
-        cell->p = (cell->water_density - P_WATER_DENSITY) * ARTIFICIAL_COMPRESSIBILITY_FACTOR;
+        cell->p = (cell->water_vol_coeff - 1) * ARTIFICIAL_COMPRESSIBILITY_FACTOR;
         if (cell->p < 0) {
             cell->p = 0; // Vacuum partly fills the cell
         }
     }
     else if (cell->is_air_cell()) {
-        cell->p = cell->total_density * (NORMAL_PRESSURE / P_NORMAL_AIR_DENSITY);
-        //cell->p = 0; // This is for zero atmospheric pressure
+        cell->p = cell->total_vol_coeff * NORMAL_PRESSURE;
     }
     else {
         /* Calculate pressure for a mixed cell */
         //TODO: Optimize
         pftype k = ARTIFICIAL_COMPRESSIBILITY_FACTOR;
         pftype q = NORMAL_PRESSURE;
-        pftype a = cell->get_air_density()/P_NORMAL_AIR_DENSITY;
-        pftype w = cell->water_density/P_WATER_DENSITY;
+        pftype a = cell->get_air_volume_coefficient();
+        pftype w = cell->water_vol_coeff;
         pftype d = q*a/k;
-        cell->p = k/2*(sqrt(SQUARE(d + 1 - w) + 4*d*w) + d + w + 1);
-    }
-#else
-    "don't know what to do now"
+        "Don't know if this formula is correct"
+        cell->p = k/2*(sqrt(SQUARE(d + 1 - w) + 4*d*w) + d + w - 1);
+#if  DEBUG
+        if (ISNAN(cell->p)) {
+            throw logic_error("Pressure became NaN");
+        }
 #endif
+    }
+#endif //NO_ATMOSPHERE
+#else  //USE_ARTIFICIAL_COMPRESSIBILITY
+    "don't know what to do now"
+#endif  //USE_ARTIFICIAL_COMPRESSIBILITY
 }
 #endif
 

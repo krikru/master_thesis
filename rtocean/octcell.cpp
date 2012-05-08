@@ -190,7 +190,6 @@ void octcell::refine()
             }
         }
     }
-
 }
 
 void octcell::coarsen()
@@ -202,8 +201,8 @@ void octcell::coarsen()
     }
 #endif
 
-    water_density = 0;
-    total_density = 0;
+    water_vol_coeff = 0;
+    total_vol_coeff = 0;
     for (uint idx = 0; idx < MAX_NUM_CHILDREN; idx++) {
         octcell* c = get_child(idx);
         if (c) {
@@ -212,13 +211,13 @@ void octcell::coarsen()
                 /* Coarsen it to get updated properties */
                 c->coarsen();
             }
-            water_density += c->water_density;
-            total_density += c->total_density;
+            water_vol_coeff += c->water_vol_coeff;
+            total_vol_coeff += c->total_vol_coeff;
             remove_child(idx);
         }
     }
-    water_density *= (pftype(1)/MAX_NUM_CHILDREN);
-    total_density *= (pftype(1)/MAX_NUM_CHILDREN);
+    water_vol_coeff *= (pftype(1)/MAX_NUM_CHILDREN);
+    total_vol_coeff *= (pftype(1)/MAX_NUM_CHILDREN);
     make_leaf();
 
     /*

@@ -138,26 +138,29 @@ bool fvoctree::refine_subtree(octcell* c, pftype surface, pftype bottom, pftype 
 #endif
         /* Stop refining */
         /* Calculate properties */
+        pftype beta; /* Water volume divided by the volume of the cell */
         pftype mean_height = lowest_cell_height + s/2;
         pftype mean_surface_height = (min_surf_height + max_surf_height)/2;
-        c->p = (mean_surface_height - mean_height) * (P_G * P_WATER_DENSITY);
+        c->p = NORMAL_PRESSURE + (mean_surface_height - mean_height) * (P_G * P_WATER_DENSITY);
         if (lowest_cell_height + s > min_surf_height) {
             /* Cell is a surface cell */
-            /* Estimate alpha */
+            /* Estimate beta */
             pftype mean_height_diff = (MAX(min_surf_height - lowest_cell_height, 0) + MIN(max_surf_height - lowest_cell_height, s))/2;
-            c->water_density = mean_height_diff / c->s * P_WATER_DENSITY;
-            c->total_density = (P_WATER_DENSITY - c->water_density)*(P_NORMAL_AIR_DENSITY / P_WATER_DENSITY);
-#if  DEBUG
-            if (c->water_density < 0 || c->water_density > P_WATER_DENSITY) {
-                throw logic_error("Water density incorrectly calculated");
-            }
-#endif
+            beta = mean_height_diff / c->s;
         }
         else {
-            /* Cell is not a surface cell */
-            c->water_density = P_WATER_DENSITY + c->p*(1/ARTIFICIAL_COMPRESSIBILITY_FACTOR);
-            c->total_density = c->water_density;
+            /* Cell is not a surface cell and contains only water */
+            beta = 1;
         }
+        pftype water_vol_coeff = 1 + (c->p - NORMAL_PRESSURE)*(1/ARTIFICIAL_COMPRESSIBILITY_FACTOR);
+#if  NO_ATMOSPHERE
+        pftype air_vol_coeff = water_vol_coeff;
+#else
+        pftype air_vol_coeff = c->p / NORMAL_PRESSURE;
+#endif
+        water_vol_coeff *= beta;
+        air_vol_coeff   *= (1 - beta);
+        c->set_volume_coefficients(water_vol_coeff, water_vol_coeff + air_vol_coeff);
         return false;
     }
     // Cell is not fine enough, refine it and then handle the children recursivelly

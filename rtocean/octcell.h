@@ -51,8 +51,8 @@ public:
     /*Since the velocities are located in the cell faces, they are stored in the octneighbors */
 
     /* Volume of fluid */
-    pftype water_density; /* [kg/m^3] The mass of water divided by the volume of the cell (between 0 and total_density) */
-    pftype total_density; /* [kg/m^3] The total mass of the water and air divided by the volume of the cell */
+    pftype water_vol_coeff; /* [1] The volume the water in this cell would occupy at NORMAL_PRESSURE divided by the volume of the cell */
+    pftype total_vol_coeff; /* [1] The volume the water and the air in this cell would occupy at NORMAL_PRESSURE divided by the volume of the cell (should stay relatively close to 1) */
 
     /* Level of detail */
     uint lvl; /* The level of the cell, 0 = root */
@@ -88,8 +88,9 @@ public:
     bool is_air_cell();
     bool is_non_air_cell();
     bool is_mixed_cell();
-    pftype get_air_density();
+    pftype get_air_volume_coefficient();
     pftype get_alpha();
+    void set_volume_coefficients(pftype water_volume_coefficient, pftype total_volume_coefficient);
 
     /* Level of detail */
 
@@ -180,19 +181,13 @@ pftype octcell::get_cube_volume()
     return cube_volume(s);
 }
 
-inline
-pftype octcell::get_volume_of_water()
-{
-    return water_density * (1/P_WATER_DENSITY) * get_cube_volume();
-}
-
 /**************
  * Simulation *
  **************/
 
 inline
 bool octcell::is_water_cell() {
-    return water_density >= total_density;
+    return water_vol_coeff >= total_vol_coeff;
 }
 
 inline
@@ -202,7 +197,7 @@ bool octcell::is_non_water_cell() {
 
 inline
 bool octcell::is_air_cell() {
-    return water_density <= 0;
+    return water_vol_coeff <= 0;
 }
 
 inline
@@ -216,13 +211,38 @@ bool octcell::is_mixed_cell() {
 }
 
 inline
-pftype octcell::get_air_density() {
-    return total_density - water_density;
+pftype octcell::get_air_volume_coefficient() {
+    return total_vol_coeff - water_vol_coeff;
 }
 
 inline
 pftype octcell::get_alpha() {
-    return water_density/total_density;
+    return water_vol_coeff/total_vol_coeff;
+}
+
+inline
+
+void octcell::set_volume_coefficients(pftype water_volume_coefficient, pftype total_volume_coefficient)
+{
+#if  DEBUG
+    if (ISNAN(water_volume_coefficient)) {
+        throw logic_error("Trying to set a NaN water_volume_coefficient in cell");
+    }
+    if (ISNAN(total_volume_coefficient)) {
+        throw logic_error("Trying to set a NaN total_volume_coefficient in cell");
+    }
+    if (water_volume_coefficient < 0) {
+        throw logic_error("Trying to set a negative water_volume_coefficient in cell");
+    }
+    if (total_volume_coefficient < 0) {
+        throw logic_error("Trying to set a negative total_volume_coefficient in cell");
+    }
+    if (water_volume_coefficient > total_volume_coefficient) {
+        throw logic_error("Trying to set a higher water_volume_coefficient than total_volume_coefficient in cell");
+    }
+#endif
+    water_vol_coeff = water_volume_coefficient;
+    total_vol_coeff = total_volume_coefficient;
 }
 
 /************

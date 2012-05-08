@@ -50,8 +50,8 @@ public:
      * Volume of fluid *
      *******************/
 
-    pftype water_density; /* [1] The volume of the water divided by the volujme of the cell (between 0 and total_vol_coeff) */
-    pftype total_density; /* [1] The volume of the water and air divided by the volujme of the cell (should stay around 1) */
+    pftype water_vol_coeff; /* [1] The volume of the water divided by the volujme of the cell (between 0 and total_vol_coeff) */
+    pftype total_vol_coeff; /* [1] The volume of the water and air divided by the volujme of the cell (should stay around 1) */
 
     /*****************
      * Navier-Stokes *
@@ -71,7 +71,7 @@ public:
     /* Public methods */
     void set(octcell* neighbor_cell, nlnode* corresponding_neighbor_list_entry, uint dimension, bool positive_direction, pftype water_velocity_in_the_out_direction, pfvec distance, pftype distance_absolute_value, pftype cell_face_area);
     void set_velocity_out(pftype velocity_out);
-    void set_densities(pftype new_water_density, pftype new_total_density);
+    void set_volume_coefficients(pftype water_volume_coefficient, pftype total_volume_coefficient);
     int  get_signed_dir();
 
     /* Simulation */
