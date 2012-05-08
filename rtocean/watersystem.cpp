@@ -410,15 +410,41 @@ void watersystem::advect_cell_properties_recursivelly(octcell* cell)
     lists.add_neighbor_list(&cell->neighbor_lists[NL_LOWER_LEVEL_OF_DETAIL_LEAF]);
     for (nlnode* node = lists.get_first_node(); node; node = lists.get_next_node()) {
         pftype volume_flux_out = node->v.vel_out * node->v.cf_area; // [m^3/s]
-        in_water_flux -= node->v.water_density * volume_flux_out;
-        in_total_flux -= node->v.total_density * volume_flux_out;
+#if DEBUG
+        if (node->v.n->has_child_array()) {
+            throw logic_error("Neighbor supposed to be a leaf cell but is not");
+        }
+        if (node->v.total_density != node->v.total_density) {
+            //cout << node->v.n->get_cell_center().e[0] << ", " << cout << node->v.n->get_cell_center().e[1] << endl;
+            //exit;
+            if (node->v.pos_dir) {
+                node->v.n->water_density = 0;
+            }
+            else {
+                node->v.n->water_density = 0.001;
+            }
+        }
+#endif
+        if (volume_flux_out) { // Prevents cases when
+            in_water_flux -= node->v.water_density * volume_flux_out;
+            in_total_flux -= node->v.total_density * volume_flux_out;
+        }
     }
 
-#if 0
+#if  DEBUG
+    if (in_water_flux != in_water_flux) {
+        throw logic_error("in_water_flux is NaN");
+    }
+    if (in_total_flux != in_total_flux) {
+        throw logic_error("in_total_flux is NaN");
+    }
+#endif
+
     pftype mass_flux_to_density_factor = dt/cell->get_cube_volume();
     pftype in_water_density = in_water_flux * mass_flux_to_density_factor;
     pftype in_total_density = in_total_flux * mass_flux_to_density_factor;
 
+#if  DEBUG
     if (dt) {
         throw logic_error("dt is non-zero");
     }
@@ -431,31 +457,10 @@ void watersystem::advect_cell_properties_recursivelly(octcell* cell)
     if (in_total_density) {
         throw logic_error("in_total_density is non-zero");
     }
-#else
-
-    float C = in_total_flux;
-
-
-    float A = 0;
-    float B = C * A;
-    cout << "C = " << C << endl;
-    if (A) {
-        cout << "A = " << A << endl;
-        throw logic_error("A is non-zero");
-    }
-    if (B) {
-        cout << "B = " << B << endl;
-        throw logic_error("B is non-zero");
-    }
-
-    pftype in_water_density = 0;
-    pftype in_total_density = 0;
 #endif
 
-#if 1
     cell->water_density += in_water_density;
     cell->total_density += in_total_density;
-#endif
 
 #if  USE_ARTIFICIAL_COMPRESSIBILITY
     /* Update pressure */
