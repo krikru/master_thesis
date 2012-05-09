@@ -30,9 +30,9 @@
 /* Simulation parameters */
 #define  FRAME_MS                   (1000/60)
 //#define  SIMULATION_TIME_STEP       (FRAME_MS/1000.0) // [s]
-//#define  SIMULATION_TIME_STEP       .001 // [s]
-//#define  SIMULATION_TIME_STEP       .001 // [s]
-#define  SIMULATION_TIME_STEP       .00 // [s]
+//#define  SIMULATION_TIME_STEP       .01 // [s]
+#define  SIMULATION_TIME_STEP       .0001 // [s]
+//#define  SIMULATION_TIME_STEP       .0 // [s]
 #define  INTERFACE_THICKNESS_IN_CELLS                4.0 // [1] The number of cells that will make out the interface
 
 /* Grid */
@@ -43,7 +43,7 @@
 /* Navier-Stokes */
 #define  USE_ARTIFICIAL_COMPRESSIBILITY              1
 /* 122.92: Works; 122.93: Doesn't work. (dt = 0.001, maximal spatial resolution = 0.02) */
-#define  ARTIFICIAL_COMPRESSIBILITY_FACTOR           10.00 // [Pa] (Delta pressure = ARTIFICIAL_COMPRESSIBILITY_FACTOR * Delta total volume coefficient)
+#define  ARTIFICIAL_COMPRESSIBILITY_FACTOR           (10.00 * P_WATER_DENSITY) // [Pa] (Delta pressure = ARTIFICIAL_COMPRESSIBILITY_FACTOR * Delta water volume coefficient)
 #define  NORMAL_PRESSURE                             (NO_ATMOSPHERE ? 0.0 : 1 * P_1ATM)
 
 /* VIsualization */
@@ -53,10 +53,15 @@
 #define  LINE_WIDTH                 (DRAW_SMOOTH_LINES ? 1.5 : 1)
 #define  BULK_CELL_MARK_LINE_WIDTH  3
 #define  EMPTY_CELL_MARK_LINE_WIDTH 3
+#define  VELOCITY_LINE_WIDTH        LINE_WIDTH
 #define  NUM_LINES_IN_CIRCLES       16
 #define  MARK_EMPTY_CELLS           1
 #define  MARK_BULK_CELLS            1
 #define  DRAW_PRESSURE              1
+#define  DRAW_ALPHA                 0
+#define  DRAW_CELL_FACE_VELOCITIES                   0
+#define  DRAW_CELL_CENTER_VELOCITIES                 1
+#define  VEL_TO_ARROW_LENGTH_FACTOR 0.1
 #define  DRAW_CELL_CUBES            1
 #define  DRAW_PARENT_CELLS          1
 #define  DRAW_ONLY_SURFACE_CELLS    0
@@ -70,10 +75,12 @@
 /* Scalings to prevent the same z-value */
 #define  SCALE_FACTOR               1.0003
 #define  PRESSURE_DISTANCE_SCALING  (SCALE_FACTOR * SCALE_FACTOR)
+#define  ALPHA_DISTANCE_SCALING     (SCALE_FACTOR * SCALE_FACTOR)
 #define  PARENT_CUBE_DIST_SCALING   SCALE_FACTOR
 #define  LEAF_CUBE_DIST_SCALING     1
-#define  EMPTY_CELL_MARK_SCALING    1
-#define  BULK_CELL_MARK_SCALING     1
+#define  EMPTY_CELL_MARK_DIST_SCALING                1
+#define  BULK_CELL_MARK_DIST_SCALING                 1
+#define  VELOCITY_DISTANCE_SCALING                   (1 / SCALE_FACTOR)
 #define  NEIGHBOR_CONNECTIONS_DIST_SCALING           (1 / SCALE_FACTOR)
 
 /* Precision */
@@ -147,6 +154,10 @@ const float  EMPTY_CELL_MARK_R      = 1;
 const float  EMPTY_CELL_MARK_G      = 0;
 const float  EMPTY_CELL_MARK_B      = 0;
 const float  EMPTY_CELL_MARK_A      = 1;
+const float  VELOCITY_R             = 0;
+const float  VELOCITY_G             = 0;
+const float  VELOCITY_B             = 1;
+const float  VELOCITY_A             = 1;
 
 ////////////////////////////////////////////////////////////////
 // TYPEDEFS
@@ -225,13 +236,12 @@ enum DIMENSION {
 /* Physical constants */
 #define  P_G                 9.82000000000000000000 // [m/s^2] Gravitational acceleration
 #define  P_1ATM              101325.0               // [Pa] The atmospheric pressure
-#define  P_MAX_WATER_DENSITY 999.9720               // [kg/m^3] The density of waterat +4 °C, see http://en.wikipedia.org/wiki/Properties_of_water#Density_of_water_and_ice
+#define  P_WATER_DENSITY     999.9720               // [kg/m^3] The density of waterat +4 °C, see http://en.wikipedia.org/wiki/Properties_of_water#Density_of_water_and_ice
 
 /* Independent physical constant variables */
 //#define  P_AIR_PRESSURE      (1.0 * P_1ATM)            // [Pa] The atmospheric pressure //Not necessary to have
 #define  P_WATER_TEMP        10.0000000000000000000 // [°C] The water temperature in degrees Celcius
 #define  P_AIR_TEMP          10.0000000000000000000 // [°C] The air temperature in degrees Celcius
-#define  P_WATER_DENSITY     P_MAX_WATER_DENSITY    // [kg/m^3] The density of waterat
 
 /* Dependent physical constant variables */
 #define  P_NORMAL_AIR_DENSITY  ((1.2898   - 0.00432   * P_AIR_TEMP  ) * NORMAL_PRESSURE / P_1ATM) // [kg/m^3] The density of air, see http://en.wikipedia.org/wiki/Density_of_air#Temperature_and_pressure
@@ -247,7 +257,8 @@ enum DIMENSION {
 #define  MIN(x, y)  ((y) < (x) ? (y) : (x))
 #define  MAX(x, y)  ((y) > (x) ? (y) : (x))
 #define  SQUARE(x)  ((x) * (x))
-#define  ISNAN(x)   ((x) != (x))
+#define  IS_NAN(x)  ((x) != (x))
+#define  NO_OP()    {float f = 0; if (f != 0) exit(0);}
 
 #define  TEMP_SWAP(x, y, temp) { \
     (temp) = (x);                \

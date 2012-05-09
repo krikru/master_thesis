@@ -221,14 +221,13 @@ pftype octcell::get_alpha() {
 }
 
 inline
-
 void octcell::set_volume_coefficients(pftype water_volume_coefficient, pftype total_volume_coefficient)
 {
 #if  DEBUG
-    if (ISNAN(water_volume_coefficient)) {
+    if (IS_NAN(water_volume_coefficient)) {
         throw logic_error("Trying to set a NaN water_volume_coefficient in cell");
     }
-    if (ISNAN(total_volume_coefficient)) {
+    if (IS_NAN(total_volume_coefficient)) {
         throw logic_error("Trying to set a NaN total_volume_coefficient in cell");
     }
     if (water_volume_coefficient < 0) {

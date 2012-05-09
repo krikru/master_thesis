@@ -311,6 +311,6 @@ void octcell::make_neighbors(octcell* cell1, octcell* cell2, uint cell1_neighbor
     pftype min_s = MIN(cell1->s, cell2->s);
     pftype area = cube_side_area(min_s);
     /* Set properties */
-    node1->v.set(cell2, node2, dimension,  pos_dir, 0,  dist, dist_abs, area);
-    node2->v.set(cell1, node1, dimension, !pos_dir, 0, -dist, dist_abs, area);
+    node1->v.set(cell2, node2, dimension,  pos_dir, 0, 0, 0,  dist, dist_abs, area);
+    node2->v.set(cell1, node1, dimension, !pos_dir, 0, 0, 0, -dist, dist_abs, area);
 }

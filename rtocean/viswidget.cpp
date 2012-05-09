@@ -141,16 +141,16 @@ void viswidget::draw_pressure_deviation(octcell* cell)
 {
     /* Calculate color */
     /*
-     * In rising order: White, blue, cyan, green, yellow, red, black
+     * In rising order: White, blue, cyan, green, yellow, red, purple
      */
     const uint NUM_TRANSITIONS = 6;
-    const color3 colors[] = {color3(1, 1, 1),  // White
-                             color3(0, 0, 1),  // Blue
-                             color3(0, 1, 1),  // Cyan
-                             color3(0, 1, 0),  // Green
-                             color3(1, 1, 0),  // Yellow
-                             color3(1, 0, 0),  // Red
-                             color3(0, 0, 0)}; // Black
+    const color3 colors[] = {color3(1, 1, 1),  // 0, White
+                             color3(0, 0, 1),  // 1, Blue
+                             color3(0, 1, 1),  // 2, Cyan
+                             color3(0, 1, 0),  // 3, Green
+                             color3(1, 1, 0),  // 4, Yellow
+                             color3(1, 0, 0),  // 5, Red
+                             color3(1, 0, 1)}; // 6, Purple
     pftype q = NUM_TRANSITIONS * ((cell->p - NORMAL_PRESSURE) / (P_G * P_WATER_DENSITY) - (SURFACE_HEIGHT - cell->get_cell_center().e[VERTICAL_DIMENSION]) + 0.5);
     q = MIN(MAX(q, 0), NUM_TRANSITIONS);
     uint idx1 = uint(q);
@@ -196,6 +196,96 @@ void viswidget::draw_pressure_deviation(octcell* cell)
 #elif  NUM_DIMENSIONS == 3
     /* Don't draw pressure */
 #endif
+}
+
+void viswidget::draw_alpha(octcell* cell)
+{
+    /* Calculate color */
+    /*
+     * In rising order: Blue, cyan, green, yellow, red
+     */
+    const uint NUM_TRANSITIONS = 4;
+    const color3 colors[] = {color3(0, 0, 1),  // 0, Blue
+                             color3(0, 1, 1),  // 1, Cyan
+                             color3(0, 1, 0),  // 2, Green
+                             color3(1, 1, 0),  // 3, Yellow
+                             color3(1, 0, 0)}; // 4, Red
+    pftype q = NUM_TRANSITIONS * cell->get_alpha();
+    q = MIN(MAX(q, 0), NUM_TRANSITIONS);
+    uint idx1 = uint(q);
+    uint idx2 = MIN(idx1 + 1, NUM_TRANSITIONS);
+    q -= idx1;
+    color3 c = (1-q)*colors[idx1] + q*colors[idx2];
+#if  DEBUG
+    if (q < 0) {
+        throw domain_error("q < 0");
+    }
+    if (q > 1) {
+        throw domain_error("q < 0");
+    }
+    if (idx1 < 0) {
+        throw domain_error("idx1 < 0");
+    }
+    if (idx1 > NUM_TRANSITIONS) {
+        throw domain_error("idx1 > NUM_TRANSITIONS");
+    }
+    if (idx2 < 0) {
+        throw domain_error("idx2 < 0");
+    }
+    if (idx2 > NUM_TRANSITIONS) {
+        throw domain_error("idx2 > NUM_TRANSITIONS");
+    }
+#endif
+    quick_set_color(c[0], c[1], c[2], 1);
+
+#if    NUM_DIMENSIONS == 2
+    /* Vertices */
+    pfvec p00 = cell->r;
+    pfvec p01 = p00;
+    p01[DIM_X] += cell->s;
+    pfvec p10 = p00;
+    p10[DIM_Y] += cell->s;
+    pfvec p11 = p10 + p01 - p00;
+
+    /* Draw triangle*/
+    quick_draw_triangle(p00, p01, p10);
+    quick_draw_triangle(p11, p10, p01);
+
+#elif  NUM_DIMENSIONS == 3
+    /* Don't draw alpha */
+#endif
+}
+
+void viswidget::quick_draw_cell_face_velocities(octcell* cell)
+{
+    // Loop through all leaf neighbors
+    nlset leaf_set;
+    leaf_set.add_neighbor_list(&cell->neighbor_lists[NL_LOWER_LEVEL_OF_DETAIL_LEAF]);
+    leaf_set.add_neighbor_list(&cell->neighbor_lists[NL_SAME_LEVEL_OF_DETAIL_LEAF ]);
+    leaf_set.add_neighbor_list(&cell->neighbor_lists[NL_HIGHER_LEVEL_OF_DETAIL    ]);
+    for (nlnode* node = leaf_set.get_first_node(); node; node = leaf_set.get_next_node()) {
+        if (node->v.vel_out > 0) {
+            pfvec arrow_start = (cell->get_cell_center() + node->v.n->get_cell_center())/2;
+            pfvec dir = (node->v.n->get_cell_center() - cell->get_cell_center()).normalized();
+            pfvec arrow = dir * node->v.vel_out * VEL_TO_ARROW_LENGTH_FACTOR;
+            quick_draw_arrow(arrow_start, arrow);
+        }
+    }
+}
+
+void viswidget::quick_draw_cell_center_velocities(octcell* cell)
+{
+    pfvec average_velocity;
+    // Loop through all leaf neighbors
+    nlset leaf_set;
+    leaf_set.add_neighbor_list(&cell->neighbor_lists[NL_LOWER_LEVEL_OF_DETAIL_LEAF]);
+    leaf_set.add_neighbor_list(&cell->neighbor_lists[NL_SAME_LEVEL_OF_DETAIL_LEAF ]);
+    leaf_set.add_neighbor_list(&cell->neighbor_lists[NL_HIGHER_LEVEL_OF_DETAIL    ]);
+    for (nlnode* node = leaf_set.get_first_node(); node; node = leaf_set.get_next_node()) {
+        average_velocity.e[node->v.dim] += node->v.get_signed_dir() * node->v.vel_out * node->v.cf_area;
+    }
+    average_velocity /= (2 * cell->get_side_area());
+    quick_draw_arrow(cell->get_cell_center(), average_velocity * VEL_TO_ARROW_LENGTH_FACTOR);
 }
 
 void viswidget::quick_mark_water_cell(octcell* cell)
@@ -322,7 +412,7 @@ void viswidget::visualize_leaf_cells_recursively(octcell* cell)
 }
 
 
-void viswidget::draw_pressure_recursively(octcell* cell)
+void viswidget::draw_pressure_deviations_recursively(octcell* cell)
 {
     if (cell->is_leaf()) {
         draw_pressure_deviation(cell);
@@ -331,7 +421,49 @@ void viswidget::draw_pressure_recursively(octcell* cell)
 
     for (uint i = 0; i < octcell::MAX_NUM_CHILDREN; i++) {
         if (cell->get_child(i)) {
-            draw_pressure_recursively(cell->get_child(i));
+            draw_pressure_deviations_recursively(cell->get_child(i));
+        }
+    }
+}
+
+void viswidget::draw_alpha_recursively(octcell* cell)
+{
+    if (cell->is_leaf()) {
+        draw_alpha(cell);
+        return;
+    }
+
+    for (uint i = 0; i < octcell::MAX_NUM_CHILDREN; i++) {
+        if (cell->get_child(i)) {
+            draw_alpha_recursively(cell->get_child(i));
+        }
+    }
+}
+
+void viswidget::draw_cell_face_velocities_recursivelly(octcell* cell)
+{
+    if (cell->is_leaf()) {
+        quick_draw_cell_face_velocities(cell);
+        return;
+    }
+
+    for (uint i = 0; i < octcell::MAX_NUM_CHILDREN; i++) {
+        if (cell->get_child(i)) {
+            draw_cell_face_velocities_recursivelly(cell->get_child(i));
+        }
+    }
+}
+
+void viswidget::draw_cell_center_velocities_recursivelly(octcell* cell)
+{
+    if (cell->is_leaf()) {
+        quick_draw_cell_center_velocities(cell);
+        return;
+    }
+
+    for (uint i = 0; i < octcell::MAX_NUM_CHILDREN; i++) {
+        if (cell->get_child(i)) {
+            draw_cell_center_velocities_recursivelly(cell->get_child(i));
         }
     }
 }
@@ -475,8 +607,8 @@ void viswidget::visualize_finest_neighbor_connections_recursively(octcell* cell)
 
     /* Draw neighbor connections to leaf cells */
     pfvec center1 = cell->get_cell_center();
-    nlset leaf_set;
 
+    nlset leaf_set;
     /* Draw everything but the middle of the connection  */
     leaf_set.add_neighbor_list(&cell->neighbor_lists[NL_LOWER_LEVEL_OF_DETAIL_LEAF]);
     leaf_set.add_neighbor_list(&cell->neighbor_lists[NL_SAME_LEVEL_OF_DETAIL_LEAF ]);
@@ -522,7 +654,11 @@ void viswidget::visualize_fvoctree(fvoctree *tree)
     glPushAttrib(GL_ALL_ATTRIB_BITS);
 #if DRAW_PRESSURE
     set_up_model_view_matrix(PRESSURE_DISTANCE_SCALING);
-    draw_pressure_recursively(tree->root);
+    draw_pressure_deviations_recursively(tree->root);
+#endif
+#if DRAW_ALPHA
+    set_up_model_view_matrix(ALPHA_DISTANCE_SCALING);
+    draw_alpha_recursively(tree->root);
 #endif
 #if DRAW_WATER_LEVEL
     set_up_model_view_matrix();
@@ -553,17 +689,29 @@ void viswidget::visualize_fvoctree(fvoctree *tree)
 #endif // Parent/leaf cell order
 #endif // DRAW_CELL_CUBES
 
+#if  DRAW_CELL_FACE_VELOCITIES
+    set_line_style(VELOCITY_LINE_WIDTH, VELOCITY_R, VELOCITY_G, VELOCITY_B, VELOCITY_A);
+    set_up_model_view_matrix(VELOCITY_DISTANCE_SCALING);
+    draw_cell_face_velocities_recursivelly(tree->root);
+#endif
+
+#if  DRAW_CELL_CENTER_VELOCITIES
+    set_line_style(VELOCITY_LINE_WIDTH, VELOCITY_R, VELOCITY_G, VELOCITY_B, VELOCITY_A);
+    set_up_model_view_matrix(VELOCITY_DISTANCE_SCALING);
+    draw_cell_center_velocities_recursivelly(tree->root);
+#endif
+
 #if  MARK_BULK_CELLS
     /* Mark bulk cells */
     set_line_style(BULK_CELL_MARK_LINE_WIDTH, BULK_CELL_MARK_R, BULK_CELL_MARK_G, BULK_CELL_MARK_B, BULK_CELL_MARK_A);
-    set_up_model_view_matrix(BULK_CELL_MARK_SCALING);
+    set_up_model_view_matrix(BULK_CELL_MARK_DIST_SCALING);
     mark_water_cells_recursively(tree->root);
 #endif
 
 #if  MARK_EMPTY_CELLS
     /* Mark empty cells */
     set_line_style(EMPTY_CELL_MARK_LINE_WIDTH, EMPTY_CELL_MARK_R, EMPTY_CELL_MARK_G, EMPTY_CELL_MARK_B, EMPTY_CELL_MARK_A);
-    set_up_model_view_matrix(EMPTY_CELL_MARK_SCALING);
+    set_up_model_view_matrix(EMPTY_CELL_MARK_DIST_SCALING);
     mark_air_cells_recursively(tree->root);
 #endif
 
@@ -738,6 +886,11 @@ void viswidget::quick_draw_line(pfvec p1, pfvec p2)
     quick_draw_line(p1.e[DIM_X], p1.e[DIM_Y], p1.e[DIM_Z],
                     p2.e[DIM_X], p2.e[DIM_Y], p2.e[DIM_Z]);
 #endif
+}
+
+void viswidget::quick_draw_arrow(pfvec start, pfvec arrow)
+{
+    quick_draw_line(start, start + arrow);
 }
 
 void viswidget::draw_line(GLfloat ax, GLfloat ay, GLfloat az, GLfloat bx, GLfloat by, GLfloat bz, GLfloat width, GLfloat  r, GLfloat g, GLfloat b, GLfloat a)

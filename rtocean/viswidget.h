@@ -36,13 +36,24 @@ public slots:
 public:
 
 private:
+    void visualize_fvoctree(fvoctree *tree);
+
+    /* Simple functions */
     void draw_pressure_deviation(octcell* cell);
+    void draw_alpha(octcell* cell);
+    void quick_draw_cell_face_velocities(octcell* cell);
+    void quick_draw_cell_center_velocities(octcell* cell);
     void quick_mark_water_cell(octcell* cell);
     void quick_air_empty_cell(octcell* cell);
     void quick_draw_cell_water_level(octcell* cell);
     void quick_draw_cell(octcell* cell);
     void set_up_model_view_matrix(GLdouble scale_factor = 1);
-    void draw_pressure_recursively(octcell* cell);
+
+    /* Recursive functions */
+    void draw_pressure_deviations_recursively(octcell* cell);
+    void draw_alpha_recursively(octcell* cell);
+    void draw_cell_face_velocities_recursivelly(octcell* cell);
+    void draw_cell_center_velocities_recursivelly(octcell* cell);
     void mark_water_cells_recursively(octcell* cell);
     void mark_air_cells_recursively(octcell* cell);
     void draw_water_level_recursively(octcell* cell);
@@ -51,7 +62,6 @@ private:
     void visualize_neighbor_connections_recursively(octcell* cell);
     void visualize_neighbor_connections_recursively(octcell* cell, uint neighbor_list_index);
     void visualize_finest_neighbor_connections_recursively(octcell* cell);
-    void visualize_fvoctree(fvoctree *tree);
 
     static void init_neighbor_connection_colors();
     static void quick_set_color(GLfloat r, GLfloat g, GLfloat b, GLfloat a);
@@ -61,6 +71,7 @@ private:
     static void quick_draw_triangle(pfvec p1, pfvec p2, pfvec p3);
     static void quick_draw_line(GLfloat ax, GLfloat ay, GLfloat az, GLfloat bx, GLfloat by, GLfloat bz);
     static void quick_draw_line(pfvec p1, pfvec p2);
+    static void quick_draw_arrow(pfvec start, pfvec arrow);
     static void draw_line(GLfloat ax, GLfloat ay, GLfloat az, GLfloat bx, GLfloat by, GLfloat bz, GLfloat width, GLfloat  r, GLfloat g, GLfloat b, GLfloat a = 1);
 
     /* test functions (remove when finished testing) */

@@ -160,6 +160,11 @@ bool fvoctree::refine_subtree(octcell* c, pftype surface, pftype bottom, pftype 
 #endif
         water_vol_coeff *= beta;
         air_vol_coeff   *= (1 - beta);
+#if  DEBUG
+        if (water_vol_coeff < 0) {
+            NO_OP();
+        }
+#endif
         c->set_volume_coefficients(water_vol_coeff, water_vol_coeff + air_vol_coeff);
         return false;
     }

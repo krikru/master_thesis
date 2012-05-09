@@ -96,7 +96,7 @@ void watersystem::_evolve()
 {
     t += dt;
     advect_and_update_pressure();
-    //update_velocities_recursively(w->root);
+    update_velocities_recursively(w->root);
 }
 
 #if 1
@@ -412,8 +412,8 @@ void watersystem::advect_cell_properties_recursivelly(octcell* cell)
 
     /* TODO: Update the code for updating pressure */
     /* Update pressure */
-    pftype in_water_flux = 0; // [kg/s]
-    pftype in_total_flux = 0; // [kg/s]
+    pftype in_water_vol_flux = 0; // [m^3/s]
+    pftype in_total_vol_flux = 0; // [m^3/s]
     /* Loop through neighbors */
     nlset lists;
     lists.add_neighbor_list(&cell->neighbor_lists[NL_HIGHER_LEVEL_OF_DETAIL]);
@@ -425,7 +425,7 @@ void watersystem::advect_cell_properties_recursivelly(octcell* cell)
         if (node->v.n->has_child_array()) {
             throw logic_error("Neighbor supposed to be a leaf cell but is not");
         }
-        if (ISNAN(node->v.total_density)) {
+        if (IS_NAN(node->v.total_vol_coeff)) {
             //cout << node->v.n->get_cell_center().e[0] << ", " << cout << node->v.n->get_cell_center().e[1] << endl;
             //exit();
             if (node->v.pos_dir) {
@@ -438,42 +438,62 @@ void watersystem::advect_cell_properties_recursivelly(octcell* cell)
 #endif
         if (1) { // Prevents cases when
         //if (volume_flux_out) { // Prevents cases when
-            in_water_flux -= node->v.water_density * volume_flux_out;
-            in_total_flux -= node->v.total_density * volume_flux_out;
+            in_water_vol_flux -= node->v.water_vol_coeff * volume_flux_out;
+            in_total_vol_flux -= node->v.total_vol_coeff * volume_flux_out;
+#if  DEBUG
+            if (!dt) {
+                if (volume_flux_out) {
+                    cout << volume_flux_out << endl;
+                    throw logic_error("volume_flux_out is non-zero");
+                }
+                if (in_total_vol_flux) {
+                    cout << in_total_vol_flux << endl;
+                    if (IS_NAN(node->v.total_vol_coeff)) {
+                        cout << "node->v.total_vol_coeff is NaN =>" << endl;
+                    }
+                    throw logic_error("in_total_vol_flux is non-zero");
+                }
+            }
+#endif
         }
     }
 
-    pftype mass_flux_to_density_factor = dt/cell->get_cube_volume();
-    pftype in_water_density = in_water_flux * mass_flux_to_density_factor;
-    pftype in_total_density = in_total_flux * mass_flux_to_density_factor;
+    pftype volume_flux_to_volume_coefficient_factor = dt/cell->get_cube_volume();
+    pftype in_water_vol_coeff = in_water_vol_flux * volume_flux_to_volume_coefficient_factor;
+    pftype in_total_vol_coeff = in_total_vol_flux * volume_flux_to_volume_coefficient_factor;
 
 #if  DEBUG
-    if (dt) {
-        throw logic_error("dt is non-zero");
-    }
-    if (mass_flux_to_density_factor) {
-        throw logic_error("mass_flux_to_density_factor is non-zero");
-    }
-    if (in_water_density) {
-        throw logic_error("in_water_density is non-zero");
-    }
-    if (in_total_density) {
-        throw logic_error("in_total_density is non-zero");
+    if (!dt) {
+        if (volume_flux_to_volume_coefficient_factor) {
+            throw logic_error("volume_flux_to_volume_coefficient_factor is non-zero");
+        }
+        if (in_water_vol_coeff) {
+            throw logic_error("in_water_vol_coeff is non-zero");
+        }
+        if (in_total_vol_coeff) {
+            throw logic_error("in_total_vol_coeff is non-zero");
+        }
+        if (cell->water_vol_coeff + in_water_vol_coeff < 0) {
+            throw logic_error("New water volume coefficient in cell becomes negative");
+        }
+        if (cell->total_vol_coeff + in_total_vol_coeff < 0) {
+            throw logic_error("New total volume coefficient in cell becomes negative");
+        }
     }
 #endif
 
-    cell->set_densities(cell->water_density + in_water_density,
-                        cell->total_density + in_total_density);
+    cell->set_volume_coefficients(cell->water_vol_coeff + in_water_vol_coeff,
+                                  cell->total_vol_coeff + in_total_vol_coeff);
 
 #if  DEBUG
-    if (cell->water_density < 0) {
-        throw logic_error("Water density became negative");
+    if (cell->water_vol_coeff < 0) {
+        throw logic_error("Water volume coefficient became negative");
     }
-    if (cell->total_density < 0) {
-        throw logic_error("Total density became negative");
+    if (cell->total_vol_coeff < 0) {
+        throw logic_error("Total volume coefficient became negative");
     }
-    if (cell->water_density > cell->total_density) {
-        throw logic_error("Water density became larger than total density");
+    if (cell->water_vol_coeff > cell->total_vol_coeff) {
+        throw logic_error("Water volume coefficient became larger than total volume coefficient");
     }
 #endif
 

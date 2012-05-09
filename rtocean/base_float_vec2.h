@@ -247,7 +247,7 @@ base_float_vec2<T> base_float_vec2<T>::normalized() const
     if (!len) throw domain_error("Trying to normalize a zero-length base_float_vec2<T>");
 #endif
     T k = 1/len;
-    return base_float_vec2<T>(e[0]/k, e[1]*k);
+    return base_float_vec2<T>(e[0]*k, e[1]*k);
 }
 
 template<typename T>
