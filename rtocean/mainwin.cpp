@@ -30,6 +30,9 @@ mainwin::mainwin(QWidget *parent) :
     this->show();
     // Set central widget
 
+    QObject::connect(ui->actionPause, SIGNAL(triggered(bool)),
+                     this, SLOT(toggle_pause_simulation()));
+
     // Start simulation directly when application has finished loading
     QTimer::singleShot(100, this, SLOT(start_simulation()));
 }
@@ -89,6 +92,24 @@ void mainwin::start_simulation()
         ui->statusBar->showMessage("Starting simulation...");
         system.run_simulation(SIMULATION_TIME_STEP);
         ui->statusBar->showMessage("Simulation finished.");
+    }
+    catch (std::exception &e) {
+        message_handler::inform_about_exception("mainwin::start_simulation()", e, true);
+    }
+}
+
+void mainwin::toggle_pause_simulation()
+{
+    try
+    {
+        if (system.is_water_defined()) {
+            if (system.is_paused()) {
+                system.continue_simulation();
+            }
+            else {
+                system.pause_simulation();
+            }
+        }
     }
     catch (std::exception &e) {
         message_handler::inform_about_exception("mainwin::start_simulation()", e, true);

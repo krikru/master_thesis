@@ -43,33 +43,6 @@ octcell::~octcell()
  * Simulation *
  **************/
 
-#if 0
-void octcell::update_pressure()
-{
-    /* No advection term implemented */
-#if  USE_ARTIFICIAL_COMPRESSIBILITY
-    if (surface_cell) {
-        /* Assume a pressure that is increasing linearly from the surface and down; allow negative pressures for points above the surface */
-        rp = (vof/get_side_area() - 0.5*s) * P_G;
-    }
-    else {
-        pftype rp_increase = 0;
-        nlset lists;
-        lists.add_neighbor_list(&neighbor_lists[NL_HIGHER_LEVEL_OF_DETAIL]);
-        lists.add_neighbor_list(&neighbor_lists[NL_SAME_LEVEL_OF_DETAIL_LEAF]);
-        lists.add_neighbor_list(&neighbor_lists[NL_LOWER_LEVEL_OF_DETAIL_LEAF]);
-        for (nlnode* node = lists.get_first_node(); node; node = lists.get_next_node()) {
-            rp_increase += node->v.get_signed_dir() * node->v.vel * node->v.cf_area;
-        }
-        rp_increase /= get_total_volume();
-        rp += rp_increase;
-    }
-#else
-    Artificial compressibility not used; not yet supported
-#endif
-}
-#endif
-
 /*******************
  * Level of detail *
  *******************/
@@ -181,7 +154,7 @@ void octcell::refine()
      */
 
     // Create all neighbor connections internally between the child cells
-    // TODO: Optimize
+    // Optimize
     for (uint idx1 = 0; idx1 < MAX_NUM_CHILDREN; idx1++) {
         for (uint dim = 0; dim < NUM_DIMENSIONS; dim++) {
             uint idx2 = idx1 | child_index_offset(dim);
@@ -247,7 +220,7 @@ void octcell::coarsen()
      */
 }
 
-void octcell::move_neighbor_connection_to_other_list(nlnode* node, uint new_list_index)
+void octcell::move_neighbor_connection_to_other_list(nlnode *node, uint new_list_index)
 {
 #if  DEBUG
     if (new_list_index >= NUM_NEIGHBOR_LISTS) {
@@ -268,6 +241,38 @@ void octcell::break_all_neighbor_connections()
             un_neighbor(current_node);
         }
     }
+}
+
+/* Flow */
+
+pftype octcell::get_velocity_divergence() const
+{
+    pftype div = 0;
+    /* Loop through neighbors */
+    nlset lists;
+    lists.add_neighbor_list(&neighbor_lists[NL_HIGHER_LEVEL_OF_DETAIL]);
+    lists.add_neighbor_list(&neighbor_lists[NL_SAME_LEVEL_OF_DETAIL_LEAF]);
+    lists.add_neighbor_list(&neighbor_lists[NL_LOWER_LEVEL_OF_DETAIL_LEAF]);
+    for (nlnode* node = lists.get_first_node(); node; node = lists.get_next_node()) {
+        div += node->v.vel_out * node->v.cf_area;
+    }
+    div /= get_cube_volume();
+    return div;
+}
+
+pftype octcell::get_water_flow_divergence() const
+{
+    pftype div = 0;
+    /* Loop through neighbors */
+    nlset lists;
+    lists.add_neighbor_list(&neighbor_lists[NL_HIGHER_LEVEL_OF_DETAIL]);
+    lists.add_neighbor_list(&neighbor_lists[NL_SAME_LEVEL_OF_DETAIL_LEAF]);
+    lists.add_neighbor_list(&neighbor_lists[NL_LOWER_LEVEL_OF_DETAIL_LEAF]);
+    for (nlnode* node = lists.get_first_node(); node; node = lists.get_next_node()) {
+        div += node->v.vel_out * node->v.water_vol_coeff * node->v.cf_area;
+    }
+    div /= get_cube_volume();
+    return div;
 }
 
 ////////////////////////////////////////////////////////////////

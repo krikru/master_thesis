@@ -23,15 +23,15 @@
 #define  NUM_DIMENSIONS             2 /* 2 or 3 */
 //#define  NUM_DIRECTIONS             (2*NUM_DIMENSIONS)
 #define  LOGICAL_AXIS_ORDER         1
-#define  GENERATE_NEIGHBORS_STATICALLY               0
-#define  GENERATE_NEIGHBORS_DYNAMICALLY              1
-#define  NO_ATMOSPHERE                               1
+#define  NO_ATMOSPHERE              1
 
 /* Simulation parameters */
 #define  FRAME_MS                   (1000/60)
 //#define  SIMULATION_TIME_STEP       (FRAME_MS/1000.0) // [s]
 //#define  SIMULATION_TIME_STEP       .01 // [s]
+//#define  SIMULATION_TIME_STEP       .001 // [s]
 #define  SIMULATION_TIME_STEP       .0001 // [s]
+//#define  SIMULATION_TIME_STEP       .000003 // [s]
 //#define  SIMULATION_TIME_STEP       .0 // [s]
 #define  INTERFACE_THICKNESS_IN_CELLS                4.0 // [1] The number of cells that will make out the interface
 
@@ -43,7 +43,7 @@
 /* Navier-Stokes */
 #define  USE_ARTIFICIAL_COMPRESSIBILITY              1
 /* 122.92: Works; 122.93: Doesn't work. (dt = 0.001, maximal spatial resolution = 0.02) */
-#define  ARTIFICIAL_COMPRESSIBILITY_FACTOR           (10.00 * P_WATER_DENSITY) // [Pa] (Delta pressure = ARTIFICIAL_COMPRESSIBILITY_FACTOR * Delta water volume coefficient)
+#define  ARTIFICIAL_COMPRESSIBILITY_FACTOR           (1000.00 * P_WATER_DENSITY) // [Pa] (Delta pressure = ARTIFICIAL_COMPRESSIBILITY_FACTOR * Delta water volume coefficient)
 #define  NORMAL_PRESSURE                             (NO_ATMOSPHERE ? 0.0 : 1 * P_1ATM)
 
 /* VIsualization */
@@ -57,8 +57,13 @@
 #define  NUM_LINES_IN_CIRCLES       16
 #define  MARK_EMPTY_CELLS           1
 #define  MARK_BULK_CELLS            1
-#define  DRAW_PRESSURE              1
+#define  DRAW_PRESSURE              0
+#define  DRAW_PRESSURE_DEVIATION    1
 #define  DRAW_ALPHA                 0
+#define  DRAW_VELOCITY_DIVERGENCE   0
+#define  DRAW_FLOW_DIVERGENCE       0
+#define  VEL_DIV_SCALE_FACTOR       0.1 // [s/m]
+#define  FLOW_DIV_SCALE_FACTOR      VEL_DIV_SCALE_FACTOR // [s/m]
 #define  DRAW_CELL_FACE_VELOCITIES                   0
 #define  DRAW_CELL_CENTER_VELOCITIES                 1
 #define  VEL_TO_ARROW_LENGTH_FACTOR 0.1
@@ -75,7 +80,10 @@
 /* Scalings to prevent the same z-value */
 #define  SCALE_FACTOR               1.0003
 #define  PRESSURE_DISTANCE_SCALING  (SCALE_FACTOR * SCALE_FACTOR)
+#define  PRESSURE_DEVIATION_DISTANCE_SCALING         (SCALE_FACTOR * SCALE_FACTOR)
 #define  ALPHA_DISTANCE_SCALING     (SCALE_FACTOR * SCALE_FACTOR)
+#define  VELOCITY_DIVERGENCE_DISTANCE_SCALING        (SCALE_FACTOR * SCALE_FACTOR)
+#define  FLOW_DIVERGENCE_DISTANCE_SCALING            (SCALE_FACTOR * SCALE_FACTOR)
 #define  PARENT_CUBE_DIST_SCALING   SCALE_FACTOR
 #define  LEAF_CUBE_DIST_SCALING     1
 #define  EMPTY_CELL_MARK_DIST_SCALING                1
@@ -87,8 +95,6 @@
 #define  USE_DOUBLE_PRECISION_FOR_PHYSICS  0
 
 /* Tests */
-#define  SIZE_ACCURACY_FACTOR              1
-#define  TEST_REFINING_AND_COARSENING      0
 
 /* Graphics */
 const float  BACKGROUND_BRIGHTNESS  = 0;
@@ -185,7 +191,7 @@ typedef  uint64_t  uint64;
 ////////////////////////////////////////////////////////////////
 
 //TODO: Generalize the code so it works for 1, 2 and 3 dimensions
-//TODO: The real order should be X, Y, Z (change back if it isn't)
+/* The real order should be X, Y, Z (change back if it isn't) */
 #if LOGICAL_AXIS_ORDER
 enum DIMENSION {
     DIM_X,

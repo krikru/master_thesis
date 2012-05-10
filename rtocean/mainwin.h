@@ -35,6 +35,7 @@ private slots:
     void closeEvent(QCloseEvent *event);
 
     void start_simulation();
+    void toggle_pause_simulation();
 
     // Slots connected to UI items
     void on_actionAbout_rtocean_triggered();

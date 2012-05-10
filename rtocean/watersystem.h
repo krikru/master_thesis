@@ -21,22 +21,24 @@ public:
 
 public:
     /* Water */
-    bool      water_defined();
-    void      define_water(fvoctree* water, bool time_staggered = false, pftype time_step = 0);
-    void      redefine_water(fvoctree* water, bool time_staggered = false, pftype time_step = 0);
+    bool      is_water_defined() const;
+    void      define_water(fvoctree* water, pftype start_time = 0, bool time_staggered = false, pftype time_step = 0);
+    void      redefine_water(fvoctree* water, pftype start_time = 0, bool time_staggered = false, pftype time_step = 0);
     void      undefine_water();
-    fvoctree* get_water();
+    const fvoctree* get_water() const;
     /* Time */
-    pftype    get_time();
+    pftype    get_time() const;
     void      set_time(pftype time);
-    pftype    get_time_step();
+    pftype    get_time_step() const;
     void      set_time_step(pftype time_step);
     /* Control */
     void      evolve();
     int       run_simulation(pftype time_step);
-    bool      is_running();
-    bool      is_operating();
+    bool      is_started() const;
+    bool      is_paused() const;
+    bool      is_operating() const;
     void      pause_simulation();
+    void      continue_simulation();
     void      abort_ongoing_operation();
     /* Callback */
     void set_state_updated_callback(callback<void (*)(void*)> callback);
@@ -51,7 +53,7 @@ private:
     pftype   dt; // Time step
 
     /* Control */
-    bool      running; // If the simulation is running or not
+    bool      started; // If the simulation is running or not
     bool      operating; // If some operation is already using some of the class members
     bool      pause; // If the simulation should stop or not
     bool      abort; // If the main loop should quit or not
@@ -89,13 +91,13 @@ private:
 ////////////////////////////////////////////////////////////////
 
 inline
-bool watersystem::water_defined()
+bool watersystem::is_water_defined() const
 {
     return w;
 }
 
 inline
-void watersystem::define_water(fvoctree* water, bool time_staggered, pftype time_step)
+void watersystem::define_water(fvoctree* water, pftype start_time, bool time_staggered, pftype time_step)
 {
 #if  DEBUG
     if (!water) {
@@ -106,6 +108,8 @@ void watersystem::define_water(fvoctree* water, bool time_staggered, pftype time
     }
 #endif
 
+    w = water;
+    t = start_time;
     if (time_staggered) {
         dt = time_step;
     }
@@ -113,14 +117,16 @@ void watersystem::define_water(fvoctree* water, bool time_staggered, pftype time
         dt = 0;
         set_time_step(time_step);
     }
-    w = water;
+    started = false;
+    pause = false;
+    abort = false;
 }
 
 inline
-void watersystem::redefine_water(fvoctree* water, bool time_staggered, pftype time_step)
+void watersystem::redefine_water(fvoctree* water, pftype start_time, bool time_staggered, pftype time_step)
 {
     undefine_water();
-    define_water(water, time_staggered, time_step);
+    define_water(water, start_time, time_staggered, time_step);
 }
 
 inline
@@ -136,47 +142,84 @@ void watersystem::undefine_water()
 }
 
 inline
-fvoctree* watersystem::get_water()
+const fvoctree *watersystem::get_water() const
 {
     return w;
 }
 
-
 inline
-pftype watersystem::get_time()
+pftype watersystem::get_time() const
 {
+#if  DEBUG
+    if (!is_water_defined()) {
+        throw logic_error("Trying to get time while no water is defined");
+    }
+#endif
     return t;
 }
 
 inline
 void watersystem::set_time(pftype time)
 {
+#if  DEBUG
+    if (!is_water_defined()) {
+        throw logic_error("Trying to set time while no water is defined");
+    }
+#endif
     t = time;
 }
 
 inline
-pftype watersystem::get_time_step()
+pftype watersystem::get_time_step() const
 {
+#if  DEBUG
+    if (!is_water_defined()) {
+        throw logic_error("Trying to get time step while no water is defined");
+    }
+#endif
     return dt;
 }
 
 inline
 void watersystem::set_time_step(pftype time_step)
 {
+#if  DEBUG
+    if (!is_water_defined()) {
+        throw logic_error("Trying to set time step while no water is defined");
+    }
+#endif
     if (dt != time_step) {
         // TODO: Update time-staggered parameters (velocities)
+        dt = 0.5 * (time_step - dt);
+        update_velocities_recursively(w->root);
         dt = time_step;
     }
 }
 
 inline
-bool watersystem::is_running()
+bool watersystem::is_started() const
 {
-    return running;
+#if  DEBUG
+    if (!is_water_defined()) {
+        throw logic_error("Asking if simulation is started while no water is defined");
+    }
+#endif
+    return started;
 }
 
 inline
-bool watersystem::is_operating()
+bool watersystem::is_paused() const
+{
+#if  DEBUG
+    if (!is_water_defined()) {
+        throw logic_error("Asking if simulation is paused while no water is defined");
+    }
+#endif
+    return pause;
+}
+
+inline
+bool watersystem::is_operating() const
 {
     return operating;
 }
@@ -185,14 +228,36 @@ inline
 void watersystem::pause_simulation()
 {
 #if  DEBUG
-    if (!running) {
-        throw logic_error("Trying to pause simulation while not running any");
+    if (!is_water_defined()) {
+        throw logic_error("Trying to pause simulation while no water is defined");
+    }
+    if (!started) {
+        throw logic_error("Trying to pause simulation while not started any");
+    }if (pause) {
+        throw logic_error("Trying to pause simulation while already paused");
     }
 #endif
     pause = true;
 }
-inline
 
+inline
+void watersystem::continue_simulation()
+{
+#if  DEBUG
+    if (!is_water_defined()) {
+        throw logic_error("Trying to continue simulation while no water is defined");
+    }
+    if (!started) {
+        throw logic_error("Trying to continue simulation while not started any");
+    }if (!pause) {
+        throw logic_error("Trying to continue simulation while not paused");
+    }
+#endif
+    run_simulation(dt);
+}
+
+
+inline
 void watersystem::abort_ongoing_operation()
 {
 #if  DEBUG

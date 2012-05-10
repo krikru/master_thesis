@@ -40,7 +40,7 @@ public:
 
 public:
     /* Public methods */
-    void add_neighbor_list(nlist* list);
+    void add_neighbor_list(const nlist *list);
     nlnode* get_first_node();
     nlnode* get_next_node();
 
@@ -48,11 +48,11 @@ private:
     /* Private member variables */
     int num_unread_lists; /* The number of lists left to take elements from */
     nlnode* next_node; /* The next node to return */
-    nlist* unread_lists[NUM_NEIGHBOR_LISTS]; /* The lists yet to read (from back to front in this array) */
+    const nlist* unread_lists[NUM_NEIGHBOR_LISTS]; /* The lists yet to read (from back to front in this array) */
 
 private:
     /* Private methods */
-    nlist* get_next_unread_list();
+    const nlist* get_next_unread_list();
     void find_next_node();
 };
 
@@ -74,7 +74,7 @@ nlset::nlset()
 ////////////////////////////////////////////////////////////////
 
 inline
-void nlset::add_neighbor_list(nlist* list)
+void nlset::add_neighbor_list(const nlist* list)
 {
 #if  DEBUG
     if (num_unread_lists >= NUM_NEIGHBOR_LISTS) {
@@ -123,7 +123,7 @@ nlnode* nlset::get_next_node()
 }
 
 inline
-nlist* nlset::get_next_unread_list()
+const nlist *nlset::get_next_unread_list()
 {
     if (!num_unread_lists) {
         return 0;
@@ -139,7 +139,7 @@ void nlset::find_next_node()
         next_node = next_node->get_next_node();
     }
     while (!next_node) {
-        nlist* next_list = get_next_unread_list();
+        const nlist* next_list = get_next_unread_list();
         if (!next_list) {
             /* No more list to read from */
             return;

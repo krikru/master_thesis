@@ -25,51 +25,6 @@ fvoctree::fvoctree(pftype surface, pftype bottom)
     surface = surface;
     octcell *c = root = new octcell(1, pfvec(), 0);
     refine_subtree(c, surface, bottom, size_accuracy);
-    //TODO: Remove the refinement of selected octcells
-#if  NUM_DIMENSIONS == 2
-#if TEST_REFINING_AND_COARSENING
-    c->get_child(octcell::child_index_xy(0, 0))->refine();
-    //c->get_child(octcell::child_index_xy(1, 0))->refine();
-    //c->get_child(octcell::child_index_xy(1, 0))->get_child(octcell::child_index_xy(0, 0))->refine();
-    //c->get_child(octcell::child_index_xy(1, 1))->refine();
-    c = c->get_child(octcell::child_index_xy(0, 1));
-    //c = c->get_child(octcell::child_index_xy(1, 1));
-    if (!c) {
-        throw logic_error("Child node pointer is NULL! Cannot do what was planned :P");
-    }
-    c = c->get_child(octcell::child_index_xy(1, 0));
-    //c = c->get_child(octcell::child_index_xy(0, 0));
-    if (!c) {
-        throw logic_error("Child node pointer is NULL! Cannot do what was planned :P");
-    }
-    if (c->is_leaf()) {
-        throw logic_error("Node is a leaf! Cannot do what was planned (coarsen it) :P");
-    }
-    c->coarsen();
-#endif // TEST_REFINING_AND_COARSENING
-#elif  NUM_DIMENSIONS == 3
-#if  TEST_REFINING_AND_COARSENING
-    c->get_child(octcell::child_index_xyz(1, 0, 0))->refine();
-    c->get_child(octcell::child_index_xyz(1, 0, 0))->get_child(octcell::child_index_xyz(0, 0, 0))->refine();
-    c->get_child(octcell::child_index_xyz(1, 1, 0))->refine();
-    c = root->get_child(octcell::child_index_xyz(0, 0, 1));
-    if (!c) {
-        throw logic_error("Child node pointer is NULL! Cannot do what was planned :P");
-    }
-    c = c->get_child(octcell::child_index_xyz(0, 1, 0));
-    if (!c) {
-        throw logic_error("Child node pointer is NULL! Cannot do what was planned :P");
-    }
-    if (c->is_leaf()) {
-        throw logic_error("Node is a leaf! Cannot do what was planned (coarsen it) :P");
-    }
-    c->coarsen();
-#endif  // TEST_REFINING_AND_COARSENING
-#endif  // NUM_DIMENSIONS == 2, 3
-
-#if  GENERATE_NEIGHBORS_STATICALLY
-    generate_leaf_neighbor_lists();
-#endif  // GENERATE_NEIGHBORS_STATICALLY
 }
 
 fvoctree::~fvoctree()
@@ -93,7 +48,6 @@ pftype fvoctree::size_accuracy(pfvec r)
     else {
         return SURFACE_ACCURACY;
     }
-    //return SIZE_ACCURACY_FACTOR*(0.02 + 0.1 * r.e[DIM_X]);
 }
 
 /* Returns true if the cell should be removed from the simulation */
@@ -192,11 +146,3 @@ bool fvoctree::refine_subtree(octcell* c, pftype surface, pftype bottom, pftype 
     return 0;
 }
 
-#if  GENERATE_NEIGHBORS_STATICALLY
-void fvoctree::generate_leaf_neighbor_lists()
-{
-    if (root) {
-        root->generate_all_internal_leaf_neighbors();
-    }
-}
-#endif

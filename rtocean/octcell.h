@@ -77,36 +77,39 @@ public:
      *****************************/
 
     /* Geometry */
-    pfvec  get_cell_center();
-    pftype get_side_area();
-    pftype get_cube_volume();
-    pftype get_volume_of_water();
+    pfvec  get_cell_center() const;
+    pftype get_side_area() const;
+    pftype get_cube_volume() const;
 
     /* Simulation */
-    bool is_water_cell();
-    bool is_non_water_cell();
-    bool is_air_cell();
-    bool is_non_air_cell();
-    bool is_mixed_cell();
-    pftype get_air_volume_coefficient();
-    pftype get_alpha();
+    bool is_water_cell() const;
+    bool is_non_water_cell() const;
+    bool is_air_cell() const;
+    bool is_non_air_cell() const;
+    bool is_mixed_cell() const;
+    pftype get_air_volume_coefficient() const;
+    pftype get_alpha() const;
     void set_volume_coefficients(pftype water_volume_coefficient, pftype total_volume_coefficient);
+
+    /* Flow */
+    pftype get_velocity_divergence() const;
+    pftype get_water_flow_divergence() const;
 
     /* Level of detail */
 
     /* Children */
-    bool has_child_array();
-    bool is_leaf();
+    bool has_child_array() const;
+    bool is_leaf() const;
     void make_leaf();
-    octcell* get_child(uint idx);
-    octcell* set_child(uint idx, octcell* child);
-    uint get_number_of_children();
+    octcell* get_child(uint idx) const;
+    octcell* set_child(uint idx, octcell *child);
+    uint get_number_of_children() const;
     void refine(); // Creates a new full child array
     void coarsen(); // Decreases the level of detail to this level by removing the children and the child array
     void remove_child(uint idx);
 
     /* Neighbors */
-    void move_neighbor_connection_to_other_list(nlnode* node, uint new_list_index);
+    void move_neighbor_connection_to_other_list(nlnode *node, uint new_list_index);
     void break_all_neighbor_connections();
 
 public:
@@ -158,11 +161,13 @@ private:
  ************/
 
 inline
-pfvec octcell::get_cell_center()
+pfvec octcell::get_cell_center() const
 {
     pftype s_2 = 0.5 * s;
     //TODO: Create function for generating the vector added to r
-#if    NUM_DIMENSIONS == 2
+#if    NUM_DIMENSIONS == 1
+    return r + pfvec(s_2);
+#elif  NUM_DIMENSIONS == 2
     return r + pfvec(s_2, s_2);
 #elif  NUM_DIMENSIONS == 3
     return r + pfvec(s_2, s_2, s_2);
@@ -170,13 +175,13 @@ pfvec octcell::get_cell_center()
 }
 
 inline
-pftype octcell::get_side_area()
+pftype octcell::get_side_area() const
 {
     return cube_side_area(s);
 }
 
 inline
-pftype octcell::get_cube_volume()
+pftype octcell::get_cube_volume() const
 {
     return cube_volume(s);
 }
@@ -186,37 +191,44 @@ pftype octcell::get_cube_volume()
  **************/
 
 inline
-bool octcell::is_water_cell() {
+bool octcell::is_water_cell() const
+{
     return water_vol_coeff >= total_vol_coeff;
 }
 
 inline
-bool octcell::is_non_water_cell() {
+bool octcell::is_non_water_cell() const
+{
     return !is_water_cell();
 }
 
 inline
-bool octcell::is_air_cell() {
+bool octcell::is_air_cell() const
+{
     return water_vol_coeff <= 0;
 }
 
 inline
-bool octcell::is_non_air_cell() {
+bool octcell::is_non_air_cell() const
+{
     return !is_air_cell();
 }
 
 inline
-bool octcell::is_mixed_cell() {
+bool octcell::is_mixed_cell() const
+{
     return is_non_water_cell() && is_non_air_cell();
 }
 
 inline
-pftype octcell::get_air_volume_coefficient() {
+pftype octcell::get_air_volume_coefficient() const
+{
     return total_vol_coeff - water_vol_coeff;
 }
 
 inline
-pftype octcell::get_alpha() {
+pftype octcell::get_alpha() const
+{
     return water_vol_coeff/total_vol_coeff;
 }
 
@@ -249,15 +261,15 @@ void octcell::set_volume_coefficients(pftype water_volume_coefficient, pftype to
  ************/
 
 inline
-bool octcell::has_child_array()
+bool octcell::has_child_array() const
 {
     return _c;
 }
 
 inline
-bool octcell::is_leaf()
+bool octcell::is_leaf() const
 {
-    return !_c;
+    return !has_child_array();
 }
 
 inline
@@ -278,7 +290,8 @@ void octcell::make_leaf()
 }
 
 inline
-octcell* octcell::get_child(uint idx) {
+octcell* octcell::get_child(uint idx) const
+{
 #if  DEBUG
     if (is_leaf()) {
         throw logic_error("Trying to get a child from a leaf cell");
@@ -291,7 +304,8 @@ octcell* octcell::get_child(uint idx) {
 }
 
 inline
-octcell* octcell::set_child(uint idx, octcell* child) {
+octcell* octcell::set_child(uint idx, octcell *child)
+{
 #if  DEBUG
     if (is_leaf()) {
         throw logic_error("Trying to set a child for a leaf cell");
@@ -304,7 +318,8 @@ octcell* octcell::set_child(uint idx, octcell* child) {
 }
 
 inline
-uint octcell::get_number_of_children() {
+uint octcell::get_number_of_children() const
+{
 #if  DEBUG
     if (is_leaf()) {
         throw logic_error("Trying to get number of children for a leaf cell");

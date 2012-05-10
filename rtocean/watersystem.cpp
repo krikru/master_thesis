@@ -37,7 +37,6 @@
 watersystem::watersystem()
 {
     w = 0;
-    t = 0;
     operating = false;
 
 }
@@ -55,7 +54,7 @@ void watersystem::evolve()
     if (!dt) {
         throw logic_error("Trying to evolve system but time step is not defined");
     }
-    if (!water_defined()) {
+    if (!is_water_defined()) {
         throw logic_error("Trying to evolve system while water is not defined");
     }
 #endif
@@ -69,13 +68,14 @@ int watersystem::run_simulation(pftype time_step)
     int ret = 0;
     set_time_step(time_step);
 
+    started = true;
     pause = false;
-    do {
+    while (!abort && !pause) {
         /* Evolve the system */
         _evolve();
         /* Process everything that needs to be processed */
         process_events();
-    } while (!abort && !pause);
+    }
 
     if (abort) {
         ret = 1;
@@ -102,7 +102,6 @@ void watersystem::_evolve()
 #if 1
 void watersystem::advect_and_update_pressure()
 {
-    //TODO: Ensure mass conservation (current alpha advection do not conserve the mass)
     /* Advect alpha */
     //calculate_delta_alpha_recursively(w->root);
     calculate_cell_face_properties_recursivelly(w->root);
@@ -235,7 +234,7 @@ void watersystem::calculate_delta_alpha_recursively(octcell* cell)
         }
     }
 
-    //TODO: Optimize
+    // Optimize
     pftype ideal_length = 1/(INTERFACE_THICKNESS_IN_CELLS * cell->s); // [1/m]
     pftype square_length = cell->alpha_grad_coeff.sqr_length(); // [1/m]
     if (!square_length) {
@@ -410,8 +409,7 @@ void watersystem::advect_cell_properties_recursivelly(octcell* cell)
         return;
     }
 
-    /* TODO: Update the code for updating pressure */
-    /* Update pressure */
+    /* Update volume coefficients */
     pftype in_water_vol_flux = 0; // [m^3/s]
     pftype in_total_vol_flux = 0; // [m^3/s]
     /* Loop through neighbors */
@@ -421,66 +419,13 @@ void watersystem::advect_cell_properties_recursivelly(octcell* cell)
     lists.add_neighbor_list(&cell->neighbor_lists[NL_LOWER_LEVEL_OF_DETAIL_LEAF]);
     for (nlnode* node = lists.get_first_node(); node; node = lists.get_next_node()) {
         pftype volume_flux_out = node->v.vel_out * node->v.cf_area; // [m^3/s]
-#if DEBUG
-        if (node->v.n->has_child_array()) {
-            throw logic_error("Neighbor supposed to be a leaf cell but is not");
-        }
-        if (IS_NAN(node->v.total_vol_coeff)) {
-            //cout << node->v.n->get_cell_center().e[0] << ", " << cout << node->v.n->get_cell_center().e[1] << endl;
-            //exit();
-            if (node->v.pos_dir) {
-                //node->v.n->water_density = 0;
-            }
-            else {
-                //node->v.n->water_density = node->v.total_density/2;
-            }
-        }
-#endif
-        if (1) { // Prevents cases when
-        //if (volume_flux_out) { // Prevents cases when
-            in_water_vol_flux -= node->v.water_vol_coeff * volume_flux_out;
-            in_total_vol_flux -= node->v.total_vol_coeff * volume_flux_out;
-#if  DEBUG
-            if (!dt) {
-                if (volume_flux_out) {
-                    cout << volume_flux_out << endl;
-                    throw logic_error("volume_flux_out is non-zero");
-                }
-                if (in_total_vol_flux) {
-                    cout << in_total_vol_flux << endl;
-                    if (IS_NAN(node->v.total_vol_coeff)) {
-                        cout << "node->v.total_vol_coeff is NaN =>" << endl;
-                    }
-                    throw logic_error("in_total_vol_flux is non-zero");
-                }
-            }
-#endif
-        }
+        in_water_vol_flux -= node->v.water_vol_coeff * volume_flux_out;
+        in_total_vol_flux -= node->v.total_vol_coeff * volume_flux_out;
     }
 
     pftype volume_flux_to_volume_coefficient_factor = dt/cell->get_cube_volume();
     pftype in_water_vol_coeff = in_water_vol_flux * volume_flux_to_volume_coefficient_factor;
     pftype in_total_vol_coeff = in_total_vol_flux * volume_flux_to_volume_coefficient_factor;
-
-#if  DEBUG
-    if (!dt) {
-        if (volume_flux_to_volume_coefficient_factor) {
-            throw logic_error("volume_flux_to_volume_coefficient_factor is non-zero");
-        }
-        if (in_water_vol_coeff) {
-            throw logic_error("in_water_vol_coeff is non-zero");
-        }
-        if (in_total_vol_coeff) {
-            throw logic_error("in_total_vol_coeff is non-zero");
-        }
-        if (cell->water_vol_coeff + in_water_vol_coeff < 0) {
-            throw logic_error("New water volume coefficient in cell becomes negative");
-        }
-        if (cell->total_vol_coeff + in_total_vol_coeff < 0) {
-            throw logic_error("New total volume coefficient in cell becomes negative");
-        }
-    }
-#endif
 
     cell->set_volume_coefficients(cell->water_vol_coeff + in_water_vol_coeff,
                                   cell->total_vol_coeff + in_total_vol_coeff);
@@ -497,8 +442,8 @@ void watersystem::advect_cell_properties_recursivelly(octcell* cell)
     }
 #endif
 
-#if  USE_ARTIFICIAL_COMPRESSIBILITY
     /* Update pressure */
+#if  USE_ARTIFICIAL_COMPRESSIBILITY
 #if  NO_ATMOSPHERE
     cell->p = (cell->water_vol_coeff - 1) * ARTIFICIAL_COMPRESSIBILITY_FACTOR;
     if (cell->p < 0) { // Don't allow negative pressure
@@ -516,7 +461,7 @@ void watersystem::advect_cell_properties_recursivelly(octcell* cell)
     }
     else {
         /* Calculate pressure for a mixed cell */
-        //TODO: Optimize
+        // Optimize
         pftype k = ARTIFICIAL_COMPRESSIBILITY_FACTOR;
         pftype q = NORMAL_PRESSURE;
         pftype a = cell->get_air_volume_coefficient();
@@ -534,101 +479,6 @@ void watersystem::advect_cell_properties_recursivelly(octcell* cell)
 #else  //USE_ARTIFICIAL_COMPRESSIBILITY
     "don't know what to do now"
 #endif  //USE_ARTIFICIAL_COMPRESSIBILITY
-}
-#endif
-
-#if 0
-//TODO: Remove this function once replaced
-/* Returns true if the cell should be removed from the simulation, false otherwise*/
-bool watersystem::advect_and_update_pressure_recursively(octcell* cell)
-{
-    if (cell->has_child_array()) {
-        for (uint idx = 0; idx < octcell::MAX_NUM_CHILDREN; idx++) {
-            octcell* c = cell->get_child(idx);
-            if (c) {
-                /* Child exists */
-                if (advect_and_update_pressure_recursively(c)) {
-                    cell->remove_child(idx);
-                    if (!cell->get_number_of_children()) {
-                        /* No children left, remove this cell as well */
-                        return true;
-                    }
-                }
-            }
-        }
-        return false;
-    }
-
-    /* Cell is a leaf cell */
-    /* Calculate in flux */
-    pftype in_flux = 0;
-    /* Loop through neighbors */
-    nlset lists;
-    //nlnode* nn_up   = 0;
-    //nlnode* nn_down = 0;
-    lists.add_neighbor_list(&cell->neighbor_lists[NL_HIGHER_LEVEL_OF_DETAIL]);
-    lists.add_neighbor_list(&cell->neighbor_lists[NL_SAME_LEVEL_OF_DETAIL_LEAF]);
-    lists.add_neighbor_list(&cell->neighbor_lists[NL_LOWER_LEVEL_OF_DETAIL_LEAF]);
-    for (nlnode* node = lists.get_first_node(); node; node = lists.get_next_node()) {
-        if (node->v.dim == VERTICAL_DIMENSION) {
-            /*
-            if (node->v.pos_dir) {
-                nn_up = node;
-            }
-            else {
-                nn_down = node;
-            }
-            */
-        }
-        in_flux -= node->v.vel_out * node->v.cf_area;
-    }
-
-    /* Move volume into or from cell */
-    pftype in_volume = in_flux * dt;
-    if (cell->is_surface_cell()) {
-        cell->alpha += in_volume/cell->get_total_volume();
-#if  USE_ARTIFICIAL_COMPRESSIBILITY
-        cell->rp += in_volume / cell->get_side_area() * P_G;
-#endif
-#if 0
-        if (cell->vof > cell->get_total_volume()) {
-            pftype excess_volume = cell->vof - cell->get_total_volume();
-            cell->un_surface_cell();
-            /* Move up water to cell above */
-            if (nn_up) {
-                // TODO: Add code
-            }
-            else {
-                // TODO: Add code
-            }
-        }
-        else if (cell->vof <= 0) {
-            /* Cancel out with water from cell beneath */
-            if (nn_down) {
-                if (!nn_down.v.n->is_surface_cell()) {
-                    nn_down.v.n->make_surface_cell();
-                    nn_down.remove_water(-cell->vof);
-                }
-                else {
-                    /* Remove from all neighbors */
-                }
-            }
-            return true;
-            // TODO: Add code
-        }
-        else {
-            /* Assume a pressure that is increasing linearly from the surface and down; allow negative pressures for points above the surface */
-            //cell->rp = (cell->vof/cell->get_side_area() - 0.5*cell->s) * P_G;
-        }
-#endif
-    }
-    else {
-#if  USE_ARTIFICIAL_COMPRESSIBILITY
-        cell->rp += in_volume / cell->get_total_volume() * ARTIFICIAL_COMPRESSIBILITY_FACTOR;
-#endif
-    }
-
-    return false;
 }
 #endif
 
