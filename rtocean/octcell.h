@@ -82,14 +82,15 @@ public:
     pftype get_cube_volume() const;
 
     /* Simulation */
-    bool is_water_cell() const;
-    bool is_non_water_cell() const;
-    bool is_air_cell() const;
-    bool is_non_air_cell() const;
+    bool has_air() const;
+    bool has_no_air() const;
+    bool has_water() const;
+    bool has_no_water() const;
     bool is_mixed_cell() const;
     pftype get_air_volume_coefficient() const;
     pftype get_alpha() const;
     void set_volume_coefficients(pftype water_volume_coefficient, pftype total_volume_coefficient);
+    void prepare_for_water();
 
     /* Flow */
     pftype get_velocity_divergence() const;
@@ -191,33 +192,33 @@ pftype octcell::get_cube_volume() const
  **************/
 
 inline
-bool octcell::is_water_cell() const
+bool octcell::has_air() const
 {
     return water_vol_coeff >= total_vol_coeff;
 }
 
 inline
-bool octcell::is_non_water_cell() const
+bool octcell::has_no_air() const
 {
-    return !is_water_cell();
+    return !has_air();
 }
 
 inline
-bool octcell::is_air_cell() const
+bool octcell::has_water() const
 {
     return water_vol_coeff <= 0;
 }
 
 inline
-bool octcell::is_non_air_cell() const
+bool octcell::has_no_water() const
 {
-    return !is_air_cell();
+    return !has_water();
 }
 
 inline
 bool octcell::is_mixed_cell() const
 {
-    return is_non_water_cell() && is_non_air_cell();
+    return has_no_air() && has_no_water();
 }
 
 inline

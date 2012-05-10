@@ -275,6 +275,55 @@ pftype octcell::get_water_flow_divergence() const
     return div;
 }
 
+void octcell::prepare_for_water()
+{
+    /*
+     * This cell atkes care of:
+     *   1. Walls to cells with no water in them
+     *   2. Missing neighbors (create new ones) (not yet implemented)
+     */
+
+    /* Calculate average velocity vector */
+    pfvec mean_vel;
+    pfvec area;
+    /* Loop though neighbors */
+    nlset lists;
+    lists.add_neighbor_list(&neighbor_lists[NL_HIGHER_LEVEL_OF_DETAIL]);
+    lists.add_neighbor_list(&neighbor_lists[NL_SAME_LEVEL_OF_DETAIL_LEAF]);
+    lists.add_neighbor_list(&neighbor_lists[NL_LOWER_LEVEL_OF_DETAIL_LEAF]);
+    for (nlnode* node = lists.get_first_node(); node; node = lists.get_next_node()) {
+        if (node->v.n->has_no_water()) {
+            /* This velocity is relevant, use it to calculate mean velocity vector */
+            area.e[node->v.dim] += node->v.cf_area;
+            mean_vel.e[node->v.dim] += node->v.cf_area * node->v.get_signed_dir() * node->v.vel_out;
+        }
+    }
+    for (uint dim = 0; dim < NUM_DIMENSIONS; dim++) {
+        if (area.e[dim]) {
+            mean_vel.e[dim] /= area[dim];
+        }
+        else {
+            /* Don't know the velocity in this direction */
+            // TODO: Find out the velocity in some other way
+            //mean_vel[dim] = 0; This componentis already 0
+        }
+    }
+
+    // TODO: Create new empty cells where it doesn't have any neighbors
+
+    /* Set velocities on faces to empty cells */
+    /* Loop though neighbors */
+    lists.add_neighbor_list(&neighbor_lists[NL_HIGHER_LEVEL_OF_DETAIL]);
+    lists.add_neighbor_list(&neighbor_lists[NL_SAME_LEVEL_OF_DETAIL_LEAF]);
+    lists.add_neighbor_list(&neighbor_lists[NL_LOWER_LEVEL_OF_DETAIL_LEAF]);
+    for (nlnode* node = lists.get_first_node(); node; node = lists.get_next_node()) {
+        if (node->v.n->has_water()) {
+            /* The velocity out for this neighbor connection currently contains humbug, initialize it */
+            node->v.set_velocity_out(mean_vel[node->v.dim]*node->v.get_signed_dir());
+        }
+    }
+}
+
 ////////////////////////////////////////////////////////////////
 // PUBLIC STATIC METHODS
 ////////////////////////////////////////////////////////////////

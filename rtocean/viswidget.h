@@ -42,6 +42,7 @@ private:
     /* Simple functions */
     void draw_pressure                    (const octcell* cell);
     void draw_pressure_deviation          (const octcell* cell);
+    void draw_water_vol_coeff             (const octcell *cell);
     void draw_alpha                       (const octcell *cell);
     void draw_velocity_divergence         (const octcell *cell);
     void draw_flow_divergence             (const octcell *cell);
@@ -55,6 +56,7 @@ private:
     /* Recursive functions */
     void draw_pressure_recursively                        (const octcell* cell);
     void draw_pressure_deviations_recursively             (const octcell* cell);
+    void draw_water_vol_coeff_recursively                 (const octcell *cell);
     void draw_alpha_recursively                           (const octcell *cell);
     void draw_velocity_divergence_recursively             (const octcell *cell);
     void draw_flow_divergence_recursively                 (const octcell *cell);

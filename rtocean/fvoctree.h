@@ -25,6 +25,7 @@ public:
 private:
     static pftype size_accuracy(pfvec r);
     bool refine_subtree(octcell* c, pftype surface, pftype bottom, pftype (*accuracy_function)(pfvec));
+    void prepare_cells_for_water_recursively(octcell* cell);
 
 private:
     /*************************

@@ -25,6 +25,7 @@ fvoctree::fvoctree(pftype surface, pftype bottom)
     surface = surface;
     octcell *c = root = new octcell(1, pfvec(), 0);
     refine_subtree(c, surface, bottom, size_accuracy);
+    prepare_cells_for_water_recursively(c);
 }
 
 fvoctree::~fvoctree()
@@ -146,3 +147,15 @@ bool fvoctree::refine_subtree(octcell* c, pftype surface, pftype bottom, pftype 
     return 0;
 }
 
+void fvoctree::prepare_cells_for_water_recursively(octcell* cell)
+{
+    if (cell->is_leaf()) {
+        cell->prepare_for_water();
+        return;
+    }
+    for (uint i = 0; i < octcell::MAX_NUM_CHILDREN; i++) {
+        if (cell->get_child(i)) {
+            prepare_cells_for_water_recursively(cell->get_child(i));
+        }
+    }
+}

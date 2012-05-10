@@ -424,11 +424,14 @@ void watersystem::advect_cell_properties_recursivelly(octcell* cell)
     }
 
     pftype volume_flux_to_volume_coefficient_factor = dt/cell->get_cube_volume();
-    pftype in_water_vol_coeff = in_water_vol_flux * volume_flux_to_volume_coefficient_factor;
-    pftype in_total_vol_coeff = in_total_vol_flux * volume_flux_to_volume_coefficient_factor;
+    pftype d_water_vol_coeff = in_water_vol_flux * volume_flux_to_volume_coefficient_factor;
+    pftype d_total_vol_coeff = in_total_vol_flux * volume_flux_to_volume_coefficient_factor;
 
-    cell->set_volume_coefficients(cell->water_vol_coeff + in_water_vol_coeff,
-                                  cell->total_vol_coeff + in_total_vol_coeff);
+    if (!cell->water_vol_coeff && d_water_vol_coeff) {
+        cell->prepare_for_water();
+    }
+    cell->set_volume_coefficients(cell->water_vol_coeff + d_water_vol_coeff,
+                                  cell->total_vol_coeff + d_total_vol_coeff);
 
 #if  DEBUG
     if (cell->water_vol_coeff < 0) {
@@ -445,11 +448,23 @@ void watersystem::advect_cell_properties_recursivelly(octcell* cell)
     /* Update pressure */
 #if  USE_ARTIFICIAL_COMPRESSIBILITY
 #if  NO_ATMOSPHERE
-    cell->p = (cell->water_vol_coeff - 1) * ARTIFICIAL_COMPRESSIBILITY_FACTOR;
-    if (cell->p < 0) { // Don't allow negative pressure
-        cell->p = 0; // Vacuum partly fills the cell
-    }
+#if  VACUUM_HAS_PRESSURE
+    cell->p = (cell->total_vol_coeff - 1) * ARTIFICIAL_COMPRESSIBILITY_FACTOR;
 #else
+    cell->p = (cell->water_vol_coeff - 1) * ARTIFICIAL_COMPRESSIBILITY_FACTOR;
+    if (cell->p < 0) {
+#if  ALLOW_NEGATIVE_PRESSURES
+        // Prevent too low pressures at the boundary
+        cell->p = (cell->total_vol_coeff - 1) * ARTIFICIAL_COMPRESSIBILITY_FACTOR;
+        if (cell->p > 0) {
+            cell->p = 0; // Vacuum partly fills the cell
+        }
+#else
+        cell->p = 0;
+#endif // ALLOW_NEGATIVE_PRESSURES
+    }
+#endif // VACUUM_HAS_PRESSURE
+#else // NO_ATMOSPHERE
     if (cell->is_water_cell()) {
         cell->p = (cell->water_vol_coeff - 1) * ARTIFICIAL_COMPRESSIBILITY_FACTOR;
         if (cell->p < 0) {

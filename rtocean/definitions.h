@@ -24,6 +24,8 @@
 //#define  NUM_DIRECTIONS             (2*NUM_DIMENSIONS)
 #define  LOGICAL_AXIS_ORDER         1
 #define  NO_ATMOSPHERE              1
+#define  VACUUM_HAS_PRESSURE        0
+#define  ALLOW_NEGATIVE_PRESSURES   0
 
 /* Simulation parameters */
 #define  FRAME_MS                   (1000/60)
@@ -59,6 +61,7 @@
 #define  MARK_BULK_CELLS            1
 #define  DRAW_PRESSURE              0
 #define  DRAW_PRESSURE_DEVIATION    1
+#define  DRAW_WATER_VOL_COEFF       0
 #define  DRAW_ALPHA                 0
 #define  DRAW_VELOCITY_DIVERGENCE   0
 #define  DRAW_FLOW_DIVERGENCE       0
@@ -79,11 +82,7 @@
 #define  NEIGHBOR_CONNECTION_MIDPOINT_RANDOMIZATION  0.1
 /* Scalings to prevent the same z-value */
 #define  SCALE_FACTOR               1.0003
-#define  PRESSURE_DISTANCE_SCALING  (SCALE_FACTOR * SCALE_FACTOR)
-#define  PRESSURE_DEVIATION_DISTANCE_SCALING         (SCALE_FACTOR * SCALE_FACTOR)
-#define  ALPHA_DISTANCE_SCALING     (SCALE_FACTOR * SCALE_FACTOR)
-#define  VELOCITY_DIVERGENCE_DISTANCE_SCALING        (SCALE_FACTOR * SCALE_FACTOR)
-#define  FLOW_DIVERGENCE_DISTANCE_SCALING            (SCALE_FACTOR * SCALE_FACTOR)
+#define  SCALAR_PROPERTIES_SCALING  (SCALE_FACTOR * SCALE_FACTOR)
 #define  PARENT_CUBE_DIST_SCALING   SCALE_FACTOR
 #define  LEAF_CUBE_DIST_SCALING     1
 #define  EMPTY_CELL_MARK_DIST_SCALING                1
