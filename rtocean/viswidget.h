@@ -47,9 +47,9 @@ private:
     void draw_velocity_divergence         (const octcell *cell);
     void draw_flow_divergence             (const octcell *cell);
     void quick_draw_cell_face_velocities  (const octcell* cell);
-    void quick_draw_cell_center_velocities(const octcell *cell);
+    void quick_draw_cell_center_velocity(const octcell *cell);
     void quick_mark_water_cell            (const octcell* cell);
-    void quick_air_empty_cell             (const octcell *cell);
+    void quick_mark_air_cell             (const octcell *cell);
     void quick_draw_cell_water_level      (const octcell* cell);
     void quick_draw_cell                  (const octcell *cell);
 
@@ -63,7 +63,7 @@ private:
     void draw_cell_face_velocities_recursivelly           (const octcell* cell);
     void draw_cell_center_velocities_recursivelly         (const octcell *cell);
     void mark_water_cells_recursively                     (const octcell* cell);
-    void mark_air_cells_recursively                       (const octcell *cell);
+    void mark_air_cells_recursively                       (const octcell* cell);
     void draw_water_level_recursively                     (const octcell* cell);
     void visualize_leaf_cells_recursively                 (const octcell *cell);
     void visualize_parent_cells_recursively               (const octcell* cell);

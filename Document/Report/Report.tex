@@ -158,17 +158,23 @@ For additional information about the Linköping University Electronic Press and 
 
 \section{Incompressible Navier-Stokes equations}
 
-\section{Gauss-Seidel method}
+\subsection{Iterative methods}
 
-\subsection{Preconditioned conjugate gradient method}
+\subsubsection{Gauss-Seidel method}
+
+\subsection{Acceleration of iterative methods}
+
+\subsubsection{Preconditioned conjugate gradient method}
 
 \begin{itemize}
     \item Extension of the gradient descent
 \end{itemize}
 
-\subsection{Multigrid method}
+\subsubsection{Multigrid method}
 
 \section{Semicompressible water}
+
+\section{Boundary conditions}
 
 \chapter{Octrees}
 
@@ -184,7 +190,7 @@ For additional information about the Linköping University Electronic Press and 
 
 \subsection{Perfectly matched layer}
 
-\chapter{Surface representation}
+\chapter{Free Surface Modelling (FSM)}
 
 There are both surface trackibng methods and surface capturing methods.
 
@@ -212,8 +218,15 @@ There are both surface trackibng methods and surface capturing methods.
 
 \subsubsection{Smearing}
 
-\subsubsection{Convection boundedness criterion (CBC)}
+\subsubsection{Convection Boundedness Criterion (CBC)}
 
+\begin{itemize}
+    \item Reference: \textit{Curvature-compensated Convective Transport: SMART a New Boundedness- Preserving Transport Algorithm}
+    \item Extended Convective Boundedness Criterion (ECBC): \textit{Discussion on Numerical Stability and Boundedness of Convective Discretized Scheme}
+    \item General Convective Boundedness Criterion (GCBC): \textit{\href{http://gr.xjtu.edu.cn:8080/upload/PUB.1673.4/Wei_NHT.pdf}{A New General Convective Boundedness Criterion}}
+\end{itemize}
+
+More:
 \begin{itemize}
     \item Normalised Variable Diagram (NVD)
     \item \textit{\href{http://warminski.pollub.plwww.ptmts.org.pl/Waclaw-Koron-2-08.pdf}{Comparison of CICSAM and HRIC High-resolution Schemes for Interface Capturing}}
@@ -266,13 +279,13 @@ There are both surface trackibng methods and surface capturing methods.
 
 \subsubsection{Constrained Interpolation Profile (CIP) method}
 
-%TODO: Used for advecting fluid interfaces??
+%TODO: Used for advecting fluid interfaces?? At least apparently very good for simple advection.
 
 \begin{itemize}
     \item Reference: \textit{\href{http://www.mech.titech.ac.jp/~ryuutai/paper/JCP2001CIPReviewYabe.pdf}{The Constrained Interpolation Profile Method for Multiphase Analysis}}
 \end{itemize}
 
-\subsection{Alpha noise due to a non-zero velocity divergence}
+\subsection{Advection schemes for compressible water}
 
 \begin{itemize}
     \item Remedy: Advect both water volume and total volume and then define alpha as the ration between them

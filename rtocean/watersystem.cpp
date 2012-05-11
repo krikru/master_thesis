@@ -136,12 +136,70 @@ void watersystem::calculate_cell_face_properties_recursivelly(octcell* cell)
     lists.add_neighbor_list(&cell->neighbor_lists[NL_HIGHER_LEVEL_OF_DETAIL]);
     lists.add_neighbor_list(&cell->neighbor_lists[NL_SAME_LEVEL_OF_DETAIL_LEAF]);
     lists.add_neighbor_list(&cell->neighbor_lists[NL_LOWER_LEVEL_OF_DETAIL_LEAF]);
+#if    ADVECTION_SCHEME == UPWIND
+    /* UPWIND gives smearing!!! */
     for (nlnode* node = lists.get_first_node(); node; node = lists.get_next_node()) {
         if (node->v.vel_out > 0) {
-            // UPWIND Scheme (smearing) //TODO: Change to better scheme!!!
             node->v.set_volume_coefficients(cell->water_vol_coeff, cell->total_vol_coeff);
         }
     }
+#elif  ADVECTION_SCHEME == HRIC || ADVECTION_SCHEME == HYPER_C
+    /* Find average donor neighbor alpha */
+    pftype v; // [1] Courant number
+    pftype average_donor_neighbor_alpha; // [1]
+    pftype cell_alpha = cell->total_vol_coeff ? cell->get_alpha() : 0; // [1]
+    pftype guessed_water_in_volume_flux = 0; // [m^3/s]
+    pftype guessed_total_in_volume_flux = 0; // [m^3/s]
+    for (nlnode* node = lists.get_first_node(); node; node = lists.get_next_node()) {
+        if (node->v.vel_out < 0) {
+            guessed_water_in_volume_flux -= node->v.n->water_vol_coeff * node->v.vel_out * node->v.cf_area;
+            guessed_total_in_volume_flux -= node->v.n->total_vol_coeff * node->v.vel_out * node->v.cf_area;
+        }
+    }
+    if (guessed_total_in_volume_flux) {
+        average_donor_neighbor_alpha = guessed_water_in_volume_flux/guessed_total_in_volume_flux;
+    }
+    else {
+        average_donor_neighbor_alpha = cell_alpha;
+    }
+    v = guessed_water_in_volume_flux * dt / cell->get_cube_volume();
+
+    /* Set out volume coefficients to acceptor neighbors */
+    lists.add_neighbor_list(&cell->neighbor_lists[NL_HIGHER_LEVEL_OF_DETAIL]);
+    lists.add_neighbor_list(&cell->neighbor_lists[NL_SAME_LEVEL_OF_DETAIL_LEAF]);
+    lists.add_neighbor_list(&cell->neighbor_lists[NL_LOWER_LEVEL_OF_DETAIL_LEAF]);
+    for (nlnode* node = lists.get_first_node(); node; node = lists.get_next_node()) {
+        if (node->v.vel_out > 0) {
+            pftype acceptor_neighbor_alpha = node->v.n->total_vol_coeff ? node->v.n->get_alpha() : 0; // [1]
+            pftype cell_normalized_variable =
+                    (cell_alpha - average_donor_neighbor_alpha) /
+                    (acceptor_neighbor_alpha - average_donor_neighbor_alpha); // [1]
+            pftype face_normalized_variable; // [1];
+            if (cell_normalized_variable > 1 || cell_normalized_variable < 0) {
+                face_normalized_variable = cell_normalized_variable;
+            }
+#if  ADVECTION_SCHEME == HRIC
+            else if (cell_normalized_variable < 0.5) {
+                face_normalized_variable = 2 * cell_normalized_variable;
+            }
+#elif    ADVECTION_SCHEME == HYPER_C
+            else if (cell_normalized_variable < v) {
+                face_normalized_variable = cell_normalized_variable / v;
+            }
+#endif
+            else {
+                face_normalized_variable = 1;
+            }
+            pftype face_alpha = average_donor_neighbor_alpha + face_normalized_variable * (acceptor_neighbor_alpha - average_donor_neighbor_alpha); // [1]
+            pftype face_total_vol_coeff = cell->total_vol_coeff; // [1]
+            pftype face_water_vol_coeff = face_alpha * face_total_vol_coeff; // [1]
+            node->v.set_volume_coefficients(face_total_vol_coeff, face_water_vol_coeff);
+        }
+    }
+#else
+    "Don't know how to advect water"
+#endif
+
 }
 
 #if 0
@@ -427,6 +485,15 @@ void watersystem::advect_cell_properties_recursivelly(octcell* cell)
     pftype d_water_vol_coeff = in_water_vol_flux * volume_flux_to_volume_coefficient_factor;
     pftype d_total_vol_coeff = in_total_vol_flux * volume_flux_to_volume_coefficient_factor;
 
+#if  DEBUG
+    if (cell->water_vol_coeff + d_water_vol_coeff > cell->total_vol_coeff + d_total_vol_coeff) {
+        cout << "Old water volume coefficient: " << cell->water_vol_coeff << endl;
+        cout << "Old total volume coefficient: " << cell->water_vol_coeff << endl;
+        cout << "Additional water volume coefficient: " << d_water_vol_coeff << endl;
+        cout << "Additional total volume coefficient: " << d_total_vol_coeff << endl;
+        throw logic_error("New water volume coefficient more than new total volume coefficient in cell");
+    }
+#endif
     if (!cell->water_vol_coeff && d_water_vol_coeff) {
         cell->prepare_for_water();
     }

@@ -82,10 +82,10 @@ public:
     pftype get_cube_volume() const;
 
     /* Simulation */
-    bool has_air() const;
     bool has_no_air() const;
-    bool has_water() const;
+    bool has_air() const;
     bool has_no_water() const;
+    bool has_water() const;
     bool is_mixed_cell() const;
     pftype get_air_volume_coefficient() const;
     pftype get_alpha() const;
@@ -192,33 +192,33 @@ pftype octcell::get_cube_volume() const
  **************/
 
 inline
-bool octcell::has_air() const
+bool octcell::has_no_air() const
 {
     return water_vol_coeff >= total_vol_coeff;
 }
 
 inline
-bool octcell::has_no_air() const
+bool octcell::has_air() const
 {
-    return !has_air();
-}
-
-inline
-bool octcell::has_water() const
-{
-    return water_vol_coeff <= 0;
+    return water_vol_coeff < total_vol_coeff;
 }
 
 inline
 bool octcell::has_no_water() const
 {
-    return !has_water();
+    return water_vol_coeff <= 0;
+}
+
+inline
+bool octcell::has_water() const
+{
+    return water_vol_coeff > 0;
 }
 
 inline
 bool octcell::is_mixed_cell() const
 {
-    return has_no_air() && has_no_water();
+    return has_air() && has_water();
 }
 
 inline

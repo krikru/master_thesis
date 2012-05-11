@@ -27,25 +27,35 @@
 #define  VACUUM_HAS_PRESSURE        0
 #define  ALLOW_NEGATIVE_PRESSURES   0
 
+/* Advection scheme */
+#define  NO_SCHEME                  0
+#define  UPWIND                     1
+#define  HYPER_C                    2
+#define  HRIC                       3
+
+//#define  ADVECTION_SCHEME           UPWIND
+#define  ADVECTION_SCHEME           HYPER_C
+//#define  ADVECTION_SCHEME           HRIC
+
 /* Simulation parameters */
 #define  FRAME_MS                   (1000/60)
 //#define  SIMULATION_TIME_STEP       (FRAME_MS/1000.0) // [s]
 //#define  SIMULATION_TIME_STEP       .01 // [s]
 //#define  SIMULATION_TIME_STEP       .001 // [s]
-#define  SIMULATION_TIME_STEP       .0001 // [s]
+#define  SIMULATION_TIME_STEP       .001 // [s]
 //#define  SIMULATION_TIME_STEP       .000003 // [s]
 //#define  SIMULATION_TIME_STEP       .0 // [s]
 #define  INTERFACE_THICKNESS_IN_CELLS                4.0 // [1] The number of cells that will make out the interface
 
 /* Grid */
-#define  MIN_LOD_LAYER_THICKNESS    2    // [Number of cells]
+#define  MIN_LOD_LAYER_THICKNESS    1    // [Number of cells]
 #define  SURFACE_HEIGHT             0.65 // [m]
 #define  SURFACE_ACCURACY           0.02 // [m] Maximum size of the surface cells
 
 /* Navier-Stokes */
 #define  USE_ARTIFICIAL_COMPRESSIBILITY              1
 /* 122.92: Works; 122.93: Doesn't work. (dt = 0.001, maximal spatial resolution = 0.02) */
-#define  ARTIFICIAL_COMPRESSIBILITY_FACTOR           (1000.00 * P_WATER_DENSITY) // [Pa] (Delta pressure = ARTIFICIAL_COMPRESSIBILITY_FACTOR * Delta water volume coefficient)
+#define  ARTIFICIAL_COMPRESSIBILITY_FACTOR           (10.00 * P_WATER_DENSITY) // [Pa] (Delta pressure = ARTIFICIAL_COMPRESSIBILITY_FACTOR * Delta water volume coefficient)
 #define  NORMAL_PRESSURE                             (NO_ATMOSPHERE ? 0.0 : 1 * P_1ATM)
 
 /* VIsualization */
@@ -53,16 +63,14 @@
 #define  DRAW_CHILD_CELLS_FIRST_IF_DEPTH_TESTING     1
 #define  DRAW_SMOOTH_LINES          0
 #define  LINE_WIDTH                 (DRAW_SMOOTH_LINES ? 1.5 : 1)
-#define  BULK_CELL_MARK_LINE_WIDTH  3
-#define  EMPTY_CELL_MARK_LINE_WIDTH 3
+#define  CELL_MARK_LINE_WIDTH       3
 #define  VELOCITY_LINE_WIDTH        LINE_WIDTH
 #define  NUM_LINES_IN_CIRCLES       16
-#define  MARK_EMPTY_CELLS           1
-#define  MARK_BULK_CELLS            1
+#define  MARK_CELLS                 1
 #define  DRAW_PRESSURE              0
-#define  DRAW_PRESSURE_DEVIATION    1
+#define  DRAW_PRESSURE_DEVIATION    0
 #define  DRAW_WATER_VOL_COEFF       0
-#define  DRAW_ALPHA                 0
+#define  DRAW_ALPHA                 1
 #define  DRAW_VELOCITY_DIVERGENCE   0
 #define  DRAW_FLOW_DIVERGENCE       0
 #define  VEL_DIV_SCALE_FACTOR       0.1 // [s/m]
@@ -85,8 +93,7 @@
 #define  SCALAR_PROPERTIES_SCALING  (SCALE_FACTOR * SCALE_FACTOR)
 #define  PARENT_CUBE_DIST_SCALING   SCALE_FACTOR
 #define  LEAF_CUBE_DIST_SCALING     1
-#define  EMPTY_CELL_MARK_DIST_SCALING                1
-#define  BULK_CELL_MARK_DIST_SCALING                 1
+#define  CELL_MARK_DIST_SCALING     1
 #define  VELOCITY_DISTANCE_SCALING                   (1 / SCALE_FACTOR)
 #define  NEIGHBOR_CONNECTIONS_DIST_SCALING           (1 / SCALE_FACTOR)
 
@@ -95,7 +102,7 @@
 
 /* Tests */
 
-/* Graphics */
+/* Graphics constants */
 const float  BACKGROUND_BRIGHTNESS  = 0;
 const float  LEAF_CUBE_BRIGHTNESS   = BACKGROUND_BRIGHTNESS >= 0.5 ? 0   :   1;
 const float  PARENT_CUBE_BRIGHTNESS = BACKGROUND_BRIGHTNESS >= 0.5 ? BACKGROUND_BRIGHTNESS-0.25 : BACKGROUND_BRIGHTNESS+0.25;
@@ -142,23 +149,23 @@ const float  HIGHER_LOD_NEIGHBOR_CONNECTION_G          = 0;
 const float  HIGHER_LOD_NEIGHBOR_CONNECTION_B          = 1;
 const float  HIGHER_LOD_NEIGHBOR_CONNECTION_A          = 1;
 
-const float  FINEST_NEIGHBOR_CONNECTION_R = 0;
-const float  FINEST_NEIGHBOR_CONNECTION_G = 0;
-const float  FINEST_NEIGHBOR_CONNECTION_B = 1;
-const float  FINEST_NEIGHBOR_CONNECTION_A = 1;
+const float  FINEST_NEIGHBOR_CONNECTION_R              = 0;
+const float  FINEST_NEIGHBOR_CONNECTION_G              = 0;
+const float  FINEST_NEIGHBOR_CONNECTION_B              = 1;
+const float  FINEST_NEIGHBOR_CONNECTION_A              = 1;
 const float  MIDDLE_MARK_R          = 0.5;
 const float  MIDDLE_MARK_G          = 0.5;
 const float  MIDDLE_MARK_B          = 0.5;
 const float  MIDDLE_MARK_A          = 1;
 
-const float  BULK_CELL_MARK_R       = 0.5;
-const float  BULK_CELL_MARK_G       = 0.5;
-const float  BULK_CELL_MARK_B       = 0.5;
-const float  BULK_CELL_MARK_A       = 1;
-const float  EMPTY_CELL_MARK_R      = 1;
-const float  EMPTY_CELL_MARK_G      = 0;
-const float  EMPTY_CELL_MARK_B      = 0;
-const float  EMPTY_CELL_MARK_A      = 1;
+const float  WATER_CELL_MARK_R      = 0.5;
+const float  WATER_CELL_MARK_G      = 0.5;
+const float  WATER_CELL_MARK_B      = 0.5;
+const float  WATER_CELL_MARK_A      = 1;
+const float  AIR_CELL_MARK_R        = 1;
+const float  AIR_CELL_MARK_G        = 0;
+const float  AIR_CELL_MARK_B        = 0;
+const float  AIR_CELL_MARK_A        = 1;
 const float  VELOCITY_R             = 0;
 const float  VELOCITY_G             = 0;
 const float  VELOCITY_B             = 1;
@@ -218,22 +225,25 @@ enum DIMENSION {
 // CONSTANTS
 ////////////////////////////////////////////////////////////////
 
+/* Miscellaneous constants */
+#define  NUM_PRIMARY_COLORS         3 /* Do not change */
+
 /* Mathematical constants */
-#ifndef _MATH_H_
-#define M_E         2.7182818284590452354  // e, Euler's number
-#define M_LOG2E		1.4426950408889634074  // log_2(e)
-#define M_LOG10E	0.43429448190325182765 // log_10(e)
-#define M_LN2		0.69314718055994530942 // ln(2)
-#define M_LN10		2.30258509299404568402 // ln(10)
-#define M_PI		3.14159265358979323846 // pi
-#define M_PI_2		1.57079632679489661923 // pi/2
-#define M_PI_4		0.78539816339744830962 // pi/4
-#define M_1_PI		0.31830988618379067154 // 1/pi
-#define M_2_PI		0.63661977236758134308 // 2/pi
-#define M_2_SQRTPI	1.12837916709551257390 // 2/sqrt(pi)
-#define M_SQRT2		1.41421356237309504880 // sqrt(2)
-#define M_SQRT1_2	0.70710678118654752440 // sqrt(1/2)
-#endif
+#ifndef  _MATH_H_
+#define  M_E         2.7182818284590452354  // e, Euler's number
+#define  M_LOG2E     1.4426950408889634074  // log_2(e)
+#define  M_LOG10E    0.43429448190325182765 // log_10(e)
+#define  M_LN2       0.69314718055994530942 // ln(2)
+#define  M_LN10      2.30258509299404568402 // ln(10)
+#define  M_PI        3.14159265358979323846 // pi
+#define  M_PI_2      1.57079632679489661923 // pi/2
+#define  M_PI_4      0.78539816339744830962 // pi/4
+#define  M_1_PI      0.31830988618379067154 // 1/pi
+#define  M_2_PI      0.63661977236758134308 // 2/pi
+#define  M_2_SQRTPI  1.12837916709551257390 // 2/sqrt(pi)
+#define  M_SQRT2     1.41421356237309504880 // sqrt(2)
+#define  M_SQRT1_2   0.70710678118654752440 // sqrt(1/2)
+#endif  // _MATH_H_
 
 /* More mathematical constants */
 #define  M_2PI               6.28318530717958647693 // 2*pi

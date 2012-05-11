@@ -156,26 +156,6 @@ void viswidget::draw_pressure(const octcell *cell)
     uint idx2 = MIN(idx1 + 1, NUM_TRANSITIONS);
     q -= idx1;
     color3 c = (1-q)*colors[idx1] + q*colors[idx2];
-#if  DEBUG
-    if (q < 0) {
-        throw domain_error("q < 0");
-    }
-    if (q > 1) {
-        throw domain_error("q < 0");
-    }
-    if (idx1 < 0) {
-        throw domain_error("idx1 < 0");
-    }
-    if (idx1 > NUM_TRANSITIONS) {
-        throw domain_error("idx1 > NUM_TRANSITIONS");
-    }
-    if (idx2 < 0) {
-        throw domain_error("idx2 < 0");
-    }
-    if (idx2 > NUM_TRANSITIONS) {
-        throw domain_error("idx2 > NUM_TRANSITIONS");
-    }
-#endif
     //quick_set_color(c[0], c[1], c[2], 1);
     quick_set_color(c[0], c[1], c[2], cell->get_alpha());
 
@@ -217,26 +197,6 @@ void viswidget::draw_pressure_deviation(const octcell *cell)
     uint idx2 = MIN(idx1 + 1, NUM_TRANSITIONS);
     q -= idx1;
     color3 c = (1-q)*colors[idx1] + q*colors[idx2];
-#if  DEBUG
-    if (q < 0) {
-        throw domain_error("q < 0");
-    }
-    if (q > 1) {
-        throw domain_error("q < 0");
-    }
-    if (idx1 < 0) {
-        throw domain_error("idx1 < 0");
-    }
-    if (idx1 > NUM_TRANSITIONS) {
-        throw domain_error("idx1 > NUM_TRANSITIONS");
-    }
-    if (idx2 < 0) {
-        throw domain_error("idx2 < 0");
-    }
-    if (idx2 > NUM_TRANSITIONS) {
-        throw domain_error("idx2 > NUM_TRANSITIONS");
-    }
-#endif
     //quick_set_color(c[0], c[1], c[2], 1);
     quick_set_color(c[0], c[1], c[2], cell->get_alpha());
 
@@ -276,26 +236,6 @@ void viswidget::draw_water_vol_coeff(const octcell* cell)
     uint idx2 = MIN(idx1 + 1, NUM_TRANSITIONS);
     q -= idx1;
     color3 c = (1-q)*colors[idx1] + q*colors[idx2];
-#if  DEBUG
-    if (q < 0) {
-        throw domain_error("q < 0");
-    }
-    if (q > 1) {
-        throw domain_error("q < 0");
-    }
-    if (idx1 < 0) {
-        throw domain_error("idx1 < 0");
-    }
-    if (idx1 > NUM_TRANSITIONS) {
-        throw domain_error("idx1 > NUM_TRANSITIONS");
-    }
-    if (idx2 < 0) {
-        throw domain_error("idx2 < 0");
-    }
-    if (idx2 > NUM_TRANSITIONS) {
-        throw domain_error("idx2 > NUM_TRANSITIONS");
-    }
-#endif
     quick_set_color(c[0], c[1], c[2], 1);
 
 #if    NUM_DIMENSIONS == 2
@@ -318,6 +258,11 @@ void viswidget::draw_water_vol_coeff(const octcell* cell)
 
 void viswidget::draw_alpha(const octcell* cell)
 {
+#if  DEBUG
+    if (cell->water_vol_coeff < 0 || cell->total_vol_coeff < cell->water_vol_coeff) {
+        throw logic_error("Strange volume coefficients found in cell");
+    }
+#endif
     /* Calculate color */
     /*
      * In rising order: Blue, cyan, green, yellow, red
@@ -328,32 +273,19 @@ void viswidget::draw_alpha(const octcell* cell)
                              color3(0, 1, 0),  // 2, Green
                              color3(1, 1, 0),  // 3, Yellow
                              color3(1, 0, 0)}; // 4, Red
-    pftype q = NUM_TRANSITIONS * cell->get_alpha();
-    q = MIN(MAX(q, 0), NUM_TRANSITIONS);
-    uint idx1 = uint(q);
-    uint idx2 = MIN(idx1 + 1, NUM_TRANSITIONS);
-    q -= idx1;
-    color3 c = (1-q)*colors[idx1] + q*colors[idx2];
-#if  DEBUG
-    if (q < 0) {
-        throw domain_error("q < 0");
+    color3 c;
+    if (cell->total_vol_coeff > 0) {
+        pftype q = NUM_TRANSITIONS * cell->get_alpha();
+        q = MIN(MAX(q, 0), NUM_TRANSITIONS);
+        uint idx1 = uint(q);
+        uint idx2 = MIN(idx1 + 1, NUM_TRANSITIONS);
+        q -= idx1;
+        c = (1-q)*colors[idx1] + q*colors[idx2];
     }
-    if (q > 1) {
-        throw domain_error("q < 0");
+    else {
+        // Alpha is undefined
+        c = color3(1, 1, 1); // White
     }
-    if (idx1 < 0) {
-        throw domain_error("idx1 < 0");
-    }
-    if (idx1 > NUM_TRANSITIONS) {
-        throw domain_error("idx1 > NUM_TRANSITIONS");
-    }
-    if (idx2 < 0) {
-        throw domain_error("idx2 < 0");
-    }
-    if (idx2 > NUM_TRANSITIONS) {
-        throw domain_error("idx2 > NUM_TRANSITIONS");
-    }
-#endif
     quick_set_color(c[0], c[1], c[2], 1);
 
 #if    NUM_DIMENSIONS == 2
@@ -394,26 +326,6 @@ void viswidget::draw_velocity_divergence(const octcell* cell)
     uint idx2 = MIN(idx1 + 1, NUM_TRANSITIONS);
     q -= idx1;
     color3 c = (1-q)*colors[idx1] + q*colors[idx2];
-#if  DEBUG
-    if (q < 0) {
-        throw domain_error("q < 0");
-    }
-    if (q > 1) {
-        throw domain_error("q < 0");
-    }
-    if (idx1 < 0) {
-        throw domain_error("idx1 < 0");
-    }
-    if (idx1 > NUM_TRANSITIONS) {
-        throw domain_error("idx1 > NUM_TRANSITIONS");
-    }
-    if (idx2 < 0) {
-        throw domain_error("idx2 < 0");
-    }
-    if (idx2 > NUM_TRANSITIONS) {
-        throw domain_error("idx2 > NUM_TRANSITIONS");
-    }
-#endif
     //quick_set_color(c[0], c[1], c[2], 1);
     quick_set_color(c[0], c[1], c[2], cell->get_alpha());
 
@@ -455,26 +367,6 @@ void viswidget::draw_flow_divergence(const octcell* cell)
     uint idx2 = MIN(idx1 + 1, NUM_TRANSITIONS);
     q -= idx1;
     color3 c = (1-q)*colors[idx1] + q*colors[idx2];
-#if  DEBUG
-    if (q < 0) {
-        throw domain_error("q < 0");
-    }
-    if (q > 1) {
-        throw domain_error("q < 0");
-    }
-    if (idx1 < 0) {
-        throw domain_error("idx1 < 0");
-    }
-    if (idx1 > NUM_TRANSITIONS) {
-        throw domain_error("idx1 > NUM_TRANSITIONS");
-    }
-    if (idx2 < 0) {
-        throw domain_error("idx2 < 0");
-    }
-    if (idx2 > NUM_TRANSITIONS) {
-        throw domain_error("idx2 > NUM_TRANSITIONS");
-    }
-#endif
     //quick_set_color(c[0], c[1], c[2], 1);
     quick_set_color(c[0], c[1], c[2], cell->get_alpha());
 
@@ -498,13 +390,16 @@ void viswidget::draw_flow_divergence(const octcell* cell)
 
 void viswidget::quick_draw_cell_face_velocities(const octcell *cell)
 {
+    const pftype water_limit = 0.0001;
+
     // Loop through all leaf neighbors
     nlset leaf_set;
     leaf_set.add_neighbor_list(&cell->neighbor_lists[NL_LOWER_LEVEL_OF_DETAIL_LEAF]);
     leaf_set.add_neighbor_list(&cell->neighbor_lists[NL_SAME_LEVEL_OF_DETAIL_LEAF ]);
     leaf_set.add_neighbor_list(&cell->neighbor_lists[NL_HIGHER_LEVEL_OF_DETAIL    ]);
     for (nlnode* node = leaf_set.get_first_node(); node; node = leaf_set.get_next_node()) {
-        if (node->v.vel_out > 0) {
+        if ((cell->water_vol_coeff > water_limit || node->v.n->water_vol_coeff > water_limit)
+                && node->v.vel_out > 0) {
             pfvec arrow_start = (cell->get_cell_center() + node->v.n->get_cell_center())/2;
             pfvec dir = (node->v.n->get_cell_center() - cell->get_cell_center()).normalized();
             pfvec arrow = dir * node->v.vel_out * VEL_TO_ARROW_LENGTH_FACTOR;
@@ -513,8 +408,10 @@ void viswidget::quick_draw_cell_face_velocities(const octcell *cell)
     }
 }
 
-void viswidget::quick_draw_cell_center_velocities(const octcell* cell)
+void viswidget::quick_draw_cell_center_velocity(const octcell* cell)
 {
+    const pftype water_limit = 0.0001;
+
     pfvec average_velocity;
     pfvec mixed_area;
     pfvec air_area;
@@ -524,7 +421,7 @@ void viswidget::quick_draw_cell_center_velocities(const octcell* cell)
     leaf_set.add_neighbor_list(&cell->neighbor_lists[NL_SAME_LEVEL_OF_DETAIL_LEAF ]);
     leaf_set.add_neighbor_list(&cell->neighbor_lists[NL_HIGHER_LEVEL_OF_DETAIL    ]);
     for (nlnode* node = leaf_set.get_first_node(); node; node = leaf_set.get_next_node()) {
-        if (node->v.n->has_no_water()) {
+        if (cell->water_vol_coeff > water_limit || node->v.n->water_vol_coeff > water_limit) {
             mixed_area[node->v.dim] += node->v.cf_area;
             average_velocity.e[node->v.dim] += node->v.get_signed_dir() * node->v.vel_out * node->v.cf_area;
         }
@@ -556,7 +453,7 @@ void viswidget::quick_mark_water_cell(const octcell *cell)
 #endif
 }
 
-void viswidget::quick_air_empty_cell(const octcell* cell)
+void viswidget::quick_mark_air_cell(const octcell* cell)
 {
 #if    NUM_DIMENSIONS == 2
     pftype x0 = cell->r.e[DIM_X];
@@ -749,7 +646,7 @@ void viswidget::draw_cell_face_velocities_recursivelly(const octcell *cell)
 void viswidget::draw_cell_center_velocities_recursivelly(const octcell* cell)
 {
     if (cell->is_leaf()) {
-        quick_draw_cell_center_velocities(cell);
+        quick_draw_cell_center_velocity(cell);
         return;
     }
 
@@ -763,7 +660,7 @@ void viswidget::draw_cell_center_velocities_recursivelly(const octcell* cell)
 void viswidget::mark_water_cells_recursively(const octcell *cell)
 {
     if (cell->is_leaf()) {
-        if (cell->has_air()) {
+        if (cell->has_no_air()) {
             quick_mark_water_cell(cell);
         }
         return;
@@ -776,11 +673,11 @@ void viswidget::mark_water_cells_recursively(const octcell *cell)
     }
 }
 
-void viswidget::mark_air_cells_recursively(const octcell* cell)
+void viswidget::mark_air_cells_recursively(const octcell *cell)
 {
     if (cell->is_leaf()) {
-        if (cell->has_water()) {
-            quick_air_empty_cell(cell);
+        if (cell->has_no_water()) {
+            quick_mark_air_cell(cell);
         }
         return;
     }
@@ -1028,17 +925,12 @@ void viswidget::visualize_fvoctree(const fvoctree *tree)
     draw_cell_center_velocities_recursivelly(tree->root);
 #endif
 
-#if  MARK_BULK_CELLS
+#if  MARK_CELLS
     /* Mark bulk cells */
-    set_line_style(BULK_CELL_MARK_LINE_WIDTH, BULK_CELL_MARK_R, BULK_CELL_MARK_G, BULK_CELL_MARK_B, BULK_CELL_MARK_A);
-    set_up_model_view_matrix(BULK_CELL_MARK_DIST_SCALING);
+    set_up_model_view_matrix(CELL_MARK_DIST_SCALING);
+    set_line_style(CELL_MARK_LINE_WIDTH, WATER_CELL_MARK_R, WATER_CELL_MARK_G, WATER_CELL_MARK_B, WATER_CELL_MARK_A);
     mark_water_cells_recursively(tree->root);
-#endif
-
-#if  MARK_EMPTY_CELLS
-    /* Mark empty cells */
-    set_line_style(EMPTY_CELL_MARK_LINE_WIDTH, EMPTY_CELL_MARK_R, EMPTY_CELL_MARK_G, EMPTY_CELL_MARK_B, EMPTY_CELL_MARK_A);
-    set_up_model_view_matrix(EMPTY_CELL_MARK_DIST_SCALING);
+    set_line_style(CELL_MARK_LINE_WIDTH, AIR_CELL_MARK_R, AIR_CELL_MARK_G, AIR_CELL_MARK_B, AIR_CELL_MARK_A);
     mark_air_cells_recursively(tree->root);
 #endif
 

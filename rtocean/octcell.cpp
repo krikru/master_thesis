@@ -292,7 +292,7 @@ void octcell::prepare_for_water()
     lists.add_neighbor_list(&neighbor_lists[NL_SAME_LEVEL_OF_DETAIL_LEAF]);
     lists.add_neighbor_list(&neighbor_lists[NL_LOWER_LEVEL_OF_DETAIL_LEAF]);
     for (nlnode* node = lists.get_first_node(); node; node = lists.get_next_node()) {
-        if (node->v.n->has_no_water()) {
+        if (node->v.n->has_water()) {
             /* This velocity is relevant, use it to calculate mean velocity vector */
             area.e[node->v.dim] += node->v.cf_area;
             mean_vel.e[node->v.dim] += node->v.cf_area * node->v.get_signed_dir() * node->v.vel_out;
@@ -317,7 +317,7 @@ void octcell::prepare_for_water()
     lists.add_neighbor_list(&neighbor_lists[NL_SAME_LEVEL_OF_DETAIL_LEAF]);
     lists.add_neighbor_list(&neighbor_lists[NL_LOWER_LEVEL_OF_DETAIL_LEAF]);
     for (nlnode* node = lists.get_first_node(); node; node = lists.get_next_node()) {
-        if (node->v.n->has_water()) {
+        if (node->v.n->has_no_water()) {
             /* The velocity out for this neighbor connection currently contains humbug, initialize it */
             node->v.set_velocity_out(mean_vel[node->v.dim]*node->v.get_signed_dir());
         }
