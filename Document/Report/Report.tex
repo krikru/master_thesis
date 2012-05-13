@@ -204,6 +204,13 @@ There are both surface trackibng methods and surface capturing methods.
     \item Comparsion: \textit{\href{http://capfluidicslit.mme.pdx.edu/reference/Numerics/Gopala_ChemEngJ2008_VOFMethodsFreeSurfaceFlow.pdf}{Volume of fluid methods for immiscible-fluid and free-surface flows}}
 \end{itemize}
 
+\subsection{VOF vs. Pseudo VOF}
+
+\begin{itemize}
+    \item Explanation: \textit{\href{http://www.flow3d.com/cfd-101/cfd-101-VOF.html}{VOF (Volume of Fluid) - What's in a Name?}}
+\end{itemize}
+
+
 
 \subsection{Interface reconstruction}
 %\section{Internal alpha distribution}
@@ -271,12 +278,6 @@ More:
     \item Reference: \textit{\href{http://powerlab.fsb.hr/ped/kturbo/openfoam/docs/InterTrack.pdf}{Interface Tracking Capabilities of the Inter-Gamma Differencing Scheme}}
 \end{itemize}
 
-\subsubsection{Fast Compressive Surface Capturing Formulation (FCSCF)}
-
-\begin{itemize}
-    \item Reference: \textit{\href{http://researchspace.csir.co.za/dspace/bitstream/10204/5282/1/Heyns_2011.pdf}{Free-Surface Modelling Technology for Compressible and Violent Flows}}
-\end{itemize}
-
 \subsubsection{Constrained Interpolation Profile (CIP) method}
 
 %TODO: Used for advecting fluid interfaces?? At least apparently very good for simple advection.
@@ -289,6 +290,12 @@ More:
 
 \begin{itemize}
     \item Remedy: Advect both water volume and total volume and then define alpha as the ration between them
+\end{itemize}
+
+\subsubsection{Fast Compressive Surface Capturing Formulation (FCSCF)}
+
+\begin{itemize}
+    \item Reference: \textit{\href{http://researchspace.csir.co.za/dspace/bitstream/10204/5282/1/Heyns_2011.pdf}{Free-Surface Modelling Technology for Compressible and Violent Flows}}
 \end{itemize}
 
 \section{Coupled Level Set/Volume of Fluid  method}
@@ -330,6 +337,15 @@ More:
 \section{Accuracy}
 
 \chapter{Conclusions}
+
+\section{Difficulties and drawbacks with the method}
+
+Difficulties:
+\begin{itemize}
+    \item Dynamical creation/termination of surface cells and determination oo properties in new cells
+    \item High Courant numbers
+    \item Keeping a sharp interface
+\end{itemize}
 
 % % % % % % %
 % APENDIZES %

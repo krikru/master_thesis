@@ -23,8 +23,8 @@ fvoctree::fvoctree(pftype surface, pftype bottom)
 {
     bottom = bottom;
     surface = surface;
-    octcell *c = root = new octcell(1, pfvec(), 0);
-    refine_subtree(c, surface, bottom, size_accuracy);
+    octcell *c = root = new octcell(0, 1, pfvec(), 0);
+    refine_subtree(c, surface, bottom);
     prepare_cells_for_water_recursively(c);
 }
 
@@ -36,23 +36,11 @@ fvoctree::~fvoctree()
 }
 
 ////////////////////////////////////////////////////////////////
-// PRIVATE METHODS
+// PRIVATE NON-STATIC METHODS
 ////////////////////////////////////////////////////////////////
 
-pftype fvoctree::size_accuracy(pfvec r)
-{
-    if (r.e[VERTICAL_DIMENSION] < SURFACE_HEIGHT) {
-        /* Cell is under the surface */
-        return SURFACE_ACCURACY + (SURFACE_HEIGHT - r.e[VERTICAL_DIMENSION])
-                * (1/(MIN_LOD_LAYER_THICKNESS + 0.5));
-    }
-    else {
-        return SURFACE_ACCURACY;
-    }
-}
-
 /* Returns true if the cell should be removed from the simulation */
-bool fvoctree::refine_subtree(octcell* c, pftype surface, pftype bottom, pftype (*accuracy_function)(pfvec))
+bool fvoctree::refine_subtree(octcell* c, pftype surface, pftype bottom)
 {
 
     static int tot_num_cells = 1;
@@ -89,7 +77,7 @@ bool fvoctree::refine_subtree(octcell* c, pftype surface, pftype bottom, pftype 
     if (lowest_cell_height + s <= min_surf_height     ||  // Cell is under the surface, keep it but stop refining
         s <= accuracy_function(c->cell_center()) ) { // Accuracy is good enough, stop refining
 #else
-    if (s <= accuracy_function(c->get_cell_center())) { // Accuracy is good enough, stop refining
+    if (c->is_fine_enough()) { // Accuracy is good enough, stop refining
 #endif
         /* Stop refining */
         /* Calculate properties */
@@ -115,11 +103,6 @@ bool fvoctree::refine_subtree(octcell* c, pftype surface, pftype bottom, pftype 
 #endif
         water_vol_coeff *= beta;
         air_vol_coeff   *= (1 - beta);
-#if  DEBUG
-        if (water_vol_coeff < 0) {
-            NO_OP();
-        }
-#endif
         c->set_volume_coefficients(water_vol_coeff, water_vol_coeff + air_vol_coeff);
         return false;
     }
@@ -128,7 +111,7 @@ bool fvoctree::refine_subtree(octcell* c, pftype surface, pftype bottom, pftype 
     tot_num_cells += octcell::MAX_NUM_CHILDREN;
     num_leaf_cells += octcell::MAX_NUM_CHILDREN - 1;
     for (uint i = 0; i < octcell::MAX_NUM_CHILDREN; i++) {
-        if (refine_subtree(c->get_child(i), surface, bottom, accuracy_function)) {
+        if (refine_subtree(c->get_child(i), surface, bottom)) {
             c->remove_child(i);
             tot_num_cells--;
             num_leaf_cells--;

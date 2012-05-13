@@ -80,7 +80,9 @@ void viswidget::paintGL()
     try
     {
         /* Generate tree */
+#if  DEBUG
         double t1, t2;
+#endif
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -156,8 +158,8 @@ void viswidget::draw_pressure(const octcell *cell)
     uint idx2 = MIN(idx1 + 1, NUM_TRANSITIONS);
     q -= idx1;
     color3 c = (1-q)*colors[idx1] + q*colors[idx2];
-    //quick_set_color(c[0], c[1], c[2], 1);
-    quick_set_color(c[0], c[1], c[2], cell->get_alpha());
+    quick_set_color(c[0], c[1], c[2], 1);
+    //quick_set_color(c[0], c[1], c[2], cell->get_alpha());
 
 #if    NUM_DIMENSIONS == 2
     /* Vertices */
@@ -197,8 +199,8 @@ void viswidget::draw_pressure_deviation(const octcell *cell)
     uint idx2 = MIN(idx1 + 1, NUM_TRANSITIONS);
     q -= idx1;
     color3 c = (1-q)*colors[idx1] + q*colors[idx2];
-    //quick_set_color(c[0], c[1], c[2], 1);
-    quick_set_color(c[0], c[1], c[2], cell->get_alpha());
+    quick_set_color(c[0], c[1], c[2], 1);
+    //quick_set_color(c[0], c[1], c[2], cell->get_alpha());
 
 #if    NUM_DIMENSIONS == 2
     /* Vertices */
@@ -493,7 +495,7 @@ void viswidget::quick_draw_cell(const octcell* cell)
 {
     pfvec r1 = cell->r;
     // Optimize
-    pfvec r2 = 2*cell->get_cell_center() - cell->r;
+    pfvec r2 = cell->get_opposite_corner();
 #if    NUM_DIMENSIONS == 2
     quick_draw_line(r1[DIM_X], r1[DIM_Y], 0, r2[DIM_X], r1[DIM_Y], 0);
     quick_draw_line(r2[DIM_X], r1[DIM_Y], 0, r2[DIM_X], r2[DIM_Y], 0);

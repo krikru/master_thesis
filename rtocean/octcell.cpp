@@ -9,8 +9,9 @@
 // CONSTRUCTORS AND DESTRUCTOR
 ////////////////////////////////////////////////////////////////
 
-octcell::octcell(pftype size, pfvec pos, uint level, uint internal_layer_advancement)
+octcell::octcell(octcell *parent, pftype size, pfvec pos, uint level, uint internal_layer_advancement)
 {
+    _par = parent;
     s = size;
     r = pos;
     lvl = level;
@@ -53,14 +54,7 @@ octcell::~octcell()
 
 void octcell::refine()
 {
-#if  DEBUG
-    if (has_child_array()) {
-        throw logic_error("Trying to refine a cell that already has child array");
-    }
-#endif
-
-    // Create child array
-    _c = new octcell*[MAX_NUM_CHILDREN];
+    create_new_random_child_array();
 
     // Create new values for children
     pftype s_2 = 0.5*s;
@@ -75,7 +69,7 @@ void octcell::refine()
         for (uint dim = 0; dim < NUM_DIMENSIONS; dim++) {
             new_r[dim] = corners[(i >> dim) & 1][dim];
         }
-        set_child(i, new octcell(s_2, new_r, new_level));
+        set_child(i, new octcell(this, s_2, new_r, new_level));
     }
 
     /***************************
@@ -278,14 +272,14 @@ pftype octcell::get_water_flow_divergence() const
 void octcell::prepare_for_water()
 {
     /*
-     * This cell atkes care of:
+     * This cell takes care of:
      *   1. Walls to cells with no water in them
      *   2. Missing neighbors (create new ones) (not yet implemented)
      */
 
     /* Calculate average velocity vector */
     pfvec mean_vel;
-    pfvec area;
+    pfvec area[2];
     /* Loop though neighbors */
     nlset lists;
     lists.add_neighbor_list(&neighbor_lists[NL_HIGHER_LEVEL_OF_DETAIL]);
@@ -294,18 +288,29 @@ void octcell::prepare_for_water()
     for (nlnode* node = lists.get_first_node(); node; node = lists.get_next_node()) {
         if (node->v.n->has_water()) {
             /* This velocity is relevant, use it to calculate mean velocity vector */
-            area.e[node->v.dim] += node->v.cf_area;
+            area[node->v.pos_dir].e[node->v.dim] += node->v.cf_area;
             mean_vel.e[node->v.dim] += node->v.cf_area * node->v.get_signed_dir() * node->v.vel_out;
         }
     }
     for (uint dim = 0; dim < NUM_DIMENSIONS; dim++) {
-        if (area.e[dim]) {
-            mean_vel.e[dim] /= area[dim];
+        pftype dim_area = area[0].e[dim] + area[1].e[dim];
+        if (dim_area) {
+            mean_vel.e[dim] /= dim_area;
         }
         else {
             /* Don't know the velocity in this direction */
             // TODO: Find out the velocity in some other way
             //mean_vel[dim] = 0; This componentis already 0
+        }
+        for (uint pos_dir = 1; pos_dir < 2; pos_dir++) {
+            if (area[pos_dir].e[dim] < (7.0/8) * get_cube_volume()) {
+                /* Needs new neighbors at this side */
+                /* Not guaranteed though that neighbors will be created; this may be a wall */
+                pfvec neighbor_center = get_cell_center();
+                neighbor_center.e[dim] += (2*int(pos_dir) - 1) * get_edge_length();
+                create_new_air_neighbors(neighbor_center, dim, pos_dir, lvl);
+                //TODO: Set velocities in faces to newly created cells
+            }
         }
     }
 
@@ -321,6 +326,50 @@ void octcell::prepare_for_water()
             /* The velocity out for this neighbor connection currently contains humbug, initialize it */
             node->v.set_velocity_out(mean_vel[node->v.dim]*node->v.get_signed_dir());
         }
+    }
+}
+
+void octcell::create_new_air_neighbors(pfvec neighbor_center, uint dim, bool pos_dir, uint source_level)
+{
+    if (inside_of_cell(neighbor_center)) {
+        /* Neighbor is in this cell */
+        if (is_fine_enough()) {
+            // All neighbors created
+            return;
+        }
+        /* Cell is not fine enough */
+        if (is_leaf()) {
+            create_new_empty_child_array();
+        }
+        if (lvl < source_level) {
+            /* The cell who wants the nieghbors is at a higher level, find the one neighboring child */
+            uint child_idx = get_child_index_from_position(neighbor_center);
+            if (!get_child(child_idx)) {
+                //create_new_air_child(child_idx);
+            }
+            //get_child(child_idx)->create_new_air_neighbors(neighbor_center, dim, pos_dir, source_level);
+        }
+        else {
+            /* The cell who wants the nieghbors is not at a higher level and therefore neighbor to half of this cell's children */
+            for (uint child_idx = 0; child_idx < MAX_NUM_CHILDREN; child_idx++) {
+                if (positive_direction_of_child(child_idx, dim) != pos_dir) {
+                    /* Child cell is in the right half */
+                    if (!get_child(child_idx)) {
+                        //create_new_air_child(child_idx);
+                    }
+                    //get_child(child_idx)->create_new_air_neighbors(neighbor_center, dim, pos_dir, source_level);
+                }
+            }
+        }
+    }
+    else if (has_parent()) {
+        /* Neighbor is outside of this cell */
+        /* Must step up one level to get to position */
+        get_parent()->create_new_air_neighbors(neighbor_center, dim, pos_dir, source_level);
+    }
+    else {
+        /* Neighbor is outside of root cell (this cell) */
+        // TODO: Create water outside of root cell
     }
 }
 
@@ -367,4 +416,21 @@ void octcell::make_neighbors(octcell* cell1, octcell* cell2, uint cell1_neighbor
     /* Set properties */
     node1->v.set(cell2, node2, dimension,  pos_dir, 0, 0, 0,  dist, dist_abs, area);
     node2->v.set(cell1, node1, dimension, !pos_dir, 0, 0, 0, -dist, dist_abs, area);
+}
+
+////////////////////////////////////////////////////////////////
+// PRIVATE STATIC METHODS
+////////////////////////////////////////////////////////////////
+
+/* The size of a leaf cell should be at the maximum the value of this function applied to its cell center */
+pftype octcell::size_accuracy(pfvec r)
+{
+    if (r.e[VERTICAL_DIMENSION] < SURFACE_HEIGHT) {
+        /* Cell is under the surface */
+        return SURFACE_ACCURACY + (SURFACE_HEIGHT - r.e[VERTICAL_DIMENSION])
+                * (1/(MIN_LOD_LAYER_THICKNESS + 0.5));
+    }
+    else {
+        return SURFACE_ACCURACY;
+    }
 }

@@ -29,19 +29,24 @@ class octcell
 {
 public:
     static const uint MAX_NUM_CHILDREN = 1 << NUM_DIMENSIONS;
+    //static const uint MAX_NUM_NEIGHBORS_ON_ONE_SIDE = MAX_NUM_CHILDREN/2;
 public:
     /*******************************
      * Constructors and destructor *
      *******************************/
-    octcell(pftype size, pfvec pos, uint level, uint internal_layer_advancement = 0);
+    octcell(octcell *parent, pftype size, pfvec pos, uint level, uint internal_layer_advancement = 0);
     ~octcell();
 
 public:
     /***************************
      * Public member variables *
      ***************************/
-    /* Geometry */
 
+    /* Family */
+    octcell *_par; /* Parent cell*/
+    octcell **_c; /* The possible children */
+
+    /* Geometry */
     // The cell is a cube with size s and the first corner in r
     pftype s; /* Size of the cell (the length of an edge) */
     pfvec  r; /* Position of the first corner */
@@ -59,9 +64,6 @@ public:
     //uint ila; /* Internal layer advancement, the advancement of the cell in the layer in terms of cells: 1, 2, ..., t_n (0 = unknown) */
     //bool changed; /* Whether the ila has changed since last update or not */
 
-    /* Children */
-    octcell **_c; /* The possible children */
-
     /* Neighbors */
     //nlist leaf_neighbor_list; /* Lists all leaf neighbors. This list is empty if this is a parent cell. */
     //nlist coarse_neighbor_list; /* These connections are between cells on the same level and involves at least one non-leaf cell. */
@@ -78,8 +80,14 @@ public:
 
     /* Geometry */
     pfvec  get_cell_center() const;
+    pfvec  get_opposite_corner() const;
+    pftype get_edge_length() const;
     pftype get_side_area() const;
     pftype get_cube_volume() const;
+    uint   get_child_index_from_position(pfvec pos) const;
+    bool   outside_of_cell(pfvec pos) const;
+    bool   inside_of_cell(pfvec pos) const;
+    bool   is_fine_enough() const;
 
     /* Simulation */
     bool has_no_air() const;
@@ -89,8 +97,11 @@ public:
     bool is_mixed_cell() const;
     pftype get_air_volume_coefficient() const;
     pftype get_alpha() const;
+    pftype get_water_volume() const;
+    pftype get_total_fluid_volume() const;
     void set_volume_coefficients(pftype water_volume_coefficient, pftype total_volume_coefficient);
     void prepare_for_water();
+    void create_new_air_neighbors(pfvec neighbor_center, uint dim, bool pos_dir, uint source_level);
 
     /* Flow */
     pftype get_velocity_divergence() const;
@@ -98,10 +109,14 @@ public:
 
     /* Level of detail */
 
-    /* Children */
+    /* Family */
+    bool has_parent() const;
+    bool is_root() const;
     bool has_child_array() const;
     bool is_leaf() const;
+    void create_new_empty_child_array();
     void make_leaf();
+    octcell* get_parent() const;
     octcell* get_child(uint idx) const;
     octcell* set_child(uint idx, octcell *child);
     uint get_number_of_children() const;
@@ -138,12 +153,14 @@ private:
      * Private non-static methods *
      ******************************/
 void make_neighbors(octcell* cell1, octcell* cell2, uint cell1_neighbor_list_idx, uint cell2_neighbor_list_idx, uint dimension, bool pos_dir);
+void create_new_random_child_array();
 
 private:
     /**************************
      * Private static methods *
      **************************/
 static void un_neighbor(nlnode* list_entry);
+static pftype size_accuracy(pfvec r);
 
 private:
     /*************************
@@ -165,14 +182,27 @@ inline
 pfvec octcell::get_cell_center() const
 {
     pftype s_2 = 0.5 * s;
-    //TODO: Create function for generating the vector added to r
-#if    NUM_DIMENSIONS == 1
-    return r + pfvec(s_2);
-#elif  NUM_DIMENSIONS == 2
-    return r + pfvec(s_2, s_2);
-#elif  NUM_DIMENSIONS == 3
-    return r + pfvec(s_2, s_2, s_2);
-#endif
+    pfvec center = r;
+    for (uint dim = 0; dim < NUM_DIMENSIONS; dim++) {
+        center[dim] += s_2;
+    }
+    return center;
+}
+
+inline
+pfvec octcell::get_opposite_corner() const
+{
+    pfvec corner = r;
+    for (uint dim = 0; dim < NUM_DIMENSIONS; dim++) {
+        corner[dim] += s;
+    }
+    return corner;
+}
+
+inline
+pftype octcell::get_edge_length() const
+{
+    return s;
 }
 
 inline
@@ -185,6 +215,48 @@ inline
 pftype octcell::get_cube_volume() const
 {
     return cube_volume(s);
+}
+
+inline
+uint octcell::get_child_index_from_position(pfvec pos) const
+{
+#if  DEBUG
+    if (outside_of_cell(pos)) {
+        // Note that all positions are float values and just roughly correct; they should not lie close to cell sides
+        throw logic_error("Trying to get child index from a position that is outside of cell");
+    }
+#endif
+    uint idx = 0;
+    pftype s_2 = s/2;
+    for (uint dim = 0; dim < NUM_DIMENSIONS; dim++) {
+        if (pos[dim] > r[dim] + s_2) {
+            idx += 1 << dim;
+        }
+    }
+    return idx;
+}
+
+inline
+bool octcell::outside_of_cell(pfvec pos) const
+{
+    for (uint dim = 0; dim < NUM_DIMENSIONS; dim++) {
+        if (pos[dim] < r[dim] || pos[dim] >= r[dim] + s) {
+            return true;
+        }
+    }
+    return false;
+}
+
+inline
+bool octcell::inside_of_cell(pfvec pos) const
+{
+    return !outside_of_cell(pos);
+}
+
+inline
+bool octcell::is_fine_enough() const
+{
+    return s <= size_accuracy(get_cell_center());
 }
 
 /**************
@@ -234,9 +306,30 @@ pftype octcell::get_alpha() const
 }
 
 inline
+pftype octcell::get_water_volume() const
+{
+    return water_vol_coeff * get_cube_volume();
+}
+
+inline
+pftype octcell::get_total_fluid_volume() const
+{
+    return total_vol_coeff * get_cube_volume();
+}
+
+inline
 void octcell::set_volume_coefficients(pftype water_volume_coefficient, pftype total_volume_coefficient)
 {
 #if  DEBUG
+#if  0
+    cout << endl;
+    cout << "Cell: Old water volume coefficient: " << water_vol_coeff << endl;
+    cout << "Cell: Old total volume coefficient: " << total_vol_coeff << endl;
+    cout << "Cell: Additional water volume coefficient: " << water_volume_coefficient-water_vol_coeff << endl;
+    cout << "Cell: Additional total volume coefficient: " << total_volume_coefficient-total_vol_coeff << endl;
+    cout << "Cell: New water volume coefficient: " << water_volume_coefficient << endl;
+    cout << "Cell: New total volume coefficient: " << total_volume_coefficient << endl;
+#endif
     if (IS_NAN(water_volume_coefficient)) {
         throw logic_error("Trying to set a NaN water_volume_coefficient in cell");
     }
@@ -262,6 +355,18 @@ void octcell::set_volume_coefficients(pftype water_volume_coefficient, pftype to
  ************/
 
 inline
+bool octcell::has_parent() const
+{
+    return _par;
+}
+
+inline
+bool octcell::is_root() const
+{
+    return !has_parent();
+}
+
+inline
 bool octcell::has_child_array() const
 {
     return _c;
@@ -271,6 +376,27 @@ inline
 bool octcell::is_leaf() const
 {
     return !has_child_array();
+}
+
+inline
+void octcell::create_new_random_child_array()
+{
+#if  DEBUG
+    if (has_child_array()) {
+        throw logic_error("Trying to create child array for a cell that already has one");
+    }
+#endif
+    // Create child array
+    _c = new octcell*[MAX_NUM_CHILDREN];
+}
+
+inline
+void octcell::create_new_empty_child_array()
+{
+    create_new_random_child_array();
+    for (uint idx = 0; idx < MAX_NUM_CHILDREN; idx++) {
+        set_child(idx, 0);
+    }
 }
 
 inline
@@ -288,6 +414,17 @@ void octcell::make_leaf()
 #endif
     delete[] _c;
     _c = 0;
+}
+
+inline
+octcell* octcell::get_parent() const
+{
+#if  DEBUG
+    if (is_root()) {
+        throw logic_error("Trying to get parent from root cell");
+    }
+#endif
+    return _par;
 }
 
 inline

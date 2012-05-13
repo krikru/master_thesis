@@ -24,25 +24,28 @@
 //#define  NUM_DIRECTIONS             (2*NUM_DIMENSIONS)
 #define  LOGICAL_AXIS_ORDER         1
 #define  NO_ATMOSPHERE              1
-#define  VACUUM_HAS_PRESSURE        0
+#define  VACUUM_HAS_PRESSURE        1
 #define  ALLOW_NEGATIVE_PRESSURES   0
 
 /* Advection scheme */
 #define  NO_SCHEME                  0
 #define  UPWIND                     1
-#define  HYPER_C                    2
-#define  HRIC                       3
+#define  HRIC                       2
+#define  HYPER_C                    3
+#define  HIGH_CONTRAST_SCHEME       4
 
 //#define  ADVECTION_SCHEME           UPWIND
-#define  ADVECTION_SCHEME           HYPER_C
 //#define  ADVECTION_SCHEME           HRIC
+#define  ADVECTION_SCHEME           HYPER_C
+//#define  ADVECTION_SCHEME           HIGH_CONTRAST_SCHEME
 
 /* Simulation parameters */
 #define  FRAME_MS                   (1000/60)
 //#define  SIMULATION_TIME_STEP       (FRAME_MS/1000.0) // [s]
 //#define  SIMULATION_TIME_STEP       .01 // [s]
-//#define  SIMULATION_TIME_STEP       .001 // [s]
 #define  SIMULATION_TIME_STEP       .001 // [s]
+//#define  SIMULATION_TIME_STEP       .0003 // [s]
+//#define  SIMULATION_TIME_STEP       .0001 // [s]
 //#define  SIMULATION_TIME_STEP       .000003 // [s]
 //#define  SIMULATION_TIME_STEP       .0 // [s]
 #define  INTERFACE_THICKNESS_IN_CELLS                4.0 // [1] The number of cells that will make out the interface
@@ -98,7 +101,7 @@
 #define  NEIGHBOR_CONNECTIONS_DIST_SCALING           (1 / SCALE_FACTOR)
 
 /* Precision */
-#define  USE_DOUBLE_PRECISION_FOR_PHYSICS  0
+#define  USE_DOUBLE_PRECISION_FOR_PHYSICS  1
 
 /* Tests */
 

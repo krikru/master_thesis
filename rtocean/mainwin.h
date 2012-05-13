@@ -42,6 +42,7 @@ private slots:
 
 private:
     /* Private methods */
+    void run_simulation();
     void do_events();
     static void do_events(void* mainwin_object);
 

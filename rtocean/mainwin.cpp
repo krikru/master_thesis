@@ -86,15 +86,30 @@ void mainwin::start_simulation()
         system.define_water(new fvoctree(0, 0));
         system.set_state_updated_callback(do_events, this);
         ui->visualization_vw->set_system_to_visualize(&system);
-
-        /* Start simulation */
-        last_time_letting_system_evolve = clock();
-        ui->statusBar->showMessage("Starting simulation...");
-        system.run_simulation(SIMULATION_TIME_STEP);
-        ui->statusBar->showMessage("Simulation finished.");
+        run_simulation();
     }
     catch (std::exception &e) {
         message_handler::inform_about_exception("mainwin::start_simulation()", e, true);
+    }
+}
+
+void mainwin::run_simulation()
+{
+    last_time_letting_system_evolve = clock();
+    ui->statusBar->showMessage("Simulating");
+    int result = system.run_simulation(SIMULATION_TIME_STEP);
+    switch (result) {
+    case (SR_FINISHED):
+        ui->statusBar->showMessage("Simulation finished.");
+        break;
+    case (SR_PAUSED):
+        ui->statusBar->showMessage("Paused");
+        break;
+    case (SR_ABORTED):
+        ui->statusBar->showMessage("Simulation aborted.");
+        break;
+    default:
+        throw logic_error("Unknown simulation result");
     }
 }
 
@@ -104,7 +119,7 @@ void mainwin::toggle_pause_simulation()
     {
         if (system.is_water_defined()) {
             if (system.is_paused()) {
-                system.continue_simulation();
+                run_simulation();
             }
             else {
                 system.pause_simulation();
