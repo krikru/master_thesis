@@ -56,8 +56,8 @@ public:
     /*Since the velocities are located in the cell faces, they are stored in the octneighbors */
 
     /* Volume of fluid */
-    pftype water_vol_coeff; /* [1] The volume the water in this cell would occupy at NORMAL_PRESSURE divided by the volume of the cell */
-    pftype total_vol_coeff; /* [1] The volume the water and the air in this cell would occupy at NORMAL_PRESSURE divided by the volume of the cell (should stay relatively close to 1) */
+    pftype water_vol_coeff; /* [1] The volume the water in this cell would occupy at NORMAL_AIR_PRESSURE divided by the volume of the cell */
+    pftype total_vol_coeff; /* [1] The volume the water and the air in this cell would occupy at NORMAL_AIR_PRESSURE divided by the volume of the cell (should stay relatively close to 1) */
 
     /* Level of detail */
     uint lvl; /* The level of the cell, 0 = root */
@@ -114,7 +114,7 @@ public:
     bool is_root() const;
     bool has_child_array() const;
     bool is_leaf() const;
-    void create_new_empty_child_array();
+    void make_parent();
     void make_leaf();
     octcell* get_parent() const;
     octcell* get_child(uint idx) const;
@@ -122,7 +122,8 @@ public:
     uint get_number_of_children() const;
     void refine(); // Creates a new full child array
     void coarsen(); // Decreases the level of detail to this level by removing the children and the child array
-    void remove_child(uint idx);
+    octcell *create_new_air_child(uint child_idx);
+    void remove_child(uint child_idx);
 
     /* Neighbors */
     void move_neighbor_connection_to_other_list(nlnode *node, uint new_list_index);
@@ -230,7 +231,7 @@ uint octcell::get_child_index_from_position(pfvec pos) const
     pftype s_2 = s/2;
     for (uint dim = 0; dim < NUM_DIMENSIONS; dim++) {
         if (pos[dim] > r[dim] + s_2) {
-            idx += 1 << dim;
+            idx += (1 << dim);
         }
     }
     return idx;
@@ -391,32 +392,6 @@ void octcell::create_new_random_child_array()
 }
 
 inline
-void octcell::create_new_empty_child_array()
-{
-    create_new_random_child_array();
-    for (uint idx = 0; idx < MAX_NUM_CHILDREN; idx++) {
-        set_child(idx, 0);
-    }
-}
-
-inline
-void octcell::make_leaf()
-{
-#if  DEBUG
-    if (is_leaf()) {
-        throw logic_error("Trying to make a leaf cell a leaf");
-    }
-    for (uint i = 0; i < MAX_NUM_CHILDREN; i++) {
-        if (get_child(i)) {
-            throw logic_error("Trying to make a cell with at least one child a leaf cell");
-        }
-    }
-#endif
-    delete[] _c;
-    _c = 0;
-}
-
-inline
 octcell* octcell::get_parent() const
 {
 #if  DEBUG
@@ -473,14 +448,14 @@ uint octcell::get_number_of_children() const
 }
 
 inline
-void octcell::remove_child(uint idx)
+void octcell::remove_child(uint child_idx)
 {
-    octcell* c = get_child(idx);
+    octcell* c = get_child(child_idx);
 #if  DEBUG
     if (is_leaf()) {
         throw logic_error("Trying to remove a child cell from a leaf cell");
     }
-    if (idx < 0 || idx >= MAX_NUM_CHILDREN) {
+    if (child_idx < 0 || child_idx >= MAX_NUM_CHILDREN) {
         throw out_of_range("Trying to remove a child cell with index out of bound");
     }
     if (!c) {
@@ -490,7 +465,7 @@ void octcell::remove_child(uint idx)
 
     /* Remove child */
     delete c;
-    set_child(idx, 0);
+    set_child(child_idx, 0);
 }
 
 ////////////////////////////////////////////////////////////////

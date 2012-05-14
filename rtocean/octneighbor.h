@@ -61,8 +61,8 @@ public:
     pftype vel_out; /* Velocity of the water in the direction out from the cell, towards the neighbor cell */
 
     /* Distance between cells */
-    pfvec  dist;
-    pftype dist_abs;
+    pfvec  dist; /* Distande to the neighbor cell (dependent of direction) */
+    pftype dist_abs; /* Absolute distande (independent of direction) */
 
     /* Surface */
     pftype cf_area; /* Cell face area */

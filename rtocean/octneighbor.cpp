@@ -83,7 +83,8 @@ void octneighbor::update_velocity(octcell* cell1, octcell* cell2, pftype dt)
     pftype distance = cell1->s + cell2->s;
 #if  !NO_ATMOSPHERE
     //pftype average_density = (cell1->total_density*cell1->s + cell2->total_density*cell2->s) / distance;
-    pftype average_density = P_WATER_DENSITY * (cell1->water_vol_coeff*cell1->s + cell2->water_vol_coeff*cell2->s) / distance;
+    pftype average_density = ((cell1->water_vol_coeff*cell1->s + cell2->water_vol_coeff*cell2->s) * (NORMAL_WATER_DENSITY - NORMAL_AIR_DENSITY) +
+                              (cell1->total_vol_coeff*cell1->s + cell2->total_vol_coeff*cell2->s) * NORMAL_AIR_DENSITY) / distance;
 #endif
     //average_total_density = MIN(average_total_density, P_WATER_DENSITY); // Prevent nasty circulation behaviours in the water
     //TDO: Prevevt circulation behaviour even in the air
@@ -91,7 +92,7 @@ void octneighbor::update_velocity(octcell* cell1, octcell* cell2, pftype dt)
 #if  NO_ATMOSPHERE
     vel_out += ((cell1->p - cell2->p) / (distance * P_WATER_DENSITY) - dist[VERTICAL_DIMENSION]/dist_abs * P_G) * dt;
 #else
-    vel_out += ((cell1->p - cell2->p) / (distance * average_density) - dist[VERTICAL_DIMENSION]/dist_abs * P_G * (average_density > P_WATER_DENSITY ? P_WATER_DENSITY/average_density : 1)) * dt;
+    vel_out += ((cell1->p - cell2->p) / (distance * average_density) - dist[VERTICAL_DIMENSION]/dist_abs * P_G * (average_density > NORMAL_WATER_DENSITY ? NORMAL_WATER_DENSITY/average_density : 1)) * dt;
 #endif
     cnle->v.vel_out = -vel_out;
 }

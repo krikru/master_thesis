@@ -48,9 +48,85 @@ octcell::~octcell()
  * Level of detail *
  *******************/
 
-/************
- * Children *
- ************/
+/**********
+ * Family *
+ **********/
+
+void octcell::make_parent()
+{
+    create_new_random_child_array();
+    for (uint idx = 0; idx < MAX_NUM_CHILDREN; idx++) {
+        set_child(idx, 0);
+    }
+
+    /*
+     * This cell is no longer a parent cell, update other end of the connections to
+     * the neighbor cells at the same level and at the higher level
+     */
+
+    /* Update the neighbor cells' connections on the same level */
+    nlset same_level_set;
+    same_level_set.add_neighbor_list(&neighbor_lists[NL_SAME_LEVEL_OF_DETAIL_LEAF]);
+    same_level_set.add_neighbor_list(&neighbor_lists[NL_SAME_LEVEL_OF_DETAIL_NON_LEAF]);
+    for (nlnode* node = same_level_set.get_first_node(); node; node = same_level_set.get_next_node()) {
+        node->v.n->move_neighbor_connection_to_other_list(node->v.cnle, NL_SAME_LEVEL_OF_DETAIL_NON_LEAF);
+    }
+
+    /* Update the neighbor cells' connections on the higher level */
+    nlnode* node = neighbor_lists[NL_HIGHER_LEVEL_OF_DETAIL].get_first_node();
+    nlnode* next_node;
+    for (; node; node = next_node) {
+        next_node = node->get_next_node();
+        node->v.n->move_neighbor_connection_to_other_list(node->v.cnle, NL_LOWER_LEVEL_OF_DETAIL_NON_LEAF);
+    }
+
+    /*
+     * The lower level neighbors do not need to be updated, because they have only
+     * one list for cells at this level anyway
+     */
+}
+
+void octcell::make_leaf()
+{
+#if  DEBUG
+    if (is_leaf()) {
+        throw logic_error("Trying to make a leaf cell a leaf");
+    }
+    for (uint i = 0; i < MAX_NUM_CHILDREN; i++) {
+        if (get_child(i)) {
+            throw logic_error("Trying to make a cell with at least one child a leaf cell");
+        }
+    }
+#endif
+    delete[] _c;
+    _c = 0;
+
+    /*
+     * This cell is no longer a leaf cell, update other end of the connections to
+     * the neighbor cells at the same level and at the higher level
+     */
+
+    /* Update the neighbor cells' connections on the same level */
+    nlset same_level_set;
+    same_level_set.add_neighbor_list(&neighbor_lists[NL_SAME_LEVEL_OF_DETAIL_LEAF]);
+    same_level_set.add_neighbor_list(&neighbor_lists[NL_SAME_LEVEL_OF_DETAIL_NON_LEAF]);
+    for (nlnode* node = same_level_set.get_first_node(); node; node = same_level_set.get_next_node()) {
+        node->v.n->move_neighbor_connection_to_other_list(node->v.cnle, NL_SAME_LEVEL_OF_DETAIL_LEAF);
+    }
+
+    /* Update the neighbor cells' connections on the higher level */
+    nlnode* node = neighbor_lists[NL_HIGHER_LEVEL_OF_DETAIL].get_first_node();
+    nlnode* next_node;
+    for (; node; node = next_node) {
+        next_node = node->get_next_node();
+        node->v.n->move_neighbor_connection_to_other_list(node->v.cnle, NL_LOWER_LEVEL_OF_DETAIL_LEAF);
+    }
+
+    /*
+     * The lower level neighbors do not need to be updated, because they have only
+     * one list for cells at this level anyway
+     */
+}
 
 void octcell::refine()
 {
@@ -72,15 +148,15 @@ void octcell::refine()
         set_child(i, new octcell(this, s_2, new_r, new_level));
     }
 
-    /***************************
-     * +---------------------+ *
-     * |                     | *
-     * |  AHEAD: MOUNT CODE  | *
-     * |                     | *
-     * +---------------------+ *
-     ***************************/
+    /*****************************
+     * +-----------------------+ *
+     * |                       | *
+     * |  AHEAD: MOUNT CODE 1  | *
+     * |                       | *
+     * +-----------------------+ *
+     *****************************/
 
-    /* Find neighbors on this and the childrens' and the childrens' childrens' level */
+    /* Find neighbors on this and the children's and the children's children's level */
     nlset same_level_set;
     same_level_set.add_neighbor_list(&neighbor_lists[NL_SAME_LEVEL_OF_DETAIL_LEAF]);
     same_level_set.add_neighbor_list(&neighbor_lists[NL_SAME_LEVEL_OF_DETAIL_NON_LEAF]);
@@ -126,7 +202,7 @@ void octcell::refine()
                     }
                 } // if c
             } // if child index is in right half
-        } // i
+        } // cidx
         /* This cell is no longer a leaf cell, update other end of neighbor connection */
         n->move_neighbor_connection_to_other_list(node->v.cnle, NL_SAME_LEVEL_OF_DETAIL_NON_LEAF);
     } // node
@@ -141,6 +217,10 @@ void octcell::refine()
         next_node = node->get_next_node();
         node->v.n->move_neighbor_connection_to_other_list(node->v.cnle, NL_LOWER_LEVEL_OF_DETAIL_NON_LEAF);
     }
+
+    /*
+     * The higher level neighbors have already been updated in the code mountain
+     */
 
     /*
      * The lower level neighbors do not need to be updated, because they have only
@@ -186,32 +266,103 @@ void octcell::coarsen()
     water_vol_coeff *= (pftype(1)/MAX_NUM_CHILDREN);
     total_vol_coeff *= (pftype(1)/MAX_NUM_CHILDREN);
     make_leaf();
+}
 
-    /*
-     * This cell is no longer a leaf cell, update other end of the connections to
-     * the neighbor cells at the same level and at the higher level
-     */
+octcell* octcell::create_new_air_child(uint child_idx)
+{
+#if  DEBUG
+    if (!has_child_array()) {
+        throw logic_error("Trying to create a new air child in a cell without a child array");
+    }
+    if (child_idx < 0 || child_idx >= MAX_NUM_CHILDREN) {
+        throw out_of_range("Trying to create an air child with index out of bound");
+    }
+    if (get_child(child_idx)) {
+        throw logic_error("Trying to create a new air child that already exists");
+    }
+#endif
+    // Create new values for child
+    pftype s_2 = 0.5*s;
+    pfvec new_r;
+    for (uint dim = 0; dim < NUM_DIMENSIONS; dim++) {
+        new_r[dim] = r[dim] + ((child_idx >> dim) & 1) * s_2;
+    }
+    // Create child with new values
+    octcell *child = new octcell(this, s_2, new_r, lvl + 1);
+    child->water_vol_coeff = 0;
+    child->total_vol_coeff = 1;
+    set_child(child_idx, child);
 
-    /* Update the neighbor cells' connections on the same level */
+    /* Create neighbor connections for new child */
+
+    /*****************************
+     * +-----------------------+ *
+     * |                       | *
+     * |  AHEAD: MOUNT CODE 2  | *
+     * |                       | *
+     * +-----------------------+ *
+     *****************************/
+
+    /* Find neighbors on this and the child's and the child's children's level */
     nlset same_level_set;
     same_level_set.add_neighbor_list(&neighbor_lists[NL_SAME_LEVEL_OF_DETAIL_LEAF]);
     same_level_set.add_neighbor_list(&neighbor_lists[NL_SAME_LEVEL_OF_DETAIL_NON_LEAF]);
     for (nlnode* node = same_level_set.get_first_node(); node; node = same_level_set.get_next_node()) {
-        node->v.n->move_neighbor_connection_to_other_list(node->v.cnle, NL_SAME_LEVEL_OF_DETAIL_LEAF);
+        octcell* n = node->v.n; // Neighbor
+        uint dim = node->v.dim;
+        bool pos_dir = node->v.pos_dir;
+        if (positive_direction_of_child(child_idx, dim) == pos_dir) {
+            /* Child index is in the right half */
+            if (n->has_child_array()) {
+                make_neighbors(child, n, NL_LOWER_LEVEL_OF_DETAIL_NON_LEAF, NL_HIGHER_LEVEL_OF_DETAIL, dim, pos_dir);
+                /* Cell has children, see if there is a neighbor at the child level */
+                uint ncidx = child_index_flip_direction(child_idx, dim); // Neighbor child index
+                octcell* nc = n->get_child(ncidx); // Neighbor child
+                if (nc) {
+                    /* Neighbor cell on child level exists too, make neighbors */
+                    if (nc->has_child_array()) {
+                        make_neighbors(child, nc, NL_SAME_LEVEL_OF_DETAIL_NON_LEAF, NL_SAME_LEVEL_OF_DETAIL_LEAF, dim, pos_dir);
+                        /* Child cell has children too, see if any of these are neighbors */
+                        for (uint nccidx = 0; nccidx < MAX_NUM_CHILDREN; nccidx++) { // Neighbor child child index
+                            if (positive_direction_of_child(nccidx, dim) != pos_dir) {
+                                // Potential neighbor child child is in righ half, make neighbor
+                                octcell* ncc = nc->get_child(nccidx);
+                                if (ncc) {
+                                    // Cell exists, make neighbor
+                                    make_neighbors(child, ncc, NL_HIGHER_LEVEL_OF_DETAIL, NL_LOWER_LEVEL_OF_DETAIL_LEAF, dim, pos_dir);
+                                }
+                            }
+                        } // for nccidx
+                    } // if nc->has_child_array()
+                    else {
+                        make_neighbors(child, nc, NL_SAME_LEVEL_OF_DETAIL_LEAF, NL_SAME_LEVEL_OF_DETAIL_LEAF, dim, pos_dir);
+                    }
+                }
+
+            } // if n->has_child_array()
+            else {
+                make_neighbors(child, n, NL_LOWER_LEVEL_OF_DETAIL_LEAF, NL_HIGHER_LEVEL_OF_DETAIL, dim, pos_dir);
+            }
+        } // if child index is in right half
+        /* This cell is no longer a leaf cell, update other end of neighbor connection */
+        n->move_neighbor_connection_to_other_list(node->v.cnle, NL_SAME_LEVEL_OF_DETAIL_NON_LEAF);
+    } // node
+
+    // Create all neighbor connections internally between this child cell and other child cells that may exist
+    for (uint dim = 0; dim < NUM_DIMENSIONS; dim++) {
+        /* Get other child in this dimension */
+        uint other_child_idx = child_idx ^ child_index_offset(dim);
+        octcell *other_child = get_child(other_child_idx);
+        if (other_child) {
+            /* Child exists, make neighbors */
+            make_neighbors(child, other_child,
+                           other_child->has_child_array() ? NL_SAME_LEVEL_OF_DETAIL_NON_LEAF : NL_SAME_LEVEL_OF_DETAIL_LEAF,
+                           NL_SAME_LEVEL_OF_DETAIL_LEAF,
+                           dim, other_child_idx > child_idx);
+        }
     }
 
-    /* Update the neighbor cells' connections on the higher level */
-    nlnode* node = neighbor_lists[NL_HIGHER_LEVEL_OF_DETAIL].get_first_node();
-    nlnode* next_node;
-    for (; node; node = next_node) {
-        next_node = node->get_next_node();
-        node->v.n->move_neighbor_connection_to_other_list(node->v.cnle, NL_LOWER_LEVEL_OF_DETAIL_LEAF);
-    }
-
-    /*
-     * The lower level neighbors do not need to be updated, because they have only
-     * one list for cells at this level anyway
-     */
+    return child;
 }
 
 void octcell::move_neighbor_connection_to_other_list(nlnode *node, uint new_list_index)
@@ -272,9 +423,9 @@ pftype octcell::get_water_flow_divergence() const
 void octcell::prepare_for_water()
 {
     /*
-     * This cell takes care of:
+     * This function takes care of:
      *   1. Walls to cells with no water in them
-     *   2. Missing neighbors (create new ones) (not yet implemented)
+     *   2. Missing neighbors (create new ones)
      */
 
     /* Calculate average velocity vector */
@@ -302,19 +453,17 @@ void octcell::prepare_for_water()
             // TODO: Find out the velocity in some other way
             //mean_vel[dim] = 0; This componentis already 0
         }
-        for (uint pos_dir = 1; pos_dir < 2; pos_dir++) {
-            if (area[pos_dir].e[dim] < (7.0/8) * get_cube_volume()) {
+        for (uint pos_dir = 0; pos_dir < 2; pos_dir++) {
+            if (area[pos_dir].e[dim] < (7.0/8) * get_side_area()) {
                 /* Needs new neighbors at this side */
                 /* Not guaranteed though that neighbors will be created; this may be a wall */
                 pfvec neighbor_center = get_cell_center();
                 neighbor_center.e[dim] += (2*int(pos_dir) - 1) * get_edge_length();
                 create_new_air_neighbors(neighbor_center, dim, pos_dir, lvl);
-                //TODO: Set velocities in faces to newly created cells
+                //TODO:: Set velocities in faces to newly created cells
             }
         }
     }
-
-    // TODO: Create new empty cells where it doesn't have any neighbors
 
     /* Set velocities on faces to empty cells */
     /* Loop though neighbors */
@@ -331,6 +480,14 @@ void octcell::prepare_for_water()
 
 void octcell::create_new_air_neighbors(pfvec neighbor_center, uint dim, bool pos_dir, uint source_level)
 {
+#if 0
+    static int count = 0;
+    count++;
+    if (count == 16200) {
+        NO_OP();
+    }
+    cout << count << endl;
+#endif
     if (inside_of_cell(neighbor_center)) {
         /* Neighbor is in this cell */
         if (is_fine_enough()) {
@@ -339,25 +496,26 @@ void octcell::create_new_air_neighbors(pfvec neighbor_center, uint dim, bool pos
         }
         /* Cell is not fine enough */
         if (is_leaf()) {
-            create_new_empty_child_array();
+            make_parent();
         }
         if (lvl < source_level) {
             /* The cell who wants the nieghbors is at a higher level, find the one neighboring child */
             uint child_idx = get_child_index_from_position(neighbor_center);
             if (!get_child(child_idx)) {
-                //create_new_air_child(child_idx);
+                create_new_air_child(child_idx);
             }
-            //get_child(child_idx)->create_new_air_neighbors(neighbor_center, dim, pos_dir, source_level);
+            get_child(child_idx)->create_new_air_neighbors(neighbor_center, dim, pos_dir, source_level);
         }
         else {
-            /* The cell who wants the nieghbors is not at a higher level and therefore neighbor to half of this cell's children */
+            /* The cell who wants the neighbors is not at a higher level and therefore neighbor to half of this cell's children */
             for (uint child_idx = 0; child_idx < MAX_NUM_CHILDREN; child_idx++) {
                 if (positive_direction_of_child(child_idx, dim) != pos_dir) {
                     /* Child cell is in the right half */
-                    if (!get_child(child_idx)) {
-                        //create_new_air_child(child_idx);
+                    octcell *child = get_child(child_idx);
+                    if (!child) {
+                        child = create_new_air_child(child_idx);
                     }
-                    //get_child(child_idx)->create_new_air_neighbors(neighbor_center, dim, pos_dir, source_level);
+                    //child->create_new_air_neighbors(child->get_cell_center(), dim, pos_dir, source_level);
                 }
             }
         }

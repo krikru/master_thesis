@@ -84,7 +84,7 @@ bool fvoctree::refine_subtree(octcell* c, pftype surface, pftype bottom)
         pftype beta; /* Water volume divided by the volume of the cell */
         pftype mean_height = lowest_cell_height + s/2;
         pftype mean_surface_height = (min_surf_height + max_surf_height)/2;
-        c->p = NORMAL_PRESSURE + (mean_surface_height - mean_height) * (P_G * P_WATER_DENSITY);
+        c->p = NORMAL_AIR_PRESSURE + (mean_surface_height - mean_height) * (P_G * NORMAL_WATER_DENSITY);
         if (lowest_cell_height + s > min_surf_height) {
             /* Cell is a surface cell */
             /* Estimate beta */
@@ -95,11 +95,11 @@ bool fvoctree::refine_subtree(octcell* c, pftype surface, pftype bottom)
             /* Cell is not a surface cell and contains only water */
             beta = 1;
         }
-        pftype water_vol_coeff = 1 + (c->p - NORMAL_PRESSURE)*(1/ARTIFICIAL_COMPRESSIBILITY_FACTOR);
+        pftype water_vol_coeff = 1 + (c->p - NORMAL_AIR_PRESSURE)*(1/ARTIFICIAL_COMPRESSIBILITY_FACTOR);
 #if  NO_ATMOSPHERE
         pftype air_vol_coeff = water_vol_coeff;
 #else
-        pftype air_vol_coeff = c->p / NORMAL_PRESSURE;
+        pftype air_vol_coeff = c->p / NORMAL_AIR_PRESSURE;
 #endif
         water_vol_coeff *= beta;
         air_vol_coeff   *= (1 - beta);
@@ -133,7 +133,9 @@ bool fvoctree::refine_subtree(octcell* c, pftype surface, pftype bottom)
 void fvoctree::prepare_cells_for_water_recursively(octcell* cell)
 {
     if (cell->is_leaf()) {
-        cell->prepare_for_water();
+        if (cell->has_water()) {
+            cell->prepare_for_water();
+        }
         return;
     }
     for (uint i = 0; i < octcell::MAX_NUM_CHILDREN; i++) {

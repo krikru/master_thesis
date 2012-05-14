@@ -152,7 +152,7 @@ void viswidget::draw_pressure(const octcell *cell)
                              color3(1, 1, 0),  // 4, Yellow
                              color3(1, 0, 0),  // 5, Red
                              color3(1, 0, 1)}; // 6, Purple
-    pftype q = NUM_TRANSITIONS * (cell->p / (P_G * P_WATER_DENSITY) + 0.5);
+    pftype q = NUM_TRANSITIONS * (cell->p / (P_G * NORMAL_WATER_DENSITY) + 0.5);
     q = MIN(MAX(q, 0), NUM_TRANSITIONS);
     uint idx1 = uint(q);
     uint idx2 = MIN(idx1 + 1, NUM_TRANSITIONS);
@@ -193,7 +193,7 @@ void viswidget::draw_pressure_deviation(const octcell *cell)
                              color3(1, 1, 0),  // 4, Yellow
                              color3(1, 0, 0),  // 5, Red
                              color3(1, 0, 1)}; // 6, Purple
-    pftype q = NUM_TRANSITIONS * ((cell->p - NORMAL_PRESSURE) / (P_G * P_WATER_DENSITY) - (SURFACE_HEIGHT - cell->get_cell_center().e[VERTICAL_DIMENSION]) + 0.5);
+    pftype q = NUM_TRANSITIONS * ((cell->p - NORMAL_AIR_PRESSURE) / (P_G * NORMAL_WATER_DENSITY) - (SURFACE_HEIGHT - cell->get_cell_center().e[VERTICAL_DIMENSION]) + 0.5);
     q = MIN(MAX(q, 0), NUM_TRANSITIONS);
     uint idx1 = uint(q);
     uint idx2 = MIN(idx1 + 1, NUM_TRANSITIONS);

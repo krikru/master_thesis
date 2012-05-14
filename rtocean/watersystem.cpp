@@ -136,14 +136,14 @@ void watersystem::calculate_cell_face_properties_recursivelly(octcell* cell)
     lists.add_neighbor_list(&cell->neighbor_lists[NL_HIGHER_LEVEL_OF_DETAIL]);
     lists.add_neighbor_list(&cell->neighbor_lists[NL_SAME_LEVEL_OF_DETAIL_LEAF]);
     lists.add_neighbor_list(&cell->neighbor_lists[NL_LOWER_LEVEL_OF_DETAIL_LEAF]);
-#if    ADVECTION_SCHEME == UPWIND
+#if    ALPHA_ADVECTION_SCHEME == UPWIND
     /* UPWIND gives smearing!!! */
     for (nlnode* node = lists.get_first_node(); node; node = lists.get_next_node()) {
         if (node->v.vel_out > 0) {
             node->v.set_volume_coefficients(cell->water_vol_coeff, cell->total_vol_coeff);
         }
     }
-#elif  ADVECTION_SCHEME == HRIC || ADVECTION_SCHEME == HYPER_C || ADVECTION_SCHEME == HIGH_CONTRAST_SCHEME
+#elif  ALPHA_ADVECTION_SCHEME == HRIC || ALPHA_ADVECTION_SCHEME == HYPER_C || ALPHA_ADVECTION_SCHEME == HIGH_CONTRAST_SCHEME
     /* Find average donor neighbor alpha */
     pftype v = 0; // [1] Courant number
     pftype average_donor_neighbor_alpha; // [1]
@@ -176,7 +176,7 @@ void watersystem::calculate_cell_face_properties_recursivelly(octcell* cell)
     for (nlnode* node = lists.get_first_node(); node; node = lists.get_next_node()) {
         if (node->v.vel_out > 0) {
             pftype acceptor_neighbor_alpha = node->v.n->total_vol_coeff ? node->v.n->get_alpha() : 0; // [1]
-#if  ADVECTION_SCHEME == HIGH_CONTRAST_SCHEME
+#if  ALPHA_ADVECTION_SCHEME == HIGH_CONTRAST_SCHEME
             if (acceptor_neighbor_alpha > cell_alpha) {
                 acceptor_neighbor_alpha = 1;
             }
@@ -187,7 +187,7 @@ void watersystem::calculate_cell_face_properties_recursivelly(octcell* cell)
             pftype face_alpha;
             pftype face_total_vol_coeff = cell->total_vol_coeff; // [1]
             if (acceptor_neighbor_alpha == average_donor_neighbor_alpha) {
-#if  ADVECTION_SCHEME == HRIC || ADVECTION_SCHEME == HYPER_C || ADVECTION_SCHEME == HIGH_CONTRAST_SCHEME
+#if  ALPHA_ADVECTION_SCHEME == HRIC || ALPHA_ADVECTION_SCHEME == HYPER_C || ALPHA_ADVECTION_SCHEME == HIGH_CONTRAST_SCHEME
                 face_alpha = cell_alpha;
 #endif
             }
@@ -200,12 +200,12 @@ void watersystem::calculate_cell_face_properties_recursivelly(octcell* cell)
                     /* Outer domain */
                     face_normalized_variable = cell_normalized_variable;
                 }
-#if  ADVECTION_SCHEME == HRIC
+#if  ALPHA_ADVECTION_SCHEME == HRIC
                 else if (cell_normalized_variable < 0.5) {
                     /* Inner domain */
                     face_normalized_variable = 2 * cell_normalized_variable;
                 }
-#elif  ADVECTION_SCHEME == HYPER_C || ADVECTION_SCHEME == HIGH_CONTRAST_SCHEME
+#elif  ALPHA_ADVECTION_SCHEME == HYPER_C || ALPHA_ADVECTION_SCHEME == HIGH_CONTRAST_SCHEME
                 else if (cell_normalized_variable < v) {
                     /* Inner domain */
                     face_normalized_variable = cell_normalized_variable / v;
@@ -285,7 +285,11 @@ void watersystem::advect_cell_properties_recursivelly(octcell* cell)
     pftype d_water_vol_coeff = in_water_vol_flux * volume_flux_to_volume_coefficient_factor;
     pftype d_total_vol_coeff = in_total_vol_flux * volume_flux_to_volume_coefficient_factor;
 
+#if  USE_DOUBLE_PRECISION_FOR_PHYSICS
     const pftype LIMIT = 1.0e-16;
+#else
+    const pftype LIMIT = 0.536870912e-7; /* Based on the number above */
+#endif
     bool okay_to_decrease_water = false;
     bool okay_to_increase_water = false;
     bool no_fluid_left = false;
@@ -349,8 +353,14 @@ void watersystem::advect_cell_properties_recursivelly(octcell* cell)
     if (!cell->water_vol_coeff && d_water_vol_coeff) {
         cell->prepare_for_water();
     }
+
+#if  NO_ATMOSPHERE
+#define TRY_TO_MAINTAIN_FULL_AIR_CELLS  0 // Experimental
+#else
+#define TRY_TO_MAINTAIN_FULL_AIR_CELLS  0 // Don't change this value
+#endif
     if (no_fluid_left) {
-#if 0
+#if TRY_TO_MAINTAIN_FULL_AIR_CELLS
         cell->set_volume_coefficients(0,
                                       1);
 #else
@@ -363,7 +373,7 @@ void watersystem::advect_cell_properties_recursivelly(octcell* cell)
                                       cell->total_vol_coeff + d_total_vol_coeff);
     }
     else if (okay_to_increase_water) {
-#if 0
+#if TRY_TO_MAINTAIN_FULL_AIR_CELLS
         cell->set_volume_coefficients(0,
                                       1);
 #else
@@ -372,7 +382,7 @@ void watersystem::advect_cell_properties_recursivelly(octcell* cell)
 #endif
     }
     else {
-#if  0
+#if  TRY_TO_MAINTAIN_FULL_AIR_CELLS
         if ((cell->total_vol_coeff + d_total_vol_coeff) - (cell->water_vol_coeff + d_water_vol_coeff) > 0.2) {
             cell->set_volume_coefficients(cell->water_vol_coeff + d_water_vol_coeff,
                                           1);
@@ -403,16 +413,46 @@ void watersystem::advect_cell_properties_recursivelly(octcell* cell)
 #if  USE_ARTIFICIAL_COMPRESSIBILITY
 #if  NO_ATMOSPHERE
 #if  VACUUM_HAS_PRESSURE
-    cell->p = (cell->total_vol_coeff - 1) * ARTIFICIAL_COMPRESSIBILITY_FACTOR + NORMAL_PRESSURE;
+    cell->p = (cell->total_vol_coeff - 1) * ARTIFICIAL_COMPRESSIBILITY_FACTOR;
 #else
-    cell->p = (cell->water_vol_coeff - 1) * ARTIFICIAL_COMPRESSIBILITY_FACTOR + NORMAL_PRESSURE;
+    cell->p = (cell->water_vol_coeff - 1) * ARTIFICIAL_COMPRESSIBILITY_FACTOR;
     if (cell->p < 0) {
 #if  ALLOW_NEGATIVE_PRESSURES
+#if INTERPOLATE_SURFACE_PRESSURE
+        /* Loop through neighbors */
+        nlset lists;
+        lists.add_neighbor_list(&cell->neighbor_lists[NL_HIGHER_LEVEL_OF_DETAIL]);
+        lists.add_neighbor_list(&cell->neighbor_lists[NL_SAME_LEVEL_OF_DETAIL_LEAF]);
+        lists.add_neighbor_list(&cell->neighbor_lists[NL_LOWER_LEVEL_OF_DETAIL_LEAF]);
+        for (nlnode* node = lists.get_first_node(); node; node = lists.get_next_node()) {
+            pftype num_terms = 0;
+            pftype average_pressure_below = 0;
+            pftype average_distance_down = 0;
+            if (node->v.dim == VERTICAL_DIMENSION && !node->v.pos_dir) {
+                /* Have found a node beneath, get pressure */
+                average_pressure_below += node->v.n->p;
+                average_distance_down -= node->v.n->get_edge_length()/2;
+                num_terms++;
+            }
+            pftype pressure_gradient;
+            if (num_terms) {
+                average_pressure_below /= num_terms;
+                average_distance_down /= num_terms;
+                average_distance_down += cell->get_alpha()*cell->get_edge_length();
+                pressure_gradient = (average_pressure_below - NORMAL_AIR_PRESSURE)/average_distance_down;
+            }
+            else {
+                pressure_gradient = P_G * P_WATER_DENSITY;
+            }
+            cell->p = NORMAL_AIR_PRESSURE + (cell->get_alpha()-0.5)*cell->get_edge_length()*pressure_gradient;
+        }
+#else
         // Prevent too low pressures at the boundary
-        cell->p = (cell->total_vol_coeff - 1) * ARTIFICIAL_COMPRESSIBILITY_FACTOR + NORMAL_PRESSURE;
+        cell->p = (cell->total_vol_coeff - 1) * ARTIFICIAL_COMPRESSIBILITY_FACTOR;
         if (cell->p > 0) {
             cell->p = 0; // Vacuum partly fills the cell
         }
+#endif
 #else
         cell->p = 0;
 #endif // ALLOW_NEGATIVE_PRESSURES
@@ -421,11 +461,11 @@ void watersystem::advect_cell_properties_recursivelly(octcell* cell)
 #else // NO_ATMOSPHERE
     if (cell->has_no_air()) {
         /* Cell consists only of water */
-        cell->p = (cell->water_vol_coeff - 1) * ARTIFICIAL_COMPRESSIBILITY_FACTOR + NORMAL_PRESSURE;
+        cell->p = (cell->water_vol_coeff - 1) * ARTIFICIAL_COMPRESSIBILITY_FACTOR;
         if (cell->p < 0) {
 #if  ALLOW_NEGATIVE_PRESSURES
             // Prevent too low pressures at the boundary
-            cell->p = (cell->total_vol_coeff - 1) * ARTIFICIAL_COMPRESSIBILITY_FACTOR + NORMAL_PRESSURE;
+            cell->p = (cell->total_vol_coeff - 1) * ARTIFICIAL_COMPRESSIBILITY_FACTOR;
             if (cell->p > 0) {
                 cell->p = 0; // Vacuum partly fills the cell
             }
@@ -436,13 +476,13 @@ void watersystem::advect_cell_properties_recursivelly(octcell* cell)
     }
     else if (cell->has_no_water()) {
         /* Cell consists only of air */
-        cell->p = cell->total_vol_coeff * NORMAL_PRESSURE;
+        cell->p = cell->total_vol_coeff * NORMAL_AIR_PRESSURE;
     }
     else {
         /* Calculate pressure for a mixed cell */
         // Optimize
         pftype k = ARTIFICIAL_COMPRESSIBILITY_FACTOR;
-        pftype q = NORMAL_PRESSURE;
+        pftype q = NORMAL_AIR_PRESSURE;
         pftype a = cell->get_air_volume_coefficient();
         pftype w = cell->water_vol_coeff;
         pftype d = q*a/k;
