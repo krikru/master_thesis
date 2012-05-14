@@ -69,33 +69,19 @@ void viswidget::paintGL()
     static bool first_time_called = true;
     if (first_time_called) {
         first_time_called = false;
-        //connect(&frame_timer, SIGNAL(timeout()), this, SLOT(updateGL()));
-        //frame_timer.start(FRAME_MS);
         t = 0;
     }
     else {
-        t += FRAME_MS*.001;
+        t += FRAME_MS * .001;
     }
 
     try
     {
-        /* Generate tree */
-#if  DEBUG
-        double t1, t2;
-#endif
-
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
         if (!system_to_visualize) {
             /* Nothing to draw */
             return;
         }
-
-#if  0
-        BEGIN_TAKE_TIME("Moving octree... ");
-        move_fvoctree(system_to_visualize->get_water());
-        END_TAKE_TIME();
-#endif
 
         /* Set up perspective*/
         glViewport(0, 0, gl_width, gl_height);
@@ -108,9 +94,7 @@ void viswidget::paintGL()
 
         set_up_model_view_matrix();
 
-        BEGIN_TAKE_TIME("Visualizing octree... ");
         visualize_fvoctree(system_to_visualize->get_water());
-        END_TAKE_TIME();
     }
     catch (std::exception &e) {
         message_handler::inform_about_exception("viswidget::paintGL()", e, true);

@@ -90,7 +90,7 @@ void octneighbor::update_velocity(octcell* cell1, octcell* cell2, pftype dt)
     //TDO: Prevevt circulation behaviour even in the air
     distance *= 0.5;
 #if  NO_ATMOSPHERE
-    vel_out += ((cell1->p - cell2->p) / (distance * P_WATER_DENSITY) - dist[VERTICAL_DIMENSION]/dist_abs * P_G) * dt;
+    vel_out += ((cell1->p - cell2->p) / (distance * NORMAL_WATER_DENSITY) - dist[VERTICAL_DIMENSION]/dist_abs * P_G) * dt;
 #else
     vel_out += ((cell1->p - cell2->p) / (distance * average_density) - dist[VERTICAL_DIMENSION]/dist_abs * P_G * (average_density > NORMAL_WATER_DENSITY ? NORMAL_WATER_DENSITY/average_density : 1)) * dt;
 #endif

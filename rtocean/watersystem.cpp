@@ -69,18 +69,21 @@ int watersystem::run_simulation(pftype time_step)
     set_time_step(time_step);
 
     started = true;
-    pause = false;
-    while (!abort && !pause) {
-        /* Evolve the system */
-        _evolve();
+    paused = false;
+    while (!abort && !(paused && break_main_loop_when_pausing)) {
         /* Process everything that needs to be processed */
         process_events();
+
+        /* Evolve the system */
+        if (!paused) {
+            _evolve();
+        }
     }
 
     if (abort) {
         ret = SR_ABORTED;
     }
-    else if (pause) {
+    else if (paused) {
         ret = SR_PAUSED;
     }
 
@@ -161,6 +164,11 @@ void watersystem::calculate_cell_face_properties_recursivelly(octcell* cell)
             v += face_total_vol_fluxed/cell->get_total_fluid_volume();
         }
     }
+#if  DEBUG
+    if (v > 1) {
+        std::cerr << "Warning! Courant number > 1 ( = " << v << endl;
+    }
+#endif
     if (guessed_total_in_volume_flux) {
         average_donor_neighbor_alpha = guessed_water_in_volume_flux/guessed_total_in_volume_flux;
     }

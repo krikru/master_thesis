@@ -84,7 +84,13 @@ bool fvoctree::refine_subtree(octcell* c, pftype surface, pftype bottom)
         pftype beta; /* Water volume divided by the volume of the cell */
         pftype mean_height = lowest_cell_height + s/2;
         pftype mean_surface_height = (min_surf_height + max_surf_height)/2;
-        c->p = NORMAL_AIR_PRESSURE + (mean_surface_height - mean_height) * (P_G * NORMAL_WATER_DENSITY);
+        pftype depth = mean_surface_height - mean_height;
+        if (depth >= 0) {
+            c->p = NORMAL_AIR_PRESSURE + depth * (P_G * NORMAL_WATER_DENSITY);
+        }
+        else {
+            c->p = NORMAL_AIR_PRESSURE * exp(depth * (P_G / AIR_COMPRESSIBILITY_FACTOR));
+        }
         if (lowest_cell_height + s > min_surf_height) {
             /* Cell is a surface cell */
             /* Estimate beta */

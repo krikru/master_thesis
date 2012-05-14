@@ -23,7 +23,7 @@
 #define  NUM_DIMENSIONS             2 /* 2 or 3 */
 //#define  NUM_DIRECTIONS             (2*NUM_DIMENSIONS)
 #define  LOGICAL_AXIS_ORDER         1
-#define  NO_ATMOSPHERE              0
+#define  NO_ATMOSPHERE              1
 #define  VACUUM_HAS_PRESSURE        0
 #define  ALLOW_NEGATIVE_PRESSURES   0
 #define  INTERPOLATE_SURFACE_PRESSURE               0
@@ -41,12 +41,13 @@
 //#define  ALPHA_ADVECTION_SCHEME     HIGH_CONTRAST_SCHEME
 
 /* Simulation parameters */
-#define  FRAME_MS                   (1000/60)
+//#define  FRAME_MS                   (1000/60)
+#define  FRAME_MS                   0
 //#define  SIMULATION_TIME_STEP       (FRAME_MS/1000.0) // [s]
 //#define  SIMULATION_TIME_STEP       .01 // [s]
 //#define  SIMULATION_TIME_STEP       .001 // [s]
-//#define  SIMULATION_TIME_STEP       .0003 // [s]
-#define  SIMULATION_TIME_STEP       .0001 // [s]
+#define  SIMULATION_TIME_STEP       .0003 // [s]
+//#define  SIMULATION_TIME_STEP       .0001 // [s]
 //#define  SIMULATION_TIME_STEP       .000003 // [s]
 //#define  SIMULATION_TIME_STEP       .0 // [s]
 #define  INTERFACE_THICKNESS_IN_CELLS                4.0 // [1] The number of cells that will make out the interface
@@ -60,8 +61,10 @@
 #define  USE_ARTIFICIAL_COMPRESSIBILITY              1
 /* 122.92: Works; 122.93: Doesn't work. (dt = 0.001, maximal spatial resolution = 0.02) */
 #define  ARTIFICIAL_COMPRESSIBILITY_FACTOR           (10.00 * NORMAL_WATER_DENSITY) // [Pa] (Delta pressure = ARTIFICIAL_COMPRESSIBILITY_FACTOR * Delta water volume coefficient)
-#define  NORMAL_AIR_PRESSURE                         (0.01 * (NO_ATMOSPHERE ? 0.0 : P_1ATM))
+//#define  NORMAL_AIR_PRESSURE                         (0.01 * (NO_ATMOSPHERE ? 0.0 : P_1ATM))
+#define  NORMAL_AIR_PRESSURE                         (0.001 * (NO_ATMOSPHERE ? 0.0 : P_1ATM))
 #define  NORMAL_AIR_DENSITY                          P_AIR_DENSITY_AT_1_ATM
+#define  AIR_COMPRESSIBILITY_FACTOR                  (NORMAL_AIR_PRESSURE/NORMAL_AIR_DENSITY)
 #define  NORMAL_WATER_DENSITY                        P_WATER_DENSITY_AT_1_ATM
 
 /* VIsualization */
@@ -82,9 +85,9 @@
 #define  VEL_DIV_SCALE_FACTOR       0.1 // [s/m]
 #define  FLOW_DIV_SCALE_FACTOR      VEL_DIV_SCALE_FACTOR // [s/m]
 #define  DRAW_CELL_FACE_VELOCITIES                   0
-#define  DRAW_CELL_CENTER_VELOCITIES                 1
+#define  DRAW_CELL_CENTER_VELOCITIES                 0
 #define  VEL_TO_ARROW_LENGTH_FACTOR 0.1
-#define  DRAW_CELL_CUBES            1
+#define  DRAW_CELL_CUBES            0
 #define  DRAW_PARENT_CELLS          1
 #define  DRAW_ONLY_SURFACE_CELLS    0
 #define  DRAW_WATER_LEVEL           1
@@ -293,23 +296,6 @@ enum DIMENSION {
     (y) ^= (x)            \
     (x) ^= (y)            \
     }
-#endif
-
-#if  DEBUG
-#define  BEGIN_TAKE_TIME(action)              \
-    {                                         \
-        cout << (action) << endl;             \
-        t1 = (double)clock()/CLOCKS_PER_SEC;  \
-    }
-
-#define  END_TAKE_TIME()                                          \
-    {                                                             \
-        t2 = (double)clock()/CLOCKS_PER_SEC;                      \
-        cout << "Took " << t2-t1 << " seconds." << endl << endl;  \
-    }
-#else
-#define  BEGIN_TAKE_TIME(action) {}
-#define  END_TAKE_TIME()         {}
 #endif
 
 #endif  /* DEFINITIONS_H */

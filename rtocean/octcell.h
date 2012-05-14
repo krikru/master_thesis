@@ -103,7 +103,7 @@ public:
     void prepare_for_water();
     void create_new_air_neighbors(pfvec neighbor_center, uint dim, bool pos_dir, uint source_level);
 
-    /* Flow */
+    /* Differentiation */
     pftype get_velocity_divergence() const;
     pftype get_water_flow_divergence() const;
 
@@ -316,39 +316,6 @@ inline
 pftype octcell::get_total_fluid_volume() const
 {
     return total_vol_coeff * get_cube_volume();
-}
-
-inline
-void octcell::set_volume_coefficients(pftype water_volume_coefficient, pftype total_volume_coefficient)
-{
-#if  DEBUG
-#if  0
-    cout << endl;
-    cout << "Cell: Old water volume coefficient: " << water_vol_coeff << endl;
-    cout << "Cell: Old total volume coefficient: " << total_vol_coeff << endl;
-    cout << "Cell: Additional water volume coefficient: " << water_volume_coefficient-water_vol_coeff << endl;
-    cout << "Cell: Additional total volume coefficient: " << total_volume_coefficient-total_vol_coeff << endl;
-    cout << "Cell: New water volume coefficient: " << water_volume_coefficient << endl;
-    cout << "Cell: New total volume coefficient: " << total_volume_coefficient << endl;
-#endif
-    if (IS_NAN(water_volume_coefficient)) {
-        throw logic_error("Trying to set a NaN water_volume_coefficient in cell");
-    }
-    if (IS_NAN(total_volume_coefficient)) {
-        throw logic_error("Trying to set a NaN total_volume_coefficient in cell");
-    }
-    if (water_volume_coefficient < 0) {
-        throw logic_error("Trying to set a negative water_volume_coefficient in cell");
-    }
-    if (total_volume_coefficient < 0) {
-        throw logic_error("Trying to set a negative total_volume_coefficient in cell");
-    }
-    if (water_volume_coefficient > total_volume_coefficient) {
-        throw logic_error("Trying to set a higher water_volume_coefficient than total_volume_coefficient in cell");
-    }
-#endif
-    water_vol_coeff = water_volume_coefficient;
-    total_vol_coeff = total_volume_coefficient;
 }
 
 /************

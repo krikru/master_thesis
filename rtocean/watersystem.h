@@ -48,7 +48,7 @@ public:
     bool      is_started() const;
     bool      is_paused() const;
     bool      is_operating() const;
-    void      pause_simulation();
+    void      pause_simulation(bool jump_out_of_main_loop = true);
     void      continue_simulation();
     void      abort_ongoing_operation();
     /* Callback */
@@ -66,7 +66,8 @@ private:
     /* Control */
     bool      started; // If the simulation is running or not
     bool      operating; // If some operation is already using some of the class members
-    bool      pause; // If the simulation should stop or not
+    bool      paused; // If the simulation should stop or not
+    bool      break_main_loop_when_pausing; // If the main loop should break or not when paused
     bool      abort; // If the main loop should quit or not
 
     /* Callback */
@@ -129,7 +130,7 @@ void watersystem::define_water(fvoctree* water, pftype start_time, bool time_sta
         set_time_step(time_step);
     }
     started = false;
-    pause = false;
+    paused = false;
     abort = false;
 }
 
@@ -226,7 +227,7 @@ bool watersystem::is_paused() const
         throw logic_error("Asking if simulation is paused while no water is defined");
     }
 #endif
-    return pause;
+    return paused;
 }
 
 inline
@@ -236,7 +237,7 @@ bool watersystem::is_operating() const
 }
 
 inline
-void watersystem::pause_simulation()
+void watersystem::pause_simulation(bool jump_out_of_main_loop)
 {
 #if  DEBUG
     if (!is_water_defined()) {
@@ -244,11 +245,13 @@ void watersystem::pause_simulation()
     }
     if (!started) {
         throw logic_error("Trying to pause simulation while not started any");
-    }if (pause) {
+    }
+    if (paused) {
         throw logic_error("Trying to pause simulation while already paused");
     }
 #endif
-    pause = true;
+    paused = true;
+    break_main_loop_when_pausing = jump_out_of_main_loop;
 }
 
 inline
@@ -260,13 +263,17 @@ void watersystem::continue_simulation()
     }
     if (!started) {
         throw logic_error("Trying to continue simulation while not started any");
-    }if (!pause) {
+    }if (!paused) {
         throw logic_error("Trying to continue simulation while not paused");
     }
 #endif
-    run_simulation(dt);
+    if (break_main_loop_when_pausing) {
+        paused = false;
+    }
+    else {
+        run_simulation(dt);
+    }
 }
-
 
 inline
 void watersystem::abort_ongoing_operation()

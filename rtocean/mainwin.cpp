@@ -95,7 +95,6 @@ void mainwin::start_simulation()
 
 void mainwin::run_simulation()
 {
-    last_time_letting_system_evolve = clock();
     ui->statusBar->showMessage("Simulating");
     int result = system.run_simulation(SIMULATION_TIME_STEP);
     switch (result) {
@@ -115,14 +114,25 @@ void mainwin::run_simulation()
 
 void mainwin::toggle_pause_simulation()
 {
+#define  BREAK_MAIN_LOOP_WHEN_PAUSING  1
     try
     {
         if (system.is_water_defined()) {
             if (system.is_paused()) {
+#if  BREAK_MAIN_LOOP_WHEN_PAUSING
                 run_simulation();
+#else
+                ui->statusBar->showMessage("Simulating");
+                system.continue_simulation();
+#endif
             }
             else {
-                system.pause_simulation();
+#if  BREAK_MAIN_LOOP_WHEN_PAUSING
+                system.pause_simulation(true);
+#else
+                ui->statusBar->showMessage("Paused");
+                system.pause_simulation(false);
+#endif
             }
         }
     }
@@ -143,10 +153,31 @@ void mainwin::on_actionAbout_rtocean_triggered()
 
 void mainwin::do_events()
 {
-    base_float_vec2<float> time_per_frame();
+    static bool has_been_called_before = true;
+    static pftype time_starting_to_evolve_system;
+    pftype time_starting_to_render = clock();
+    if (has_been_called_before) {
+        /* Finished evolving system*/
+        cout << "Took " << (time_starting_to_render - time_starting_to_evolve_system)/1000.0 << " seconds." << endl;
+    }
 
+    /* Visualize */
+    cout << "Visualizing system..." << endl;
     ui->visualization_vw->updateGL();
+    cout << "Took " << (clock() - time_starting_to_render)/1000.0 << " seconds." << endl;
+
+    /* Let Qt do its stuff */
     QApplication::processEvents(QEventLoop::AllEvents);
+
+    /* Wait until frame has finished */
+    pftype time_loop_finished;
+    do {
+        time_loop_finished = clock();
+    } while (time_loop_finished - time_starting_to_evolve_system < FRAME_MS);
+
+    /* Evolve system again (it will evolve when this function returns) */
+    time_starting_to_evolve_system = time_loop_finished;
+    cout << "Evolving system..." << endl;
 }
 
 void mainwin::do_events(void* mainwin_object)

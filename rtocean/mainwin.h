@@ -49,7 +49,6 @@ private:
 private:
     Ui::mainwin *ui;
     watersystem system;
-    clock_t     last_time_letting_system_evolve;
 };
 
 #endif // MAINWIN_H
