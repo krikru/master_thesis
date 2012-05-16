@@ -42,6 +42,7 @@ public:
     void      set_time(pftype time);
     pftype    get_time_step() const;
     void      set_time_step(pftype time_step);
+    void      set_number_of_time_steps_before_resting(uint number_of_time_steps);
     /* Control */
     void      evolve();
     int       run_simulation(pftype time_step);
@@ -59,9 +60,10 @@ private:
     /* Private member variables */
 
     /* Simulation */
-    fvoctree* w; // Water
-    pftype    t; // Time
-    pftype   dt; // Time step
+    fvoctree* w ; // Water
+    pftype    t ; // Time
+    pftype    dt; // Time step
+    uint      num_time_steps_before_resting; // Ths number of time steps before calling the state_updated_callback function
 
     /* Control */
     bool      started; // If the simulation is running or not
@@ -190,6 +192,17 @@ pftype watersystem::get_time_step() const
     }
 #endif
     return dt;
+}
+
+inline
+void watersystem::set_number_of_time_steps_before_resting(uint number_of_time_steps)
+{
+#if  DEBUG
+    if (number_of_time_steps <= 0) {
+        throw logic_error("Trying to set an invalid number of time steps before resting");
+    }
+#endif
+    num_time_steps_before_resting = number_of_time_steps;
 }
 
 inline

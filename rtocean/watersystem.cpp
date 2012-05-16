@@ -46,7 +46,7 @@ watersystem::watersystem()
 {
     w = 0;
     operating = false;
-
+    num_time_steps_before_resting = 1;
 }
 
 ////////////////////////////////////////////////////////////////
@@ -78,9 +78,16 @@ int watersystem::run_simulation(pftype time_step)
 
     started = true;
     paused = false;
+    uint num_time_steps_until_resting = num_time_steps_before_resting;
     while (!abort && !(paused && break_main_loop_when_pausing)) {
-        /* Process everything that needs to be processed */
-        process_events();
+        if (!num_time_steps_until_resting) {
+            /* Process everything that needs to be processed */
+            process_events();
+            num_time_steps_until_resting = num_time_steps_before_resting - 1;
+        }
+        else {
+            num_time_steps_until_resting--;
+        }
 
         /* Evolve the system */
         if (!paused) {

@@ -110,6 +110,7 @@ void mainwin::start_simulation()
     {
         system.define_water(new fvoctree(0, 0));
         system.set_state_updated_callback(do_events, this);
+        system.set_number_of_time_steps_before_resting(NUM_TIME_STEPS_PER_FRAME);
         ui->visualization_vw->set_system_to_visualize(&system);
         ui->visualization_vw->set_scalar_property_to_visualize(SP_ALPHA);
         run_simulation();
@@ -222,13 +223,13 @@ void mainwin::do_events()
     pftype time_starting_to_render = clock();
     if (has_been_called_before) {
         /* Finished evolving system*/
-        cout << "Took " << (time_starting_to_render - time_starting_to_evolve_system)/1000.0 << " seconds." << endl;
+        cout << "Took " << (time_starting_to_render - time_starting_to_evolve_system)/1000.0 << " seconds." << endl << endl;
     }
 
     /* Visualize */
     cout << "Visualizing system..." << endl;
     ui->visualization_vw->updateGL();
-    cout << "Took " << (clock() - time_starting_to_render)/1000.0 << " seconds." << endl;
+    cout << "Took " << (clock() - time_starting_to_render)/1000.0 << " seconds." << endl << endl;
 
     /* Let Qt do its stuff */
     QApplication::processEvents(QEventLoop::AllEvents);

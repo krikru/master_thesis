@@ -27,7 +27,7 @@
 #define  NUM_DIMENSIONS             2 /* 2 or 3 */
 //#define  NUM_DIRECTIONS             (2*NUM_DIMENSIONS)
 #define  LOGICAL_AXIS_ORDER         1
-#define  NO_ATMOSPHERE              1
+#define  NO_ATMOSPHERE              0
 #define  VACUUM_HAS_PRESSURE        0
 #define  ALLOW_NEGATIVE_PRESSURES   0
 #define  INTERPOLATE_SURFACE_PRESSURE               0
@@ -47,11 +47,17 @@
 /* Simulation parameters */
 //#define  FRAME_MS                   (1000/60)
 #define  FRAME_MS                   0
+//#define  NUM_TIME_STEPS_PER_FRAME   1
+//#define  NUM_TIME_STEPS_PER_FRAME   3
+#define  NUM_TIME_STEPS_PER_FRAME   10
 //#define  SIMULATION_TIME_STEP       (FRAME_MS/1000.0) // [s]
 //#define  SIMULATION_TIME_STEP       .01 // [s]
 //#define  SIMULATION_TIME_STEP       .001 // [s]
 #define  SIMULATION_TIME_STEP       .0003 // [s]
 //#define  SIMULATION_TIME_STEP       .0001 // [s]
+//#define  SIMULATION_TIME_STEP       .000075 // [s]
+//#define  SIMULATION_TIME_STEP       .00003 // [s]
+//#define  SIMULATION_TIME_STEP       .00001 // [s]
 //#define  SIMULATION_TIME_STEP       .000003 // [s]
 //#define  SIMULATION_TIME_STEP       .0 // [s]
 #define  INTERFACE_THICKNESS_IN_CELLS                4.0 // [1] The number of cells that will make out the interface
@@ -60,6 +66,7 @@
 #define  MIN_LOD_LAYER_THICKNESS    1    // [Number of cells]
 #define  SURFACE_HEIGHT             0.65 // [m]
 #define  SURFACE_ACCURACY           0.02 // [m] Maximum size of the surface cells
+//#define  SURFACE_ACCURACY           0.005 // [m] Maximum size of the surface cells
 
 /* Navier-Stokes */
 #define  USE_ARTIFICIAL_COMPRESSIBILITY              1
@@ -79,7 +86,7 @@
 #define  CELL_MARK_LINE_WIDTH       3
 #define  VELOCITY_LINE_WIDTH        LINE_WIDTH
 #define  NUM_LINES_IN_CIRCLES       16
-#define  MARK_CELLS                 1
+#define  MARK_CELLS                 0
 #define  VEL_DIV_SCALE_FACTOR       0.1 // [s/m]
 #define  FLOW_DIV_SCALE_FACTOR      VEL_DIV_SCALE_FACTOR // [s/m]
 #define  DRAW_CELL_FACE_VELOCITIES                   0
@@ -88,7 +95,7 @@
 #define  DRAW_CELL_CUBES            0
 #define  DRAW_PARENT_CELLS          1
 #define  DRAW_ONLY_SURFACE_CELLS    0
-#define  DRAW_WATER_LEVEL           1
+#define  DRAW_WATER_LEVEL           0
 #define  DRAW_NEIGHBOR_CONNECTIONS  0
 #define  VISUALIZE_ONLY_FINEST_NEIGHBOR_CONNECTIONS  1
 #define  MARK_MIDDLE_OF_CONNECTION  0
@@ -182,10 +189,18 @@ const float  VELOCITY_A             = 1;
 // TYPEDEFS
 ////////////////////////////////////////////////////////////////
 
+#if 0
 #if USE_DOUBLE_PRECISION_FOR_PHYSICS
 typedef  base_safe_float<double>  pftype;
 #else
 typedef  base_safe_float<float >  pftype;
+#endif
+#else
+#if USE_DOUBLE_PRECISION_FOR_PHYSICS
+typedef  double                   pftype;
+#else
+typedef  float                    pftype;
+#endif
 #endif
 
 typedef unsigned int uint;
