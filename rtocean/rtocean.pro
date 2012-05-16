@@ -40,12 +40,13 @@ HEADERS  += mainwin.h \
     compile_time.h \
     nlset.h \
     watersystem.h \
-    base_int_vec2.h
+    base_int_vec2.h \
+    base_safe_float.h
 
 FORMS    += mainwin.ui
 
-LIBS += -L"C:\Program1\cygwin\usr\local\lib"
+LIBS += -L"C:/Program1/cygwin/usr/local/lib"
 
 LIBS += -lglut
 
-INCLUDEPATH += "C:\Program1\cygwin\usr\local\include"
+INCLUDEPATH += "C:/Program1/cygwin/usr/local/include"

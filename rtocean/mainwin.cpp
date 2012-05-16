@@ -23,6 +23,9 @@ mainwin::mainwin(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::mainwin)
 {
+    /* Initialize program parameters */
+    initialize_scalar_propery_names();
+
     // Set up user interface
     ui->setupUi(this);
 
@@ -79,6 +82,28 @@ void mainwin::closeEvent(QCloseEvent *event)
     }
 }
 
+void mainwin::keyPressEvent(QKeyEvent *e)
+{
+    try
+    {
+        if (e->key() >= Qt::Key_0 && e->key() <= Qt::Key_9) {
+            int scalar_property_number = e->key() - Qt::Key_0;
+            if (scalar_property_number >= NUM_SCALAR_PROPERTIES) {
+                scalar_property_number = 0;
+            }
+            ui->visualization_vw->set_scalar_property_to_visualize(scalar_property_number);
+            ui->statusBar->showMessage(QString("Visualizing ") + scalar_propery_names[scalar_property_number]);
+            return;
+        }
+
+        /* No action is implicitly defined for this key, pass the event to QMainWindow */
+        QMainWindow::keyPressEvent(e);
+    }
+    catch (std::exception &e) {
+        message_handler::inform_about_exception("mainwin::keyPressEvent()", e, true);
+    }
+}
+
 void mainwin::start_simulation()
 {
     try
@@ -86,11 +111,43 @@ void mainwin::start_simulation()
         system.define_water(new fvoctree(0, 0));
         system.set_state_updated_callback(do_events, this);
         ui->visualization_vw->set_system_to_visualize(&system);
+        ui->visualization_vw->set_scalar_property_to_visualize(SP_ALPHA);
         run_simulation();
     }
     catch (std::exception &e) {
         message_handler::inform_about_exception("mainwin::start_simulation()", e, true);
     }
+}
+
+////////////////////////////////////////////////////////////////
+// PRIVATE METHODS
+////////////////////////////////////////////////////////////////
+
+void mainwin::initialize_scalar_propery_names()
+{
+#if  DEBUG
+    for (uint i = 0; i < NUM_SCALAR_PROPERTIES; i++) {
+        scalar_propery_names[i] = 0;
+    }
+#endif
+
+    scalar_propery_names[SP_NO_SCALAR_PROPERTY      ] = "no scalar property      ";
+    scalar_propery_names[SP_ALPHA                   ] = "alpha                   ";
+    scalar_propery_names[SP_WATER_VOLUME_COEFFICIENT] = "water volume coefficient";
+    scalar_propery_names[SP_AIR_VOLUME_COEFFICIENT  ] = "air volume coefficient  ";
+    scalar_propery_names[SP_TOTAL_VOLUME_COEFFICIENT] = "total volume coefficient";
+    scalar_propery_names[SP_PRESSURE                ] = "pressure                ";
+    scalar_propery_names[SP_PRESSURE_DEVIATION      ] = "pressure deviation      ";
+    scalar_propery_names[SP_VELOCITY_DIVERGENCE     ] = "velocity divergence     ";
+    scalar_propery_names[SP_FLOW_DIVERGENCE         ] = "flow divergence         ";
+
+#if  DEBUG
+    for (uint i = 0; i < NUM_SCALAR_PROPERTIES; i++) {
+        if (!scalar_propery_names[i]) {
+            throw logic_error("Not all scalar property names have been initialized");
+        }
+    }
+#endif
 }
 
 void mainwin::run_simulation()
@@ -112,7 +169,8 @@ void mainwin::run_simulation()
     }
 }
 
-void mainwin::toggle_pause_simulation()
+/* Returns true if the simulation was pauseed, false otherwise */
+bool mainwin::toggle_pause_simulation()
 {
 #define  BREAK_MAIN_LOOP_WHEN_PAUSING  1
     try
@@ -125,6 +183,7 @@ void mainwin::toggle_pause_simulation()
                 ui->statusBar->showMessage("Simulating");
                 system.continue_simulation();
 #endif
+                return false;
             }
             else {
 #if  BREAK_MAIN_LOOP_WHEN_PAUSING
@@ -133,12 +192,17 @@ void mainwin::toggle_pause_simulation()
                 ui->statusBar->showMessage("Paused");
                 system.pause_simulation(false);
 #endif
+                return true;
             }
         }
     }
     catch (std::exception &e) {
         message_handler::inform_about_exception("mainwin::start_simulation()", e, true);
     }
+#if  DEBUG
+    LINE_UNREACHABLE();
+#endif
+    return false; // Only to prevent warning
 }
 
 void mainwin::on_actionAbout_rtocean_triggered()

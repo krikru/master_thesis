@@ -13,6 +13,23 @@
 #include "watersystem.h"
 
 ////////////////////////////////////////////////////////////////
+// ENUMS
+////////////////////////////////////////////////////////////////
+
+enum SCALAR_PROPERTY {
+    SP_NO_SCALAR_PROPERTY,
+    SP_ALPHA,
+    SP_WATER_VOLUME_COEFFICIENT,
+    SP_AIR_VOLUME_COEFFICIENT,
+    SP_TOTAL_VOLUME_COEFFICIENT,
+    SP_PRESSURE,
+    SP_PRESSURE_DEVIATION,
+    SP_VELOCITY_DIVERGENCE,
+    SP_FLOW_DIVERGENCE,
+    NUM_SCALAR_PROPERTIES
+};
+
+////////////////////////////////////////////////////////////////
 // CLASS DEFINITION
 ////////////////////////////////////////////////////////////////
 
@@ -34,6 +51,7 @@ signals:
 public slots:
 
 public:
+    void set_scalar_property_to_visualize(uint property);
 
 private:
     void visualize_fvoctree(const fvoctree *tree);
@@ -43,6 +61,8 @@ private:
     void draw_pressure                    (const octcell* cell);
     void draw_pressure_deviation          (const octcell* cell);
     void draw_water_vol_coeff             (const octcell *cell);
+    void draw_air_vol_coeff               (const octcell* cell);
+    void draw_total_vol_coeff             (const octcell* cell);
     void draw_alpha                       (const octcell *cell);
     void draw_velocity_divergence         (const octcell *cell);
     void draw_flow_divergence             (const octcell *cell);
@@ -57,6 +77,8 @@ private:
     void draw_pressure_recursively                        (const octcell* cell);
     void draw_pressure_deviations_recursively             (const octcell* cell);
     void draw_water_vol_coeff_recursively                 (const octcell *cell);
+    void draw_air_vol_coeff_recursively                   (const octcell *cell);
+    void draw_total_vol_coeff_recursively                 (const octcell *cell);
     void draw_alpha_recursively                           (const octcell *cell);
     void draw_velocity_divergence_recursively             (const octcell *cell);
     void draw_flow_divergence_recursively                 (const octcell *cell);
@@ -85,12 +107,15 @@ private:
     /* test functions (remove when finished testing) */
 
 private:
-    /* Private member variables */
+    /* Private non-static member variables */
     GLdouble t;
     int gl_width;
     int gl_height;
     watersystem* system_to_visualize;
+    uint scalar_property_to_visualize;
 
+private:
+    /* Private static member variables */
     /* Colors */
     static GLfloat* NEIGHBOR_CONNECTION_R;
     static GLfloat* NEIGHBOR_CONNECTION_G;

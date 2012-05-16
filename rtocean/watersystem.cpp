@@ -5,6 +5,14 @@
 // Own includes
 #include "watersystem.h"
 
+#if  DEBUG
+#include <iostream>
+#include <iomanip>
+using std::cout;
+using std::endl;
+using std::setprecision;
+#endif
+
 ////////////////////////////////////////////////////////////////
 // MACROS
 ////////////////////////////////////////////////////////////////
@@ -305,9 +313,9 @@ void watersystem::advect_cell_properties_recursivelly(octcell* cell)
             cell->total_vol_coeff + d_total_vol_coeff > -LIMIT) {
         no_fluid_left = true;
     }
-    if ((cell->water_vol_coeff + d_water_vol_coeff > cell->total_vol_coeff + d_total_vol_coeff &&
+    if (((cell->water_vol_coeff + d_water_vol_coeff) > (cell->total_vol_coeff + d_total_vol_coeff) &&
          (cell->water_vol_coeff + d_water_vol_coeff) - (cell->total_vol_coeff + d_total_vol_coeff) < LIMIT) ||
-            (cell->water_vol_coeff + d_water_vol_coeff < cell->total_vol_coeff + d_total_vol_coeff &&
+            ((cell->water_vol_coeff + d_water_vol_coeff) < (cell->total_vol_coeff + d_total_vol_coeff) &&
              (cell->water_vol_coeff + d_water_vol_coeff) - (cell->total_vol_coeff + d_total_vol_coeff) > -LIMIT)) {
         okay_to_decrease_water = true;
     }
@@ -376,7 +384,7 @@ void watersystem::advect_cell_properties_recursivelly(octcell* cell)
                                       0);
 #endif
     }
-    if (okay_to_decrease_water) {
+    else if (okay_to_decrease_water) {
         cell->set_volume_coefficients(cell->total_vol_coeff + d_total_vol_coeff,
                                       cell->total_vol_coeff + d_total_vol_coeff);
     }

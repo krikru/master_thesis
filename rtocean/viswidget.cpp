@@ -44,6 +44,7 @@ viswidget::viswidget(QWidget *parent) :
 {
     /* Init member variables */
     system_to_visualize = 0;
+    scalar_property_to_visualize = 0;
 
     init_neighbor_connection_colors();
 }
@@ -116,6 +117,16 @@ void viswidget::resizeGL(int w, int h)
 void viswidget::set_system_to_visualize(watersystem* system)
 {
     system_to_visualize = system;
+}
+
+void viswidget::set_scalar_property_to_visualize(uint property)
+{
+#if  DEBUG
+    if (property < 0 || property >= NUM_SCALAR_PROPERTIES) {
+        throw out_of_range("Trying to set scalar property to visualize to invalid value");
+    }
+#endif
+    scalar_property_to_visualize = property;
 }
 
 ////////////////////////////////////////////////////////////////
@@ -210,13 +221,92 @@ void viswidget::draw_water_vol_coeff(const octcell* cell)
     /*
      * In rising order: Blue, cyan, green, yellow, red
      */
-    const uint NUM_TRANSITIONS = 4;
+    const uint NUM_TRANSITIONS = 5;
     const color3 colors[] = {color3(0, 0, 1),  // 0, Blue
                              color3(0, 1, 1),  // 1, Cyan
                              color3(0, 1, 0),  // 2, Green
                              color3(1, 1, 0),  // 3, Yellow
-                             color3(1, 0, 0)}; // 4, Red
-    pftype q = NUM_TRANSITIONS * cell->water_vol_coeff * 0.5;
+                             color3(1, 0, 0),  // 4, Red
+                             color3(1, 0, 1)}; // 5, Purple
+    pftype q = (NUM_TRANSITIONS-1) * cell->water_vol_coeff;
+    q = MIN(MAX(q, 0), NUM_TRANSITIONS);
+    uint idx1 = uint(q);
+    uint idx2 = MIN(idx1 + 1, NUM_TRANSITIONS);
+    q -= idx1;
+    color3 c = (1-q)*colors[idx1] + q*colors[idx2];
+    quick_set_color(c[0], c[1], c[2], 1);
+
+#if    NUM_DIMENSIONS == 2
+    /* Vertices */
+    pfvec p00 = cell->r;
+    pfvec p01 = p00;
+    p01[DIM_X] += cell->s;
+    pfvec p10 = p00;
+    p10[DIM_Y] += cell->s;
+    pfvec p11 = p10 + p01 - p00;
+
+    /* Draw triangle*/
+    quick_draw_triangle(p00, p01, p10);
+    quick_draw_triangle(p11, p10, p01);
+
+#elif  NUM_DIMENSIONS == 3
+    /* Don't draw */
+#endif
+}
+
+void viswidget::draw_air_vol_coeff(const octcell* cell)
+{
+    /* Calculate color */
+    /*
+     * In rising order: Blue, cyan, green, yellow, red
+     */
+    const uint NUM_TRANSITIONS = 5;
+    const color3 colors[] = {color3(0, 0, 1),  // 0, Blue
+                             color3(0, 1, 1),  // 1, Cyan
+                             color3(0, 1, 0),  // 2, Green
+                             color3(1, 1, 0),  // 3, Yellow
+                             color3(1, 0, 0),  // 4, Red
+                             color3(1, 0, 1)}; // 5, Purple
+    pftype q = (NUM_TRANSITIONS-1) * cell->get_air_volume_coefficient();
+    q = MIN(MAX(q, 0), NUM_TRANSITIONS);
+    uint idx1 = uint(q);
+    uint idx2 = MIN(idx1 + 1, NUM_TRANSITIONS);
+    q -= idx1;
+    color3 c = (1-q)*colors[idx1] + q*colors[idx2];
+    quick_set_color(c[0], c[1], c[2], 1);
+
+#if    NUM_DIMENSIONS == 2
+    /* Vertices */
+    pfvec p00 = cell->r;
+    pfvec p01 = p00;
+    p01[DIM_X] += cell->s;
+    pfvec p10 = p00;
+    p10[DIM_Y] += cell->s;
+    pfvec p11 = p10 + p01 - p00;
+
+    /* Draw triangle*/
+    quick_draw_triangle(p00, p01, p10);
+    quick_draw_triangle(p11, p10, p01);
+
+#elif  NUM_DIMENSIONS == 3
+    /* Don't draw */
+#endif
+}
+
+void viswidget::draw_total_vol_coeff(const octcell* cell)
+{
+    /* Calculate color */
+    /*
+     * In rising order: Blue, cyan, green, yellow, red
+     */
+    const uint NUM_TRANSITIONS = 5;
+    const color3 colors[] = {color3(0, 0, 1),  // 0, Blue
+                             color3(0, 1, 1),  // 1, Cyan
+                             color3(0, 1, 0),  // 2, Green
+                             color3(1, 1, 0),  // 3, Yellow
+                             color3(1, 0, 0),  // 4, Red
+                             color3(1, 0, 1)}; // 5, Purple
+    pftype q = (NUM_TRANSITIONS-1) * cell->total_vol_coeff;
     q = MIN(MAX(q, 0), NUM_TRANSITIONS);
     uint idx1 = uint(q);
     uint idx2 = MIN(idx1 + 1, NUM_TRANSITIONS);
@@ -573,6 +663,34 @@ void viswidget::draw_water_vol_coeff_recursively(const octcell* cell)
     }
 }
 
+void viswidget::draw_air_vol_coeff_recursively(const octcell* cell)
+{
+    if (cell->is_leaf()) {
+        draw_air_vol_coeff(cell);
+        return;
+    }
+
+    for (uint i = 0; i < octcell::MAX_NUM_CHILDREN; i++) {
+        if (cell->get_child(i)) {
+            draw_air_vol_coeff_recursively(cell->get_child(i));
+        }
+    }
+}
+
+void viswidget::draw_total_vol_coeff_recursively(const octcell* cell)
+{
+    if (cell->is_leaf()) {
+        draw_total_vol_coeff(cell);
+        return;
+    }
+
+    for (uint i = 0; i < octcell::MAX_NUM_CHILDREN; i++) {
+        if (cell->get_child(i)) {
+            draw_total_vol_coeff_recursively(cell->get_child(i));
+        }
+    }
+}
+
 void viswidget::draw_alpha_recursively(const octcell* cell)
 {
     if (cell->is_leaf()) {
@@ -846,30 +964,39 @@ void viswidget::visualize_fvoctree(const fvoctree *tree)
         return;
     }
     glPushAttrib(GL_ALL_ATTRIB_BITS);
-#if  DRAW_PRESSURE
-    set_up_model_view_matrix(SCALAR_PROPERTIES_SCALING);
-    draw_pressure_recursively(tree->root);
+    if (scalar_property_to_visualize != SP_NO_SCALAR_PROPERTY) {
+        set_up_model_view_matrix(SCALAR_PROPERTIES_SCALING);
+        switch (scalar_property_to_visualize) {
+        case (SP_ALPHA):
+            draw_alpha_recursively(tree->root);
+            break;
+        case (SP_WATER_VOLUME_COEFFICIENT):
+            draw_water_vol_coeff_recursively(tree->root);
+            break;
+        case SP_AIR_VOLUME_COEFFICIENT:
+            draw_air_vol_coeff_recursively(tree->root);
+            break;
+        case SP_TOTAL_VOLUME_COEFFICIENT:
+            draw_total_vol_coeff_recursively(tree->root);
+            break;
+        case (SP_PRESSURE):
+            draw_pressure_recursively(tree->root);
+            break;
+        case (SP_PRESSURE_DEVIATION):
+            draw_pressure_deviations_recursively(tree->root);
+            break;
+        case (SP_VELOCITY_DIVERGENCE):
+            draw_velocity_divergence_recursively(tree->root);
+            break;
+        case (SP_FLOW_DIVERGENCE):
+            draw_flow_divergence_recursively(tree->root);
+            break;
+#if DEBUG
+        default:
+            throw logic_error("Don't recognize this scalar property index");
 #endif
-#if  DRAW_PRESSURE_DEVIATION
-    set_up_model_view_matrix(SCALAR_PROPERTIES_SCALING);
-    draw_pressure_deviations_recursively(tree->root);
-#endif
-#if  DRAW_WATER_VOL_COEFF
-    set_up_model_view_matrix(SCALAR_PROPERTIES_SCALING);
-    draw_water_vol_coeff_recursively(tree->root);
-#endif
-#if  DRAW_ALPHA
-    set_up_model_view_matrix(SCALAR_PROPERTIES_SCALING);
-    draw_alpha_recursively(tree->root);
-#endif
-#if  DRAW_VELOCITY_DIVERGENCE
-    set_up_model_view_matrix(SCALAR_PROPERTIES_SCALING);
-    draw_velocity_divergence_recursively(tree->root);
-#endif
-#if  DRAW_FLOW_DIVERGENCE
-    set_up_model_view_matrix(SCALAR_PROPERTIES_SCALING);
-    draw_flow_divergence_recursively(tree->root);
-#endif
+        }
+    }
 #if  DRAW_WATER_LEVEL
     set_up_model_view_matrix();
     set_line_style(LINE_WIDTH, SURFACE_R, SURFACE_G, SURFACE_B, SURFACE_A);
@@ -938,9 +1065,11 @@ void viswidget::init_neighbor_connection_colors()
     NEIGHBOR_CONNECTION_G = new GLfloat[NUM_NEIGHBOR_LISTS];
     NEIGHBOR_CONNECTION_B = new GLfloat[NUM_NEIGHBOR_LISTS];
     NEIGHBOR_CONNECTION_A = new GLfloat[NUM_NEIGHBOR_LISTS];
+#if  DEBUG
     for (uint i = 0; i < NUM_NEIGHBOR_LISTS; i++) {
         NEIGHBOR_CONNECTION_R[i] = NEIGHBOR_CONNECTION_G[i] = NEIGHBOR_CONNECTION_B[i] = NEIGHBOR_CONNECTION_A[i] = 0;
     }
+#endif
 
     NEIGHBOR_CONNECTION_R[NL_LOWER_LEVEL_OF_DETAIL_NON_LEAF] = LOWER_LOD_NON_LEAF_NEIGHBOR_CONNECTION_R;
     NEIGHBOR_CONNECTION_G[NL_LOWER_LEVEL_OF_DETAIL_NON_LEAF] = LOWER_LOD_NON_LEAF_NEIGHBOR_CONNECTION_G;

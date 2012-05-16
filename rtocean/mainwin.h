@@ -33,15 +33,17 @@ public:
 private slots:
     // Overload the close event slot
     void closeEvent(QCloseEvent *event);
+    void keyPressEvent(QKeyEvent *e);
 
     void start_simulation();
-    void toggle_pause_simulation();
+    bool toggle_pause_simulation();
 
     // Slots connected to UI items
     void on_actionAbout_rtocean_triggered();
 
 private:
     /* Private methods */
+    void initialize_scalar_propery_names();
     void run_simulation();
     void do_events();
     static void do_events(void* mainwin_object);
@@ -49,6 +51,7 @@ private:
 private:
     Ui::mainwin *ui;
     watersystem system;
+    char const *scalar_propery_names[NUM_SCALAR_PROPERTIES];
 };
 
 #endif // MAINWIN_H

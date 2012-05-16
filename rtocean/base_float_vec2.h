@@ -8,6 +8,7 @@
 #include <stdexcept>
 //using std::exception;
 using std::domain_error;
+using std::out_of_range;
 //using std::invalid_argument;
 
 /* Own includes */
@@ -25,11 +26,11 @@ public:
     T e[2];
 
     /* Constructors */
-    base_float_vec2<T>();                    // Default constructor
-    base_float_vec2<T>(const ivec2& source); // Conversion constructor
-    base_float_vec2<T>(T e0, T e1);          // Other constructor
+    base_float_vec2<T>();                 // Default constructor
+    base_float_vec2<T>(const ivec2& rhs); // Conversion constructor
+    base_float_vec2<T>(T e0, T e1);       // Other constructor
 
-    //base_float_vec2<T>& operator =(const ivec2&); // Conversion
+    base_float_vec2<T>& operator =(const ivec2&); // Conversion
     base_float_vec2<T>& operator+=(const base_float_vec2<T>&);
     base_float_vec2<T>& operator-=(const base_float_vec2<T>&);
     //base_float_vec2<T>& operator&=(const base_float_vec2<T>&); // Yet to define
@@ -67,7 +68,7 @@ typedef  base_float_vec2<double>  dvec2;
  ****************************************************************/
 
 template<typename T, typename T2>
-base_float_vec2<T> operator* (const T2, const base_float_vec2<T>&);
+base_float_vec2<T> operator* (const T2&, const base_float_vec2<T>&);
 
 /****************************************************************
  * Public functions
@@ -97,7 +98,6 @@ base_float_vec2<T>::base_float_vec2(T e0, T e1)
     e[1] = e1;
 }
 
-#if  0
 template<typename T>
 inline
 base_float_vec2<T>& base_float_vec2<T>::operator=(const ivec2& rhs)
@@ -105,7 +105,6 @@ base_float_vec2<T>& base_float_vec2<T>::operator=(const ivec2& rhs)
     for (int i = 0; i < 2; i++) e[i] = T(rhs.e[i]);
     return *this;
 }
-#endif
 
 template<typename T>
 inline
@@ -146,6 +145,14 @@ template<typename T>
 inline
 T& base_float_vec2<T>::operator[](const int i)
 {
+#if  DEBUG
+    if (i < 0) {
+        throw out_of_range("Trying to access a base_float_vec2 element with negative index");
+    }
+    else if (i >= 2) {
+        throw out_of_range("Trying to access a base_float_vec2 element with to high index");
+    }
+#endif
     return e[i];
 }
 
@@ -153,6 +160,14 @@ template<typename T>
 inline
 const T& base_float_vec2<T>::operator[](const int i) const
 {
+#if  DEBUG
+    if (i < 0) {
+        throw out_of_range("Trying to access a base_float_vec2 element with negative index");
+    }
+    else if (i >= 2) {
+        throw out_of_range("Trying to access a base_float_vec2 element with to high index");
+    }
+#endif
     return e[i];
 }
 
@@ -290,7 +305,7 @@ base_float_vec2<T> base_float_vec2<T>::random_normalized_orthogonal_vector() con
 
 template<typename T, typename T2>
 inline
-base_float_vec2<T> operator*(const T2 lhs, const base_float_vec2<T>& rhs)
+base_float_vec2<T> operator*(const T2& lhs, const base_float_vec2<T>& rhs)
 {
     return base_float_vec2<T>(T(lhs)*rhs.e[0], T(lhs)*rhs.e[1]);
 }

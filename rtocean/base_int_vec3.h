@@ -8,6 +8,7 @@
 #include <stdexcept>
 //using std::exception;
 using std::domain_error;
+using std::out_of_range;
 //using std::invalid_argument;
 
 /****************************************************************
@@ -29,8 +30,8 @@ public:
     //base_int_vec3<T>& operator&=(const base_int_vec3<T>&); // Yet to define
     base_int_vec3<T>& operator*=(const T                );
     base_int_vec3<T>& operator/=(const T                );
-    T&                operator[](const T)      ;
-    const T&          operator[](const T) const;
+    T&                operator[](const int)      ;
+    const T&          operator[](const int) const;
 
     base_int_vec3<T> operator-() const;
 
@@ -51,7 +52,7 @@ typedef  base_int_vec3<int>  ivec3;
  ****************************************************************/
 
 template<typename T>
-base_int_vec3<T> operator* (const T, const base_int_vec3<T>&);
+base_int_vec3<T> operator* (const T&, const base_int_vec3<T>&);
 
 /****************************************************************
  * Public functions
@@ -111,15 +112,31 @@ base_int_vec3<T>& base_int_vec3<T>::operator/=(const T den)
 
 template<typename T>
 inline
-T& base_int_vec3<T>::operator[](const T i)
+T& base_int_vec3<T>::operator[](const int i)
 {
+#if  DEBUG
+    if (i < 0) {
+        throw out_of_range("Trying to access base_int_vec3 element with negative index");
+    }
+    else if (i >= 3) {
+        throw out_of_range("Trying to access base_int_vec3 element with to high index");
+    }
+#endif
     return e[i];
 }
 
 template<typename T>
 inline
-const T& base_int_vec3<T>::operator[](const T i) const
+const T& base_int_vec3<T>::operator[](const int i) const
 {
+#if  DEBUG
+    if (i < 0) {
+        throw out_of_range("Trying to access base_int_vec3 element with negative index");
+    }
+    else if (i >= 3) {
+        throw out_of_range("Trying to access base_int_vec3 element with to high index");
+    }
+#endif
     return e[i];
 }
 
@@ -196,7 +213,7 @@ T base_int_vec3<T>::sqr_length() const
 
 template<typename T>
 inline
-base_int_vec3<T> operator*(const T lhs, const base_int_vec3<T>& rhs)
+base_int_vec3<T> operator*(const T& lhs, const base_int_vec3<T>& rhs)
 {
     return base_int_vec3<T>(lhs*rhs.e[0], lhs*rhs.e[1], lhs*rhs.e[2]);
 }

@@ -8,6 +8,7 @@
 #include <stdexcept>
 //using std::exception;
 using std::domain_error;
+using std::out_of_range;
 //using std::invalid_argument;
 
 /* Own includes */
@@ -65,7 +66,7 @@ typedef  base_float_vec3<double>  dvec3;
  ****************************************************************/
 
 template<typename T, typename T2>
-base_float_vec3<T> operator* (const T2, const base_float_vec3<T>&);
+base_float_vec3<T> operator* (const T2&, const base_float_vec3<T>&);
 
 /****************************************************************
  * Public functions
@@ -144,6 +145,14 @@ template<typename T>
 inline
 T& base_float_vec3<T>::operator[](const int i)
 {
+#if  DEBUG
+    if (i < 0) {
+        throw out_of_range("Trying to access base_float_vec3 element with negative index");
+    }
+    else if (i >= 3) {
+        throw out_of_range("Trying to access base_float_vec3 element with to high index");
+    }
+#endif
     return e[i];
 }
 
@@ -151,6 +160,14 @@ template<typename T>
 inline
 const T& base_float_vec3<T>::operator[](const int i) const
 {
+#if  DEBUG
+    if (i < 0) {
+        throw out_of_range("Trying to access base_float_vec3 element with negative index");
+    }
+    else if (i >= 3) {
+        throw out_of_range("Trying to access base_float_vec3 element with to high index");
+    }
+#endif
     return e[i];
 }
 
@@ -298,7 +315,7 @@ base_float_vec3<T> base_float_vec3<T>::random_normalized_orthogonal_vector() con
 
 template<typename T, typename T2>
 inline
-base_float_vec3<T> operator*(const T2 lhs, const base_float_vec3<T>& rhs)
+base_float_vec3<T> operator*(const T2& lhs, const base_float_vec3<T>& rhs)
 {
     return base_float_vec3<T>(T(lhs)*rhs.e[0], T(lhs)*rhs.e[1], T(lhs)*rhs.e[2]);
 }

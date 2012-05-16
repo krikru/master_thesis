@@ -5,7 +5,11 @@
 // INCLUDE FILES
 ////////////////////////////////////////////////////////////////
 
+/* Standard includes */
 #include <stdint.h>
+
+/* Own includes */
+#include "base_safe_float.h"
 
 ////////////////////////////////////////////////////////////////
 // COMPILER DEFINITIONS
@@ -76,12 +80,6 @@
 #define  VELOCITY_LINE_WIDTH        LINE_WIDTH
 #define  NUM_LINES_IN_CIRCLES       16
 #define  MARK_CELLS                 1
-#define  DRAW_PRESSURE              0
-#define  DRAW_PRESSURE_DEVIATION    0
-#define  DRAW_WATER_VOL_COEFF       0
-#define  DRAW_ALPHA                 1
-#define  DRAW_VELOCITY_DIVERGENCE   0
-#define  DRAW_FLOW_DIVERGENCE       0
 #define  VEL_DIV_SCALE_FACTOR       0.1 // [s/m]
 #define  FLOW_DIV_SCALE_FACTOR      VEL_DIV_SCALE_FACTOR // [s/m]
 #define  DRAW_CELL_FACE_VELOCITIES                   0
@@ -185,9 +183,9 @@ const float  VELOCITY_A             = 1;
 ////////////////////////////////////////////////////////////////
 
 #if USE_DOUBLE_PRECISION_FOR_PHYSICS
-typedef  double                  pftype;
+typedef  base_safe_float<double>  pftype;
 #else
-typedef  float                   pftype;
+typedef  base_safe_float<float >  pftype;
 #endif
 
 typedef unsigned int uint;
@@ -277,12 +275,18 @@ enum DIMENSION {
 
 // TODO: Make some of these inline functions instead
 
+/* Mathematical macros */
 #define  ABS(x)     ((x) >= 0 ? (x) : -(x))
 #define  MIN(x, y)  ((y) < (x) ? (y) : (x))
 #define  MAX(x, y)  ((y) > (x) ? (y) : (x))
 #define  SQUARE(x)  ((x) * (x))
 #define  IS_NAN(x)  ((x) != (x))
-#define  NO_OP()    {float f = 0; if (f != 0) exit(0);}
+
+/* Miscellaneous macros */
+#define  NO_OP()                  {float f = 0; if (f != 0) exit(0);}
+#define  MAKE_STRING(x)           #x
+#define  LINE_UNREACHABLE2(line)  {throw logic_error("Should not be able to reach this line: line " MAKE_STRING(line) " in " __FILE__);}
+#define  LINE_UNREACHABLE()       LINE_UNREACHABLE2(__LINE__)
 
 #define  TEMP_SWAP(x, y, temp) { \
     (temp) = (x);                \
