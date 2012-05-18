@@ -45,11 +45,11 @@
 //#define  ALPHA_ADVECTION_SCHEME     HIGH_CONTRAST_SCHEME
 
 /* Simulation parameters */
-//#define  FRAME_MS                   (1000/60)
-#define  FRAME_MS                   0
-//#define  NUM_TIME_STEPS_PER_FRAME   1
-//#define  NUM_TIME_STEPS_PER_FRAME   3
-#define  NUM_TIME_STEPS_PER_FRAME   10
+//#define  FRAME_MS                   (1000/60) // [ms]
+#define  FRAME_MS                   0 // [ms]
+//#define  NUM_TIME_STEPS_PER_FRAME   1 // [1]
+//#define  NUM_TIME_STEPS_PER_FRAME   3 // [1]
+#define  NUM_TIME_STEPS_PER_FRAME   10 // [1]
 //#define  SIMULATION_TIME_STEP       (FRAME_MS/1000.0) // [s]
 //#define  SIMULATION_TIME_STEP       .01 // [s]
 //#define  SIMULATION_TIME_STEP       .001 // [s]
