@@ -15,6 +15,13 @@
 % "--": En-dash, used for number ranges, to mark off nested clausees and phrases (use)
 % "---": Em-dash, used to mark off nested clausees and phrases (don't use)
 
+% Escape characters
+%\& \% \$ \# \_ \{ \}
+%\textasciitilde  = ~
+%\textasciicircum = ^
+%\textbackslash   = \
+
+
 % % % % % % %
 % PREAMBLE  %
 % % % % % % %
@@ -194,6 +201,10 @@ For additional information about the Linköping University Electronic Press and 
 
 There are both surface trackibng methods and surface capturing methods.
 
+\begin{itemize}
+    \item Lecture: \textit{\href{http://www.ims.nus.edu.sg/Programs/fluiddynamic/files/Lecture1-basics.pdf}{Moving Interface Problems: Methods \& Applications Tutorial Lecture I}}
+\end{itemize}
+
 \section{Level set method}
 
 \subsection{Marching cubes}
@@ -201,6 +212,7 @@ There are both surface trackibng methods and surface capturing methods.
 \section{Volume of fluid method}
 
 \begin{itemize}
+    \item Reference: \textit{\href{http://pages.csam.montclair.edu/~yecko/icodes/HirtNichols_Surfer_JCP1981.pdf}{Volume of Fluid (VOF) Method for the Dynamics of Free Boundaries}}
     \item Comparsion: \textit{\href{http://capfluidicslit.mme.pdx.edu/reference/Numerics/Gopala_ChemEngJ2008_VOFMethodsFreeSurfaceFlow.pdf}{Volume of fluid methods for immiscible-fluid and free-surface flows}}
 \end{itemize}
 
@@ -209,8 +221,6 @@ There are both surface trackibng methods and surface capturing methods.
 \begin{itemize}
     \item Explanation: \textit{\href{http://www.flow3d.com/cfd-101/cfd-101-VOF.html}{VOF (Volume of Fluid) - What's in a Name?}}
 \end{itemize}
-
-
 
 \subsection{Interface reconstruction}
 %\section{Internal alpha distribution}
@@ -241,6 +251,27 @@ More:
     \item Normalised Variable Diagram (NVD)
     \item \textit{\href{http://warminski.pollub.plwww.ptmts.org.pl/Waclaw-Koron-2-08.pdf}{Comparison of CICSAM and HRIC High-resolution Schemes for Interface Capturing}}
     \item \textit{\href{http://proceedings.fyper.com/eccomascfd2006/documents/85.pdf}{MODELING OF THE WAVE BREAKING WITH CICSAM AND HRIC HIGH-RESOLUTION SCHEMES}}
+\end{itemize}
+
+\subsubsection{Multidimensional Universal Limiter with Explicit Solution (MULES)}
+
+See \textit{OpenFOAM-1.5.x/src/finiteVolume/fvMatrices/solvers/MULES/MULES.H} for details
+
+% Escape characters
+%\& \% \$ \# \_ \{ \}
+%\textasciitilde  = ~
+%\textasciicircum = ^
+%\textbackslash   = \
+
+\begin{itemize}
+    \item Described here: \textit{\href{http://link.libris.kb.se/sfxliub?sid=?url_ver=Z39.88-2004&rfr_id=info:sid/bibl.liu.se\%3Axerxes+\%28+PubMed+LiU\%29&rft.genre=article&rft_val_fmt=info\%3Aofi\%2Ffmt\%3Akev\%3Amtx\%3Ajournal&rft.issn=15393755&rft.date=2009&rft.jtitle=Phys+Rev+E+Stat+Nonlin+Soft+Matter+Phys&rft.volume=79&rft.issue=3+Pt+2&rft.spage=036306&rft.atitle=Drop+impact+onto+a+liquid+layer+of+finite+thickness+\%3A+dynamics+of+the+cavity+evolution+&rft.aulast=Berberovi\%C4\%87&rft.aufirst=Edin}{Drop impact onto a liquid layer of finite thickness: Dynamics of the cavity evolution}}
+    \item An improvement for multiple phases: \textit{\href{http://www.mathematik.uni-ulm.de/numerik/staff/urban/reports/ECCOMASCFD2010paperfinal.pdf}{A Coupled Pressure Based Solution Algorithm Based on the Volume-Of-Fluid Approach for Two or More Immiscible Fluids}}
+\end{itemize}
+
+\subsubsection{SOLA-VOF}
+
+\begin{itemize}
+    \item Reference: \textit{\href{http://www.ewp.rpi.edu/hartford/~ernesto/Su2012/CFD/Readings/SOLA-VOF-1980-P1.pdf}{SOLA-VOF: A Solution Algorithm for Transient Fluid Flow with Multiple Free Boundaries}}
 \end{itemize}
 
 \subsubsection{Hyper-C flux limiter}
@@ -302,6 +333,10 @@ More:
 \end{itemize}
 
 \section{Coupled Level Set/Volume of Fluid  method}
+
+\begin{itemize}
+    \item Reference: \textit{\href{http://pages.csam.montclair.edu/~yecko/icodes/SussmanPuckett_LevelSetVOF.pdf}{A Coupled Level Set and Volume-of-Fluid Method for Computing 3D and Axisymmetric Incompressible Two-Phase Flows}}
+\end{itemize}
 
 \chapter{Interaction with moving objects}
 

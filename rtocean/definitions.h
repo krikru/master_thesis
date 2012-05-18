@@ -27,7 +27,7 @@
 #define  NUM_DIMENSIONS             2 /* 2 or 3 */
 //#define  NUM_DIRECTIONS             (2*NUM_DIMENSIONS)
 #define  LOGICAL_AXIS_ORDER         1
-#define  NO_ATMOSPHERE              0
+#define  NO_ATMOSPHERE              1
 #define  VACUUM_HAS_PRESSURE        0
 #define  ALLOW_NEGATIVE_PRESSURES   0
 #define  INTERPOLATE_SURFACE_PRESSURE               0
