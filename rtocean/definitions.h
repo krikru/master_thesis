@@ -60,7 +60,6 @@
 //#define  SIMULATION_TIME_STEP       .00001 // [s]
 //#define  SIMULATION_TIME_STEP       .000003 // [s]
 //#define  SIMULATION_TIME_STEP       .0 // [s]
-#define  INTERFACE_THICKNESS_IN_CELLS                4.0 // [1] The number of cells that will make out the interface
 
 /* Grid */
 #define  MIN_LOD_LAYER_THICKNESS    1    // [Number of cells]
@@ -79,6 +78,8 @@
 #define  NORMAL_WATER_DENSITY                        P_WATER_DENSITY_AT_1_ATM
 
 /* VIsualization */
+//#define  DEFAULT_SCALAR_PROPERTY_TO_VISUALIZE        SP_ALPHA
+#define  DEFAULT_SCALAR_PROPERTY_TO_VISUALIZE        SP_WATER_VOLUME_COEFFICIENT
 #define  TEST_DEPTH                 1
 #define  DRAW_CHILD_CELLS_FIRST_IF_DEPTH_TESTING     1
 #define  DRAW_SMOOTH_LINES          0
@@ -90,7 +91,7 @@
 #define  VEL_DIV_SCALE_FACTOR       0.1 // [s/m]
 #define  FLOW_DIV_SCALE_FACTOR      VEL_DIV_SCALE_FACTOR // [s/m]
 #define  DRAW_CELL_FACE_VELOCITIES                   0
-#define  DRAW_CELL_CENTER_VELOCITIES                 0
+#define  DRAW_CELL_CENTER_VELOCITIES                 1
 #define  VEL_TO_ARROW_LENGTH_FACTOR 0.1
 #define  DRAW_CELL_CUBES            0
 #define  DRAW_PARENT_CELLS          1

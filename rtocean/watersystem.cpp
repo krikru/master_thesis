@@ -174,7 +174,7 @@ void watersystem::calculate_cell_face_properties_recursivelly(octcell* cell)
             guessed_total_in_volume_flux -= node->v.n->total_vol_coeff * node->v.vel_out * node->v.cf_area;
         }
         else {
-            pftype face_total_vol_coeff = cell->total_vol_coeff; // [1]
+            pftype face_total_vol_coeff = cell->total_vol_coeff; // [1] Will depend on which scheme that is used to advect total volume (currently UPWIND)
             pftype face_total_vol_fluxed = face_total_vol_coeff * node->v.vel_out * node->v.cf_area * dt; // [m^3]
             v += face_total_vol_fluxed/cell->get_total_fluid_volume();
         }

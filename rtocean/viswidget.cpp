@@ -215,6 +215,56 @@ void viswidget::draw_pressure_deviation(const octcell *cell)
 #endif
 }
 
+void viswidget::draw_alpha(const octcell* cell)
+{
+#if  DEBUG
+    if (cell->water_vol_coeff < 0 || cell->total_vol_coeff < cell->water_vol_coeff) {
+        throw logic_error("Strange volume coefficients found in cell");
+    }
+#endif
+    /* Calculate color */
+    /*
+     * In rising order: Blue, cyan, green, yellow, red
+     */
+    const uint NUM_TRANSITIONS = 4;
+    const color3 colors[] = {color3(0, 0, 1),  // 0, Blue
+                             color3(0, 1, 1),  // 1, Cyan
+                             color3(0, 1, 0),  // 2, Green
+                             color3(1, 1, 0),  // 3, Yellow
+                             color3(1, 0, 0)}; // 4, Red
+    color3 c;
+    if (cell->total_vol_coeff > 0) {
+        pftype q = NUM_TRANSITIONS * cell->get_alpha();
+        q = MIN(MAX(q, 0), NUM_TRANSITIONS);
+        uint idx1 = uint(q);
+        uint idx2 = MIN(idx1 + 1, NUM_TRANSITIONS);
+        q -= idx1;
+        c = (1-q)*colors[idx1] + q*colors[idx2];
+    }
+    else {
+        // Alpha is undefined
+        c = color3(1, 1, 1); // White
+    }
+    quick_set_color(c[0], c[1], c[2], 1);
+
+#if    NUM_DIMENSIONS == 2
+    /* Vertices */
+    pfvec p00 = cell->r;
+    pfvec p01 = p00;
+    p01[DIM_X] += cell->s;
+    pfvec p10 = p00;
+    p10[DIM_Y] += cell->s;
+    pfvec p11 = p10 + p01 - p00;
+
+    /* Draw triangle*/
+    quick_draw_triangle(p00, p01, p10);
+    quick_draw_triangle(p11, p10, p01);
+
+#elif  NUM_DIMENSIONS == 3
+    /* Don't draw alpha */
+#endif
+}
+
 void viswidget::draw_water_vol_coeff(const octcell* cell)
 {
     /* Calculate color */
@@ -329,56 +379,6 @@ void viswidget::draw_total_vol_coeff(const octcell* cell)
 
 #elif  NUM_DIMENSIONS == 3
     /* Don't draw */
-#endif
-}
-
-void viswidget::draw_alpha(const octcell* cell)
-{
-#if  DEBUG
-    if (cell->water_vol_coeff < 0 || cell->total_vol_coeff < cell->water_vol_coeff) {
-        throw logic_error("Strange volume coefficients found in cell");
-    }
-#endif
-    /* Calculate color */
-    /*
-     * In rising order: Blue, cyan, green, yellow, red
-     */
-    const uint NUM_TRANSITIONS = 4;
-    const color3 colors[] = {color3(0, 0, 1),  // 0, Blue
-                             color3(0, 1, 1),  // 1, Cyan
-                             color3(0, 1, 0),  // 2, Green
-                             color3(1, 1, 0),  // 3, Yellow
-                             color3(1, 0, 0)}; // 4, Red
-    color3 c;
-    if (cell->total_vol_coeff > 0) {
-        pftype q = NUM_TRANSITIONS * cell->get_alpha();
-        q = MIN(MAX(q, 0), NUM_TRANSITIONS);
-        uint idx1 = uint(q);
-        uint idx2 = MIN(idx1 + 1, NUM_TRANSITIONS);
-        q -= idx1;
-        c = (1-q)*colors[idx1] + q*colors[idx2];
-    }
-    else {
-        // Alpha is undefined
-        c = color3(1, 1, 1); // White
-    }
-    quick_set_color(c[0], c[1], c[2], 1);
-
-#if    NUM_DIMENSIONS == 2
-    /* Vertices */
-    pfvec p00 = cell->r;
-    pfvec p01 = p00;
-    p01[DIM_X] += cell->s;
-    pfvec p10 = p00;
-    p10[DIM_Y] += cell->s;
-    pfvec p11 = p10 + p01 - p00;
-
-    /* Draw triangle*/
-    quick_draw_triangle(p00, p01, p10);
-    quick_draw_triangle(p11, p10, p01);
-
-#elif  NUM_DIMENSIONS == 3
-    /* Don't draw alpha */
 #endif
 }
 
@@ -649,6 +649,20 @@ void viswidget::draw_pressure_deviations_recursively(const octcell *cell)
     }
 }
 
+void viswidget::draw_alpha_recursively(const octcell* cell)
+{
+    if (cell->is_leaf()) {
+        draw_alpha(cell);
+        return;
+    }
+
+    for (uint i = 0; i < octcell::MAX_NUM_CHILDREN; i++) {
+        if (cell->get_child(i)) {
+            draw_alpha_recursively(cell->get_child(i));
+        }
+    }
+}
+
 void viswidget::draw_water_vol_coeff_recursively(const octcell* cell)
 {
     if (cell->is_leaf()) {
@@ -687,20 +701,6 @@ void viswidget::draw_total_vol_coeff_recursively(const octcell* cell)
     for (uint i = 0; i < octcell::MAX_NUM_CHILDREN; i++) {
         if (cell->get_child(i)) {
             draw_total_vol_coeff_recursively(cell->get_child(i));
-        }
-    }
-}
-
-void viswidget::draw_alpha_recursively(const octcell* cell)
-{
-    if (cell->is_leaf()) {
-        draw_alpha(cell);
-        return;
-    }
-
-    for (uint i = 0; i < octcell::MAX_NUM_CHILDREN; i++) {
-        if (cell->get_child(i)) {
-            draw_alpha_recursively(cell->get_child(i));
         }
     }
 }

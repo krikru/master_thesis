@@ -92,7 +92,11 @@ void mainwin::keyPressEvent(QKeyEvent *e)
                 scalar_property_number = 0;
             }
             ui->visualization_vw->set_scalar_property_to_visualize(scalar_property_number);
-            ui->statusBar->showMessage(QString("Visualizing ") + scalar_propery_names[scalar_property_number]);
+            //ui->statusBar->showMessage(QString("Visualizing ") + scalar_propery_names[scalar_property_number]);
+            //ui->statusBar->showMessage(scalar_propery_names[scalar_property_number]);
+            ui->statusBar->showMessage("Pressure deviation");
+            cout << ui->statusBar << endl;
+            exit(0);
             return;
         }
 
@@ -112,7 +116,7 @@ void mainwin::start_simulation()
         system.set_state_updated_callback(do_events, this);
         system.set_number_of_time_steps_before_resting(NUM_TIME_STEPS_PER_FRAME);
         ui->visualization_vw->set_system_to_visualize(&system);
-        ui->visualization_vw->set_scalar_property_to_visualize(SP_ALPHA);
+        ui->visualization_vw->set_scalar_property_to_visualize(DEFAULT_SCALAR_PROPERTY_TO_VISUALIZE);
         run_simulation();
     }
     catch (std::exception &e) {
@@ -132,15 +136,15 @@ void mainwin::initialize_scalar_propery_names()
     }
 #endif
 
-    scalar_propery_names[SP_NO_SCALAR_PROPERTY      ] = "no scalar property      ";
-    scalar_propery_names[SP_ALPHA                   ] = "alpha                   ";
+    scalar_propery_names[SP_NO_SCALAR_PROPERTY      ] = "no scalar property"      ;
+    scalar_propery_names[SP_ALPHA                   ] = "alpha"                   ;
     scalar_propery_names[SP_WATER_VOLUME_COEFFICIENT] = "water volume coefficient";
-    scalar_propery_names[SP_AIR_VOLUME_COEFFICIENT  ] = "air volume coefficient  ";
+    scalar_propery_names[SP_AIR_VOLUME_COEFFICIENT  ] = "air volume coefficient"  ;
     scalar_propery_names[SP_TOTAL_VOLUME_COEFFICIENT] = "total volume coefficient";
-    scalar_propery_names[SP_PRESSURE                ] = "pressure                ";
-    scalar_propery_names[SP_PRESSURE_DEVIATION      ] = "pressure deviation      ";
-    scalar_propery_names[SP_VELOCITY_DIVERGENCE     ] = "velocity divergence     ";
-    scalar_propery_names[SP_FLOW_DIVERGENCE         ] = "flow divergence         ";
+    scalar_propery_names[SP_PRESSURE                ] = "pressure"                ;
+    scalar_propery_names[SP_PRESSURE_DEVIATION      ] = "pressure deviation"      ;
+    scalar_propery_names[SP_VELOCITY_DIVERGENCE     ] = "velocity divergence"     ;
+    scalar_propery_names[SP_FLOW_DIVERGENCE         ] = "flow divergence"         ;
 
 #if  DEBUG
     for (uint i = 0; i < NUM_SCALAR_PROPERTIES; i++) {
