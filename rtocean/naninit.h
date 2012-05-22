@@ -20,7 +20,7 @@ public:
 #ifdef  NAN
     naninit() : value(NAN) {} // The NAN macro is defined in math.h on machines that support IEEE floating point.
 #else
-    naninit() : value(sqrt(T(-1))) {} // I would optimise out the sqrt call in practice.
+    naninit() : value(sqrt(T(-1))) {} // Hope that sqrt of -1 will produce a NaN on machines that do not support IEEE floating point (maybe this is silly).
 #endif
     naninit(T inVal) : value(inVal) {}
 

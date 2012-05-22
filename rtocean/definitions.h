@@ -9,7 +9,7 @@
 #include <stdint.h>
 
 /* Own includes */
-//#include "naninit.h"
+#include "naninit.h"
 #include "mustinit.h"
 
 ////////////////////////////////////////////////////////////////
@@ -24,15 +24,19 @@
 
 /* Essential */
 #define  DEBUG                      1
-#define  RUN_SAFE                   1
+#define  INITIALIZE_FLOATS_TO_NAN                   1 // Weaker
+#define  CHECK_INITIALIZATION_OF_FLOATS             0 // Stronger
 #define  NUM_DIMENSIONS             2 /* 2 or 3 */
 //#define  NUM_DIRECTIONS             (2*NUM_DIMENSIONS)
 #define  LOGICAL_AXIS_ORDER         1
-#define  NO_ATMOSPHERE              1
+#define  NO_ATMOSPHERE              0
 #define  VACUUM_HAS_PRESSURE        0
 #define  ALLOW_NEGATIVE_PRESSURES   0
 #define  INTERPOLATE_SURFACE_PRESSURE               0
 #define  COMPRESS_INTERFACE_VERTICALLY              1
+
+/* Precision */
+#define  USE_DOUBLE_PRECISION_FOR_PHYSICS           1
 
 /* Advection scheme */
 #define  NO_SCHEME                  0
@@ -67,6 +71,7 @@
 #define  MIN_LOD_LAYER_THICKNESS    1    // [Number of cells]
 #define  SURFACE_HEIGHT             0.65 // [m]
 #define  SURFACE_ACCURACY           0.02 // [m] Maximum size of the surface cells
+//#define  SURFACE_ACCURACY           0.01 // [m] Maximum size of the surface cells
 //#define  SURFACE_ACCURACY           0.005 // [m] Maximum size of the surface cells
 
 /* Navier-Stokes */
@@ -93,7 +98,7 @@
 #define  VEL_DIV_SCALE_FACTOR       0.1 // [s/m]
 #define  FLOW_DIV_SCALE_FACTOR      VEL_DIV_SCALE_FACTOR // [s/m]
 #define  DRAW_CELL_FACE_VELOCITIES                   0
-#define  DRAW_CELL_CENTER_VELOCITIES                 1
+#define  DRAW_CELL_CENTER_VELOCITIES                 0
 #define  VEL_TO_ARROW_LENGTH_FACTOR 0.1
 #define  DRAW_CELL_CUBES            0
 #define  DRAW_PARENT_CELLS          1
@@ -105,7 +110,7 @@
 #define  MIDDLE_MARK_SIZE           0.05
 #define  RANDOMIZE_NEIGHBOR_CONNECTION_MIDPOINTS     0
 #define  NEIGHBOR_CONNECTION_MIDPOINT_RANDOMIZATION  0.1
-/* Scalings to prevent the same z-value */
+/* Scaling to prevent the same z-value */
 #define  SCALE_FACTOR               1.0003
 #define  SCALAR_PROPERTIES_SCALING  (SCALE_FACTOR * SCALE_FACTOR)
 #define  PARENT_CUBE_DIST_SCALING   SCALE_FACTOR
@@ -113,9 +118,6 @@
 #define  CELL_MARK_DIST_SCALING     1
 #define  VELOCITY_DISTANCE_SCALING                   (1 / SCALE_FACTOR)
 #define  NEIGHBOR_CONNECTIONS_DIST_SCALING           (1 / SCALE_FACTOR)
-
-/* Precision */
-#define  USE_DOUBLE_PRECISION_FOR_PHYSICS  1
 
 /* Tests */
 
@@ -168,7 +170,7 @@ const float  HIGHER_LOD_NEIGHBOR_CONNECTION_A          = 1;
 
 const float  FINEST_NEIGHBOR_CONNECTION_R              = 0;
 const float  FINEST_NEIGHBOR_CONNECTION_G              = 0;
-const float  FINEST_NEIGHBOR_CONNECTION_B              = 1;
+const float  FINEST_NEIGHBOR_CONNECTION_B              = 0;
 const float  FINEST_NEIGHBOR_CONNECTION_A              = 1;
 const float  MIDDLE_MARK_R          = 0.5;
 const float  MIDDLE_MARK_G          = 0.5;
@@ -192,18 +194,18 @@ const float  VELOCITY_A             = 1;
 // TYPEDEFS
 ////////////////////////////////////////////////////////////////
 
-#if  DEBUG
-#if USE_DOUBLE_PRECISION_FOR_PHYSICS
-typedef  mustinit<double>  pftype;
+#if  USE_DOUBLE_PRECISION_FOR_PHYSICS
+typedef  double  base_float_type;
 #else
-typedef  mustinit<float >  pftype;
+typedef  float   base_float_type;
 #endif
+
+#if    DEBUG && CHECK_INITIALIZATION_OF_FLOATS
+typedef  mustinit<base_float_type>  pftype;
+#elif  DEBUG && INITIALIZE_FLOATS_TO_NAN
+typedef  naninit <base_float_type>  pftype;
 #else
-#if USE_DOUBLE_PRECISION_FOR_PHYSICS
-typedef  double                   pftype;
-#else
-typedef  float                    pftype;
-#endif
+typedef  base_float_type            pftype;
 #endif
 
 typedef unsigned int uint;
