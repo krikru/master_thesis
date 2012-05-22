@@ -28,7 +28,7 @@ octcell::~octcell()
     /* Delete potential children */
     if (has_child_array()) {
         for (uint i = 0; i < MAX_NUM_CHILDREN; i++) {
-            if (get_child(i)) {
+            if (has_child(i)) {
                 delete get_child(i);
             }
         }
@@ -74,6 +74,99 @@ void octcell::set_volume_coefficients(pftype water_volume_coefficient, pftype to
 #endif
     water_vol_coeff = water_volume_coefficient;
     total_vol_coeff = total_volume_coefficient;
+    calculate_pressure();
+}
+
+void octcell::calculate_pressure()
+{
+#if  USE_ARTIFICIAL_COMPRESSIBILITY
+#if  NO_ATMOSPHERE
+#if  VACUUM_HAS_PRESSURE
+    p = (total_vol_coeff - 1) * ARTIFICIAL_COMPRESSIBILITY_FACTOR;
+#else
+    p = (water_vol_coeff - 1) * ARTIFICIAL_COMPRESSIBILITY_FACTOR;
+    if (p < 0) {
+#if  ALLOW_NEGATIVE_PRESSURES
+#if INTERPOLATE_SURFACE_PRESSURE
+        /* Loop through neighbors */
+        nlset lists;
+        lists.add_neighbor_list(&neighbor_lists[NL_HIGHER_LEVEL_OF_DETAIL]);
+        lists.add_neighbor_list(&neighbor_lists[NL_SAME_LEVEL_OF_DETAIL_LEAF]);
+        lists.add_neighbor_list(&neighbor_lists[NL_LOWER_LEVEL_OF_DETAIL_LEAF]);
+        for (nlnode* node = lists.get_first_node(); node; node = lists.get_next_node()) {
+            pftype num_terms = 0;
+            pftype average_pressure_below = 0;
+            pftype average_distance_down = 0;
+            if (node->v.dim == VERTICAL_DIMENSION && !node->v.pos_dir) {
+                /* Have found a node beneath, get pressure */
+                average_pressure_below += node->v.n->p;
+                average_distance_down -= node->v.n->get_edge_length()/2;
+                num_terms++;
+            }
+            pftype pressure_gradient;
+            if (num_terms) {
+                average_pressure_below /= num_terms;
+                average_distance_down /= num_terms;
+                average_distance_down += get_alpha()*get_edge_length();
+                pressure_gradient = (average_pressure_below - NORMAL_AIR_PRESSURE)/average_distance_down;
+            }
+            else {
+                pressure_gradient = P_G * P_WATER_DENSITY;
+            }
+            p = NORMAL_AIR_PRESSURE + (get_alpha()-0.5)*get_edge_length()*pressure_gradient;
+        }
+#else
+        // Prevent too low pressures at the boundary
+        p = (total_vol_coeff - 1) * ARTIFICIAL_COMPRESSIBILITY_FACTOR;
+        if (p > 0) {
+            p = 0; // Vacuum partly fills the cell
+        }
+#endif
+#else
+        p = 0;
+#endif // ALLOW_NEGATIVE_PRESSURES
+    }
+#endif // VACUUM_HAS_PRESSURE
+#else // NO_ATMOSPHERE
+    if (has_no_air()) {
+        /* Cell consists only of water */
+        p = (water_vol_coeff - 1) * ARTIFICIAL_COMPRESSIBILITY_FACTOR;
+        if (p < 0) {
+#if  ALLOW_NEGATIVE_PRESSURES
+            // Prevent too low pressures at the boundary
+            p = (total_vol_coeff - 1) * ARTIFICIAL_COMPRESSIBILITY_FACTOR;
+            if (p > 0) {
+                p = 0; // Vacuum partly fills the cell
+            }
+#else
+            p = 0;
+#endif // ALLOW_NEGATIVE_PRESSURES
+        }
+    }
+    else if (has_no_water()) {
+        /* Cell consists only of air */
+        p = total_vol_coeff * NORMAL_AIR_PRESSURE;
+    }
+    else {
+        /* Calculate pressure for a mixed cell */
+        // Optimize
+        pftype k = ARTIFICIAL_COMPRESSIBILITY_FACTOR;
+        pftype q = NORMAL_AIR_PRESSURE;
+        pftype a = get_air_volume_coefficient();
+        pftype w = water_vol_coeff;
+        pftype d = q*a/k;
+        //"Don't know if this formula is correct"
+        p = k/2*(sqrt(SQUARE(d + 1 - w) + 4*d*w) + d + w - 1);
+#if  DEBUG
+        if (IS_NAN(p)) {
+            throw logic_error("Pressure became NaN");
+        }
+#endif
+    }
+#endif //NO_ATMOSPHERE
+#else  //USE_ARTIFICIAL_COMPRESSIBILITY
+    "don't know what to do now"
+#endif  //USE_ARTIFICIAL_COMPRESSIBILITY
 }
 
 /*******************
@@ -84,12 +177,20 @@ void octcell::set_volume_coefficients(pftype water_volume_coefficient, pftype to
  * Family *
  **********/
 
+octcell* octcell::get_child(uint idx) const
+{
+#if  DEBUG
+    if (!has_child(idx)) {
+        NO_OP();
+        //throw logic_error("Trying to get a child cell that does not exist");
+    }
+#endif
+    return _c[idx];
+}
+
 void octcell::make_parent()
 {
-    create_new_random_child_array();
-    for (uint idx = 0; idx < MAX_NUM_CHILDREN; idx++) {
-        set_child(idx, 0);
-    }
+    create_new_empty_child_array();
 
     /*
      * This cell is no longer a parent cell, update other end of the connections to
@@ -125,7 +226,7 @@ void octcell::make_leaf()
         throw logic_error("Trying to make a leaf cell a leaf");
     }
     for (uint i = 0; i < MAX_NUM_CHILDREN; i++) {
-        if (get_child(i)) {
+        if (has_child(i)) {
             throw logic_error("Trying to make a cell with at least one child a leaf cell");
         }
     }
@@ -162,7 +263,7 @@ void octcell::make_leaf()
 
 void octcell::refine()
 {
-    create_new_random_child_array();
+    _create_new_random_child_array();
 
     // Create new values for children
     pftype s_2 = 0.5*s;
@@ -199,25 +300,25 @@ void octcell::refine()
         for (uint cidx = 0; cidx < MAX_NUM_CHILDREN; cidx++) { // Child index in this cell
             if (positive_direction_of_child(cidx, dim) == pos_dir) {
                 /* Child index is in the right half */
-                octcell* c = get_child(cidx); // Child
-                if (c) {
+                if (has_child(cidx)) {
                     /* Child exists, make neighbor */
+                    octcell* c = get_child(cidx); // Child
                     if (n->has_child_array()) {
                         make_neighbors(c, n, NL_LOWER_LEVEL_OF_DETAIL_NON_LEAF, NL_HIGHER_LEVEL_OF_DETAIL, dim, pos_dir);
                         /* Cell has children, see if there is a neighbor at the child level */
                         uint ncidx = child_index_flip_direction(cidx, dim); // Neighbor child index
-                        octcell* nc = n->get_child(ncidx); // Neighbor child
-                        if (nc) {
+                        if (n->has_child(ncidx)) {
                             /* Neighbor cell on child level exists too, make neighbors */
+                            octcell* nc = n->get_child(ncidx); // Neighbor child
                             if (nc->has_child_array()) {
                                 make_neighbors(c, nc, NL_SAME_LEVEL_OF_DETAIL_NON_LEAF, NL_SAME_LEVEL_OF_DETAIL_LEAF, dim, pos_dir);
                                 /* Child cell has children too, see if any of these are neighbors */
                                 for (uint nccidx = 0; nccidx < MAX_NUM_CHILDREN; nccidx++) { // Neighbor child child index
                                     if (positive_direction_of_child(nccidx, dim) != pos_dir) {
                                         // Potential neighbor child child is in righ half, make neighbor
-                                        octcell* ncc = nc->get_child(nccidx);
-                                        if (ncc) {
+                                        if (nc->has_child(nccidx)) {
                                             // Cell exists, make neighbor
+                                            octcell* ncc = nc->get_child(nccidx);
                                             make_neighbors(c, ncc, NL_HIGHER_LEVEL_OF_DETAIL, NL_LOWER_LEVEL_OF_DETAIL_LEAF, dim, pos_dir);
                                         }
                                     }
@@ -283,9 +384,9 @@ void octcell::coarsen()
     water_vol_coeff = 0;
     total_vol_coeff = 0;
     for (uint idx = 0; idx < MAX_NUM_CHILDREN; idx++) {
-        octcell* c = get_child(idx);
-        if (c) {
+        if (has_child(idx)) {
             /* Child exists, remove it */
+            octcell* c = get_child(idx);
             if (c->has_child_array()) {
                 /* Coarsen it to get updated properties */
                 c->coarsen();
@@ -309,7 +410,7 @@ octcell* octcell::create_new_air_child(uint child_idx)
     if (child_idx < 0 || child_idx >= MAX_NUM_CHILDREN) {
         throw out_of_range("Trying to create an air child with index out of bound");
     }
-    if (get_child(child_idx)) {
+    if (has_child(child_idx)) {
         throw logic_error("Trying to create a new air child that already exists");
     }
 #endif
@@ -321,8 +422,7 @@ octcell* octcell::create_new_air_child(uint child_idx)
     }
     // Create child with new values
     octcell *child = new octcell(this, s_2, new_r, lvl + 1);
-    child->water_vol_coeff = 0;
-    child->total_vol_coeff = 1;
+    child->set_volume_coefficients(0, 1);
     set_child(child_idx, child);
 
     /* Create neighbor connections for new child */
@@ -349,18 +449,18 @@ octcell* octcell::create_new_air_child(uint child_idx)
                 make_neighbors(child, n, NL_LOWER_LEVEL_OF_DETAIL_NON_LEAF, NL_HIGHER_LEVEL_OF_DETAIL, dim, pos_dir);
                 /* Cell has children, see if there is a neighbor at the child level */
                 uint ncidx = child_index_flip_direction(child_idx, dim); // Neighbor child index
-                octcell* nc = n->get_child(ncidx); // Neighbor child
-                if (nc) {
+                if (n->has_child(ncidx)) {
                     /* Neighbor cell on child level exists too, make neighbors */
+                    octcell* nc = n->get_child(ncidx); // Neighbor child
                     if (nc->has_child_array()) {
                         make_neighbors(child, nc, NL_SAME_LEVEL_OF_DETAIL_NON_LEAF, NL_SAME_LEVEL_OF_DETAIL_LEAF, dim, pos_dir);
                         /* Child cell has children too, see if any of these are neighbors */
                         for (uint nccidx = 0; nccidx < MAX_NUM_CHILDREN; nccidx++) { // Neighbor child child index
                             if (positive_direction_of_child(nccidx, dim) != pos_dir) {
                                 // Potential neighbor child child is in righ half, make neighbor
-                                octcell* ncc = nc->get_child(nccidx);
-                                if (ncc) {
+                                if (nc->has_child(nccidx)) {
                                     // Cell exists, make neighbor
+                                    octcell* ncc = nc->get_child(nccidx);
                                     make_neighbors(child, ncc, NL_HIGHER_LEVEL_OF_DETAIL, NL_LOWER_LEVEL_OF_DETAIL_LEAF, dim, pos_dir);
                                 }
                             }
@@ -384,9 +484,9 @@ octcell* octcell::create_new_air_child(uint child_idx)
     for (uint dim = 0; dim < NUM_DIMENSIONS; dim++) {
         /* Get other child in this dimension */
         uint other_child_idx = child_idx ^ child_index_offset(dim);
-        octcell *other_child = get_child(other_child_idx);
-        if (other_child) {
+        if (has_child(other_child_idx)) {
             /* Child exists, make neighbors */
+            octcell *other_child = get_child(other_child_idx);
             make_neighbors(child, other_child,
                            other_child->has_child_array() ? NL_SAME_LEVEL_OF_DETAIL_NON_LEAF : NL_SAME_LEVEL_OF_DETAIL_LEAF,
                            NL_SAME_LEVEL_OF_DETAIL_LEAF,
@@ -533,7 +633,7 @@ void octcell::create_new_air_neighbors(pfvec neighbor_center, uint dim, bool pos
         if (lvl < source_level) {
             /* The cell who wants the nieghbors is at a higher level, find the one neighboring child */
             uint child_idx = get_child_index_from_position(neighbor_center);
-            if (!get_child(child_idx)) {
+            if (!has_child(child_idx)) {
                 create_new_air_child(child_idx);
             }
             get_child(child_idx)->create_new_air_neighbors(neighbor_center, dim, pos_dir, source_level);
@@ -543,9 +643,12 @@ void octcell::create_new_air_neighbors(pfvec neighbor_center, uint dim, bool pos
             for (uint child_idx = 0; child_idx < MAX_NUM_CHILDREN; child_idx++) {
                 if (positive_direction_of_child(child_idx, dim) != pos_dir) {
                     /* Child cell is in the right half */
-                    octcell *child = get_child(child_idx);
-                    if (!child) {
+                    octcell *child;
+                    if (!has_child(child_idx)) {
                         child = create_new_air_child(child_idx);
+                    }
+                    else {
+                        child = get_child(child_idx);
                     }
                     //child->create_new_air_neighbors(child->get_cell_center(), dim, pos_dir, source_level);
                 }

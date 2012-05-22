@@ -62,8 +62,8 @@ bool fvoctree::refine_subtree(octcell* c, pftype surface, pftype bottom)
     pftype left_edge_height = 0.9501;
     pftype slope = -0.4;
 #endif
-    pftype min_surf_height = left_edge_height + slope*(c->r[HORIZONTAL_DIMENSION1] + (slope < 0 ? s : 0));
-    pftype max_surf_height = left_edge_height + slope*(c->r[HORIZONTAL_DIMENSION1] + (slope > 0 ? s : 0));
+    pftype min_surf_height = left_edge_height + slope*(c->r[HORIZONTAL_DIMENSION1] + (slope < 0 ? s : pftype(0)));
+    pftype max_surf_height = left_edge_height + slope*(c->r[HORIZONTAL_DIMENSION1] + (slope > 0 ? s : pftype(0)));
 #endif
 #elif  NUM_DIMENSIONS == 3
     pftype min_surf_height = 0.55 + 0.2*c->r[HORIZONTAL_DIMENSION1] + 0.1*c->r[HORIZONTAL_DIMENSION2];
@@ -94,7 +94,7 @@ bool fvoctree::refine_subtree(octcell* c, pftype surface, pftype bottom)
         if (lowest_cell_height + s > min_surf_height) {
             /* Cell is a surface cell */
             /* Estimate beta */
-            pftype mean_height_diff = (MAX(min_surf_height - lowest_cell_height, 0) + MIN(max_surf_height - lowest_cell_height, s))/2;
+            pftype mean_height_diff = (MAX(min_surf_height - lowest_cell_height, 0) + MIN(pftype(max_surf_height - lowest_cell_height), s))/2;
             beta = mean_height_diff / c->s;
         }
         else {
@@ -145,7 +145,7 @@ void fvoctree::prepare_cells_for_water_recursively(octcell* cell)
         return;
     }
     for (uint i = 0; i < octcell::MAX_NUM_CHILDREN; i++) {
-        if (cell->get_child(i)) {
+        if (cell->has_child(i)) {
             prepare_cells_for_water_recursively(cell->get_child(i));
         }
     }

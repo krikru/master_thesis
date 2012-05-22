@@ -9,7 +9,8 @@
 #include <stdint.h>
 
 /* Own includes */
-#include "base_safe_float.h"
+//#include "naninit.h"
+#include "mustinit.h"
 
 ////////////////////////////////////////////////////////////////
 // COMPILER DEFINITIONS
@@ -31,6 +32,7 @@
 #define  VACUUM_HAS_PRESSURE        0
 #define  ALLOW_NEGATIVE_PRESSURES   0
 #define  INTERPOLATE_SURFACE_PRESSURE               0
+#define  COMPRESS_INTERFACE_VERTICALLY              1
 
 /* Advection scheme */
 #define  NO_SCHEME                  0
@@ -190,11 +192,11 @@ const float  VELOCITY_A             = 1;
 // TYPEDEFS
 ////////////////////////////////////////////////////////////////
 
-#if 0
+#if  DEBUG
 #if USE_DOUBLE_PRECISION_FOR_PHYSICS
-typedef  base_safe_float<double>  pftype;
+typedef  mustinit<double>  pftype;
 #else
-typedef  base_safe_float<float >  pftype;
+typedef  mustinit<float >  pftype;
 #endif
 #else
 #if USE_DOUBLE_PRECISION_FOR_PHYSICS
@@ -293,8 +295,8 @@ enum DIMENSION {
 
 /* Mathematical macros */
 #define  ABS(x)     ((x) >= 0 ? (x) : -(x))
-#define  MIN(x, y)  ((y) < (x) ? (y) : (x))
-#define  MAX(x, y)  ((y) > (x) ? (y) : (x))
+#define  MIN(x, y)  ((x) <= (y) ? (x) : (y))
+#define  MAX(x, y)  ((x) >= (y) ? (x) : (y))
 #define  SQUARE(x)  ((x) * (x))
 #define  IS_NAN(x)  ((x) != (x))
 

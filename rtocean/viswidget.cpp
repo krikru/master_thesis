@@ -148,7 +148,7 @@ void viswidget::draw_pressure(const octcell *cell)
                              color3(1, 0, 0),  // 5, Red
                              color3(1, 0, 1)}; // 6, Purple
     pftype q = NUM_TRANSITIONS * (cell->p / (P_G * NORMAL_WATER_DENSITY) + 0.5);
-    q = MIN(MAX(q, 0), NUM_TRANSITIONS);
+    q = MIN(MAX(q, (pftype)0), (pftype)NUM_TRANSITIONS);
     uint idx1 = uint(q);
     uint idx2 = MIN(idx1 + 1, NUM_TRANSITIONS);
     q -= idx1;
@@ -189,7 +189,7 @@ void viswidget::draw_pressure_deviation(const octcell *cell)
                              color3(1, 0, 0),  // 5, Red
                              color3(1, 0, 1)}; // 6, Purple
     pftype q = NUM_TRANSITIONS * ((cell->p - NORMAL_AIR_PRESSURE) / (P_G * NORMAL_WATER_DENSITY) - (SURFACE_HEIGHT - cell->get_cell_center().e[VERTICAL_DIMENSION]) + 0.5);
-    q = MIN(MAX(q, 0), NUM_TRANSITIONS);
+    q = MIN(MAX(q, (pftype)0), (pftype)NUM_TRANSITIONS);
     uint idx1 = uint(q);
     uint idx2 = MIN(idx1 + 1, NUM_TRANSITIONS);
     q -= idx1;
@@ -235,7 +235,7 @@ void viswidget::draw_alpha(const octcell* cell)
     color3 c;
     if (cell->total_vol_coeff > 0) {
         pftype q = NUM_TRANSITIONS * cell->get_alpha();
-        q = MIN(MAX(q, 0), NUM_TRANSITIONS);
+        q = MIN(MAX(q, (pftype)0), (pftype)NUM_TRANSITIONS);
         uint idx1 = uint(q);
         uint idx2 = MIN(idx1 + 1, NUM_TRANSITIONS);
         q -= idx1;
@@ -279,7 +279,7 @@ void viswidget::draw_water_vol_coeff(const octcell* cell)
                              color3(1, 0, 0),  // 4, Red
                              color3(1, 0, 1)}; // 5, Purple
     pftype q = (NUM_TRANSITIONS-1) * cell->water_vol_coeff;
-    q = MIN(MAX(q, 0), NUM_TRANSITIONS);
+    q = MIN(MAX(q, (pftype)0), (pftype)NUM_TRANSITIONS);
     uint idx1 = uint(q);
     uint idx2 = MIN(idx1 + 1, NUM_TRANSITIONS);
     q -= idx1;
@@ -318,7 +318,7 @@ void viswidget::draw_air_vol_coeff(const octcell* cell)
                              color3(1, 0, 0),  // 4, Red
                              color3(1, 0, 1)}; // 5, Purple
     pftype q = (NUM_TRANSITIONS-1) * cell->get_air_volume_coefficient();
-    q = MIN(MAX(q, 0), NUM_TRANSITIONS);
+    q = MIN(MAX(q, (pftype)0), (pftype)NUM_TRANSITIONS);
     uint idx1 = uint(q);
     uint idx2 = MIN(idx1 + 1, NUM_TRANSITIONS);
     q -= idx1;
@@ -357,7 +357,7 @@ void viswidget::draw_total_vol_coeff(const octcell* cell)
                              color3(1, 0, 0),  // 4, Red
                              color3(1, 0, 1)}; // 5, Purple
     pftype q = (NUM_TRANSITIONS-1) * cell->total_vol_coeff;
-    q = MIN(MAX(q, 0), NUM_TRANSITIONS);
+    q = MIN(MAX(q, (pftype)0), (pftype)NUM_TRANSITIONS);
     uint idx1 = uint(q);
     uint idx2 = MIN(idx1 + 1, NUM_TRANSITIONS);
     q -= idx1;
@@ -397,7 +397,7 @@ void viswidget::draw_velocity_divergence(const octcell* cell)
                              color3(1, 0, 0),  // 5, Red
                              color3(1, 0, 1)}; // 6, Purple
     pftype q = NUM_TRANSITIONS * (cell->get_velocity_divergence() * VEL_DIV_SCALE_FACTOR + .5);
-    q = MIN(MAX(q, 0), NUM_TRANSITIONS);
+    q = MIN(MAX(q, (pftype)0), (pftype)NUM_TRANSITIONS);
     uint idx1 = uint(q);
     uint idx2 = MIN(idx1 + 1, NUM_TRANSITIONS);
     q -= idx1;
@@ -438,7 +438,7 @@ void viswidget::draw_flow_divergence(const octcell* cell)
                              color3(1, 0, 0),  // 5, Red
                              color3(1, 0, 1)}; // 6, Purple
     pftype q = NUM_TRANSITIONS * (cell->get_water_flow_divergence() * FLOW_DIV_SCALE_FACTOR + .5);
-    q = MIN(MAX(q, 0), NUM_TRANSITIONS);
+    q = MIN(MAX(q, (pftype)0), (pftype)NUM_TRANSITIONS);
     uint idx1 = uint(q);
     uint idx2 = MIN(idx1 + 1, NUM_TRANSITIONS);
     q -= idx1;
@@ -629,7 +629,7 @@ void viswidget::draw_pressure_recursively(const octcell *cell)
     }
 
     for (uint i = 0; i < octcell::MAX_NUM_CHILDREN; i++) {
-        if (cell->get_child(i)) {
+        if (cell->has_child(i)) {
             draw_pressure_recursively(cell->get_child(i));
         }
     }
@@ -643,7 +643,7 @@ void viswidget::draw_pressure_deviations_recursively(const octcell *cell)
     }
 
     for (uint i = 0; i < octcell::MAX_NUM_CHILDREN; i++) {
-        if (cell->get_child(i)) {
+        if (cell->has_child(i)) {
             draw_pressure_deviations_recursively(cell->get_child(i));
         }
     }
@@ -657,7 +657,7 @@ void viswidget::draw_alpha_recursively(const octcell* cell)
     }
 
     for (uint i = 0; i < octcell::MAX_NUM_CHILDREN; i++) {
-        if (cell->get_child(i)) {
+        if (cell->has_child(i)) {
             draw_alpha_recursively(cell->get_child(i));
         }
     }
@@ -671,7 +671,7 @@ void viswidget::draw_water_vol_coeff_recursively(const octcell* cell)
     }
 
     for (uint i = 0; i < octcell::MAX_NUM_CHILDREN; i++) {
-        if (cell->get_child(i)) {
+        if (cell->has_child(i)) {
             draw_water_vol_coeff_recursively(cell->get_child(i));
         }
     }
@@ -685,7 +685,7 @@ void viswidget::draw_air_vol_coeff_recursively(const octcell* cell)
     }
 
     for (uint i = 0; i < octcell::MAX_NUM_CHILDREN; i++) {
-        if (cell->get_child(i)) {
+        if (cell->has_child(i)) {
             draw_air_vol_coeff_recursively(cell->get_child(i));
         }
     }
@@ -699,7 +699,7 @@ void viswidget::draw_total_vol_coeff_recursively(const octcell* cell)
     }
 
     for (uint i = 0; i < octcell::MAX_NUM_CHILDREN; i++) {
-        if (cell->get_child(i)) {
+        if (cell->has_child(i)) {
             draw_total_vol_coeff_recursively(cell->get_child(i));
         }
     }
@@ -713,7 +713,7 @@ void viswidget::draw_velocity_divergence_recursively(const octcell* cell)
     }
 
     for (uint i = 0; i < octcell::MAX_NUM_CHILDREN; i++) {
-        if (cell->get_child(i)) {
+        if (cell->has_child(i)) {
             draw_velocity_divergence_recursively(cell->get_child(i));
         }
     }
@@ -727,7 +727,7 @@ void viswidget::draw_flow_divergence_recursively(const octcell* cell)
     }
 
     for (uint i = 0; i < octcell::MAX_NUM_CHILDREN; i++) {
-        if (cell->get_child(i)) {
+        if (cell->has_child(i)) {
             draw_flow_divergence_recursively(cell->get_child(i));
         }
     }
@@ -741,7 +741,7 @@ void viswidget::draw_cell_face_velocities_recursivelly(const octcell *cell)
     }
 
     for (uint i = 0; i < octcell::MAX_NUM_CHILDREN; i++) {
-        if (cell->get_child(i)) {
+        if (cell->has_child(i)) {
             draw_cell_face_velocities_recursivelly(cell->get_child(i));
         }
     }
@@ -755,7 +755,7 @@ void viswidget::draw_cell_center_velocities_recursivelly(const octcell* cell)
     }
 
     for (uint i = 0; i < octcell::MAX_NUM_CHILDREN; i++) {
-        if (cell->get_child(i)) {
+        if (cell->has_child(i)) {
             draw_cell_center_velocities_recursivelly(cell->get_child(i));
         }
     }
@@ -771,7 +771,7 @@ void viswidget::mark_water_cells_recursively(const octcell *cell)
     }
 
     for (uint i = 0; i < octcell::MAX_NUM_CHILDREN; i++) {
-        if (cell->get_child(i)) {
+        if (cell->has_child(i)) {
             mark_water_cells_recursively(cell->get_child(i));
         }
     }
@@ -787,7 +787,7 @@ void viswidget::mark_air_cells_recursively(const octcell *cell)
     }
 
     for (uint i = 0; i < octcell::MAX_NUM_CHILDREN; i++) {
-        if (cell->get_child(i)) {
+        if (cell->has_child(i)) {
             mark_air_cells_recursively(cell->get_child(i));
         }
     }
@@ -803,7 +803,7 @@ void viswidget::draw_water_level_recursively(const octcell *cell)
     }
 
     for (uint i = 0; i < octcell::MAX_NUM_CHILDREN; i++) {
-        if (cell->get_child(i)) {
+        if (cell->has_child(i)) {
             draw_water_level_recursively(cell->get_child(i));
         }
     }
@@ -822,7 +822,7 @@ void viswidget::visualize_leaf_cells_recursively(const octcell* cell)
     }
 
     for (uint i = 0; i < octcell::MAX_NUM_CHILDREN; i++) {
-        if (cell->get_child(i)) {
+        if (cell->has_child(i)) {
             visualize_leaf_cells_recursively(cell->get_child(i));
         }
     }
@@ -838,7 +838,7 @@ void viswidget::visualize_parent_cells_recursively(const octcell *cell)
     }
 
     for (uint i = 0; i < octcell::MAX_NUM_CHILDREN; i++) {
-        if (cell->get_child(i)) {
+        if (cell->has_child(i)) {
             visualize_parent_cells_recursively(cell->get_child(i));
         }
     }
@@ -865,7 +865,7 @@ void viswidget::visualize_neighbor_connections_recursively(const octcell *cell, 
 
     if (cell->has_child_array()) {
         for (uint i = 0; i < octcell::MAX_NUM_CHILDREN; i++) {
-            if (cell->get_child(i)) {
+            if (cell->has_child(i)) {
                 visualize_neighbor_connections_recursively(cell->get_child(i), neighbor_list_index);
             }
         }
@@ -910,7 +910,7 @@ void viswidget::visualize_finest_neighbor_connections_recursively(const octcell*
 {
     if (cell->has_child_array()) {
         for (uint i = 0; i < octcell::MAX_NUM_CHILDREN; i++) {
-            if (cell->get_child(i)) {
+            if (cell->has_child(i)) {
                 visualize_finest_neighbor_connections_recursively(cell->get_child(i));
             }
         }

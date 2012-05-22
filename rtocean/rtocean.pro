@@ -20,7 +20,8 @@ SOURCES += main.cpp\
     dllnode.cpp \
     base_dllnode.cpp \
     nlistset.cpp \
-    watersystem.cpp
+    watersystem.cpp \
+    mustinit.cpp
 
 HEADERS  += mainwin.h \
     viswidget.h \
@@ -41,7 +42,8 @@ HEADERS  += mainwin.h \
     nlset.h \
     watersystem.h \
     base_int_vec2.h \
-    base_safe_float.h
+    naninit.h \
+    mustinit.h
 
 FORMS    += mainwin.ui
 

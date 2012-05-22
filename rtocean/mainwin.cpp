@@ -95,7 +95,7 @@ void mainwin::keyPressEvent(QKeyEvent *e)
             //ui->statusBar->showMessage(QString("Visualizing ") + scalar_propery_names[scalar_property_number]);
             //ui->statusBar->showMessage(scalar_propery_names[scalar_property_number]);
             ui->statusBar->showMessage("Pressure deviation");
-            cout << ui->statusBar << endl;
+            cout << "Address to statusBar: " << ui->statusBar << endl;
             exit(0);
             return;
         }
@@ -222,12 +222,15 @@ void mainwin::on_actionAbout_rtocean_triggered()
 
 void mainwin::do_events()
 {
-    static bool has_been_called_before = true;
+    static bool has_been_called_before = false;
     static pftype time_starting_to_evolve_system;
     pftype time_starting_to_render = clock();
     if (has_been_called_before) {
         /* Finished evolving system*/
         cout << "Took " << (time_starting_to_render - time_starting_to_evolve_system)/1000.0 << " seconds." << endl << endl;
+    }
+    else {
+        has_been_called_before = true;
     }
 
     /* Visualize */

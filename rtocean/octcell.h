@@ -100,6 +100,7 @@ public:
     pftype get_water_volume() const;
     pftype get_total_fluid_volume() const;
     void set_volume_coefficients(pftype water_volume_coefficient, pftype total_volume_coefficient);
+    void calculate_pressure();
     void prepare_for_water();
     void create_new_air_neighbors(pfvec neighbor_center, uint dim, bool pos_dir, uint source_level);
 
@@ -114,6 +115,7 @@ public:
     bool is_root() const;
     bool has_child_array() const;
     bool is_leaf() const;
+    bool has_child(uint idx) const;
     void make_parent();
     void make_leaf();
     octcell* get_parent() const;
@@ -154,7 +156,8 @@ private:
      * Private non-static methods *
      ******************************/
 void make_neighbors(octcell* cell1, octcell* cell2, uint cell1_neighbor_list_idx, uint cell2_neighbor_list_idx, uint dimension, bool pos_dir);
-void create_new_random_child_array();
+void _create_new_random_child_array();
+void create_new_empty_child_array();
 
 private:
     /**************************
@@ -347,7 +350,21 @@ bool octcell::is_leaf() const
 }
 
 inline
-void octcell::create_new_random_child_array()
+bool octcell::has_child(uint idx) const
+{
+#if  DEBUG
+    if (is_leaf()) {
+        throw logic_error("Trying to check if a leaf cell has a child by looking up an index");
+    }
+    if (idx >= MAX_NUM_CHILDREN) {
+        throw out_of_range("Trying to check if a cell has a child by looking up an index that is too high");
+    }
+#endif
+    return _c[idx];
+}
+
+inline
+void octcell::_create_new_random_child_array()
 {
 #if  DEBUG
     if (has_child_array()) {
@@ -359,6 +376,15 @@ void octcell::create_new_random_child_array()
 }
 
 inline
+void octcell::create_new_empty_child_array()
+{
+    _create_new_random_child_array();
+    for (uint idx = 0; idx < MAX_NUM_CHILDREN; idx++) {
+        set_child(idx, 0);
+    }
+}
+
+inline
 octcell* octcell::get_parent() const
 {
 #if  DEBUG
@@ -367,20 +393,6 @@ octcell* octcell::get_parent() const
     }
 #endif
     return _par;
-}
-
-inline
-octcell* octcell::get_child(uint idx) const
-{
-#if  DEBUG
-    if (is_leaf()) {
-        throw logic_error("Trying to get a child from a leaf cell");
-    }
-    if (idx >= MAX_NUM_CHILDREN) {
-        throw out_of_range("Trying to get a child with an index that is too high");
-    }
-#endif
-    return _c[idx];
 }
 
 inline
@@ -407,7 +419,7 @@ uint octcell::get_number_of_children() const
 #endif
     uint num = 0;
     for (uint idx = 0; idx < MAX_NUM_CHILDREN; idx++) {
-        if (get_child(idx)) {
+        if (has_child(idx)) {
             num++;
         }
     }

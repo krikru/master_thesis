@@ -28,6 +28,9 @@ int main(int argc, char *argv[])
 {
     try
     {
+        pftype a = 1;
+        a = 2;
+        a + 3;
         /* Init glut */
         //glutInit(&argc, argv);
 
