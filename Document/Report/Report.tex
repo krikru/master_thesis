@@ -122,7 +122,7 @@ For additional information about the Linköping University Electronic Press and 
 \begin{itemize}
     \item Wave dispersion
     \item Different depths gives different speeds
-    \item The water should interact with moving objects (see e.g.: \textit{\href{http://physbam.stanford.edu/~fedkiw/papers/stanford2010-04.pdf}{Numerically Stable Fluid-Structure Interactions Between Compressible Flow and Solid Structures}}, Immersed Boundary Method)
+    \item The water should interact with moving objects
 \end{itemize}
 
 \chapter{Earlier approaches}
@@ -183,7 +183,11 @@ For additional information about the Linköping University Electronic Press and 
     \item Extension of the gradient descent
 \end{itemize}
 
+See also \textit{Incomplete Cholesky Preconditioned Conjugate Gradients method}, described in \textit{\href{http://www.cs.ubc.ca/~rbridson/fluidbook/}{Fluid Simulation for Computer Graphics}}. This method uses the \textit{\href{http://en.wikipedia.org/wiki/Incomplete_Cholesky_factorization}{incomplete Cholesky factorization}} as preconditioner.
+
 \subsubsection{Multigrid method}
+
+See \textit{\href{http://developer.download.nvidia.com/books/cuda-by-example/cuda-by-example-sample.pdf}{CUDA by Example: An Introduction to General-Purpose GPU Programming}}
 
 \section{Semicompressible water}
 
@@ -204,6 +208,8 @@ For additional information about the Linköping University Electronic Press and 
 \chapter{Free Surface Modelling (FSM)}
 
 There are both surface trackibng methods and surface capturing methods.
+
+See also \textit{\href{http://physbam.stanford.edu/~fedkiw/papers/cam1998-17.pdf}{A Non-Oscillatory Eulerian Approach to Interfaces in Multimaterial Flows (The Ghost Fluid Method)}}
 
 \begin{itemize}
     \item Lecture: \textit{\href{http://www.ims.nus.edu.sg/Programs/fluiddynamic/files/Lecture1-basics.pdf}{Moving Interface Problems: Methods \& Applications Tutorial Lecture I}}
@@ -344,23 +350,31 @@ See \textit{OpenFOAM-1.5.x/src/finiteVolume/fvMatrices/solvers/MULES/MULES.H} fo
 
 \chapter{Interaction with moving objects}
 
+see e.g.:
+
+\begin{itemize}
+    \item \textit{\href{http://physbam.stanford.edu/~fedkiw/papers/stanford2010-04.pdf}{Numerically Stable Fluid-Structure Interactions Between Compressible Flow and Solid Structures}}
+    \item \textit{\href{http://efdl.as.ntu.edu.tw/research/papers/JCP03GCIBM.pdf}{A ghost-cell immersed boundary method for flow in complex geometry}}
+    \item \textit{\href{http://www.cs.columbia.edu/~batty/papers/Batty07.pdf}{A Fast Variational Framework for Accurate Solid-Fluid Coupling}} (solid fraction, non-stick to walls)
+\end{itemize}
+
+\section{Immersed Boundary Method}
+
+\begin{itemize}
+    \item Reference: \textit{\href{http://www4.ncsu.edu/~zhilin/TEACHING/MA798Z/Peskin1.pdf}{The immersed boundary method}}
+    \item For compressible flow: \textit{\href{http://www.cecs.wright.edu/~haibo.dong/wp-content/themes/publications/IBM_JCP_2007.pdf}{A sharp interface immersed boundary method for compressible viscous flows}}
+\end{itemize}
+
+\section{Volume of Solid Method (VOS)}
+
+\begin{itemize}
+    \item Reference: \textit{The simulation of fluid-rigid body interaction}
+    \item Described in \textit{Numerical Modeling of Deforming Bubble Transport Related to Cavitating Hydraulic Turbines}
+\end{itemize}
+
 \section{Rotation of rigid bodies}
 
 See \textit{\href{http://en.wikipedia.org/wiki/Euler\%27s_equations_\%28rigid_body_dynamics\%29}{Euler's equations (rigid body dynamics)}}
-
-\chapter{Wind waves}
-
-\section{Spectral methods}
-
-\section{Air-water interaction}
-
-\chapter{Splash and foam}
-
-See \textit{\href{http://en.wikipedia.org/wiki/Sea_foam}{Wikipedia -- Sea foam}} or search for \textit{protein skimming} or \textit{foam fractionation}
-
-\chapter{Parallellization}
-
-\section{Space filling curves}
 
 \chapter{Conservation laws}
 
@@ -394,33 +408,49 @@ Difficulties:
 \begin{itemize}
     \item Dynamical creation/termination of surface cells and determination of properties in new cells
     \item High Courant numbers
+    \item High speeds of sound
     \item Keeping a sharp interface
+    \item Making it work in realtime
 \end{itemize}
 
-\section{Improvements}
+\chapter{Improvements}
 
-\subsection{Local-time stepping}
+\section{Wind waves}
 
-\subsection{Moving mesh for regions with high Courant number}
+\subsection{Spectral methods}
 
-\subsection{Perfectly matched layers}
+\subsection{Air-water interaction}
 
-\subsection{Incompressibility or semi-incompressibility}
+\section{Splash and foam}
+
+See \textit{\href{http://en.wikipedia.org/wiki/Sea_foam}{Wikipedia -- Sea foam}} or search for \textit{protein skimming} or \textit{foam fractionation}
+
+\section{Parallellization}
+
+\subsection{Space filling curves}
+
+\section{Local-time stepping}
+
+\section{Moving mesh for regions with high Courant number}
+
+\section{Perfectly matched layers}
+
+\section{Incompressibility or semi-incompressibility}
 
 \begin{itemize}
     \item See: \textit{\href{http://physbam.stanford.edu/~kwatra/papers/compressible_semi_implicit/compressible_semi_implicit.pdf}{A method for avoiding the acoustic time step restriction in compressible flow}}
 \end{itemize}
 
-\subsection{Sharpening of various advected fields}
+\section{Sharpening of various advected fields}
 
-\subsubsection{Backward Error Compensation and Forward Error Correction}
+\subsection{Backward Error Compensation and Forward Error Correction}
 
 \begin{itemize}
     \item Reference: \textit{\href{http://smartech.gatech.edu/xmlui/bitstream/handle/1853/29473/2002-389.pdf}{Back and forth error compensation and correction methods for removing errors induced by uneven gradients of the level set function}}
     \item Applied to the velocity field: \textit{\href{http://www.gvu.gatech.edu/~jarek/papers/FlowFixer.pdf}{FlowFixer: Using BFECC for Fluid Simulation}}
 \end{itemize}
 
-\subsection{Code optimization}
+\section{Code optimization}
 
 % % % % % % %
 % APENDIZES %
