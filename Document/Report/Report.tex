@@ -37,7 +37,13 @@
 % Linking
 \iftrue
     \usepackage{hyperref} % Links to pages
-    \hypersetup{pdfborder = {0 0 0}} % Remove the frame around links
+    \hypersetup{
+        pdfborder = {0 0 0},
+        colorlinks=true,
+        citecolor=violet,
+        linkcolor=black,
+        urlcolor=blue,
+        } % Remove the frame around links
 \else
     \usepackage{url} % Doesn't link to pages
 \fi
@@ -193,9 +199,7 @@ For additional information about the Linköping University Electronic Press and 
 
 \section{Multilevel acceleration}
 
-\section{Wave reflection}
-
-\subsection{Perfectly matched layer}
+\section{Wave reflection at level transitions}
 
 \chapter{Free Surface Modelling (FSM)}
 
@@ -340,6 +344,10 @@ See \textit{OpenFOAM-1.5.x/src/finiteVolume/fvMatrices/solvers/MULES/MULES.H} fo
 
 \chapter{Interaction with moving objects}
 
+\section{Rotation of a rigid body}
+
+See \textit{\href{http://en.wikipedia.org/wiki/Euler\%27s_equations_\%28rigid_body_dynamics\%29}{Euler's equations (rigid body dynamics)}}
+
 \chapter{Wind waves}
 
 \section{Spectral methods}
@@ -394,6 +402,14 @@ Difficulties:
 \subsection{Local-time stepping}
 
 \subsection{Moving mesh for regions with high Courant number}
+
+\subsection{Perfectly matched layers}
+
+\subsection{Incompressibility or semi-incompressibility}
+
+\begin{itemize}
+    \item See: \textit{\href{http://physbam.stanford.edu/~kwatra/papers/compressible_semi_implicit/compressible_semi_implicit.pdf}{A method for avoiding the acoustic time step restriction in compressible flow}}
+\end{itemize}
 
 % % % % % % %
 % APENDIZES %
