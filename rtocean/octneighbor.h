@@ -46,12 +46,15 @@ public:
     uint dim;
     bool pos_dir;
 
-    /*******************
-     * Volume of fluid *
-     *******************/
+    /***************************
+     * Advection of properties *
+     ***************************/
 
+    /* Volume of fluid method */
     pftype water_vol_coeff; /* [1] The volume of the water divided by the volujme of the cell (between 0 and total_vol_coeff) */
     pftype total_vol_coeff; /* [1] The volume of the water and air divided by the volujme of the cell (should stay around 1) */
+
+    /* Advection of momentum */
 
     /*****************
      * Navier-Stokes *

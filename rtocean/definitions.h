@@ -23,7 +23,7 @@
 ////////////////////////////////////////////////////////////////
 
 /* Essential */
-#define  DEBUG                      1
+#define  DEBUG                      0
 #define  INITIALIZE_FLOATS_TO_NAN                   1 // Weaker
 #define  CHECK_INITIALIZATION_OF_FLOATS             0 // Stronger
 #define  NUM_DIMENSIONS             2 /* 2 or 3 */
@@ -95,10 +95,11 @@
 #define  VELOCITY_LINE_WIDTH        LINE_WIDTH
 #define  NUM_LINES_IN_CIRCLES       16
 #define  MARK_CELLS                 0
-#define  VEL_DIV_SCALE_FACTOR       0.1 // [s/m]
-#define  FLOW_DIV_SCALE_FACTOR      VEL_DIV_SCALE_FACTOR // [s/m]
+#define  VEL_DIV_SCALE_FACTOR       0.1 // [s]
+#define  FLOW_DIV_SCALE_FACTOR      VEL_DIV_SCALE_FACTOR // [s]
+#define  DRAW_CELL_CENTER_VELOCITIES                 1
 #define  DRAW_CELL_FACE_VELOCITIES                   0
-#define  DRAW_CELL_CENTER_VELOCITIES                 0
+#define  DRAW_ALL_VELOCITIES                         1
 #define  VEL_TO_ARROW_LENGTH_FACTOR 0.1
 #define  DRAW_CELL_CUBES            0
 #define  DRAW_PARENT_CELLS          1

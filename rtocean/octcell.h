@@ -43,8 +43,13 @@ public:
      ***************************/
 
     /* Family */
-    octcell *_par; /* Parent cell*/
-    octcell **_c; /* The possible children */
+#if  DEBUG && CHECK_INITIALIZATION_OF_FLOATS
+    mustinit<octcell*> _par; /* Parent cell*/
+    mustinit<mustinit<octcell*>*> _c; /* The possible children */
+#else
+    octcell* _par; /* Parent cell*/
+    octcell** _c; /* The possible children */
+#endif
 
     /* Geometry */
     // The cell is a cube with size s and the first corner in r
@@ -58,6 +63,8 @@ public:
     /* Volume of fluid */
     pftype water_vol_coeff; /* [1] The volume the water in this cell would occupy at NORMAL_AIR_PRESSURE divided by the volume of the cell */
     pftype total_vol_coeff; /* [1] The volume the water and the air in this cell would occupy at NORMAL_AIR_PRESSURE divided by the volume of the cell (should stay relatively close to 1) */
+
+    /* Advection of momentum */
 
     /* Level of detail */
     uint lvl; /* The level of the cell, 0 = root */
@@ -97,6 +104,7 @@ public:
     bool is_mixed_cell() const;
     pftype get_air_volume_coefficient() const;
     pftype get_alpha() const;
+    pftype get_safe_alpha() const;
     pftype get_water_volume() const;
     pftype get_total_fluid_volume() const;
     void set_volume_coefficients(pftype water_volume_coefficient, pftype total_volume_coefficient);
@@ -310,6 +318,17 @@ pftype octcell::get_alpha() const
 }
 
 inline
+pftype octcell::get_safe_alpha() const
+{
+    if (total_vol_coeff) {
+        return water_vol_coeff/total_vol_coeff;
+    }
+    else {
+        return 0;
+    }
+}
+
+inline
 pftype octcell::get_water_volume() const
 {
     return water_vol_coeff * get_cube_volume();
@@ -372,7 +391,11 @@ void octcell::_create_new_random_child_array()
     }
 #endif
     // Create child array
+#if  DEBUG && CHECK_INITIALIZATION_OF_FLOATS
+    _c = new mustinit<octcell*>[MAX_NUM_CHILDREN];
+#else
     _c = new octcell*[MAX_NUM_CHILDREN];
+#endif
 }
 
 inline

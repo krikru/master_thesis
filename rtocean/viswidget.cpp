@@ -154,7 +154,7 @@ void viswidget::draw_pressure(const octcell *cell)
     q -= idx1;
     color3 c = (1-q)*colors[idx1] + q*colors[idx2];
     quick_set_color(c[0], c[1], c[2], 1);
-    //quick_set_color(c[0], c[1], c[2], cell->get_alpha());
+    //quick_set_color(c[0], c[1], c[2], cell->get_safe_alpha());
 
 #if    NUM_DIMENSIONS == 2
     /* Vertices */
@@ -195,7 +195,7 @@ void viswidget::draw_pressure_deviation(const octcell *cell)
     q -= idx1;
     color3 c = (1-q)*colors[idx1] + q*colors[idx2];
     quick_set_color(c[0], c[1], c[2], 1);
-    //quick_set_color(c[0], c[1], c[2], cell->get_alpha());
+    //quick_set_color(c[0], c[1], c[2], cell->get_safe_alpha());
 
 #if    NUM_DIMENSIONS == 2
     /* Vertices */
@@ -234,7 +234,7 @@ void viswidget::draw_alpha(const octcell* cell)
                              color3(1, 0, 0)}; // 4, Red
     color3 c;
     if (cell->total_vol_coeff > 0) {
-        pftype q = NUM_TRANSITIONS * cell->get_alpha();
+        pftype q = NUM_TRANSITIONS * cell->get_safe_alpha();
         q = MIN(MAX(q, (pftype)0), (pftype)NUM_TRANSITIONS);
         uint idx1 = uint(q);
         uint idx2 = MIN(idx1 + 1, NUM_TRANSITIONS);
@@ -402,8 +402,8 @@ void viswidget::draw_velocity_divergence(const octcell* cell)
     uint idx2 = MIN(idx1 + 1, NUM_TRANSITIONS);
     q -= idx1;
     color3 c = (1-q)*colors[idx1] + q*colors[idx2];
-    //quick_set_color(c[0], c[1], c[2], 1);
-    quick_set_color(c[0], c[1], c[2], cell->get_alpha());
+    quick_set_color(c[0], c[1], c[2], 1);
+    //quick_set_color(c[0], c[1], c[2], cell->get_safe_alpha());
 
 #if    NUM_DIMENSIONS == 2
     /* Vertices */
@@ -443,8 +443,8 @@ void viswidget::draw_flow_divergence(const octcell* cell)
     uint idx2 = MIN(idx1 + 1, NUM_TRANSITIONS);
     q -= idx1;
     color3 c = (1-q)*colors[idx1] + q*colors[idx2];
-    //quick_set_color(c[0], c[1], c[2], 1);
-    quick_set_color(c[0], c[1], c[2], cell->get_alpha());
+    quick_set_color(c[0], c[1], c[2], 1);
+    //quick_set_color(c[0], c[1], c[2], cell->get_safe_alpha());
 
 #if    NUM_DIMENSIONS == 2
     /* Vertices */
@@ -474,8 +474,9 @@ void viswidget::quick_draw_cell_face_velocities(const octcell *cell)
     leaf_set.add_neighbor_list(&cell->neighbor_lists[NL_SAME_LEVEL_OF_DETAIL_LEAF ]);
     leaf_set.add_neighbor_list(&cell->neighbor_lists[NL_HIGHER_LEVEL_OF_DETAIL    ]);
     for (nlnode* node = leaf_set.get_first_node(); node; node = leaf_set.get_next_node()) {
-        if ((cell->water_vol_coeff > water_limit || node->v.n->water_vol_coeff > water_limit)
-                && node->v.vel_out > 0) {
+        if (DRAW_ALL_VELOCITIES ||
+                ((cell->water_vol_coeff > water_limit || node->v.n->water_vol_coeff > water_limit)
+                && node->v.vel_out > 0)) {
             pfvec arrow_start = (cell->get_cell_center() + node->v.n->get_cell_center())/2;
             pfvec dir = (node->v.n->get_cell_center() - cell->get_cell_center()).normalized();
             pfvec arrow = dir * node->v.vel_out * VEL_TO_ARROW_LENGTH_FACTOR;
@@ -497,7 +498,8 @@ void viswidget::quick_draw_cell_center_velocity(const octcell* cell)
     leaf_set.add_neighbor_list(&cell->neighbor_lists[NL_SAME_LEVEL_OF_DETAIL_LEAF ]);
     leaf_set.add_neighbor_list(&cell->neighbor_lists[NL_HIGHER_LEVEL_OF_DETAIL    ]);
     for (nlnode* node = leaf_set.get_first_node(); node; node = leaf_set.get_next_node()) {
-        if (cell->water_vol_coeff > water_limit || node->v.n->water_vol_coeff > water_limit) {
+        if (DRAW_ALL_VELOCITIES ||
+                (cell->water_vol_coeff > water_limit || node->v.n->water_vol_coeff > water_limit)) {
             mixed_area[node->v.dim] += node->v.cf_area;
             average_velocity.e[node->v.dim] += node->v.get_signed_dir() * node->v.vel_out * node->v.cf_area;
         }
@@ -546,7 +548,7 @@ void viswidget::quick_draw_cell_water_level(const octcell *cell)
 {
 #if    NUM_DIMENSIONS == 2
     pfvec p0 = cell->r;
-    p0.e[VERTICAL_DIMENSION] += cell->get_alpha() * cell->s;
+    p0.e[VERTICAL_DIMENSION] += cell->get_safe_alpha() * cell->s;
     pfvec p1 = p0;
     p1.e[HORIZONTAL_DIMENSION1] += cell->s;
     quick_draw_line(p0, p1);

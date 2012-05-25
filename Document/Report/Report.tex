@@ -116,7 +116,7 @@ For additional information about the Linköping University Electronic Press and 
 \begin{itemize}
     \item Wave dispersion
     \item Different depths gives different speeds
-    \item The water should interact with moving objects
+    \item The water should interact with moving objects (see e.g.: \textit{\href{http://physbam.stanford.edu/~fedkiw/papers/stanford2010-04.pdf}{Numerically Stable Fluid-Structure Interactions Between Compressible Flow and Solid Structures}}, Immersed Boundary Method)
 \end{itemize}
 
 \chapter{Earlier approaches}
@@ -395,6 +395,17 @@ Difficulties:
 
 \subsection{Moving mesh for regions with high Courant number}
 
+\subsection{Sharpening of various advected fields}
+
+\subsubsection{Backward Error Compensation and Forward Error Correction}
+
+\begin{itemize}
+    \item Reference: \textit{\href{http://smartech.gatech.edu/xmlui/bitstream/handle/1853/29473/2002-389.pdf}{Back and forth error compensation and correction methods for removing errors induced by uneven gradients of the level set function}}
+    \item Applied to the velocity field: \textit{\href{http://www.gvu.gatech.edu/~jarek/papers/FlowFixer.pdf}{FlowFixer: Using BFECC for Fluid Simulation}}
+\end{itemize}
+
+\subsection{Code optimization}
+
 % % % % % % %
 % APENDIZES %
 % % % % % % %
@@ -435,3 +446,5 @@ Difficulties:
 
 %TODO: Check up:
 % Turbulens model (Large Eddy Simulation for example)
+
+%TODO: Mention Zalesak’s problem (for advection tests of sharp interfaces)
