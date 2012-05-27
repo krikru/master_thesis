@@ -142,6 +142,13 @@ For additional information about the Linköping University Electronic Press and 
 
 \subsection{Particles}
 
+\subsection{Marker-and-Cell method (MAC)}
+
+\begin{itemize}
+    \item Reference: \textit{Numerical calculation of time-dependent viscous incompressible flow of fluid with a free surface}
+    \item Described in: \textit{\href{http://people.sc.fsu.edu/~jburkardt/pdf/fluid_flow_for_the_rest_of_us.pdf}{Fluid Flow for the Rest of Us: Tutorial of the Marker and Cell Method in Computer Graphics}}
+\end{itemize}
+
 \subsection{Boundary element method}
 
 \subsection{Finite element method}
@@ -275,7 +282,7 @@ See \textit{OpenFOAM-1.5.x/src/finiteVolume/fvMatrices/solvers/MULES/MULES.H} fo
 
 \begin{itemize}
     \item Described here: \textit{\href{http://link.libris.kb.se/sfxliub?sid=?url_ver=Z39.88-2004&rfr_id=info:sid/bibl.liu.se\%3Axerxes+\%28+PubMed+LiU\%29&rft.genre=article&rft_val_fmt=info\%3Aofi\%2Ffmt\%3Akev\%3Amtx\%3Ajournal&rft.issn=15393755&rft.date=2009&rft.jtitle=Phys+Rev+E+Stat+Nonlin+Soft+Matter+Phys&rft.volume=79&rft.issue=3+Pt+2&rft.spage=036306&rft.atitle=Drop+impact+onto+a+liquid+layer+of+finite+thickness+\%3A+dynamics+of+the+cavity+evolution+&rft.aulast=Berberovi\%C4\%87&rft.aufirst=Edin}{Drop impact onto a liquid layer of finite thickness: Dynamics of the cavity evolution}}
-    \item An improvement for multiple phases: \textit{\href{http://www.mathematik.uni-ulm.de/numerik/staff/urban/reports/ECCOMASCFD2010paperfinal.pdf}{A Coupled Pressure Based Solution Algorithm Based on the Volume-Of-Fluid Approach for Two or More Immiscible Fluids}}
+    \item An improvement for more than two phases: \textit{\href{http://www.mathematik.uni-ulm.de/numerik/staff/urban/reports/ECCOMASCFD2010paperfinal.pdf}{A Coupled Pressure Based Solution Algorithm Based on the Volume-Of-Fluid Approach for Two or More Immiscible Fluids}}
 \end{itemize}
 
 \subsubsection{SOLA-VOF}
@@ -300,6 +307,7 @@ See \textit{OpenFOAM-1.5.x/src/finiteVolume/fvMatrices/solvers/MULES/MULES.H} fo
 
 \begin{itemize}
     \item Reference: \textit{\href{http://ac.els-cdn.com/S0021999199962769/1-s2.0-S0021999199962769-main.pdf?_tid=85161b57da5f4401e55c9d07495e24ea&acdnat=1336167249_a59e4f578adbacf3bff69936c48cdd57}{A Method for Capturing Sharp Fluid Interfaces on Arbitrary Meshes}}
+    \item Also described in (by the same author): \textit{\href{http://powerlab.fsb.hr/ped/kturbo/OpenFOAM/docs/OnnoUbbinkPhD.pdf}{Numerical prediction of two fluid systems with sharp interfaces}}
     \item Test with different Courant numbers: \textit{\href{http://www.marin.nl/upload_mm/8/2/c/1807524470_1999999096_2007-ECCOMAS_HoekstraVazAbeilBunnik.pdf}{Free Surface Flow Modelling with Interface Capturing Techniques}}
     \item Improvement 1: \textit{\href{http://powerlab.fsb.hr/ped/kturbo/openfoam/docs/HenrikRuschePhD2002.pdf}{Computational Fluid Dynamics of Dispersed Two-Phase Flows at High Phase Fractions}}
 \end{itemize}
@@ -408,7 +416,7 @@ Difficulties:
 \begin{itemize}
     \item Dynamical creation/termination of surface cells and determination of properties in new cells
     \item High Courant numbers
-    \item High speeds of sound
+    \item High speeds of sound (remedied in \textit{\href{http://physbam.stanford.edu/~kwatra/papers/compressible_semi_implicit/compressible_semi_implicit.pdf}{A method for avoiding the acoustic time step restriction in compressible flow}})
     \item Keeping a sharp interface
     \item Making it work in realtime
 \end{itemize}
@@ -431,7 +439,7 @@ See \textit{\href{http://en.wikipedia.org/wiki/Sea_foam}{Wikipedia -- Sea foam}}
 
 \section{Local-time stepping}
 
-\section{Moving mesh for regions with high Courant number}
+\section{Remedy for regions with high Courant number}
 
 \section{Perfectly matched layers}
 
@@ -447,7 +455,7 @@ See \textit{\href{http://en.wikipedia.org/wiki/Sea_foam}{Wikipedia -- Sea foam}}
 
 \begin{itemize}
     \item Reference: \textit{\href{http://smartech.gatech.edu/xmlui/bitstream/handle/1853/29473/2002-389.pdf}{Back and forth error compensation and correction methods for removing errors induced by uneven gradients of the level set function}}
-    \item Applied to the velocity field: \textit{\href{http://www.gvu.gatech.edu/~jarek/papers/FlowFixer.pdf}{FlowFixer: Using BFECC for Fluid Simulation}}
+    \item Applied to the velocity field and images: \textit{\href{http://www.gvu.gatech.edu/~jarek/papers/FlowFixer.pdf}{FlowFixer: Using BFECC for Fluid Simulation}}
 \end{itemize}
 
 \section{Code optimization}
