@@ -30,10 +30,12 @@
 
 % Miscellaneous tools
 \usepackage{etoolbox} % Includes the macro \ifstrequal
+
 % Paper size
 \iffalse
     \usepackage{./Packages/s5paper/s5paper}
 \fi
+
 % Linking
 \iftrue
     \usepackage{hyperref} % Links to pages
@@ -47,9 +49,17 @@
 \else
     \usepackage{url} % Doesn't link to pages
 \fi
+
+% Mathematics
+\usepackage{mathtools}
+
+% Title page
+\usepackage{lithmaketitle}
+
 % Graphics
 \usepackage{graphicx} % Necessary in order to include images
-\usepackage{titlepic} % Necessary in order to be able to have an image on the title page
+%\usepackage{titlepic} % Necessary in order to be able to have an image on the title page
+
 % Referencing
 \iftrue
     \usepackage[round, authoryear]{natbib} % Harward style referencing
@@ -57,26 +67,32 @@
     \usepackage[square, numbers]{natbib} %
 \fi
 
-%Define commands
+% Define commands
+
 \newcommand{\comment}[1]{}
 \newcommand{\HRule}{\rule{\linewidth}{0.5mm}}
 
 \begin{document}
 
+\pagenumbering{roman}
+%TODO: frontmatter, mainmatter and backmatter is only supported in the book class. Should I change to book??
+%\frontmatter
+
 % % % % % % % %
 % TOP MATTER  %
 % % % % % % % %
 
+% Using the maketitle commant
 %\begin{titlepage}
-% Top matter
-\title{Simulating Ocean Waves and Ships on a Tree Structure}
+\title{Simulating Ocean Waves and Ships with an Octree Data Structure}
 \author{Kristofer Krus}
 \date{\today}
-\titlepic{\includegraphics[width=0.6\textwidth, clip=true]{./Images/lith_en_vert_col.pdf}}
+\lithlogo{\includegraphics[width=0.6\textwidth, clip=true]{./Images/lith_en_vert_col.pdf}}
 %\includegraphics[width=0.6\textwidth, clip=true]{./Images/lith_en_vert_col.pdf}
-\maketitle
+\lithmaketitle
 %\texttt{krikr808@student.liu.se}
 %\end{titlepage}
+
 
 % % % % % % % % % %
 % COMPYRIGHT NOTE %
@@ -108,6 +124,10 @@ For additional information about the Linköping University Electronic Press and 
 \tableofcontents
 \listoftables
 \listoffigures
+
+\newpage
+\pagenumbering{arabic}
+%\mainmatter
 
 % % % % % % % % %
 % INTRODUCTION  %
@@ -194,7 +214,12 @@ See also \textit{Incomplete Cholesky Preconditioned Conjugate Gradients method},
 
 \subsubsection{Multigrid method}
 
-See \textit{\href{http://developer.download.nvidia.com/books/cuda-by-example/cuda-by-example-sample.pdf}{CUDA by Example: An Introduction to General-Purpose GPU Programming}}
+See
+\begin{itemize}
+    \item \textit{\href{http://developer.download.nvidia.com/books/cuda-by-example/cuda-by-example-sample.pdf}{CUDA by Example: An Introduction to General-Purpose GPU Programming}}
+    \item \textit{\href{http://people.freebsd.org/~snb/school/hp_mg.pdf}{High Performance Multigrid for Poisson's Equation in 3D}}
+\end{itemize}
+
 
 \section{Semicompressible water}
 
@@ -469,6 +494,13 @@ See \textit{\href{http://en.wikipedia.org/wiki/Sea_foam}{Wikipedia -- Sea foam}}
 \appendix
 %\chapter{Derivation of twodimensional PDEs for water waves at random intermediate depths}
 \chapter{Derivation of twodimensional PDEs for water waves at varying depths}
+
+\begin{equation} \label{eq:example}
+example
+\end{equation}
+
+See equation \ref{eq:example}
+
 
 % % % % % % % % %
 % BIBLIOGRAPHY  %

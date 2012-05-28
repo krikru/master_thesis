@@ -1,0 +1,66 @@
+% lithmaketitle.sty is a LaTeX package to create a title page following the LiTH specifications.
+% This package is derived from the popular non-standard package titlepic
+% By Kristofer Krus <krikr808@student.liu.se>. Free software, no warranty of any kind.
+% 
+% V. 0.1
+% -----------------------------------------------------------------------------
+
+% No idea whether it works on older LaTeXes.
+\NeedsTeXFormat{LaTeX2e}
+
+% Package identification and version number.
+\ProvidesPackage{lithmaketitle}[2012/05/28 0.1 Package create a title page following the LiTH specifications]
+
+% Declare the options.
+\DeclareOption{tt}{\gdef\@tptopspace{}\gdef\@tpsepspace{\vskip 3em}}
+\DeclareOption{tc}{\gdef\@tptopspace{}\gdef\@tpsepspace{\vfil}}
+\DeclareOption{cc}{\gdef\@tptopspace{\null\vfil}\gdef\@tpsepspace{\vskip 3em}}
+\ExecuteOptions{cc}
+\ProcessOptions
+
+% Define additional commands introduced by this package.
+% Very similar to the definition of \title, etc.
+\def\lithlogo#1{\gdef\@lithlogo{#1}}
+\def\@lithlogo{\@empty} % default: no picture
+
+% If a title page was requested from the document class (article/report/book),
+% define \lithmaketitle.
+\if@titlepage
+\newcommand\lithmaketitle{
+    \begin{titlepage}%
+        \let\footnotesize\small
+        \let\footnoterule\relax
+        \let \footnote \thanks
+        \@tptopspace%
+        \begin{center}%
+            {\LARGE \@title \par}%
+            \vskip 3em%
+            {\large
+                \lineskip .75em%
+                \begin{tabular}[t]{c}%
+                    \@author
+                \end{tabular}\par%
+            }%
+            \vskip 1.5em%
+            {\large \@date \par}%       % Set date in \large size.
+        \end{center}\par
+        \@tpsepspace%
+        {\centering\@lithlogo\par}
+        \vfil
+        \@thanks
+    \end{titlepage}%
+    \setcounter{footnote}{0}%
+    \global\let\thanks\relax
+    \global\let\maketitle\relax
+    \global\let\@thanks\@empty
+    \global\let\@author\@empty
+    \global\let\@date\@empty
+    \global\let\@title\@empty
+    \global\let\@lithlogo\@empty
+    \global\let\title\relax
+    \global\let\author\relax
+    \global\let\date\relax
+    \global\let\and\relax
+    \global\let\titlepic\relax
+}
+\fi
