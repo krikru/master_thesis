@@ -4,6 +4,22 @@
 % S5: 165 x 242 mm (This is also called statsformat (in Swedish), it.s a special government format used in Sweden) 
 % Standard format for master thesis works, according to LIU-tryck
 
+% Packages to check out
+%\usepackage{amsmath,amssymb,amsthm,amsfonts,bm}
+%\usepackage{array} % for better arrays (eg matrices) in maths
+%\usepackage{color}
+%\usepackage{graphicx}
+%\usepackage{float} % To get the placement H for figures
+%\usepackage{tikz,pgfplots}
+%\usetikzlibrary{positioning,shapes,shadows,arrows,fit, decorations}
+%\usepackage[a4paper,top=1.75truecm,bottom=1.75truecm,left=1.75truecm,right=1.75truecm]{geometry}
+%\usepackage[parfill]{parskip}
+%\usepackage[bookmarks]{hyperref}
+%\hypersetup{colorlinks=true, pagebackref=page, citecolor=blue, menucolor=red}
+%\usepackage{natbib} 
+%\usepackage{hypernat} 
+
+
 \documentclass[]{report}
 %\documentclass[a4paper]{report}
 %\documentclass[s5paper]{report}
@@ -36,13 +52,16 @@
     \usepackage{./Packages/s5paper/s5paper}
 \fi
 
+% Get å, ä, ö, Å, Ä, Ö
+\usepackage[utf8]{inputenc}
+
 % Linking
 \iftrue
     \usepackage{hyperref} % Links to pages
     \hypersetup{
         pdfborder = {0 0 0},
         colorlinks=true,
-        citecolor=violet,
+        citecolor=blue,
         linkcolor=black,
         urlcolor=blue,
         } % Remove the frame around links
@@ -82,16 +101,21 @@
 % TOP MATTER  %
 % % % % % % % %
 
-% Using the maketitle commant
-%\begin{titlepage}
 \title{Simulating Ocean Waves and Ships with an Octree Data Structure}
 \author{Kristofer Krus}
 \date{\today}
+%\thanks{All supporters}
 \lithlogo{\includegraphics[width=0.6\textwidth, clip=true]{./Images/lith_en_vert_col.pdf}}
-%\includegraphics[width=0.6\textwidth, clip=true]{./Images/lith_en_vert_col.pdf}
+\lithcompany{Saab AB}
+\lithwork{Master thesis work}
+\lithdepartment{The Department of Physics, Chemistry and Biology}
+\lithuniversity{Linköping University}
+\lithpostaddress{581 83 Linköping}
+\lithsupervisors{Anders Rönnbrant (Saab AB) \\ Kenneth Järrendal (Linköping Institute of Technology)}
+\lithexaminator{Magnus Johansson (Linköping Institute of Technology)}
 \lithmaketitle
+
 %\texttt{krikr808@student.liu.se}
-%\end{titlepage}
 
 
 % % % % % % % % % %
@@ -162,6 +186,12 @@ For additional information about the Linköping University Electronic Press and 
 
 \subsection{Particles}
 
+\subsubsection{Screen Space Meshes}
+
+\begin{itemize}
+    \item Reference: \textit{\href{http://www.matthiasmueller.info/publications/screenSpaceMeshes.pdf}{Screen Space Meshes}}
+\end{itemize}
+
 \subsection{Marker-and-Cell method (MAC)}
 
 \begin{itemize}
@@ -176,6 +206,9 @@ For additional information about the Linköping University Electronic Press and 
 \subsection{Finite volume method with tall cells}
 
 \subsection{Finite volume method with octrees}
+
+%This is the method I have choosen to use for my work, with the main reference \cite{Harlow65b}
+This is the method I have choosen to use for my work, with the main reference \cite{journals/tog/LosassoGF04}.
 
 \begin{itemize}
     \item Reference 1: \textit{\href{http://gfs.sourceforge.net/gerris.pdf}{Gerris: a tree-based adaptive solver for the incompressible Euler equations in complex geometries}}
@@ -506,11 +539,14 @@ See equation \ref{eq:example}
 % BIBLIOGRAPHY  %
 % % % % % % % % %
 
-\iffalse
+\iftrue
+
+\cleardoublepage
+\phantomsection
+\addcontentsline{toc}{chapter}{Bibliography}
 
 \bibliographystyle{plain}
-\bibliography{sample1,sample2,...,samplen}
-% Note the lack of whitespace between the commas and the next bib file.
+\bibliography{references} % If multiple bib files are used, they have to be separated by a comma and no space
 
 \else
 

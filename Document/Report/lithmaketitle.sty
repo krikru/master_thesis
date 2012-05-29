@@ -8,6 +8,9 @@
 % No idea whether it works on older LaTeXes.
 \NeedsTeXFormat{LaTeX2e}
 
+% Use the fancyhdr package to create headers and footers
+\RequirePackage{fancyhdr}
+
 % Package identification and version number.
 \ProvidesPackage{lithmaketitle}[2012/05/28 0.1 Package create a title page following the LiTH specifications]
 
@@ -20,8 +23,33 @@
 
 % Define additional commands introduced by this package.
 % Very similar to the definition of \title, etc.
+% \lithlogo
 \def\lithlogo#1{\gdef\@lithlogo{#1}}
 \def\@lithlogo{\@empty} % default: no picture
+% \lithwork
+\def\lithwork#1{\gdef\@lithwork{#1}}
+\def\@lithwork{Master thesis work} % default value
+% \lithcompany
+\def\lithcompany#1{\gdef\@lithcompany{#1}}
+\def\@lithcompany{\textit{Company}} % default value
+% \lithuniversity
+\def\lithuniversity#1{\gdef\@lithuniversity{#1}}
+\def\@lithuniversity{Link\"{o}ping University} % default value
+% \lithdepartment
+\def\lithdepartment#1{\gdef\@lithdepartment{#1}}
+\def\@lithdepartment{The Department of Physics, Chemistry and Biology} % default value
+% \lithpostaddress
+\def\lithpostaddress#1{\gdef\@lithpostaddress{#1}}
+\def\@lithpostaddress{581 83 Link\"{o}ping} % default value
+% \lithsupervisor
+\def\lithsupervisor#1{\gdef\@lithsupervisor{#1}}
+\def\@lithsupervisor{\textit{Supervisor}} % default value
+% \lithsupervisors
+\def\lithsupervisors#1{\gdef\@lithsupervisors{#1}}
+%\def\@lithsupervisors{\textit{Supervisors}} % default value
+% \lithexaminator
+\def\lithexaminator#1{\gdef\@lithexaminator{#1}}
+\def\@lithexaminator{\textit{Examinator}} % default value
 
 % If a title page was requested from the document class (article/report/book),
 % define \lithmaketitle.
@@ -31,22 +59,59 @@
         \let\footnotesize\small
         \let\footnoterule\relax
         \let \footnote \thanks
-        \@tptopspace%
-        \begin{center}%
+        \renewcommand{\headrulewidth}{0pt} % Remove horozontal ruler under header
+        %TODO: Fix so that the headers and footers get wider (see line below)
+        %\fancyheadoffset[LE,RO]{\marginparsep + \marginparwidth} % Make header and footer wider
+        {\bf \large \begin{center}% Make the font on the title page get a bold face and center the content
+            % Page 1
+            \thispagestyle{fancy}
+            \chead{\bf \large \@lithdepartment}
+            \cfoot{\bf \small \@lithuniversity\ \@lithdepartment \\ \@lithpostaddress}
+            \@tptopspace%
+            \@lithwork
+            \vskip 1em%
             {\LARGE \@title \par}%
             \vskip 3em%
-            {\large
-                \lineskip .75em%
-                \begin{tabular}[t]{c}%
-                    \@author
-                \end{tabular}\par%
-            }%
+            \lineskip .75em%
+            \begin{tabular}[t]{c}%
+                \@author \\
+                \@lithwork\ carried out at \@lithcompany \\
+                \@date
+            \end{tabular}\par%
             \vskip 1.5em%
-            {\large \@date \par}%       % Set date in \large size.
-        \end{center}\par
-        \@tpsepspace%
-        {\centering\@lithlogo\par}
-        \vfil
+            LITH-IFM-x-EX--yy/xxxx--SE
+            \@tpsepspace%
+            {\centering\@lithlogo\par}
+            \newpage
+            
+            % Page 2
+            \thispagestyle{fancy}
+            \chead{\bf \large \@lithdepartment}
+            \cfoot{}
+            \@tptopspace%
+            {\LARGE \@title \par}%
+            \vskip 3em%
+            \lineskip .75em%
+            \begin{tabular}[t]{c}%
+                \@author \\ \\
+                \@lithwork\ carried out at \@lithcompany \\ \\
+                \@date
+            \end{tabular}\par%
+            \vskip 1.5em%
+            \ifx \@lithsupervisors \undefined
+            Supervisor: \\
+            \@lithsupervisor
+            \else
+            Supervisors: \\
+            \@lithsupervisors
+            \fi
+            \vskip 1em%
+            Examinator: \\
+            \@lithexaminator
+            \@tpsepspace%
+            {\centering\@lithlogo\par}
+            \vfil
+        \end{center}\par }
         \@thanks
     \end{titlepage}%
     \setcounter{footnote}{0}%
