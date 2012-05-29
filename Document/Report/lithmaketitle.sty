@@ -34,7 +34,7 @@
 \def\@lithcompany{\textit{Company}} % default value
 % \lithuniversity
 \def\lithuniversity#1{\gdef\@lithuniversity{#1}}
-\def\@lithuniversity{Link\"{o}ping University} % default value
+\def\@lithuniversity{Link\"{o}pings universitet} % default value
 % \lithdepartment
 \def\lithdepartment#1{\gdef\@lithdepartment{#1}}
 \def\@lithdepartment{The Department of Physics, Chemistry and Biology} % default value
@@ -48,8 +48,8 @@
 \def\lithsupervisors#1{\gdef\@lithsupervisors{#1}}
 %\def\@lithsupervisors{\textit{Supervisors}} % default value
 % \lithexaminator
-\def\lithexaminator#1{\gdef\@lithexaminator{#1}}
-\def\@lithexaminator{\textit{Examinator}} % default value
+\def\lithexaminor#1{\gdef\@lithexaminor{#1}}
+\def\@lithexaminor{\textit{Examinator}} % default value
 
 % If a title page was requested from the document class (article/report/book),
 % define \lithmaketitle.
@@ -79,10 +79,10 @@
                 \@date
             \end{tabular}\par%
             \vskip 1.5em%
-            LITH-IFM-x-EX--yy/xxxx--SE
+            LITH-IFM-x-EX-{}-yy/xxxx---SE %TODO: Replace the x, yy and xxxx
             \@tpsepspace%
             {\centering\@lithlogo\par}
-            \newpage
+            \clearpage
             
             % Page 2
             \thispagestyle{fancy}
@@ -99,18 +99,18 @@
             \end{tabular}\par%
             \vskip 1.5em%
             \ifx \@lithsupervisors \undefined
-            Supervisor: \\
-            \@lithsupervisor
+                Supervisor: \\
+                \@lithsupervisor
             \else
-            Supervisors: \\
-            \@lithsupervisors
+                Supervisors: \\
+                \@lithsupervisors
             \fi
             \vskip 1em%
-            Examinator: \\
-            \@lithexaminator
+            Examinor: \\
+            \@lithexaminor
             \@tpsepspace%
             {\centering\@lithlogo\par}
-            \vfil
+            \clearpage
         \end{center}\par }
         \@thanks
     \end{titlepage}%
