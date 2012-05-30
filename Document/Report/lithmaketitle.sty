@@ -37,10 +37,10 @@
 \def\@lithuniversity{Link\"{o}pings universitet} % default value
 % \lithdepartment
 \def\lithdepartment#1{\gdef\@lithdepartment{#1}}
-\def\@lithdepartment{The Department of Physics, Chemistry and Biology} % default value
+\def\@lithdepartment{Department of Physics, Chemistry and Biology} % default value
 % \lithpostaddress
 \def\lithpostaddress#1{\gdef\@lithpostaddress{#1}}
-\def\@lithpostaddress{581 83 Link\"{o}ping} % default value
+\def\@lithpostaddress{581 83 Link\"{o}ping, Sweden} % default value
 % \lithsupervisor
 \def\lithsupervisor#1{\gdef\@lithsupervisor{#1}}
 \def\@lithsupervisor{\textit{Supervisor}} % default value
@@ -60,58 +60,58 @@
         \let\footnoterule\relax
         \let \footnote \thanks
         \renewcommand{\headrulewidth}{0pt} % Remove horozontal ruler under header
-        %TODO: Fix so that the headers and footers get wider (see line below)
-        %\fancyheadoffset[LE,RO]{\marginparsep + \marginparwidth} % Make header and footer wider
-        {\bf \large \begin{center}% Make the font on the title page get a bold face and center the content
-            % Page 1
-            \thispagestyle{fancy}
-            \chead{\bf \large \@lithdepartment}
-            \cfoot{\bf \small \@lithuniversity\ \@lithdepartment \\ \@lithpostaddress}
-            \@tptopspace%
-            \@lithwork
-            \vskip 1em%
-            {\LARGE \@title \par}%
-            \vskip 3em%
-            \lineskip .75em%
-            \begin{tabular}[t]{c}%
-                \@author \\
-                \@lithwork\ carried out at \@lithcompany \\
-                \@date
-            \end{tabular}\par%
-            \vskip 1.5em%
-            LITH-IFM-x-EX-{}-yy/xxxx---SE %TODO: Replace the x, yy and xxxx
-            \@tpsepspace%
-            {\centering\@lithlogo\par}
-            \clearpage
-            
-            % Page 2
-            \thispagestyle{fancy}
-            \chead{\bf \large \@lithdepartment}
-            \cfoot{}
-            \@tptopspace%
-            {\LARGE \@title \par}%
-            \vskip 3em%
-            \lineskip .75em%
-            \begin{tabular}[t]{c}%
-                \@author \\ \\
-                \@lithwork\ carried out at \@lithcompany \\ \\
-                \@date
-            \end{tabular}\par%
-            \vskip 1.5em%
-            \ifx \@lithsupervisors \undefined
-                Supervisor: \\
-                \@lithsupervisor
-            \else
-                Supervisors: \\
-                \@lithsupervisors
-            \fi
-            \vskip 1em%
-            Examinor: \\
-            \@lithexaminor
-            \@tpsepspace%
-            {\centering\@lithlogo\par}
-            \clearpage
-        \end{center}\par }
+        \fancyhfoffset[]{\dimexpr\marginparsep+\marginparwidth\relax} % Make header and footer wider. \RequirePackage{calc} can be used instead of using \dimexpr and \relax.
+        {\bf \large
+            \begin{center}% Make the font on the title page get a bold face and center the content
+                % Page 1
+                \thispagestyle{fancy} %TODO: Check why pagestyle doesn't work
+                \chead{\bf \large \@lithdepartment}
+                \cfoot{\bf \normalsize \@lithdepartment\\ \@lithuniversity\\ \@lithpostaddress}
+                \@tptopspace%
+                \@lithwork
+                \vskip 1em%
+                {\LARGE \@title \par}%
+                \vskip 3em%
+                \lineskip .75em%
+                \begin{tabular}[t]{c}%
+                    \@author \\
+                    \@lithwork\ carried out at \@lithcompany \\
+                    \@date
+                \end{tabular}\par%
+                \vskip 1.5em%
+                LITH-IFM-x-EX-{}-yy/xxxx---SE %TODO: Replace the x, yy and xxxx
+                \@tpsepspace%
+                {\centering\@lithlogo\par}
+                \clearpage
+                
+                % Page 2
+                \thispagestyle{fancy}
+                \cfoot{}
+                \@tptopspace%
+                {\LARGE \@title \par}%
+                \vskip 3em%
+                \lineskip .75em%
+                \begin{tabular}[t]{c}%
+                    \@author \\ \\
+                    \@lithwork\ carried out at \@lithcompany \\ \\
+                    \@date
+                \end{tabular}\par%
+                \vskip 1.5em%
+                \ifx \@lithsupervisors \undefined
+                    Supervisor: \\
+                    \@lithsupervisor
+                \else
+                    Supervisors: \\
+                    \@lithsupervisors
+                \fi
+                \vskip 1em%
+                Examinor: \\
+                \@lithexaminor
+                \@tpsepspace%
+                {\centering\@lithlogo\par}
+                \clearpage
+            \end{center}\par
+        }
         \@thanks
     \end{titlepage}%
     \setcounter{footnote}{0}%

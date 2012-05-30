@@ -19,7 +19,6 @@
 %\usepackage{natbib} 
 %\usepackage{hypernat} 
 
-
 \documentclass[]{report}
 %\documentclass[a4paper]{report}
 %\documentclass[s5paper]{report}
@@ -42,7 +41,12 @@
 % PREAMBLE  %
 % % % % % % %
 
-% Packages
+% % % % % % %
+% PACKAGES  %
+% % % % % % %
+
+% Get å, ä, ö, Å, Ä, Ö
+\usepackage[utf8]{inputenc}
 
 % Miscellaneous tools
 \usepackage{etoolbox} % Includes the macro \ifstrequal
@@ -52,8 +56,22 @@
     \usepackage{./Packages/s5paper/s5paper}
 \fi
 
-% Get å, ä, ö, Å, Ä, Ö
-\usepackage[utf8]{inputenc}
+% Referencing
+\iftrue
+    \usepackage[round, authoryear, comma]{natbib} % Harward style referencing
+    \bibliographystyle{unsrtnat}
+    %\bibliographystyle{plain}
+    %\bibliographystyle{plainnat}
+\else
+    \usepackage[square, numbers, comma]{natbib} %
+    \bibliographystyle{ieeetr}
+    %\bibliographystyle{plain}
+    %\bibliographystyle{plainnat}
+\fi
+
+% Indexing
+\usepackage{makeidx}
+\makeindex
 
 % Linking
 \iftrue
@@ -77,29 +95,27 @@
 
 % Graphics
 \usepackage{graphicx} % Necessary in order to include images
-%\usepackage{titlepic} % Necessary in order to be able to have an image on the title page
+\usepackage{caption} % For captions 
+\usepackage{subcaption} % For subcaptions
 
-% Referencing
-\iftrue
-    \usepackage[round, authoryear]{natbib} % Harward style referencing
-\else
-    \usepackage[square, numbers]{natbib} %
-\fi
-
-% Define commands
+% % % % % %
+% MACROS  %
+% % % % % %
 
 \newcommand{\comment}[1]{}
 \newcommand{\HRule}{\rule{\linewidth}{0.5mm}}
+\newcommand{\idx }[1]{\textit{#1}\index{#1}}
+\newcommand{\idx2}[2]{\textit{#1}\index{#2}}
 
 \begin{document}
-
-\pagenumbering{roman}
-%TODO: frontmatter, mainmatter and backmatter is only supported in the book class. Should I change to book??
-%\frontmatter
 
 % % % % % % % %
 % TOP MATTER  %
 % % % % % % % %
+
+\pagenumbering{roman}
+%TODO: frontmatter, mainmatter and backmatter is only supported in the book class. Should I change to book??
+%\frontmatter
 
 \title{Simulating Ocean Waves and Ships with an Octree Data Structure}
 \author{Kristofer Krus}
@@ -108,10 +124,10 @@
 \lithlogo{\includegraphics[width=0.6\textwidth, clip=true]{./Images/lith_en_vert_col.pdf}}
 \lithcompany{Saab AB}
 \lithwork{Master thesis work}
-\lithdepartment{The Department of Physics, Chemistry and Biology}
+\lithdepartment{Department of Physics, Chemistry and Biology}
 \lithuniversity{Linköpings universitet}
-\lithpostaddress{581 83 Linköping}
-\lithsupervisors{Anders Rönnbrant (Saab AB) \\ Kenneth Järrendal (Linköping Institute of Technology)}
+\lithpostaddress{SE-581 83 Linköping, Sweden}
+\lithsupervisors{Anders Rönnbrant (Saab AB)\\ Kenneth Järrendal (Linköping Institute of Technology)}
 \lithexaminor{Magnus Johansson (Linköping Institute of Technology)}
 \lithmaketitle
 
@@ -127,7 +143,7 @@
 \thispagestyle{empty}
 \fi
 
-The publishers will keep this document online on the Internet -- or its possible replacement -- for a period of 25 years starting from the date of publication barring exceptional circumstances.
+The \idx{publishers} will keep this document online on the Internet -- or its possible replacement -- for a period of 25 years starting from the date of publication barring exceptional circumstances.
 
 The online availability of the document implies permanent permission for anyone to read, to download, or to print out single copies for his/hers own use and to use it unchanged for non-commercial research and educational purpose. Subsequent transfers of copyright cannot revoke this permission. All other uses of the document are conditional upon the consent of the copyright owner. The publisher has taken technical and administrative measures to assure authenticity, security and accessibility.
 
@@ -208,7 +224,7 @@ For additional information about the Linköping University Electronic Press and 
 \subsection{Finite volume method with octrees}
 
 %This is the method I have choosen to use for my work, with the main reference \cite{Harlow65b}
-This is the method I have choosen to use for my work, with the main reference \cite{journals/tog/LosassoGF04}.
+This is the method I have choosen to use for my work, with the main reference \citealp{journals/tog/LosassoGF04} and \citep{oai:CiteSeerPSU:562256}.
 
 \begin{itemize}
     \item Reference 1: \textit{\href{http://gfs.sourceforge.net/gerris.pdf}{Gerris: a tree-based adaptive solver for the incompressible Euler equations in complex geometries}}
@@ -525,6 +541,15 @@ See \textit{\href{http://en.wikipedia.org/wiki/Sea_foam}{Wikipedia -- Sea foam}}
 \part{Appendixes}
 
 \appendix
+\chapter{Algorithms and data structures}
+
+Use Ti\textit{k}Z and PGF to illustrate the structures.
+
+\section{The octree}
+
+\section{Neighbor connections}
+
+\appendix
 %\chapter{Derivation of twodimensional PDEs for water waves at random intermediate depths}
 \chapter{Derivation of twodimensional PDEs for water waves at varying depths}
 
@@ -534,35 +559,27 @@ example
 
 See equation \ref{eq:example}
 
+% % % % %
+% INDEX %
+% % % % %
+
+% Add bibliography to table of contents
+\cleardoublepage
+\phantomsection
+\addcontentsline{toc}{part}{Index}
+% Print index
+\printindex
 
 % % % % % % % % %
 % BIBLIOGRAPHY  %
 % % % % % % % % %
 
-\iftrue
-
+% Add bibliography to table of contents
 \cleardoublepage
 \phantomsection
-\addcontentsline{toc}{chapter}{Bibliography}
-
-\bibliographystyle{plain}
+\addcontentsline{toc}{part}{Bibliography}
+% Print bibliography
 \bibliography{references} % If multiple bib files are used, they have to be separated by a comma and no space
-
-\else
-
-\begin{thebibliography}{99}
-    
-    %TODO: Remove this bibitem
-    \bibitem{lamport94}
-    Leslie Lamport,
-    \emph{\LaTeX: A Document Preparation System}.
-    Addison Wesley, Massachusetts,
-    2nd Edition,
-    1994.
-    
-\end{thebibliography}
-
-\fi
 
 \end{document}
 
