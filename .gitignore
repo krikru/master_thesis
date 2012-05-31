@@ -30,3 +30,15 @@ _ReSharper*/
 
 #Ignoring Qt builds
 *-build-*
+
+#Ignoring files build by LaTeX
+*.aux
+*.bbl
+*.blg
+*.idx
+*.dvi
+*.out
+*.toc
+*.lof
+*.lot
+*.synctex.gz

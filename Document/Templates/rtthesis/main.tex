@@ -1,0 +1,51 @@
+\documentclass[
+  utf8,%     More capable input encoding than latin-1.
+  parskip,%  For vertical whitespace between paragraphs.  This comes down to more than just using parskip.sty, so it's better to use this class option.
+  % S5MP % If you intend to really use margin paragraphs (not recommended!).
+%  crop,%     Produce output with crop marks and paper size A4.  Liu-Tryck should like this.  Automatically adds information, including the physical page number, at the top of each page.
+       %     Add option 'noInfo' to suppress the info at the top of each page when using option 'crop'.
+  % Font options: 'kp' (default), 'times', 'lm'.  The KpFonts (loaded using 'kp'), is the most complete font among the provided options.  Among other, it supports slanted small caps.  See rtthesis.cls for more details regarding the font options.
+  largesmallcaps,intlimits,widermath,% Good options to KpFonts.
+  sharecounter,nobreak,definition=marks,%  See comments in the results chapter of this document for more information on these options!
+  parts% Use option 'noparts' if you do not make use of part divisions.
+]{rtthesis}
+
+\usepackage{mythesis}
+
+
+\begin{document}
+\selectlanguage{swedish}
+\makeFrontPage
+\frontmatter
+\maketitle
+\makeLibraryPage{\input{svensk-sammanfattning}}
+
+\begin{abstract}[swedish]
+  \input{svensk-sammanfattning}
+\end{abstract}
+\begin{abstract}[english]
+  \input{engelsk-sammanfattning}
+\end{abstract}
+\include{tack}
+\tableofcontents
+\include{notation}
+
+\mainmatter
+\part{Bakgrund}
+\include{introduktion}
+
+\part[Resultat]{Resultat\thispagestyle{plain}}% If you want to change the page style, you need to pass a simplified title for the table of contents as the optional first argument.
+\include{resultat}
+\include{avrundning}
+
+\appendix
+\include{detaljer}
+\include{rtthesis-doc}
+
+\backmatter
+
+\bibliography{IEEEfull,myrefs}
+
+\printindex
+
+\end{document}

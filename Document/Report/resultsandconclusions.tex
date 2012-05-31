@@ -1,0 +1,61 @@
+\part{Results and discussion}
+
+\chapter{Results}
+
+\section{Speed}
+
+\section{Accuracy}
+
+\chapter{Discussion}
+
+\section{Conclusions}
+
+\subsection{Difficulties and drawbacks with the method}
+
+Difficulties:
+\begin{itemize}
+    \item Dynamical creation/termination of surface cells and determination of properties in new cells
+    \item High Courant numbers
+    \item High speeds of sound (remedied in \textit{\href{http://physbam.stanford.edu/~kwatra/papers/compressible_semi_implicit/compressible_semi_implicit.pdf}{A method for avoiding the acoustic time step restriction in compressible flow}})
+    \item Keeping a sharp interface
+    \item Making it work in realtime
+\end{itemize}
+
+\chapter{Improvements}
+
+\section{Wind waves}
+
+\subsection{Spectral methods}
+
+\subsection{Air-water interaction}
+
+\section{Splash and foam}
+
+See \textit{\href{http://en.wikipedia.org/wiki/Sea_foam}{Wikipedia -- Sea foam}} or search for \textit{protein skimming} or \textit{foam fractionation}
+
+\section{Parallellization}
+
+\subsection{Space filling curves}
+
+\section{Local-time stepping}
+
+\section{Remedy for regions with high Courant number}
+
+\section{Perfectly matched layers}
+
+\section{Incompressibility or semi-incompressibility}
+
+\begin{itemize}
+    \item See: \textit{\href{http://physbam.stanford.edu/~kwatra/papers/compressible_semi_implicit/compressible_semi_implicit.pdf}{A method for avoiding the acoustic time step restriction in compressible flow}}
+\end{itemize}
+
+\section{Sharpening of various advected fields}
+
+\subsection{Backward Error Compensation and Forward Error Correction}
+
+\begin{itemize}
+    \item Reference: \textit{\href{http://smartech.gatech.edu/xmlui/bitstream/handle/1853/29473/2002-389.pdf}{Back and forth error compensation and correction methods for removing errors induced by uneven gradients of the level set function}}
+    \item Applied to the velocity field and images: \textit{\href{http://www.gvu.gatech.edu/~jarek/papers/FlowFixer.pdf}{FlowFixer: Using BFECC for Fluid Simulation}}
+\end{itemize}
+
+\section{Code optimization}

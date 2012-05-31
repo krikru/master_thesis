@@ -1,0 +1,180 @@
+\providecommand*\@issn{0280-7971} % ISSN for rt lic
+\providecommand*\publication@series{Linköping studies in science and
+  technology. Thesis.\\No.\@}
+
+\newcommand{\licLocal@ID}{LIU-TEK-LIC-\thesis@year:\local@ID}
+
+\renewcommand*\maketitle{%
+  \begingroup
+  \setlength{\parskip}{\z@}
+  \frontmatter
+  \cleardoublepage
+  \thispagestyle{empty}
+  \begin{center}
+    \publication@series~\thesisn@
+    \par\bigskip\bigskip
+    \begin{huge}
+      \textbf{\textsf{\@title}}
+      \par
+    \end{huge}
+    \ifrt@subtitle%
+    \medskip%
+    \begin{LARGE}
+      \textbf{\textsf{\@subtitle}}%
+      \par
+    \end{LARGE}
+    \fi%
+    \bigskip\bigskip\bigskip
+    \begin{Large}
+      \textbf{\textsf{\@author}}
+    \end{Large}
+    \par\vfill
+    \includegraphics{rtlogo_tall}
+    \par\vspace*{15mm}
+    Division of Automatic Control\\
+    Department of Electrical Engineering\\
+    Linköping University, SE-581 83 Linköping, Sweden\\
+    \texttt{http://www.control.isy.liu.se}\\
+    \texttt{\u@name @isy.liu.se}
+    \par\medskip
+    \thesis@city~\thesis@year
+  \end{center}
+
+  \clearpage
+  \thispagestyle{empty}
+
+  \vspace*{\stretch{1}}
+  \begin{center}
+    \small
+    This is a Swedish Licentiate's Thesis.\\[1.5mm]
+
+    Swedish postgraduate education leads to a Doctor's degree and/or a
+    Licentiate's degree.\\
+    A Doctor's Degree comprises 240~ECTS~credits (4~years of full-time
+    studies).\\
+    A Licentiate's degree comprises 120~ECTS~credits,\\
+    of which at least 60~ECTS~credits constitute a Licentiate's thesis.
+  \end{center}
+  \vspace*{\stretch{5}}
+  \begin{center}
+    \publication@series~\thesisn@
+    \par\smallskip
+    \textbf{\textsf{\@title\ifrt@subtitle\@subtitlesep\@subtitle\fi}}
+    \par\smallskip
+    \@author
+    \par\bigskip
+    {\slshape
+      \texttt{\u@name @isy.liu.se}\\
+      \texttt{www.control.isy.liu.se}\\
+      Department of Electrical Engineering\\
+      Linköping University\\
+      SE-581 83 Linköping\\
+      Sweden}
+    \par\bigskip
+    ~\hfill
+    \makebox[.25\textwidth][c]{ISBN~\@isbn}\hfill
+    \hfill
+    \makebox[.25\textwidth][c]{ISSN~\@issn}\hfill
+    \hfill
+    \makebox[.25\textwidth][c]{\licLocal@ID}
+    \hfill~
+    \par\bigskip
+    Copyright \copyright~\thesis@year~\@author\par
+    \par\bigskip
+    {\small Printed by \publishername~\thesis@year}
+    \normalsize
+  \end{center}
+
+  \clearemptydoublepage
+    \thispagestyle{empty}
+  \vspace*{70mm}
+  \begin{flushright}
+    \textsl{\dedic@tion}
+  \end{flushright}
+
+  \clearemptydoublepage
+  \endgroup
+}
+
+
+\newcommand*\liclist[1][liclist]{%
+  \clearemptydoublepage
+  \pagestyle{empty}
+  \begingroup
+  \setlength{\parskip}{\z@}
+  \begin{center}
+    \small\bfseries%
+    Licentiate Theses\\%
+    Division of Automatic Control\\%
+    Linköping University
+  \end{center}
+  \begin{list}{}{%
+      \setlength\leftmargin{0pt}\setlength\rightmargin{0pt}%
+      \setlength\labelwidth{0pt}\setlength\labelsep{.5em}%
+      \setlength\itemindent{0pt}\setlength\itemsep{.20\baselineskip}%
+      \setlength\parsep{0pt}\setlength\partopsep{0.5ex}%
+      \newcommand*\licitem[4]{%
+      \item\parbox{\linewidth}{\textbf{##1:} ##2. Thesis No.~##3, ##4.}}}
+    \small
+    \input{#1}
+  \end{list}
+  \endgroup
+}
+
+\AtEndDocument{\liclist}
+
+\newcommand*\makecover{%
+  \pagestyle{empty}
+  \begin{document}
+  \begin{center}
+    \setlength{\parskip}{\z@}
+    \publication@series~\thesisn@
+    \par\bigskip\bigskip\bigskip
+    \begin{huge}
+      \textbf{\textsf{\@title}}
+      \par
+    \end{huge}
+    \ifrt@subtitle%
+    \medskip%
+    \begin{LARGE}
+      \textbf{\textsf{\@subtitle}}%
+      \par
+    \end{LARGE}
+    \fi%
+    \bigskip\bigskip\bigskip
+    \begin{Large}
+      \textbf{\textsf{\@author}}
+    \end{Large}
+    \par\vspace{\stretch{4}}
+    \includegraphics[height=45mm]{LiTH_staende_eng_sv}
+    \par\vspace{10mm}
+    Department of Electrical Engineering\\
+    Linköping University, SE--581 83 Linköping, Sweden\\
+    \par\medskip
+    \thesis@city~\thesis@year
+  \end{center}
+  \newpage
+
+  \centering
+  \vspace*{.95\textheight}
+  \textcopyright~\thesis@year~\@author
+  \bigskip
+  \newpage
+
+  \raggedright
+  \rotatebox[origin=lb]{270}{%
+    \makebox[.95\textheight][l]{%
+      \def\\{ }
+      \def\linebreak{ }
+      \hfill\hfill
+      \@author\hspace*{3em}%
+      \hfill%
+      \textbf{\@title\@subtitlesep\@subtitle}%
+      \hspace*{3em}\hfill
+      \thesis@city~\thesis@year%
+      \hfill\hfill
+    }
+  }
+  \let\liclist\relax
+\end{document}
+}

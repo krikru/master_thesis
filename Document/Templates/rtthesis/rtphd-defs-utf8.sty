@@ -1,0 +1,168 @@
+\providecommand*\@issn{0345-7524} % ISSN for PhD thesis
+\providecommand*\publication@series{Linköping studies in science and
+  technology. Dissertations.\\ No.\@}
+
+\renewcommand*\maketitle{%
+  \frontmatter
+  \cleardoublepage
+  \thispagestyle{empty}
+  \begin{center}
+    \begin{large}
+      \publication@series~\thesisn@
+      \par
+    \end{large}
+    \bigskip\bigskip
+    \begin{huge}
+      \textbf{\textsf{\@title}}
+      \par
+    \end{huge}
+    \ifrt@subtitle%
+    \medskip%
+    \begin{LARGE}
+      \textbf{\textsf{\@subtitle}}%
+      \par
+    \end{LARGE}
+    \fi%
+    \bigskip\bigskip\bigskip
+    \begin{Large}
+      \textbf{\textsf{\@author}}
+      \par
+    \end{Large}
+    \vspace{\stretch{2}}
+    \includegraphics[height=30mm]{LinkUniv_sigill_sv}
+    \par
+    \vspace{\stretch{4}}
+    \begin{large}
+      Department of Electrical Engineering \\
+      Linköping University, SE--581 83 Linköping, Sweden
+      \par
+      \medskip
+      Linköping~\thesis@year
+    \end{large}
+  \end{center}
+
+  \clearpage
+  \thispagestyle{empty}
+
+  \vspace*{\stretch{1}}
+  \noindent\rtcoverinfo
+  \vspace*{\stretch{4}}
+  \begin{center}
+    \publication@series~\thesisn@
+    \par\smallskip
+    \textbf{\textsf{\@title\ifrt@subtitle\@subtitlesep\@subtitle\fi}}
+    \par\smallskip
+    \@author
+    \par\bigskip
+    {\slshape
+      \texttt{\u@name @isy.liu.se}\\
+      \texttt{www.control.isy.liu.se}\\
+      Division of Automatic Control\\
+      Department of Electrical Engineering \\
+      Linköping University \\
+      SE--581 83 Linköping \\
+      Sweden}
+    \par\bigskip\bigskip
+    ISBN~\@isbn
+    \hspace{1cm}
+    ISSN~\@issn
+    \par\bigskip
+    Copyright \copyright~\thesis@year~\@author\par
+    \par\bigskip
+    {\small Printed by \publishername~\thesis@year}
+    \normalsize
+  \end{center}
+
+  \clearemptydoublepage
+    \thispagestyle{empty}
+  \vspace*{70mm}
+  \begin{flushright}
+    \textsl{\dedic@tion}
+  \end{flushright}
+
+  \clearemptydoublepage
+}
+
+
+\newcommand*\phdlist[1][phdlist-utf8]{%
+  \clearemptydoublepage
+  \pagestyle{empty}
+  \begin{center}
+    \small\bfseries%
+    PhD~Dissertations\\%
+    Division of Automatic Control\\%
+    Linköping University
+  \end{center}
+  \begin{list}{}{%
+      \setlength\leftmargin{0pt}\setlength\rightmargin{0pt}%
+      \setlength\labelwidth{0pt}\setlength\labelsep{.5em}%
+      \setlength\itemindent{0pt}\setlength\itemsep{.20\baselineskip}%
+      \setlength\parsep{0pt}\setlength\partopsep{0.5ex}%
+      \newcommand*\phditem[5]{%
+      \item\parbox{\linewidth}{\textbf{##1:} ##2. Thesis No.~##3, ##4. ISBN~##5.}}}
+    \small
+    \input{#1}
+  \end{list}}
+
+\AtEndDocument{\phdlist}
+
+
+\newcommand*\makecover{%
+  \pagestyle{empty}
+  \begin{document}
+  \begin{center}
+    \begin{large}
+      \publication@series~\thesisn@
+      \par
+    \end{large}
+    \bigskip\bigskip
+    \begin{huge}
+      \textbf{\textsf{\@title}}
+      \par
+    \end{huge}
+    \ifrt@subtitle%
+    \medskip%
+    \begin{LARGE}
+      \textbf{\textsf{\@subtitle}}%
+      \par
+    \end{LARGE}
+    \fi%
+    \bigskip\bigskip\bigskip
+    \begin{Large}
+      \textbf{\textsf{\@author}}
+      \par
+    \end{Large}
+    \vspace{\stretch{2}}
+    \includegraphics[height=30mm]{LinkUniv_sigill_sv}
+    \par
+    \vspace{\stretch{4}}
+    \begin{large}
+      Department of Electrical Engineering \\
+      Linköping University, SE--581 83 Linköping, Sweden
+      \par
+      \medskip
+      \thesis@city~\thesis@year
+    \end{large}
+  \end{center}
+  \newpage
+
+  \centering
+  \vspace*{\fill}
+  \includegraphics[height=35mm]{LiTH_staende_eng_sv}
+  \bigskip
+  \newpage
+
+  \raggedright
+  \rotatebox[origin=lb]{270}{%
+    \makebox[\textheight][l]{%
+      \def\\{ }
+      \def\linebreak{ }
+      \@author\hspace*{12mm}%
+      \textbf{\@title\@subtitlesep\@subtitle}%
+      \hfill
+      \thesis@city~\thesis@year%
+    }
+  }
+  \let\phdlist\relax
+\end{document}
+}

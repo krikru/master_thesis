@@ -8,11 +8,12 @@
 % No idea whether it works on older LaTeXes.
 \NeedsTeXFormat{LaTeX2e}
 
-% Use the fancyhdr package to create headers and footers
-\RequirePackage{fancyhdr}
-
 % Package identification and version number.
 \ProvidesPackage{lithmaketitle}[2012/05/28 0.1 Package create a title page following the LiTH specifications]
+
+% Package used
+\RequirePackage{fancyhdr} % Use the fancyhdr package to create headers and footers
+\RequirePackage{color} % Use the color package to mark unentered fields
 
 % Declare the options.
 \DeclareOption{tt}{\gdef\@tptopspace{}\gdef\@tpsepspace{\vskip 3em}}
@@ -21,17 +22,17 @@
 \ExecuteOptions{cc}
 \ProcessOptions
 
-% Define additional commands introduced by this package.
+% Additional commands for defining parameters used by this package.
 % Very similar to the definition of \title, etc.
 % \lithlogo
 \def\lithlogo#1{\gdef\@lithlogo{#1}}
-\def\@lithlogo{\@empty} % default: no picture
+\def\@lithlogo{\textcolor{red}{\framebox[0.6\textwidth]{\raisebox{-0.2\textwidth}{\textit{Logo}}\raisebox{-0.4\textwidth}{}}}}
 % \lithwork
 \def\lithwork#1{\gdef\@lithwork{#1}}
 \def\@lithwork{Master thesis work} % default value
 % \lithcompany
 \def\lithcompany#1{\gdef\@lithcompany{#1}}
-\def\@lithcompany{\textit{Company}} % default value
+\def\@lithcompany{\textcolor{red}{\textit{Company}}} % default value
 % \lithuniversity
 \def\lithuniversity#1{\gdef\@lithuniversity{#1}}
 \def\@lithuniversity{Link\"{o}pings universitet} % default value
@@ -39,17 +40,33 @@
 \def\lithdepartment#1{\gdef\@lithdepartment{#1}}
 \def\@lithdepartment{Department of Physics, Chemistry and Biology} % default value
 % \lithpostaddress
-\def\lithpostaddress#1{\gdef\@lithpostaddress{#1}}
-\def\@lithpostaddress{581 83 Link\"{o}ping, Sweden} % default value
+\def\lithpostaladdress#1{\gdef\@lithpostaladdress{#1}}
+\def\@lithpostaladdress{581 83 Link\"{o}ping, Sweden} % default value
 % \lithsupervisor
 \def\lithsupervisor#1{\gdef\@lithsupervisor{#1}}
-\def\@lithsupervisor{\textit{Supervisor}} % default value
+\def\@lithsupervisor{\textcolor{red}{\textit{Supervisor}}} % default value
 % \lithsupervisors
 \def\lithsupervisors#1{\gdef\@lithsupervisors{#1}}
 %\def\@lithsupervisors{\textit{Supervisors}} % default value
-% \lithexaminator
+% \lithexaminor
 \def\lithexaminor#1{\gdef\@lithexaminor{#1}}
-\def\@lithexaminor{\textit{Examinator}} % default value
+\def\@lithexaminor{\textcolor{red}{\textit{Examinator}}} % default value
+\def\lithx#1{\gdef\@lithx{#1}}
+\def\@lithx{\textcolor{red}{\textit{x}}} % default value
+\def\lithyy#1{\gdef\@lithyy{#1}}
+\def\@lithyy{\shortyear} % default value
+\def\lithxxxx#1{\gdef\@lithxxxx{#1}}
+\def\@lithxxxx{\textcolor{red}{\textit{xxxx}}} % default value
+
+% Define default parameters
+\def\@author{\textcolor{red}{\textit{Author}}} % default value
+\def\@title{\textcolor{red}{\textit{Title}}} % default value
+\def\@date{\textcolor{red}{\textit{Date}}} % default value
+\def\@thanks{} % default value
+
+% Additional miscellaneous commands
+\def\shortyear{\expandafter\@YYYYTOYY\the\year}
+\def\@YYYYTOYY#1#2#3#4{#3#4}
 
 % If a title page was requested from the document class (article/report/book),
 % define \lithmaketitle.
@@ -64,9 +81,9 @@
         {\bf \large
             \begin{center}% Make the font on the title page get a bold face and center the content
                 % Page 1
-                \thispagestyle{fancy} %TODO: Check why pagestyle doesn't work
+                \thispagestyle{fancy} %TODO: Check why just pagestyle doesn't work
                 \chead{\bf \large \@lithdepartment}
-                \cfoot{\bf \normalsize \@lithdepartment\\ \@lithuniversity\\ \@lithpostaddress}
+                \cfoot{\bf \normalsize \@lithdepartment\\ \@lithuniversity\\ \@lithpostaladdress}
                 \@tptopspace%
                 \@lithwork
                 \vskip 1em%
@@ -79,7 +96,7 @@
                     \@date
                 \end{tabular}\par%
                 \vskip 1.5em%
-                LITH-IFM-x-EX-{}-yy/xxxx---SE %TODO: Replace the x, yy and xxxx
+                LITH-IFM-\@lithx-EX-{}-\@lithyy/\@lithxxxx---SE
                 \@tpsepspace%
                 {\centering\@lithlogo\par}
                 \clearpage
@@ -109,7 +126,7 @@
                 \@lithexaminor
                 \@tpsepspace%
                 {\centering\@lithlogo\par}
-                \clearpage
+                \vfil
             \end{center}\par
         }
         \@thanks
