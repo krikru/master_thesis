@@ -36,81 +36,7 @@
 %\textasciicircum = ^
 %\textbackslash   = \
 
-% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
-% PREAMBLE
-% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
-
-% % % % % % %
-% PACKAGES  %
-% % % % % % %
-
-% Formatting
-\usepackage[utf8]{inputenc} % Get å, ä, ö, Å, Ä, Ö
-\usepackage[resetfonts]{cmap} % Help reader to interpret ligatures
-
-% Miscellaneous tools
-\usepackage{etoolbox} % Includes the macro \ifstrequal
-
-% Paper size
-\iffalse
-    \usepackage{./Packages/s5paper/s5paper}
-\fi
-
-% Referencing
-\iftrue
-    \usepackage[round, authoryear, comma]{natbib} % Harward style referencing
-    %\bibliographystyle{unsrtnat}
-    %\bibliographystyle{plain}
-    \bibliographystyle{plainnat}
-\else
-    \usepackage[square, numbers, comma]{natbib} %
-    \bibliographystyle{ieeetr}
-    %\bibliographystyle{plain}
-    %\bibliographystyle{plainnat}
-\fi
-
-% Indexing
-\usepackage{makeidx}
-\makeindex
-
-% Linking
-\iftrue
-    \usepackage{hyperref} % Links to pages
-    \hypersetup{
-        pdfborder = {0 0 0},
-        colorlinks=true,
-        citecolor=blue,
-        linkcolor=black,
-        urlcolor=blue,
-        } % Remove the frame around links
-\else
-    \usepackage{url} % Doesn't link to pages
-\fi
-
-% Mathematics
-\usepackage{mathtools}
-
-% Title page
-\usepackage{lithmaketitle}
-
-% Graphics
-\usepackage{graphicx} % Necessary in order to include images
-\usepackage{caption} % For captions 
-\usepackage{subcaption} % For subcaptions
-
-% % % % % %
-% MACROS  %
-% % % % % %
-
-\newcommand{\comment}[1]{}
-\newcommand{\HRule}{\rule{\linewidth}{0.5mm}}
-\newcommand{\idx}[1]{\textit{#1}\index{#1}}
-%\newcommand{\idx2}[2]{\textit{#1}\index{#2}}
-\newcommand{\addtotoc}[2]{\cleardoublepage\phantomsection\addcontentsline{toc}{#1}{#2}}
-
-% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
-% DOCUMENT
-% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+\input{preamble}
 
 \begin{document}
 
@@ -123,7 +49,8 @@
 %\frontmatter
 
 \include{title_pages}
-\include{libary_page}
+\blankpage
+%\include{libary_page}
 \include{copyright_note}
 \include{abstract}
 \include{acknowledgments}

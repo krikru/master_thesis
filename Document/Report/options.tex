@@ -1,0 +1,12 @@
+% % % % % %
+% FLAGS   %
+% % % % % %
+
+% DEBUG
+\newflag{DEBUG}{true} % For debugging the document
+%\newflag{DEBUG}{false} % For publishing the document
+
+\newrobustcmd{\IFDEBUG      }[1]{\iftoggle {DEBUG}{#1}{  }}
+\newrobustcmd{\IFDEBUGELSE  }[2]{\iftoggle {DEBUG}{#1}{#2}}
+\newrobustcmd{\IFPUBLISH    }[1]{\nottoggle{DEBUG}{#1}{  }}
+\newrobustcmd{\IFPUBLISHELSE}[2]{\nottoggle{DEBUG}{#1}{#2}}

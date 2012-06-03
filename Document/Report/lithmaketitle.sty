@@ -78,57 +78,57 @@
         \let \footnote \thanks
         \renewcommand{\headrulewidth}{0pt} % Remove horozontal ruler under header
         \fancyhfoffset[]{\dimexpr\marginparsep+\marginparwidth\relax} % Make header and footer wider. \RequirePackage{calc} can be used instead of using \dimexpr and \relax.
-        {\bf \large
-            \begin{center}% Make the font on the title page get a bold face and center the content
-                % Page 1
-                \thispagestyle{fancy} %TODO: Check why just pagestyle doesn't work
-                \chead{\bf \large \@lithdepartment}
-                \cfoot{\bf \normalsize \@lithdepartment\\ \@lithuniversity\\ \@lithpostaladdress}
-                \@tptopspace%
-                \@lithwork
-                \vskip 1em%
-                {\LARGE \@title \par}%
-                \vskip 3em%
-                \lineskip .75em%
-                \begin{tabular}[t]{c}%
-                    \@author \\
-                    \@lithwork\ carried out at \@lithcompany \\
-                    \@date
-                \end{tabular}\par%
-                \vskip 1.5em%
-                LITH-IFM-\@lithx-EX-{}-\@lithyy/\@lithxxxx---SE
-                \@tpsepspace%
-                {\centering\@lithlogo\par}
-                \clearpage
-                
-                % Page 2
-                \thispagestyle{fancy}
-                \cfoot{}
-                \@tptopspace%
-                {\LARGE \@title \par}%
-                \vskip 3em%
-                \lineskip .75em%
-                \begin{tabular}[t]{c}%
-                    \@author \\ \\
-                    \@lithwork\ carried out at \@lithcompany \\ \\
-                    \@date
-                \end{tabular}\par%
-                \vskip 1.5em%
-                \ifx \@lithsupervisors \undefined
-                    Supervisor: \\
-                    \@lithsupervisor
-                \else
-                    Supervisors: \\
-                    \@lithsupervisors
-                \fi
-                \vskip 1em%
-                Examinor: \\
-                \@lithexaminor
-                \@tpsepspace%
-                {\centering\@lithlogo\par}
-                \vfil
-            \end{center}\par
-        }
+        \begin{center}% Make the font on the title page get a bold face and center the content
+            \bf \large
+            
+            % Page 1
+            \thispagestyle{fancy} %TODO: Check why just pagestyle doesn't work
+            \chead{\bf \large \@lithdepartment}
+            \cfoot{\bf \normalsize \@lithdepartment\\ \@lithuniversity\\ \@lithpostaladdress}
+            \@tptopspace%
+            \@lithwork
+            \vskip 1em%
+            {\LARGE \@title \par}%
+            \vskip 3em%
+            \lineskip .75em%
+            \begin{tabular}[t]{c}%
+                \@author \\
+                \@lithwork\ carried out at \@lithcompany \\
+                \@date
+            \end{tabular}\par%
+            \vskip 1.5em%
+            LITH-IFM-\@lithx-EX-{}-\@lithyy/\@lithxxxx---SE
+            \@tpsepspace%
+            {\centering\@lithlogo\par}
+            \clearpage
+            
+            % Page 2
+            \thispagestyle{fancy}
+            \cfoot{}
+            \@tptopspace%
+            {\LARGE \@title \par}%
+            \vskip 3em%
+            \lineskip .75em%
+            \begin{tabular}[t]{c}%
+                \@author \\ \\
+                \@lithwork\ carried out at \@lithcompany \\ \\
+                \@date
+            \end{tabular}\par%
+            \vskip 1.5em%
+            \ifx \@lithsupervisors \undefined
+                Supervisor: \\
+                \@lithsupervisor
+            \else
+                Supervisors: \\
+                \@lithsupervisors
+            \fi
+            \vskip 1em%
+            Examinor: \\
+            \@lithexaminor
+            \@tpsepspace%
+            {\centering\@lithlogo\par}
+            \vfil
+        \end{center}\par
         \@thanks
     \end{titlepage}%
     \setcounter{footnote}{0}%

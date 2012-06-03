@@ -1,0 +1,72 @@
+% % % % % % %
+% PACKAGES  %
+% % % % % % %
+
+% Formatting
+\usepackage[utf8]{inputenc} % Get å, ä, ö, Å, Ä, Ö
+\usepackage[resetfonts]{cmap} % Help reader to interpret ligatures
+
+% Miscellaneous tools
+\usepackage{etoolbox} % Includes the macro \ifstrequal
+
+% Paper size
+\iffalse
+\usepackage{./Packages/s5paper/s5paper}
+\fi
+
+% Referencing
+\iftrue
+\usepackage[round, authoryear, comma]{natbib} % Harward style referencing
+%\bibliographystyle{unsrtnat}
+%\bibliographystyle{plain}
+\bibliographystyle{plainnat}
+\else
+\usepackage[square, numbers, comma]{natbib} %
+\bibliographystyle{ieeetr}
+%\bibliographystyle{plain}
+%\bibliographystyle{plainnat}
+\fi
+
+% Indexing
+\usepackage{makeidx}
+\makeindex
+
+% Linking
+\iftrue
+\usepackage{hyperref} % Links to pages
+\hypersetup{
+    pdfborder = {0 0 0},
+    colorlinks=true,
+    citecolor=blue,
+    linkcolor=black,
+    urlcolor=blue,
+} % Remove the frame around links
+\else
+\usepackage{url} % Doesn't link to pages
+\fi
+
+% Mathematics
+\usepackage{mathtools}
+
+% Title page
+\usepackage{lithmaketitle}
+
+% Graphics
+\usepackage{graphicx} % Necessary in order to include images
+\usepackage{caption} % For captions 
+\usepackage{subcaption} % For subcaptions
+
+% % % % % %
+% MACROS  %
+% % % % % %
+
+\newrobustcmd{\newflag}[2]{\newtoggle{#1}\settoggle{#1}{#2}}
+\newrobustcmd{\comment}[1]{}
+\newrobustcmd{\HRule}{\rule{\linewidth}{0.5mm}}
+\newrobustcmd{\idx}[1]{\textit{#1}\index{#1}}
+%\newrobustcmd{\idx2}[2]{\textit{#1}\index{#2}}
+\newrobustcmd{\addtotoc}[2]{\cleardoublepage\phantomsection\addcontentsline{toc}{#1}{#2}}
+\newrobustcmd{\blankpage}{\clearpage\thispagestyle{fancy}\renewcommand{\headrulewidth}{0pt}\chead{}\cfoot{}\IFDEBUGELSE{\begin{center}\large\textit{This page intentionally left blank}\end{center}}{\ }\clearpage}
+
+% Options for compiling the documelt
+\input{options}
