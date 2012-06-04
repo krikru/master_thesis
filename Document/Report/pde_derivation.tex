@@ -1,14 +1,126 @@
 %\chapter{Derivation of twodimensional PDEs for water waves at random intermediate depths}
 \chapter{Derivation of twodimensional PDEs for water waves at varying depths}
 
-In this appendix I will present a twodimensional partial differential equation describing the evolution of surface waves for intermediate, mildly varying water depths. It is derived from the dispersion relation used in Airy wave theory, namely:
+In this appendix I will present a twodimensional partial differential equation in the room domain, describing the evolution of surface waves for intermediate, mildly varying water depths. It is derived from the dispersion relation obtaines in Airy wave theory, namely:
 
 \begin{equation} \label{eq:dispersion}
-\omega(k) = \sqrt{g\,k\,\tanh(k\,h)}
+\omega^2(k) = \left(g\,+\,\frac{\gamma}{\rho}\,k^2\right)\,k\,\tanh(k\,h),
 \end{equation}
 
-where \(\omega\) is the angular freequency of the wave, 
+where $k$ is the wavenumber of one wave component, $\omega$ is the angular freequency of the component, $g$ is the gravitational acceleration, $h$ is the depth of the water, $\gamma$ is the surface tension and $\rho$ is the density of the water. Since this equation describes waves waves of a single wavelength, we can assume that the free surface elevetion of one wave component is on the form
 
-for monotonic waves on intermediate constant water depth.
+\begin{equation} \label{eq:component}
+\eta(\vec{r},\,t) = A\,e^{i(\vec{k}\cdot\vec{r}\,-\,\omega\,t)},
+\end{equation}
 
-See equation \ref{eq:dispersion}
+where $\eta(\vec{r},\,t)$ is the free surface elevation at the position $\vec{r}$ and at time $t$, $A$ is the wave amplitude and $\vec{k}$ is the wave vector. We see that $k$ and $\vec{k}$ is related to eachother by the equation
+
+\begin{equation} \label{eq:kvectok}
+k = \left|\vec{k}\right|.
+\end{equation}
+
+Although this equation describes the time evolution of every wave component, it includes time domain variables ($\vec{k}$ and $\omega$) which are not available when working purely in the room domain. Furthermore, it is indirectly dependent on $h$ and assumes that it has the same value on all locations, which may not be the case. We therefore need a way to express the evolution of the free surface which don't use the time domain variables $\vec{k}$ and $\omega$ and is roboust even though $h$ may vary from location to location.
+
+By differentiating \ref{eq:component} in time, we obtain
+
+\begin{equation}
+\frac{\partial\eta(\vec{r},\,t)}{\partial t} = -i\,\omega\,A\,e^{i(\vec{k}\cdot\vec{r}\,-\,\omega\,t)},
+\end{equation}
+
+which can be rewritten as
+
+\begin{equation}
+\frac{\partial}{\partial t}\eta(\vec{r},\,t) = -i\,\omega\,\eta(\vec{r},\,t).
+\end{equation}
+
+Let's therefore define a new operator,
+
+\begin{equation} \label{eq:opomega}
+\sop{\omega} = i\frac{\partial}{\partial t},
+\end{equation}
+
+and we see that
+
+\begin{equation} \label{eq:opomegaaction}
+\sop{\omega}\,\eta = \omega\,\eta
+\end{equation}
+
+for a wave component given on the form given by \ref{eq:component}. By taking the gradient of \ref{eq:component}, we obtain
+
+\begin{equation}
+\nabla\eta(\vec{r},\,t) = i\,\vec{k}\,A\,e^{i(\vec{k}\cdot\vec{r}\,-\,\omega\,t)},
+\end{equation}
+
+which can be written as
+
+\begin{equation}
+\nabla\eta(\vec{r},\,t) = i\,\vec{k}\,\eta(\vec{r},\,t).
+\end{equation}
+
+Let's therefore define a new operator,
+
+\begin{equation} \label{eq:opkvec}
+\vop{\vec{k}} = -i\,\nabla,
+\end{equation}
+
+and we see that 
+
+\begin{equation} \label{eq:opkvec1action}
+\vop{k}\,\eta = \vec{k}\,\eta,
+\end{equation}
+
+\begin{equation} \label{eq:opkvec2action}
+{\vop{k}}^2\,\eta = k^2\,\eta
+\end{equation}
+
+for a wave component given on the form \ref{eq:component}. By mutliplying both sides of the dispersion relation (\ref{eq:dispersion}) with $\eta$, we obtain
+
+\begin{equation}
+\omega^2\,\eta = \left(g\,+\,\frac{\gamma}{\rho}\,k^2\right)\,k\,\tanh(k\,h)\,\eta
+\end{equation}
+
+which can be rewritten as
+
+\begin{equation} \label{eq:baddiffeq}
+\sop{\omega}^2\,\eta = \left(g\,+\,\frac{\gamma}{\rho}\,{\vop{k}}^2\right)\,k\,\tanh(k\,h)\,\eta.
+\end{equation}
+
+We now have an equation almost free from $\vec{k}$ and $\omega$. However, the factor $k\,\tanh(k\,h)$ persists and is diffucult to turn into an operator free from $\vec{k}$. One solution is to turn this factor into a convolution filter, and calculate the convolution between the operand and a convolution kernel, but the kernel proves to be difficult to obtain. A possibility is to rewrite \ref{eq:baddiffeq} into
+
+\begin{equation} \label{eq:betterdiffeq}
+\sop{\omega}^2\,\eta = \left(g\,+\,\frac{\gamma}{\rho}\,{\vop{k}}^2\right)\,{\vop{k}}^2\,h\,\ftrans{K}(\vec{k}\,h)\,\eta,
+\end{equation}
+
+where
+
+\begin{equation} %\label{eq:fofkvec}
+\ftrans{K}(\vec{\xi}) = \frac{\tanh(|\vec{\xi}|)}{|\vec{\xi}|}
+\end{equation}
+
+and where $\xi$ is a unitless time domain vector, and turn $\ftrans{K}(\vec{\xi})$ into a convolution filter. The convolution kernel $K(\vec{x})$ is given by
+
+\begin{equation} \label{eq:kernelfour2d}
+K(\vec{x}) = \mathcal{F}^2\{\ftrans{K}(\vec{\xi})\}(\vec{x})
+\end{equation}
+
+where $\mathcal{F}^2$ denotes the twodimensional \idx{Fourier transform} and $\vec{x}$ is a unitless vector in the room domain. Although it is very difficult (if not impossible) to obtain the kernel analytically, it is possible to calculate a numerically approximation for it and use that in the convolution filer instead.
+
+By realizing that the function is cilcular symmetric:
+
+\begin{equation} %\label{eq:fofkvec}
+f(\vec{k}) = f(k)
+\end{equation}
+
+it is possible to obtain the twodimensional Fourier transform of $f(\vec{k})$ by transforming $f(k)$ with the zero-order \idx{Hankel transform}, which is a much more efficient way. The resulting kernel is also circular symmetric, and the convolution filter can be applied by using a variant of the \idx{Fast Multipole Method} (FMM\index{FMM|see{Fast Multipole Method}}) for continuous data.
+
+\hrule{}
+
+This partial differential equation has not been solved numerically so it's behaviour is unknown.
+
+\hrule{}
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+
+\begin{equation}
+\frac{1}{(2\,\pi\,r)(1\,+\,r)}\,e^{-r^2/4}
+\end{equation}
+

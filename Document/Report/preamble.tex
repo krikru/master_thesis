@@ -5,6 +5,7 @@
 % Formatting
 \usepackage[utf8]{inputenc} % Get å, ä, ö, Å, Ä, Ö
 \usepackage[resetfonts]{cmap} % Help reader to interpret ligatures
+\usepackage{parskip} % Sets paragraph indentation to zero and instead skips a line between paragraphs
 
 % Miscellaneous tools
 \usepackage{etoolbox} % Includes the macro \ifstrequal
@@ -68,5 +69,14 @@
 \newrobustcmd{\addtotoc}[2]{\cleardoublepage\phantomsection\addcontentsline{toc}{#1}{#2}}
 \newrobustcmd{\blankpage}{\clearpage\thispagestyle{fancy}\renewcommand{\headrulewidth}{0pt}\chead{}\cfoot{}\IFDEBUGELSE{\begin{center}\large\textit{This page intentionally left blank}\end{center}}{\ }\clearpage}
 
-% Options for compiling the documelt
+% DEBUG is defined in options.tex
+\newrobustcmd{\IFDEBUG      }[1]{\iftoggle {DEBUG}{#1}{  }}
+\newrobustcmd{\IFDEBUGELSE  }[2]{\iftoggle {DEBUG}{#1}{#2}}
+\newrobustcmd{\IFPUBLISH    }[1]{\nottoggle{DEBUG}{#1}{  }}
+\newrobustcmd{\IFPUBLISHELSE}[2]{\nottoggle{DEBUG}{#1}{#2}}
+
+% % % % % % % % % % % % % % % % % % % %
+% OPTIONS FOR COMPILING THE DOCUMENT  %
+% % % % % % % % % % % % % % % % % % % %
 \input{options}
+

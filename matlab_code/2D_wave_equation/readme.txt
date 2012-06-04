@@ -1,0 +1,1 @@
+Change the working director by cd:ing ("Change Directory") to this directory. You can use the commands ls ("List information about file(s)") and pwd ("Print Working Directory") to navigate.
