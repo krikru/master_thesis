@@ -41,4 +41,6 @@ _ReSharper*/
 *.toc
 *.lof
 *.lot
+*.ilg
+*.ind
 *.synctex.gz

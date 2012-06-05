@@ -154,6 +154,9 @@ h'^2(\vec{r}) = \frac{\displaystyle\int K\left(\frac{\vec{r'}}{h_e(\vec{r},\,\ve
 
 in order to scale the amplitude of the convolution filter properly.
 
+\ \\
+\hrule{}
+\ \\
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
 
 and \eqref{eq:betterdiffeq} could be written as
@@ -162,10 +165,9 @@ and \eqref{eq:betterdiffeq} could be written as
 \sop{\omega}^2\,\eta = \left(g\,+\,\frac{\gamma}{\rho}\,{\vop{k}}^2\right)\,{\vop{k}}^2\,h\,\sop{C}\,\eta.
 \end{equation}
 
-For a \idx{uniform surface grid}\index{surface grid!uniform}, the convolution filter given by \eqref{eq:opc} can be applied by using a variant of the \idx{Fast Multipole Method} (FMM\index{FMM|see{Fast Multipole Method}}) \citep{Greengard1987} for continuous data, which will allow it to be applied in $O(1)$\index{big O notation} time in average per surface grid point.
+For a \idx{uniform surface grid}\index{surface grid!uniform}, the convolution filter given by \eqref{eq:opc} can be applied by using a variant of the \idx{Fast Multipole Method} (\qidxe{FMM}{FMM|see{Fast Multipole Method}}) \citep{Rokhlin1985,Greengard1987} for continuous data, called the \idx{Continuous Fast Multipole Method} (\qidxe{CFMM}{CFMM|see{Continuous Fast Multipole Method}}) \citep{White1994,White1996}, which will allow it to be applied in $O(1)$\index{big O notation} time in average per surface grid point.
 
-However, even though $O(1)$ is very fast in theory, the Fast Multipole Method is complicated and involves many computational steps, which would make the simulation slow. Besides, it needs many \idxe{Taylor terms}{Taylor term} to calculate a good approximantion, so one has to choose between large approximation errors and additional computational costs due to many Taylor terms.
-
+However, even though $O(1)$ is very fast in theory, the Fast Multipole Method is complicated and involves many computational steps, which would make the simulation slow. It needs many \idxe{Taylor terms}{Taylor term} to calculate a good approximantion, so one would have balance the approximation errors with the additional computational costs due to the processing the Taylor terms.
 
 \ \\
 \hrule{}
