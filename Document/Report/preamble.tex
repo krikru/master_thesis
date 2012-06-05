@@ -61,13 +61,22 @@
 % MACROS  %
 % % % % % %
 
+% General macros
 \newrobustcmd{\newflag}[2]{\newtoggle{#1}\settoggle{#1}{#2}}
 \newrobustcmd{\comment}[1]{}
+% Appearance
 \newrobustcmd{\HRule}{\rule{\linewidth}{0.5mm}}
-\newrobustcmd{\idx}[1]{\textit{#1}\index{#1}}
-%\newrobustcmd{\idx2}[2]{\textit{#1}\index{#2}}
-\newrobustcmd{\addtotoc}[2]{\cleardoublepage\phantomsection\addcontentsline{toc}{#1}{#2}}
 \newrobustcmd{\blankpage}{\clearpage\thispagestyle{fancy}\renewcommand{\headrulewidth}{0pt}\chead{}\cfoot{}\IFDEBUGELSE{\begin{center}\large\textit{This page intentionally left blank}\end{center}}{\ }\clearpage}
+\newrobustcmd{\addtotoc}[2]{\cleardoublepage\phantomsection\addcontentsline{toc}{#1}{#2}}
+% Indexing
+\newrobustcmd{\idx  }[1]{\indexify{#1}\index{#1}}   % The basic version of the idx function
+\newrobustcmd{\idxe }[2]{\indexify{#1}\index{#2}}   % The extended version of the idx function
+\newrobustcmd{\idxp }[2]{\indexify{#1#2}\index{#1}} % The plural version of the idx function
+\newrobustcmd{\qidx }[1]{#1\index{#1}}            % The quite version of the idx function
+\newrobustcmd{\qidxe}[2]{#1\index{#2}}            % The quite extended version of the idx function
+\newrobustcmd{\qidxp}[2]{#1#2\index{#1}}          % The quite plural version of the idx function
+% Mathematics
+\newrobustcmd{\infinitesimal}[0]{\operatorname{d}}          % The quite plural version of the idx function
 
 % DEBUG is defined in options.tex
 \newrobustcmd{\IFDEBUG      }[1]{\iftoggle {DEBUG}{#1}{  }}

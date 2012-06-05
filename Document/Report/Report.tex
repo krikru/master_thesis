@@ -38,6 +38,8 @@
 
 \input{preamble}
 
+\includeonly{pde_derivation,back_matter} % There must be no spaces between the filenames and the commas separating the files
+
 \begin{document}
 
 % % % % % % % %
@@ -49,19 +51,14 @@
 %\frontmatter
 
 \include{title_pages}
-\blankpage
-%\include{libary_page}
+%\blankpage
+\include{libary_page}
 \include{copyright_note}
 \include{abstract} %TODO: Prevent the abstract from messing up the page numbering
 \include{acknowledgments}
 
 % Table of contents and various lists
-\tableofcontents
-\addtotoc{chapter}{List of Tables}
-\listoftables
-\addtotoc{chapter}{List of Figures}
-\listoffigures
-\include{notation}
+\include{listing_page}
 
 \newpage
 \pagenumbering{arabic}
@@ -77,13 +74,7 @@
 % The back matter
 %\backmatter
 
-% Index
-\addtotoc{part}{Index}
-\printindex
-
-% Bibliography
-\addtotoc{part}{Bibliography}
-\bibliography{references} % If multiple bib files are used, they have to be separated by a comma and no space
+\include{back_matter}
 
 \end{document}
 
