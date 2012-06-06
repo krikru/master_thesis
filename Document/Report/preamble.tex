@@ -6,6 +6,7 @@
 \usepackage[utf8]{inputenc} % Get å, ä, ö, Å, Ä, Ö
 \usepackage[resetfonts]{cmap} % Help reader to interpret ligatures
 \usepackage{parskip} % Sets paragraph indentation to zero and instead skips a line between paragraphs
+\usepackage{setspace} % Allows for spreading the lines arbitrarly much
 
 % Miscellaneous tools
 \usepackage{etoolbox} % Includes the macro \ifstrequal
@@ -69,14 +70,14 @@
 \newrobustcmd{\blankpage}{\clearpage\thispagestyle{fancy}\renewcommand{\headrulewidth}{0pt}\chead{}\cfoot{}\IFDEBUGELSE{\begin{center}\large\textit{This page intentionally left blank}\end{center}}{\ }\clearpage}
 \newrobustcmd{\addtotoc}[2]{\cleardoublepage\phantomsection\addcontentsline{toc}{#1}{#2}}
 % Indexing
-\newrobustcmd{\idx  }[1]{\indexify{#1}\index{#1}}   % The basic version of the idx function
-\newrobustcmd{\idxe }[2]{\indexify{#1}\index{#2}}   % The extended version of the idx function
-\newrobustcmd{\idxp }[2]{\indexify{#1#2}\index{#1}} % The plural version of the idx function
-\newrobustcmd{\qidx }[1]{#1\index{#1}}            % The quite version of the idx function
-\newrobustcmd{\qidxe}[2]{#1\index{#2}}            % The quite extended version of the idx function
-\newrobustcmd{\qidxp}[2]{#1#2\index{#1}}          % The quite plural version of the idx function
+\newrobustcmd{\idx  }[1]{\index{#1}\indexify{#1}}   % The basic version of the idx function
+\newrobustcmd{\idxe }[2]{\index{#1}\indexify{#2}}   % The extended version of the idx function
+\newrobustcmd{\idxp }[2]{\index{#1}\indexify{#1#2}} % The plural version of the idx function
+\newrobustcmd{\qidx }[1]{\index{#1}#1}              % The quite version of the idx function
+\newrobustcmd{\qidxe}[2]{\index{#1}#2}              % The quite extended version of the idx function
+\newrobustcmd{\qidxp}[2]{\index{#1}#1#2}            % The quite plural version of the idx function
 % Mathematics
-\newrobustcmd{\infinitesimal}[0]{\operatorname{d}}          % The quite plural version of the idx function
+\newrobustcmd{\infinitesimal}[0]{\operatorname{d}} % Used e.g. in integrals and derivatives and for
 \newrobustcmd{\range}[2]{#1{--}#2}
 
 % DEBUG is defined in options.tex
