@@ -1,13 +1,13 @@
 %\chapter{Derivation of two-dimensional PDEs for water waves at random intermediate depths}
 \chapter{Derivation of a two-dimensional PDE for water waves at varying depths}
 
-In this appendix, I will present a two-dimensional \idx{partial differential equation} in the \idx{spatial domain}, describing the \qidxe{surface waves!time evolution of}{time evolution of surface waves} for intermediate, mildly varying water depths. It is derived from the \idx{dispersion relation} that is obtained in \idx{Airy wave theory}, namely:
+In this appendix, I will present a two-dimensional \idx{partial differential equation} in the \idx{spatial domain}, describing the \qidxe{surface waves!time evolution of}{time evolution of surface waves} for intermediate, mildly varying water depths. The equation can efficiently be solved with a \idx{time complexity} of $O(n)$ per \idx{time step}, where $n$ is the number of \idxp{surface grid point}{s}\index{grid point!surface}, using the \idx{Continuous Fast Multipole Method}\index{Fast Multipole Method!Continuous} (\qidxe{CFMM|see{Continuous Fast Multipole Method}}{CFMM}) \citep{White1994}. The equation have not been solved numerically so its behaviour is unknown. It is derived from the \idx{dispersion relation} that is obtained in \idx{Airy wave theory}, namely:
 
 \begin{equation} \label{eq:dispersion}
 \omega^2(k) = \left(g\,+\,\frac{\gamma}{\rho}\,k^2\right)\,k\,\tanh(k\,h),
 \end{equation}
 
-where $k$ is the \idx{wavenumber} of one \idx{wave component}, $\omega$ is the \idx{angular freequency} of the component, $g$ is the \idx{gravitational acceleration}, $h$ is the \idx{water depth}\index{depth!water|see{water depth}}, $\gamma$ is the \idx{surface tension} and $\rho$ is the \idx{density} of the water. Since this equation describes waves of a single \idx{wavelength}, we can assume that the \idx{time evolution} of one wave component can be described by
+where $k$ is the \idx{wavenumber} of one \idx{wave component}, $\omega$ is the \idx{angular freequency} of the component, $g$ is the \idx{gravitational acceleration}, $h$ is the \idx{water depth}\index{depth!water}, $\gamma$ is the \idx{surface tension} and $\rho$ is the \idx{density} of the water. Since this equation describes waves of a single \idx{wavelength}, we can assume that the \idx{time evolution} of one wave component can be described by
 
 \begin{equation} \label{eq:component}
 \eta(\vec{r},\,t) = A\,e^{i(\vec{k}\cdot\vec{r}\,-\,\omega\,t)},
@@ -19,7 +19,7 @@ where $\eta(\vec{r},\,t)$ is the free surface elevation at the position $\vec{r}
 k = \left|\vec{k}\right|.
 \end{equation}
 
-Although \eqref{eq:component} describes the time evolution of all wave components, it includes variables from the \idx{frequency domain} ($\vec{k}$ and $\omega$ -- note that $k$ depends on $\vec{k}$ according to \eqref{eq:kvectok}), which are not available when working purely in the spatial domain. Furthermore, it is indirectly dependent on $h$ and assumes that this variable has the same value on all locations, which may not be the case. We therefore need a way to express the time evolution of the free surface which does not use frequency domain variables and is roboust even for varying water depths.
+Although \eqref{eq:component} describes the time evolution of all wave components, it includes variables from the \idx{frequency domain} ($\vec{k}$ and $\omega$ -- note that $k$ depends on $\vec{k}$ according to \eqref{eq:kvectok}), which are not available when working purely in the spatial domain. Furthermore, the equation is indirectly dependent on $h$ and assumes that this variable has the same value on all locations, which may not be the case. We therefore need a way to express the time evolution of the free surface which does not use frequency domain variables and is roboust even for varying water depths.
 
 By \idxe{differentiation!in time}{differentiating} \eqref{eq:component} in time, we obtain
 
@@ -57,11 +57,17 @@ which can be written as
 \nabla\eta(\vec{r},\,t) = i\,\vec{k}\,\eta(\vec{r},\,t).
 \end{equation}
 
-Let's define the operator
+Let's define the operators
 
+\begin{samepage}
 \begin{equation} \label{eq:opkvec}
 \vop{k} = -i\,\nabla
 \end{equation}
+
+\begin{equation} \label{eq:opk2}
+\sop{k^2} = \vop{k}^2 = -\nabla^2
+\end{equation}
+\end{samepage}
 
 and we see that 
 
@@ -70,8 +76,8 @@ and we see that
 \vop{k}\,\eta = \vec{k}\,\eta,%\quad\text{and}
 \end{equation}
 
-\begin{equation} \label{eq:opkvec2action}
-{\vop{k}}^2\,\eta = k^2\,\eta
+\begin{equation} \label{eq:opk2action}
+\sop{k^2}\,\eta = k^2\,\eta
 \end{equation}
 \end{samepage}
 
@@ -84,13 +90,13 @@ for a wave component described by \eqref{eq:component}. By mutliplying both side
 which can be rewritten as
 
 \begin{equation} \label{eq:baddiffeq}
-\sop{\omega}^2\,\eta = \left(g\,+\,\frac{\gamma}{\rho}\,{\vop{k}}^2\right)\,k\,\tanh(k\,h)\,\eta.
+\sop{\omega}^2\,\eta = \left(g\,+\,\frac{\gamma}{\rho}\,\sop{k^2}\right)\,k\,\tanh(k\,h)\,\eta.
 \end{equation}
 
 We now have an equation almost free from $\vec{k}$ and $\omega$. However, the factor $k\,\tanh(k\,h)$ persists and is diffucult to turn into an operator free from $\vec{k}$. One solution is to turn this factor into a \idx{convolution filter}\index{filter!convolution} which works by calculating the \idx{convolution} between the operand and a \idx{convolution kernel}\index{kernel!convolution}, but the kernel proves to be difficult to obtain due to the asymptotically increasing valvue of $k\,\tanh(k\,h)$ as $k\rightarrow\infty$. A possibility is to rewrite \eqref{eq:baddiffeq} into
 
 \begin{equation} \label{eq:betterdiffeq}
-\sop{\omega}^2\,\eta = \left(g\,+\,\frac{\gamma}{\rho}\,{\vop{k}}^2\right)\,{\vop{k}}^2\,h\,\fdfunc{K}(\vec{k}\,h)\,\eta,
+\sop{\omega}^2\,\eta = \left(g\,+\,\frac{\gamma}{\rho}\,\sop{k^2}\right)\,\sop{k^2}\,h\,\fdfunc{K}(\vec{k}\,h)\,\eta,
 \end{equation}
 
 where
@@ -99,104 +105,172 @@ where
 \fdfunc{K}(\vec{\xi}) = \begin{cases}
 1                                                  , & \quad \vec{\xi} = \vec{0} \\[.5em]
 \displaystyle\frac{\tanh(|\vec{\xi}|)}{|\vec{\xi}|}, & \quad \vec{\xi} \neq \vec{0}
-\end{cases}
+\end{cases}\ ,
 \end{equation}
 
-where $\fdfunc{~}$ denotes a function in the frequency domain and $\vec{\xi}$ is a \idx{unitless} vector in the frequency domain -- and turn $\fdfunc{K}(\vec{\xi})$ into a convolution filter. The convolution kernel $K(\vec{x})$ is given by the inverse, non-unitary \idxe{Fourier transform!two-dimensional}{two-dimensional Fourier transform} of $\fdfunc{K}(\vec{\xi})$:
+a $\fdfunc{~}$ denotes a function in the frequency domain and $\vec{\xi}$ is a \idx{unitless} vector in the frequency domain, and turn $\fdfunc{K}(\vec{\xi})$ into a convolution filter. The effect of the filter applied on a function described by \eqref{eq:component} would be
+
+\begin{equation} \label{eq:opceffect}
+\sop{C}\,\eta(\vec{r},\,t) = \fdfunc{K}(\vec{k}\,h)\,\eta(\vec{r},\,t)
+\end{equation}
+
+and since the filter is a convolution filter, it can be described by
+
+\begin{equation} \label{eq:opcfconvolution}
+\sop{C}\,\eta(\vec{r},\,t) = \{f\,*\,\eta\}(\vec{r},\,t),
+\end{equation}
+
+where $f$ is the \idx{convolution kernel}\index{kernel|convolution}. Combining \eqref{eq:opceffect} and \eqref{eq:opcfconvolution} yeilds
+
+\begin{equation} \label{eq:fconvolutioneffect}
+\{f\,*\,\eta\}(\vec{r},\,t) = \fdfunc{K}(\vec{k}\,h)\,\eta(\vec{r},\,t).
+\end{equation}
+
+The \idx{convolution theorem} states that
+
+\begin{equation} \label{eq:convolutiontheorem}
+\mathcal{F}\{f\,*\,g\} = \mathcal{F}\{f\}\,\cdot\,\mathcal{F}\{g\},
+\end{equation}
+
+where $\mathcal{F}$ denotes the \idx{non-uniform Fourier transform}\index{Fourier transform!non-uniform} using angular frequency and $\cdot$ denotes point-wise multiplication. By Fourier transforming \eqref{eq:fconvolutioneffect} using this theorem, we obtain
+
+\begin{equation}
+\mathcal{F}\{f\}(\vec{k})\ \mathcal{F}\{\eta\}(\vec{k},\,t) = \fdfunc{K}(\vec{k}\,h)\ \mathcal{F}\{\eta\}(\vec{k},\,t)
+\end{equation}
+
+which can be rewritten as
+
+\begin{equation} \label{eq:ffourier}
+\mathcal{F}\{f\}(\vec{k}) = \fdfunc{K}(\vec{k}\,h)
+\end{equation}
+
+by calceling out $\mathcal{F}\{\eta\}(\vec{k},\,t)$ on both sides. For scaling of a function with a real, nun-zero number $a$, the Fourier transform has the following property:
+
+\begin{equation} \label{eq:fourierscaling}
+\mathcal{F}\{h\}(\vec{\xi}) = \frac{1}{|a|^n}\,\mathcal{F}\{f\}\left(\frac{\vec{\xi}}{a}\right)
+,\quad
+h(\vec{x}) = f(a\vec{x})\ \forall\ \vec{x},
+\end{equation}
+
+where $n$ is the dimensionality of $\vec{x}$ and $\vec{\xi}$. Let's define the function
+
+\begin{equation} \label{eq:ftokernel}
+K(\vec{x}) = h^2\,f(h\,\vec{x}),
+\end{equation}
+
+where $\vec{x}$ is a \idx{unitless} vector in the spatial domain. The scaling property of the Fourier transform (\eqref{eq:fourierscaling}) tells us that
+
+\begin{equation}
+\mathcal{F}\{K\}(\vec{\xi}) = h^2\,\frac{1}{|h|^2}\,\mathcal{F}\{f\}\left(\frac{\vec{\xi}}{h}\right)
+\end{equation}
+
+which, by using \eqref{eq:ffourier} can be rewritten as
+
+\begin{equation}
+\mathcal{F}\{K\}(\vec{\xi}) = \fdfunc{K}(\vec{\xi}).
+\end{equation}
+
+$K(\vec{x})$ is obtained by reverse Fourier transforming this equation:
 
 \begin{equation} \label{eq:kernelfour2d}
-K(\vec{x}) = (\mathcal{F}^2)^{-1}\{\fdfunc{K}(\vec{\xi})\}(\vec{x}) = \frac{1}{(2\,\pi)^2}\iint\fdfunc{K}(\vec{\xi})\,e^{i\,\vec{\xi}\cdot\vec{x}}\,\infinitesimal\vec{x}
+K(\vec{x})\, = \,\mathcal{F}^{-1}\{\fdfunc{K}(\vec{\xi})\}(\vec{x})\, = \,\frac{1}{(2\,\pi)^2}\iint\fdfunc{K}(\vec{\xi})\,e^{i\,\vec{\xi}\cdot\vec{x}}\,\infinitesimal\vec{\xi}
 \end{equation}
 
-where $\mathcal{F}^2$ denotes the two-dimensional Fourier transform and $\vec{x}$ is a unitless vector in the spatial domain. Although it is very difficult (if not impossible) to obtain the two-dimensional Fourier transform of this function analytically, it is possible to approximate it numerically and use the approximation in the convolution filter instead.
+where $\mathcal{F}^{-1}$ denotes the reverse Fourier transform. Although it is very difficult (if not impossible) to obtain the reverse Fourier transform of this function analytically, it is possible to approximate it numerically and use the approximation in the convolution filter instead.
 
-By realizing that the function is cilcular symmetric:
+With no loss of generality, we can pick a polar coordinate system $(\xi,\,\theta)$ such that the $\vec{x}$ vector lies on the $\theta = 0$ axis. In that case, \eqref{eq:kernelfour2d} can be rewritten as
 
-\begin{equation} \label{eq:transkernelsymmetry}
-\fdfunc{K}(\vec{\xi}) = \fdfunc{K}(\xi)
+\begin{equation}
+K(\vec{x})\, = \,\frac{1}{(2\,\pi)^2}\int_{\xi=0}^\infty\int_{\theta=0}^{2\,\pi}\fdfunc{K}(\xi, \theta)\,e^{i\,\xi\,x\cos\theta}\,\xi\,\infinitesimal\xi\,\infinitesimal\theta,
 \end{equation}
 
-the kernel will also be cilcular symmetric and it is possible to obtain the two-dimensional Fourier transform of $\fdfunc{K}(\vec{\xi})$ by transforming $\fdfunc{K}(\xi)$ with the \idxe{Hankel transform!zeroth order}{zeroth order Hankel transform}:
+where $\theta$ is the angle between the $\vec{x}$ and the $\vec{\xi}$ vectors. By realizing that $\fdfunc{K}$ is cilcular symmetric, i.e.
 
-\begin{equation} \label{eq:kernelhankel}
-K(x) = 2\,\pi\int_0^\infty \fdfunc{K}(\xi)\,J_0(
-%TODO:: should we multiply with 2 pi here?
-%2\,\pi
-x\,\xi)\,\xi\infinitesimal\xi = F_0\{\fdfunc{K}(\xi)\}(x),
+\begin{equation}
+\fdfunc{K}(\vec{\xi}) = \fdfunc{K}(\xi),
 \end{equation}
 
-where $J_0$ is the \idxe{Bessel function!zeroth order of the first kind}{zeroth order Bessel function of the first kind} and $F_0$ denotes the zeroth order Hankel transform, which can be calculated more efficiently than the two-dimensional Fourier transform. The resulting kernel is then given by
+and that this leads to that $K$ also is cilcular symmetric, i.e.
 
-\begin{equation} \label{eq:kernelsymmetry}
-K(\vec{x}) = K(x).
+\begin{equation}
+K(\vec{x}) = K(x),
 \end{equation}
 
-Note that both $K$, $\fdfunc{K}$ and the arguments they take are unitless. A first attempt to define an operator that would use this kernel could be
+the integral over $\theta$ may be carried out, and the Fourier transform is now written
+
+\begin{equation} \label{eq:fdkerneltokernel}
+K(x)\, = \,\frac{1}{2\,\pi}\int_0^\infty\fdfunc{K}(\xi)\,J_0(x\,\xi)\,\xi\,\infinitesimal\xi\, = \,\frac{1}{2\,\pi}\,F_0\{\fdfunc{K}\}(x),
+\end{equation}
+
+where $x = |\vec{x}|$, $J_0$ is the \idxe{Bessel function!zeroth order of the first kind}{zeroth order Bessel function of the first kind} and $F_0$ denotes the \idxe{Hankel transform!zeroth order}{zeroth order Hankel transform}, which can be calculated more efficiently than the reverse two-dimensional Fourier transform. The corresponding transformation for calculating $\fdfunc{K}$ from $K$ is given by
+
+\begin{equation} \label{eq:kerneltofdkernel}
+\fdfunc{K}(\xi) = 2\,\pi\,F_0\{K\}(\xi).
+\end{equation}
+
+In this case, since $K(x)$ was found to vanish very quickly as $x\rightarrow\infty$, it was more efficient to solve \eqref{eq:kerneltofdkernel} by guessing a function $K^*$ for $K$ than to calculate $K$ from \eqref{eq:fdkerneltokernel} directly. A function that was found both to be simple and to match $\fdfunc{K}$ sufficiently well when transformed according to \eqref{eq:kerneltofdkernel} was
+
+\begin{equation}
+K^*(x) = \frac{1}{8\,\pi^3\,x\,(1\,+\,x)}\,e^{-x^2/4}.
+\end{equation}
+
+Note that both $K$, $\fdfunc{K}$ and the arguments they take are \idx{unitless}. $K$ is therefore the \idxe{kernel!unitless}{unitless kernel}.
+
+Expanding \eqref{eq:opcfconvolution} yeilds
+
+\begin{equation} \label{eq:opcfintegral}
+\sop{C}\,\eta(\vec{r},\,t) = \iint f(\vec{r'})\,\eta(\vec{r}-\vec{r'},\,t)\,\infinitesimal\vec{r'}
+\end{equation}
+
+which, by using \eqref{eq:ftokernel}, can be rewritten to
 
 \begin{equation} \label{eq:opchunknown}
-\sop{C}_h\,\eta(\vec{r},\,t) = a_h\iint\eta(\vec{r}-\vec{r'},\,t)\,K\left(\frac{\vec{r'}}{h}\right) \infinitesimal\vec{r'}.
+\sop{C}_h\,\eta(\vec{r},\,t) = a_h\iint K\left(\frac{\vec{r'}}{h}\right)\,\eta(\vec{r}-\vec{r'},\,t)\,\infinitesimal\vec{r'},
 \end{equation}
 
-where $a$ is a factor that scales the outcome of the operation with an appropriate amount. By examining \eqref{eq:transkernelofxivec}, we see that the convolution filter in fact is a kind of \idx{low-pass filter}\index{filter!low-pass}, since $\fdfunc{K}(\vec{0}) = 1$. We therefore require that if we apply it on a constant function, it will have no effect:
+where $a_h = 1/h^2$. We could just use this definition of $C$ and plug it in to LKJG AISG ASOUY GQUIF SIUQYG SUIGYQ SILGQU SILYGQ SUY SGQUKYF QS
 
-\begin{equation} \label{eq:opcproperscaling}
-\sop{C}_h\,\eta(\vec{r},\,t) = \eta(\vec{r},\,t),\quad\eta(\vec{r},\,t) = \eta_0\ \forall\ \vec{r},\,t.
-\end{equation}
-
-By combining \eqref{eq:opchunknown} and \eqref{eq:opcproperscaling} and isolating $a_h$, we get
-
-\begin{equation} \label{eq:scalinghunknown}
-a_h = \frac{1}{\displaystyle\iint K\left(\frac{\vec{r'}}{h}\right) \infinitesimal\vec{r'}}.
-\end{equation}
 
 A problem, though, is that $h$ is not a constant, but dependent of location for a sea bottom that is not perfectly flat. The simplest thing to do would be to just take the height of the local position:
 
 \begin{equation} \label{eq:opchlocal}
-\sop{C}_{h(\vec{r})}\,\eta(\vec{r},\,t) = a_{h(\vec{r})}\iint \eta(\vec{r}-\vec{r'},\,t)\,K\left(\frac{\vec{r'}}{h(\vec{r})}\right) \infinitesimal\vec{r'},
+\sop{C}_{h(\vec{r})}\,\eta(\vec{r},\,t) = a_{h(\vec{r})}\iint K\left(\frac{\vec{r'}}{h(\vec{r})}\right)\,\eta(\vec{r}-\vec{r'},\,t)\,\infinitesimal\vec{r'},
 \end{equation}
 
-and by combinging \eqref{eq:opcproperscaling} and \eqref{eq:opchlocal} like before, obtain
+where $a_{h(\vec{r})} = 1/h^2(\vec{r})$. Unfortunately, this method has other problems that occur when the bottom toppography is unplesant. For example, if one part of the water is surrounded by ground, as is the case with lakes, this simple operator would still be affected by other parts of the water. Hence, waves in one lake could propagate into another, nearby lake, which is not the case in reality.
 
-\begin{equation} \label{eq:ahlocal}
-a_{h(\vec{r})} = \frac{1}{\displaystyle\iint K\left(\frac{\vec{r'}}{h(\vec{r})}\right) \infinitesimal\vec{r'}} = \frac{1}{h^2(\vec{r})\,\displaystyle\iint K\left(\vec{\xi}\right)\infinitesimal\vec{\xi}} = \frac{1}{h^2(\vec{r})}.
+A possible remedy for this problem is to try to limit the convolution filter and let the kernel approach zero more quickly when the water gets shallower. For example, one could be to find the path from $\vec{r}$ to $\vec{r}-\vec{r'}$ with the maximal minimum water depth, and use the minimal water depth of that path as an \idx{effective depth}\index{depth!effective} $h_e$ for that sampling location. Another possibility could be to find the path with the minimal path integral of $h^{-1}$, calculate the average value of $h^{-1}$ along that path and use the inverse of that average as the effective depth $h_e$.
+
+Anyway, assuming we have defined the effective depth \mbox{$h_e(\vec{r},\,\vec{r}-\vec{r'})$} in some way, we can use that definition:
+
+\begin{equation} \label{eq:opcheffective}
+\sop{C}_{h_e}\,\eta(\vec{r},\,t) = a_{h_e}\,\iint K\left(\frac{\vec{r'}}{h_e(\vec{r},\,\vec{r}-\vec{r'})}\right)\,\eta(\vec{r}-\vec{r'},\,t)\,\infinitesimal\vec{r'}.
 \end{equation}
 
-Unfortunately, this method has other problems that occur when the bottom toppography is unplesant. For example, if one part of the water is surrounded by ground, as is the case with lakes, this simple operator would still be affected by other parts of the water. Hence, waves in one lake could propagate into another, nearby lake, which is not the case in reality.
+One problem here, though, is that different values for $h_e$ are used for each value of $\vec{r}$, so $a_{h_e}$ cannot be easily obtained. However, by examining \eqref{eq:transkernelofxivec}, we see that the convolution filter is in fact a kind of \idx{low-pass filter}\index{filter!low-pass}, since $\fdfunc{K}(\vec{0}) = 1$. We therefore require that if we apply it on a constant function, it will have no effect:
 
-A possible remedy for this problem is to try to limit the convolution filter and let the kernel approach zero more quickly when the water gets shallower. One attempt could be to find the path from $\vec{r}$ to $\vec{r}-\vec{r'}$ with the maximal minimum water depth, and use the minimal water depth of that path as an \idx{effective depth}\index{depth!effective} $h_e$ for that sampling location:
-
-\begin{equation} \label{eq:opcmoresophisticated}
-\sop{C}_{h_e}\,\eta(\vec{r},\,t) = \frac{1}{h'^2(\vec{r})}\,\iint\eta(\vec{r}-\vec{r'},\,t)\,K\left(\frac{\vec{r'}}{h_e(\vec{r},\,\vec{r}-\vec{r'})}\right) \infinitesimal\vec{r'},
+\begin{equation} \label{eq:opcproperscaling}
+\sop{C}\,\eta(\vec{r},\,t) = \eta(\vec{r},\,t),\quad\eta(\vec{r},\,t) = \eta_0\ \forall\ \vec{r},\,t.
 \end{equation}
 
-where $h'^2(\vec{r})$ is defined as 
+By combining \eqref{eq:opcheffective} and \eqref{eq:opcproperscaling} and isolating $a_h$, we get
 
-\begin{equation} \label{eq:hsqreffective}
-h'^2(\vec{r}) = \frac{\displaystyle\iint K\left(\frac{\vec{r'}}{h_e(\vec{r},\,\vec{r}-\vec{r'})}\right) \infinitesimal\vec{r'}}{\displaystyle\iint K(\vec{x}) \infinitesimal\vec{x}}
+\begin{equation} \label{eq:scalinghunknown}
+a_{h_e} = \frac{1}{\displaystyle\iint K\left(\frac{\vec{r'}}{h_e(\vec{r},\,\vec{r}-\vec{r'})}\right) \infinitesimal\vec{r'}}.
 \end{equation}
 
-in order to scale the amplitude of the convolution filter properly.
-
-\ \\
-\hrule{}
-\ \\
-% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
-
-and \eqref{eq:betterdiffeq} could be written as
+By using \eqref{eq:opceffect} to substitute $\fdfunc{K}$ in \eqref{eq:betterdiffeq} and using $C_{h_e}$ which is the most \idx{robust} of our $C$ operators, we obtain
 
 \begin{equation} \label{eq:bestdiffeq}
-\sop{\omega}^2\,\eta = \left(g\,+\,\frac{\gamma}{\rho}\,{\vop{k}}^2\right)\,{\vop{k}}^2\,h\,\sop{C}\,\eta.
+\sop{\omega}^2\,\eta = \left(g\,+\,\frac{\gamma}{\rho}\,\sop{k^2}\right)\,\sop{k^2}\,h\,\sop{C}_{h_e}\,\eta
 \end{equation}
 
-For a \idx{uniform surface grid}\index{surface grid!uniform}, the convolution filter can be applied by using the a modified version of the \idx{Fast Multipole Method} (\qidxe{FMM|see{Fast Multipole Method}}{FMM}) \citep{Greengard1985,Greengard1987} for continuous data, known as the \idx{Continuous Fast Multipole Method}\index{Fast Multipole Method!Continuous} (\qidxe{CFMM|see{Continuous Fast Multipole Method}}{CFMM}) \citep{White1994}, which allows it to be applied with a $O(n)$\index{big O notation}\index{notation!big O} \idxe{amortized time}{amortized} \idx{time complexity} instead of $O(n^2)$ as with a simple $n$-to-$n$ approach, where $n$ is the number of surface grid points.
+which is a partial differential equation completely free from variables in the frequency domain and which is believed to be robust even for varying water depths, which was the goal. By using the definition for $\sop{\omega}$ (\eqref{eq:opomega}), the definition for $\sop{k^2}$ (\eqref{eq:opk2}) and the definition for $\sop{C}_{h_e}$ (\eqref{eq:opcheffective}), the equation can be rewritten as
+
+\begin{equation} \label{eq:diffeqnouserdefinedoperators}
+\frac{\partial^2}{\partial t^2}\,\eta = \left(g\,-\,\frac{\gamma}{\rho}\,\nabla^2\right)\,\nabla^2\,h\,\sop{C}_{h_e}\,\eta
+\end{equation}
+
+For a \idx{uniform surface grid}\index{surface grid!uniform}, the convolution filter can be applied by using the a modified version of the \idx{Fast Multipole Method} (\qidxe{FMM|see{Fast Multipole Method}}{FMM}) \citep{Greengard1985,Greengard1987} for continuous data, known as the \idx{Continuous Fast Multipole Method}\index{Fast Multipole Method!Continuous} (\qidx{CFMM}) \citep{White1994}, which allows it to be applied with a $O(n)$\index{big O notation}\index{notation!big O} \idxe{amortized time}{amortized} \idx{time complexity} instead of $O(n^2)$ as with a simple $n$-to-$n$ approach, where $n$ is the number of surface grid points.
 
 However, even though $O(n)$ is very fast in theory, the Continuous Fast Multipole Method is complicated and involves many computational steps, which would make the simulation slow. It needs many \idxe{Taylor term}{Taylor terms} to calculate a good approximantion, so one would have to balance the approximation errors with the additional computational costs due to the processing the Taylor terms. On the other hand, it is possible to parallelize these kinds of \idxp{algorithm}{s} \citep[see e.g.][]{Board1994}, making it possible to overcome this bottleneck simply by running the algorithm on many \idxp{core}{s}.
-
-The \idxp{partial differential equation}{s} have not been solved numerically so their behaviours are unknown.
-
-% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
-
-\begin{equation}
-\frac{1}{(2\,\pi\,r)(1\,+\,r)}\,e^{-r^2/4}
-\end{equation}
-
