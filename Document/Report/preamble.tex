@@ -4,6 +4,7 @@
 
 % Formatting
 \usepackage[utf8]{inputenc} % Get å, ä, ö, Å, Ä, Ö
+%\usepackage[T1]{fontenc} % Get rid of warning "LaTeX Font Warning: Some font shapes were not available, defaults substituted. "
 \usepackage[resetfonts]{cmap} % Help reader to interpret ligatures
 \usepackage{parskip} % Sets paragraph indentation to zero and instead skips a line between paragraphs
 \usepackage{setspace} % Allows for spreading the lines arbitrarly much
@@ -35,18 +36,7 @@
 \makeindex
 
 % Linking
-\iftrue
 \usepackage{hyperref} % Links to pages
-\hypersetup{
-    pdfborder = {0 0 0},
-    colorlinks=true,
-    citecolor=blue,
-    linkcolor=black,
-    urlcolor=blue,
-} % Remove the frame around links
-\else
-\usepackage{url} % Doesn't link to pages
-\fi
 
 % Mathematics
 \usepackage{mathtools}
@@ -88,10 +78,16 @@
 \newrobustcmd{\range}[2]{#1{--}#2}
 
 % DEBUG is defined in options.tex
-\newrobustcmd{\IFDEBUG      }[1]{\iftoggle {DEBUG}{#1}{  }}
-\newrobustcmd{\IFDEBUGELSE  }[2]{\iftoggle {DEBUG}{#1}{#2}}
-\newrobustcmd{\IFPUBLISH    }[1]{\nottoggle{DEBUG}{#1}{  }}
-\newrobustcmd{\IFPUBLISHELSE}[2]{\nottoggle{DEBUG}{#1}{#2}}
+\newrobustcmd{\IFDEBUG        }[1]{\iftoggle {DEBUG}{#1}{  }}
+\newrobustcmd{\IFDEBUGELSE    }[2]{\iftoggle {DEBUG}{#1}{#2}}
+\newrobustcmd{\IFNOTDEBUG     }[1]{\nottoggle{DEBUG}{#1}{  }}
+\newrobustcmd{\IFNOTDEBUGHELSE}[2]{\nottoggle{DEBUG}{#1}{#2}}
+
+% PAPERPRINT is defined in options.tex
+\newrobustcmd{\IFPAPERPRINT        }[1]{\iftoggle {PAPERPRINT}{#1}{  }}
+\newrobustcmd{\IFPAPERPRINTELSE    }[2]{\iftoggle {PAPERPRINT}{#1}{#2}}
+\newrobustcmd{\IFNOTPAPERPRINT     }[1]{\nottoggle{PAPERPRINT}{#1}{  }}
+\newrobustcmd{\IFNOTPAPERPRINTHELSE}[2]{\nottoggle{PAPERPRINT}{#1}{#2}}
 
 % % % % % % % % % % % % % % % % % % % %
 % OPTIONS FOR COMPILING THE DOCUMENT  %

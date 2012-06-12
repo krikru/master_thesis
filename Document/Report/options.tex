@@ -6,6 +6,33 @@
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
 
 
+% Dimensions
+% ----------
+%
+% (see http://nwalsh.com/tex/texhelp/Plain.html#dimensions, http://en.wikipedia.org/wiki/Point_%28typography%29)
+%
+% pt: Point
+% pc: pica (12 pt)
+% in: inch (72.27 pt)
+% bp: Big point (72 bp = 1 in)
+% cm: Centimeter
+% mm: Millimeter
+% dd: Didot point
+% cc: cicero (12 dd)
+% sp: Scaled point (65,536 sp = 1 pt), the smallest TeX unit
+% ex: Nomimal x-height
+% em: Nominal m-width (M-width?)
+%
+%   Available in math mode:
+%
+% mu: math unit, 1 em = 18 mu, where em is taken from the math symbols family, various lengths are derived from it (thinspace, thickspace, etc.)
+%
+%   Additionally available in pdfTeX and LuaTeX:
+%
+% px: "pixel", the dimension given to the \pdfpxdimen primitive; default value is 1 bp, corresponding to a pixel density of 72 dpi
+
+
+
 % % % % % %
 % FLAGS   %
 % % % % % %
@@ -14,6 +41,10 @@
 \newflag{DEBUG}{true} % For debugging the document
 %\newflag{DEBUG}{false} % For publishing the document
 
+% PAPERPRINT
+%\newflag{PAPERPRINT}{true} % For debugging the document
+\newflag{PAPERPRINT}{false} % For publishing the document
+
 % DEBUG OPTIONS
 % -------------
 
@@ -21,6 +52,16 @@
 % APPEARANCE  %
 % % % % % % % %
 
+% Links
+\hypersetup{
+    pdfborder = {0 0 0}, % Remove the frame around links
+    colorlinks=\iftoggle{PAPERPRINT}{false}{true}, % Don't color links on paper prints
+    citecolor=black, %Used for links to the bibliography
+    linkcolor=black, %Used for internal links to labels
+    urlcolor=blue, %Used for external links
+}
+
+% Header
 \setlength{\headheight}{14pt} % To prevent warning " \headheight is too small (12.0pt): Make it at least 14.0pt."
 
 % Maths
