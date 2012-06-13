@@ -52,6 +52,43 @@
 % APPEARANCE  %
 % % % % % % % %
 
+% Names
+\renewcommand{\contentsname}{Table of Contents} % Table of contents
+
+% \abstractname   Abstract
+% \alsoname       see also (makeidx package)
+% \appendixname   Appendix
+% \bibname        Bibliography (report,book)
+% \ccname         cc (letter)
+% \chaptername    Chapter (report,book)
+% \contentsname   Contents
+% \enclname       encl (letter)
+% \figurename     Figure (for captions)
+% \headtoname     To (letter)
+% \indexname      Index
+% \listfigurename List of Figures
+% \listtablename  List of Tables
+% \pagename       Page (letter)
+% \partname       Part
+% \refname        References (article)
+% \seename        see (makeidx package)
+% \tablename      Table (for caption)
+
+%\figurename             *\figurename*
+%\tablename              *\tablename*
+%\partname               *\partname*
+%\appendixname           *\appendixname*
+%\equationname           *\equationname*
+%\Itemname               *\Itemname*
+%\chaptername            *\chaptername*
+%\sectionname            *\sectionname*
+%\subsectionname         *\subsesctionname*
+%\subsubsectionname      *\subsubsectionname*
+%\paragraphname          *\paragraphname*
+%\Hfootnotename          *\Hfootnotename*
+%\AMSname                *\AMSname*
+%\theoremname            *\theoremname*
+
 % Links
 \hypersetup{
     pdfborder = {0 0 0}, % Remove the frame around links
@@ -81,4 +118,5 @@
 
 % Referencing
 \robustify{\eqref}
-\renewrobustcmd{\eqref}[1]{equation \ref{#1}}
+\renewrobustcmd{\eqref}[1]{Equation \ref{#1}}
+%\renewrobustcmd{\eqref}[1]{\equationname\ \ref{#1}}

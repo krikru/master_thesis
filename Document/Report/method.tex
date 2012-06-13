@@ -2,6 +2,10 @@
 
 \chapter{Finite volume method}
 
+The \FVM is a way to realistically simulate the flow of a fluid by letting the fluid flow between a large number of adjactent \idxp{cell}{s}, through the \idxp{cell face}{s}. The magnitude of the \idxs{fluid}{flux} between two cells is directly proportional to the area of the cell face and the component of the velocity of the fluid in the direction of the cell face normal.
+
+When simulating fluids with the \FVM it is common to \idxe{approximation}{approximate} the fluid as being \idxse{incompressible}{fluid}{incompressible}. This is because it is difficult to simulate compressible fluids when the \idx{time step} becomes large, due to \idxe{instability}{instabilities} in the \idx{numerical method} which leads to \idxs{spurious}{oscillations}.
+
 \section{Artificial compression}
 
 \subsection{Instability}

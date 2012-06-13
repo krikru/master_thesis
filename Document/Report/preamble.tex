@@ -5,8 +5,9 @@
 % Formatting
 \usepackage[utf8]{inputenc} % Get å, ä, ö, Å, Ä, Ö
 %\usepackage[T1]{fontenc} % Get rid of warning "LaTeX Font Warning: Some font shapes were not available, defaults substituted. "
-\usepackage[resetfonts]{cmap} % Help reader to interpret ligatures
-\usepackage{parskip} % Sets paragraph indentation to zero and instead skips a line between paragraphs
+%\usepackage{t1enc} % Gets rid of the warning "No file OMScmtt.fd. on input line 10.", but makes the text look ugly.
+\usepackage[resetfonts]{cmap} % Help reader with interpreting ligatures
+\usepackage{parskip} % Skips a line between paragraphs instead of indenting the paragraphs
 \usepackage{setspace} % Allows for spreading the lines arbitrarly much
 
 % Miscellaneous tools
@@ -35,9 +36,6 @@
 \usepackage{makeidx}
 \makeindex
 
-% Linking
-\usepackage{hyperref} % Links to pages
-
 % Mathematics
 \usepackage{mathtools}
 
@@ -46,14 +44,13 @@
 
 % Graphics
 \usepackage{graphicx} % Necessary in order to include images
-\usepackage{caption} % For captions 
+\usepackage{caption} % For captions
 \usepackage{subcaption} % For subcaptions
+\usepackage{tikz} % For advanced graphics functions
 
-% % % % % % % % %
-% ABBREVIATIONS %
-% % % % % % % % %
-
-\newabbrev\PDE{partial differential equation}%[PDE]
+% Linking
+\usepackage{hyperref} % Links to pages. The hyperref should generally be loaded last, with some exceptions
+\usepackage{bookmark} % Ease bookmark management
 
 % % % % % %
 % MACROS  %
@@ -65,14 +62,47 @@
 % Appearance
 \newrobustcmd{\HRule}{\rule{\linewidth}{0.5mm}}
 \newrobustcmd{\blankpage}{\clearpage\thispagestyle{fancy}\renewcommand{\headrulewidth}{0pt}\chead{}\cfoot{}\IFDEBUGELSE{\begin{center}\large\textit{This page intentionally left blank}\end{center}}{\ }\clearpage}
+%Table of contents
 \newrobustcmd{\addtotoc}[2]{\cleardoublepage\phantomsection\addcontentsline{toc}{#1}{#2}}
+% Do not add to table of contents and do not number
+\newrobustcmd{\notocpart         }[3][]{\pdfbookmark[#1]{#2}{#3}\part*         {#2}}
+\newrobustcmd{\notocchapter      }[3][]{\pdfbookmark[#1]{#2}{#3}\chapter*      {#2}}
+\newrobustcmd{\notocsection      }[3][]{\pdfbookmark[#1]{#2}{#3}\section*      {#2}}
+\newrobustcmd{\notocsubsection   }[3][]{\pdfbookmark[#1]{#2}{#3}\subsection*   {#2}}
+\newrobustcmd{\notocsubsubsection}[3][]{\pdfbookmark[#1]{#2}{#3}\subsubsection*{#2}}
+\newrobustcmd{\notocparagraph    }[3][]{\pdfbookmark[#1]{#2}{#3}\paragraph*    {#2}}
+\newrobustcmd{\notocsubparagraph }[3][]{\pdfbookmark[#1]{#2}{#3}\subparagraph* {#2}}
+% Add to table of contents but do not number
+\newrobustcmd{\nonumpart         }[1]{\addtotoc{part}         {#1}\part*         {#1}}
+\newrobustcmd{\nonumchapter      }[1]{\addtotoc{chapter}      {#1}\chapter*      {#1}}
+\newrobustcmd{\nonumsection      }[1]{\addtotoc{section}      {#1}\section*      {#1}}
+\newrobustcmd{\nonumsubsection   }[1]{\addtotoc{subsection}   {#1}\subsection*   {#1}}
+\newrobustcmd{\nonumsubsubsection}[1]{\addtotoc{subsubsection}{#1}\subsubsection*{#1}}
+\newrobustcmd{\nonumparagraph    }[1]{\addtotoc{paragraph}    {#1}\paragraph*    {#1}}
+\newrobustcmd{\nonumsubparagraph }[1]{\addtotoc{subparagraph} {#1}\subparagraph* {#1}}
+
 % Indexing
-\newrobustcmd{\idx  }[1]{\index{#1}\indexify{#1}}   % The basic version of the idx function
-\newrobustcmd{\idxe }[2]{\index{#1}\indexify{#2}}   % The extended version of the idx function
-\newrobustcmd{\idxp }[2]{\index{#1}\indexify{#1#2}} % The plural version of the idx function
-\newrobustcmd{\qidx }[1]{\index{#1}#1}              % The quite version of the idx function
-\newrobustcmd{\qidxe}[2]{\index{#1}#2}              % The quite extended version of the idx function
-\newrobustcmd{\qidxp}[2]{\index{#1}#1#2}            % The quite plural version of the idx function
+\newrobustcmd{\idx   }[1]{\index{#1}\indexify{#1}}           % The basic version of the idx macro
+\newrobustcmd{\idxe  }[2]{\index{#1}\indexify{#2}}           % The extended version of the idx macro
+\newrobustcmd{\idxp  }[2]{\index{#1}\indexify{#1#2}}         % The plural version of the idx macro
+\newrobustcmd{\idxs  }[2]{\indexs{#1}{#2}\indexify{#1 #2}}   % The split version of the idx macro
+\newrobustcmd{\idxse }[3]{\indexs{#1}{#2}\indexify{#3}}      % The split extended version of the idx macro
+\newrobustcmd{\idxsp }[3]{\indexs{#1}{#2}\indexify{#1 #2#3}} % The split plural version of the idx macro
+\newrobustcmd{\qidx  }[1]{\index{#1}#1}                      % The quite version of the idx macro
+\newrobustcmd{\qidxe }[2]{\index{#1}#2}                      % The quite extended version of the idx macro
+\newrobustcmd{\qidxp }[2]{\index{#1}#1#2}                    % The quite plural version of the idx macro
+\newrobustcmd{\qidxs }[2]{\indexs{#1}{#2}#1 #2}              % The quite split version of the idx macro
+\newrobustcmd{\qidxse}[3]{\indexs{#1}{#2}#3}              % The quite split version of the idx macro
+\newrobustcmd{\qidxsp}[3]{\indexs{#1}{#2}#1 #2#3}            % The quite split plural version of the idx macro
+\newrobustcmd{\indexs}[2]{\index{#1 #2}\index{#2!#1|see{#1 #2}}}
+% Abbreviations
+\iffalse % Put the non-abbreviated form in the index
+\newrobustcmd{\declareextendedabbreviation}[2]{\expandafter\newabbrev\csname #1\endcsname{\idx{#2} (\qidxe{#1|see{#2}}{#1})}[\qidxe{#2}{#1}]}
+\newrobustcmd{\declareextendedabbreviations}[3]{\expandafter\newabbrev\csname #1\endcsname{\idxs{#2}{#3} (\qidxe{#1|see{#2 #3}}{#1})}[\qidxe{#2 #3}{#1}]}
+\else % Put the abbreviated form in the index
+\newrobustcmd{\declareextendedabbreviation}[2]{\expandafter\newabbrev\csname #1\endcsname{\idxe{#1}{#2} (\qidxe{#2|see{#1}}{#1})}[\qidx{#1}]}
+\newrobustcmd{\declareextendedabbreviations}[3]{\expandafter\newabbrev\csname #1\endcsname{\idxe{#1}{#2 #3}\index{#3!#2|see{#1}} (\qidxe{#2 #3|see{#1}}{#1})}[\qidx{#1}]}
+\fi
 % Mathematics
 \newrobustcmd{\infinitesimal}[0]{\operatorname{d}} % Used e.g. in integrals and derivatives
 \newrobustcmd{\range}[2]{#1{--}#2}
@@ -88,6 +118,17 @@
 \newrobustcmd{\IFPAPERPRINTELSE    }[2]{\iftoggle {PAPERPRINT}{#1}{#2}}
 \newrobustcmd{\IFNOTPAPERPRINT     }[1]{\nottoggle{PAPERPRINT}{#1}{  }}
 \newrobustcmd{\IFNOTPAPERPRINTHELSE}[2]{\nottoggle{PAPERPRINT}{#1}{#2}}
+
+% % % % % % % % %
+% ABBREVIATIONS %
+% % % % % % % % %
+
+\declareextendedabbreviation {PDE}{Partial Differential Equation}
+\declareextendedabbreviation {FVM}{Finite Volume Method}
+\declareextendedabbreviation {FMM}{Fast Multipole Method}
+\declareextendedabbreviations{CFMM}{Continuous}{Fast Multipole Method}
+%\newabbrev\PDE{\idx{Partial Differential Equation} (\qidxe{PDE|see{Partial Differential Equation}}{PDE})}[\qidxe{Partial Differential Equation}{PDE}]
+%\newabbrev\FVM{\idx{Finite Volume Method} (\qidxe{FVM|see{Finite Volume Method}}{FVM})}[\qidxe{Finite Volume Method}{FVM}]
 
 % % % % % % % % % % % % % % % % % % % %
 % OPTIONS FOR COMPILING THE DOCUMENT  %
