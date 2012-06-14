@@ -185,7 +185,7 @@ $K(\vec{x})$ is obtained by \idxsp{reverse}{Fourier transform}{ing} this equatio
 K(\vec{x})\, = \,\mathcal{F}^{-1}\{\fdfunc{K}(\vec{\xi})\}(\vec{x})\, = \,\frac{1}{(2\,\pi)^2}\iint\fdfunc{K}(\vec{\xi})\,e^{i\,\vec{\xi}\cdot\vec{x}}\,\infinitesimal\vec{\xi}
 \end{equation}
 
-where $\mathcal{F}^{-1}$ denotes the reverse Fourier transform. Although it is very difficult (if not impossible) to obtain the reverse Fourier transform of this function analytically, it is possible to approximate it numerically and use the approximation in the convolution filter instead.
+where $\mathcal{F}^{-1}$ denotes the reverse Fourier transform. Although it is very difficult (if not impossible) to obtain the reverse Fourier transform of this function analytically, it is possible to \idxe{approximation}{approximate} it numerically and use the approximation in the convolution filter instead.
 
 With no loss of generality, we can pick a polar coordinate system $(\xi,\,\theta)$ such that the $\vec{x}$ vector lies on the $\theta = 0$ axis. In that case, \eqref{eq:kernelfour2d} can be rewritten as
 
@@ -223,7 +223,7 @@ In this case, since $K(x)$ was found to vanish very quickly as $x\rightarrow\inf
 K^*(x) = \frac{1}{8\,\pi^3\,x\,(1\,+\,x)}\,e^{-x^2/4},
 \end{equation}
 
-where $^*$ denotes an estimation. Note that both $K$, $\fdfunc{K}$ and the arguments they take are \idx{unitless}. $K$ is therefore the \idxe{kernel!unitless}{unitless kernel}.
+where $^*$ denotes an \idx{estimate}. Note that both $K$, $\fdfunc{K}$ and the arguments they take are \idx{unitless}. $K$ is therefore the \idxe{kernel!unitless}{unitless kernel}.
 
 %TODO: Include plots
 %\input{comparison.tex}

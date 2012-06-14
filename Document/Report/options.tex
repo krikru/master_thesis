@@ -111,6 +111,27 @@
 \newrobustcmd{\vop}[1]{\widehat{\vec{#1}}} % For vector operators
 % % % Fourier transform
 \newrobustcmd{\fdfunc}[1]{\widetilde{#1}} % For a function in the frequency domain
+% % % Integrals
+\newrobustcmd{\halfBetweenIntegralsigns}{\!\!}
+\newrobustcmd{\betweenIntegralsigns}{\halfBetweenIntegralsigns\halfBetweenIntegralsigns}
+% Double integral
+\robustify{\iint}
+\renewrobustcmd{\iint}{\int\betweenIntegralsigns\int}
+% Triple integral
+\robustify{\iiint}
+\renewrobustcmd{\iiint}{\int\betweenIntegralsigns\int\betweenIntegralsigns\int}
+% Closed double integral
+\newrobustcmd{\oiint}{\begingroup
+    \displaystyle \unitlength 1pt
+    \int\mkern-7.2mu
+    \begin{picture}(0,3)
+    \put(0,3){\oval(10,8)}
+    \end{picture}
+    \mkern-7mu\int
+\endgroup}
+% Closed trippel integral (yet to be defined)
+
+
 
 % Indexing
 %\newrobustcmd{\indexify}[1]{#1} % For leaving indexed text in the body text as it is

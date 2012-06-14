@@ -1,18 +1,32 @@
+%
+% Warnings and their (possible) solutions
+% ---------------------------------------
+%
+% "LaTeX Font Warning: Some font shapes were not available, defaults substituted. " -- \usepackage[T1]{fontenc} (\usepackage{t1enc} ?)
+% "No file OMScmtt.fd. on input line 10." -- \usepackage[T1]{fontenc} OR \usepackage{t1enc}
+% NOTE: \usepackage[T1]{fontenc} and \usepackage{t1enc} loads an ugly bitmap font by default. Install package cm-super (have not tries) using the MikTeX package manager (if you use Windows) to get around this problem, or \usepackage{lmodern} which replaces the bitmap font with teh Latin Modern font.
+%
+
+
 % % % % % % %
 % PACKAGES  %
 % % % % % % %
 
 % Formatting
 \usepackage[utf8]{inputenc} % Get å, ä, ö, Å, Ä, Ö
-%\usepackage[T1]{fontenc} % Get rid of warning "LaTeX Font Warning: Some font shapes were not available, defaults substituted. "
-%\usepackage{t1enc} % Gets rid of the warning "No file OMScmtt.fd. on input line 10.", but makes the text look ugly.
-\usepackage[resetfonts]{cmap} % Help reader with interpreting ligatures
+%\usepackage{t1enc} % Gets rid of the warning "No file OMScmtt.fd. on input line 10.", but loads an ugly bitmap font.
+\usepackage[resetfonts]{cmap} % Help reader with interpreting ligatures (if you use cmap, you must use it before fontenc)
+\usepackage[T1]{fontenc} % Gets rid of warning "No file OMScmtt.fd. on input line 10." but loads an ugly bitmap font
+\usepackage{lmodern} % Replaces the default bitmap font used by t1enc and fontenc with the Latin Modern font
 \usepackage{parskip} % Skips a line between paragraphs instead of indenting the paragraphs
 \usepackage{setspace} % Allows for spreading the lines arbitrarly much
 
 % Miscellaneous tools
 \usepackage{etoolbox} % Includes the macro \ifstrequal
-\usepackage{abbrevs} %  For defining abbreviations and other stuff
+
+% Abbreviations
+\usepackage{abbrevs} % For defining abbreviations and other stuff
+\usepackage{xspace} % To prevent incorrect spacing after abbreviations
 
 % Paper size
 \iffalse
@@ -92,17 +106,24 @@
 \newrobustcmd{\qidxe }[2]{\index{#1}#2}                      % The quite extended version of the idx macro
 \newrobustcmd{\qidxp }[2]{\index{#1}#1#2}                    % The quite plural version of the idx macro
 \newrobustcmd{\qidxs }[2]{\indexs{#1}{#2}#1 #2}              % The quite split version of the idx macro
-\newrobustcmd{\qidxse}[3]{\indexs{#1}{#2}#3}              % The quite split version of the idx macro
+\newrobustcmd{\qidxse}[3]{\indexs{#1}{#2}#3}                 % The quite split version of the idx macro
 \newrobustcmd{\qidxsp}[3]{\indexs{#1}{#2}#1 #2#3}            % The quite split plural version of the idx macro
 \newrobustcmd{\indexs}[2]{\index{#1 #2}\index{#2!#1|see{#1 #2}}}
 % Abbreviations
 \iffalse % Put the non-abbreviated form in the index
-\newrobustcmd{\declareextendedabbreviation}[2]{\expandafter\newabbrev\csname #1\endcsname{\idx{#2} (\qidxe{#1|see{#2}}{#1})}[\qidxe{#2}{#1}]}
-\newrobustcmd{\declareextendedabbreviations}[3]{\expandafter\newabbrev\csname #1\endcsname{\idxs{#2}{#3} (\qidxe{#1|see{#2 #3}}{#1})}[\qidxe{#2 #3}{#1}]}
+\newrobustcmd{\declareacronym} [2]{\expandafter\newabbrev\csname #1\endcsname{\idx{#2} (\qidxe{#1|see{#2}}{#1})}[\qidxe{#2}{#1}]}
+\newrobustcmd{\declareacronyms}[3]{\expandafter\newabbrev\csname #1\endcsname{\idxs{#2}{#3} (\qidxe{#1|see{#2 #3}}{#1})}[\qidxe{#2 #3}{#1}]}
 \else % Put the abbreviated form in the index
-\newrobustcmd{\declareextendedabbreviation}[2]{\expandafter\newabbrev\csname #1\endcsname{\idxe{#1}{#2} (\qidxe{#2|see{#1}}{#1})}[\qidx{#1}]}
-\newrobustcmd{\declareextendedabbreviations}[3]{\expandafter\newabbrev\csname #1\endcsname{\idxe{#1}{#2 #3}\index{#3!#2|see{#1}} (\qidxe{#2 #3|see{#1}}{#1})}[\qidx{#1}]}
+\newrobustcmd{\declareacronym} [2]{\expandafter\newabbrev\csname #1\endcsname{\idxe{#1}{#2} (\qidxe{#2|see{#1}}{#1})}[\qidx{#1}]}
+\newrobustcmd{\declareacronyms}[3]{\expandafter\newabbrev\csname #1\endcsname{\idxe{#1}{#2 #3}\index{#3!#2|see{#1}} (\qidxe{#2 #3|see{#1}}{#1})}[\qidx{#1}]}
 \fi
+\newrobustcmd{\declareabbreviation} [2]{\expandafter\newabbrev\csname #1\endcsname{#2}}
+\newrobustcmd{\declareabbreviations}[3]{\expandafter\newabbrev\csname #1\endcsname{#2 #3}}
+\newrobustcmd{\declareabbreviationi} [2]{\expandafter\newabbrev\csname #1\endcsname{\idx{#2}}}
+\newrobustcmd{\declareabbreviationis}[3]{\expandafter\newabbrev\csname #1\endcsname{\idxs{#2}{#3}}}
+\newrobustcmd{\declareabbreviationqi} [2]{\expandafter\newabbrev\csname #1\endcsname{\qidx{#2}}}
+\newrobustcmd{\declareabbreviationqis}[3]{\expandafter\newabbrev\csname #1\endcsname{\qidxs{#2}{#3}}}
+
 % Mathematics
 \newrobustcmd{\infinitesimal}[0]{\operatorname{d}} % Used e.g. in integrals and derivatives
 \newrobustcmd{\range}[2]{#1{--}#2}
@@ -120,15 +141,35 @@
 \newrobustcmd{\IFNOTPAPERPRINTHELSE}[2]{\nottoggle{PAPERPRINT}{#1}{#2}}
 
 % % % % % % % % %
-% ABBREVIATIONS %
+% ABREVIATIONS  %
 % % % % % % % % %
 
-\declareextendedabbreviation {PDE}{Partial Differential Equation}
-\declareextendedabbreviation {FVM}{Finite Volume Method}
-\declareextendedabbreviation {FMM}{Fast Multipole Method}
-\declareextendedabbreviations{CFMM}{Continuous}{Fast Multipole Method}
-%\newabbrev\PDE{\idx{Partial Differential Equation} (\qidxe{PDE|see{Partial Differential Equation}}{PDE})}[\qidxe{Partial Differential Equation}{PDE}]
-%\newabbrev\FVM{\idx{Finite Volume Method} (\qidxe{FVM|see{Finite Volume Method}}{FVM})}[\qidxe{Finite Volume Method}{FVM}]
+%TODO: Find some better way to denote plural form (one macro would be better since acronyms are indexed verbosely only ocne)
+% Allow pluralform of abbreviations
+\newrobustcmd{\s} {\!\!{}s\xspace} % For abbreviations that are not indexed or indexed quietly
+\newrobustcmd{\si}{\!\!{}\indexify{s}\xspace} % For abbreviations that are indexed verbosely
+
+
+% Abreviations
+% ------------
+
+% The abbreviations are sorted by the abbreviated forms
+\declareabbreviationqi{threedim}{three-dimensional}
+\declareabbreviationqi{twodim}  {two-dimensional}
+
+% Acronyms
+% --------
+
+% The acronyms are sorted by the abbreviated forms
+\declareacronym {BEM} {Boundary Element Methods}
+\declareacronyms{CFD} {Computational}{Fluid Dynamics}
+\declareacronyms{CFMM}{Continuous}{Fast Multipole Method}
+\declareacronym {FMM} {Fast Multipole Method}
+\declareacronym {FVM} {Finite Volume Method}
+\declareacronym {MAC} {Marker-and-Cell}
+\declareacronym {PDE} {Partial Differential Equation}
+\declareacronyms{VOF} {Volume of}{Fluid}
+\declareacronyms{VOS} {Volume of}{Solid}
 
 % % % % % % % % % % % % % % % % % % % %
 % OPTIONS FOR COMPILING THE DOCUMENT  %

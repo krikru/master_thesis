@@ -1,0 +1,23 @@
+
+Phrases in need of being indexed
+--------------------------------
+
+* control volume
+* divergence theorem (Ostrogradsky's theorem)
+* gradient theorem (fundamental theorem of calculus for line integrals)
+
+Topict to check up
+------------------
+
+* Turbulens model (Large Eddy Simulation for example)
+* Mention Zalesak’s problem (for advection tests of sharp interfaces)
+* The SWAN wave model
+
+Miscellaneous todo's
+--------------------
+
+* Include plots
+* Close surface integrals
+* Use frontmatter, mainmatter and backmatter (which are only available for the book class by default)
+* Prevent abstract from messing up the page numbering
+* Fins some good way to abbreviate long names using code (the abbrevs package in not good for several reasons)

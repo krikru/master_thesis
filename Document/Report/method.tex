@@ -2,9 +2,26 @@
 
 \chapter{Finite volume method}
 
-The \FVM is a way to realistically simulate the flow of a fluid by letting the fluid flow between a large number of adjactent \idxp{cell}{s}, through the \idxp{cell face}{s}. The magnitude of the \idxs{fluid}{flux} between two cells is directly proportional to the area of the cell face and the component of the velocity of the fluid in the direction of the cell face normal.
+%The \FVM is a way to realistically simulate the \idx{flow} of a \idx{fluid} by dividing the fluid into a large number of non-moving, adjactent \idxp{cell}{s} and letting the fluid flow between the cells, through the \idxp{cell face}{s}. The magnitude of the \idxs{fluid}{flux} between two cells is directly proportional to the area of the cell face between the cells and the component of the velocity of the fluid in the direction of the cell face \idx{normal}.
 
-When simulating fluids with the \FVM it is common to \idxe{approximation}{approximate} the fluid as being \idxse{incompressible}{fluid}{incompressible}. This is because it is difficult to simulate compressible fluids when the \idx{time step} becomes large, due to \idxe{instability}{instabilities} in the \idx{numerical method} which leads to \idxs{spurious}{oscillations}.
+%The motion of the fluid is described by a \PDE, or a set of \PDE\s.
+
+%When simulating fluids with the \FVM it is common to \idxe{approximation}{approximate} the fluid as being \idxse{incompressible}{fluid}{incompressible}. This is because many numerical methods for solving the discretized \PDE
+
+%This is because it is difficult to simulate compressible fluids when the \idx{time step} becomes large, due to \idxe{instability}{instabilities} in the \idx{numerical method} which leads to \idxs{spurious}{oscillations}.
+
+The Finite Volume Method is a way of solving Partial Differential Equations, where the room is discretized into a large number of non-moving, adjactent cells. In the partial differentail equations, in order to calculate the divergences of various vector fields, the divergence theorem is used and a volume integral of the divergence of the field is converted to a surface integral of the field itself:
+
+\begin{equation} \label{eq:divergencesurfaceintegral}
+\nabla\cdot\vec{v}\ =\ \frac{1}{V}\iiint_V\nabla\cdot\vec{v}\,\infinitesimal V\ =\ \frac{1}{V}\oiint _S(\vec{v}\cdot\vec{n})\infinitesimal S
+\end{equation}
+%TODO: Close the surface integral!
+
+where $V$ is a control volume surrounding the point where the divergence is being calculated, $\infinitesimal V$ is an infinitesimal volume element in $V$, $S$ is the surface of the control volume, $\infinitesimal S$ is an infinitesimal surface element on $S$ and $\vec{n}$ is the surface normal.
+
+realistically simulate the flow of a fluid by dividing the fluid into a large number of non-moving, adjactent cells and letting the fluid flow between the cells, through the cell faces. The motion of the fluid is described by a set of Partial Differential Equations, usually the Euler equations or the Navier-Stokes equations. The finite volume method works by discretizing the partial differential equations 
+
+The magnitude of the fluid flux between two cells is directly proportional to the area of the cell face between the cells and the component of the velocity of the fluid in the direction of the cell face normal.
 
 \section{Artificial compression}
 
