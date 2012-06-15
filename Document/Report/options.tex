@@ -1,11 +1,12 @@
-% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
 % Options.tex
 % -----------
 %
 % This file contains all options that can be tuned throughout the document. This is the only file that should contain any parameters that can be changed or adjusted in order to tune the document.
-% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
 
 
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
 % Dimensions
 % ----------
 %
@@ -30,6 +31,24 @@
 %   Additionally available in pdfTeX and LuaTeX:
 %
 % px: "pixel", the dimension given to the \pdfpxdimen primitive; default value is 1 bp, corresponding to a pixel density of 72 dpi
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+
+
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+% Spacings in math mode
+% ---------------------
+%
+% \,       thin space (normally 1/6 of a quad)
+% \> or \: medium space (normally 2/9 of a quad)
+% \;       thick space (normally 5/18 of a quad)
+% \!       negative thin space (normally 1/6 of a quad)
+%
+% TexXBook definition: \def\,{\mskip\thinmuskip} \def\!{\mskip-\thinmuskip}
+%
+% \thinmuskip would normally be .16667em (= 3 mu), though it might be redefined.
+%
+% \quad    usually 1em (derived from identities above)
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
 
 
 
@@ -102,6 +121,7 @@
 \setlength{\headheight}{14pt} % To prevent warning " \headheight is too small (12.0pt): Make it at least 14.0pt."
 
 % Maths
+
 % % % Vectors
 \robustify{\vec}
 %\renewrobustcmd{\vec}[1]{\bar{#1}} % For bars over vectors
@@ -112,26 +132,28 @@
 % % % Fourier transform
 \newrobustcmd{\fdfunc}[1]{\widetilde{#1}} % For a function in the frequency domain
 % % % Integrals
-\newrobustcmd{\halfBetweenIntegralsigns}{\!\!}
-\newrobustcmd{\betweenIntegralsigns}{\halfBetweenIntegralsigns\halfBetweenIntegralsigns}
+\newrobustcmd{\HalfBetweenIntegralSigns}{\!\!}
+\newrobustcmd{\BetweenIntegralSigns}{\HalfBetweenIntegralSigns\HalfBetweenIntegralSigns}
 % Double integral
 \robustify{\iint}
-\renewrobustcmd{\iint}{\int\betweenIntegralsigns\int}
+\renewrobustcmd{\iint}{\int\BetweenIntegralSigns\int}
 % Triple integral
 \robustify{\iiint}
-\renewrobustcmd{\iiint}{\int\betweenIntegralsigns\int\betweenIntegralsigns\int}
+\renewrobustcmd{\iiint}{\int\BetweenIntegralSigns\int\BetweenIntegralSigns\int}
 % Closed double integral
 \newrobustcmd{\oiint}{\begingroup
     \displaystyle \unitlength 1pt
-    \int\mkern-7.2mu
+    %\let\CharactaristicSize 3pt
+    %\int\mkern-7.2mu
+    \int\HalfBetweenIntegralSigns\mkern-1.2mu
     \begin{picture}(0,3)
-    \put(0,3){\oval(10,8)}
+    %\put(0,3){\oval(10,8)} %\put uses units of \unitlength
+    \put(0,3){\oval(10,8)} %\put uses units of \unitlength
     \end{picture}
-    \mkern-7mu\int
+    %\mkern-7mu\int
+    \HalfBetweenIntegralSigns\mkern-1mu\int
 \endgroup}
 % Closed trippel integral (yet to be defined)
-
-
 
 % Indexing
 %\newrobustcmd{\indexify}[1]{#1} % For leaving indexed text in the body text as it is
@@ -141,3 +163,40 @@
 \robustify{\eqref}
 \renewrobustcmd{\eqref}[1]{Equation \ref{#1}}
 %\renewrobustcmd{\eqref}[1]{\equationname\ \ref{#1}}
+
+% % % % % % % % %
+% ABBREVIATIONS %
+% % % % % % % % %
+
+% Abreviations
+% ------------
+
+% The abbreviations are sorted by the abbreviated forms
+\declareabbreviationqi{threedim}{three-dimensional}
+\declareabbreviationqi{twodim}  {two-dimensional}
+
+% Acronyms
+% --------
+
+% The acronyms are sorted by the abbreviated forms
+\declareacronym {BEM} {Boundary Element Methods}
+\declareacronyms{CFD} {Computational}{Fluid Dynamics}
+\declareacronyms{CFMM}{Continuous}{Fast Multipole Method}
+\declareacronym {FMM} {Fast Multipole Method}
+\declareacronym {FVM} {Finite Volume Method}
+\declareacronym {MAC} {Marker-and-Cell}
+\declareacronym {PDE} {Partial Differential Equation}
+\declareacronyms{VOF} {Volume of}{Fluid}
+\declareacronyms{VOS} {Volume of}{Solid}
+
+% % % % % % % % % % % % %
+% INDEX SINGLE KEYWORDS %
+% % % % % % % % % % % % %
+
+\declareindexkey      {cell}
+\declareindexkeypair      {cell}{cells}
+\declareindexkey      {divergence}
+\declareindexkeypair      {divergence}{divergences}
+\declareindexkey      {discretization}
+\declareindexkeypair      {discretization}{discretize}
+\declareindexkeypair      {discretization}{discretized}

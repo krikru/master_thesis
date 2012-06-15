@@ -2,9 +2,16 @@
 Phrases in need of being indexed
 --------------------------------
 
-* control volume
-* divergence theorem (Ostrogradsky's theorem)
-* gradient theorem (fundamental theorem of calculus for line integrals)
+* cell
+* cell center
+* cell face
+* collocated grid (see also staggered grid)
+* control volume (see cell)
+* divergence theorem (Ostrogradsky's theorem, see also gradient theorem)
+* gradient theorem (fundamental theorem of calculus for line integrals, see also divergence theorem)
+* node
+* staggered grid (see also collocated grid)
+* surface vector
 
 Topict to check up
 ------------------
@@ -17,7 +24,7 @@ Miscellaneous todo's
 --------------------
 
 * Include plots
-* Close surface integrals
+* Include glossary (see http://en.wikibooks.org/wiki/LaTeX/Glossary)
 * Use frontmatter, mainmatter and backmatter (which are only available for the book class by default)
 * Prevent abstract from messing up the page numbering
 * Fins some good way to abbreviate long names using code (the abbrevs package in not good for several reasons)

@@ -10,18 +10,43 @@
 
 %This is because it is difficult to simulate compressible fluids when the \idx{time step} becomes large, due to \idxe{instability}{instabilities} in the \idx{numerical method} which leads to \idxs{spurious}{oscillations}.
 
-The Finite Volume Method is a way of solving Partial Differential Equations, where the room is discretized into a large number of non-moving, adjactent cells. In the partial differentail equations, in order to calculate the divergences of various vector fields, the divergence theorem is used and a volume integral of the divergence of the field is converted to a surface integral of the field itself:
+The \FVM is a way of solving a \PDE, or a set of \PDE\s, where the room is discretized into a large number of non-moving, adjactent volume elements which we will call cells, and different properties are discretized into certain points. Scalar fields are usually discretized to the cell centers, or sometimes to nodes of corners of the cells, as in \citep{Losasso2004}, which can be convenient since interpolations of fields discretized to the cell centers tend to be more difficult. In a collocated grid, all properties are stored at the same locations, so the vector properties are discretized to the same locations as the scalar properties. On a staggered grid on the other hand, the velocity (or the momentum, depending on implementation) is discretized to the cell faces. For the work described in this report, a staggered grid has been used, and we will mention the discretization locations as storage locations for the .
 
-\begin{equation} \label{eq:divergencesurfaceintegral}
-\nabla\cdot\vec{v}\ =\ \frac{1}{V}\iiint_V\nabla\cdot\vec{v}\,\infinitesimal V\ =\ \frac{1}{V}\oiint _S(\vec{v}\cdot\vec{n})\infinitesimal S
+In the \PDE\s, in order to calculate the divergences of various vector fields, the divergence theorem is used and a volume integral of the divergence of the field is converted to a surface integral of the vector field itself. The divergence theorem states that
+
+\begin{equation} \label{eq:divergence_theorem}
+\iiint_V\nabla\cdot\vec{F}(\vec{r'})\,\infinitesimal V \,=\, \oiint_S(\vec{F}(\vec{r'})\cdot\vec{n})\,\infinitesimal S
 \end{equation}
-%TODO: Close the surface integral!
 
-where $V$ is a control volume surrounding the point where the divergence is being calculated, $\infinitesimal V$ is an infinitesimal volume element in $V$, $S$ is the surface of the control volume, $\infinitesimal S$ is an infinitesimal surface element on $S$ and $\vec{n}$ is the surface normal.
+where $\vec{F}$ is a vector field, $V$ is a control volume, which in our case is the cell surrounding the point $\vec{r}$ in which the divergence is being calculated, $S$ is the surface of the control volume, with normal pointing outwards, $\infinitesimal V$ and $\infinitesimal S$ are infinitesimal elements in $V$ and $S$ respectively, $\vec{n}$ is the normal of $\infinitesimal S$ and $\vec{r'}$ is the position of $\infinitesimal V$ and $\infinitesimal S$ respectively. The divergence of $\vec{F}(\vec{r})$ is then approximated as the average divergence of $\vec{F}$ in $V$, and calculated as
 
-realistically simulate the flow of a fluid by dividing the fluid into a large number of non-moving, adjactent cells and letting the fluid flow between the cells, through the cell faces. The motion of the fluid is described by a set of Partial Differential Equations, usually the Euler equations or the Navier-Stokes equations. The finite volume method works by discretizing the partial differential equations 
+\begin{equation} \label{eq:divergence_surface_integral}
+\nabla\vec{F}(\vec{r}) \,=\, \frac{1}{V}\,\oiint_S(\vec{F}\cdot\vec{n})\,\infinitesimal S.
+\end{equation}
 
-The magnitude of the fluid flux between two cells is directly proportional to the area of the cell face between the cells and the component of the velocity of the fluid in the direction of the cell face normal.
+In the \FVM, the surface of a cell consists of cell faces, $S_i$, between the cell itself and neighboring cells, so \eqref{eq:divergence_surface_integral} can be rewritten as
+
+\begin{equation} \label{eq:divergence_cell_face_sum}
+\nabla\vec{F}(\vec{r})\ =\ \frac{1}{V}\,\sum_{S_i} \oiint_{S_i}(\vec{F}\cdot\vec{n})\,\infinitesimal S\ =\ \frac{1}{V}\,\sum_{S_i} F_i\,S_i,
+\end{equation}
+
+where $S_i$ is the area of the cell face to the $i$:th neighbor cell, and $F_{\vec{n},\,i}$
+
+and $\vec{F}_i$ is 
+
+Furthermore, each cell face is given a value $\vec{F}_i$ which is used as an approximation for the vector field in the entire cell face.
+
+For orthogonal grids, the gradients of various scalar fields are calculated in a similar way, but in this case the gradient theorem is used. The gradient theorem states that
+
+\begin{equation} \label{eq:gradient_theorem}
+\phi(\vec{r}_2)-\phi(\vec{r}_1) \,=\, \int_{\gamma[\vec{r}_1,\,\vec{r}_2]}\nabla\phi(\vec{r})\cdot \infinitesimal\vec{r},
+\end{equation}
+
+where $\phi$ is a scalar function and $\gamma[\vec{r}_1,\,\vec{r}_2]$ is a path within $\phi$'s domain, connecting the vectors $\vec{r}_1$ and $\vec{r}_2$.
+
+%In Computational Fluid Dynamics, the finite element method is used to realistically simulate the flow of a fluid by dividing the fluid into a large number of non-moving, adjactent cells and letting the fluid flow between the cells, through the cell faces. The motion of the fluid is described by a set of Partial Differential Equations, usually the Euler equations or the Navier-Stokes equations. The finite volume method works by discretizing the partial differential equations 
+
+%The magnitude of the fluid flux between two cells is directly proportional to the area of the cell face between the cells and the component of the velocity of the fluid in the direction of the cell face normal.
 
 \section{Artificial compression}
 

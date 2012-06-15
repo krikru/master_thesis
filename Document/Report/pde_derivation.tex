@@ -1,7 +1,7 @@
 %\chapter{Derivation of two-dimensional PDEs for water waves at random intermediate depths}
 \chapter{Derivation of a two-dimensional PDE for water waves at varying depths}
 
-In this appendix, I will present a two-dimensional \PDE in the \idx{spatial domain}, describing the \qidxe{surface waves!time evolution of}{time evolution of surface waves} for intermediate, mildly varying water depths. The equation could efficiently be solved with a \idx{time complexity} of $O(n)$ per \idx{time step}, where $n$ is the number of \idxsp{surface}{grid point}{s}, using the \CFMM \citep{White1994}. It has not been solved numerically so its behaviour is unknown.
+In this appendix, I will present a new two-dimensional \PDE in the \idx{spatial domain}, describing the \qidxs{time evolution of}{surface waves} for intermediate, mildly varying water depths. The equation could efficiently be solved with a \idx{time complexity} of $O(n)$ per \idx{time step}, where $n$ is the number of \idxsp{surface}{grid point}{s}, using the \CFMM \citep{White1994}. It has not been solved numerically so its behaviour is unknown.
 
 The equation is derived from the \idx{dispersion relation} that is obtained in \idx{Airy wave theory}, namely:
 
@@ -211,7 +211,7 @@ the integral over $\theta$ may be carried out, and the Fourier transform is now 
 K(x)\, = \,\frac{1}{2\,\pi}\int_0^\infty\fdfunc{K}(\xi)\,J_0(x\,\xi)\,\xi\,\infinitesimal\xi\, = \,\frac{1}{2\,\pi}\,F_0\{\fdfunc{K}\}(x),
 \end{equation}
 
-where $x = |\vec{x}|$, $J_0$ is the \idxe{Bessel function!zeroth order of the first kind}{zeroth order Bessel function of the first kind} and $F_0$ denotes the \idxe{Hankel transform!zeroth order}{zeroth order Hankel transform}, which can be calculated more efficiently than the reverse two-dimensional Fourier transform. The corresponding transformation for calculating $\fdfunc{K}$ from $K$ is given by
+where $x = |\vec{x}|$, $J_0$ is the \idxs{zeroth order}{Bessel function of the first kind} and $F_0$ denotes the \idxs{zeroth order}{Hankel transform}, which can be calculated more efficiently than the reverse two-dimensional Fourier transform. The corresponding transformation for calculating $\fdfunc{K}$ from $K$ is given by
 
 \begin{equation} \label{eq:kerneltofdkernel}
 \fdfunc{K}(\xi) = 2\,\pi\,F_0\{K\}(\xi).
@@ -223,7 +223,7 @@ In this case, since $K(x)$ was found to vanish very quickly as $x\rightarrow\inf
 K^*(x) = \frac{1}{8\,\pi^3\,x\,(1\,+\,x)}\,e^{-x^2/4},
 \end{equation}
 
-where $^*$ denotes an \idx{estimate}. Note that both $K$, $\fdfunc{K}$ and the arguments they take are \idx{unitless}. $K$ is therefore the \idxe{kernel!unitless}{unitless kernel}.
+where $^*$ denotes an \idx{estimate}. Note that both $K$, $\fdfunc{K}$ and the arguments they take are \idx{unitless}. $K$ is therefore the \idxs{unitless}{kernel}.
 
 %TODO: Include plots
 %\input{comparison.tex}

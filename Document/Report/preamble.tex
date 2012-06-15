@@ -1,11 +1,19 @@
-%
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
 % Warnings and their (possible) solutions
 % ---------------------------------------
 %
 % "LaTeX Font Warning: Some font shapes were not available, defaults substituted. " -- \usepackage[T1]{fontenc} (\usepackage{t1enc} ?)
 % "No file OMScmtt.fd. on input line 10." -- \usepackage[T1]{fontenc} OR \usepackage{t1enc}
 % NOTE: \usepackage[T1]{fontenc} and \usepackage{t1enc} loads an ugly bitmap font by default. Install package cm-super (have not tries) using the MikTeX package manager (if you use Windows) to get around this problem, or \usepackage{lmodern} which replaces the bitmap font with teh Latin Modern font.
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+
+
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+% Tips and trix
+% -------------
 %
+% Tips for shrinking the size of the paper: http://gurmeet.net/computer-science/latex-tips-n-tricks-for-conference-papers/ (Note: I want to do the opposite)
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
 
 
 % % % % % % %
@@ -25,7 +33,7 @@
 \usepackage{etoolbox} % Includes the macro \ifstrequal
 
 % Abbreviations
-\usepackage{abbrevs} % For defining abbreviations and other stuff
+\usepackage{abbrevs_package_with_bug_fixed} % For defining abbreviations and other stuff
 \usepackage{xspace} % To prevent incorrect spacing after abbreviations
 
 % Paper size
@@ -70,6 +78,16 @@
 % MACROS  %
 % % % % % %
 
+% Naming conventions
+% ------------------
+%
+% LaTeX does try to encourage a naming scheme:
+%
+% * Document level commands (\section) lowercase.
+% * Package interface commands (\DeclareTextCommandDefault) CamelCase.
+% * Package or kernel internal commands (\@text@composite@) lower@case@with@.
+% * TeX primitives (\expandafter) lowercase.
+
 % General macros
 \newrobustcmd{\newflag}[2]{\newtoggle{#1}\settoggle{#1}{#2}}
 \newrobustcmd{\comment}[1]{}
@@ -108,7 +126,17 @@
 \newrobustcmd{\qidxs }[2]{\indexs{#1}{#2}#1 #2}              % The quite split version of the idx macro
 \newrobustcmd{\qidxse}[3]{\indexs{#1}{#2}#3}                 % The quite split version of the idx macro
 \newrobustcmd{\qidxsp}[3]{\indexs{#1}{#2}#1 #2#3}            % The quite split plural version of the idx macro
-\newrobustcmd{\indexs}[2]{\index{#1 #2}\index{#2!#1|see{#1 #2}}}
+\iffalse
+\newrobustcmd{\indexs}[2]{\index{#1 #2}\index{#2!#1|see{#1 #2}}} % Index key has the natural order of the parts
+\else
+\newrobustcmd{\indexs}[2]{\index{#2!#1}\index{#1 #2|see{#2}}} % Index key has the reeversed order of the parts
+\fi
+% Easier-to-read indexing
+\newrobustcmd{\declareindexkey}     [1]{\expandafter\newabbrev\csname #1\endcsname{\idx{#1}}}
+\newrobustcmd{\declareindexkeyq}    [1]{\expandafter\newabbrev\csname #1\endcsname{\qidx{#1}}}
+\newrobustcmd{\declareindexkeypair} [2]{\expandafter\newabbrev\csname #2\endcsname{\idxe{#1}{#2}}}
+\newrobustcmd{\declareindexkeypairq}[2]{\expandafter\newabbrev\csname #2\endcsname{\qidxe{#1}{#2}}}
+%\newrobustcmd{\declareindexkeyq}[1]{\expandafter\newabbrev\csname #1\endcsname{\idxq{#1}}}
 % Abbreviations
 \iffalse % Put the non-abbreviated form in the index
 \newrobustcmd{\declareacronym} [2]{\expandafter\newabbrev\csname #1\endcsname{\idx{#2} (\qidxe{#1|see{#2}}{#1})}[\qidxe{#2}{#1}]}
@@ -123,6 +151,10 @@
 \newrobustcmd{\declareabbreviationis}[3]{\expandafter\newabbrev\csname #1\endcsname{\idxs{#2}{#3}}}
 \newrobustcmd{\declareabbreviationqi} [2]{\expandafter\newabbrev\csname #1\endcsname{\qidx{#2}}}
 \newrobustcmd{\declareabbreviationqis}[3]{\expandafter\newabbrev\csname #1\endcsname{\qidxs{#2}{#3}}}
+%TODO: Find some better way to denote plural form (one macro would be better since acronyms are indexed verbosely only ocne)
+% Allow pluralform of abbreviations
+\newrobustcmd{\s} {\!\!{}s\xspace} % For abbreviations that are not indexed or indexed quietly
+\newrobustcmd{\si}{\!\!{}\indexify{s}\xspace} % For abbreviations that are indexed verbosely
 
 % Mathematics
 \newrobustcmd{\infinitesimal}[0]{\operatorname{d}} % Used e.g. in integrals and derivatives
@@ -139,37 +171,6 @@
 \newrobustcmd{\IFPAPERPRINTELSE    }[2]{\iftoggle {PAPERPRINT}{#1}{#2}}
 \newrobustcmd{\IFNOTPAPERPRINT     }[1]{\nottoggle{PAPERPRINT}{#1}{  }}
 \newrobustcmd{\IFNOTPAPERPRINTHELSE}[2]{\nottoggle{PAPERPRINT}{#1}{#2}}
-
-% % % % % % % % %
-% ABREVIATIONS  %
-% % % % % % % % %
-
-%TODO: Find some better way to denote plural form (one macro would be better since acronyms are indexed verbosely only ocne)
-% Allow pluralform of abbreviations
-\newrobustcmd{\s} {\!\!{}s\xspace} % For abbreviations that are not indexed or indexed quietly
-\newrobustcmd{\si}{\!\!{}\indexify{s}\xspace} % For abbreviations that are indexed verbosely
-
-
-% Abreviations
-% ------------
-
-% The abbreviations are sorted by the abbreviated forms
-\declareabbreviationqi{threedim}{three-dimensional}
-\declareabbreviationqi{twodim}  {two-dimensional}
-
-% Acronyms
-% --------
-
-% The acronyms are sorted by the abbreviated forms
-\declareacronym {BEM} {Boundary Element Methods}
-\declareacronyms{CFD} {Computational}{Fluid Dynamics}
-\declareacronyms{CFMM}{Continuous}{Fast Multipole Method}
-\declareacronym {FMM} {Fast Multipole Method}
-\declareacronym {FVM} {Finite Volume Method}
-\declareacronym {MAC} {Marker-and-Cell}
-\declareacronym {PDE} {Partial Differential Equation}
-\declareacronyms{VOF} {Volume of}{Fluid}
-\declareacronyms{VOS} {Volume of}{Solid}
 
 % % % % % % % % % % % % % % % % % % % %
 % OPTIONS FOR COMPILING THE DOCUMENT  %

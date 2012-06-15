@@ -1,0 +1,21 @@
+\RequirePackage{abbrevs}
+
+
+% Fixes a bug in the abbrevs package
+
+\makeatletter
+\renewcommand\maybe@space@{%
+    % \@tempswatrue % <= this is in the original
+    \maybe@ictrue % <= this is new
+    \expandafter   \@tfor
+    \expandafter \reserved@a
+    \expandafter :%
+    \expandafter =%
+    \nospacelist
+    \do \t@st@ic
+    % \if@tempswa % <= this is in the original
+    \ifmaybe@ic % <= this is new
+    \space
+    \fi
+}
+\makeatother
