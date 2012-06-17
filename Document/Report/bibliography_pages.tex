@@ -3,4 +3,7 @@
 \addtotoc{part}{Bibliography}
 
 %\bibliographystyle{abbrv} % Doesn't seem to work
-{\scriptsize \bibliography{references}} % If multiple bib files are used, they have to be separated by a comma and no space
+{
+    \iftoggle{SCRIPTSIZEBIBLIOGRAPHY}{\scriptsize}{}
+    \bibliography{references} % If multiple bib files are used, they have to be separated by a comma and no space
+}

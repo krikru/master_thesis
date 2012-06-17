@@ -1,3 +1,6 @@
 % Index
 \addtotoc{part}{Index}
-{\scriptsize \printindex}
+{
+    \iftoggle{SCRIPTSIZEINDEX}{\scriptsize}{}
+    \printindex
+}

@@ -56,24 +56,29 @@
 % FLAGS   %
 % % % % % %
 
-% DEBUG
+% DEBUG (should be false when publishing)
+% Affects: Extra information written into the document
 \newflag{DEBUG}{true} % For debugging the document
 %\newflag{DEBUG}{false} % For publishing the document
 
 % PAPERPRINT
+% Affects: Link colors
 %\newflag{PAPERPRINT}{true} % For debugging the document
 \newflag{PAPERPRINT}{false} % For publishing the document
 
-% DEBUG OPTIONS
-% -------------
+% Miscellaneous flags
+\newflag{SCRIPTSIZEINDEX}       {false} % Controls the size of the index
+\newflag{SCRIPTSIZEBIBLIOGRAPHY}{false} % Controls the size of the bibliography
 
 % % % % % % % %
 % APPEARANCE  %
 % % % % % % % %
 
 % Names
-\renewcommand{\contentsname}{Table of Contents} % Table of contents
+\renewcommand{\contentsname}{Table of Contents} % Rename Contents to Table of contents
 
+% Names possible to change
+%
 % \abstractname   Abstract
 % \alsoname       see also (makeidx package)
 % \appendixname   Appendix
