@@ -56,19 +56,22 @@
 % FLAGS   %
 % % % % % %
 
-% DEBUG (should be false when publishing)
+% DEBUG (should be false when publishing or simulating publishing, true otherwise)
 % Affects: Extra information written into the document
 \newflag{DEBUG}{true} % For debugging the document
 %\newflag{DEBUG}{false} % For publishing the document
 
-% PAPERPRINT
+% PAPERPRINT (should be true if the compiled document is intended to be printed to paper, false otherwise)
 % Affects: Link colors
 %\newflag{PAPERPRINT}{true} % For debugging the document
 \newflag{PAPERPRINT}{false} % For publishing the document
 
 % Miscellaneous flags
-\newflag{SCRIPTSIZEINDEX}       {false} % Controls the size of the index
-\newflag{SCRIPTSIZEBIBLIOGRAPHY}{false} % Controls the size of the bibliography
+\newflag{USEACRONYMS}                {true}  % Controls whether acronyms should be used or not
+\newflag{INDEXACRONYMS}              {true}  % Controls whether the acronyms or the full forms get indexed
+\newflag{REVERTINDEXORDEROFSPLITKEYS}{true}  % Controls which index key refers to the other one for split keys
+\newflag{SCRIPTSIZEINDEX}            {false}  % Controls the size of the index
+\newflag{SCRIPTSIZEBIBLIOGRAPHY}     {false}  % Controls the size of the bibliography
 
 % % % % % % % %
 % APPEARANCE  %
@@ -131,11 +134,16 @@
 \robustify{\vec}
 %\renewrobustcmd{\vec}[1]{\bar{#1}} % For bars over vectors
 %\renewrobustcmd{\vec}[1]{\mathbf{#1}} % For bold font vectors (deosn't work for all characters, for example \pi\pixi)
+% % % Normalized vectors
+\newrobustcmd{\normvec}[1]{\hat{#1}} % Hats over normalized vectors
+%\newrobustcmd{\normvec}[1]{\widehat{#1}} % Wide hats over normalized vectors
 % % % Operators
 \newrobustcmd{\sop}[1]{\widehat{#1}} % For scalar operators
 \newrobustcmd{\vop}[1]{\widehat{\vec{#1}}} % For vector operators
 % % % Fourier transform
 \newrobustcmd{\fdfunc}[1]{\widetilde{#1}} % For a function in the frequency domain
+
+\iffalse
 % % % Integrals
 \newrobustcmd{\HalfBetweenIntegralSigns}{\!\!}
 \newrobustcmd{\BetweenIntegralSigns}{\HalfBetweenIntegralSigns\HalfBetweenIntegralSigns}
@@ -159,6 +167,7 @@
     \HalfBetweenIntegralSigns\mkern-1mu\int
 \endgroup}
 % Closed trippel integral (yet to be defined)
+\fi
 
 % Indexing
 %\newrobustcmd{\indexify}[1]{#1} % For leaving indexed text in the body text as it is
@@ -168,6 +177,7 @@
 \robustify{\eqref}
 \renewrobustcmd{\eqref}[1]{Equation \ref{#1}}
 %\renewrobustcmd{\eqref}[1]{\equationname\ \ref{#1}}
+\newrobustcmd{\eqrefs}[0]{Equations\xspace}
 
 % % % % % % % % %
 % ABBREVIATIONS %
@@ -191,6 +201,7 @@
 \declareacronym {FVM} {Finite Volume Method}
 \declareacronym {MAC} {Marker-and-Cell}
 \declareacronym {PDE} {Partial Differential Equation}
+\def            \PDEs {\PDE\s}
 \declareacronyms{VOF} {Volume of}{Fluid}
 \declareacronyms{VOS} {Volume of}{Solid}
 
@@ -198,10 +209,39 @@
 % INDEX SINGLE KEYWORDS %
 % % % % % % % % % % % % %
 
+\declareindexkey      {approximation}
+\declareindexkeypair      {approximation}{approximated}
+\declareindexkeypair      {approximation}{approximately}
+\declareindexkey      {area}
+\declareindexkeypair      {area}{areas}
+\declareindexkey      {average}
+\declareindexkeypair      {average}{averaged}
 \declareindexkey      {cell}
 \declareindexkeypair      {cell}{cells}
+\declareindexkey      {derivative}
+\declareindexkeypair      {derivative}{derivatives}
 \declareindexkey      {divergence}
 \declareindexkeypair      {divergence}{divergences}
 \declareindexkey      {discretization}
 \declareindexkeypair      {discretization}{discretize}
 \declareindexkeypair      {discretization}{discretized}
+\declareindexkey      {estimation}
+\declareindexkeypair      {estimation}{estimate}
+\declareindexkey      {gradient}
+\declareindexkeypair      {gradient}{gradients}
+\declareindexkey      {infinitesimal}
+\declareindexkey      {interpolation}
+\declareindexkey      {momentum}
+\declareindexkey      {neighbor}
+\declareindexkeypair      {neighbor}{neighboring}
+\declareindexkey      {normalization}
+\declareindexkeypair      {normalization}{normalize}
+\declareindexkeypair      {normalization}{normalized}
+\declareindexkey      {orthogonal}
+\declareindexkeypair      {orthogonal}{orthogonalized}
+\declareindexkey      {property}
+\declareindexkeypair      {property}{properties}
+\declareindexkey      {surface}
+\declareindexkeypair      {surface}{surfaces}
+\declareindexkey      {velocity}
+\declareindexkeypair      {velocity}{velocities}

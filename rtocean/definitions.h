@@ -101,7 +101,7 @@
 #define  DRAW_CELL_FACE_VELOCITIES                   0
 #define  DRAW_ALL_VELOCITIES                         1
 #define  VEL_TO_ARROW_LENGTH_FACTOR 0.1
-#define  DRAW_CELL_CUBES            0
+#define  DRAW_CELL_CUBES            1
 #define  DRAW_PARENT_CELLS          1
 #define  DRAW_ONLY_SURFACE_CELLS    0
 #define  DRAW_WATER_LEVEL           0

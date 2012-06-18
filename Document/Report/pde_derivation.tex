@@ -182,7 +182,7 @@ which, by using \eqref{eq:ffourier} can be rewritten as
 $K(\vec{x})$ is obtained by \idxsp{reverse}{Fourier transform}{ing} this equation:
 
 \begin{equation} \label{eq:kernelfour2d}
-K(\vec{x})\, = \,\mathcal{F}^{-1}\{\fdfunc{K}(\vec{\xi})\}(\vec{x})\, = \,\frac{1}{(2\,\pi)^2}\iint\fdfunc{K}(\vec{\xi})\,e^{i\,\vec{\xi}\cdot\vec{x}}\,\infinitesimal\vec{\xi}
+K(\vec{x})\, = \,\mathcal{F}^{-1}\{\fdfunc{K}(\vec{\xi})\}(\vec{x})\, = \,\frac{1}{(2\,\pi)^2}\iint\fdfunc{K}(\vec{\xi})\,e^{i\,\vec{\xi}\cdot\vec{x}}\,\opd\vec{\xi}
 \end{equation}
 
 where $\mathcal{F}^{-1}$ denotes the reverse Fourier transform. Although it is very difficult (if not impossible) to obtain the reverse Fourier transform of this function analytically, it is possible to \idxe{approximation}{approximate} it numerically and use the approximation in the convolution filter instead.
@@ -190,7 +190,7 @@ where $\mathcal{F}^{-1}$ denotes the reverse Fourier transform. Although it is v
 With no loss of generality, we can pick a polar coordinate system $(\xi,\,\theta)$ such that the $\vec{x}$ vector lies on the $\theta = 0$ axis. In that case, \eqref{eq:kernelfour2d} can be rewritten as
 
 \begin{equation}
-K(\vec{x})\, = \,\frac{1}{(2\,\pi)^2}\int_{\xi=0}^\infty\int_{\theta=0}^{2\,\pi}\fdfunc{K}(\xi, \theta)\,e^{i\,\xi\,x\cos\theta}\,\xi\,\infinitesimal\xi\,\infinitesimal\theta,
+K(\vec{x})\, = \,\frac{1}{(2\,\pi)^2}\int_{\xi=0}^\infty\int_{\theta=0}^{2\,\pi}\fdfunc{K}(\xi, \theta)\,e^{i\,\xi\,x\cos\theta}\,\xi\,\opd\xi\,\opd\theta,
 \end{equation}
 
 where $\theta$ is the angle between the $\vec{x}$ and the $\vec{\xi}$ vectors. By realizing that $\fdfunc{K}$ is cilcular symmetric, i.e.
@@ -208,7 +208,7 @@ K(\vec{x}) = K(x),
 the integral over $\theta$ may be carried out, and the Fourier transform is now written
 
 \begin{equation} \label{eq:fdkerneltokernel}
-K(x)\, = \,\frac{1}{2\,\pi}\int_0^\infty\fdfunc{K}(\xi)\,J_0(x\,\xi)\,\xi\,\infinitesimal\xi\, = \,\frac{1}{2\,\pi}\,F_0\{\fdfunc{K}\}(x),
+K(x)\, = \,\frac{1}{2\,\pi}\int_0^\infty\fdfunc{K}(\xi)\,J_0(x\,\xi)\,\xi\,\opd\xi\, = \,\frac{1}{2\,\pi}\,F_0\{\fdfunc{K}\}(x),
 \end{equation}
 
 where $x = |\vec{x}|$, $J_0$ is the \idxs{zeroth order}{Bessel function of the first kind} and $F_0$ denotes the \idxs{zeroth order}{Hankel transform}, which can be calculated more efficiently than the reverse two-dimensional Fourier transform. The corresponding transformation for calculating $\fdfunc{K}$ from $K$ is given by
@@ -223,7 +223,7 @@ In this case, since $K(x)$ was found to vanish very quickly as $x\rightarrow\inf
 K^*(x) = \frac{1}{8\,\pi^3\,x\,(1\,+\,x)}\,e^{-x^2/4},
 \end{equation}
 
-where $^*$ denotes an \idx{estimate}. Note that both $K$, $\fdfunc{K}$ and the arguments they take are \idx{unitless}. $K$ is therefore the \idxs{unitless}{kernel}.
+where $^*$ denotes an \estimation. Note that both $K$, $\fdfunc{K}$ and the arguments they take are \idx{unitless}. $K$ is therefore the \idxs{unitless}{kernel}.
 
 %TODO: Include plots
 %\input{comparison.tex}
@@ -232,13 +232,13 @@ where $^*$ denotes an \idx{estimate}. Note that both $K$, $\fdfunc{K}$ and the a
 Expanding \eqref{eq:opcfconvolution} yeilds
 
 \begin{equation} \label{eq:opcfintegral}
-\sop{C}\,\eta(\vec{r},\,t) = \iint f(\vec{r'})\,\eta(\vec{r}-\vec{r'},\,t)\,\infinitesimal\vec{r'}
+\sop{C}\,\eta(\vec{r},\,t) = \iint f(\vec{r'})\,\eta(\vec{r}-\vec{r'},\,t)\,\opd\vec{r'}
 \end{equation}
 
 which, by using \eqref{eq:ftokernel}, can be rewritten to
 
 \begin{equation} \label{eq:opchunknown}
-\sop{C}_h\,\eta(\vec{r},\,t) = a_h\iint K\left(\frac{\vec{r'}}{h}\right)\,\eta(\vec{r}-\vec{r'},\,t)\,\infinitesimal\vec{r'},
+\sop{C}_h\,\eta(\vec{r},\,t) = a_h\iint K\left(\frac{\vec{r'}}{h}\right)\,\eta(\vec{r}-\vec{r'},\,t)\,\opd\vec{r'},
 \end{equation}
 
 where
@@ -252,7 +252,7 @@ We could just use this definition of $C$ and plug it in to \eqref{eq:diffeqspati
 A problem, though, is that $h$ is not a constant, but dependent of location for a sea bottom that is not perfectly flat, so \eqref{eq:opchunknown} is not applicable. The simplest remedy for this would be to just substitute $h$ for the water depth of the local position $h(\vec{r})$:
 
 \begin{equation} \label{eq:opchlocal}
-\sop{C}_{h(\vec{r})}\,\eta(\vec{r},\,t) = a_{h(\vec{r})}\iint K\left(\frac{\vec{r'}}{h(\vec{r})}\right)\,\eta(\vec{r}-\vec{r'},\,t)\,\infinitesimal\vec{r'},
+\sop{C}_{h(\vec{r})}\,\eta(\vec{r},\,t) = a_{h(\vec{r})}\iint K\left(\frac{\vec{r'}}{h(\vec{r})}\right)\,\eta(\vec{r}-\vec{r'},\,t)\,\opd\vec{r'},
 \end{equation}
 
 where $a_{h(\vec{r})} = 1/h^2(\vec{r})$. Unfortunately, this method has other problems that occur when the bottom toppography is unplesant. For example, if one part of the water is surrounded by ground, as is the case with lakes, this simple operator would still be affected by other parts of the water. Hence, waves in one lake could propagate into another, nearby lake, which is not the case in reality.
@@ -262,7 +262,7 @@ A possible remedy for this problem is to try to limit the convolution filter and
 Anyway, assuming we have defined the effective depth \mbox{$h_e(\vec{r},\,\vec{r}-\vec{r'})$} in some way, we can use that definition:
 
 \begin{equation} \label{eq:opcheffective}
-\sop{C}_{h_e}\,\eta(\vec{r},\,t) = a_{h_e}\,\iint K\left(\frac{\vec{r'}}{h_e(\vec{r},\,\vec{r}-\vec{r'})}\right)\,\eta(\vec{r}-\vec{r'},\,t)\,\infinitesimal\vec{r'}.
+\sop{C}_{h_e}\,\eta(\vec{r},\,t) = a_{h_e}\,\iint K\left(\frac{\vec{r'}}{h_e(\vec{r},\,\vec{r}-\vec{r'})}\right)\,\eta(\vec{r}-\vec{r'},\,t)\,\opd\vec{r'}.
 \end{equation}
 
 which will be robust, as well as well as the most gerenal definition of $\sop{C}$. One problem here, though, is that different values for $h_e$ are used for each value of $\vec{r}$, so $a_{h_e}$ cannot be easily obtained. However, by examining \eqref{eq:transkernelofxivec}, we see that the convolution filter is in fact a kind of \idxs{low-pass}{filter}, since $\fdfunc{K}(\vec{0}) = 1$. We therefore require that if we apply it on a constant function, it will have no effect:
@@ -274,7 +274,7 @@ which will be robust, as well as well as the most gerenal definition of $\sop{C}
 By combining \eqref{eq:opcheffective} and \eqref{eq:opcproperscaling} and isolating $a_{h_e}$, we get
 
 \begin{equation} \label{eq:scalingheffective}
-a_{h_e} = \frac{1}{\displaystyle\iint K\left(\frac{\vec{r'}}{h_e(\vec{r},\,\vec{r}-\vec{r'})}\right) \infinitesimal\vec{r'}}.
+a_{h_e} = \frac{1}{\displaystyle\iint K\left(\frac{\vec{r'}}{h_e(\vec{r},\,\vec{r}-\vec{r'})}\right) \opd\vec{r'}}.
 \end{equation}
 
 By using the effective water depth $h_e$, and $\sop{C}_{h_e}$, which is the most \idx{robust} of our $\sop{C}$ operators, \eqref{eq:diffeqspatial} becomes
@@ -292,19 +292,19 @@ which still contains $h$ at one place. Using \eqref{eq:aofh}, we can substitute 
 which is a \PDE completely free from variables in the frequency domain and which is believed to be robust even for varying water depths, which was the goal. By using the definition for $\sop{\omega}$ (\eqref{eq:opomega}), the definition for $\sop{k^2}$ (\eqref{eq:opk2}) and the definition for $\sop{C}_{h_e}$ (\eqref{eq:opcheffective}, \eqref{eq:scalingheffective}), the equation can be rewritten as
 
 \begin{equation} \label{eq:diffeqnouserdefinedoperators}
-\frac{\partial^2}{\partial t^2}\,\eta = a_{h_e}^{-1/2}\,\left(g\,-\,\frac{\gamma}{\rho}\,\nabla^2\right)\,\nabla^2\,\frac{\displaystyle\iint K\left(\frac{\vec{r'}}{h_e(\vec{r},\,\vec{r}-\vec{r'})}\right)\,\eta(\vec{r}-\vec{r'},\,t)\,\infinitesimal\vec{r'}}{\displaystyle\iint K\left(\frac{\vec{r'}}{h_e(\vec{r},\,\vec{r}-\vec{r'})}\right) \infinitesimal\vec{r'}}.
+\frac{\partial^2}{\partial t^2}\,\eta = a_{h_e}^{-1/2}\,\left(g\,-\,\frac{\gamma}{\rho}\,\nabla^2\right)\,\nabla^2\,\frac{\displaystyle\iint K\left(\frac{\vec{r'}}{h_e(\vec{r},\,\vec{r}-\vec{r'})}\right)\,\eta(\vec{r}-\vec{r'},\,t)\,\opd\vec{r'}}{\displaystyle\iint K\left(\frac{\vec{r'}}{h_e(\vec{r},\,\vec{r}-\vec{r'})}\right) \opd\vec{r'}}.
 \end{equation}
 
 Note that the order of the operators matters when we use this definition for $C$, contrary to in \eqref{eq:dispersion} which we started from, where the order of the factors on the right hand side doesn't matter. If, for example, \eqref{eq:diffeqcomplete} is modified so that $C_{h_e}$ is placed furthest to the left, we end up with the \PDE
 
 \begin{equation} \label{eq:diffeqnouserdefinedoperatorsvariant}
-\frac{\partial^2}{\partial t^2}\,\eta = \frac{\displaystyle\iint K\left(\frac{\vec{r'}}{h_e(\vec{r},\,\vec{r}-\vec{r'})}\right)\,\left(g\,-\,\frac{\gamma}{\rho}\,\nabla^2\right)\,\nabla^2\,\eta(\vec{r}-\vec{r'},\,t)\,\infinitesimal\vec{r'}}{\sqrt{\displaystyle\iint K\left(\frac{\vec{r'}}{h_e(\vec{r},\,\vec{r}-\vec{r'})}\right) \infinitesimal\vec{r'}}}
+\frac{\partial^2}{\partial t^2}\,\eta = \frac{\displaystyle\iint K\left(\frac{\vec{r'}}{h_e(\vec{r},\,\vec{r}-\vec{r'})}\right)\,\left(g\,-\,\frac{\gamma}{\rho}\,\nabla^2\right)\,\nabla^2\,\eta(\vec{r}-\vec{r'},\,t)\,\opd\vec{r'}}{\sqrt{\displaystyle\iint K\left(\frac{\vec{r'}}{h_e(\vec{r},\,\vec{r}-\vec{r'})}\right) \opd\vec{r'}}}
 \end{equation}
 
 instead, which is essentially different from \eqref{eq:diffeqnouserdefinedoperators}.
 
 \section{Applying the convolution filter}
 
-For a \idxs{uniform}{surface grid}, the convolution filter can be applied by using the a modified version of the \FMM \citep{Greengard1985,Greengard1987} for continuous data, known as the \idxe{CFMM}{Continuous Fast Multipole Method} (CFMM) \citep{White1994}, which allows it to be applied with a $O(n)$\indexs{big O}{notation} \idxe{amortized running time}{amortized} \idx{time complexity} instead of $O(n^2)$ as with a simple $n$-to-$n$ approach, where $n$ is the number of surface grid points.
+For a \idxs{uniform}{surface grid}, the convolution filter can be applied by using the a modified version of the \FMM \citep{Greengard1985,Greengard1987} for continuous data, the \CFMM \citep{White1994}, which allows it to be applied with a $O(n)$\indexs{big O}{notation} \idxe{amortized running time}{amortized} \idx{time complexity} instead of $O(n^2)$ as with a simple $n$-to-$n$ approach, where $n$ is the number of surface grid points.
 
 However, even though $O(n)$ is very fast in theory, the Continuous Fast Multipole Method is complicated and involves many computational steps, which would make the simulation slow. It requires many terms in the \idx{Taylor series} in order make a good approximantion, so one would have to balance the approximation errors to the additional computational costs due to the processing of the Taylor series. On the other hand, it is possible to parallelize these kinds of \idxp{algorithm}{s} \citep[see e.g.][]{Board1994}, making it possible to overcome this bottleneck simply by running the algorithm on many \idxp{core}{s}.

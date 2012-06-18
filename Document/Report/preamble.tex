@@ -60,6 +60,9 @@
 
 % Mathematics
 \usepackage{mathtools}
+\usepackage{amssymb} % To get \therefore (see documentation: There is no documentation :( )
+\usepackage{esint} % Eddie Saudrais integrals (see documentation: http://ctan.uib.no/macros/latex/contrib/esint/esint.pdf).
+% For more math symbols, see The Comprehensive LaTeX Symbol List (http://ctan.uib.no/info/symbols/comprehensive/symbols-a4.pdf)
 
 % Title page
 \usepackage{lithmaketitle}
@@ -94,6 +97,7 @@
 \newrobustcmd{\newflag}[2]{\newtoggle{#1}\settoggle{#1}{#2}}
 % Appearance
 \newrobustcmd{\HRule}{\rule{\linewidth}{0.5mm}}
+\newrobustcmd{\nspace}{\!\!}
 \newrobustcmd{\blankpage}{\clearpage\thispagestyle{fancy}\renewcommand{\headrulewidth}{0pt}\chead{}\cfoot{}\IFDEBUGELSE{\begin{center}\large\textit{This page intentionally left blank}\end{center}}{\ }\clearpage}
 % Table of contents
 \newrobustcmd{\addtotoc}[2]{\cleardoublepage\phantomsection\addcontentsline{toc}{#1}{#2}}
@@ -127,11 +131,12 @@
 \newrobustcmd{\qidxs }[2]{\indexs{#1}{#2}#1 #2}              % The quite split version of the idx macro
 \newrobustcmd{\qidxse}[3]{\indexs{#1}{#2}#3}                 % The quite split version of the idx macro
 \newrobustcmd{\qidxsp}[3]{\indexs{#1}{#2}#1 #2#3}            % The quite split plural version of the idx macro
-\iffalse
-\newrobustcmd{\indexs}[2]{\index{#1 #2}\index{#2!#1|see{#1 #2}}} % Index key has the natural order of the parts
-\else
-\newrobustcmd{\indexs}[2]{\index{#2!#1}\index{#1 #2|see{#2}}} % Index key has the reeversed order of the parts
-\fi
+
+\newrobustcmd{\indexs}[2]{\iftoggle{REVERTINDEXORDEROFSPLITKEYS}%
+{\index{#2!#1}\index{#1 #2|see{#2}}}% Index key has the reeversed order of the parts
+{\index{#1 #2}\index{#2!#1|see{#1 #2}}}% Index key has the natural order of the parts
+}
+
 % Easier-to-read indexing
 \newrobustcmd{\declareindexkey}     [1]{\expandafter\newabbrev\csname #1\endcsname{\idx{#1}}}
 \newrobustcmd{\declareindexkeyq}    [1]{\expandafter\newabbrev\csname #1\endcsname{\qidx{#1}}}
@@ -139,26 +144,29 @@
 \newrobustcmd{\declareindexkeypairq}[2]{\expandafter\newabbrev\csname #2\endcsname{\qidxe{#1}{#2}}}
 %\newrobustcmd{\declareindexkeyq}[1]{\expandafter\newabbrev\csname #1\endcsname{\idxq{#1}}}
 % Abbreviations
-\iffalse % Put the non-abbreviated form in the index
-\newrobustcmd{\declareacronym} [2]{\expandafter\newabbrev\csname #1\endcsname{\idx{#2} (\qidxe{#1|see{#2}}{#1})}[\qidxe{#2}{#1}]}
-\newrobustcmd{\declareacronyms}[3]{\expandafter\newabbrev\csname #1\endcsname{\idxs{#2}{#3} (\qidxe{#1|see{#2 #3}}{#1})}[\qidxe{#2 #3}{#1}]}
-\else % Put the abbreviated form in the index
-\newrobustcmd{\declareacronym} [2]{\expandafter\newabbrev\csname #1\endcsname{\idxe{#1}{#2} (\qidxe{#2|see{#1}}{#1})}[\qidx{#1}]}
-\newrobustcmd{\declareacronyms}[3]{\expandafter\newabbrev\csname #1\endcsname{\idxe{#1}{#2 #3}\index{#3!#2|see{#1}} (\qidxe{#2 #3|see{#1}}{#1})}[\qidx{#1}]}
-\fi
+\newrobustcmd{\declareacronym} [2]{\iftoggle{INDEXACRONYMS}
+    {\expandafter\newabbrev\csname #1\endcsname{\idxe{#1}{#2}\iftoggle{USEACRONYMS}{ (\qidxe{#2|see{#1}}{#1})}{}}[\iftoggle{USEACRONYMS}{\qidx{#1}}{\qidxe{#1}{#2}}]}
+    {\expandafter\newabbrev\csname #1\endcsname{\idx{#2}\iftoggle{USEACRONYMS}{ (\qidxe{#1|see{#2}}{#1})}{}}     [\iftoggle{USEACRONYMS}{\qidxe{#2}{#1}}{\qidx{#2}}]}
+}
+\newrobustcmd{\declareacronyms}[3]{\iftoggle{INDEXACRONYMS}
+    {\expandafter\newabbrev\csname #1\endcsname{\idxe{#1}{#2 #3}\index{#3!#2|see{#1}}\index{#2 #3|see{#1}}\iftoggle{USEACRONYMS}{ (#1)}{}}[\iftoggle{USEACRONYMS}{\qidx{#1}}{\qidxe{#1}{#2 #3}}]}
+    {\expandafter\newabbrev\csname #1\endcsname{\idxs{#2}{#3}\iftoggle{USEACRONYMS}{ (\qidxe{#1|see{\iftoggle{REVERTINDEXORDEROFSPLITKEYS}{#3}{#2 #3}}}{#1})}{}}[\iftoggle{USEACRONYMS}{\qidxse{#2}{#3}{#1}}{\qidxs{#2}{#3}}]}
+}
+
 \newrobustcmd{\declareabbreviation} [2]{\expandafter\newabbrev\csname #1\endcsname{#2}}
 \newrobustcmd{\declareabbreviations}[3]{\expandafter\newabbrev\csname #1\endcsname{#2 #3}}
 \newrobustcmd{\declareabbreviationi} [2]{\expandafter\newabbrev\csname #1\endcsname{\idx{#2}}}
 \newrobustcmd{\declareabbreviationis}[3]{\expandafter\newabbrev\csname #1\endcsname{\idxs{#2}{#3}}}
 \newrobustcmd{\declareabbreviationqi} [2]{\expandafter\newabbrev\csname #1\endcsname{\qidx{#2}}}
 \newrobustcmd{\declareabbreviationqis}[3]{\expandafter\newabbrev\csname #1\endcsname{\qidxs{#2}{#3}}}
+\def\simpleabbrev{\declareabbreviation}
 %TODO: Find some better way to denote plural form (one macro would be better since acronyms are indexed verbosely only ocne)
 % Allow pluralform of abbreviations
-\newrobustcmd{\s} {\!\!{}s\xspace} % For abbreviations that are not indexed or indexed quietly
-\newrobustcmd{\si}{\!\!{}\indexify{s}\xspace} % For abbreviations that are indexed verbosely
+\newrobustcmd{\s} {\!s\xspace} % For abbreviations that are not indexed or indexed quietly
+\newrobustcmd{\si}{\!\indexify{s}\xspace} % For abbreviations that are indexed verbosely
 
 % Mathematics
-\newrobustcmd{\infinitesimal}[0]{\operatorname{d}} % Used e.g. in integrals and derivatives
+\newrobustcmd{\opd}[0]{\operatorname{d}} % Used e.g. in integrals and derivatives
 \newrobustcmd{\range}[2]{#1{--}#2}
 
 % DEBUG is defined in options.tex
