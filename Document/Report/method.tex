@@ -13,9 +13,15 @@
 \newrobustcmd{\gammapath}{{\gamma[\vec{r}_1,\,\vec{r}_2]}}
 \newabbrev{\textgammapath}{\mbox{$\gammapath$}}
 
-The \FVM is a way of solving a \PDE, or a set of \PDEs, where the room is \discretized into a large number of non-moving, adjactent volume elements which we will call \cells, and different \properties are discretized into certain points. \idxse{scalar}{fields}{Scalar fields} are usually discretized to the \idxsp{cell}{center}{s}, or sometimes to \idxp{node}{s} of \idxse{cell}{corner}{corners} of the cells, as in \citep{Losasso2004}, which can be convenient since \interpolation of fields discretized to the cell centers tend to be more difficult. In a \idxs{collocated}{grid}, all properties are stored at the same locations, so the vector properties are discretized to the same locations as the scalar properties. On a \idxs{staggered}{grid} on the other hand, the \velocity (or the \momentum, depending on implementation) is discretized to the \idxs{cell}{faces}. For the work described in this report, a staggered grid has been used, and throughout the report the discretization locations for the various properties will be called \idxsp{storage}{location}{s}.
+The \FVM is a way of solving a \PDE, or a set of \PDEs, where the room is \discretized into a large number of non-moving, adjactent volume elements which we will call \cells, and different \properties are discretized into certain points. \idxse{scalar}{field}{Scalar fields} are usually discretized to the \idxsp{cell}{center}{s}, or sometimes to \idxp{node}{s} of \idxse{cell}{corner}{corners} of the cells, as in \citep{Losasso2004}, which can be convenient since \interpolation of fields discretized to the cell centers tend to be more difficult. In a \idxs{collocated}{grid}, all properties are stored at the same locations, so the vector properties are discretized to the same locations as the scalar properties. On a \idxs{staggered}{grid} on the other hand, the \velocity (or the \momentum, depending on implementation) is discretized to the \idxsp{cell}{face}{s}. For the work described in this report, a staggered grid has been used, and throughout the report the discretization locations for the various properties will be called \idxsp{storage}{location}{s}.
 
-\paragraph{Divergences}
+\paragraph{Fluid simulation}
+
+When applying the \FVM in \CFD, it is used to realistically \simulate the \flow of a \fluid by dividing the fluid into a large number of non-moving, adjactent \cells and letting the fluid flow between the cells, through the \idxsp{cell}{face}{s}. The motion of the fluid is described by a set of \PDEs, usually the \idxs{Euler}{equations} or the \idxs{Navier-Stokes}{equations}.
+
+The main difference between the Navier-Stokes equations and the Euler equations is that the Navier-Stokes equations takes \index{visousity|see{viscous force}}\idxsp{viscous}{force}{s} into account whe\-reas the Euler equations do not. The Euler equations are therefore a special case of the Navier-Stokes equations. Many textbooks also omits \idxsp{external}{force}{s} when writing about the Euler equations, although gravity which is such an external force usually is included when simulating \idxs{free surface}{flow} using the Euler equations.
+
+\section{Divergence calculation}
 
 In the \PDEs, in order to calculate the \divergence of a \idxs{vector}{field}, the \idxs{divergence}{theorem} is used and a \idxs{volume}{integral} of the divergence of the field is converted to a \idxs{surface}{integral} of the vector field itself. The divergence theorem states that
 
@@ -49,7 +55,7 @@ F_i \,=\, \frac{1}{S_i}\normvec{n}_i\cdot\oiint_{S_i}(\vec{F})\,\opd S,
 
 where $\normvec{n}_i$ is the normal of $S_i$. $F_i$, which is now just the $\normvec{n}_i$-component of the average value of the field on the cell face $S_i$, is on a staggered grid stored directly on $S_i$.
 
-\paragraph{Gradients}
+\section{Gradient calculation}
 
 For \idxsp{orthogonal}{grid}{s}, the \gradient of a \idxs{scalar}{field} is calculated in a similar way, but in this case the \idxs{gradient}{theorem} is used. The gradient theorem states that
 
@@ -57,7 +63,7 @@ For \idxsp{orthogonal}{grid}{s}, the \gradient of a \idxs{scalar}{field} is calc
 \phi(\vec{r}_2)-\phi(\vec{r}_1) \,=\, \int_\gammapath\nabla\phi(\vec{r'})\cdot \opd\vec{r'},
 \end{equation}
 
-where $\phi$ is a scalar field and \textgammapath is a path within $\phi$'s domain, connecting the vectors $\vec{r}_1$ and $\vec{r}_2$. By dividing both sides of \eqref{eq:gradient_theorem} with \mbox{$\Delta r = |\vec{r}_2\,-\,\vec{r}_1|$}, we obtain
+where $\phi$ is a scalar field, \textgammapath is a path within $\phi$'s domain, connecting the vectors $\vec{r}_1$ and $\vec{r}_2$ and $\int_\gammapath$ denotes a \idxs{path}{integral} along \textgammapath. By dividing both sides of \eqref{eq:gradient_theorem} with \mbox{$\Delta r = |\vec{r}_2\,-\,\vec{r}_1|$}, we obtain
 
 \begin{equation} \label{eq:gradient_theorem_divided}
 \frac{\phi(\vec{r}_2)-\phi(\vec{r}_1)}{\Delta r} \,=\, \frac{\int_\gammapath\nabla\phi(\vec{r'})\cdot \opd\vec{r'}}{\Delta r} \,=\, \frac{\int_\gammapath\nabla\phi(\vec{r'})\cdot\frac{\Delta\vec{r}}{|\Delta\vec{r}|} \opd r'}{\Delta r}
@@ -93,47 +99,87 @@ The gradient of a scalar field can be written as
 \nabla\phi(\vec{r}) \,=\, \left(\frac{\partial}{\partial x}\,\normvec{x}\,+\,\frac{\partial}{\partial y}\,\normvec{y}\,+\,\frac{\partial}{\partial z}\,\normvec{z}\right) \phi(\vec{r}) \,=\, \phi'_{\normvec{x}}(\vec{r})\,\normvec{x}\,+\,\phi'_{\normvec{y}}(\vec{r})\,\normvec{y}\,+\,\phi'_{\normvec{z}}(\vec{r})\,\normvec{z}
 \end{equation}
 
-where $\normvec{x}$, $\normvec{y}$ and $\normvec{z}$ are the \normalized \idxs{base}{vectors} along the three \orthogonal \idxse{grid}{axis}{grid axes} and $x$, $y$ and $z$ are the \idxp{coordinate}{s} along the grid axes. Since we are on an orthogonal grid, the location $\vec{r}$ in which the gradient is to be calculated will be the center (or the corner) of a cell with 6 neighboring cell centers (or cell corners):
+where $\normvec{x}$, $\normvec{y}$ and $\normvec{z}$ are the \normalized \idxsp{base}{vector}{s} along the three \orthogonal \idxse{grid}{axis}{grid axes} and $x$, $y$ and $z$ are the \idxp{coordinate}{s} along the grid axes. Since we are on an orthogonal grid, we can assume that the location $\vec{r}$ in which the gradient is to be calculated will be the center (or corner) of a cell with 6 neighboring cell centers (or cell corners):
 
 \begin{equation} \label{eq:neighboring_locations}
 \begin{cases}
-\vec{r}_{x^-} & = \vec{r} \,-\, \frac{\Delta x}{2}\,\normvec{x}\\[1ex]
-\vec{r}_{x^+} & = \vec{r} \,+\, \frac{\Delta x}{2}\,\normvec{x}\\[1ex]
-\vec{r}_{y^-} & = \vec{r} \,-\, \frac{\Delta y}{2}\,\normvec{y}\\[1ex]
-\vec{r}_{y^+} & = \vec{r} \,+\, \frac{\Delta y}{2}\,\normvec{y}\\[1ex]
-\vec{r}_{z^-} & = \vec{r} \,-\, \frac{\Delta z}{2}\,\normvec{z}\\[1ex]
-\vec{r}_{z^+} & = \vec{r} \,+\, \frac{\Delta z}{2}\,\normvec{z}
-\end{cases}\ .
+\vec{r}_{x^-} & = \vec{r} \,-\, \Delta x\,\normvec{x}\\[1ex]
+\vec{r}_{x^+} & = \vec{r} \,+\, \Delta x\,\normvec{x}\\[1ex]
+\vec{r}_{y^-} & = \vec{r} \,-\, \Delta y\,\normvec{y}\\[1ex]
+\vec{r}_{y^+} & = \vec{r} \,+\, \Delta y\,\normvec{y}\\[1ex]
+\vec{r}_{z^-} & = \vec{r} \,-\, \Delta z\,\normvec{z}\\[1ex]
+\vec{r}_{z^+} & = \vec{r} \,+\, \Delta z\,\normvec{z}
+\end{cases}\ ,
 \end{equation}
 
 %\begin{samepage}
-By combining \eqrefs \ref{eq:phi_derivative_final}, \ref{eq:gradient_orthogonal} and \ref{eq:neighboring_locations}, we can write the gradient for $\phi$ as
+where $\Delta x$, $\Delta y$ and $\Delta z$ are the grid spacings in the $\normvec{x}$, $\normvec{y}$ and $\normvec{z}$ directions respectively. By combining \eqrefs \ref{eq:phi_derivative_final}, \ref{eq:gradient_orthogonal} and \ref{eq:neighboring_locations}, we can write the gradient of $\phi$ as
 
 \begin{equation} \label{eq:gradient_final}
 \nabla\phi(\vec{r}) \,=\,
-\frac{\phi(\vec{r}_{x^+})-\phi(\vec{r}_{x^-})}{\Delta x}\,\normvec{x} \,+\,
-\frac{\phi(\vec{r}_{y^+})-\phi(\vec{r}_{y^-})}{\Delta y}\,\normvec{y} \,+\,
-\frac{\phi(\vec{r}_{z^+})-\phi(\vec{r}_{z^-})}{\Delta z}\,\normvec{z}.
+\frac{\phi(\vec{r}_{x^+})-\phi(\vec{r}_{x^-})}{2\,\Delta x}\,\normvec{x} \,+\,
+\frac{\phi(\vec{r}_{y^+})-\phi(\vec{r}_{y^-})}{2\,\Delta y}\,\normvec{y} \,+\,
+\frac{\phi(\vec{r}_{z^+})-\phi(\vec{r}_{z^-})}{2\,\Delta z}\,\normvec{z}.
 \end{equation}
 %\end{samepage}
 
-%In Computational Fluid Dynamics, the finite element method is used to realistically simulate the flow of a fluid by dividing the fluid into a large number of non-moving, adjactent cells and letting the fluid flow between the cells, through the cell faces. The motion of the fluid is described by a set of Partial Differential Equations, usually the Euler equations or the Navier-Stokes equations. The finite volume method works by discretizing the partial differential equations 
+\section{Pressure calculation}
 
-%The magnitude of the fluid flux between two cells is directly proportional to the area of the cell face between the cells and the component of the velocity of the fluid in the direction of the cell face normal.
+Both the Euler equations and the Navier-Stokes equations come in two forms which usually differes significantly in implementation and stability: The \indexs{compressible Navier-Stokes}{equations}\indexs{compressible Euler}{equations}\compressible forms and the \indexs{incompressible Navier-Stokes}{equations}\indexs{incompressible Euler}{equations}\incompressible forms. For the work described in this report, the compressible Euler equations have been used. %TODO: Have they been fully solved? (advection of the velocity field)
 
-\section{Artificial compression}
+\subsection{Compressible flow}
 
-\subsection{Instability}
+For \idxs{compressible}{flow}, the \divergence of the \idxs{velocity}{field} is allowed to be non-zero. The \pressure is then usually expressed purely as a function of the density; sometimes also taking into account the \temperature and other properties that may affect the pressure, that is
 
-\section{Incompressible Navier-Stokes equations}
+\begin{equation} \label{eq:pressure_compressible_flow}
+p = p\,(\rho,\,T,\,\text{other material properties}),
+\end{equation}
 
-\subsection{Iterative methods}
+where $p$ is the pressure, $\rho$ is the density and $T$ is the temperature.
 
-\subsubsection{Gauss-Seidel method}
+However, the set of equations including \eqref{eq:pressure_compressible_flow} is \idxse{stiff}{equation}{stiff}, and ordinary \idxsp{numerical}{method}{s} for solving this set of equations are known to give rise to \idxs{spurious}{oscillations} in the solutions when the \idxs{speed of}{sound} multiplied by the \idx{time step} becomes too large in relation to the \idxs{characteristic}{length} of the \cells, making the numerical methud \unstable.
 
-\subsection{Acceleration of iterative methods}
+Still, not all solvers for compressible flow suffers from this problem. In \citep{Kwatra2009}, this problem is remedied by introducing a \idxs{pressure}{field}, separated from the \idxe{density}{field}, and updating the pressure and velocity fields using what looks like the \index{implicit Euler method|see{backward Euler method}}\idxs{backward}{Euler method}, which leads to a \idxs{Poisson}{equation} for solving the pressure field. The remaining fields are then updated with the standard (forward) \idx{Euler method}. This technique prohobits \idx{A-stability} and therefore doesn't lead any spurious oscillations, but tends to \damp \idxse{high}{frequency}{high frequent} \idxsp{acoustic}{wave}{s} as the standard Euler method would instead make them grow in strenght. This technique is similar to the technique used for solving incompressible flow which also gives rise to a Poisson equation for solving the pressure field.
 
-\subsubsection{Preconditioned conjugate gradient method}
+\subsection{Incompressible Navier-Stokes equations}
+
+For \idxs{incompressible}{flow}, a different approach is taken to calculate the \idxs{pressure}{field}. Starting from the the \idxs{general form of the}{equations of fluid motion},
+
+\begin{equation} \label{eq:navier_stokes_general}
+\rho\left(\frac{\partial\vec{u}}{\partial t} + \vec{u}\cdot\nabla\vec{u}\right) = -\nabla p + \nabla\cdot\boldsymbol{\mathsf{T}} + \vec{f}
+\end{equation}
+
+where $\vec{u}$ is the velocity, $\boldsymbol{\mathsf{T}}$ is the \index{stress tensor|see{deviatoric stress tensor}}\idxs{deviatoric stress}{tensor} and $\vec{f}$ is the external forces per unit volume. Since the flow is incompressible, the \divergence of the \idxs{velocity}{field} $\vec{u}$ is zero, that is
+
+\begin{equation} \label{eq:vecolity_divergence_incompressible_flow}
+\nabla\cdot\vec{u} \,=\, 0,
+\end{equation}
+
+and the density is equal in all parts of the fluid, which means that we have
+
+\begin{equation} \label{eq:density_gradient_incompressible_flow}
+\nabla\rho \,=\, \vec{0},
+\end{equation}
+
+so \eqref{eq:navier_stokes_general} reduces to
+
+\begin{equation} \label{eq:navier_stokes_general_simplified}
+\frac{\partial\vec{u}}{\partial t} + \vec{u}\cdot\nabla\vec{u} = -\nabla p' + \nabla\cdot\boldsymbol{\mathsf{T}}' + \vec{f}',
+\end{equation}
+
+where $'$ denotes reduces forms, which are $1/\rho$ times their equivalents without the $'$ notation. As described in \citep{Losasso2004}, this \PDE can be solved it in two steps. First, an intermediate velocity field $\vec{u}*$ is calculated ignoring the pressure term, and second
+
+\begin{equation} \label{eq:navier_stokes_general_discretized}
+\frac{\partial\vec{u}}{\partial t} + \vec{u}\cdot\nabla\vec{u} = -\nabla p' + \nabla\cdot\boldsymbol{\mathsf{T}}' + \vec{f}',
+\end{equation}
+
+\subsubsection{Iterative methods}
+
+\paragraph{Gauss-Seidel method}
+
+\subsubsection{Acceleration of iterative methods}
+
+\paragraph{Preconditioned conjugate gradient method}
 
 \begin{itemize}
     \item Extension of the gradient descent
@@ -141,7 +187,7 @@ By combining \eqrefs \ref{eq:phi_derivative_final}, \ref{eq:gradient_orthogonal}
 
 See also \textit{Incomplete Cholesky Preconditioned Conjugate Gradients method}, described in \textit{\href{http://www.cs.ubc.ca/~rbridson/fluidbook/}{Fluid Simulation for Computer Graphics}}. This method uses the \textit{\href{http://en.wikipedia.org/wiki/Incomplete_Cholesky_factorization}{incomplete Cholesky factorization}} as preconditioner.
 
-\subsubsection{Multigrid method}
+\paragraph{Multigrid method}
 
 See
 \begin{itemize}
@@ -150,7 +196,7 @@ See
 \end{itemize}
 
 
-\section{Semicompressible water}
+\subsection{Semicompressible water}
 
 \section{Boundary conditions}
 
