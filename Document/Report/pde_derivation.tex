@@ -259,6 +259,8 @@ where $a_{h(\vec{r})} = 1/h^2(\vec{r})$. Unfortunately, this method has other pr
 
 A possible remedy for this problem is to try to limit the convolution filter and let the kernel approach zero more quickly when the water gets shallower. For example, one could be to find the path from $\vec{r}$ to $\vec{r}-\vec{r'}$ with the maximal minimum water depth, and use the minimal water depth of that path as an \idxs{effective}{depth} $h_e$ for that sampling location. Another possibility could be to find the path with the minimal path integral of $h^{-1}$, calculate the average value of $h^{-1}$ along that path and use the inverse of that average as the effective depth $h_e$.
 
+%TODO: How is h_e calculated? How much time does that take?
+
 Anyway, assuming we have defined the effective depth \mbox{$h_e(\vec{r},\,\vec{r}-\vec{r'})$} in some way, we can use that definition:
 
 \begin{equation} \label{eq:opcheffective}

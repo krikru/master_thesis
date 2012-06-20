@@ -5,19 +5,25 @@
 % -----------------------------------------------------------------------------
 
 \documentclass[]{report}
-\usepackage{lithmaketitle}
-\usepackage{graphicx}
-% Get å, ä, ö, Å, Ä, Ö
-\usepackage[utf8]{inputenc}
+
+\iftrue
+    \usepackage{lithmaketitle}
+    \usepackage{graphicx}
+    \usepackage[utf8]{inputenc} % Get å, ä, ö, Å, Ä, Ö
+\else
+    \input{preamble}
+\fi
 
 \begin{document}
 
 % NOTE: Make sure to replace the \today and \shortyear macros if you are reprinting a previously published document.
 
+\iftrue
+
 \title{Simulating Ocean Waves and Ships with an Octree Data Structure} % The title of the report
 \author{Kristofer Krus} % Your name
 \date{\today} % The date of ... (?)
-%\thanks{All supporters} % In case you have someone to thank. Do not use.
+%\thanks{Thanks to all supporters.} % In case you have someone to thank. Do not use.
 \lithlogo{\includegraphics[width=0.6\textwidth, clip=true]{./Images/lith_en_vert_col.pdf}} % The code for displaying the logo (or a replacement)
 \lithcompany{Saab AB} % The company the thesis work was carried out at
 \lithwork{Master thesis work} % The type of work (well master thesis work, duh)
@@ -25,13 +31,16 @@
 \lithuniversity{Linköpings universitet} % Your university (Linköping universitet if you didn't know...)
 \lithpostaladdress{SE-581 83 Linköping, Sweden} % The postal address of the university
 % NOTE! Only use on of the fields lithsupervisor and lithsupervisors, comment the other out
-%\lithsupervisor{} % The supervisor
+\lithsupervisor{} % The supervisor
 \lithsupervisors{Anders Rönnbrant (Saab AB)\\Kenneth Järrendal (Linköping Institute of Technology)} % The supervisors, separated by e.g. a comma or a double backslash
-\lithexaminor{Magnus Johansson (Linköping Institute of Technology)} % The examinor of the thesis work
+\lithexaminer{Magnus Johansson (Linköping Institute of Technology)} % The examinor of the thesis work
 \lithx{A} % A or G (A for advanced, G for kandidat)
 \lithyy{\shortyear} % The two last digits of the year
-%\lithxxxx{} % The master thesis work number
+\lithxxxx{\textcolor{red}{\textit{xxxx}}} % The master thesis work number
+
+\fi
 
 \lithmaketitle
+%\maketitle % To compare with the ordinary \maketitle macro
 
 \end{document}

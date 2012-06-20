@@ -26,34 +26,34 @@ The main difference between the Navier-Stokes equations and the Euler equations 
 In the \PDEs, in order to calculate the \divergence of a \idxs{vector}{field}, the \idxs{divergence}{theorem} is used and a \idxs{volume}{integral} of the divergence of the field is converted to a \idxs{surface}{integral} of the vector field itself. The divergence theorem states that
 
 \begin{equation} \label{eq:divergence_theorem}
-\iiint_V\nabla\cdot\vec{F}(\vec{r'})\,\opd V \,=\, \oiint_S(\vec{F}(\vec{r'})\cdot\normvec{n})\,\opd S
+\iiint_V\nabla\cdot\vec{F}(\vec{r'})\,\opd V \,=\, \oiint_S(\vec{F}(\vec{r'})\cdot\normal)\,\opd S
 \end{equation}
 
-where $\vec{F}$ is a vector field, $V$ is a \idxs{control}{volume}, which in our case is the cell surrounding the point $\vec{r}$ in which the divergence is to be calculated, $S$ is the surface of the control volume, with \idxs{normal}{vector} pointing outwards, $\opd V$ and $\opd S$ are \infinitesimal elements in $V$ and $S$ respectively, $\normvec{n}$ is the normal of $\opd S$ and $\vec{r'}$ is the position of $\opd V$ and $\opd S$ respectively. The divergence of $\vec{F}(\vec{r})$ is then \approximated as the \average divergence of $\vec{F}$ in $V$ and calculated as
+where $\vec{F}$ is a vector field, $V$ is a \idxs{control}{volume}, which in our case is the cell surrounding the point $\vec{r}$ in which the divergence is to be calculated, $S$ is the surface of the control volume, with \idxs{normal}{vector} pointing outwards, $\opd V$ and $\opd S$ are \infinitesimal elements in $V$ and $S$ respectively, $\normal$ is the normal of $\opd S$ and $\vec{r'}$ is the position of $\opd V$ and $\opd S$ respectively. The divergence of $\vec{F}(\vec{r})$ is then \approximated as the \average divergence of $\vec{F}$ in $V$ and calculated as
 
 \begin{equation} \label{eq:divergence_surface_integral}
-\nabla\vec{F}(\vec{r}) \,=\, \frac{1}{V}\,\oiint_S(\vec{F}\cdot\normvec{n})\,\opd S.
+\nabla\vec{F}(\vec{r}) \,=\, \frac{1}{V}\,\oiint_S(\vec{F}\cdot\normal)\,\opd S.
 \end{equation}
 
 In the \FVM, the surface of a cell consists of \idxsp{cell}{face}{s}, $S_i$, between the cell itself and \neighboring cells, so \eqref{eq:divergence_surface_integral} can be rewritten as
 
 \begin{equation} \label{eq:divergence_cell_face_sum}
-\nabla\vec{F}(\vec{r})\ =\ \frac{1}{V}\,\sum_{S_i} \oiint_{S_i}(\vec{F}\cdot\normvec{n})\,\opd S\ =\ \frac{1}{V}\,\sum_{S_i} F_i\,S_i,
+\nabla\vec{F}(\vec{r})\ =\ \frac{1}{V}\,\sum_{S_i} \oiint_{S_i}(\vec{F}\cdot\normal)\,\opd S\ =\ \frac{1}{V}\,\sum_{S_i} F_i\,S_i,
 \end{equation}
 
 where $S_i$ is the \area of the cell face to the $i$:th neighbor cell, and $F_i$ is the average \idxs{field}{flux} through $S_i$, defined as
 
 \begin{equation} \label{eq:fi_integral}
-F_i \,=\, \frac{1}{S_i}\oiint_{S_i}(\vec{F}\cdot\normvec{n})\,\opd S.
+F_i \,=\, \frac{1}{S_i}\oiint_{S_i}(\vec{F}\cdot\normal)\,\opd S.
 \end{equation}
 
-In the \FVM, cell faces are usually flat, which means that the normal vector $\normvec{n}$ is constant for a certain cell face $S_i$. \eqref{eq:fi_integral} can therefore be rewritten as
+In the \FVM, cell faces are usually flat, which means that the normal vector $\normal$ is constant for a certain cell face $S_i$. \eqref{eq:fi_integral} can therefore be rewritten as
 
 \begin{equation} \label{eq:fi_flat_cell_face}
-F_i \,=\, \frac{1}{S_i}\normvec{n}_i\cdot\oiint_{S_i}(\vec{F})\,\opd S,
+F_i \,=\, \frac{1}{S_i}\,\normal_i\cdot\oiint_{S_i}(\vec{F})\,\opd S,
 \end{equation}
 
-where $\normvec{n}_i$ is the normal of $S_i$. $F_i$, which is now just the $\normvec{n}_i$-component of the average value of the field on the cell face $S_i$, is on a staggered grid stored directly on $S_i$.
+where $\normal_i$ is the normal of $S_i$. $F_i$, which is now just the $\normal_i$-component of the average value of the field on the cell face $S_i$, is on a staggered grid stored directly on $S_i$.
 
 \section{Gradient calculation}
 
@@ -103,12 +103,12 @@ where $\normvec{x}$, $\normvec{y}$ and $\normvec{z}$ are the \normalized \idxsp{
 
 \begin{equation} \label{eq:neighboring_locations}
 \begin{cases}
-\vec{r}_{x^-} & = \vec{r} \,-\, \Delta x\,\normvec{x}\\[1ex]
-\vec{r}_{x^+} & = \vec{r} \,+\, \Delta x\,\normvec{x}\\[1ex]
-\vec{r}_{y^-} & = \vec{r} \,-\, \Delta y\,\normvec{y}\\[1ex]
-\vec{r}_{y^+} & = \vec{r} \,+\, \Delta y\,\normvec{y}\\[1ex]
-\vec{r}_{z^-} & = \vec{r} \,-\, \Delta z\,\normvec{z}\\[1ex]
-\vec{r}_{z^+} & = \vec{r} \,+\, \Delta z\,\normvec{z}
+\vec{r}_{x^-} \,=\, \vec{r} \,-\, \Delta x\,\normvec{x}\\[1ex]
+\vec{r}_{x^+} \,=\, \vec{r} \,+\, \Delta x\,\normvec{x}\\[1ex]
+\vec{r}_{y^-} \,=\, \vec{r} \,-\, \Delta y\,\normvec{y}\\[1ex]
+\vec{r}_{y^+} \,=\, \vec{r} \,+\, \Delta y\,\normvec{y}\\[1ex]
+\vec{r}_{z^-} \,=\, \vec{r} \,-\, \Delta z\,\normvec{z}\\[1ex]
+\vec{r}_{z^+} \,=\, \vec{r} \,+\, \Delta z\,\normvec{z}
 \end{cases}\ ,
 \end{equation}
 
@@ -151,27 +151,49 @@ For \idxs{incompressible}{flow}, a different approach is taken to calculate the 
 
 where $\vec{u}$ is the velocity, $\boldsymbol{\mathsf{T}}$ is the \index{stress tensor|see{deviatoric stress tensor}}\idxs{deviatoric stress}{tensor} and $\vec{f}$ is the external forces per unit volume. Since the flow is incompressible, the \divergence of the \idxs{velocity}{field} $\vec{u}$ is zero, that is
 
-\begin{equation} \label{eq:vecolity_divergence_incompressible_flow}
+\begin{equation} \label{eq:velocity_divergence_incompressible_flow}
 \nabla\cdot\vec{u} \,=\, 0,
 \end{equation}
 
-and the density is equal in all parts of the fluid, which means that we have
+and the density becomes a constant rather than a function of time and position, so we have
 
 \begin{equation} \label{eq:density_gradient_incompressible_flow}
-\nabla\rho \,=\, \vec{0},
+\nabla\rho \,=\, \vec{0}.
 \end{equation}
 
-so \eqref{eq:navier_stokes_general} reduces to
+For simplicity, we can assume that we use a set of units where $\rho = 1$. We can therefore reduce \eqref{eq:navier_stokes_general} to
 
 \begin{equation} \label{eq:navier_stokes_general_simplified}
-\frac{\partial\vec{u}}{\partial t} + \vec{u}\cdot\nabla\vec{u} = -\nabla p' + \nabla\cdot\boldsymbol{\mathsf{T}}' + \vec{f}',
+\frac{\partial\vec{u}}{\partial t} + \vec{u}\cdot\nabla\vec{u} = -\nabla p + \nabla\cdot\boldsymbol{\mathsf{T}} + \vec{f}.
 \end{equation}
 
-where $'$ denotes reduces forms, which are $1/\rho$ times their equivalents without the $'$ notation. As described in \citep{Losasso2004}, this \PDE can be solved it in two steps. First, an intermediate velocity field $\vec{u}^*$ is calculated ignoring the pressure term, and second
+Using a method described in \citep{Losasso2004}, this \PDE can be solved in two steps. First, an intermediate velocity field $\vec{u}^*$ is calculated ignoring the pressure term, and second, the velocity update is calculated as
 
-\begin{equation} \label{eq:navier_stokes_general_discretized}
-\frac{\partial\vec{u}}{\partial t} + \vec{u}\cdot\nabla\vec{u} = -\nabla p' + \nabla\cdot\boldsymbol{\mathsf{T}}' + \vec{f}',
+\begin{equation} \label{eq:velocity_update}
+\vec{u} \,=\, \vec{u}^* - \Delta t\nabla p.
 \end{equation}
+
+However, this equation contains a second unknown, $p$, which must be calculated before $\vec{u}$ can be calculated. By taking the divergence of both sides of \eqref{eq:velocity_update} and using \eqref{eq:velocity_divergence_incompressible_flow} to get rid of $\nabla\cdot\vec{u}$, we obtain the \idxs{Poisson}{equation}
+
+\begin{equation} \label{eq:pressure_poissin_equation}
+\nabla^2 p \,=\, \frac{\nabla\cdot\vec{u}^*}{\Delta t},
+\end{equation}
+
+which need to be solved before we can update the velocity completely.
+
+In the work described in this report, a \idxs{staggered}{grid} has been used, so the velocities are stored at the \idxsp{cell}{face}{s}. Furthermore, only the velocity component relevant to \eqref{eq:fi_flat_cell_face} is stored, that is, only the velocity component parallel to the cell face normal. We can therefore calculate the scalar multiplication of $\normal$ with both sides of \eqref{eq:velocity_update} to get
+
+\begin{equation} \label{eq:velocity_update_staggered_grid_pressure_derivative}
+\normal\cdot\vec{u} \,=\, \normal\cdot\vec{u}^* - \normal\cdot\Delta t\nabla p \,=\, \normal\cdot\vec{u}^* - \Delta t\,p'_{\normal},
+\end{equation}
+
+and since the cell face $\normal\cdot\vec{u}$ is stored on separates two adjactent cells whose cell centers are separated by a vector parallel to $\normal$, we can using \eqref{eq:phi_derivative_final} to rewrite this equation as
+
+\begin{equation} \label{eq:velocity_update_staggered_grid_final}
+\normal\cdot\vec{u} \,=\, \normal\cdot\vec{u}^* - \Delta t\,\frac{p_2 - p_1}{\Delta r},
+\end{equation}
+
+where $p_1$ is the pressure in the cell center of the cell $\normal$ points from, $p_2$ is the pressure in the cell center of the cell $\normal$ points to and $\Delta r$ is the distance between the two cell centers.
 
 \subsubsection{Iterative methods}
 

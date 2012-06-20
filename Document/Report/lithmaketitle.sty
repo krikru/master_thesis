@@ -49,12 +49,13 @@
 \def\lithsupervisors#1{\gdef\@lithsupervisors{#1}}
 %\def\@lithsupervisors{\textit{Supervisors}} % default value
 % \lithexaminor
-\def\lithexaminor#1{\gdef\@lithexaminor{#1}}
-\def\@lithexaminor{\textcolor{red}{\textit{Examinator}}} % default value
+\def\lithexaminer#1{\gdef\@lithexaminer{#1}}
+\def\@lithexaminer{\textcolor{red}{\textit{Examiner}}} % default value
 \def\lithx#1{\gdef\@lithx{#1}}
 \def\@lithx{\textcolor{red}{\textit{x}}} % default value
 \def\lithyy#1{\gdef\@lithyy{#1}}
-\def\@lithyy{\shortyear} % default value
+%\def\@lithyy{\shortyear} % default value
+\def\@lithyy{\textcolor{red}{\textit{yy}}} % default value
 \def\lithxxxx#1{\gdef\@lithxxxx{#1}}
 \def\@lithxxxx{\textcolor{red}{\textit{xxxx}}} % default value
 
@@ -123,8 +124,8 @@
                 \@lithsupervisors
             \fi
             \vskip 1em%
-            Examinor: \\
-            \@lithexaminor
+            Examiner: \\
+            \@lithexaminer
             \@tpsepspace%
             {\centering\@lithlogo\par}
             \vfil

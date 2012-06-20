@@ -172,6 +172,7 @@
 % Indexing
 %\newrobustcmd{\indexify}[1]{#1} % For leaving indexed text in the body text as it is
 \newrobustcmd{\indexify}[1]{\textit{#1}} % For italicizing the indexed text in the body text
+\newrobustcmd{\qindexify}[1]{#1} % For marking indexed text quietly (don't do anything)
 
 % Referencing
 \robustify{\eqref}
@@ -201,7 +202,7 @@
 \declareacronym {FVM} {Finite Volume Method}
 \declareacronym {MAC} {Marker-and-Cell}
 \declareacronym {PDE} {Partial Differential Equation}
-\def            \PDEs {\PDE\s}
+\def            \PDEs {\mbox{\PDE\qsi}}
 \declareacronyms{VOF} {Volume of}{Fluid}
 \declareacronyms{VOS} {Volume of}{Solid}
 

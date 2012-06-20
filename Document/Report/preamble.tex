@@ -31,6 +31,7 @@
 
 % Miscellaneous tools
 \usepackage{etoolbox} % Includes the macro \ifstrequal
+%\usepackage{xkeyval} % For enabling labeled macro arguments (see http://www.tex.ac.uk/tex-archive/macros/latex/contrib/xkeyval/doc/xkeyval.pdf)
 
 % Abbreviations
 \usepackage{abbrevs_package_with_bug_fixed} % For defining abbreviations and other stuff
@@ -119,18 +120,27 @@
 \newrobustcmd{\nonumsubparagraph }[1]{\addtotoc{subparagraph} {#1}\subparagraph* {#1}}
 
 % Indexing
-\newrobustcmd{\idx   }[1]{\index{#1}\indexify{#1}}           % The basic version of the idx macro
-\newrobustcmd{\idxe  }[2]{\index{#1}\indexify{#2}}           % The extended version of the idx macro
-\newrobustcmd{\idxp  }[2]{\index{#1}\indexify{#1#2}}         % The plural version of the idx macro
-\newrobustcmd{\idxs  }[2]{\indexs{#1}{#2}\indexify{#1 #2}}   % The split version of the idx macro
-\newrobustcmd{\idxse }[3]{\indexs{#1}{#2}\indexify{#3}}      % The split extended version of the idx macro
-\newrobustcmd{\idxsp }[3]{\indexs{#1}{#2}\indexify{#1 #2#3}} % The split plural version of the idx macro
-\newrobustcmd{\qidx  }[1]{\index{#1}#1}                      % The quite version of the idx macro
-\newrobustcmd{\qidxe }[2]{\index{#1}#2}                      % The quite extended version of the idx macro
-\newrobustcmd{\qidxp }[2]{\index{#1}#1#2}                    % The quite plural version of the idx macro
-\newrobustcmd{\qidxs }[2]{\indexs{#1}{#2}#1 #2}              % The quite split version of the idx macro
-\newrobustcmd{\qidxse}[3]{\indexs{#1}{#2}#3}                 % The quite split version of the idx macro
-\newrobustcmd{\qidxsp}[3]{\indexs{#1}{#2}#1 #2#3}            % The quite split plural version of the idx macro
+% % % Base versions
+\newrobustcmd{\Bidx   }[2]{\index{#2}#1{#2}}           % The basic version of the idx macro
+\newrobustcmd{\Bidxe  }[3]{\index{#2}#1{#3}}           % The extended version of the idx macro
+\newrobustcmd{\Bidxp  }[3]{\index{#2}#1{#2#3}}         % The plural version of the idx macro
+\newrobustcmd{\Bidxs  }[3]{\indexs{#2}{#3}#1{#2 #3}}   % The split version of the idx macro
+\newrobustcmd{\Bidxse }[4]{\indexs{#2}{#3}#1{#4}}      % The split extended version of the idx macro
+\newrobustcmd{\Bidxsp }[4]{\indexs{#2}{#3}#1{#2 #3#4}} % The split plural version of the idx macro
+% % % Normal versions
+\newrobustcmd{\idx   }[1]{\Bidx{\indexify}{#1}}           % The basic version of the idx macro
+\newrobustcmd{\idxe  }[2]{\Bidxe{\indexify}{#1}{#2}}      % The extended version
+\newrobustcmd{\idxp  }[2]{\Bidxp{\indexify}{#1}{#2}}      % The plural version
+\newrobustcmd{\idxs  }[2]{\Bidxs{\indexify}{#1}{#2}}      % The split version
+\newrobustcmd{\idxse }[3]{\Bidxse{\indexify}{#1}{#2}{#3}} % The split extended version
+\newrobustcmd{\idxsp }[3]{\Bidxsp{\indexify}{#1}{#2}{#3}} % The split plural version
+% % % Quite versions
+\newrobustcmd{\qidx   }[1]{\Bidx{\qindexify}{#1}}           % The quite basic version of the idx macro
+\newrobustcmd{\qidxe  }[2]{\Bidxe{\qindexify}{#1}{#2}}      % The quite extended version
+\newrobustcmd{\qidxp  }[2]{\Bidxp{\qindexify}{#1}{#2}}      % The quite plural version
+\newrobustcmd{\qidxs  }[2]{\Bidxs{\qindexify}{#1}{#2}}      % The quite split version
+\newrobustcmd{\qidxse }[3]{\Bidxse{\qindexify}{#1}{#2}{#3}} % The quite split extended version
+\newrobustcmd{\qidxsp }[3]{\Bidxsp{\qindexify}{#1}{#2}{#3}} % The quite split plural version macro
 
 \newrobustcmd{\indexs}[2]{\iftoggle{REVERTINDEXORDEROFSPLITKEYS}%
 {\index{#2!#1}\index{#1 #2|see{#2}}}% Index key has the reeversed order of the parts
@@ -144,13 +154,13 @@
 \newrobustcmd{\declareindexkeypairq}[2]{\expandafter\newabbrev\csname #2\endcsname{\qidxe{#1}{#2}}}
 %\newrobustcmd{\declareindexkeyq}[1]{\expandafter\newabbrev\csname #1\endcsname{\idxq{#1}}}
 % Abbreviations
-\newrobustcmd{\declareacronym} [2]{\iftoggle{INDEXACRONYMS}
-    {\expandafter\newabbrev\csname #1\endcsname{\idxe{#1}{#2}\iftoggle{USEACRONYMS}{ (\qidxe{#2|see{#1}}{#1})}{}}[\iftoggle{USEACRONYMS}{\qidx{#1}}{\qidxe{#1}{#2}}]}
-    {\expandafter\newabbrev\csname #1\endcsname{\idx{#2}\iftoggle{USEACRONYMS}{ (\qidxe{#1|see{#2}}{#1})}{}}     [\iftoggle{USEACRONYMS}{\qidxe{#2}{#1}}{\qidx{#2}}]}
+\newrobustcmd{\declareacronym} [2]{\iftoggle{INDEXACRONYMS}%
+{\expandafter\newabbrev\csname #1\endcsname{\idxe{#1}{#2}\iftoggle{USEACRONYMS}{ (\qidxe{#2|see{#1}}{#1})}{}}[\iftoggle{USEACRONYMS}{\qidx{#1}}{\qidxe{#1}{#2}}]}%
+{\expandafter\newabbrev\csname #1\endcsname{\idx{#2}\iftoggle{USEACRONYMS}{ (\qidxe{#1|see{#2}}{#1})}{}}     [\iftoggle{USEACRONYMS}{\qidxe{#2}{#1}}{\qidx{#2}}]}
 }
-\newrobustcmd{\declareacronyms}[3]{\iftoggle{INDEXACRONYMS}
-    {\expandafter\newabbrev\csname #1\endcsname{\idxe{#1}{#2 #3}\index{#3!#2|see{#1}}\index{#2 #3|see{#1}}\iftoggle{USEACRONYMS}{ (#1)}{}}[\iftoggle{USEACRONYMS}{\qidx{#1}}{\qidxe{#1}{#2 #3}}]}
-    {\expandafter\newabbrev\csname #1\endcsname{\idxs{#2}{#3}\iftoggle{USEACRONYMS}{ (\qidxe{#1|see{\iftoggle{REVERTINDEXORDEROFSPLITKEYS}{#3}{#2 #3}}}{#1})}{}}[\iftoggle{USEACRONYMS}{\qidxse{#2}{#3}{#1}}{\qidxs{#2}{#3}}]}
+\newrobustcmd{\declareacronyms}[3]{\iftoggle{INDEXACRONYMS}%
+{\expandafter\newabbrev\csname #1\endcsname{\idxe{#1}{#2 #3}\index{#3!#2|see{#1}}\index{#2 #3|see{#1}}\iftoggle{USEACRONYMS}{ (#1)}{}}[\iftoggle{USEACRONYMS}{\qidx{#1}}{\qidxe{#1}{#2 #3}}]}%
+{\expandafter\newabbrev\csname #1\endcsname{\idxs{#2}{#3}\iftoggle{USEACRONYMS}{ (\qidxe{#1|see{\iftoggle{REVERTINDEXORDEROFSPLITKEYS}{#3}{#2 #3}}}{#1})}{}}[\iftoggle{USEACRONYMS}{\qidxse{#2}{#3}{#1}}{\qidxs{#2}{#3}}]}
 }
 
 \newrobustcmd{\declareabbreviation} [2]{\expandafter\newabbrev\csname #1\endcsname{#2}}
@@ -162,11 +172,13 @@
 \def\simpleabbrev{\declareabbreviation}
 %TODO: Find some better way to denote plural form (one macro would be better since acronyms are indexed verbosely only ocne)
 % Allow pluralform of abbreviations
-\newrobustcmd{\s} {\!s\xspace} % For abbreviations that are not indexed or indexed quietly
-\newrobustcmd{\si}{\!\indexify{s}\xspace} % For abbreviations that are indexed verbosely
+\newrobustcmd{\s}  {\!\!s\xspace} % For abbreviations that are not indexed
+\newrobustcmd{\qsi}{\!\!\qindexify{s}\xspace} % For abbreviations that are indexed quietly
+\newrobustcmd{\si} {\!\!\indexify{s}\xspace} % For abbreviations that are indexed verbosely
 
 % Mathematics
 \newrobustcmd{\opd}[0]{\operatorname{d}} % Used e.g. in integrals and derivatives
+\newrobustcmd{\normal}[0]{\normvec{n}} % Used e.g. in integrals and derivatives
 \newrobustcmd{\range}[2]{#1{--}#2}
 
 % DEBUG is defined in options.tex
