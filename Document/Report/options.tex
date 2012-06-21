@@ -145,7 +145,8 @@
 
 \iffalse
 % % % Integrals
-\newrobustcmd{\HalfBetweenIntegralSigns}{\!\!}
+%\newrobustcmd{\HalfBetweenIntegralSigns}{\!\!}
+\newrobustcmd{\HalfBetweenIntegralSigns}{\nspace} % \nspace = \!\!
 \newrobustcmd{\BetweenIntegralSigns}{\HalfBetweenIntegralSigns\HalfBetweenIntegralSigns}
 % Double integral
 \robustify{\iint}
@@ -190,21 +191,23 @@
 % The abbreviations are sorted by the abbreviated forms
 \declareabbreviationqi{threedim}{three-dimensional}
 \declareabbreviationqi{twodim}  {two-dimensional}
+%\declareabbreviation  {NS}      {Navier--Stokes}
 
 % Acronyms
 % --------
 
 % The acronyms are sorted by the abbreviated forms
-\declareacronym {BEM} {Boundary Element Method}
-\declareacronyms{CFD} {Computational}{Fluid Dynamics}
-\declareacronyms{CFMM}{Continuous}{Fast Multipole Method}
-\declareacronym {FMM} {Fast Multipole Method}
-\declareacronym {FVM} {Finite Volume Method}
-\declareacronym {MAC} {Marker-and-Cell}
-\declareacronym {PDE} {Partial Differential Equation}
+\declareacronym {BEM} {boundary element method}
+\declareacronyms{CFD} {computational}{fluid dynamics}
+%\declareacronym {CFL} {Courant--Friedrichs--Lewy}
+\declareacronyms{CFMM}{continuous}{fast multipole method}
+\declareacronym {FMM} {fast multipole method}
+\declareacronym {FVM} {finite volume method}
+\declareacronym {MAC} {marker-and-cell}
+\declareacronyms{PDE} {partial differential}{equation}
 \def            \PDEs {\mbox{\PDE\qsi}}
-\declareacronyms{VOF} {Volume of}{Fluid}
-\declareacronyms{VOS} {Volume of}{Solid}
+\declareacronyms{VOF} {volume of}{fluid}
+\declareacronyms{VOS} {volume of}{solid}
 
 % % % % % % % % % % % % %
 % INDEX SINGLE KEYWORDS %

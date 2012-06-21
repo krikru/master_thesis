@@ -172,9 +172,9 @@
 \def\simpleabbrev{\declareabbreviation}
 %TODO: Find some better way to denote plural form (one macro would be better since acronyms are indexed verbosely only ocne)
 % Allow pluralform of abbreviations
-\newrobustcmd{\s}  {\!\!s\xspace} % For abbreviations that are not indexed
-\newrobustcmd{\qsi}{\!\!\qindexify{s}\xspace} % For abbreviations that are indexed quietly
-\newrobustcmd{\si} {\!\!\indexify{s}\xspace} % For abbreviations that are indexed verbosely
+\newrobustcmd{\s}  {\nspace s\xspace} % For abbreviations that are not indexed
+\newrobustcmd{\qsi}{\nspace\qindexify{s}\xspace} % For abbreviations that are indexed quietly
+\newrobustcmd{\si} {\nspace\indexify{s}\xspace} % For abbreviations that are indexed verbosely
 
 % Mathematics
 \newrobustcmd{\opd}[0]{\operatorname{d}} % Used e.g. in integrals and derivatives
