@@ -1,6 +1,24 @@
 % This file was created with JabRef 2.8.
 % Encoding: Cp1252
 
+@ARTICLE{Berberovi2009,
+  author = {Berberovi\ifmmode \acute{c}\else \'{c}\fi{}, Edin and van Hinsberg,
+	Nils P. and Jakirli\ifmmode \acute{c}\else \'{c}\fi{}, Suad and Roisman,
+	Ilia V. and Tropea, Cameron},
+  title = {Drop impact onto a liquid layer of finite thickness: Dynamics of
+	the cavity evolution},
+  journal = {Phys. Rev. E},
+  year = {2009},
+  volume = {79},
+  pages = {036306},
+  month = {Mar},
+  doi = {10.1103/PhysRevE.79.036306},
+  issue = {3},
+  numpages = {15},
+  publisher = {American Physical Society},
+  url = {http://link.aps.org/doi/10.1103/PhysRevE.79.036306}
+}
+
 @INPROCEEDINGS{Board1994,
   author = {J. A. Board and Z. S. Hakura and W. D. Elliott and D. C. Gray},
   title = {Scalable Implementations of Multipole-Accelerated Algorithms for
@@ -88,6 +106,59 @@
   pages = {2182--2189},
   number = {12},
   annote = {Harlow:Harlow65b.pdf}
+}
+
+@INPROCEEDINGS{Kissling2010,
+  author = {Kathrin Kissling and Julia Springer and Hrvoje Jasak and Steven Sch\"{u}tz
+	and Karsten Urban and Manfred Piesche},
+  title = {A Coupled Pressure Based Solution Algorithm Based on the Volume-Of-Fluid
+	Approach for Two or More Immiscible Fluids},
+  booktitle = {Proceedings of the V European Conference on Computational Fluid Dynamics
+	ECCOMAS CFD 2010 J. C. F. Pereira, A. Sequeira and J. M. C. Pereira
+	(Eds) Lisbon, Portugal,14--17 June 2010, ISBN: 978-989-96778-1-4},
+  year = {2010},
+  month = {June},
+  abstract = {The purpose of this study is to describe a coupled pressure based
+	solution algorithm to model interface capturing problems for multiphase
+	flows where neither of the phases can be regarded as dominant. As
+	to a segregated approach using an iterative solution scheme consisting
+	of successive solutions of the transport equation for each phase,
+	the phase for which the equation is solved first dominates the phases
+	for which the transport equations are solved later. This is the result
+	of the requirement of a bounded solution for the phase fraction variables.
+	A cell which is already completely filled with one phase cannot contain
+	any more fluid of any other phase. In the present study, a coupled
+	solution approach of the equations to describe the transport of the
+	phases and the pressure equation is presented. This coupled approach
+	avoids the predescribed numerically induced predominance of a single
+	phase which may occur if a common segregated algorithm is used.
+	
+	
+	The system is described by the continuity equation, the equations
+	to model the transport of the volume fractions $\alpha_i$ and the
+	volumetrically averaged momentum equation. By analogy with the derivation
+	of the pressure equation in PISO or SIMPLE, the discretised momentum
+	balance is inserted in the equations to describe the transport of
+	the $N$ phases. While the volume fractions of $(N - 1)$ phases are
+	gained by solving the transport equations, the volume fraction of
+	the $N$-th phase is calculated by applying the closure equation.
+	
+	
+	In contrast to segregated approaches, the equations for pressure and
+	volume fractions are now solved simultaneously in one single step.
+	Therefore the state variables can implicitly depend on other state
+	variables. To achieve a strong coupling between the volume fractions
+	and the pressure, the pressure is treated implicitly in the equations
+	for the volume fractions and the volume fractions are equally treated
+	implicitly in the pressure equation. The coupled approach with the
+	additional implicit dependencies leads to a matrix which is larger
+	and has more non-zero entries than the matrices of a segregated approach.
+	Therefore the effort to solve the equation system increases significantly.
+	The system is solved applying the block matrix implementation by
+	Jasak.},
+  owner = {Kristofer},
+  timestamp = {2012.06.22},
+  url = {http://www.mathematik.uni-ulm.de/numerik/staff/urban/reports/ECCOMASCFD2010paperfinal.pdf}
 }
 
 @ARTICLE{Kwatra2009,

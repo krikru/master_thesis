@@ -120,7 +120,7 @@
 \hypersetup{
     pdfborder = {0 0 0}, % Remove the frame around links
     colorlinks=\iftoggle{PAPERPRINT}{false}{true}, % Don't color links on paper prints
-    citecolor=black, %Used for links to the bibliography
+    citecolor=blue, %Used for links to the bibliography
     linkcolor=black, %Used for internal links to labels
     urlcolor=blue, %Used for external links
 }
@@ -197,13 +197,14 @@
 % --------
 
 % The acronyms are sorted by the abbreviated forms
-\declareacronym {BEM} {boundary element method}
+\declareacronyms{BEM} {boundary element}{method}
 \declareacronyms{CFD} {computational}{fluid dynamics}
-%\declareacronym {CFL} {Courant--Friedrichs--Lewy}
-\declareacronyms{CFMM}{continuous}{fast multipole method}
-\declareacronym {FMM} {fast multipole method}
-\declareacronym {FVM} {finite volume method}
-\declareacronym {MAC} {marker-and-cell}
+\declareacronym {CFL} {Courant--Friedrichs--Lewy} %[\index{condition!Courant--Friedrichs--Lewy|see{Courant--Friedrichs--Lewy}}]
+\declareacronyms{CFMM}{continuous fast multipole}{method}
+\declareacronyms{FMM} {fast multipole}{method}
+\declareacronyms{FVM} {finite volume}{method}
+\declareacronym {MAC} {marker-and-cell}%[\index{method!marker-and-cell|see{marker-and-cell}}]
+\declareacronym {PCG} {preconditioned conjugate gradient}
 \declareacronyms{PDE} {partial differential}{equation}
 \def            \PDEs {\mbox{\PDE\qsi}}
 \declareacronyms{VOF} {volume of}{fluid}
@@ -213,7 +214,10 @@
 % INDEX SINGLE KEYWORDS %
 % % % % % % % % % % % % %
 
+\declareindexkey      {algorithm}
+\declareindexkeypair      {algorithm}{algorithms}
 \declareindexkey      {approximation}
+\declareindexkeypair      {approximation}{approximate}
 \declareindexkeypair      {approximation}{approximated}
 \declareindexkeypair      {approximation}{approximately}
 \declareindexkey      {area}
@@ -222,7 +226,8 @@
 \declareindexkeypair      {average}{averaged}
 \declareindexkey      {cell}
 \declareindexkeypair      {cell}{cells}
-\declareindexkey      {compressible}
+\declareindexkey      {compressibility}
+\declareindexkeypair      {compressibility}{compressible}
 \declareindexkey      {damping}
 \declareindexkeypair      {damping}{damp}
 \declareindexkey      {density}
@@ -242,7 +247,8 @@
 \declareindexkeypair      {fluid}{fluids}
 \declareindexkey      {gradient}
 \declareindexkeypair      {gradient}{gradients}
-\declareindexkey      {incompressible}
+\declareindexkey      {incompressibility}
+\declareindexkeypair      {incompressibility}{incompressible}
 \declareindexkey      {infinitesimal}
 \declareindexkey      {instability}
 \declareindexkeypair      {instability}{unstable}
@@ -255,6 +261,8 @@
 \declareindexkeypair      {normalization}{normalized}
 \declareindexkey      {orthogonal}
 \declareindexkeypair      {orthogonal}{orthogonalized}
+\declareindexkey      {preconditioning}
+\declareindexkeypair      {preconditioning}{preconditioner}
 \declareindexkey      {pressure}
 \declareindexkey      {property}
 \declareindexkeypair      {property}{properties}

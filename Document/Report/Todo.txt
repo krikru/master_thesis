@@ -28,9 +28,11 @@ Miscellaneous todo's
 * Use frontmatter, mainmatter and backmatter (which are only available for the book class by default)
 * Prevent abstract from messing up the page numbering
 * Fins some good way to abbreviate long names using code (the abbrevs package in not good for several reasons)
+* Hint readers to click on the links in the bibliography (there are a lot of links to free-access pdf files)
 
 Bugs to fix
 -----------
 
 * There's a bug in declareacronyms when INDEXACRONYMS is false and the acronym is used on two different pages, index key gets messed up (don't know why)
 * For declareacronym and declareacronyms, if USEACRONYMS is false but INDEXACRONYMS is true (which I don't know why anyone would use), the full form doesn't end up in the index
+* If an acronym expansion is used as part of an index key, at least with the separated versions of idx, superfluous spaces are inserted before and after the key expanded with an acronym.

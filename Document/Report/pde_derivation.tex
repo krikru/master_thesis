@@ -1,7 +1,7 @@
 %\chapter{Derivation of two-dimensional PDEs for water waves at random intermediate depths}
 \chapter{Derivation of a two-dimensional PDE for water waves at varying depths}
 
-In this appendix, I will present a new two-dimensional \PDE in the \idx{spatial domain}, describing the \qidxs{time evolution of}{surface waves} for intermediate, mildly varying water depths. The equation could efficiently be solved with a \idx{time complexity} of $O(n)$ per \idx{time step}, where $n$ is the number of \idxsp{surface}{grid point}{s}, using the \CFMM \citep{White1994}. It has not been solved numerically so its behaviour is unknown.
+In this appendix, I will present a new two-dimensional \PDE in the \idx{spatial domain}, describing the \qidxs{time evolution of}{surface waves} for intermediate, mildly varying water depths. The equation could efficiently be solved with a \idx{time complexity} of $O(N)$\indexs{big O}{notation} per \idx{time step}, where $N$ is the number of \idxsp{surface}{grid point}{s}, using the \CFMM \citep{White1994}. It has not been solved numerically so its behaviour is unknown.
 
 The equation is derived from the \idx{dispersion relation} that is obtained in \idx{Airy wave theory}, namely:
 
@@ -307,6 +307,6 @@ instead, which is essentially different from \eqref{eq:diffeqnouserdefinedoperat
 
 \section{Applying the convolution filter}
 
-For a \idxs{uniform}{surface grid}, the convolution filter can be applied by using the a modified version of the \FMM \citep{Greengard1985,Greengard1987a} for continuous data, the \CFMM \citep{White1994}, which allows it to be applied with a $O(n)$\indexs{big O}{notation} \idxe{amortized running time}{amortized} \idx{time complexity} instead of $O(n^2)$ as with a simple $n$-to-$n$ approach, where $n$ is the number of surface grid points.
+For a \idxs{uniform}{surface grid}, the convolution filter can be applied by using the a modified version of the \FMM \citep{Greengard1985,Greengard1987a} for continuous data, the \CFMM \citep{White1994}, which allows it to be applied with a $O(N)$\indexs{big O}{notation} \idx{time complexity} instead of $O(N^2)$ as with a simple $N$-to-$N$ approach, where $N$ is the number of surface grid points.
 
-However, even though $O(n)$ is very fast in theory, the Continuous Fast Multipole Method is complicated and involves many computational steps, which would make the simulation slow. It requires many terms in the \idx{Taylor series} in order make a good approximantion, so one would have to balance the approximation errors to the additional computational costs due to the processing of the Taylor series. On the other hand, it is possible to parallelize these kinds of \idxp{algorithm}{s} \citep[see e.g.][]{Board1994}, making it possible to overcome this bottleneck simply by running the algorithm on many \idxp{core}{s}.
+However, even though $O(N)$ is very fast in theory, the Continuous Fast Multipole Method is complicated and involves many computational steps, which would make the simulation slow. It requires many terms in the \idxs{Taylor}{series} in order make a good approximantion, so one would have to balance the approximation errors to the additional computational costs due to the processing of the Taylor series. On the other hand, it is possible to parallelize these kinds of \idxp{algorithm}{s} \citep[see e.g.][]{Board1994}, making it possible to overcome this bottleneck simply by running the algorithm on many \idxp{core}{s}.

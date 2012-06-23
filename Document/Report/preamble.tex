@@ -28,6 +28,7 @@
 \usepackage{lmodern} % Replaces the default bitmap font used by t1enc and fontenc with the Latin Modern font
 \usepackage{parskip} % Skips a line between paragraphs instead of indenting the paragraphs
 \usepackage{setspace} % Allows for spreading the lines arbitrarly much
+%TODO: setspace what?
 
 % Miscellaneous tools
 \usepackage{etoolbox} % Includes the macro \ifstrequal
@@ -100,6 +101,20 @@
 \newrobustcmd{\HRule}{\rule{\linewidth}{0.5mm}}
 \newrobustcmd{\nspace}{\!\!}
 \newrobustcmd{\blankpage}{\clearpage\thispagestyle{fancy}\renewcommand{\headrulewidth}{0pt}\chead{}\cfoot{}\IFDEBUGELSE{\begin{center}\large\textit{This page intentionally left blank}\end{center}}{\ }\clearpage}
+% % % Text color
+\definecolor{orange}{rgb}{1,0.5,0}
+\definecolor{purple}{rgb}{0.5,0,0.5}
+\newrobustcmd{\red}[1]{\textcolor{red}{#1}}
+\newrobustcmd{\yellow}[1]{\textcolor{yellow}{#1}}
+\newrobustcmd{\orange}[1]{\textcolor{orange}{#1}}
+\newrobustcmd{\green}[1]{\textcolor{green}{#1}}
+\newrobustcmd{\cyan}[1]{\textcolor{cyan}{#1}}
+\newrobustcmd{\blue}[1]{\textcolor{blue}{#1}}
+\newrobustcmd{\magenta}[1]{\textcolor{magenta}{#1}}
+\newrobustcmd{\purple}[1]{\textcolor{purple}{#1}}
+\newrobustcmd{\white}[1]{\textcolor{white}{#1}}
+\newrobustcmd{\black}[1]{\textcolor{black}{#1}}
+%\newrobustcmd{\transparent}[1]{\textcolor{transparent}{#1}}
 % Table of contents
 \newrobustcmd{\addtotoc}[2]{\cleardoublepage\phantomsection\addcontentsline{toc}{#1}{#2}}
 % Do not add to table of contents and do not number
@@ -163,12 +178,12 @@
 {\expandafter\newabbrev\csname #1\endcsname{\idxs{#2}{#3}\iftoggle{USEACRONYMS}{ (\qidxe{#1|see{\iftoggle{REVERTINDEXORDEROFSPLITKEYS}{#3}{#2 #3}}}{#1})}{}}[\iftoggle{USEACRONYMS}{\qidxse{#2}{#3}{#1}}{\qidxs{#2}{#3}}]}
 }
 
-\newrobustcmd{\declareabbreviation} [2]{\expandafter\newabbrev\csname #1\endcsname{#2}}
-\newrobustcmd{\declareabbreviations}[3]{\expandafter\newabbrev\csname #1\endcsname{#2 #3}}
-\newrobustcmd{\declareabbreviationi} [2]{\expandafter\newabbrev\csname #1\endcsname{\idx{#2}}}
-\newrobustcmd{\declareabbreviationis}[3]{\expandafter\newabbrev\csname #1\endcsname{\idxs{#2}{#3}}}
-\newrobustcmd{\declareabbreviationqi} [2]{\expandafter\newabbrev\csname #1\endcsname{\qidx{#2}}}
-\newrobustcmd{\declareabbreviationqis}[3]{\expandafter\newabbrev\csname #1\endcsname{\qidxs{#2}{#3}}}
+\newrobustcmd{\declareabbreviation} [3][]{\expandafter\newabbrev\csname #2\endcsname{#1#3}}
+\newrobustcmd{\declareabbreviations}[4][]{\expandafter\newabbrev\csname #2\endcsname{#1#3 #4}}
+\newrobustcmd{\declareabbreviationi} [3][]{\expandafter\newabbrev\csname #2\endcsname{#1\idx{#3}}}
+\newrobustcmd{\declareabbreviationis}[4][]{\expandafter\newabbrev\csname #2\endcsname{#1\idxs{#3}{#4}}}
+\newrobustcmd{\declareabbreviationqi} [3][]{\expandafter\newabbrev\csname #2\endcsname{#1\qidx{#3}}}
+\newrobustcmd{\declareabbreviationqis}[4][]{\expandafter\newabbrev\csname #2\endcsname{#1\qidxs{#3}{#4}}}
 \def\simpleabbrev{\declareabbreviation}
 %TODO: Find some better way to denote plural form (one macro would be better since acronyms are indexed verbosely only ocne)
 % Allow pluralform of abbreviations
