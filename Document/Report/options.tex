@@ -190,9 +190,10 @@
 % ------------
 
 % The abbreviations are sorted by the abbreviated forms
-\declareabbreviationqi{threedim}{three-dimensional}
-\declareabbreviationqi{twodim}  {two-dimensional}
+%\declareabbreviationqi{threedim}{three-dimensional}
+%declareabbreviationqi{twodim}  {two-dimensional}
 %\declareabbreviation  {NS}      {Navier--Stokes}
+\declareabbreviation  {thiswork}{the work described in this report}
 
 % Acronyms
 % --------
@@ -204,6 +205,7 @@
 \declareacronyms{CFMM}{continuous fast multipole}{method}
 \declareacronyms{FMM} {fast multipole}{method}
 \declareacronyms{FVM} {finite volume}{method}
+\declareacronyms{LOD} {level of}{detail}
 \declareacronym {MAC} {marker-and-cell}%[\index{method!marker-and-cell|see{marker-and-cell}}]
 \declareacronym {PCG} {preconditioned conjugate gradient}
 \declareacronyms{PDE} {partial differential}{equation}
@@ -217,7 +219,7 @@
 
 \declareindexkey      {algorithm}
 \declareindexkeypair      {algorithm}{algorithms}
-\declareindexkey      {approximation}
+\declareindexkey      {approximation}%[\index{approximation|seealso{neglection}}]
 \declareindexkeypair      {approximation}{approximate}
 \declareindexkeypair      {approximation}{approximated}
 \declareindexkeypair      {approximation}{approximately}
@@ -229,6 +231,8 @@
 \declareindexkeypair      {cell}{cells}
 \declareindexkey      {compressibility}
 \declareindexkeypair      {compressibility}{compressible}
+\declareindexkey      {cube}
+\declareindexkeypair      {cube}{cubes}
 \declareindexkey      {damping}
 \declareindexkeypair      {damping}{damp}
 \declareindexkey      {density}
@@ -255,11 +259,18 @@
 \declareindexkeypair      {instability}{unstable}
 \declareindexkey      {interpolation}
 \declareindexkey      {momentum}
+\declareindexkey      {neglection}%[\index{neglection|seealso{approximation}}]
+\declareindexkeypair      {neglection}{neglect}
+\declareindexkeypair      {neglection}{neglected}
 \declareindexkey      {neighbor}
 \declareindexkeypair      {neighbor}{neighboring}
+\declareindexkey      {node}
+\declareindexkeypair      {node}{nodes}
 \declareindexkey      {normalization}
 \declareindexkeypair      {normalization}{normalize}
 \declareindexkeypair      {normalization}{normalized}
+\declareindexkey      {octree}
+\declareindexkeypair      {octree}{octrees}
 \declareindexkey      {orthogonal}
 \declareindexkeypair      {orthogonal}{orthogonalized}
 \declareindexkey      {preconditioning}
@@ -267,12 +278,16 @@
 \declareindexkey      {pressure}
 \declareindexkey      {property}
 \declareindexkeypair      {property}{properties}
+\declareindexkey      {room}
 \declareindexkey      {simulation}
 \declareindexkeypair      {simulation}{simulate}
 \declareindexkeypair      {simulation}{simulating}
 \declareindexkeypair      {simulation}{simulations}
+\declareindexkey      {spectrum}
 \declareindexkey      {surface}
 \declareindexkeypair      {surface}{surfaces}
 \declareindexkey      {temperature}
 \declareindexkey      {velocity}
 \declareindexkeypair      {velocity}{velocities}
+\declareindexkey      {quadtree}
+\declareindexkeypair      {quadtree}{quadtrees}
