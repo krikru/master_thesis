@@ -2,6 +2,9 @@
 
 \chapter{Finite volume method}
 
+%TODO: Insert time values for more discretisized variables
+%TODO: Insert error bounds for more discretized equations
+
 %The \FVM is a way to realistically simulate the \idx{flow} of a \idx{fluid} by dividing the fluid into a large number of non-moving, adjactent \idxp{cell}{s} and letting the fluid flow between the cells, through the \idxp{cell face}{s}. The magnitude of the \idxs{fluid}{flux} between two cells is directly proportional to the area of the cell face between the cells and the component of the velocity of the fluid in the direction of the cell face \idx{normal}.
 
 %The motion of the fluid is described by a \PDE, or a set of \PDE\s.
@@ -133,37 +136,37 @@ The \idxs{Navier--Stokes}{equations} are a statement of the conservation of mome
 
 where $\rho$ is the dencity of the fluid, $\vec{u}$ is the velocity, $p$ is the pressure, $\boldsymbol{\mathsf{T}}$ is the \index{stress tensor|see{deviatoric stress tensor}}\idxs{deviatoric stress}{tensor} and $\vec{f}$ is the external forces per unit volume. It should be noted that these equations do not fully describe the fluid for; for example, they do not describe convection of the fluid, nor do they describe how to obtain any of the fields $p$, $\boldsymbol{\mathsf{T}}$ or $\vec{f}$ that the Navier--Stokes equations depends on.
 
-By \idxse{time}{discretization}{time discretizing} and rewriting \eqref{eq:navier_stokes}, we obtain
+By \idxse{time}{discretization}{time discretizing} and rewriting \eqref{eq:navier_stokes}, and choosing the value of $\vec{u}$ in timestep $n$ and the value of $\partial\vec{u}/\partial t$ in timestep $n+\frac{1}{2}$, thus introducing an $O(\Delta t)$ error where $\Delta t$ is the length of the time step, we obtain
 
 \begin{equation} \label{eq:navier_stokes_time_discretized}
-\vec{u}_{n+1}  = \vec{u}_{n} + \Delta t\left(- \vec{u}\cdot\nabla\vec{u} \,+\, \frac{-\nabla p + \nabla\cdot\boldsymbol{\mathsf{T}} + \vec{f}}{\rho}\right),
+\vec{u}_{n+1}  = \vec{u}_{n} + \Delta t\left(-\vec{u}_{n}\cdot\nabla\vec{u}_{n} \,+\, \frac{-\nabla p + \nabla\cdot\boldsymbol{\mathsf{T}} + \vec{f}}{\rho}\right),
 \end{equation}
 
-where $\vec{u}_{n}$ denotes the velocity in time step $n$ and $\Delta t$ is the length of the time step. Using a method described e.g.\ in \citep{Losasso2004}, this \PDE can be solved in two steps. First, an intermediate velocity field $\vec{u}^*_{n+1}$ is calculated ignoring the pressure term, that is
+where $\vec{u}_{n}$ denotes the velocity in time step $n$. Using a method described e.g.\ in \citep{Losasso2004}, this \PDE can be solved in two steps. First, an intermediate velocity field $\vec{u}^*_{n+1}$ is calculated ignoring the pressure term, that is
 
 \begin{equation} \label{eq:intermediate_velocity}
-\vec{u}^*_{n+1}  = \vec{u}_{n} + \Delta t\left(- \vec{u}\cdot\nabla\vec{u} \,+\, \frac{\nabla\cdot\boldsymbol{\mathsf{T}} + \vec{f}}{\rho}\right),
+\vec{u}^*_{n+1}  = \vec{u}_{n} + \Delta t\left(-\vec{u}_{n}\cdot\nabla\vec{u}_{n} \,+\, \frac{\nabla\cdot\boldsymbol{\mathsf{T}} + \vec{f}}{\rho}\right),
 \end{equation}
 
 and second, the velocity update is calculated as
 
 \begin{equation} \label{eq:velocity_update}
-\vec{u}_{n+1} \,=\, \vec{u}^*_{n+1} - \Delta t\nabla p.
+\vec{u}_{n+1} \,=\, \vec{u}^*_{n+1} - \Delta t\nabla p_{n+1}.
 \end{equation}
 
-In the work described in this report, a \idxs{staggered}{grid} has been used, so the velocities are stored on the \idxsp{cell}{face}{s}. Furthermore, only the velocity component relevant to \eqref{eq:fi_flat_cell_face} is stored, that is, only the velocity component in the direction of the cell face normal $\normal$. We can therefore calculate the scalar multiplication of $\normal$ with both sides of \eqref{eq:velocity_update} to get
+%In the work described in this report, a \idxs{staggered}{grid} has been used, so the velocities are stored on the \idxsp{cell}{face}{s}. Furthermore, only the velocity component relevant to \eqref{eq:fi_flat_cell_face} is stored, that is, only the velocity component in the direction of the cell face normal $\normal$. We can therefore calculate the scalar multiplication of $\normal$ with both sides of \eqref{eq:velocity_update} to get
 
-\begin{equation} \label{eq:velocity_update_staggered_grid_pressure_derivative}
-u_{\normal,\,m+1} \,=\, u^*_{\normal,\,m+1} - \Delta t\,p'_{\normal},
-\end{equation}
+%\begin{equation} \label{eq:velocity_update_staggered_grid_pressure_derivative}
+%u_{\normal,\,n+1} \,=\, u^*_{\normal,\,n+1} - \Delta t\,p'_{\normal,\,n+1},
+%\end{equation}
 
-where $u_{\normal,\,m}$ and $u^*_{\normal,\,m}$ are the $\normal$-direction components of $\vec{u}_{n}$ and $\vec{u}^*_{n}$ respectivelly, and $p'_{\normal}$ is the pressure derivative in the direction of $\normal$. Since the cell face on which $\vec{u}_{\normal}$ is stored separates two adjactent cells whose cell centers are separated by a vector parallel to $\normal$, we can using \eqref{eq:phi_derivative_final} to rewrite this equation as
+%where $u_{\normal,\,n}$ and $u^*_{\normal,\,n}$ are the $\normal$-direction components of $\vec{u}_{n}$ and $\vec{u}^*_{n}$ respectivelly at timestep $n$, and $p'_{\normal\,n}$ is the pressure derivative in the direction of $\normal$ at timestep $n$. Since the cell face on which $\vec{u}_{\normal}$ is stored separates two adjactent cells whose cell centers are separated by a vector parallel to $\normal$, we can using \eqref{eq:phi_derivative_final} to rewrite this equation as
 
-\begin{equation} \label{eq:velocity_update_staggered_grid_final}
-u_{\normal,\,m+1} \,=\, u^*_{\normal,\,m+1} - \Delta t\,\frac{p_2 - p_1}{\Delta r},
-\end{equation}
+%\begin{equation} \label{eq:velocity_update_staggered_grid_final}
+%u_{\normal,\,m+1} \,=\, u^*_{\normal,\,m+1} - \Delta t\,\frac{p_{2,\,n+1} - p_{1,\,n+1}}{\Delta r},
+%\end{equation}
 
-where $p_1$ is the pressure in the cell center of the cell which $\normal$ points from, $p_2$ is the pressure in the cell center of the cell which $\normal$ points to and $\Delta r$ is the distance between the two cell centers.
+%where $p_{1,\,n}$ is the pressure in the cell center of the cell which $\normal$ points from at time step $n$, $p_{2,\,n+1}$ is the pressure in the cell center of the cell which $\normal$ points to at time step $n$ and $\Delta r$ is the distance between the two cell centers.
 
 \section{Continuity equation}
 
@@ -191,7 +194,13 @@ where the density is defined as $\rho = \opd m/\opd V$. By subtracting the right
 \frac{\partial \rho}{\partial t} + \nabla\cdot(\rho\vec{u}) \,=\, 0.
 \end{equation}
 
-This is known as the \idxs{continuity}{equation} and has to be satisfied in order to ensure \idxs{conservation of}{mass}.
+This is known as the \idxs{continuity}{equation} and has to be satisfied in order to ensure \idxs{conservation of}{mass}. \idxse{time}{discretization}{Time discretizing} this equation, and choosing to use the value of $\rho$ in timestep $n+1$ and the value of $\partial \rho/\partial t$ in time step $n+\frac{1}{2}$, thus giving an $O(\Delta t)$ error, gives
+
+\begin{equation} \label{eq:continuity_equation_time_discretized}
+\rho_{n+1} \,=\, \rho_{n} - \Delta t\,\nabla\cdot(\rho_{n}\vec{u}_{n}),
+\end{equation}
+
+where $\rho_{n}$ is the value of $\rho$ at timestep $n$.
 
 \section{Pressure calculation}
 
@@ -242,30 +251,46 @@ Furthermore, %TODO: Furthermore what?
 For simplicity, we can assume that we use a set of units where $\rho = 1$. \eqref{eq:intermediate_velocity} can then be rewritten as
 
 \begin{equation} \label{eq:intermediate_velocity_reduced}
-\vec{u}^*_{n+1} \,= \, \vec{u}_{n} + \Delta t(- \vec{u}\cdot\nabla\vec{u} \,+\, \mu\nabla^2\vec{u} + \vec{f}),
+\vec{u}^*_{n+1} \,= \, \vec{u}_{n} + \Delta t(- \vec{u}_{n}\cdot\nabla\vec{u}_{n} \,+\, \mu\nabla^2\vec{u}_{n} + \vec{f}),
 \end{equation}
 
-which can be directly solved.
+which can be directly solved assuming $\mu$ and $\vec{f}$ are known.
 
-However, \eqref{eq:velocity_update}, which is used to update the velocity, contains $p$ which is a second unknown and must be calculated before $\vec{u}$ can be calculated. By rewriting \eqref{eq:velocity_update}, taking the divergence of both sides and using \eqref{eq:velocity_divergence_incompressible_flow} to get rid of $\nabla\cdot\vec{u}$, we obtain the \idxs{Poisson}{equation}
+%TODO: Use Piponet's paper as main reference instead of Losasso's?
+
+However, \eqref{eq:velocity_update}, which is used to update the velocity, contains $p$ which is a second unknown and must be calculated before $\vec{u}$ can be calculated. As outlined in e.g.\ \citep{Losasso2004}, by rewriting \eqref{eq:velocity_update}, taking the divergence of both sides and using \eqref{eq:velocity_divergence_incompressible_flow} to get rid of $\nabla\cdot\vec{u}$, we obtain the \idxs{Poisson}{equation}
 
 \begin{equation} \label{eq:pressure_poissin_equation_incompressible_flow}
-\nabla^2 p \,=\, \frac{\nabla\cdot\vec{u}^*_{n+1}}{\Delta t}
+\nabla^2 p_{n+1} \,=\, \frac{\nabla\cdot\vec{u}^*_{n+1}}{\Delta t}
 \end{equation}
 
 which need to be solved before we can update the velocity completely.
 
 When \idxse{spatial}{discretization}{discretizing} this equation spatially a \idxs{system of linear}{equations} is obtained, for which there exists many solution methods with varing speed and accuracy. As a comparison, it can be notet that the naive \idxs{Gaussian}{elimination} \algorithm, or the \idxs{Gauss--Jordan}{elimination} \algorithm for a multicore system, has a \idxs{time}{complexity} of $O(N^3)$ for an $N\times N$ \idx{matrix}. However, an $O(N^3)$ time for solving the pressure Poisson equation would slow down the simulation tremendously, which otherwise runs in $O(N)$ time per time step.
 
-Since \incompressibility is only an \approximate property of the fluid, it is arguably enough to only approximately solve the pressure Poisson equation which is the governing equation for incompressibility. This assumptions enables a large set of fast, iterative methods for solving the pressure equation, such as the \idxse{multilevel}{acceleration}{multilevel accelerated} \idxs{Jacobi}{method} used in \citep{Popinet2003}. Although, there exist iterative methods that will solve the pressure equation down to \idxs{machine}{precision} in only a few number of iterations, such as the \PCG method with an incomplete \idxs{LU Cholesky}{factorization} as \preconditioner, used in \citep{Losasso2004}, which can be applied if the matrix is \idxse{symmetric}{matrix}{symmetric}.
+Since \incompressibility is only an \approximate property of the fluid, it is arguably enough to only approximately solve the pressure Poisson equation which is the governing equation for incompressibility. This assumptions enables a large set of fast, iterative methods for solving the pressure equation, such as the \idxse{multilevel}{acceleration}{multilevel accelerated} \idxs{Jacobi}{method} used in \citep{Popinet2003}. Although, there exist iterative methods that will solve the pressure equation down to \idxs{machine}{precision} in only a few number of iterations, such as the \PCG method, which can be applied if the matrix is \idxse{symmetric}{matrix}{symmetric}, used in \citep{Losasso2004} with an incomplete \idxs{LU Cholesky}{factorization} as \preconditioner.
 
-If the pressure equation is only solved approximately, \eqref{eq:velocity_divergence_incompressible_flow} is not perfectly satisfied, so each cell will gain or lose some mass during each time step. If perfect \idxs{conservation of}{mass} is essential this deviation has to be recorder, so the \idxs{density}{field} $\rho$ must be reintroduced. Instead of \eqref{eq:velocity_divergence_incompressible_flow}, one would rather prefer that the density stays close to one after each time step, that is
+If the pressure equation is only solved approximately, \eqref{eq:velocity_divergence_incompressible_flow} is not perfectly satisfied, so each cell will gain or lose some mass during each time step. If perfect \idxs{conservation of}{mass} is essential the deviation of mass has to be recorder, so the \idxs{density}{field} $\rho$ must be reintroduced. Instead of satisfying \eqref{eq:velocity_divergence_incompressible_flow}, one would rather prefer that the density becomes one again after the time step has been taken, that is
 
 \begin{equation} \label{eq:density_conservation}
-\rho_{n+1} \,=\, 1,
+\rho_{n+2} \,=\, 1,
 \end{equation}
 
-where $\rho_n$ is the density in time step $n$. By discretizing \eqref{eq:continuity_equation} and choosing to use the value of $\rho$ in timestep $n+1$, we obtain
+where $\rho_{n}$ is the density in time step $n$. Perfect satisfaction of \eqref{eq:density_conservation} will not take place due to an only aproximately solved pressure equation, but it is still the goal and also what we are going to assume. By rearanging \eqref{eq:continuity_equation_time_discretized} and expanding the divergence, we obtain
+
+\begin{equation} %\label{eq:continuity_equation_time_discretized}
+\rho_{n+1} \,=\, \rho_{n} - \Delta t\,(\nabla\cdot(\rho_{n}\vec{u}_{n})),
+\end{equation}
+
+\begin{equation} %\label{eq:continuity_equation_time_discretized}
+\rho_{n+1} \,=\, \rho_{n} - \Delta t\,(\vec{u}_{n}\cdot\nabla\rho_{n} + \rho_{n}\nabla\cdot\vec{u}_{n}),
+\end{equation}
+
+\begin{equation} %\label{eq:continuity_equation_time_discretized}
+\rho_{n+2} \,=\, \rho_{n+1} - \Delta t\,(\vec{u}_{n+1}\cdot\nabla\rho_{n+1} + \rho_{n+1}\nabla\cdot\vec{u}_{n+1}),
+\end{equation}
+
+\HRule
 
 \begin{equation}
 \frac{\rho_{n+1} - \rho_{n}}{\Delta t} + \nabla\cdot(\rho_{n+1}\vec{u}) \,=\, 0
@@ -274,13 +299,13 @@ where $\rho_n$ is the density in time step $n$. By discretizing \eqref{eq:contin
 which, by using \eqref{eq:density_conservation}, can be rewritten as
 
 \begin{equation} \label{eq:velocity_divergence_density_conservation}
-\nabla\cdot\vec{u} \,=\, \frac{\rho_{n} - 1}{\Delta t}.
+\nabla\cdot\vec{u}_{n+1} \,=\, \frac{\rho_{n} - 1}{\Delta t}.
 \end{equation}
 
 By rewriting \eqref{eq:velocity_update}, taking the divergence of both sides and using \eqref{eq:velocity_divergence_density_conservation} to substitute $\nabla\cdot\vec{u}$, we obtain the \idxs{Poisson}{equation}
 
 \begin{equation} \label{eq:pressure_poissin_equation_density_conservation}
-\nabla^2 p \,=\, \frac{\nabla\cdot\vec{u}^*_{n+1}}{\Delta t} - \frac{\rho_{n} - 1}{\Delta t^2}.
+\nabla^2 p_{n+1} \,=\, \frac{\nabla\cdot\vec{u}^*_{n+1}}{\Delta t} - \frac{\rho_{n} - 1}{\Delta t^2}.
 \end{equation}
 
 If, on the other hand perfect \idxs{conservation of}{mass} is not something very important, \eqref{eq:pressure_poissin_equation_incompressible_flow} can equally well be used and then the \idxs{density}{field} becomes superfluous. No matter if we need to conserve mass perfectly or not, we get a \idxs{Poisson}{equation} for the \idxs{pressure}{field}, which can be written on the form
