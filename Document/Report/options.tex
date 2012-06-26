@@ -68,9 +68,10 @@
 
 % Miscellaneous flags
 \newflag{SKPIPLINEBETWEENPARAGRAPHS} {true}  % Controls whether a line is skipped between paragraphs
+\newflag{ITALICIZEINDEXEDTEXT}       {true}  % Controls whether indexed text becomes italicized in the body text
 \newflag{USEACRONYMS}                {true}  % Controls whether acronyms should be used or not
 \newflag{INDEXACRONYMS}              {true}  % Controls whether the acronyms or the full forms get indexed
-\newflag{REVERTINDEXORDEROFSPLITKEYS}{true}  % Controls which is the main index key for split keys
+\newflag{REVERTINDEXORDEROFSPLITKEYS}{false}  % Controls which is the main index key for split keys
 \newflag{SCRIPTSIZEINDEX}            {false}  % Controls the size of the index
 \newflag{SCRIPTSIZEBIBLIOGRAPHY}     {false}  % Controls the size of the bibliography
 
@@ -145,36 +146,30 @@
 \newrobustcmd{\fdfunc}[1]{\widetilde{#1}} % For a function in the frequency domain
 
 \iffalse
-% % % Integrals
-%\newrobustcmd{\HalfBetweenIntegralSigns}{\!\!}
-\newrobustcmd{\HalfBetweenIntegralSigns}{\nspace} % \nspace = \!\!
-\newrobustcmd{\BetweenIntegralSigns}{\HalfBetweenIntegralSigns\HalfBetweenIntegralSigns}
-% Double integral
-\robustify{\iint}
-\renewrobustcmd{\iint}{\int\BetweenIntegralSigns\int}
-% Triple integral
-\robustify{\iiint}
-\renewrobustcmd{\iiint}{\int\BetweenIntegralSigns\int\BetweenIntegralSigns\int}
-% Closed double integral
-\newrobustcmd{\oiint}{\begingroup
-    \displaystyle \unitlength 1pt
-    %\let\CharactaristicSize 3pt
-    %\int\mkern-7.2mu
-    \int\HalfBetweenIntegralSigns\mkern-1.2mu
-    \begin{picture}(0,3)
-    %\put(0,3){\oval(10,8)} %\put uses units of \unitlength
-    \put(0,3){\oval(10,8)} %\put uses units of \unitlength
-    \end{picture}
-    %\mkern-7mu\int
-    \HalfBetweenIntegralSigns\mkern-1mu\int
-\endgroup}
-% Closed trippel integral (yet to be defined)
+%% % % Integrals
+%%\newrobustcmd{\HalfBetweenIntegralSigns}{\!\!}
+%\newrobustcmd{\HalfBetweenIntegralSigns}{\nspace} % \nspace = \!\!
+%\newrobustcmd{\BetweenIntegralSigns}{\HalfBetweenIntegralSigns\HalfBetweenIntegralSigns}
+%% Double integral
+%\robustify{\iint}
+%\renewrobustcmd{\iint}{\int\BetweenIntegralSigns\int}
+%% Triple integral
+%\robustify{\iiint}
+%\renewrobustcmd{\iiint}{\int\BetweenIntegralSigns\int\BetweenIntegralSigns\int}
+%% Closed double integral
+%\newrobustcmd{\oiint}{\begingroup
+%    \displaystyle \unitlength 1pt
+%    %\let\CharactaristicSize 3pt
+%    %\int\mkern-7.2mu
+%    \int\HalfBetweenIntegralSigns\mkern-1.2mu
+%    \begin{picture}(0,3)
+%    %\put(0,3){\oval(10,8)} %\put uses units of \unitlength
+%    \put(0,3){\oval(10,8)} %\put uses units of \unitlength
+%    \end{picture}
+%    %\mkern-7mu\int
+%    \HalfBetweenIntegralSigns\mkern-1mu\int
+%\endgroup}
 \fi
-
-% Indexing
-%\newrobustcmd{\indexify}[1]{#1} % For leaving indexed text in the body text as it is
-\newrobustcmd{\indexify}[1]{\textit{#1}} % For italicizing the indexed text in the body text
-\newrobustcmd{\qindexify}[1]{#1} % For marking indexed text quietly (don't do anything)
 
 % Referencing
 \robustify{\eqref}
@@ -206,10 +201,11 @@
 \declareacronyms{FMM} {fast multipole}{method}
 \declareacronyms{FVM} {finite volume}{method}
 \declareacronyms{LOD} {level of}{detail}
+\def            \LODs {\mbox{\LOD\nspace s}\xspace}
 \declareacronym {MAC} {marker-and-cell}%[\index{method!marker-and-cell|see{marker-and-cell}}]
 \declareacronym {PCG} {preconditioned conjugate gradient}
 \declareacronyms{PDE} {partial differential}{equation}
-\def            \PDEs {\mbox{\PDE\qsi}}
+\def            \PDEs {\mbox{\PDE\nspace s}\xspace}
 \declareacronyms{VOF} {volume of}{fluid}
 \declareacronyms{VOS} {volume of}{solid}
 
@@ -217,6 +213,7 @@
 % INDEX SINGLE KEYWORDS %
 % % % % % % % % % % % % %
 
+\declareindexkey      {accuracy}
 \declareindexkey      {algorithm}
 \declareindexkeypair      {algorithm}{algorithms}
 \declareindexkey      {approximation}%[\index{approximation|seealso{neglection}}]
@@ -227,6 +224,7 @@
 \declareindexkeypair      {area}{areas}
 \declareindexkey      {average}
 \declareindexkeypair      {average}{averaged}
+\declareindexkey      {camera}
 \declareindexkey      {cell}
 \declareindexkeypair      {cell}{cells}
 \declareindexkey      {compressibility}
@@ -236,6 +234,8 @@
 \declareindexkey      {damping}
 \declareindexkeypair      {damping}{damp}
 \declareindexkey      {density}
+\declareindexkey      {depth}
+\declareindexkeypair      {depth}{depths}
 \declareindexkey      {derivative}
 \declareindexkeypair      {derivative}{derivatives}
 \declareindexkey      {divergence}
@@ -243,8 +243,8 @@
 \declareindexkey      {discretization}
 \declareindexkeypair      {discretization}{discretize}
 \declareindexkeypair      {discretization}{discretized}
-\declareindexkey      {estimation}
-\declareindexkeypair      {estimation}{estimate}
+\declareindexkey      {estimate}
+\declareindexkeypair      {estimate}{estimation}
 \declareindexkey      {flow}
 \declareindexkeypair      {flow}{flowing}
 \declareindexkeypair      {flow}{flows}
@@ -275,6 +275,7 @@
 \declareindexkeypair      {orthogonal}{orthogonalized}
 \declareindexkey      {preconditioning}
 \declareindexkeypair      {preconditioning}{preconditioner}
+\declareindexkey      {precision}
 \declareindexkey      {pressure}
 \declareindexkey      {property}
 \declareindexkeypair      {property}{properties}

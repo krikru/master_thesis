@@ -134,6 +134,10 @@
 \newrobustcmd{\nonumsubparagraph }[1]{\addtotoc{subparagraph} {#1}\subparagraph* {#1}}
 
 % Indexing
+\newrobustcmd{\indexify}[1]{\iftoggle{ITALICIZEINDEXEDTEXT}{\textit{#1}}{#1}}
+\newrobustcmd{\qindexify}[1]{#1} % For indexifying text quietly (don't do anything)
+
+% The idx macro series
 % % % Base versions
 \newrobustcmd{\Bidx   }[2]{\index{#2}#1{#2}}           % The basic version of the idx macro
 \newrobustcmd{\Bidxe  }[3]{\index{#2}#1{#3}}           % The extended version of the idx macro
@@ -186,9 +190,9 @@
 \def\simpleabbrev{\declareabbreviation}
 %TODO: Find some better way to denote plural form (one macro would be better since acronyms are indexed verbosely only ocne)
 % Allow pluralform of abbreviations
-\newrobustcmd{\s}  {\nspace s\xspace} % For abbreviations that are not indexed
-\newrobustcmd{\qsi}{\nspace\qindexify{s}\xspace} % For abbreviations that are indexed quietly
-\newrobustcmd{\si} {\nspace\indexify{s}\xspace} % For abbreviations that are indexed verbosely
+%\newrobustcmd{\s}  {\nspace s\xspace} % For abbreviations that are not indexed
+%\newrobustcmd{\qsi}{\nspace\qindexify{s}\xspace} % For abbreviations that are indexed quietly
+%\newrobustcmd{\si} {\nspace\indexify{s}\xspace} % For abbreviations that are indexed verbosely
 
 % Mathematics
 \newrobustcmd{\opd}[0]{\operatorname{d}} % Used e.g. in integrals and derivatives

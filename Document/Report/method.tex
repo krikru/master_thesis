@@ -6,15 +6,27 @@
 
 An \octree is a spatial tree \idxs{data}{structure} in which each \idxs{internal}{node} has exactly eight \idxse{child}{node}{children}. Octrees are often used to represent \idxs{three-dimensional}{data}, for which each node corresponds to a \cube in \idxs{three-dimensional}{space}, and where each of those cubes that corresponds to a \idxs{parent}{node} is subdivided into eight half-sized cubes, corresponding to the children of the node. Octrees are especially usefull when the data that needs to be repersented has different requirements for the \LOD in different parts of space. Octrees are a variant of \quadtrees in which each internal node has four children and often are used to represent \idxs{two-dimensional}{data}.
 
-In \thiswork, an octree has been used to partition the space into the \cells required by the \FVM. Since only the \surface is visible in the \simulation, the \idxsp{surface}{cell}{s} have been given a high \LOD; the \LOD then decreases periodically, a few \idxse{layer of}{cells}{layers of cells} further down under the surface. This means that the total number of cells used in the simulation, $N_{\text{total}}$, is limited by a \idxs{geometric}{sum} multiplied the number of cells visible on the surface, $N_{\text{surface}}$, that is
+\section{Levels of detail}
 
-\begin{equation} \label{eq:number_of_cells_total}
-N_{\text{total}} \,=\, 1\,$N_{\text{surface}}$
+In \thiswork, an octree has been used to partition the space into the \cells required by the \FVM. Since only the \surface of the water is visible in the \simulation, the \idxsp{surface}{cell}{s} have been given a high \LOD; the \LOD then decreases at the water depth increases, staying at each \LOD a few \idxse{layer of}{cells}{layers of cells} at a time. Ideally, the \LOD on the surface will also dependent on the horizontal location and be higher where it is more important to catch much of the \idxsp{surface}{detail}{s}, such as close to the \camera. The total number of cells $N_{\text{t}}$ used in the simulationcan can be approximated by an expression containing the thicknesses of the different \LODs and the number of cells visible at the surface that belong to each \LOD accoring to
+
+\begin{equation} \label{eq:number_of_cells_total_sum}
+N_{\text{t}} \,=\, \sum_{i\,=\,0}^\infty N_{\text{s},i}\sum_{j\,=\,i}^\infty d_j\cdot 4^{-(j-i)},
 \end{equation}
 
-%An \octree is a spatial tree \idxs{data}{structure} in which each \node corresponds to a \cube in the \space, and where each cube corresponding to an \idxs{internal}{node} is subdivided into eight half-sized \idxsp{child}{cube}{s}. The 
+where $N_{\text{s},i}$ is the number of cells visible on the surface belonging to \LOD-layer $i$, and $d_j$ is the thickness in number of cells of \LOD-layer $j$, where \LOD-layer $0$ corresponds to the highest \LOD and an increasing \LOD-layer index corresponds to a lower \LOD. Different \LOD-layers can have different thickness; if this is the case, it will also be reflected in the behavior of waves and waves with different wavelengths will be simulated with different \accuracy. In \thiswork, all \LOD-layers have been given the same thickness, $d$. \eqref{eq:number_of_cells_total_sum} therefore turns into
 
-\section{Determining level of detail}
+\begin{equation} \label{eq:number_of_cells_total}
+N_{\text{t}} \,=\, d\sum_{i\,=\,0}^\infty N_{\text{s},i}\sum_{k\,=\,0}^\infty 4^{-k} \,=\, d\,N_{\text{s}}\,\frac{1}{1-4^{-1}} \,=\, \frac{4}{3}\,d\,N_{\text{s}},
+\end{equation}
+
+where $k = j-i$ and $N_{\text{s}}$ is the total number of cells visible on the surface. We can therefore in this case conclude that
+
+\begin{equation} \label{eq:number_of_cells_total_ordo}
+N_{\text{t}} \,=\, O(N_{\text{s}}).
+\end{equation}
+
+Because of this, the \idx{time step} for updating the \idxs{fluid}{flow} is roughly porportional to the number of \idxsp{surface}{cell}{s} $N_{\text{s}}$, but the simulation still catches all motion under the surface, with decaying \precision at increasing \depths.
 
 \section{The differentiating problem}
 
@@ -29,6 +41,8 @@ N_{\text{total}} \,=\, 1\,$N_{\text{surface}}$
 There are both surface trackibng methods and surface capturing methods.
 
 See also \textit{\href{http://physbam.stanford.edu/~fedkiw/papers/cam1998-17.pdf}{A Non-Oscillatory Eulerian Approach to Interfaces in Multimaterial Flows (The Ghost Fluid Method)}}
+
+and \textit{\href{http://physbam.stanford.edu/~fedkiw/papers/stanford2002-07.pdf}{Robust Treatment of Interfaces for Fluid Flows and Computer Graphics}}
 
 \begin{itemize}
     \item Lecture: \textit{\href{http://www.ims.nus.edu.sg/Programs/fluiddynamic/files/Lecture1-basics.pdf}{Moving Interface Problems: Methods \& Applications Tutorial Lecture I}}
