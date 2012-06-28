@@ -1,0 +1,33 @@
+\chapter{Octrees}
+
+An \octree is a spatial tree \idxs{data}{structure} in which each \idxs{internal}{node} has exactly eight \idxse{child}{node}{children}. Octrees are often used to represent \idxs{three-dimensional}{data}, for which each node corresponds to a \cube in \idxs{three-dimensional}{space}, and where each of those cubes that corresponds to a \idxs{parent}{node} is subdivided into eight half-sized cubes, corresponding to the children of the node. Octrees are especially usefull when the \data that needs to be repersented has different requirements for the \LOD in different parts of space. Octrees are a variant of \quadtrees in which each internal node has four children and often are used to represent \idxs{two-dimensional}{data}.
+
+\section{Varying level of detail}
+
+In \thiswork, an octree has been used to partition the \idxs{computational}{domain} (the space in which the simulation will be performed) into the \cells required by the \FVM. Since only the \surface of the water is visible in the \simulation, the \idxsp{surface}{cell}{s} have been given a high \LOD; the \LOD then decreases at the water depth increases, staying a few \idxse{layer of}{cells}{layers of cells} a time on each \LOD. The function that assigns a \LOD to each point in the computational domain will be refered to as the \idxs{LOD}{function}. Ideally, although not implemented in \thiswork because of \lackoftime, the LOD function will not have a constant value on the surface, but be higher where the \idxsp{surface}{detail}{s} are more importans to the simulation, such as close to the \camera where they are more easily seen. The total number of cells $N_{\text{t}}$ used in the simulationcan can be approximated by an expression containing the thicknesses of the different \LODs and the number of cells visible at the surface that belong to each \LOD accoring to
+
+\begin{equation} \label{eq:number_of_cells_total_sum}
+N_{\text{t}} \,=\, \sum_{i\,=\,0}^\infty N_{\text{s},i}\sum_{j\,=\,i}^\infty d_j\cdot 4^{-(j-i)},
+\end{equation}
+
+where $N_{\text{s},i}$ is the number of cells visible on the surface belonging to \LOD-layer $i$, and $d_j$ is the thickness in number of cells of \LOD-layer $j$, where \LOD-layer $0$ corresponds to the highest \LOD and an increasing \LOD-layer index corresponds to a lower \LOD. Different \LOD-layers can have different thickness; if this is the case, it will also be reflected in the behavior of waves and waves with different wavelengths will be simulated with different \accuracy. In \thiswork, all \LOD-layers have been given the same thickness, $d$. \eqref{eq:number_of_cells_total_sum} therefore turns into
+
+\begin{equation} \label{eq:number_of_cells_total}
+N_{\text{t}} \,=\, d\sum_{i\,=\,0}^\infty N_{\text{s},i}\sum_{k\,=\,0}^\infty 4^{-k} \,=\, d\,N_{\text{s}}\,\frac{1}{1-4^{-1}} \,=\, \frac{4}{3}\,d\,N_{\text{s}},
+\end{equation}
+
+where $k = j-i$ and $N_{\text{s}}$ is the total number of cells visible on the surface. We can therefore in this case conclude that
+
+\begin{equation} \label{eq:number_of_cells_total_ordo}
+N_{\text{t}} \,=\, O(N_{\text{s}}).
+\end{equation}
+
+Because of this, the \idx{time step} for updating the \idxs{fluid}{flow} is roughly porportional to the number of \idxsp{surface}{cell}{s} $N_{\text{s}}$, but the simulation still catches all motion under the surface, with decaying \precision at increasing \depths.
+
+\section{The differentiating problem}
+
+\subsection{Velocity advection term}
+
+\section{Multilevel acceleration}
+
+\section{Spurious wave reflections at level transitions}

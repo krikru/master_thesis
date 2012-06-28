@@ -1,0 +1,149 @@
+\chapter{Free Surface Modelling (FSM)}
+
+There are both surface trackibng methods and surface capturing methods.
+
+See also \textit{\href{http://physbam.stanford.edu/~fedkiw/papers/cam1998-17.pdf}{A Non-Oscillatory Eulerian Approach to Interfaces in Multimaterial Flows (The Ghost Fluid Method)}}
+
+and \textit{\href{http://physbam.stanford.edu/~fedkiw/papers/stanford2002-07.pdf}{Robust Treatment of Interfaces for Fluid Flows and Computer Graphics}}
+
+\begin{itemize}
+    \item Lecture: \textit{\href{http://www.ims.nus.edu.sg/Programs/fluiddynamic/files/Lecture1-basics.pdf}{Moving Interface Problems: Methods \& Applications Tutorial Lecture I}}
+\end{itemize}
+
+\section{Level set method}
+
+\subsection{Marching cubes}
+
+\section{Volume of fluid method}
+
+\begin{itemize}
+    \item Reference: \textit{\href{http://pages.csam.montclair.edu/~yecko/icodes/HirtNichols_Surfer_JCP1981.pdf}{Volume of Fluid (VOF) Method for the Dynamics of Free Boundaries}}
+    \item Comparsion: \textit{\href{http://capfluidicslit.mme.pdx.edu/reference/Numerics/Gopala_ChemEngJ2008_VOFMethodsFreeSurfaceFlow.pdf}{Volume of fluid methods for immiscible-fluid and free-surface flows}}
+\end{itemize}
+
+\subsection{VOF vs. Pseudo VOF}
+
+\begin{itemize}
+    \item Explanation: \textit{\href{http://www.flow3d.com/cfd-101/cfd-101-VOF.html}{VOF (Volume of Fluid) - What's in a Name?}}
+\end{itemize}
+
+\subsection{Interface reconstruction}
+%\section{Internal alpha distribution}
+
+\subsection{Smearing during advection}
+
+\subsection{Geometric advection schemes}
+
+\begin{itemize}
+    \item A simple (at least so it seems) scheme: \textit{\href{http://www.lmm.jussieu.fr/~zaleski/nota02.pdf}{A geometrical area-preserving Volume-of-Fluid advection method}}
+\end{itemize}
+
+\subsection{Algebraic advection schemes}
+
+\subsubsection{Convection Boundedness Criterion (CBC)}
+
+\sloppy
+\begin{itemize}
+    \item Reference: \textit{Curvature-compensated Convective Transport: SMART a New Boundedness- Preserving Transport Algorithm}
+    \item Extended Convective Boundedness Criterion (ECBC): \textit{Discussion on Numerical Stability and Boundedness of Convective Discretized Scheme}
+    \item General Convective Boundedness Criterion (GCBC): \textit{\href{http://gr.xjtu.edu.cn:8080/upload/PUB.1673.4/Wei_NHT.pdf}{A New General Convective Boundedness Criterion}}
+    \item \red{Convection Boundedness Criterion for arbitrarily unstructured meshes:} \textit{\href{http://powerlab.fsb.hr/ped/kturbo/openfoam/papers/GammaPaper.pdf}{High resolution NVD differencing scheme for arbitrarily unstructured meshes}}
+\end{itemize}
+\fussy
+
+More:
+\begin{itemize}
+    \item Normalised Variable Diagram (NVD)
+    \item \textit{\href{http://warminski.pollub.plwww.ptmts.org.pl/Waclaw-Koron-2-08.pdf}{Comparison of CICSAM and HRIC High-resolution Schemes for Interface Capturing}}
+    \item \textit{\href{http://proceedings.fyper.com/eccomascfd2006/documents/85.pdf}{MODELING OF THE WAVE BREAKING WITH CICSAM AND HRIC HIGH-RESOLUTION SCHEMES}}
+\end{itemize}
+
+\subsubsection{Multidimensional Universal Limiter with Explicit Solution (MULES)}
+
+References: \citep{Berberovi2009,Kissling2010}
+
+See \textit{OpenFOAM-1.5.x/src/finiteVolume/fvMatrices/solvers/MULES/MULES.H} for details
+
+See also \href{http://fds.duke.edu/db/aas/Physics/weller}{Henry R Weller, Professor Emeritus}
+
+% Escape characters
+%\& \% \$ \# \_ \{ \}
+%\textasciitilde  = ~
+%\textasciicircum = ^
+%\textbackslash   = \
+
+\begin{itemize}
+    \item Described here: \textit{\href{http://link.libris.kb.se/sfxliub?sid=?url_ver=Z39.88-2004&rfr_id=info:sid/bibl.liu.se\%3Axerxes+\%28+PubMed+LiU\%29&rft.genre=article&rft_val_fmt=info\%3Aofi\%2Ffmt\%3Akev\%3Amtx\%3Ajournal&rft.issn=15393755&rft.date=2009&rft.jtitle=Phys+Rev+E+Stat+Nonlin+Soft+Matter+Phys&rft.volume=79&rft.issue=3+Pt+2&rft.spage=036306&rft.atitle=Drop+impact+onto+a+liquid+layer+of+finite+thickness+\%3A+dynamics+of+the+cavity+evolution+&rft.aulast=Berberovi\%C4\%87&rft.aufirst=Edin}{Drop impact onto a liquid layer of finite thickness: Dynamics of the cavity evolution}}
+    \item An improvement for more than two phases: \textit{\href{http://www.mathematik.uni-ulm.de/numerik/staff/urban/reports/ECCOMASCFD2010paperfinal.pdf}{A Coupled Pressure Based Solution Algorithm Based on the Volume-Of-Fluid Approach for Two or More Immiscible Fluids}}
+\end{itemize}
+
+\subsubsection{SOLA-VOF}
+
+\begin{itemize}
+    \item Reference: \textit{\href{http://www.ewp.rpi.edu/hartford/~ernesto/Su2012/CFD/Readings/SOLA-VOF-1980-P1.pdf}{SOLA-VOF: A Solution Algorithm for Transient Fluid Flow with Multiple Free Boundaries}}
+\end{itemize}
+
+\subsubsection{Hyper-C flux limiter}
+
+\begin{itemize}
+    \item Reference: \textit{\href{http://www.water.tkk.fi/wr/kurssit/Yhd-12.112/TVD1.pdf}{The Ultimate Conservative Difference Scheme Applied to Unsteady One-Dimensional Advection}}
+\end{itemize}
+
+\paragraph{Floating mixed cells}
+
+\begin{itemize}
+    \item Remedy: \textit{\href{https://e-reports-ext.llnl.gov/pdf/245038.pdf}{A Simple Advection Scheme for Material Interface}}
+\end{itemize}
+
+\subsubsection{Compressive Interface Capturing Scheme for Arbitrary Meshes (CICSAM)}
+
+\begin{itemize}
+    \item Reference: \textit{\href{http://ac.els-cdn.com/S0021999199962769/1-s2.0-S0021999199962769-main.pdf?_tid=85161b57da5f4401e55c9d07495e24ea&acdnat=1336167249_a59e4f578adbacf3bff69936c48cdd57}{A Method for Capturing Sharp Fluid Interfaces on Arbitrary Meshes}}
+    \item Also described in (by the same author): \textit{\href{http://powerlab.fsb.hr/ped/kturbo/OpenFOAM/docs/OnnoUbbinkPhD.pdf}{Numerical prediction of two fluid systems with sharp interfaces}}
+    \item Test with different Courant numbers: \textit{\href{http://www.marin.nl/upload_mm/8/2/c/1807524470_1999999096_2007-ECCOMAS_HoekstraVazAbeilBunnik.pdf}{Free Surface Flow Modelling with Interface Capturing Techniques}}
+    \item Improvement 1: \textit{\href{http://powerlab.fsb.hr/ped/kturbo/openfoam/docs/HenrikRuschePhD2002.pdf}{Computational Fluid Dynamics of Dispersed Two-Phase Flows at High Phase Fractions}}
+\end{itemize}
+
+\subsubsection{High Resolution Interface Capturing (HRIC) scheme}
+
+\begin{itemize}
+    \item Described here: \textit{\href{http://warminski.pollub.plwww.ptmts.org.pl/Waclaw-Koron-2-08.pdf}{Comparison of CICSAM and HRIC High-resolution Sche\-mes for Interface Capturing}}
+\end{itemize}
+
+\subsubsection{Switching Technique for Advection and Capturing of Surfaces scheme (STACS)}
+
+\begin{itemize}
+    \item Reference: \textit{\href{http://webfea-lb.fea.aub.edu.lb/cfd/pdfs/publications2/STACS-Complete.pdf}{Convective Schemes for Capturing Interfaces of Free-Surface Flows on Unstructured Grids}}
+\end{itemize}
+
+\subsubsection{Inter-Gamma Scheme}
+
+\begin{itemize}
+    \item Reference: \textit{\href{http://powerlab.fsb.hr/ped/kturbo/openfoam/docs/InterTrack.pdf}{Interface Tracking Capabilities of the Inter-Gamma Differencing Scheme}}
+\end{itemize}
+
+\subsubsection{Constrained Interpolation Profile (CIP) method}
+
+%TODO: Used for advecting fluid interfaces?? At least apparently very good for simple advection.
+
+\begin{itemize}
+    \item Reference: \textit{\href{http://www.mech.titech.ac.jp/~ryuutai/paper/JCP2001CIPReviewYabe.pdf}{The Constrained Interpolation Profile Method for Multiphase Analysis}}
+\end{itemize}
+
+\subsection{Advection schemes for compressible water}
+
+\begin{itemize}
+    \item Remedy: Advect both water volume and total volume and then define alpha as the ration between them
+\end{itemize}
+
+\subsubsection{Fast Compressive Surface Capturing Formulation (FCSCF)}
+
+\begin{itemize}
+    \item Reference: \textit{\href{http://researchspace.csir.co.za/dspace/bitstream/10204/5282/1/Heyns_2011.pdf}{Free-Surface Modelling Technology for Compressible and Violent Flows}}
+\end{itemize}
+
+\section{Coupled Level Set/Volume of Fluid  method}
+
+\begin{itemize}
+    \item Reference: \textit{\href{http://pages.csam.montclair.edu/~yecko/icodes/SussmanPuckett_LevelSetVOF.pdf}{A Coupled Level Set and Volume-of-Fluid Method for Computing 3D and Axisymmetric Incompressible Two-Phase Flows}}
+\end{itemize}
