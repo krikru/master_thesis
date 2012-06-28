@@ -1,5 +1,12 @@
 \chapter{Free Surface Modelling (FSM)}
 
+A fluid flow with a free surface in the form of a sharp interface between two fluids, such as the interface between water and air, is called a two-phase flow. When simulating a two-phase flow, one of the most challenging things to represent the surface in a good way. There are several ways to model the surface, all with their respective strengths and weaknesses.
+
+In \thiswork, a method called the volume of fluid method has been used, together with an advection scheme called CICSAM. These, and a few other methods for modelling the free surface will be covered briefly in this \levelname.
+
+
+\HRule
+
 There are both surface trackibng methods and surface capturing methods.
 
 See also \textit{\href{http://physbam.stanford.edu/~fedkiw/papers/cam1998-17.pdf}{A Non-Oscillatory Eulerian Approach to Interfaces in Multimaterial Flows (The Ghost Fluid Method)}}
@@ -10,11 +17,35 @@ and \textit{\href{http://physbam.stanford.edu/~fedkiw/papers/stanford2002-07.pdf
     \item Lecture: \textit{\href{http://www.ims.nus.edu.sg/Programs/fluiddynamic/files/Lecture1-basics.pdf}{Moving Interface Problems: Methods \& Applications Tutorial Lecture I}}
 \end{itemize}
 
-\section{Level set method}
+\section{Mesh based surface tracking methods}
+
+\begin{itemize}
+    \item See e.g. \textit{\href{http://www.cc.gatech.edu/~turk/my_papers/thin_fluid_features.pdf}{Physics-Inspired Topology Changes for Thin Fluid Features}}
+\end{itemize}
+
+\section{Level Set method}
+
+One of the most common ways to track the surface is the \LS method, which is first presented in \citep{Osher1988}. In the \LS method, a \idxs{signed distance}{function}\indexs{signed}{distance function}, also called a \idxs{level set}{function}, $\phi$ is used to keep track of the distance to the surface. The absolute value of $\phi$ represents the distance to the interface, whereas the sign of $\phi$ designates the phase. If the two phases are air and water, $\phi \leq 0$ usually designates water and $\phi > 0$ designates air, so that $\phi$ can be interpreted as the "height" when the system is in its \equilibrium position. The surface is then defined as the \isosurface, or \idxs{level}{set}, where $\phi = 0$, that is, as
+
+\begin{equation} \label{eq:level_set}
+L_c(\phi) \,=\, \{\vec{r}\,\mid\,\phi(\vec{r})=c\}
+\end{equation}
+
+where $L_c(\phi)$ is the set of all locations $\vec{r}$ where $\phi(\vec{r}) = c$. In the \LS method, $c = 0$ is used to represent the surface.
+
+In each \idxs{time}{step}, $\phi$ is transported according to the equation
+
+\begin{equation} \label{eq:level_set_function_transport}
+\frac{\partial\phi}{\partial t} + \vec{u}\cdot\nabla\phi \,=\, 0.
+\end{equation}
+
+A weakness with this method is that it doesn't conserve mass perfectly. This is more apparent when the simulation contains thin features, as noted in 
 
 \subsection{Marching cubes}
 
 \section{Volume of fluid method}
+
+In the \VOF method, a phase fraction $\gamma$
 
 \begin{itemize}
     \item Reference: \textit{\href{http://pages.csam.montclair.edu/~yecko/icodes/HirtNichols_Surfer_JCP1981.pdf}{Volume of Fluid (VOF) Method for the Dynamics of Free Boundaries}}

@@ -185,11 +185,11 @@
 % ------------
 
 % The abbreviations are sorted by the abbreviated forms
-%\declareabbreviationqi{threedim}{three-dimensional}
-%declareabbreviationqi{twodim}  {two-dimensional}
-%\declareabbreviation  {NS}      {Navier--Stokes}
-\declareabbreviation  {thiswork}  {the work described in this report}
-\declareabbreviation  {lackoftime}{its limited extent in time}
+%\declareabbreviationqi{threedim}      {three-dimensional}
+%\declareabbreviationqi{twodim}        {two-dimensional}
+%\declareabbreviation  {NS}            {Navier--Stokes}
+\declareabbreviation  {thiswork}      {the work described in this report}
+\declareabbreviation  {itslimitedtime}{its limited time}
 
 % Acronyms
 % --------
@@ -200,21 +200,25 @@
 \declareacronym {CFL} {Courant--Friedrichs--Lewy} %[\index{condition!Courant--Friedrichs--Lewy|see{Courant--Friedrichs--Lewy}}]
 \declareacronyms{CFMM}{continuous fast multipole}{method}
 \declareacronyms{FMM} {fast multipole}{method}
+\declareacronyms{FOV} {field of}{view}
 \declareacronyms{FVM} {finite volume}{method}
 \declareacronyms{LOD} {level of}{detail}
 \def            \LODs {\mbox{\LOD\nspace s}\xspace}
+\declareacronym {LS}  {level set}
 \declareacronym {MAC} {marker-and-cell}%[\index{method!marker-and-cell|see{marker-and-cell}}]
 \declareacronym {PCG} {preconditioned conjugate gradient}
 \declareacronyms{PDE} {partial differential}{equation}
 \def            \PDEs {\mbox{\PDE\nspace s}\xspace}
-\declareacronyms{VOF} {volume of}{fluid}
-\declareacronyms{VOS} {volume of}{solid}
+\declareacronym {SPH} {smoothed-particle hydrydynamics}
+\declareacronyms{VOF} {volume of}{fluid}%[\index{method!volume of fluid|see{volume of fluid}}]
+\declareacronyms{VOS} {volume of}{solid}%[\index{method!volume of solid|see{volume of solid}}]
 
 % % % % % % % % % % % % %
 % INDEX SINGLE KEYWORDS %
 % % % % % % % % % % % % %
 
 \declareindexkey      {accuracy}
+\declareindexkey      {advection}
 \declareindexkey      {algorithm}
 \declareindexkeypair      {algorithm}{algorithms}
 \declareindexkey      {approximation}%[\index{approximation|seealso{neglection}}]
@@ -236,10 +240,11 @@
 \declareindexkeypair      {damping}{damp}
 \declareindexkey      {data}
 \declareindexkey      {density}
-\declareindexkey      {depth}
-\declareindexkeypair      {depth}{depths}
+%\declareindexkey      {depth} %Use \idxs{water}{depth} instead
+%\declareindexkeypair      {depth}{depths} %Use \idxsp{water}{depth}{s} instead
 \declareindexkey      {derivative}
 \declareindexkeypair      {derivative}{derivatives}
+\declareindexkey      {diffusion}
 \declareindexkey      {divergence}
 \declareindexkeypair      {divergence}{divergences}
 \declareindexkey      {discretization}
@@ -247,6 +252,7 @@
 \declareindexkeypair      {discretization}{discretized}
 \declareindexkey      {estimate}
 \declareindexkeypair      {estimate}{estimation}
+\declareindexkey      {equilibrium}
 \declareindexkey      {flow}
 \declareindexkeypair      {flow}{flowing}
 \declareindexkeypair      {flow}{flows}
@@ -260,6 +266,8 @@
 \declareindexkey      {instability}
 \declareindexkeypair      {instability}{unstable}
 \declareindexkey      {interpolation}
+\declareindexkey      {isosurface}
+\declareindexkeypair      {isosurface}{isosurfaces}
 \declareindexkey      {momentum}
 \declareindexkey      {neglection}%[\index{neglection|seealso{approximation}}]
 \declareindexkeypair      {neglection}{neglect}
@@ -275,6 +283,8 @@
 \declareindexkeypair      {octree}{octrees}
 \declareindexkey      {orthogonal}
 \declareindexkeypair      {orthogonal}{orthogonalized}
+%\declareindexkey      {particle}
+%\declareindexkeypair      {particle}{particles}
 \declareindexkey      {preconditioning}
 \declareindexkeypair      {preconditioning}{preconditioner}
 \declareindexkey      {precision}
@@ -292,5 +302,7 @@
 \declareindexkey      {temperature}
 \declareindexkey      {velocity}
 \declareindexkeypair      {velocity}{velocities}
+\declareindexkey      {visualization}
+\declareindexkeypair      {visualization}{visualize}
 \declareindexkey      {quadtree}
 \declareindexkeypair      {quadtree}{quadtrees}

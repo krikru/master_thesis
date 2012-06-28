@@ -94,8 +94,26 @@
 
 % General macros
 \newrobustcmd{\comment}[1]{}
+
 % Flags
 \newrobustcmd{\newflag}[2]{\newtoggle{#1}\settoggle{#1}{#2}}
+
+% Document macros
+\newrobustcmd{\levelname}{%
+\ifnumequal{\value{subparagraph}}{0}{%
+\ifnumequal{\value{paragraph}}{0}{%
+\ifnumequal{\value{subsection}}{0}{%
+\ifnumequal{\value{section}}{0}{%
+\ifnumequal{\value{chapter}}{0}{%
+\ifnumequal{\value{part}}{0}{%
+}{part\xspace}%
+}{chapter\xspace}%
+}{section\xspace}%
+}{subsection\xspace}%
+}{paragraph\xspace}%
+}{subparagraph\xspace}%
+}
+
 % Appearance
 \newrobustcmd{\HRule}{\rule{\linewidth}{0.5mm}}
 \newrobustcmd{\nspace}{\!\!}
@@ -116,6 +134,7 @@
 \newrobustcmd{\white}[1]{\textcolor{white}{#1}}
 \newrobustcmd{\black}[1]{\textcolor{black}{#1}}
 %\newrobustcmd{\transparent}[1]{\textcolor{transparent}{#1}}
+
 % Table of contents
 \newrobustcmd{\addtotoc}[2]{\cleardoublepage\phantomsection\addcontentsline{toc}{#1}{#2}}
 % Do not add to table of contents and do not number

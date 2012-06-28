@@ -58,6 +58,39 @@
   url = {http://people.sc.fsu.edu/~jburkardt/pdf/fluid_flow_for_the_rest_of_us.pdf}
 }
 
+@MISC{Desbrun1999,
+  author = {Mathieu Desbrun and Marie-Paule Cani},
+  title = {Space-Time Adaptive Simulation of Highly Deformable Substances},
+  month = dec,
+  year = {1999},
+  abstract = {This report presents an approach for efficiently yet precisely simulating
+	highly deformable substances ranging from solids to liquids. The
+	key idea is to use a state equation for specifying the dynamics of
+	the substance. During a simulation, the material is sampled by particles
+	that derive their interaction forces from this state equation. Since
+	this ensures the same qualitative behavior whatever the discretization
+	rate, an adaptive scheme can be used during simulations: the particle
+	system adapts over space and time according to a given compromise
+	between precision and computati- onal efficiency. The system refines
+	(i.e., particles are subdivided) in areas undergoing large or fast
+	deformations, while it simplifies (i.e., neighboring particles are
+	merged) in stable regions. Meanwhile, the values of the individual
+	integration time steps used for each particle are automatica- lly
+	adapted to avoid instabilities. An active implicit surface is used
+	to visualize the substance. It smoothly coats the particles and filters
+	over time internal changes of granularity.},
+  annote = {Rapport De Recherche Inria <anne.adolphe@inrialpes.fr>},
+  bibsource = {OAI-PMH server at hal.ccsd.cnrs.fr},
+  contributor = {Rapport De Recherche Inria <anne.adolphe@inrialpes.fr>},
+  coverage = {SIMULATION / DEFORMABLE OBJECTS / PARTICLE SYSTEM / SPACE-TIME ADAPTION},
+  identifier = {inria-00072829 (version 1)},
+  oai = {oai:hal.ccsd.cnrs.fr:inria-00072829_v1},
+  publisher = {HAL - CCSd - CNRS},
+  subject = {Computer Science},
+  type = {RAPPORT},
+  url = {http://hal.inria.fr/inria-00072829/en/; http://hal.ccsd.cnrs.fr/docs/00/07/28/29/PDF/RR-3829.pdf}
+}
+
 @PHDTHESIS{Greengard1987a,
   author = {L. Greengard},
   title = {The Rapid Evaluation of Potential Fields in Particle Systems},
@@ -189,6 +222,17 @@
   url = {http://physbam.stanford.edu/~fedkiw/papers/stanford2004-02.pdf}
 }
 
+@ARTICLE{Osher1988,
+  author = {S. Osher and J. Sethian},
+  title = {Fronts Propagating with Curvature-Dependent Speed: Algorithms Based
+	on {H}amilton-{J}acobi Formulations},
+  journal = {Journal of Computational Physics},
+  year = {1988},
+  volume = {79},
+  pages = {12--49},
+  url = {http://math.berkeley.edu/~sethian/Papers/sethian.osher.88.pdf}
+}
+
 @ARTICLE{Popinet2003,
   author = {S. Popinet},
   title = {Gerris: a tree-based adaptive solver for the incompressible Euler
@@ -221,6 +265,20 @@
   number = {1--2},
   owner = {a3579},
   timestamp = {2012.06.05}
+}
+
+@ARTICLE{Yan2009,
+  author = {He Yan and Zhangye Wang and Jian He and Xi Chen and Changbo Wang
+	and Qunsheng Peng},
+  title = {Real-time fluid simulation with adaptive {SPH}},
+  journal = {Journal of Visualization and Computer Animation},
+  year = {2009},
+  volume = {20},
+  pages = {417--426},
+  number = {2-3},
+  bibdate = {2009-11-12},
+  bibsource = {DBLP, http://dblp.uni-trier.de/db/journals/jvca/jvca20.html#YanWHCWP09},
+  url = {http://dx.doi.org/10.1002/cav.300}
 }
 
 @comment{jabref-meta: selector_review:}
