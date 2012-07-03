@@ -1,4 +1,4 @@
-% Title_page.tex is an example title page following the LiTH specifications.
+% Title_page.tex is an example title page following the IFM specifications.
 % By Kristofer Krus <krikr808@student.liu.se>. Free software, no warranty of any kind.
 % 
 % V. 0.1
@@ -7,7 +7,7 @@
 \documentclass[]{report}
 
 \iftrue
-    \usepackage{lithmaketitle}
+    \usepackage{ifmmaketitle}
     \usepackage{graphicx}
     \usepackage[utf8]{inputenc} % Get å, ä, ö, Å, Ä, Ö
 \else
@@ -24,23 +24,23 @@
 \author{Kristofer Krus} % Your name
 \date{\today} % The date of ... (?)
 %\thanks{Thanks to all supporters.} % In case you have someone to thank. Do not use.
-\lithlogo{\includegraphics[width=0.6\textwidth, clip=true]{./Images/lith_en_vert_col.pdf}} % The code for displaying the logo (or a replacement)
-\lithcompany{Saab AB} % The company the thesis work was carried out at
-\lithwork{Master thesis work} % The type of work (well master thesis work, duh)
-\lithdepartment{Department of Physics, Chemistry and Biology} % The department (is there any choice here?)
-\lithuniversity{Linköpings universitet} % Your university (Linköping universitet if you didn't know...)
-\lithpostaladdress{SE-581 83 Linköping, Sweden} % The postal address of the university
-% NOTE! Only use on of the fields lithsupervisor and lithsupervisors, comment the other out
-\lithsupervisor{} % The supervisor
-\lithsupervisors{Anders Rönnbrant (Saab AB)\\Kenneth Järrendal (Linköping Institute of Technology)} % The supervisors, separated by e.g. a comma or a double backslash
-\lithexaminer{Magnus Johansson (Linköping Institute of Technology)} % The examinor of the thesis work
-\lithx{A} % A or G (A for advanced, G for kandidat)
-\lithyy{\shortyear} % The two last digits of the year
-\lithxxxx{\textcolor{red}{\textit{xxxx}}} % The master thesis work number
+\ifmlogo{\includegraphics[width=0.6\textwidth, clip=true]{./Images/lith_en_vert_col.pdf}} % The code for displaying the logo (or a replacement)
+\ifmcompany{Saab AB} % The company the thesis work was carried out at
+\ifmwork{Master thesis work} % The type of work (well master thesis work, duh)
+\ifmdepartment{Department of Physics, Chemistry and Biology} % The department (is there any choice here?)
+\ifmuniversity{Linköpings universitet} % Your university (Linköping universitet if you didn't know...)
+\ifmpostaladdress{SE-581 83 Linköping, Sweden} % The postal address of the university
+% NOTE! Only use on of the fields ifmsupervisor and ifmsupervisors, comment the other out
+\ifmsupervisor{} % The supervisor
+\ifmsupervisors{Anders Rönnbrant (Saab AB)\\Kenneth Järrendal (Linköping Institute of Technology)} % The supervisors, separated by e.g. a comma or a double backslash
+\ifmexaminer{Magnus Johansson (Linköping Institute of Technology)} % The examinor of the thesis work
+\ifmx{A} % A or G (A for advanced, G for kandidat)
+\ifmyy{\shortyear} % The two last digits of the year
+\ifmxxxx{\textcolor{red}{\textit{xxxx}}} % The master thesis work number
 
 \fi
 
-\lithmaketitle
+\ifmmaketitle
 %\maketitle % To compare with the ordinary \maketitle macro
 
 \end{document}
