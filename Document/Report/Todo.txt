@@ -13,6 +13,12 @@ Phrases in need of being indexed
 * staggered grid (see also collocated grid)
 * surface vector
 
+Topics to cover
+---------------
+
+* My modification of CICSAM (or the VOF method)
+* Velocity advection term (in the FVM chapter)
+
 Topict to check up
 ------------------
 
@@ -29,6 +35,10 @@ Miscellaneous todo's
 * Prevent abstract from messing up the page numbering
 * Fins some good way to abbreviate long names using code (the abbrevs package in not good for several reasons)
 * Hint readers to click on the links in the bibliography (there are a lot of links to free-access pdf files)
+
+...
+
+* Use Piponet's paper as main reference instead of Losasso's? (No.)
 
 Bugs to fix
 -----------

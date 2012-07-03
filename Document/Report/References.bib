@@ -58,12 +58,14 @@
   url = {http://people.sc.fsu.edu/~jburkardt/pdf/fluid_flow_for_the_rest_of_us.pdf}
 }
 
-@MISC{Desbrun1999,
-  author = {Mathieu Desbrun and Marie-Paule Cani},
-  title = {Space-Time Adaptive Simulation of Highly Deformable Substances},
-  month = dec,
+@TECHREPORT{Desbrun1999,
+  author = {Desbrun, Mathieu and Cani, Marie-Paule},
+  title = {{Space-Time Adaptive Simulation of Highly Deformable Substances}},
+  institution = {INRIA},
   year = {1999},
-  abstract = {This report presents an approach for efficiently yet precisely simulating
+  type = {Research Report},
+  number = {RR-3829},
+  abstract = {{This report presents an approach for efficiently yet precisely simulating
 	highly deformable substances ranging from solids to liquids. The
 	key idea is to use a state equation for specifying the dynamics of
 	the substance. During a simulation, the material is sampled by particles
@@ -78,17 +80,13 @@
 	integration time steps used for each particle are automatica- lly
 	adapted to avoid instabilities. An active implicit surface is used
 	to visualize the substance. It smoothly coats the particles and filters
-	over time internal changes of granularity.},
-  annote = {Rapport De Recherche Inria <anne.adolphe@inrialpes.fr>},
-  bibsource = {OAI-PMH server at hal.ccsd.cnrs.fr},
-  contributor = {Rapport De Recherche Inria <anne.adolphe@inrialpes.fr>},
-  coverage = {SIMULATION / DEFORMABLE OBJECTS / PARTICLE SYSTEM / SPACE-TIME ADAPTION},
-  identifier = {inria-00072829 (version 1)},
-  oai = {oai:hal.ccsd.cnrs.fr:inria-00072829_v1},
-  publisher = {HAL - CCSd - CNRS},
-  subject = {Computer Science},
-  type = {RAPPORT},
-  url = {http://hal.inria.fr/inria-00072829/en/; http://hal.ccsd.cnrs.fr/docs/00/07/28/29/PDF/RR-3829.pdf}
+	over time internal changes of granularity.}},
+  affiliation = {Computer Science Department - CS CALTECH , iMAGIS - IMAG-INRIA Rh{\^o}ne-Alpes
+	/ GRAVIR},
+  hal_id = {inria-00072829},
+  keywords = {SIMULATION / DEFORMABLE OBJECTS / PARTICLE SYSTEM / SPACE-TIME ADAPTION},
+  language = {English},
+  url = {http://hal.inria.fr/inria-00072829/PDF/RR-3829.pdf}
 }
 
 @PHDTHESIS{Greengard1987a,
@@ -139,6 +137,17 @@
   pages = {2182--2189},
   number = {12},
   annote = {Harlow:Harlow65b.pdf}
+}
+
+@ARTICLE{Hirt1981,
+  author = {C. W. Hirt and B. D. Nichols},
+  title = {Volume of {F}luid ({VOF}) Method for the Dynamics of Free Boundaries},
+  journal = {Journal of Computational Physics},
+  year = {1981},
+  volume = {39},
+  pages = {201--225},
+  annote = {FSF-VOF:Hirt81a.pdf},
+  url = {http://pages.csam.montclair.edu/~yecko/icodes/HirtNichols_Surfer_JCP1981.pdf}
 }
 
 @INPROCEEDINGS{Kissling2010,
@@ -265,6 +274,29 @@
   number = {1--2},
   owner = {a3579},
   timestamp = {2012.06.05}
+}
+
+@ARTICLE{Wojtan2009,
+  author = {Wojtan, Chris and Th\"{u}rey, Nils and Gross, Markus and Turk, Greg},
+  title = {Deforming meshes that split and merge},
+  journal = {ACM Trans. Graph.},
+  year = {2009},
+  volume = {28},
+  pages = {76:1--76:10},
+  number = {3},
+  month = jul,
+  note = {There is a video related to this article at \url{http://www.youtube.com/watch?v=M5xnAdVPbgQ}.},
+  acmid = {1531382},
+  address = {New York, NY, USA},
+  articleno = {76},
+  doi = {10.1145/1531326.1531382},
+  issn = {0730-0301},
+  issue_date = {August 2009},
+  keywords = {deformable meshes, fluid simulation, physically based animation, topological
+	control},
+  numpages = {10},
+  publisher = {ACM},
+  url = {http://kucg.korea.ac.kr/seminar/2010/src/paper-2010-08-18.pdf}
 }
 
 @ARTICLE{Yan2009,

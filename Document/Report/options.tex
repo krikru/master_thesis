@@ -68,7 +68,8 @@
 
 % Miscellaneous flags
 \newflag{SKPIPLINEBETWEENPARAGRAPHS} {true}  % Controls whether a line is skipped between paragraphs
-\newflag{ITALICIZEINDEXEDTEXT}       {true}  % Controls whether indexed text becomes italicized in the body text
+%\newflag{ITALICIZEINDEXEDTEXT}       {\iftoggle{DEBUG}{true}{false}}  % Controls whether indexed text becomes italicized in the body text
+\newflag{ITALICIZEINDEXEDTEXT}       {false}  % Controls whether indexed text becomes italicized in the body text
 \newflag{USEACRONYMS}                {true}  % Controls whether acronyms should be used or not
 \newflag{INDEXACRONYMS}              {true}  % Controls whether the acronyms or the full forms get indexed
 \newflag{REVERTINDEXORDEROFSPLITKEYS}{false}  % Controls which is the main index key for split keys
@@ -219,6 +220,7 @@
 
 \declareindexkey      {accuracy}
 \declareindexkey      {advection}
+\declareindexkey      {air}
 \declareindexkey      {algorithm}
 \declareindexkeypair      {algorithm}{algorithms}
 \declareindexkey      {approximation}%[\index{approximation|seealso{neglection}}]
@@ -268,6 +270,8 @@
 \declareindexkey      {interpolation}
 \declareindexkey      {isosurface}
 \declareindexkeypair      {isosurface}{isosurfaces}
+\declareindexkey      {jump}
+\declareindexkeypair      {jump}{jumps}
 \declareindexkey      {momentum}
 \declareindexkey      {neglection}%[\index{neglection|seealso{approximation}}]
 \declareindexkeypair      {neglection}{neglect}
@@ -285,12 +289,16 @@
 \declareindexkeypair      {orthogonal}{orthogonalized}
 %\declareindexkey      {particle}
 %\declareindexkeypair      {particle}{particles}
+\declareindexkey      {phase}
+\declareindexkeypair      {phase}{phases}
 \declareindexkey      {preconditioning}
 \declareindexkeypair      {preconditioning}{preconditioner}
 \declareindexkey      {precision}
 \declareindexkey      {pressure}
 \declareindexkey      {property}
 \declareindexkeypair      {property}{properties}
+\declareindexkey      {quadtree}
+\declareindexkeypair      {quadtree}{quadtrees}
 \declareindexkey      {room}
 \declareindexkey      {simulation}
 \declareindexkeypair      {simulation}{simulate}
@@ -304,5 +312,4 @@
 \declareindexkeypair      {velocity}{velocities}
 \declareindexkey      {visualization}
 \declareindexkeypair      {visualization}{visualize}
-\declareindexkey      {quadtree}
-\declareindexkeypair      {quadtree}{quadtrees}
+\declareindexkey      {water}

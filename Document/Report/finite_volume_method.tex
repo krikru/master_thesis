@@ -207,6 +207,8 @@ This is known as the \idxs{continuity}{equation} and has to be satisfied in orde
 
 where $\rho_{n}$ is the value of $\rho$ at timestep $n$.
 
+\section{Velocity advection and conservation of momentum}
+
 \section{Pressure calculation}
 
 Neither the Euler equations nor the Navier--Stokes equations specify how the pressure should be calculated, so when solving either of these two set of equations one is essentially free to calculate the pressure in whichever way desired. Together with a \idxs{pressure}{model}, the two sets of equations come in two major forms which usually differes significantly in implementation and stability: The \indexs{compressible Navier--Stokes}{equations}\indexs{compressible Euler}{equations}\compressible forms and the \indexs{incompressible Navier--Stokes}{equations}\indexs{incompressible Euler}{equations}\incompressible forms. For \thiswork, the compressible Euler equations have been used. %TODO: Have they been fully solved? (advection of the velocity field)
@@ -261,8 +263,6 @@ For simplicity, we can assume that we use a set of units where $\rho = 1$. \eqre
 
 which can be directly solved assuming $\mu$ and $\vec{f}$ are known.
 
-%TODO: Use Piponet's paper as main reference instead of Losasso's?
-
 However, \eqref{eq:velocity_update}, which is used to update the velocity, contains $p$ which is a second unknown and must be calculated before $\vec{u}$ can be calculated. As outlined in e.g.\ \citep{Losasso2004}, by rewriting \eqref{eq:velocity_update}, taking the divergence of both sides and using \eqref{eq:velocity_divergence_incompressible_flow} to get rid of $\nabla\cdot\vec{u}$, we obtain the \idxs{Poisson}{equation}
 
 \begin{equation} \label{eq:pressure_poissin_equation_incompressible_flow}
@@ -273,7 +273,7 @@ which need to be solved before we can update the velocity completely.
 
 When \idxse{spatial}{discretization}{discretizing} this equation spatially a \idxs{system of linear}{equations} is obtained, for which there exists many solution methods with varing speed and accuracy. As a comparison, it can be notet that the naive \idxs{Gaussian}{elimination} \algorithm, or the \idxs{Gauss--Jordan}{elimination} \algorithm for a multicore system, has a \idxs{time}{complexity} of $O(N^3)$ for an $N\times N$ \idx{matrix}. However, an $O(N^3)$ time for solving the pressure Poisson equation would slow down the simulation tremendously, since it otherwise runs in $O(N)$ time per time step.
 
-Since \incompressibility is only an \approximate \property of the fluid, it is arguably enough to only approximately solve the pressure Poisson equation, which is the governing equation for incompressibility. This assumptions enables a large set of fast, iterative methods for solving the pressure equation, such as the \idxse{multilevel}{acceleration}{multilevel accelerated} \idxs{Jacobi}{method} used in \citep{Popinet2003}. Although, there exist iterative methods that will solve the pressure Poisson equation down to \idxs{machine}{precision} in only a few number of iterations, such as the \PCG method, which can be applied if the matrix is \idxse{symmetric}{matrix}{symmetric} and which was used in \citep{Losasso2004} with an incomplete \idxs{LU Cholesky}{factorization} as \preconditioner.
+Since \incompressibility is only an \approximate \property of the fluid, it is arguably enough to only approximately solve the pressure Poisson equation, which is the governing equation for incompressibility. This assumptions enables a large set of fast, iterative methods for solving the pressure equation, such as the \idxse{multilevel}{acceleration}{multilevel accelerated} \idxs{Jacobi}{method} used in \citep{Popinet2003}. However, there exist iterative methods that will solve the pressure Poisson equation down to \idxs{machine}{precision} in only a few number of iterations, such as the \PCG method, which can be applied if the matrix is \idxse{symmetric}{matrix}{symmetric}; this method was used in \citep{Losasso2004} with an incomplete \idxs{LU Cholesky}{factorization} as \preconditioner.
 
 If the pressure equation is only solved approximately, \eqref{eq:velocity_divergence_incompressible_flow} is not perfectly satisfied, so each cell will gain or lose some mass during each time step. If perfect \idxs{conservation of}{mass} is essential the deviation of mass has to be recorder, so the \idxs{density}{field} $\rho$ must be reintroduced. Instead of satisfying \eqref{eq:velocity_divergence_incompressible_flow}, one would rather prefer that the density very quickly becomes one again. The time $n+1$ density is given by \eqref{eq:continuity_equation_time_discretized} which is fully determined since $\rho_{n+1}$ is the only unknown in the equation, but the time $n+2$ density is given by substituting $n$ for $n+1$ in \eqref{eq:continuity_equation_time_discretized}, that is
 
@@ -293,7 +293,7 @@ Perfect satisfaction of \eqref{eq:density_conservation} will not take place due 
 \nabla\cdot\vec{u}_{n+1} \,=\, \frac{1-\rho_{n+1}^{-1}\,\rho_{n+2}}{\Delta t} \,-\, \rho_{n+1}^{-1}\,\vec{u}_{n+1}\cdot\nabla\rho_{n+1}.
 \end{equation}
 
-If we assume that the \idxs{Courant}{number} is much lower than one, or that the \idxs{Courant}{number} is limited and that the \spectrum of $\rho_{n+1}$ is dominated by frequencies much lower than the \idxs{Nyquist}{frequency}, $\rho_{n+1}^{-1}\,\vec{u}_{n+1}\cdot\nabla\rho_{n+1}$ will be a minor term in \eqref{eq:velocity_divergence_density_conservation_premature} and can therefore be \neglected. Furthermore, since $\rho_{n+1}$ is close to $1$, we can \approximate $\rho_{n+1}^{-1}$ as the first-order \idxs{Taylor}{series} about the value 1, which is $2-\rho_{n+1}$. Hence, by using \eqref{eq:density_conservation}, we can rewrite \eqref{eq:velocity_divergence_density_conservation_premature} as
+If we assume that the \idxs{Courant}{number} is much lower than one, or that the \idxs{Courant}{number} is limited and that the \spectrum of $\rho_{n+1}$ is dominated by frequencies much lower than the \idxs{Nyquist}{frequency}, $\rho_{n+1}^{-1}\,\vec{u}_{n+1}\cdot\nabla\rho_{n+1}$ will be a minor term in \eqref{eq:velocity_divergence_density_conservation_premature} and can therefore be \neglected. Furthermore, since $\rho_{n+1}$ is close to $1$, we can \approximate $\rho_{n+1}^{-1}$ as the first-order \idxs{Taylor}{series} about the value $1$, which is $2-\rho_{n+1}$. Hence, by using \eqref{eq:density_conservation}, we can rewrite \eqref{eq:velocity_divergence_density_conservation_premature} as
 
 \begin{equation} \label{eq:velocity_divergence_density_conservation}
 \nabla\cdot\vec{u}_{n+1} \,=\, \frac{\rho_{n+1}-1}{\Delta t}.
