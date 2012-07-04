@@ -41,8 +41,14 @@
 \fi
 
 % Referencing
-\iftrue
+\iffalse
 \usepackage[round, authoryear, comma]{natbib} % Harward style referencing
+%\bibliographystyle{unsrtnat}
+%\bibliographystyle{plain}
+\bibliographystyle{plainnat}
+\else
+\iftrue
+\usepackage[square, authoryear, comma]{natbib} % Harward style referencing
 %\bibliographystyle{unsrtnat}
 %\bibliographystyle{plain}
 \bibliographystyle{plainnat}
@@ -51,6 +57,7 @@
 \bibliographystyle{ieeetr}
 %\bibliographystyle{plain}
 %\bibliographystyle{plainnat}
+\fi
 \fi
 
 % Indexing
