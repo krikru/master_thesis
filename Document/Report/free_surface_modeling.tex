@@ -2,7 +2,7 @@
 
 A fluid flow with a free surface in the form of a \idxs{sharp}{interface} between two \idxs{immiscible}{fluids}, such as the flow of \water and \air, is called a \idxs{two-phase}{flow}. When simulating a two-phase flow, one of the most challenging things is to represent the surface in a satisfying way. There are several ways to model the surface, all with their respective strengths and weaknesses.
 
-In \thiswork, a method called the volume of fluid method has been used, together with a variant of an advection scheme called CICSAM. These and a few other methods for modelling the free surface will be covered briefly in this \levelname.
+In \thiswork, a method called the volume of fluid method has been used, together with a variant of an advection scheme called HYPER-C. These and a few other methods for modelling the free surface will be covered briefly in this \levelname.
 
 
 \HRule
@@ -45,7 +45,7 @@ When $\phi$ has become discretized, \eqref{eq:level_set} cannot be used directly
 
 On the other hand, probably the greatest weakness with this method is that it doesn't conserve mass perfectly after $\phi$ together with \eqref{eq:level_set_function_transport} have been discretized. Advection will cause $\phi$ to be smeared out and, as noted e.g.\ in \citep{Wojtan2009}, most of the surface details are washed away. This problem is more apparent when the simulation contains thin features, which, also as noted in \citep{Wojtan2009}, have a tendency to disappear, or start to flicker. However, it can be remedied somewhat (although not completely) by using \BFECC, which was first presented in \citep{Dupont2003} and later tested in \citep{Kim2005} both in advection of the velocity field as well as on images for illustration purposes.
 
-\section{Volume of fluid method}
+\section{Volume of Fluid method}
 
 Another very commonly used way of tracking interfaces between two immiscible fluids is the \VOF method, first presented in \citep{Hirt1981}. For a non-discretized \PDE, the \VOF method uses a \idxs{phase}{fraction} $\alpha^*$ that is either $0$ or $1$ to designate the \phase. If the two phases are air and water, $\alpha^* = 0$ usually designates air and $\alpha^* = 1$ designates water, so that for a non-discretized \PDE $\alpha^*$ can be expressed as
 
