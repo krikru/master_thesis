@@ -128,6 +128,9 @@
 \definecolor{orange}{rgb}{1,0.5,0}
 \definecolor{purple}{rgb}{0.5,0,0.5}
 \definecolor{darkblue}{rgb}{0,0,0.5}
+\definecolor{grey}{rgb}{0.5,0.5,0.5}
+\definecolor{darkgrey}{rgb}{0.25,0.25,0.25}
+\definecolor{lightgrey}{rgb}{0.75,0.75,0.75}
 \newrobustcmd{\red}[1]{\textcolor{red}{#1}}
 \newrobustcmd{\yellow}[1]{\textcolor{yellow}{#1}}
 \newrobustcmd{\orange}[1]{\textcolor{orange}{#1}}
@@ -138,6 +141,9 @@
 \newrobustcmd{\magenta}[1]{\textcolor{magenta}{#1}}
 \newrobustcmd{\purple}[1]{\textcolor{purple}{#1}}
 \newrobustcmd{\white}[1]{\textcolor{white}{#1}}
+\newrobustcmd{\lightgrey}[1]{\textcolor{lightgrey}{#1}}
+\newrobustcmd{\grey}[1]{\textcolor{grey}{#1}}
+\newrobustcmd{\darkgrey}[1]{\textcolor{darkgrey}{#1}}
 \newrobustcmd{\black}[1]{\textcolor{black}{#1}}
 %\newrobustcmd{\transparent}[1]{\textcolor{transparent}{#1}}
 
@@ -152,6 +158,7 @@
 \newrobustcmd{\notocparagraph    }[3][]{\pdfbookmark[#1]{#2}{#3}\paragraph*    {#2}}
 \newrobustcmd{\notocsubparagraph }[3][]{\pdfbookmark[#1]{#2}{#3}\subparagraph* {#2}}
 % Add to table of contents but do not number
+\iftrue
 \newrobustcmd{\nonumpart         }[1]{\addtotoc{part}         {#1}\part*         {#1}}
 \newrobustcmd{\nonumchapter      }[1]{\addtotoc{chapter}      {#1}\chapter*      {#1}}
 \newrobustcmd{\nonumsection      }[1]{\addtotoc{section}      {#1}\section*      {#1}}
@@ -159,9 +166,18 @@
 \newrobustcmd{\nonumsubsubsection}[1]{\addtotoc{subsubsection}{#1}\subsubsection*{#1}}
 \newrobustcmd{\nonumparagraph    }[1]{\addtotoc{paragraph}    {#1}\paragraph*    {#1}}
 \newrobustcmd{\nonumsubparagraph }[1]{\addtotoc{subparagraph} {#1}\subparagraph* {#1}}
+\else
+\newrobustcmd{\nonumpart         }[1]{\part*         {#1}}
+\newrobustcmd{\nonumchapter      }[1]{\chapter*      {#1}}
+\newrobustcmd{\nonumsection      }[1]{\section*      {#1}}
+\newrobustcmd{\nonumsubsection   }[1]{\subsection*   {#1}}
+\newrobustcmd{\nonumsubsubsection}[1]{\subsubsection*{#1}}
+\newrobustcmd{\nonumparagraph    }[1]{\paragraph*    {#1}}
+\newrobustcmd{\nonumsubparagraph }[1]{\subparagraph* {#1}}
+\fi
 
 % Indexing
-\newrobustcmd{\indexify}[1]{\iftoggle{ITALICIZEINDEXEDTEXT}{\textit{#1}}{#1}}
+\newrobustcmd{\indexify}[1]{\iftoggle{ITALICIZEINDEXEDTEXT}{\textit{\iftoggle{INDEXEDTEXTPURPLE}{\purple{#1}}{#1}}}{\iftoggle{INDEXEDTEXTPURPLE}{\purple{#1}}{#1}}}
 \newrobustcmd{\qindexify}[1]{#1} % For indexifying text quietly (don't do anything)
 
 % The idx macro series

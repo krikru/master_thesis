@@ -1,0 +1,19 @@
+\chapter{Motivation}
+
+A general wave simulator implemented in a flight simulator can prove to have several benefits. This \levelname will take up two of the main reasons for why \Saab wants to implement a wave simulator in their flight simulator.
+
+\section{Landing on ships with helicopters}
+
+For some helicopter missions, offshore landings on a ships have to be preformed. The landings are sometimes performed so far offshore that the limit where the fuel left in the fuel tank is just enough for returning to solid ground is passed. This limit is often refered to as \idxs{bingo}{fuel}. If a helicopter that is supposed to land on a ship passes this limit, it \emph{has} to land on the ship; the only other option is crash in the water.
+
+%TODO: Replace URL with reference
+However, when the ship is exposed to large waves, it becomes difficult to land on it. This can be seen in \url{http://www.youtube.com/watch?v=bC2XIGMI2kM}~. It is therefore of high importance that the pilots have been able to train landing on ships under similar circumstances in a simulator, before going to land with an helicopter on a rolling ship in a real situation. It is therefore necessary that ships are affected by waves in the simulation, in order to get a situiation that is realistic enough to give any \idxs{training}{value}.
+
+When a helicopter polit that flies over land determines the distance to the ground, small visual things such as grass bending because of the air flow cause by the rotor blades become helpfull. These things are refered to as \idxsp{visual}{cue}{s}. If the pilot instead flies over water, it becomes possible to determine the distance to the surface of the water by looking at the disturbances in the water due to the air flow that comes from the rotor blades. It is therefore valuable if the surface water in the simulation gets disturbed when the helicopter moves closer to it.
+
+\section{Landing on ships with aircrafts}
+
+A fighter pilot that is about to land on an aircraft carrier has to know the orientation of the carrier. The aircraft carrier traveles against the wind with as high speed as possible, to give the polit as high speed relative the air as possible when landing, but in order for that to work properly, the pilot has to approach the carrier from behind and just slightly from the side.
+
+%TODO: Replace URL with reference
+In a real situation, the pilot can look at the wake the carrier leaves behind it in order to find the right angle to approach it with. This can clearly be seen in \url{http://www.youtube.com/watch?v=jOSDrTDoB0o}. In a simulation, it is important that the pilot has the same possibility. It is therefore necessary that ships leave a wake in the simulation that looks and behaves as a real wake and that consists of both waves created by the ship and of water behind the ship containing a lot of air, making it significantly brighter than the rest of the water. It is valuable if this wake keeps alive and looks as a real wake for as long time as possible, making it possible to determine the direction to a ship from a long distance even if only a single \idxs{wake}{line} is spoted.

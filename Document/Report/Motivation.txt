@@ -1,0 +1,13 @@
+Motivation
+----------
+
+Bingo fuel (limit for returning, 50 % of the fuel)
+Lynx ship
+Training purposes for landing
+
+Requirements
+------------
+
+Real time
+Look decently good (Visual quing, framerate)
+Interaction with between water and ships

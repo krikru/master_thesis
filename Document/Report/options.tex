@@ -70,6 +70,8 @@
 \newflag{SKPIPLINEBETWEENPARAGRAPHS} {true}  % Controls whether a line is skipped between paragraphs
 %\newflag{ITALICIZEINDEXEDTEXT}       {\iftoggle{DEBUG}{true}{false}}  % Controls whether indexed text becomes italicized in the body text
 \newflag{ITALICIZEINDEXEDTEXT}       {false}  % Controls whether indexed text becomes italicized in the body text
+\newflag{INDEXEDTEXTPURPLE}          {\iftoggle{DEBUG}{true}{false}}  % Controls whether indexed text becomes purple in the body text
+%\newflag{INDEXEDTEXTPURPLE}          {false}  % Controls whether indexed text becomes purple in the body text
 \newflag{USEACRONYMS}                {true}  % Controls whether acronyms should be used or not
 \newflag{INDEXACRONYMS}              {true}  % Controls whether the acronyms or the full forms get indexed
 \newflag{REVERTINDEXORDEROFSPLITKEYS}{false}  % Controls which is the main index key for split keys
@@ -189,8 +191,9 @@
 %\declareabbreviationqi{threedim}      {three-dimensional}
 %\declareabbreviationqi{twodim}        {two-dimensional}
 %\declareabbreviation  {NS}            {Navier--Stokes}
-\declareabbreviation  {thiswork}      {the work described in this report}
 \declareabbreviation  {itslimitedtime}{its limited time}
+\declareabbreviationqi{Saab}          {\textbf{Saab}} % Saab seems to use the Gill Sans font
+\declareabbreviation  {thiswork}      {the work described in this report}
 
 % Acronyms
 % --------
