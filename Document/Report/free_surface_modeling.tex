@@ -65,7 +65,7 @@ However, in \thiswork, $\alpha^*$ has been \discretized into $\alpha$ which is l
 \alpha_i \,=\, \frac{V_{i,\text{w}}}{V_{i,\text{t}}}\,,
 \end{equation}
 
-where $\alpha_i$ is the value of $\alpha$ in the cell center of the cell with index $i$, $V_{i,\text{t}}$ is the total volume of the cell and $V_{i,\text{w}}$ is the total volume of the water contained within the cell. In contrast to in the non-discretized case, this fraction will never be undefined, so substituting $\alpha^*$ for $\alpha$ in \eqref{eq:vof_interface_continuous} and use that for the definition of the surface will not work. On the other hand, since the cells the interface cross through will be partially filled with water, $\alpha$ will be somewhere in between 0 and 1, or in other words
+where $\alpha_i$ is the value of $\alpha$ in the cell center of the cell with index $i$, $V_{i,\text{t}}$ is the total volume of the cell and $V_{i,\text{w}}$ is the total volume of the water contained within the cell. In contrast to in the non-discretized case, this fraction will never be undefined, so substituting $\alpha$ for $\alpha^*$ in \eqref{eq:vof_interface_continuous} and use that for the definition of the surface will not work. On the other hand, since the cells the interface cross through will be partially filled with water, $\alpha$ will be somewhere in between 0 and 1, or in other words
 
 \begin{equation} \label{eq:vof_interface_discrete}
 I(\alpha) \,=\, \{C_i \,\mid\, 0 < \alpha_i < 1\}.

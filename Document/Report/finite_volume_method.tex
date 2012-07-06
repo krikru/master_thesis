@@ -275,7 +275,7 @@ When \idxse{spatial}{discretization}{discretizing} this equation spatially a \id
 
 Since \incompressibility is only an \approximate \property of the fluid, it is arguably enough to only approximately solve the pressure Poisson equation, which is the governing equation for incompressibility. This assumptions enables a large set of fast, iterative methods for solving the pressure equation, such as the \idxse{multilevel}{acceleration}{multilevel accelerated} \idxs{Jacobi}{method} used in \citep{Popinet2003}. However, there exist iterative methods that will solve the pressure Poisson equation down to \idxs{machine}{precision} in only a few number of iterations, such as the \PCG method, which can be applied if the matrix is \idxse{symmetric}{matrix}{symmetric}; this method was used in \citep{Losasso2004} with an incomplete \idxs{LU Cholesky}{factorization} as \preconditioner.
 
-If the pressure equation is only solved approximately, \eqref{eq:velocity_divergence_incompressible_flow} is not perfectly satisfied, so each cell will gain or lose some mass during each time step. If perfect \idxs{conservation of}{mass} is essential the deviation of mass has to be recorder, so the \idxs{density}{field} $\rho$ must be reintroduced. Instead of satisfying \eqref{eq:velocity_divergence_incompressible_flow}, one would rather prefer that the density very quickly becomes one again. The time $n+1$ density is given by \eqref{eq:continuity_equation_time_discretized} which is fully determined since $\rho_{n+1}$ is the only unknown in the equation, but the time $n+2$ density is given by substituting $n$ for $n+1$ in \eqref{eq:continuity_equation_time_discretized}, that is
+If the pressure equation is only solved approximately, \eqref{eq:velocity_divergence_incompressible_flow} is not perfectly satisfied, so each cell will gain or lose some mass during each time step. If perfect \idxs{conservation of}{mass} is essential the deviation of mass has to be recorder, so the \idxs{density}{field} $\rho$ must be reintroduced. Instead of satisfying \eqref{eq:velocity_divergence_incompressible_flow}, one would rather prefer that the density very quickly becomes one again. The time $n+1$ density is given by \eqref{eq:continuity_equation_time_discretized} which is fully determined since $\rho_{n+1}$ is the only unknown in the equation, but the time $n+2$ density is given by substituting $n+1$ for $n$ in \eqref{eq:continuity_equation_time_discretized}, that is
 
 \begin{equation} \label{eq:continuity_equation_time_discretized_postponed}
 \rho_{n+2} \,=\, \rho_{n+1} - \Delta t\,\nabla\cdot(\rho_{n+1}\vec{u}_{n+1})
@@ -299,7 +299,7 @@ If we assume that the \idxs{Courant}{number} is much lower than one, or that the
 \nabla\cdot\vec{u}_{n+1} \,=\, \frac{\rho_{n+1}-1}{\Delta t}.
 \end{equation}
 
-By rewriting \eqref{eq:velocity_update}, taking the divergence of both sides and using \eqref{eq:velocity_divergence_density_conservation} to substitute $\nabla\cdot\vec{u}$, we obtain the \idxs{Poisson}{equation}
+By rewriting \eqref{eq:velocity_update}, taking the divergence of both sides and using \eqref{eq:velocity_divergence_density_conservation} to get rid of $\nabla\cdot\vec{u}$, we obtain the \idxs{Poisson}{equation}
 
 \begin{equation} \label{eq:pressure_poissin_equation_density_conservation}
 \nabla^2 p_{n+1} \,=\, \frac{\nabla\cdot\vec{u}^*_{n+1}}{\Delta t} - \frac{\rho_{n+1} - 1}{\Delta t^2}.
