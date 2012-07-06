@@ -76,6 +76,8 @@
 
 % Graphics
 \usepackage{graphicx} % Necessary in order to include images
+\DeclareGraphicsExtensions{.pdf,.png,.jpg} % Specifies the priority of image formats if there exists more than one image with the same name
+%\usepackage{wrapfig} % For allowing figures to be wrapped within the text
 \usepackage{caption} % For captions
 \usepackage{subcaption} % For subcaptions
 \usepackage{tikz} % For advanced graphics functions
@@ -127,6 +129,7 @@
 % % % Text color
 \definecolor{orange}{rgb}{1,0.5,0}
 \definecolor{purple}{rgb}{0.5,0,0.5}
+\definecolor{darkpurple}{rgb}{0.31,0,0.31}
 \definecolor{darkblue}{rgb}{0,0,0.5}
 \definecolor{grey}{rgb}{0.5,0.5,0.5}
 \definecolor{darkgrey}{rgb}{0.25,0.25,0.25}
@@ -140,6 +143,7 @@
 \newrobustcmd{\darkblue}[1]{\textcolor{darkblue}{#1}}
 \newrobustcmd{\magenta}[1]{\textcolor{magenta}{#1}}
 \newrobustcmd{\purple}[1]{\textcolor{purple}{#1}}
+\newrobustcmd{\darkpurple}[1]{\textcolor{darkpurple}{#1}}
 \newrobustcmd{\white}[1]{\textcolor{white}{#1}}
 \newrobustcmd{\lightgrey}[1]{\textcolor{lightgrey}{#1}}
 \newrobustcmd{\grey}[1]{\textcolor{grey}{#1}}
@@ -177,7 +181,7 @@
 \fi
 
 % Indexing
-\newrobustcmd{\indexify}[1]{\iftoggle{ITALICIZEINDEXEDTEXT}{\textit{\iftoggle{INDEXEDTEXTPURPLE}{\purple{#1}}{#1}}}{\iftoggle{INDEXEDTEXTPURPLE}{\purple{#1}}{#1}}}
+\newrobustcmd{\indexify}[1]{\iftoggle{ITALICIZEINDEXEDTEXT}{\textit{\iftoggle{INDEXEDTEXTPURPLE}{\darkpurple{#1}}{#1}}}{\iftoggle{INDEXEDTEXTPURPLE}{\darkpurple{#1}}{#1}}}
 \newrobustcmd{\qindexify}[1]{#1} % For indexifying text quietly (don't do anything)
 
 % The idx macro series
@@ -263,9 +267,9 @@
 % FLAG DEPENDENT BEHAVIOR %
 % % % % % % % % % % % % % %
 
-\IFDEBUG{
+\iftoggle{PRINTLABLES}{
     \usepackage{showlabels} % Print the internal labels for various objects in the document
-}
+}{}
 
 \iftoggle{SKPIPLINEBETWEENPARAGRAPHS}{
     \usepackage{parskip} % Skips a line between paragraphs instead of indenting the paragraphs

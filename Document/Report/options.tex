@@ -68,15 +68,18 @@
 
 % Miscellaneous flags
 \newflag{SKPIPLINEBETWEENPARAGRAPHS} {true}  % Controls whether a line is skipped between paragraphs
-%\newflag{ITALICIZEINDEXEDTEXT}       {\iftoggle{DEBUG}{true}{false}}  % Controls whether indexed text becomes italicized in the body text
 \newflag{ITALICIZEINDEXEDTEXT}       {false}  % Controls whether indexed text becomes italicized in the body text
-\newflag{INDEXEDTEXTPURPLE}          {\iftoggle{DEBUG}{true}{false}}  % Controls whether indexed text becomes purple in the body text
-%\newflag{INDEXEDTEXTPURPLE}          {false}  % Controls whether indexed text becomes purple in the body text
 \newflag{USEACRONYMS}                {true}  % Controls whether acronyms should be used or not
 \newflag{INDEXACRONYMS}              {true}  % Controls whether the acronyms or the full forms get indexed
 \newflag{REVERTINDEXORDEROFSPLITKEYS}{false}  % Controls which is the main index key for split keys
 \newflag{SCRIPTSIZEINDEX}            {false}  % Controls the size of the index
 \newflag{SCRIPTSIZEBIBLIOGRAPHY}     {false}  % Controls the size of the bibliography
+
+% Debug options
+\newflag{INDEXEDTEXTPURPLE}          {\iftoggle{DEBUG}{true}{false}}  % Controls whether indexed text becomes purple in the body text
+%\newflag{INDEXEDTEXTPURPLE}          {false}  % Controls whether indexed text becomes purple in the body text
+%\newflag{PRINTLABLES}                {\iftoggle{DEBUG}{true}{false}}  % Controls whether indexed text becomes purple in the body text
+\newflag{PRINTLABLES}                {false}  % Controls whether indexed text becomes purple in the body text
 
 % % % % % % % %
 % APPEARANCE  %
@@ -176,9 +179,14 @@
 
 % Referencing
 \robustify{\eqref}
-\renewrobustcmd{\eqref}[1]{Equation \ref{#1}}
-%\renewrobustcmd{\eqref}[1]{\equationname\ \ref{#1}}
-\newrobustcmd{\eqrefs}[0]{Equations\xspace}
+\renewrobustcmd{\eqref}    [1]{Equation \ref{#1}}
+\newrobustcmd  {\subeqref} [1]{Equation \subref{#1}}
+\newrobustcmd  {\eqrefs}   [0]{Equations\xspace}
+\newrobustcmd  {\figref}   [1]{Figure \ref{#1}}
+\newrobustcmd  {\subfigref}[1]{Figure \subref{#1}}
+\newrobustcmd  {\figrefs}  [0]{Figures\xspace}
+\newrobustcmd  {\subrefp}  [1]{(\subref{#1})}
+
 
 % % % % % % % % %
 % ABBREVIATIONS %
@@ -235,6 +243,7 @@
 \declareindexkeypair      {area}{areas}
 \declareindexkey      {average}
 \declareindexkeypair      {average}{averaged}
+\declareindexkey      {backwash}
 \declareindexkey      {camera}
 \declareindexkey      {cell}
 \declareindexkeypair      {cell}{cells}
@@ -316,4 +325,5 @@
 \declareindexkeypair      {velocity}{velocities}
 \declareindexkey      {visualization}
 \declareindexkeypair      {visualization}{visualize}
+\declareindexkey      {wake}
 \declareindexkey      {water}
