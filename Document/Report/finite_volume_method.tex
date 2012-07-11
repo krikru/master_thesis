@@ -14,7 +14,7 @@
 \newrobustcmd{\gammapath}{{\gamma[\vec{r}_1,\,\vec{r}_2]}}
 \newabbrev{\textgammapath}{\mbox{$\gammapath$}}
 
-The \FVM is a way of solving a \PDE, or a set of \PDEs, where the room is \discretized into a large number of non-moving, adjactent volume elements which we will call \cells. Different \properties are discretized into certain points. \idxse{scalar}{field}{Scalar fields} are usually discretized to the \idxsp{cell}{center}{s}, or sometimes to \idxp{node}{s} of \idxse{cell}{corner}{corners} of the cells, as in \citep{Losasso2004}, which can be convenient since \interpolation of fields discretized to the cell centers tend to be more difficult. In a \idxs{collocated}{grid}, all properties are stored at the same locations, so the \idxse{vector}{property}{vector properties} are discretized to the same locations as the \idxse{scalar}{property}{scalar properties}. On a \idxs{staggered}{grid} on the other hand, the \velocity (or the \momentum, depending on implementation) is discretized to the \idxsp{cell}{face}{s}. For \thiswork, a staggered grid has been used, and throughout the report the discretization locations for the various properties will be called \idxsp{storage}{location}{s}.
+The \FVM is a way of solving a \PDE, or a set of \PDEs, where the room is \discretized into a large number of non-moving, adjactent volume elements which we will call \cells. Different \properties are discretized into certain points. \idxse{scalar}{field}{Scalar fields} are usually discretized to the \idxsp{cell}{center}{s}, or sometimes to \idxp{node}{s} of \idxse{cell}{corner}{corners} of the cells, as in \citep{Losasso2004}, which can be convenient since \interpolation of fields discretized to the cell centers tend to be more difficult. In a \idxs{collocated}{grid}, all properties are stored at the same locations, so the \idxse{vector}{property}{vector properties} are discretized to the same locations as the \idxse{scalar}{property}{scalar properties}. On a \idxs{staggered}{grid} on the other hand, the \velocity (or the \momentum, depending on implementation) is discretized to the \idxsp{cell}{face}{s}. For \thisprojectwork, a staggered grid has been used, and throughout the report the discretization locations for the various properties will be called \idxsp{storage}{location}{s}.
 
 \paragraph{Fluid simulation}
 
@@ -159,7 +159,7 @@ and second, the velocity update is calculated as
 \vec{u}_{n+1} \,=\, \vec{u}^*_{n+1} - \Delta t\nabla p_{n+1}.
 \end{equation}
 
-%In \thiswork, a \idxs{staggered}{grid} has been used, so the velocities are stored on the \idxsp{cell}{face}{s}. Furthermore, only the velocity component relevant to \eqref{eq:fi_flat_cell_face} is stored, that is, only the velocity component in the direction of the cell face normal $\normal$. We can therefore calculate the scalar multiplication of $\normal$ with both sides of \eqref{eq:velocity_update} to get
+%In \thisprojectwork, a \idxs{staggered}{grid} has been used, so the velocities are stored on the \idxsp{cell}{face}{s}. Furthermore, only the velocity component relevant to \eqref{eq:fi_flat_cell_face} is stored, that is, only the velocity component in the direction of the cell face normal $\normal$. We can therefore calculate the scalar multiplication of $\normal$ with both sides of \eqref{eq:velocity_update} to get
 
 %\begin{equation} \label{eq:velocity_update_staggered_grid_pressure_derivative}
 %u_{\normal,\,n+1} \,=\, u^*_{\normal,\,n+1} - \Delta t\,p'_{\normal,\,n+1},
@@ -211,7 +211,7 @@ where $\rho_{n}$ is the value of $\rho$ at timestep $n$.
 
 \section{Pressure calculation}
 
-Neither the Euler equations nor the Navier--Stokes equations specify how the pressure should be calculated, so when solving either of these two set of equations one is essentially free to calculate the pressure in whichever way desired. Together with a \idxs{pressure}{model}, the two sets of equations come in two major forms which usually differes significantly in implementation and stability: The \indexs{compressible Navier--Stokes}{equations}\indexs{compressible Euler}{equations}\compressible forms and the \indexs{incompressible Navier--Stokes}{equations}\indexs{incompressible Euler}{equations}\incompressible forms. For \thiswork, the compressible Euler equations have been used. %TODO: Have they been fully solved? (advection of the velocity field)
+Neither the Euler equations nor the Navier--Stokes equations specify how the pressure should be calculated, so when solving either of these two set of equations one is essentially free to calculate the pressure in whichever way desired. Together with a \idxs{pressure}{model}, the two sets of equations come in two major forms which usually differes significantly in implementation and stability: The \indexs{compressible Navier--Stokes}{equations}\indexs{compressible Euler}{equations}\compressible forms and the \indexs{incompressible Navier--Stokes}{equations}\indexs{incompressible Euler}{equations}\incompressible forms. For \thisprojectwork, the compressible Euler equations have been used. %TODO: Have they been fully solved? (advection of the velocity field)
 
 \subsection{Compressible flow}
 

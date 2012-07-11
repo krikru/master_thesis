@@ -78,9 +78,11 @@
 \usepackage{graphicx} % Necessary in order to include images
 \DeclareGraphicsExtensions{.pdf,.png,.jpg} % Specifies the priority of image formats if there exists more than one image with the same name
 %\usepackage{wrapfig} % For allowing figures to be wrapped within the text
-\usepackage{caption} % For captions
+\usepackage[footnotesize]{caption} % For captions
 \usepackage{subcaption} % For subcaptions
 \usepackage{tikz} % For advanced graphics functions
+%\usepackage{pgfmath} % For parsing mathematical data. Is included by the tikz package, but can be used independently for stuff unrelated to graphics, even when the tikz package is not used.
+%\usepackage{epstopdf} % For including eps files in a file converted with pdflatex (?)
 
 % Linking
 \usepackage{hyperref} % Links to pages. The hyperref should generally be loaded last, with some exceptions

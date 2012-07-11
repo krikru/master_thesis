@@ -1,4 +1,10 @@
 
+Sections left to write after importance
+---------------------------------------
+
+* NVD
+* HYPER-C
+
 Phrases in need of being indexed
 --------------------------------
 

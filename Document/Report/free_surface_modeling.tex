@@ -2,7 +2,7 @@
 
 A fluid flow with a free surface in the form of a \idxs{sharp}{interface} between two \idxs{immiscible}{fluids}, such as the flow of \water and \air, is called a \idxs{two-phase}{flow}. When simulating a two-phase flow, one of the most challenging things is to represent the surface in a satisfying way. There are several ways to model the surface, all with their respective strengths and weaknesses.
 
-In \thiswork, a method called the volume of fluid method has been used, together with a variant of an advection scheme called HYPER-C. These and a few other methods for modelling the free surface will be covered briefly in this \levelname.
+In \thisprojectwork, a method called the volume of fluid method has been used, together with a variant of an advection scheme called HYPER-C. These and a few other methods for modelling the free surface will be covered briefly in this \levelname.
 
 
 \HRule
@@ -59,7 +59,7 @@ where $V_{\epsilon,\text{t}}$ is the volume of the sphere with radius $\epsilon$
 I^*(\alpha^*) \,=\, \{\vec{r} \,\mid\, \cancel{\exists}\,\alpha(\vec{r})\in\mathbb{R}\}.
 \end{equation}
 
-However, in \thiswork, $\alpha^*$ has been \discretized into $\alpha$ which is located at \idxsp{cell}{center}{s} and which by its discrete nautre is not able to perfectly describe how the two phases are distributed. It is therefore derised that $\alpha$ takes the whole cell it is discretized in into account, and tells how big ratio of the cell that is filled with water rather than only looking at one point. The definition of $\alpha$ is therefore
+However, in \thisprojectwork, $\alpha^*$ has been \discretized into $\alpha$ which is located at \idxsp{cell}{center}{s} and which by its discrete nautre is not able to perfectly describe how the two phases are distributed. It is therefore derised that $\alpha$ takes the whole cell it is discretized in into account, and tells how big ratio of the cell that is filled with water rather than only looking at one point. The definition of $\alpha$ is therefore
 
 \begin{equation} \label{eq:phase_fraction_discretized}
 \alpha_i \,=\, \frac{V_{i,\text{w}}}{V_{i,\text{t}}}\,,
