@@ -2,6 +2,18 @@
 
 \chapter{Results}
 
+In order for helicopter pilots to get the most out of training landings on ships in a \idxs{flight}{simulator}, the ships have to be affected by the state the water they are in and start to rock forth and back if large surface waves hit them, or the ship will lie still in the water and the landing will be unrealistically easy.
+
+Besides, as an aircraft carrier travels travels with full speed against the wind in order to give the pilot who is supposed to land on it the minimal speed relative to the carrier during the landing, it leaves a wake behind of itself which serves as an aid for the pilot when trying to find the right angle to approach the ship with. Therefore, ships also have to give rise to waves as they travel on the water, which should propagate in a realistic way in order to form the characteristic \idxs{Kelvin}{wake pattern}. Ships should also draw air down into the water in order to give rise to the also so characteristic \backwash that follows a large ship like a tail.
+
+It is therefore necessary to in a realistic way simulate waves on the surface of the water, with a two-way interaction between water and ships. This should happen in realtime in order to make it possible to implement it in a \idxs{flight}{simulator}. Simulation of water waves faces a number of challenges, like \idxs{wave}{dispersion}
+
+the ships have to be able to become affected by surface waves and rock forth and back 
+
+The method chosen to simulate water waves in realtime, which was the \FVM on an \octree datastructure together with the \VOF, proved to be quite advanced and difficult to implemented properly within the time assigned for \thismasterthesiswork, which was \masterthesisworktime. As for the speed, it is not possible to 
+
+For realtime simulation of surface waves in large bodies of water, where non-linear phenomena are not of any significant importance, the best method to use, considering both implementation time and simulation quality, is probably spectral methods.
+
 \section{Speed}
 
 \section{Accuracy}

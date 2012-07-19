@@ -14,7 +14,7 @@ In this report, an octree is going to be considered to be a spatial data structu
             \newrobustcmd{\threedrectpath}[7]{-- ++(#1*#2,#1*#3,#1*#4) -- ++(#1*#5,#1*#6,#1*#7) -- ++(-#1*#2,-#1*#3,-#1*#4) -- cycle}
             
             % Front side
-            \draw (0,0,1) \threedrectpath{1} {1}{0}{0} {0}{1}{0};
+            \draw[fill=white!100!black] (0,0,1) \threedrectpath{1} {1}{0}{0} {0}{1}{0};
             % Level 1
             \drawthreedplus{0}{0}{1} {1} {1}{0}{0} {0}{1}{0}
             % Level 2
@@ -49,7 +49,7 @@ In this report, an octree is going to be considered to be a spatial data structu
             \newrobustcmd{\threedrectpath}[7]{-- ++(#1*#2,#1*#3,#1*#4) -- ++(#1*#5,#1*#6,#1*#7) -- ++(-#1*#2,-#1*#3,-#1*#4) -- cycle}
             
             % Front side
-            \draw (0,0,1) \threedrectpath{1} {1}{0}{0} {0}{1}{0};
+            \draw[fill=white!100!black] (0,0,1) \threedrectpath{1} {1}{0}{0} {0}{1}{0};
             % Level 1
             \drawthreedplus{0}{0}{1} {1} {1}{0}{0} {0}{1}{0}
             % Level 2
@@ -72,7 +72,7 @@ In this report, an octree is going to be considered to be a spatial data structu
             \drawthreedplus{10/16}{13/16}{1} {1/16} {1}{0}{0} {0}{1}{0}
             
             % Top side
-            \draw (0,1,0) \threedrectpath{1} {1}{0}{0} {0}{0}{1};
+            \draw[fill=white!98!black] (0,1,0) \threedrectpath{1} {1}{0}{0} {0}{0}{1};
             % Level 1
             \drawthreedplus{0}{1}{0} {1} {1}{0}{0} {0}{0}{1}
             % Level 2
@@ -89,7 +89,7 @@ In this report, an octree is going to be considered to be a spatial data structu
             \drawthreedplus{5/8}{1}{5/8} {1/8} {1}{0}{0} {0}{0}{1}
             
             % Right side
-            \draw (1,0,0) \threedrectpath{1} {0}{1}{0} {0}{0}{1};
+            \draw[fill=white!90!black] (1,0,0) \threedrectpath{1} {0}{1}{0} {0}{0}{1};
             % Level 1
             \drawthreedplus{1}{0}{0} {1} {0}{1}{0} {0}{0}{1}
             % Level 2

@@ -38,9 +38,13 @@
 
 \input{preamble}
 
-%\includeonly{motivation}
-%\includeonly{method,bibliography_pages,index_pages}
-%\includeonly{pde_derivation,bibliography_pages}%,index_pages} % There must be no spaces between the filenames and the commas separating the files
+\iftoggle{DEBUG}{
+    % There must be no spaces between the filenames and the commas separating the files
+    %\includeonly{motivation}
+    %\includeonly{method,bibliography_pages,index_pages}
+    \includeonly{results_and_conclusions,bibliography_pages,index_pages}
+    %\includeonly{pde_derivation,bibliography_pages}%,index_pages}
+}{}
 
 \begin{document}
 

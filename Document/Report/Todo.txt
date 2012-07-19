@@ -2,6 +2,10 @@
 Sections left to write after importance
 ---------------------------------------
 
+* Results and conclusions
+* Own implementations of algorithms and data structures
+* Improvements
+* Splash and foam
 * NVD
 * HYPER-C
 
