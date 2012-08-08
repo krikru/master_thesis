@@ -37,6 +37,7 @@ private slots:
 
     void start_simulation();
     bool toggle_pause_simulation();
+    void save_screen_as_tikz_picture();
 
     // Slots connected to UI items
     void on_actionAbout_rtocean_triggered();

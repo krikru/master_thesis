@@ -33,8 +33,11 @@ mainwin::mainwin(QWidget *parent) :
     this->show();
     // Set central widget
 
+    /* Connect menu items with functions */
     QObject::connect(ui->actionPause, SIGNAL(triggered(bool)),
                      this, SLOT(toggle_pause_simulation()));
+    QObject::connect(ui->actionSave_screen_as_TikZ_picture, SIGNAL(triggered(bool)),
+                     this, SLOT(save_screen_as_tikz_picture()));
 
     // Start simulation directly when application has finished loading
     QTimer::singleShot(100, this, SLOT(start_simulation()));
@@ -87,6 +90,7 @@ void mainwin::keyPressEvent(QKeyEvent *e)
     try
     {
         if (e->key() >= Qt::Key_0 && e->key() <= Qt::Key_9) {
+            /* Select scalar property to visualize */
             int scalar_property_number = e->key() - Qt::Key_0;
             if (scalar_property_number >= NUM_SCALAR_PROPERTIES) {
                 scalar_property_number = 0;
@@ -208,6 +212,12 @@ bool mainwin::toggle_pause_simulation()
     LINE_UNREACHABLE();
 #endif
     return false; // Only to prevent warning
+}
+
+void mainwin::save_screen_as_tikz_picture()
+{
+    cout << "Visualizing system..." << endl;
+    ui->visualization_vw->save_screen_as_tikz_picture();
 }
 
 void mainwin::on_actionAbout_rtocean_triggered()

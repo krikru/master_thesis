@@ -188,12 +188,13 @@
 \newrobustcmd  {\subrefp}  [1]{(\subref{#1})}
 
 
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+% ABBREVIATIONS AND ACRONYMS
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+
 % % % % % % % % %
 % ABBREVIATIONS %
 % % % % % % % % %
-
-% Abreviations
-% ------------
 
 % The abbreviations are sorted by the abbreviated forms
 %\declareabbreviationqi{threedim}      {three-dimensional}
@@ -201,32 +202,47 @@
 %\declareabbreviation  {NS}            {Navier--Stokes}
 \declareabbreviation  {itslimitedtime}      {its limited time}
 \declareabbreviation  {masterthesisworktime}{about five months}
-\declareabbreviationqi{Saab}                {\textbf{Saab}} % Saab seems to use the Gill Sans font
+\declareabbreviationqi{NULL}                {NULL}
+\declareabbreviation  {numchildren}         {$2^d$}
+\declareabbreviationqi{Saab}                {Saab} % Saab seems to use the Gill Sans font
 \declareabbreviation  {thismasterthesiswork}{the master thesis work behind this report}
 \declareabbreviation  {thisprojectwork}     {the project work described in this report}
 
-% Acronyms
-% --------
+% % % % % % %
+% ACRONYMS  %
+% % % % % % %
 
 % The acronyms are sorted by the abbreviated forms
 \declareacronym {BFECC} {back and forth error compensation and correction}
 \declareacronyms{BEM}   {boundary element}{method}
+\declareacronyms{CBC}   {convection boundedness}{criterion}
+\declareacronyms{CD}    {central}{difference}
 \declareacronyms{CFD}   {computational}{fluid dynamics}
 \declareacronym {CFL}   {Courant--Friedrichs--Lewy} %[\index{condition!Courant--Friedrichs--Lewy|see{Courant--Friedrichs--Lewy}}]
 \declareacronyms{CFMM}  {continuous fast multipole}{method}
+\declareacronym {CICSAM}{compressive interface capturing scheme for arbitrary meshes}
+\declareacronym {CIP}   {constrained interpolation profile}
+\declareacronym {FCSCF} {Fast Compressive Surface Capturing Formulation}
 \declareacronyms{FMM}   {fast multipole}{method}
 \declareacronyms{FOV}   {field of}{view}
 \declareacronyms{FVM}   {finite volume}{method}
+\declareacronyms{HRIC}  {high resolution}{interface capturing}
 \declareacronyms{LOD}   {level of}{detail}
 \def            \LODs   {\mbox{\LOD\nspace s}\xspace}
 \declareacronym {LS}    {level set}
+\declareacronym {LUDS}  {linear upwind difference scheme}
+\def            \LUDSs  {\mbox{\LUDS\nspace s}\xspace}
 \declareacronym {MAC}   {marker-and-cell}%[\index{method!marker-and-cell|see{marker-and-cell}}]
+\declareacronym {MULES} {multidimensional universal limiter with explicit solution}%[\index{method!marker-and-cell|see{marker-and-cell}}]
+\declareacronyms{NVD}   {normalised variable}{diagram}
 \declareacronym {PCG}   {preconditioned conjugate gradient}
 \declareacronyms{PDE}   {partial differential}{equation}
 \def            \PDEs   {\mbox{\PDE\nspace s}\xspace}
 \declareacronym {SPH}   {smoothed-particle hydrydynamics}
+\declareacronym {UQ}    {Quadratic upwind difference scheme}
 \declareacronyms{VOF}   {volume of}{fluid}%[\index{method!volume of fluid|see{volume of fluid}}]
 \declareacronyms{VOS}   {volume of}{solid}%[\index{method!volume of solid|see{volume of solid}}]
+\declareacronym {QUICK} {quadratic upwind interpolation for convective kinematics}
 
 % % % % % % % % % % % % %
 % INDEX SINGLE KEYWORDS %
@@ -243,6 +259,7 @@
 \declareindexkeypair      {approximation}{approximately}
 \declareindexkey      {area}
 \declareindexkeypair      {area}{areas}
+%\declareindexkey      {array} % Command \array already defined.
 \declareindexkey      {average}
 \declareindexkeypair      {average}{averaged}
 \declareindexkey      {backwash}
@@ -263,6 +280,10 @@
 \declareindexkeypair      {derivative}{derivatives}
 \declareindexkey      {diffusion}
 %\declareindexkey      {dispersion} % Use \idxs{wave}{dispersion} instead
+\declareindexkey      {dimension}
+%\declareindexkeypair      {dimension}{dimensions} % This keyword is listed under dimensionality
+\declareindexkey      {dimensionality}
+\declareindexkeypair      {dimensionality}{dimensions}
 \declareindexkey      {divergence}
 \declareindexkeypair      {divergence}{divergences}
 \declareindexkey      {discretization}
@@ -290,6 +311,8 @@
 \declareindexkeypair      {isosurface}{isosurfaces}
 \declareindexkey      {jump}
 \declareindexkeypair      {jump}{jumps}
+\declareindexkey      {method}
+\declareindexkeypair      {method}{methods}
 \declareindexkey      {momentum}
 \declareindexkey      {neglection}%[\index{neglection|seealso{approximation}}]
 \declareindexkeypair      {neglection}{neglect}
@@ -307,8 +330,11 @@
 \declareindexkeypair      {orthogonal}{orthogonalized}
 %\declareindexkey      {particle}
 %\declareindexkeypair      {particle}{particles}
+\declareindexkey      {preformance}
 \declareindexkey      {phase}
 \declareindexkeypair      {phase}{phases}
+\declareindexkey      {pointer}
+\declareindexkeypair      {pointer}{pointers}
 \declareindexkey      {preconditioning}
 \declareindexkeypair      {preconditioning}{preconditioner}
 %\declareindexkey      {precision} % Use \idxs{numerical}{precision} or \accuracy instead
@@ -326,6 +352,10 @@
 \declareindexkey      {surface}
 \declareindexkeypair      {surface}{surfaces}
 \declareindexkey      {temperature}
+\declareindexkey      {unboundedness}
+\declareindexkeypair      {unboundedness}{unbounded}
+\declareindexkey      {UPWIND}
+\declareindexkey      {vacuum}
 \declareindexkey      {velocity}
 \declareindexkeypair      {velocity}{velocities}
 \declareindexkey      {visualization}

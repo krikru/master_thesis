@@ -18,13 +18,6 @@ using std::endl;
 
 // Own includes
 #include "message_handler.h"
-#include "base_float_vec3.h"
-
-////////////////////////////////////////////////////////////////
-// TYPEDEFS
-////////////////////////////////////////////////////////////////
-
-typedef base_float_vec3<GLfloat> color3;
 
 ////////////////////////////////////////////////////////////////
 // STATIC VARIABLES
@@ -45,6 +38,7 @@ viswidget::viswidget(QWidget *parent) :
     /* Init member variables */
     system_to_visualize = 0;
     scalar_property_to_visualize = 0;
+    drawing_to_tikz = false;
 
     init_neighbor_connection_colors();
 }
@@ -102,6 +96,16 @@ void viswidget::paintGL()
     }
 }
 
+void viswidget::save_screen_as_tikz_picture()
+{
+    if (NUM_DIMENSIONS != 2) {
+        message_handler::display_message_box("Saving the screen as a TikZ picture is currently only suported in two dimensions");
+    }
+    start_tikz_picture();
+    visualize_fvoctree(system_to_visualize->get_water());
+    end_tikz_picture();
+}
+
 void viswidget::resizeGL(int w, int h)
 {
     try
@@ -153,22 +157,10 @@ void viswidget::draw_pressure(const octcell *cell)
     uint idx2 = MIN(idx1 + 1, NUM_TRANSITIONS);
     q -= idx1;
     color3 c = (1-q)*colors[idx1] + q*colors[idx2];
-    quick_set_color(c[0], c[1], c[2], 1);
-    //quick_set_color(c[0], c[1], c[2], cell->get_safe_alpha());
 
 #if    NUM_DIMENSIONS == 2
-    /* Vertices */
-    pfvec p00 = cell->r;
-    pfvec p01 = p00;
-    p01[DIM_X] += cell->s;
-    pfvec p10 = p00;
-    p10[DIM_Y] += cell->s;
-    pfvec p11 = p10 + p01 - p00;
-
-    /* Draw triangle*/
-    quick_draw_triangle(p00, p01, p10);
-    quick_draw_triangle(p11, p10, p01);
-
+    quick_fill_cell_2d(cell, c);
+    quick_fill_cell_2d(cell, c, cell->get_safe_alpha());
 #elif  NUM_DIMENSIONS == 3
     /* Don't draw pressure */
 #endif
@@ -194,22 +186,10 @@ void viswidget::draw_pressure_deviation(const octcell *cell)
     uint idx2 = MIN(idx1 + 1, NUM_TRANSITIONS);
     q -= idx1;
     color3 c = (1-q)*colors[idx1] + q*colors[idx2];
-    quick_set_color(c[0], c[1], c[2], 1);
-    //quick_set_color(c[0], c[1], c[2], cell->get_safe_alpha());
 
 #if    NUM_DIMENSIONS == 2
-    /* Vertices */
-    pfvec p00 = cell->r;
-    pfvec p01 = p00;
-    p01[DIM_X] += cell->s;
-    pfvec p10 = p00;
-    p10[DIM_Y] += cell->s;
-    pfvec p11 = p10 + p01 - p00;
-
-    /* Draw triangle*/
-    quick_draw_triangle(p00, p01, p10);
-    quick_draw_triangle(p11, p10, p01);
-
+    quick_fill_cell_2d(cell, c);
+    //quick_fill_cell_2d(cell, c, cell->get_safe_alpha());
 #elif  NUM_DIMENSIONS == 3
     /* Don't draw pressure */
 #endif
@@ -245,21 +225,9 @@ void viswidget::draw_alpha(const octcell* cell)
         // Alpha is undefined
         c = color3(1, 1, 1); // White
     }
-    quick_set_color(c[0], c[1], c[2], 1);
 
 #if    NUM_DIMENSIONS == 2
-    /* Vertices */
-    pfvec p00 = cell->r;
-    pfvec p01 = p00;
-    p01[DIM_X] += cell->s;
-    pfvec p10 = p00;
-    p10[DIM_Y] += cell->s;
-    pfvec p11 = p10 + p01 - p00;
-
-    /* Draw triangle*/
-    quick_draw_triangle(p00, p01, p10);
-    quick_draw_triangle(p11, p10, p01);
-
+    quick_fill_cell_2d(cell, c);
 #elif  NUM_DIMENSIONS == 3
     /* Don't draw alpha */
 #endif
@@ -284,21 +252,9 @@ void viswidget::draw_water_vol_coeff(const octcell* cell)
     uint idx2 = MIN(idx1 + 1, NUM_TRANSITIONS);
     q -= idx1;
     color3 c = (1-q)*colors[idx1] + q*colors[idx2];
-    quick_set_color(c[0], c[1], c[2], 1);
 
 #if    NUM_DIMENSIONS == 2
-    /* Vertices */
-    pfvec p00 = cell->r;
-    pfvec p01 = p00;
-    p01[DIM_X] += cell->s;
-    pfvec p10 = p00;
-    p10[DIM_Y] += cell->s;
-    pfvec p11 = p10 + p01 - p00;
-
-    /* Draw triangle*/
-    quick_draw_triangle(p00, p01, p10);
-    quick_draw_triangle(p11, p10, p01);
-
+    quick_fill_cell_2d(cell, c);
 #elif  NUM_DIMENSIONS == 3
     /* Don't draw */
 #endif
@@ -323,21 +279,9 @@ void viswidget::draw_air_vol_coeff(const octcell* cell)
     uint idx2 = MIN(idx1 + 1, NUM_TRANSITIONS);
     q -= idx1;
     color3 c = (1-q)*colors[idx1] + q*colors[idx2];
-    quick_set_color(c[0], c[1], c[2], 1);
 
 #if    NUM_DIMENSIONS == 2
-    /* Vertices */
-    pfvec p00 = cell->r;
-    pfvec p01 = p00;
-    p01[DIM_X] += cell->s;
-    pfvec p10 = p00;
-    p10[DIM_Y] += cell->s;
-    pfvec p11 = p10 + p01 - p00;
-
-    /* Draw triangle*/
-    quick_draw_triangle(p00, p01, p10);
-    quick_draw_triangle(p11, p10, p01);
-
+    quick_fill_cell_2d(cell, c);
 #elif  NUM_DIMENSIONS == 3
     /* Don't draw */
 #endif
@@ -362,21 +306,9 @@ void viswidget::draw_total_vol_coeff(const octcell* cell)
     uint idx2 = MIN(idx1 + 1, NUM_TRANSITIONS);
     q -= idx1;
     color3 c = (1-q)*colors[idx1] + q*colors[idx2];
-    quick_set_color(c[0], c[1], c[2], 1);
 
 #if    NUM_DIMENSIONS == 2
-    /* Vertices */
-    pfvec p00 = cell->r;
-    pfvec p01 = p00;
-    p01[DIM_X] += cell->s;
-    pfvec p10 = p00;
-    p10[DIM_Y] += cell->s;
-    pfvec p11 = p10 + p01 - p00;
-
-    /* Draw triangle*/
-    quick_draw_triangle(p00, p01, p10);
-    quick_draw_triangle(p11, p10, p01);
-
+    quick_fill_cell_2d(cell, c);
 #elif  NUM_DIMENSIONS == 3
     /* Don't draw */
 #endif
@@ -402,22 +334,10 @@ void viswidget::draw_velocity_divergence(const octcell* cell)
     uint idx2 = MIN(idx1 + 1, NUM_TRANSITIONS);
     q -= idx1;
     color3 c = (1-q)*colors[idx1] + q*colors[idx2];
-    quick_set_color(c[0], c[1], c[2], 1);
-    //quick_set_color(c[0], c[1], c[2], cell->get_safe_alpha());
 
 #if    NUM_DIMENSIONS == 2
-    /* Vertices */
-    pfvec p00 = cell->r;
-    pfvec p01 = p00;
-    p01[DIM_X] += cell->s;
-    pfvec p10 = p00;
-    p10[DIM_Y] += cell->s;
-    pfvec p11 = p10 + p01 - p00;
-
-    /* Draw triangle*/
-    quick_draw_triangle(p00, p01, p10);
-    quick_draw_triangle(p11, p10, p01);
-
+    quick_fill_cell_2d(cell, c);
+    //quick_fill_cell_2d(cell, c, cell->get_safe_alpha());
 #elif  NUM_DIMENSIONS == 3
     /* Don't draw */
 #endif
@@ -443,22 +363,10 @@ void viswidget::draw_flow_divergence(const octcell* cell)
     uint idx2 = MIN(idx1 + 1, NUM_TRANSITIONS);
     q -= idx1;
     color3 c = (1-q)*colors[idx1] + q*colors[idx2];
-    quick_set_color(c[0], c[1], c[2], 1);
-    //quick_set_color(c[0], c[1], c[2], cell->get_safe_alpha());
 
 #if    NUM_DIMENSIONS == 2
-    /* Vertices */
-    pfvec p00 = cell->r;
-    pfvec p01 = p00;
-    p01[DIM_X] += cell->s;
-    pfvec p10 = p00;
-    p10[DIM_Y] += cell->s;
-    pfvec p11 = p10 + p01 - p00;
-
-    /* Draw triangle*/
-    quick_draw_triangle(p00, p01, p10);
-    quick_draw_triangle(p11, p10, p01);
-
+    quick_fill_cell_2d(cell, c);
+    //quick_fill_cell_2d(cell, c, cell->get_safe_alpha());
 #elif  NUM_DIMENSIONS == 3
     /* Don't draw */
 #endif
@@ -572,6 +480,21 @@ void viswidget::quick_draw_cell(const octcell* cell)
     pfvec r1 = cell->r;
     // Optimize
     pfvec r2 = cell->get_opposite_corner();
+    if (drawing_to_tikz) {
+        tikz_file << "\\draw";
+        if (!tikz_line_color_black || tikz_line_opacity != 1) {
+            tikz_file << "[";
+            if (!tikz_line_color_black) {
+                tikz_file << "draw=linecolor,";
+            }
+            if (tikz_line_opacity != 1) {
+                tikz_file << "opacity=" << tikz_line_opacity;
+            }
+            tikz_file << "]";
+        }
+        tikz_file << " (" << r1[DIM_X] << "," << r1[DIM_Y] << ") rectangle (" << r2[DIM_X] << "," << r2[DIM_Y] << ");" << endl;
+        return;
+    }
 #if    NUM_DIMENSIONS == 2
     quick_draw_line(r1[DIM_X], r1[DIM_Y], 0, r2[DIM_X], r1[DIM_Y], 0);
     quick_draw_line(r2[DIM_X], r1[DIM_Y], 0, r2[DIM_X], r2[DIM_Y], 0);
@@ -1005,27 +928,16 @@ void viswidget::visualize_fvoctree(const fvoctree *tree)
     draw_water_level_recursively(tree->root);
 #endif
 #if  DRAW_CELL_CUBES
-#if  !(TEST_DEPTH && DRAW_CHILD_CELLS_FIRST_IF_DEPTH_TESTING) && DRAW_PARENT_CELLS && !DRAW_ONLY_SURFACE_CELLS
-    /* Draw parent cells */
-    set_line_style(LINE_WIDTH, PARENT_CUBE_R, PARENT_CUBE_G, PARENT_CUBE_B, PARENT_CUBE_A);
-    set_up_model_view_matrix(PARENT_CUBE_DIST_SCALING);
-    visualize_parent_cells_recursively(tree->root);
-    /* Draw leaf cells */
-    set_line_style(LINE_WIDTH, LEAF_CUBE_R, LEAF_CUBE_G, LEAF_CUBE_B, LEAF_CUBE_A);
-    set_up_model_view_matrix();
-    visualize_leaf_cells_recursively(tree->root);
-#else
-    /* Draw leaf cells */
-    set_line_style(LINE_WIDTH, LEAF_CUBE_R, LEAF_CUBE_G, LEAF_CUBE_B, LEAF_CUBE_A);
-    set_up_model_view_matrix(LEAF_CUBE_DIST_SCALING);
-    visualize_leaf_cells_recursively(tree->root);
 #if  DRAW_PARENT_CELLS && !DRAW_ONLY_SURFACE_CELLS
     /* Draw parent cells */
     set_line_style(LINE_WIDTH, PARENT_CUBE_R, PARENT_CUBE_G, PARENT_CUBE_B, PARENT_CUBE_A);
     set_up_model_view_matrix(PARENT_CUBE_DIST_SCALING);
     visualize_parent_cells_recursively(tree->root);
 #endif // DRAW_PARENT_CELLS
-#endif // Parent/leaf cell order
+    /* Draw leaf cells */
+    set_line_style(LINE_WIDTH, LEAF_CUBE_R, LEAF_CUBE_G, LEAF_CUBE_B, LEAF_CUBE_A);
+    set_up_model_view_matrix();
+    visualize_leaf_cells_recursively(tree->root);
 #endif // DRAW_CELL_CUBES
 
 #if  DRAW_CELL_FACE_VELOCITIES
@@ -1108,6 +1020,32 @@ void viswidget::init_neighbor_connection_colors()
 #endif
 }
 
+void viswidget::start_tikz_picture()
+{
+#if  DEBUG
+    if (drawing_to_tikz) {
+        throw logic_error("Trying to start TikZ picture when already drawing to TikZ");
+    }
+#endif
+    drawing_to_tikz = true;
+    tikz_file.open("tikz_test.tex");
+    tikz_file.setf(std::ios::fixed, std::ios::floatfield); // LaTeX doesn't support scientific notation
+    //tikz_file << "\\begin{tikzpicture}[x={(.35\\textwidth,0)},y={(0,.35\\textwidth)}]" << endl;
+    tikz_file << "\\def\\initiallinewidth{" << INITIAL_PGF_LINE_WIDTH << "}" << endl;
+}
+
+void viswidget::end_tikz_picture()
+{
+#if  DEBUG
+    if (!drawing_to_tikz) {
+        throw logic_error("Trying to end TikZ picture while not drawing to TikZ");
+    }
+#endif
+    //tikz_file << "\\end{tikzpicture}";
+    tikz_file.close();
+    drawing_to_tikz = false;
+}
+
 void viswidget::quick_set_color(GLfloat r, GLfloat g, GLfloat b, GLfloat a)
 {
     static bool blending_enabled = false;
@@ -1126,6 +1064,23 @@ void viswidget::quick_set_color(GLfloat r, GLfloat g, GLfloat b, GLfloat a)
 void viswidget::set_line_style(GLfloat width, GLfloat  r, GLfloat g, GLfloat b, GLfloat a)
 {
     static bool blending_enabled = false;
+    if (drawing_to_tikz) {
+        tikz_line_opacity = a;
+        if (!a) {
+            //tikz_line_color_black = true;
+            return;
+        }
+        if (!r && !b && !g) {
+            tikz_line_color_black = true;
+        }
+        else {
+            tikz_line_color_black = false;
+            tikz_file << "\\definecolor{linecolor}{rgb}{" << r << "," << g << "," << b << "}" << endl;
+        }
+        tikz_file << "\\pgfsetlinewidth{" << width << "*\\initiallinewidth}" << endl; // Default line width is 1 pt
+        // TODO: Implement line thicknesses in TikZ pictures
+        return;
+    }
     if (a < 1 && !blending_enabled) {
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -1161,6 +1116,32 @@ void viswidget::quick_draw_circle(pfvec mid, pfvec e1, pfvec e2, uint num_lines)
    glEnd();
 }
 
+void viswidget::quick_fill_cell_2d(const octcell *cell, color3 color, GLfloat alpha)
+{
+    /* Vertices */
+    pfvec p00 = cell->r;
+    pfvec p01 = p00;
+    p01[DIM_X] += cell->s;
+    pfvec p10 = p00;
+    p10[DIM_Y] += cell->s;
+    pfvec p11 = p10 + p01 - p00;
+    if (drawing_to_tikz) {
+        tikz_file << "\\definecolor{fillcolor}{rgb}{" << color[0] << "," << color[1] << "," << color[2] << "}" << endl;
+        tikz_file << "\\fill[fillcolor";
+        if (alpha != 1) {
+            tikz_file << ",opacity=" << alpha;
+        }
+        tikz_file << "] (" << p00[DIM_X] << "," << p00[DIM_Y] << ") rectangle (" << p11[DIM_X] << "," << p11[DIM_Y] << ");" << endl;
+        return;
+    }
+
+
+    quick_set_color(color[0], color[1], color[2], alpha);
+    /* Draw triangle*/
+    quick_draw_triangle(p00, p01, p10);
+    quick_draw_triangle(p11, p10, p01);
+}
+
 void viswidget::quick_draw_triangle(pftype x1, pftype y1, pftype z1,
                                     pftype x2, pftype y2, pftype z2,
                                     pftype x3, pftype y3, pftype z3)
@@ -1185,8 +1166,29 @@ void viswidget::quick_draw_triangle(pfvec p1, pfvec p2, pfvec p3)
 #endif
 }
 
+/* set_line_style should have been called at least once before calling this function */
 void viswidget::quick_draw_line(GLfloat ax, GLfloat ay, GLfloat az, GLfloat bx, GLfloat by, GLfloat bz)
 {
+    if (drawing_to_tikz) {
+        tikz_file << "\\draw";
+        if (!tikz_line_color_black || tikz_line_opacity != 1) {
+            tikz_file << "[";
+            if (!tikz_line_color_black) {
+                tikz_file << "draw=linecolor,";
+            }
+            if (tikz_line_opacity != 1) {
+                tikz_file << "opacity=" << tikz_line_opacity;
+            }
+            tikz_file << "]";
+        }
+        if (az || bz) {
+            tikz_file << " (" << ax << "," << ay << "," << az << ") -- (" << bx << "," << by << "," << bz << ");" << endl;
+        }
+        else {
+            tikz_file << " (" << ax << "," << ay << ") -- (" << bx << "," << by << ");" << endl;
+        }
+        return;
+    }
     glBegin(GL_LINES);
     glVertex3f(ax, ay, az);
     glVertex3f(bx, by, bz);

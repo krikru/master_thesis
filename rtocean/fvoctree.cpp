@@ -42,23 +42,58 @@ fvoctree::~fvoctree()
 /* Returns true if the cell should be removed from the simulation */
 bool fvoctree::refine_subtree(octcell* c, pftype surface, pftype bottom)
 {
-
     static int tot_num_cells = 1;
     static int num_leaf_cells = 1;
     pftype s = c->s;
 
     pftype lowest_cell_height = c->r[VERTICAL_DIMENSION];
 #if    NUM_DIMENSIONS == 2
-#if 0
+#if 0 // Step profile surface
     pftype hdiff = .24118956;
     pftype local_surface_height = c->get_cell_center().e[HORIZONTAL_DIMENSION1] > .5 ? SURFACE_HEIGHT + hdiff/2 : SURFACE_HEIGHT - hdiff/2;
     pftype min_surf_height = local_surface_height;
     pftype max_surf_height = local_surface_height;
-#else
-#if 1
+#elif 0 // Pilar
+#if 0 // Large pilar
+    pftype hdiff = .5;
+    pftype width = .5;
+#elif 0 // High, thin pilar
+    pftype hdiff = .5;
+    pftype width = .1;
+#else  // Small pilar
+    pftype hdiff = .1;
+    pftype width = .2;
+#endif
+    pftype low  = SURFACE_HEIGHT - hdiff/2;
+    pftype high = SURFACE_HEIGHT + hdiff/2;
+    pftype min_surf_height, max_surf_height;
+    if (c->r.e[HORIZONTAL_DIMENSION1] < .5 - width/2) {
+        min_surf_height = low;
+        if (c->get_opposite_corner().e[HORIZONTAL_DIMENSION1] > .5 - width/2) {
+            max_surf_height = high;
+        }
+        else {
+            max_surf_height = low;
+        }
+    }
+    else if (c->get_opposite_corner().e[HORIZONTAL_DIMENSION1] > .5 + width/2) {
+        min_surf_height = low;
+        if (c->r.e[HORIZONTAL_DIMENSION1] < .5 + width/2) {
+            max_surf_height = high;
+        }
+        else {
+            max_surf_height = low;
+        }
+    }
+    else {
+        min_surf_height = max_surf_height = high;
+    }
+
+#else // Sloping surface
+#if 1 // Slope to the right
     pftype left_edge_height = 0.5501;
     pftype slope = 0.4;
-#else
+#else // Slope to the left
     pftype left_edge_height = 0.9501;
     pftype slope = -0.4;
 #endif

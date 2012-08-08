@@ -83,14 +83,15 @@ private:
     void _evolve();
 
     /* Simulation */
-    void advect_and_update_pressure();
+    void transport_fluids_and_update_pressure();
     void calculate_cell_face_properties_recursivelly(octcell* cell);
     void calculate_delta_alpha_recursively(octcell* cell);
     void clamp_advect_alpha_recursively(octcell* cell);
     void calculate_alpha_gradient_recursively(octcell* cell);
     void advect_cell_properties_recursivelly(octcell* cell);
     //bool advect_and_update_pressure_recursively(octcell* cell);
-    void update_velocities_recursively(octcell* cell);
+    void update_velocities_by_the_pressure_gradients_recursively(octcell* cell);
+    void update_velocities_by_advection();
 
     /* Thread safety */
     void start_operation();
@@ -216,7 +217,7 @@ void watersystem::set_time_step(pftype time_step)
     if (dt != time_step) {
         // TODO: Update time-staggered parameters (velocities)
         dt = 0.5 * (time_step - dt);
-        update_velocities_recursively(w->root);
+        update_velocities_by_the_pressure_gradients_recursively(w->root);
         dt = time_step;
     }
 }

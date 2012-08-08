@@ -113,29 +113,28 @@ int watersystem::run_simulation(pftype time_step)
 void watersystem::_evolve()
 {
     t += dt;
-    advect_and_update_pressure();
-    update_velocities_recursively(w->root);
+    calculate_cell_face_properties_recursivelly(w->root);
+    calculate_quasi_momentums_recursively(w->root); // New
+    advect_cell_properties_recursivelly(w->root);
+    transport_fluids_and_update_pressure();
+    update_velocities_by_the_pressure_gradients_recursively(w->root);
+    update_velocities_by_advection();
 }
 
 #if 1
-void watersystem::advect_and_update_pressure()
+void watersystem::transport_fluids_and_update_pressure()
 {
     /* Advect alpha */
     //calculate_delta_alpha_recursively(w->root);
-    calculate_cell_face_properties_recursivelly(w->root);
     //clamp_advect_alpha_recursively(w->root);
 
-#if 0
-    /* Sharpen alpha */
-    calculate_alpha_gradient_recursively(w->root);
-    sharpen_alpha_recursively(w->root);
-#endif
-
     /* Update pressure */
-    advect_cell_properties_recursivelly(w->root);
     //update_pressure_recursively(w->root);
 }
 
+/*
+ * Calculates among other cell face alpha
+ */
 void watersystem::calculate_cell_face_properties_recursivelly(octcell* cell)
 {
     if (cell->has_child_array()) {
@@ -430,14 +429,14 @@ void watersystem::advect_cell_properties_recursivelly(octcell* cell)
 }
 #endif
 
-void watersystem::update_velocities_recursively(octcell* cell)
+void watersystem::update_velocities_by_the_pressure_gradients_recursively(octcell* cell)
 {
     if (cell->has_child_array()) {
         for (uint idx = 0; idx < octcell::MAX_NUM_CHILDREN; idx++) {
             if (cell->has_child(idx)) {
                 /* Child exists */
                 octcell* c = cell->get_child(idx);
-                update_velocities_recursively(c);
+                update_velocities_by_the_pressure_gradients_recursively(c);
             }
         }
         return;
@@ -454,6 +453,10 @@ void watersystem::update_velocities_recursively(octcell* cell)
             node->v.update_velocity(cell, node->v.n, dt);
         }
     }
+}
+
+void watersystem::update_velocities_by_advection()
+{
 }
 
 /* Thread safety */

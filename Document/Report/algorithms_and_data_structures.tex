@@ -1,7 +1,131 @@
 \chapter{Algorithms and data structures}
 
-Use Ti\textit{k}Z and PGF to illustrate the structures.
-
 \section{The octree}
+
+\begin{figure}
+    \centering
+    \begin{tikzpicture}[x={(.35\textwidth,0)},y={(0,.35\textwidth)}]
+    \def\@offset{.1}
+    
+    % The cells
+    \draw (0,0) \squarepath{1};
+    \drawplus{0}{0}{1}
+    \draw (0.25,0.25) node{0};
+    \draw (0.75,0.25) node{1};
+    \draw (0.25,0.75) node{2};
+    \draw (0.75,0.75) node{3};
+    
+    % The 0th index axes
+    \draw[->] (0,-\@offset) -- (1,-\@offset);
+    \draw (1+\@offset,-\@offset) node{$i_0$};
+    \draw (.25,-2*\@offset) node{0};
+    \draw (.75,-2*\@offset) node{1};
+    
+    % The 1th index axes
+    \draw[->] (-\@offset,0) -- (-\@offset,1);
+    \draw (-\@offset,1+\@offset) node{$i_1$};
+    \draw (-2*\@offset,.25) node{0};
+    \draw (-2*\@offset,.75) node{1};
+    \end{tikzpicture}
+    \caption{Child cells with their indexes written inside of them.}
+    \label{fig:octree_child_indexes}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \subcaptionbox{\label{fig:octree_child_array_example_layout}}[.415\textwidth]{
+        \begin{tikzpicture}[x={(.35\textwidth,0)},y={(0,.35\textwidth)}]
+        % The cells
+        % Level 0
+        \draw (0,0) \squarepath{1};
+        
+        \drawplus{0}{0}{1}
+        % Level 1
+        \drawplus{0}{0}{1}
+        \draw[pattern=north east lines] (0.5,0.5) \squarepath{0.5};
+        % Level 2
+        \drawplus{0.5}{0}{0.5}
+        \draw[pattern=north east lines] (0.75,0.25) \squarepath{0.25};
+        \end{tikzpicture}
+    }
+    \subcaptionbox{\label{fig:octree_child_array_example_data}}[.415\textwidth]{
+        \pgfmathsetmacro{\wdbox}{.02\textwidth}
+        \tikzset{
+            >= stealth,
+            every picture/.style={thick},
+            %every picture/.style={ultra thick},
+            every node/.style={anchor=north},
+            %null/.style={\path (0,0) -- +(0,.65em) node {$\emptyset$};},
+            simple/.style={draw,fill=white!100!black,minimum size=4*\wdbox,scale=1},
+            array/.style={%
+                draw,
+                fill=white!90!black,
+                inner sep=0,
+                rounded corners,
+                rectangle,
+                rectangle split,
+                rectangle split parts=4,
+                rectangle split horizontal,
+                rectangle split every empty part={},
+                rectangle split empty part width=2*\wdbox-\pgflinewidth,
+                rectangle split empty part height=2*\wdbox-\pgflinewidth,
+                rectangle split ignore empty parts=false,
+                append after command={%
+                    \pgfextra{\let\mainnode=\tikzlastnode} 
+                    coordinate (c0 \mainnode) at ($(\mainnode.west)!0.5!(\mainnode.one split)$)
+                    coordinate (c1 \mainnode) at ($(\mainnode.west)!1.5!(\mainnode.one split)$)
+                    coordinate (c2 \mainnode) at ($(\mainnode.west)!2.5!(\mainnode.one split)$)
+                    coordinate (c3 \mainnode) at ($(\mainnode.west)!3.5!(\mainnode.one split)$)
+                }
+            }
+        }
+        \begin{tikzpicture}[x=\wdbox,y=\wdbox]
+        \node[simple] (1) {};
+        \draw[->] (1.center)  -- +( 0,-4) node[array]  (2)  {};
+        \draw[->] (c0 2)      -- +(-6,-4) node[simple] (3)  {};
+        \draw[->] (c1 2)      -- +(-2,-4) node[simple] (4)  {};
+        \draw[->] (c2 2)      -- +(+2,-4) node[simple] (5)  {};
+        %\draw[->] (c3 2)      -- +(+6,-4) node         (6)  {}; \path (6) -- +(0,.65em) node {$\emptyset$};
+        \path (c3 2) -- +(0,.75em) node {$\emptyset$};
+        %\draw[->] (3.center)  -- +( 0,-4) node         (7)  {$\emptyset$};
+        \path (3.center) -- +(0,.75em) node {$\emptyset$};
+        \draw[->] (4.center)  -- +( 0,-4) node[array]  (8)  {};
+        %\draw[->] (5.center)  -- +( 0,-4) node         (9)  {$\emptyset$};
+        \path (5.center) -- +(0,.75em) node {$\emptyset$};
+        \draw[->] (c0 8)      -- +(-4,-4) node[simple] (10) {};
+        \draw[->] (c1 8)      -- +(-0,-4) node[simple] (11) {};
+        \draw[->] (c2 8)      -- +(+4,-4) node[simple] (12) {};
+        %\draw[->] (c3 8)      -- +(+8,-4) node         (13) {$\emptyset$};
+        %\draw[->] (10.center) -- +( 0,-4) node         (14) {$\emptyset$};
+        %\draw[->] (11.center) -- +( 0,-4) node         (15) {$\emptyset$};
+        %\draw[->] (12.center) -- +( 0,-4) node         (16) {$\emptyset$};
+        \path (c3 8) -- +(0,.75em) node {$\emptyset$};
+        \path (10.center) -- +(0,.75em) node {$\emptyset$};
+        \path (11.center) -- +(0,.75em) node {$\emptyset$};
+        \path (12.center) -- +(0,.75em) node {$\emptyset$};
+        %\draw (0,1)--(0,1);
+        \end{tikzpicture}
+    }
+    \caption{An octree configuration. \subrefp{fig:octree_child_array_example_layout} The spatial layout of the octree. A striped square denotes a non-existing cell on that location. \subrefp{fig:octree_child_array_example_data} The internal data representation of the octree. The large squares are cells, the rectangles broken into four parts are arrays containing four elements and the arrows are pointers. A $\emptyset$ sign denotes a \NULL pointer, i.e. a pointer whos value is zero.}
+    \label{fig:octree_child_array_example}
+\end{figure}
+
+Although an octree is a \idxs{three-dimensional}{data structure} and a tree in which all \idxsp{parent}{node}{s} has exactly eight \idxsp{child}{node}{s}, the octree implementation used in \thisprojectwork is a generalized version of an octree that works for any number $d$ of \dimensions and where each \idxs{parent}{cell} (a \cell is a \node with a physical representation) has between 1 and $2^d$ \idxsp{child}{node}{s}. 
+
+The \octree itself just consists of a \pointer to the \idxs{root}{cell}\indexs{root}{node} and a few \methods for manipulating the \cells in the tree. If the octree is empty, the value of the pointer is \NULL.
+
+Each cell in the tree then contains a pointer to an \idx{array} of pointers to the child cells. If a cell is a \idxs{leaf}{cell}, it doesn't have any children and the value of the pointer to the array is \NULL. If the cell does have children, the pointer points to an actual array consisting of $2^d$ pointers to \idxsp{octree}{cell}{s}. The index $i$ of an array element corresponds to the position of the child cell relative the parent cell according to
+
+\begin{equation} \label{eq:child_node_index_general}
+i \,=\, \sum_{j=0}^{d-1} \,2^j\,i_j,
+\end{equation}
+
+where $d$ is the \dimensionality and $i_j$ is an index in the $j$th dimension that is either 0 or 1 and corresponds to the position of the child cell relativet the parent cell along the $j$th of the orthogonal \idxse{grid}{axis}{grid axes} as shown in \figref{fig:octree_child_indexes}. (Note that the $j$th element refers to the element with index $j$ and not element number $j$. Everything that is indexed will be \idxse{zero}{indexation}{zero indexed} unless anything else is stated, which means that the first element has index 0 and is refered to as the 0th element, the second element has index 1 and is refered to as the 1st element, etc.) For example, in three dimensions \eqref{eq:child_node_index_general} reduces to
+
+\begin{equation} \label{eq:child_node_index_three_dimensions}
+i \,=\, 2^0\,i_0 + 2^1\,i_1 + 2^2\,i_2 \,=\, i_x + 2\,i_y + 4\,i_z,
+\end{equation}
+
+where $(i_0,\,i_1,\,i_2) = (i_x,\,i_y,\,i_z)$ and the 0th, 1st and 2nd orthogonal grid axes are the x-, y- and z-axes respectivelly.
 
 \section{Neighbor connections}

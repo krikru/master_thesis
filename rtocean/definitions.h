@@ -59,8 +59,8 @@
 //#define  SIMULATION_TIME_STEP       (FRAME_MS/1000.0) // [s]
 //#define  SIMULATION_TIME_STEP       .01 // [s]
 //#define  SIMULATION_TIME_STEP       .001 // [s]
-#define  SIMULATION_TIME_STEP       .0003 // [s]
-//#define  SIMULATION_TIME_STEP       .0001 // [s]
+////#define  SIMULATION_TIME_STEP       .0003 // [s]
+#define  SIMULATION_TIME_STEP       .0001 // [s]
 //#define  SIMULATION_TIME_STEP       .000075 // [s]
 //#define  SIMULATION_TIME_STEP       .00003 // [s]
 //#define  SIMULATION_TIME_STEP       .00001 // [s]
@@ -91,15 +91,16 @@
 #define  DRAW_CHILD_CELLS_FIRST_IF_DEPTH_TESTING     1
 #define  DRAW_SMOOTH_LINES          0
 #define  LINE_WIDTH                 (DRAW_SMOOTH_LINES ? 1.5 : 1)
+#define  INITIAL_PGF_LINE_WIDTH    "0.4pt" // From the PGF manual
 #define  CELL_MARK_LINE_WIDTH       3
 #define  VELOCITY_LINE_WIDTH        LINE_WIDTH
 #define  NUM_LINES_IN_CIRCLES       16
 #define  MARK_CELLS                 0
 #define  VEL_DIV_SCALE_FACTOR       0.1 // [s]
 #define  FLOW_DIV_SCALE_FACTOR      VEL_DIV_SCALE_FACTOR // [s]
-#define  DRAW_CELL_CENTER_VELOCITIES                 1
+#define  DRAW_CELL_CENTER_VELOCITIES                 0
 #define  DRAW_CELL_FACE_VELOCITIES                   0
-#define  DRAW_ALL_VELOCITIES                         1
+#define  DRAW_ALL_VELOCITIES                         1 // Draw velocities for all cells
 #define  VEL_TO_ARROW_LENGTH_FACTOR 0.1
 #define  DRAW_CELL_CUBES            1
 #define  DRAW_PARENT_CELLS          1
@@ -123,7 +124,7 @@
 /* Tests */
 
 /* Graphics constants */
-const float  BACKGROUND_BRIGHTNESS  = 0;
+const float  BACKGROUND_BRIGHTNESS  = 1;
 const float  LEAF_CUBE_BRIGHTNESS   = BACKGROUND_BRIGHTNESS >= 0.5 ? 0   :   1;
 const float  PARENT_CUBE_BRIGHTNESS = BACKGROUND_BRIGHTNESS >= 0.5 ? BACKGROUND_BRIGHTNESS-0.25 : BACKGROUND_BRIGHTNESS+0.25;
 

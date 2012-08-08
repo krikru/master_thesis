@@ -8,129 +8,96 @@ In this report, an octree is going to be considered to be a spatial data structu
     \centering
     \subcaptionbox{\label{fig:quadtree}}[.415\textwidth]{
         \begin{tikzpicture}[x={(.35\textwidth,0)},y={(0,.35\textwidth)}]
-            % Three-dimensional versions
-            \newrobustcmd{\drawthreedplus}[4]{\def\cx{#1} \def\cy{#2} \def\cz{#3} \def\s{#4} \drawthreedplushelper}
-            \newrobustcmd{\drawthreedplushelper}[6]{;\draw (\cx+\s*#1/2,\cy+\s*#2/2,\cz+\s*#3/2) -- +(\s*#4,\s*#5,\s*#6); \draw (\cx+\s*#4/2,\cy+\s*#5/2,\cz+\s*#6/2) -- +(\s*#1,\s*#2,\s*#3);}
-            \newrobustcmd{\threedrectpath}[7]{-- ++(#1*#2,#1*#3,#1*#4) -- ++(#1*#5,#1*#6,#1*#7) -- ++(-#1*#2,-#1*#3,-#1*#4) -- cycle}
-            
             % Front side
-            \draw[fill=white!100!black] (0,0,1) \threedrectpath{1} {1}{0}{0} {0}{1}{0};
+            \draw (0,0,1) \threedimsquarepath{1} {1}{0}{0} {0}{1}{0};
             % Level 1
-            \drawthreedplus{0}{0}{1} {1} {1}{0}{0} {0}{1}{0}
+            \drawthreedimplus{0}{0}{1} {1} {1}{0}{0} {0}{1}{0}
             % Level 2
-            \drawthreedplus{1/2}{1/2}{1} {1/2} {1}{0}{0} {0}{1}{0}
-            \drawthreedplus{1/2}{0/2}{1} {1/2} {1}{0}{0} {0}{1}{0}
-            \drawthreedplus{0/2}{1/2}{1} {1/2} {1}{0}{0} {0}{1}{0}
+            \drawthreedimplus{1/2}{1/2}{1} {1/2} {1}{0}{0} {0}{1}{0}
+            \drawthreedimplus{1/2}{0/2}{1} {1/2} {1}{0}{0} {0}{1}{0}
+            \drawthreedimplus{0/2}{1/2}{1} {1/2} {1}{0}{0} {0}{1}{0}
             % Level 3
-            \drawthreedplus{2/4}{3/4}{1} {1/4} {1}{0}{0} {0}{1}{0}
-            \drawthreedplus{3/4}{3/4}{1} {1/4} {1}{0}{0} {0}{1}{0}
-            \drawthreedplus{2/4}{1/4}{1} {1/4} {1}{0}{0} {0}{1}{0}
+            \drawthreedimplus{2/4}{3/4}{1} {1/4} {1}{0}{0} {0}{1}{0}
+            \drawthreedimplus{3/4}{3/4}{1} {1/4} {1}{0}{0} {0}{1}{0}
+            \drawthreedimplus{2/4}{1/4}{1} {1/4} {1}{0}{0} {0}{1}{0}
             % Level 4
-            \drawthreedplus{5/8}{7/8}{1} {1/8} {1}{0}{0} {0}{1}{0}
-            \drawthreedplus{6/8}{7/8}{1} {1/8} {1}{0}{0} {0}{1}{0}
-            \drawthreedplus{5/8}{6/8}{1} {1/8} {1}{0}{0} {0}{1}{0}
-            \drawthreedplus{6/8}{6/8}{1} {1/8} {1}{0}{0} {0}{1}{0}
+            \drawthreedimplus{5/8}{7/8}{1} {1/8} {1}{0}{0} {0}{1}{0}
+            \drawthreedimplus{6/8}{7/8}{1} {1/8} {1}{0}{0} {0}{1}{0}
+            \drawthreedimplus{5/8}{6/8}{1} {1/8} {1}{0}{0} {0}{1}{0}
+            \drawthreedimplus{6/8}{6/8}{1} {1/8} {1}{0}{0} {0}{1}{0}
             % Level 5
-            \drawthreedplus{12/16}{14/16}{1} {1/16} {1}{0}{0} {0}{1}{0}
-            \drawthreedplus{11/16}{14/16}{1} {1/16} {1}{0}{0} {0}{1}{0}
-            \drawthreedplus{11/16}{13/16}{1} {1/16} {1}{0}{0} {0}{1}{0}
-            \drawthreedplus{10/16}{13/16}{1} {1/16} {1}{0}{0} {0}{1}{0}
+            \drawthreedimplus{12/16}{14/16}{1} {1/16} {1}{0}{0} {0}{1}{0}
+            \drawthreedimplus{11/16}{14/16}{1} {1/16} {1}{0}{0} {0}{1}{0}
+            \drawthreedimplus{11/16}{13/16}{1} {1/16} {1}{0}{0} {0}{1}{0}
+            \drawthreedimplus{10/16}{13/16}{1} {1/16} {1}{0}{0} {0}{1}{0}
         \end{tikzpicture}
     }
     \subcaptionbox{\label{fig:octree}}[.575\textwidth]{
         \begin{tikzpicture}[x={(.35\textwidth,0)},y={(0,.35\textwidth)},z={(-.385*.35\textwidth,-.385*.35\textwidth)}]
-            % Two-dimensional versions
-            %\newrobustcmd{\drawplus}[3]{;\draw (#1+#3/2,#2) -- (#1+#3/2,#2+#3); \draw (#1,#2+#3/2) -- (#1+#3,#2+#3/2);}
-            %\newrobustcmd{\rectanglepath}[1]{-- ++(#1,0) -- ++(0,#1) -- ++(-#1,0) -- cycle}
-            
-            % Three-dimensional versions
-            \newrobustcmd{\drawthreedplus}[4]{\def\cx{#1} \def\cy{#2} \def\cz{#3} \def\s{#4} \drawthreedplushelper}
-            \newrobustcmd{\drawthreedplushelper}[6]{;\draw (\cx+\s*#1/2,\cy+\s*#2/2,\cz+\s*#3/2) -- +(\s*#4,\s*#5,\s*#6); \draw (\cx+\s*#4/2,\cy+\s*#5/2,\cz+\s*#6/2) -- +(\s*#1,\s*#2,\s*#3);}
-            \newrobustcmd{\threedrectpath}[7]{-- ++(#1*#2,#1*#3,#1*#4) -- ++(#1*#5,#1*#6,#1*#7) -- ++(-#1*#2,-#1*#3,-#1*#4) -- cycle}
-            
             % Front side
-            \draw[fill=white!100!black] (0,0,1) \threedrectpath{1} {1}{0}{0} {0}{1}{0};
+            \draw[fill=white!100!black] (0,0,1) \threedimsquarepath{1} {1}{0}{0} {0}{1}{0};
             % Level 1
-            \drawthreedplus{0}{0}{1} {1} {1}{0}{0} {0}{1}{0}
+            \drawthreedimplus{0}{0}{1} {1} {1}{0}{0} {0}{1}{0}
             % Level 2
-            \drawthreedplus{1/2}{1/2}{1} {1/2} {1}{0}{0} {0}{1}{0}
-            \drawthreedplus{1/2}{0/2}{1} {1/2} {1}{0}{0} {0}{1}{0}
-            \drawthreedplus{0/2}{1/2}{1} {1/2} {1}{0}{0} {0}{1}{0}
+            \drawthreedimplus{1/2}{1/2}{1} {1/2} {1}{0}{0} {0}{1}{0}
+            \drawthreedimplus{1/2}{0/2}{1} {1/2} {1}{0}{0} {0}{1}{0}
+            \drawthreedimplus{0/2}{1/2}{1} {1/2} {1}{0}{0} {0}{1}{0}
             % Level 3
-            \drawthreedplus{2/4}{3/4}{1} {1/4} {1}{0}{0} {0}{1}{0}
-            \drawthreedplus{3/4}{3/4}{1} {1/4} {1}{0}{0} {0}{1}{0}
-            \drawthreedplus{2/4}{1/4}{1} {1/4} {1}{0}{0} {0}{1}{0}
+            \drawthreedimplus{2/4}{3/4}{1} {1/4} {1}{0}{0} {0}{1}{0}
+            \drawthreedimplus{3/4}{3/4}{1} {1/4} {1}{0}{0} {0}{1}{0}
+            \drawthreedimplus{2/4}{1/4}{1} {1/4} {1}{0}{0} {0}{1}{0}
             % Level 4
-            \drawthreedplus{5/8}{7/8}{1} {1/8} {1}{0}{0} {0}{1}{0}
-            \drawthreedplus{6/8}{7/8}{1} {1/8} {1}{0}{0} {0}{1}{0}
-            \drawthreedplus{5/8}{6/8}{1} {1/8} {1}{0}{0} {0}{1}{0}
-            \drawthreedplus{6/8}{6/8}{1} {1/8} {1}{0}{0} {0}{1}{0}
+            \drawthreedimplus{5/8}{7/8}{1} {1/8} {1}{0}{0} {0}{1}{0}
+            \drawthreedimplus{6/8}{7/8}{1} {1/8} {1}{0}{0} {0}{1}{0}
+            \drawthreedimplus{5/8}{6/8}{1} {1/8} {1}{0}{0} {0}{1}{0}
+            \drawthreedimplus{6/8}{6/8}{1} {1/8} {1}{0}{0} {0}{1}{0}
             % Level 5
-            \drawthreedplus{12/16}{14/16}{1} {1/16} {1}{0}{0} {0}{1}{0}
-            \drawthreedplus{11/16}{14/16}{1} {1/16} {1}{0}{0} {0}{1}{0}
-            \drawthreedplus{11/16}{13/16}{1} {1/16} {1}{0}{0} {0}{1}{0}
-            \drawthreedplus{10/16}{13/16}{1} {1/16} {1}{0}{0} {0}{1}{0}
+            \drawthreedimplus{12/16}{14/16}{1} {1/16} {1}{0}{0} {0}{1}{0}
+            \drawthreedimplus{11/16}{14/16}{1} {1/16} {1}{0}{0} {0}{1}{0}
+            \drawthreedimplus{11/16}{13/16}{1} {1/16} {1}{0}{0} {0}{1}{0}
+            \drawthreedimplus{10/16}{13/16}{1} {1/16} {1}{0}{0} {0}{1}{0}
             
             % Top side
-            \draw[fill=white!98!black] (0,1,0) \threedrectpath{1} {1}{0}{0} {0}{0}{1};
+            \draw[fill=white!98!black] (0,1,0) \threedimsquarepath{1} {1}{0}{0} {0}{0}{1};
             % Level 1
-            \drawthreedplus{0}{1}{0} {1} {1}{0}{0} {0}{0}{1}
+            \drawthreedimplus{0}{1}{0} {1} {1}{0}{0} {0}{0}{1}
             % Level 2
-            \drawthreedplus{0/2}{1}{1/2} {1/2} {1}{0}{0} {0}{0}{1}
-            \drawthreedplus{1/2}{1}{1/2} {1/2} {1}{0}{0} {0}{0}{1}
-            \drawthreedplus{1/2}{1}{0/2} {1/2} {1}{0}{0} {0}{0}{1}
+            \drawthreedimplus{0/2}{1}{1/2} {1/2} {1}{0}{0} {0}{0}{1}
+            \drawthreedimplus{1/2}{1}{1/2} {1/2} {1}{0}{0} {0}{0}{1}
+            \drawthreedimplus{1/2}{1}{0/2} {1/2} {1}{0}{0} {0}{0}{1}
             % Level 3
-            \drawthreedplus{2/4}{1}{3/4} {1/4} {1}{0}{0} {0}{0}{1}
-            \drawthreedplus{3/4}{1}{3/4} {1/4} {1}{0}{0} {0}{0}{1}
-            \drawthreedplus{2/4}{1}{2/4} {1/4} {1}{0}{0} {0}{0}{1}
+            \drawthreedimplus{2/4}{1}{3/4} {1/4} {1}{0}{0} {0}{0}{1}
+            \drawthreedimplus{3/4}{1}{3/4} {1/4} {1}{0}{0} {0}{0}{1}
+            \drawthreedimplus{2/4}{1}{2/4} {1/4} {1}{0}{0} {0}{0}{1}
             % Level 4
-            \drawthreedplus{5/8}{1}{7/8} {1/8} {1}{0}{0} {0}{0}{1}
-            \drawthreedplus{6/8}{1}{7/8} {1/8} {1}{0}{0} {0}{0}{1}
-            \drawthreedplus{5/8}{1}{5/8} {1/8} {1}{0}{0} {0}{0}{1}
+            \drawthreedimplus{5/8}{1}{7/8} {1/8} {1}{0}{0} {0}{0}{1}
+            \drawthreedimplus{6/8}{1}{7/8} {1/8} {1}{0}{0} {0}{0}{1}
+            \drawthreedimplus{5/8}{1}{5/8} {1/8} {1}{0}{0} {0}{0}{1}
             
             % Right side
-            \draw[fill=white!90!black] (1,0,0) \threedrectpath{1} {0}{1}{0} {0}{0}{1};
+            \draw[fill=white!90!black] (1,0,0) \threedimsquarepath{1} {0}{1}{0} {0}{0}{1};
             % Level 1
-            \drawthreedplus{1}{0}{0} {1} {0}{1}{0} {0}{0}{1}
+            \drawthreedimplus{1}{0}{0} {1} {0}{1}{0} {0}{0}{1}
             % Level 2
-            \drawthreedplus{1}{1/2}{1/2} {1/2} {0}{1}{0} {0}{0}{1}
-            \drawthreedplus{1}{0/2}{1/2} {1/2} {0}{1}{0} {0}{0}{1}
-            \drawthreedplus{1}{1/2}{0/2} {1/2} {0}{1}{0} {0}{0}{1}
-            \drawthreedplus{1}{0/2}{0/2} {1/2} {0}{1}{0} {0}{0}{1}
+            \drawthreedimplus{1}{1/2}{1/2} {1/2} {0}{1}{0} {0}{0}{1}
+            \drawthreedimplus{1}{0/2}{1/2} {1/2} {0}{1}{0} {0}{0}{1}
+            \drawthreedimplus{1}{1/2}{0/2} {1/2} {0}{1}{0} {0}{0}{1}
+            \drawthreedimplus{1}{0/2}{0/2} {1/2} {0}{1}{0} {0}{0}{1}
             % Level 3
-            \drawthreedplus{1}{3/4}{3/4} {1/4} {0}{1}{0} {0}{0}{1}
-            \drawthreedplus{1}{2/4}{2/4} {1/4} {0}{1}{0} {0}{0}{1}
-            \drawthreedplus{1}{2/4}{1/4} {1/4} {0}{1}{0} {0}{0}{1}
-            \drawthreedplus{1}{1/4}{2/4} {1/4} {0}{1}{0} {0}{0}{1}
-            \drawthreedplus{1}{1/4}{1/4} {1/4} {0}{1}{0} {0}{0}{1}
+            \drawthreedimplus{1}{3/4}{3/4} {1/4} {0}{1}{0} {0}{0}{1}
+            \drawthreedimplus{1}{2/4}{2/4} {1/4} {0}{1}{0} {0}{0}{1}
+            \drawthreedimplus{1}{2/4}{1/4} {1/4} {0}{1}{0} {0}{0}{1}
+            \drawthreedimplus{1}{1/4}{2/4} {1/4} {0}{1}{0} {0}{0}{1}
+            \drawthreedimplus{1}{1/4}{1/4} {1/4} {0}{1}{0} {0}{0}{1}
             % Level 4
-            \drawthreedplus{1}{3/8}{3/8} {1/8} {0}{1}{0} {0}{0}{1}
-            \drawthreedplus{1}{4/8}{3/8} {1/8} {0}{1}{0} {0}{0}{1}
-            \drawthreedplus{1}{4/8}{4/8} {1/8} {0}{1}{0} {0}{0}{1}
+            \drawthreedimplus{1}{3/8}{3/8} {1/8} {0}{1}{0} {0}{0}{1}
+            \drawthreedimplus{1}{4/8}{3/8} {1/8} {0}{1}{0} {0}{0}{1}
+            \drawthreedimplus{1}{4/8}{4/8} {1/8} {0}{1}{0} {0}{0}{1}
         \end{tikzpicture}
     }
     \caption{\subrefp{fig:quadtree} A \quadtree used to partition twodimensional space. \subrefp{fig:octree} An \octree used to partition three-dimensional space. Note that an octree is essentially the same as a quadtree but is extended from two to three dimensions. In this illustration, only half of the surface of the octree is visible.}
     \label{fig:quadtree_and_octree}
 \end{figure}
-
-%\pgfmathsetseed{1}
-%\foreach \col in {black,red,green,blue}
-%{
-%    \begin{tikzpicture}[x=10pt,y=10pt,ultra thick,baseline,line cap=round]
-%    \coordinate (current point) at (0,0);
-%    \coordinate (old velocity) at (0,0);
-%    \coordinate (new velocity) at (rand,rand);
-%    \foreach \i in {0,1,...,100}
-%    {
-%        \draw[\col!\i] (current point)
-%        .. controls ++([scale=-1]old velocity) and
-%        ++(new velocity) .. ++(rand,rand)
-%        coordinate (current point);
-%        \coordinate (old velocity) at (new velocity);
-%        \coordinate (new velocity) at (rand,rand);
-%    }
-%    \end{tikzpicture}
-%}
 
 \section{Varying level of detail}
 
@@ -144,7 +111,7 @@ The total number of cells $N_{\text{t}}$ used in the simulationcan can be \appro
 N_{\text{t}} \,=\, \sum_{i\,=\,0}^\infty N_{\text{s},i}\sum_{j\,=\,i}^\infty d_j\cdot 4^{-(j-i)},
 \end{equation}
 
-where $N_{\text{s},i}$ is the number of cells visible on the surface belonging to LOD layer $i$, and $d_j$ is the thickness in number of cells of LOD layer $j$, where LOD layer $0$ corresponds to the highest \LOD and an increasing LOD layer index corresponds to a lower \LOD. Different LOD layers can have different thickness; if this is the case, it will also be reflected in the simulation and waves with different wavelengths will be simulated with different \accuracy. In \thisprojectwork, all LOD layers have been given the same thickness, $d$. \eqref{eq:number_of_cells_total_sum} therefore turns into
+where $N_{\text{s},i}$ is the number of cells visible on the surface belonging to \idxs{LOD}{layer} $i$ (a lod layer is the set of all cells with a distinct given \LOD) and $d_j$ is the thickness in number of cells of LOD layer $j$, where LOD layer $0$ corresponds to the highest \LOD and an increasing LOD layer index corresponds to a lower \LOD. Different LOD layers can have different thickness; if this is the case, it will also be reflected in the simulation and waves with different wavelengths will be simulated with different \accuracy. In \thisprojectwork, all LOD layers have been given the same thickness, $d$. \eqref{eq:number_of_cells_total_sum} therefore turns into
 
 \begin{equation} \label{eq:number_of_cells_total}
 N_{\text{t}} \,=\, d\sum_{i\,=\,0}^\infty N_{\text{s},i}\sum_{k\,=\,0}^\infty 4^{-k} \,=\, d\,N_{\text{s}}\,\frac{1}{1-4^{-1}} \,=\, \frac{4}{3}\,d\,N_{\text{s}},
@@ -153,10 +120,10 @@ N_{\text{t}} \,=\, d\sum_{i\,=\,0}^\infty N_{\text{s},i}\sum_{k\,=\,0}^\infty 4^
 where $k = j-i$ and $N_{\text{s}}$ is the total number of cells visible on the surface. We can therefore in this case conclude that
 
 \begin{equation} \label{eq:number_of_cells_total_ordo}
-N_{\text{t}} \,=\, O(N_{\text{s}}).
+N_{\text{t}} \,=\, O(N_{\text{s}}),
 \end{equation}
 
-Hence, the \idx{time step} for updating the \idxs{fluid}{flow} is roughly porportional to the number of \idxsp{surface}{cell}{s} $N_{\text{s}}$, but the simulation still catches all motion under the surface, with decaying \accuracy at increasing \idxsp{water}{depth}{s}.
+where the $O$ symbol indicates \idxs{big O}{notation}\index{O!big O notation|see{big O notation}}. Hence, the \idx{time step} for updating the \idxs{fluid}{flow} is roughly porportional to the number of \idxsp{surface}{cell}{s} $N_{\text{s}}$, but the simulation still catches all motion under the surface, with decaying \accuracy at increasing \idxsp{water}{depth}{s}.
 
 \section{The differentiating problem}
 

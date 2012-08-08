@@ -2,6 +2,8 @@
 Sections left to write after importance
 ---------------------------------------
 
+* Summary of methods used
+* TikZ plots of simulation
 * Results and conclusions
 * Own implementations of algorithms and data structures
 * Improvements
@@ -39,6 +41,8 @@ Topict to check up
 Miscellaneous todo's
 --------------------
 
+* Find out what UPWIND stands for
+* Mention that not al children of an octree parent cell have to exist (cross refer from the chapter Octrees to image in appendix)
 * Include plots
 * Include glossary (see http://en.wikibooks.org/wiki/LaTeX/Glossary)
 * Use frontmatter, mainmatter and backmatter (which are only available for the book class by default)
