@@ -55,27 +55,33 @@ public:
     pftype total_vol_coeff; /* [1] The volume of the water and air divided by the volujme of the cell (should stay around 1) */
 
     /* Advection of momentum */
+    pfvec  quasi_momentum_vector; /* [kg/(s*m^2)] The quasi-momentum vector to be advected */
+    pftype quasi_momentum_out; /* [kg/(s*m^2)] The quasi-momentum scalar, could be united with the velocity scalar */
 
     /*****************
      * Navier-Stokes *
      *****************/
 
     /* Water flow */
-    pftype vel_out; /* Velocity of the water in the direction out from the cell, towards the neighbor cell */
+    pftype vel_out; /* [m/s] Velocity of the water in the direction out from the cell, towards the neighbor cell */
 
     /* Distance between cells */
-    pfvec  dist; /* Distande to the neighbor cell (dependent of direction) */
-    pftype dist_abs; /* Absolute distande (independent of direction) */
+    pfvec  dist;     /* [m] Distande to the neighbor cell (dependent of direction) */
+    pftype dist_abs; /* [m] Absolute distande (independent of direction) */
 
     /* Surface */
-    pftype cf_area; /* Cell face area */
+    pftype cf_area;  /* [m^2] Cell face area */
 
 public:
     /* Public methods */
-    void set(octcell* neighbor_cell, nlnode* corresponding_neighbor_list_entry, uint dimension, bool positive_direction, pftype water_volume_coefficient, pftype total_volume_coefficient, pftype water_velocity_in_the_out_direction, pfvec distance, pftype distance_absolute_value, pftype cell_face_area);
-    void set_velocity_out(pftype velocity_out);
-    void set_volume_coefficients(pftype water_volume_coefficient, pftype total_volume_coefficient);
-    int  get_signed_dir();
+    void   set(octcell* neighbor_cell, nlnode* corresponding_neighbor_list_entry, uint dimension, bool positive_direction, pftype water_volume_coefficient, pftype total_volume_coefficient, pftype water_velocity_in_the_out_direction, pfvec distance, pftype distance_absolute_value, pftype cell_face_area);
+    void   set_velocity_out(pftype velocity_out);
+    void   set_volume_coefficients(pftype water_volume_coefficient, pftype total_volume_coefficient);
+    int    get_signed_dir();
+    pftype get_vel_in_pos_dir();                /* [m/s] */
+    pftype get_average_cell_density();          /* [kg/m^3] */
+    pftype get_associated_mass_per_unit_area(); /* [kg/m^2] */
+    pftype get_cell_face_density();             /* [kg/m^3] */
 
     /* Simulation */
     bool should_calculate_new_velocity();
@@ -88,11 +94,30 @@ private:
     octneighbor(octneighbor&); // Copy constructor prevented from all use
 };
 
+////////////////////////////////////////////////////////////////
+// INCLUDE FILES
+////////////////////////////////////////////////////////////////
+
+// Own includes
+//#include "octcell.h"
+
+////////////////////////////////////////////////////////////////
+// PUBLIC MEMBER FUNCTIONS
+////////////////////////////////////////////////////////////////
+
 inline
 int octneighbor::get_signed_dir()
 {
     return pos_dir ? 1 : -1;
 }
+
+inline
+pftype octneighbor::get_vel_in_pos_dir()
+{
+    return vel_out * get_signed_dir();
+}
+
+
 
 inline
 bool octneighbor::should_calculate_new_velocity()

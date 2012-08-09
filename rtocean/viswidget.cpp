@@ -160,7 +160,7 @@ void viswidget::draw_pressure(const octcell *cell)
 
 #if    NUM_DIMENSIONS == 2
     quick_fill_cell_2d(cell, c);
-    quick_fill_cell_2d(cell, c, cell->get_safe_alpha());
+    //quick_fill_cell_2d(cell, c, cell->get_safe_alpha());
 #elif  NUM_DIMENSIONS == 3
     /* Don't draw pressure */
 #endif

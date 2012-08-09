@@ -21,7 +21,8 @@ SOURCES += main.cpp\
     base_dllnode.cpp \
     nlistset.cpp \
     watersystem.cpp \
-    mustinit.cpp
+    mustinit.cpp \
+    physics.cpp
 
 HEADERS  += mainwin.h \
     viswidget.h \
@@ -43,7 +44,8 @@ HEADERS  += mainwin.h \
     watersystem.h \
     base_int_vec2.h \
     naninit.h \
-    mustinit.h
+    mustinit.h \
+    physics.h
 
 FORMS    += mainwin.ui
 

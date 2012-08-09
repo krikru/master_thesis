@@ -4,6 +4,7 @@
 
 // Own includes
 #include "watersystem.h"
+#include "physics.h"
 
 #if  DEBUG
 #include <iostream>
@@ -17,7 +18,6 @@ using std::setprecision;
 // MACROS
 ////////////////////////////////////////////////////////////////
 
-#if 0
 #define  DECLARE_RECURSIVE_LEAF_CELL_FUNCTION(function, cell)        \
     if ((cell)->has_child_array()) {                                 \
         for (uint idx = 0; idx < octcell::MAX_NUM_CHILDREN; idx++) { \
@@ -30,14 +30,6 @@ using std::setprecision;
         return;                                                      \
     }
 
-#define  LOOP_THROUGH_ALL_LEAF_NEIGHBORS(cell, node)                                  \
-    for (nlset lists,                                                                 \
-    lists.add_neighbor_list(&(cell)->neighbor_lists[NL_HIGHER_LEVEL_OF_DETAIL]),      \
-    lists.add_neighbor_list(&(cell)->neighbor_lists[NL_SAME_LEVEL_OF_DETAIL_LEAF]),   \
-    lists.add_neighbor_list(&(cell)->neighbor_lists[NL_LOWER_LEVEL_OF_DETAIL_LEAF]),  \
-    nlnode* node = lists.get_first_node(); node; node = lists.get_next_node())
-#endif
-
 ////////////////////////////////////////////////////////////////
 // CONSTRUCTORS AND DESTRUCTOR
 ////////////////////////////////////////////////////////////////
@@ -45,6 +37,7 @@ using std::setprecision;
 watersystem::watersystem()
 {
     w = 0;
+    max_v = 0;
     operating = false;
     num_time_steps_before_resting = 1;
 }
@@ -112,47 +105,86 @@ int watersystem::run_simulation(pftype time_step)
 
 void watersystem::_evolve()
 {
+    /* Check if dt needs to be decreased */
+    if (max_v) {
+        dt *= MAX_RECOMMENDED_V / max_v;
+        if (dt > max_dt) {
+            dt = max_dt;
+        }
+    }
+    else {
+        dt = max_dt;
+    }
+    max_v = 0;
+    /* Update the time */
     t += dt;
-    calculate_cell_face_properties_recursivelly(w->root);
-    calculate_quasi_momentums_recursively(w->root); // New
+    /* Calculate cell-center velocity vectors */
+    calculate_cell_center_properties_recursively(w->root);
+    /*
+     * Calculate cell-face alpha
+     * Calculate cell-face quasi-momentum vectors using the cell-face alpha and an UPWIND scheme.
+     */
+    calculate_cell_face_properties_recursively(w->root);
+    /*
+     * Advect mass
+     * Calculate the net quasi-momentum inflow in each cell
+     * Calculate the quasi-momentum increase in cell-faces due to increase of density in cells and remove that value from the net quasi-momentum increase
+     */
     advect_cell_properties_recursivelly(w->root);
-    transport_fluids_and_update_pressure();
+
+    /* Convert cell-face velocity out to quasi-momentum out */
+    //convert_cell_face_vel_out_to_quasi_momentum_out_recursively(w->root);
+    //TODO: Distribute the remainding net quasi-momentum in the cells on the cell faces equaly per unit area
+    distribute_ceLl_quasi_momentum_on_cell_faces_recursively(w->root);
+    /* Convert cell-face quasi-momentum out to velocity out */
+    //convert_cell_face_quasi_momentum_out_to_vel_out_recursively(w->root);
+
     update_velocities_by_the_pressure_gradients_recursively(w->root);
-    update_velocities_by_advection();
-}
-
-#if 1
-void watersystem::transport_fluids_and_update_pressure()
-{
-    /* Advect alpha */
-    //calculate_delta_alpha_recursively(w->root);
-    //clamp_advect_alpha_recursively(w->root);
-
-    /* Update pressure */
-    //update_pressure_recursively(w->root);
 }
 
 /*
- * Calculates among other cell face alpha
+ * Calculates cell center velocity vector
  */
-void watersystem::calculate_cell_face_properties_recursivelly(octcell* cell)
+void watersystem::calculate_cell_center_properties_recursively(octcell* cell)
 {
-    if (cell->has_child_array()) {
-        for (uint idx = 0; idx < octcell::MAX_NUM_CHILDREN; idx++) {
-            if (cell->has_child(idx)) {
-                /* Child exists */
-                octcell* c = cell->get_child(idx);
-                calculate_cell_face_properties_recursivelly(c);
+    DECLARE_RECURSIVE_LEAF_CELL_FUNCTION(calculate_cell_face_properties_recursively, cell);
+
+    /* Reset cell-center velocity */
+    cell->ccv = pfvec();
+
+    /* Calculate new cell-center velocity averaged from the cell faces */
+    if (cell->has_fluid()) {
+        pfvec weights; /* The weights in all three directins */
+        pftype own_cell_density = cell->get_density();
+        nlset lists;
+        cell->add_leaf_neighbor_lists_to_list_set(lists);
+        for (nlnode* node = lists.get_first_node(); node; node = lists.get_next_node()) {
+            pftype weight = node->v.cf_area*(own_cell_density        *cell->s      +
+                                             node->v.n->get_density()*node->v.n->s );
+            cell->ccv[node->v.dim] += weight * node->v.get_vel_in_pos_dir();
+            weights[node->v.dim] += weight;
+        }
+        for (uint dim = 0; dim < NUM_DIMENSIONS; dim++) {
+            if (weights[dim]) {
+                cell->ccv[dim] /= weights[dim];
+            }
+            else {
+                //TODO: Handle this case (it can occur for empty surface cells when the velocity shound't be non-zero)
             }
         }
-        return;
     }
+}
 
-    /* Loop through neighbors */
+/*
+ * Calculates cell face alpha
+ */
+void watersystem::calculate_cell_face_properties_recursively(octcell* cell)
+{
+    DECLARE_RECURSIVE_LEAF_CELL_FUNCTION(calculate_cell_face_properties_recursively, cell);
+
+    /* Calculate cell-face alpha */
     nlset lists;
-    lists.add_neighbor_list(&cell->neighbor_lists[NL_HIGHER_LEVEL_OF_DETAIL]);
-    lists.add_neighbor_list(&cell->neighbor_lists[NL_SAME_LEVEL_OF_DETAIL_LEAF]);
-    lists.add_neighbor_list(&cell->neighbor_lists[NL_LOWER_LEVEL_OF_DETAIL_LEAF]);
+    cell->add_leaf_neighbor_lists_to_list_set(lists);
 #if    ALPHA_ADVECTION_SCHEME == UPWIND
     /* UPWIND gives smearing!!! */
     for (nlnode* node = lists.get_first_node(); node; node = lists.get_next_node()) {
@@ -178,9 +210,17 @@ void watersystem::calculate_cell_face_properties_recursivelly(octcell* cell)
             v += face_total_vol_fluxed/cell->get_total_fluid_volume();
         }
     }
+#if COURANT_NUMBER_LIMITATION
+    if (v > max_v) {
+        max_v = v;
+    }
+#endif
 #if  DEBUG
     if (v > 1) {
         std::cerr << "Warning! Courant number > 1 ( = " << v << endl;
+        if (v > MAX_ALLOWED_V) {
+            throw logic_error("Courant number larger than MAX_ALLOWED_V");
+        }
     }
 #endif
     if (guessed_total_in_volume_flux) {
@@ -192,9 +232,7 @@ void watersystem::calculate_cell_face_properties_recursivelly(octcell* cell)
     //v = guessed_water_in_volume_flux * dt / cell->get_cube_volume();
 
     /* Set out volume coefficients to acceptor neighbors */
-    lists.add_neighbor_list(&cell->neighbor_lists[NL_HIGHER_LEVEL_OF_DETAIL]);
-    lists.add_neighbor_list(&cell->neighbor_lists[NL_SAME_LEVEL_OF_DETAIL_LEAF]);
-    lists.add_neighbor_list(&cell->neighbor_lists[NL_LOWER_LEVEL_OF_DETAIL_LEAF]);
+    cell->add_leaf_neighbor_lists_to_list_set(lists);
     for (nlnode* node = lists.get_first_node(); node; node = lists.get_next_node()) {
         if (node->v.vel_out > 0) {
             pftype acceptor_neighbor_alpha = node->v.n->total_vol_coeff ? node->v.n->get_alpha() : pftype(0); // [1]
@@ -271,43 +309,51 @@ void watersystem::calculate_cell_face_properties_recursivelly(octcell* cell)
     }
 #else
     "Don't know how to advect water"
-#endif
+#endif // ALPHA_ADVECTION_SCHEME
 
+    //TODO: Calculate cell-face quasi-momentum scalars
+
+    /* Calculate cell-face quasi-momentum vectors using the UPWIND scheme */
+    cell->add_leaf_neighbor_lists_to_list_set(lists);
+    for (nlnode* node = lists.get_first_node(); node; node = lists.get_next_node()) {
+        if (node->v.vel_out >= 0) {
+            node->v.quasi_momentum_vector = cell->ccv * node->v.get_cell_face_density();
+        }
+    }
 }
 
 void watersystem::advect_cell_properties_recursivelly(octcell* cell)
 {
-    if (cell->has_child_array()) {
-        /* */
-        for (uint idx = 0; idx < octcell::MAX_NUM_CHILDREN; idx++) {
-            if (cell->has_child(idx)) {
-                /* Child exists */
-                octcell* c = cell->get_child(idx);
-                advect_cell_properties_recursivelly(c);
-            }
-        }
-        return;
-    }
+    DECLARE_RECURSIVE_LEAF_CELL_FUNCTION(advect_cell_properties_recursivelly, cell);
 
-    /* Update volume coefficients */
+    /*
+     * Update volume coefficients
+     * Calculate in quasi-momentum flux
+     */
     pftype in_water_vol_flux = 0; // [m^3/s]
     pftype in_total_vol_flux = 0; // [m^3/s]
+    pfvec  in_momentum_flux; // [kg*m/s^2] in momentum flux
+    pfvec  total_cell_face_area_velocity; // [m^3/s]
+
     /* Loop through neighbors */
     nlset lists;
-    lists.add_neighbor_list(&cell->neighbor_lists[NL_HIGHER_LEVEL_OF_DETAIL]);
-    lists.add_neighbor_list(&cell->neighbor_lists[NL_SAME_LEVEL_OF_DETAIL_LEAF]);
-    lists.add_neighbor_list(&cell->neighbor_lists[NL_LOWER_LEVEL_OF_DETAIL_LEAF]);
+    cell->add_leaf_neighbor_lists_to_list_set(lists);
     for (nlnode* node = lists.get_first_node(); node; node = lists.get_next_node()) {
         pftype volume_flux_out = node->v.vel_out * node->v.cf_area; // [m^3/s]
         in_water_vol_flux -= node->v.water_vol_coeff * volume_flux_out;
         in_total_vol_flux -= node->v.total_vol_coeff * volume_flux_out;
+        in_momentum_flux -= node->v.quasi_momentum_vector * volume_flux_out;
+        total_cell_face_area_velocity[node->v.dim] += node->v.get_vel_in_pos_dir() * node->v.cf_area;
     }
 
-    pftype volume_flux_to_volume_coefficient_factor = dt/cell->get_cube_volume();
-    pftype d_water_vol_coeff = in_water_vol_flux * volume_flux_to_volume_coefficient_factor;
-    pftype d_total_vol_coeff = in_total_vol_flux * volume_flux_to_volume_coefficient_factor;
+    pftype volume_flux_to_volume_coefficient_factor = dt/cell->get_cube_volume(); /* [s/m^3] */
+    pftype d_water_vol_coeff = in_water_vol_flux * volume_flux_to_volume_coefficient_factor; /* [1] */
+    pftype d_total_vol_coeff = in_total_vol_flux * volume_flux_to_volume_coefficient_factor; /* [1] */
+    pftype d_density = physics::vol_coeffs_to_density(d_water_vol_coeff, d_total_vol_coeff); /* [kg/m^3] */
+    pfvec net_momentum_in_flow = dt * in_momentum_flux; // [kg*m/s] Net in momentum
+    cell->momentum_to_distribute = net_momentum_in_flow - d_density * total_cell_face_area_velocity * (0.5 * cell->s);
 
-    const pftype LIMIT = 2.0e-16 * (USE_DOUBLE_PRECISION_FOR_PHYSICS ? 1 : 1 << (52 - 23));
+    const pftype LIMIT = 4.0e-16 * (USE_DOUBLE_PRECISION_FOR_PHYSICS ? 1 : 1 << (52 - 23));
     bool okay_to_decrease_water = false;
     bool okay_to_increase_water = false;
     bool no_fluid_left = false;
@@ -427,36 +473,72 @@ void watersystem::advect_cell_properties_recursivelly(octcell* cell)
     }
 #endif
 }
+
+#if 0
+void watersystem::convert_cell_face_vel_out_to_quasi_momentum_out_recursively(octcell* cell)
+{
+    DECLARE_RECURSIVE_LEAF_CELL_FUNCTION(convert_cell_face_vel_out_to_quasi_momentum_out_recursively, cell);
+
+    /* Loop through neighbors */
+    nlset lists;
+    cell->add_leaf_neighbor_lists_to_list_set(lists);
+    for (nlnode* node = lists.get_first_node(); node; node = lists.get_next_node()) {
+        node->v.quasi_momentum_out = node->v.vel_out * node->v.get_average_cell_density();
+    }
+}
+
+void watersystem::convert_cell_face_quasi_momentum_out_to_vel_out_recursively(octcell* cell)
+{
+    DECLARE_RECURSIVE_LEAF_CELL_FUNCTION(convert_cell_face_quasi_momentum_out_to_vel_out_recursively, cell);
+
+    /* Loop through neighbors */
+    nlset lists;
+    cell->add_leaf_neighbor_lists_to_list_set(lists);
+    for (nlnode* node = lists.get_first_node(); node; node = lists.get_next_node()) {
+        if (node->v.quasi_momentum_out) {
+            node->v.vel_out = node->v.quasi_momentum_out / node->v.get_average_cell_density();
+#if  DEBUG
+            if (!node->v.get_average_cell_density()) {
+                throw logic_error("Cell face has quasi momentum out but no density");
+            }
 #endif
+        }
+    }
+}
+#endif
+
+void watersystem::distribute_ceLl_quasi_momentum_on_cell_faces_recursively(octcell* cell)
+{
+    DECLARE_RECURSIVE_LEAF_CELL_FUNCTION(distribute_ceLl_quasi_momentum_on_cell_faces_recursively, cell);
+
+    /* Measure areas */
+    pfvec areas;
+    nlset lists;
+    cell->add_leaf_neighbor_lists_to_list_set(lists);
+    for (nlnode* node = lists.get_first_node(); node; node = lists.get_next_node()) {
+        areas[node->v.dim] += node->v.cf_area;
+    }
+    /* Distribute quasi momentum */
+    cell->add_leaf_neighbor_lists_to_list_set(lists);
+    for (nlnode* node = lists.get_first_node(); node; node = lists.get_next_node()) {
+        node->v.vel_out += node->v.get_signed_dir() *
+                cell->momentum_to_distribute[node->v.dim]/(node->v.get_associated_mass_per_unit_area() * areas[node->v.dim]);
+    }
+}
 
 void watersystem::update_velocities_by_the_pressure_gradients_recursively(octcell* cell)
 {
-    if (cell->has_child_array()) {
-        for (uint idx = 0; idx < octcell::MAX_NUM_CHILDREN; idx++) {
-            if (cell->has_child(idx)) {
-                /* Child exists */
-                octcell* c = cell->get_child(idx);
-                update_velocities_by_the_pressure_gradients_recursively(c);
-            }
-        }
-        return;
-    }
+    DECLARE_RECURSIVE_LEAF_CELL_FUNCTION(update_velocities_by_the_pressure_gradients_recursively, cell);
 
     /* Cell is a leaf cell */
     /* Loop through neighbors */
     nlset lists;
-    lists.add_neighbor_list(&cell->neighbor_lists[NL_HIGHER_LEVEL_OF_DETAIL]);
-    lists.add_neighbor_list(&cell->neighbor_lists[NL_SAME_LEVEL_OF_DETAIL_LEAF]);
-    lists.add_neighbor_list(&cell->neighbor_lists[NL_LOWER_LEVEL_OF_DETAIL_LEAF]);
+    cell->add_leaf_neighbor_lists_to_list_set(lists);
     for (nlnode* node = lists.get_first_node(); node; node = lists.get_next_node()) {
         if (node->v.should_calculate_new_velocity()) {
             node->v.update_velocity(cell, node->v.n, dt);
         }
     }
-}
-
-void watersystem::update_velocities_by_advection()
-{
 }
 
 /* Thread safety */

@@ -34,6 +34,8 @@
 #define  ALLOW_NEGATIVE_PRESSURES   0
 #define  INTERPOLATE_SURFACE_PRESSURE               0
 #define  COMPRESS_INTERFACE_VERTICALLY              1
+#define  TIME_STEP_CHANGE_CORRECTION                1 // Weaker
+#define  COURANT_NUMBER_LIMITATION                  1 // Stronger
 
 /* Precision */
 #define  USE_DOUBLE_PRECISION_FOR_PHYSICS           1
@@ -41,9 +43,9 @@
 /* Advection scheme */
 #define  NO_SCHEME                  0
 #define  UPWIND                     1
-#define  HRIC                       2
+//#define  HRIC                       2
 #define  HYPER_C                    3
-#define  HIGH_CONTRAST_SCHEME       4
+//#define  HIGH_CONTRAST_SCHEME       4
 
 //#define  ALPHA_ADVECTION_SCHEME     UPWIND
 //#define  ALPHA_ADVECTION_SCHEME     HRIC
@@ -51,21 +53,24 @@
 //#define  ALPHA_ADVECTION_SCHEME     HIGH_CONTRAST_SCHEME
 
 /* Simulation parameters */
+//#define  FRAME_MS                   150 // [ms]
 //#define  FRAME_MS                   (1000/60) // [ms]
 #define  FRAME_MS                   0 // [ms]
 //#define  NUM_TIME_STEPS_PER_FRAME   1 // [1]
-//#define  NUM_TIME_STEPS_PER_FRAME   3 // [1]
-#define  NUM_TIME_STEPS_PER_FRAME   10 // [1]
+#define  NUM_TIME_STEPS_PER_FRAME   3 // [1]
+//#define  NUM_TIME_STEPS_PER_FRAME   10 // [1]
 //#define  SIMULATION_TIME_STEP       (FRAME_MS/1000.0) // [s]
 //#define  SIMULATION_TIME_STEP       .01 // [s]
 //#define  SIMULATION_TIME_STEP       .001 // [s]
-////#define  SIMULATION_TIME_STEP       .0003 // [s]
-#define  SIMULATION_TIME_STEP       .0001 // [s]
+#define  SIMULATION_TIME_STEP       .0003 // [s]
+//#define  SIMULATION_TIME_STEP       .0001 // [s]
 //#define  SIMULATION_TIME_STEP       .000075 // [s]
 //#define  SIMULATION_TIME_STEP       .00003 // [s]
 //#define  SIMULATION_TIME_STEP       .00001 // [s]
 //#define  SIMULATION_TIME_STEP       .000003 // [s]
 //#define  SIMULATION_TIME_STEP       .0 // [s]
+#define  MAX_RECOMMENDED_V          .9
+#define  MAX_ALLOWED_V              10
 
 /* Grid */
 #define  MIN_LOD_LAYER_THICKNESS    1    // [Number of cells]
@@ -97,11 +102,13 @@
 #define  NUM_LINES_IN_CIRCLES       16
 #define  MARK_CELLS                 0
 #define  VEL_DIV_SCALE_FACTOR       0.1 // [s]
+//#define  VEL_DIV_SCALE_FACTOR       SIMULATION_TIME_STEP // [s]
 #define  FLOW_DIV_SCALE_FACTOR      VEL_DIV_SCALE_FACTOR // [s]
 #define  DRAW_CELL_CENTER_VELOCITIES                 0
 #define  DRAW_CELL_FACE_VELOCITIES                   0
 #define  DRAW_ALL_VELOCITIES                         1 // Draw velocities for all cells
-#define  VEL_TO_ARROW_LENGTH_FACTOR 0.1
+//#define  VEL_TO_ARROW_LENGTH_FACTOR                  0.1 // [s]
+#define  VEL_TO_ARROW_LENGTH_FACTOR                  (1*SIMULATION_TIME_STEP) // [s]
 #define  DRAW_CELL_CUBES            1
 #define  DRAW_PARENT_CELLS          1
 #define  DRAW_ONLY_SURFACE_CELLS    0

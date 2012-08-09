@@ -12,6 +12,7 @@
 // Own includes
 #include "octneighbor.h"
 #include "octcell.h"
+#include "physics.h"
 
 ////////////////////////////////////////////////////////////////
 // CONSTRUCTORS AND DESTRUCTOR
@@ -35,6 +36,28 @@ void octneighbor::set(octcell* neighbor_cell, nlnode* corresponding_neighbor_lis
     dist            = distance                           ;
     dist_abs        = distance_absolute_value            ;
     cf_area         = cell_face_area                     ;
+}
+
+//inline
+pftype octneighbor::get_average_cell_density()
+{
+    octcell* c1 = n;
+    octcell* c2 = cnle->v.n;
+    //return c1->get_density();
+    return (c1->get_density()*c1->s + c2->get_density()*c2->s)/(c1->s + c2->s);
+}
+
+pftype octneighbor::get_associated_mass_per_unit_area()
+{
+    octcell* c1 = n;
+    octcell* c2 = cnle->v.n;
+    //return c1->get_density();
+    return 0.5 * (c1->get_density()*c1->s + c2->get_density()*c2->s);
+}
+
+pftype octneighbor::get_cell_face_density()
+{
+    return physics::vol_coeffs_to_density(water_vol_coeff, total_vol_coeff);
 }
 
 void octneighbor::set_velocity_out(pftype velocity_out)
@@ -83,8 +106,7 @@ void octneighbor::update_velocity(octcell* cell1, octcell* cell2, pftype dt)
     pftype double_distance = cell1->s + cell2->s;
 #if  !NO_ATMOSPHERE
     //pftype average_density = (cell1->total_density*cell1->s + cell2->total_density*cell2->s) / distance;
-    pftype average_density = ((cell1->water_vol_coeff * cell1->s + cell2->water_vol_coeff * cell2->s) * (NORMAL_WATER_DENSITY - NORMAL_AIR_DENSITY) +
-                              (cell1->total_vol_coeff * cell1->s + cell2->total_vol_coeff * cell2->s) * NORMAL_AIR_DENSITY) / double_distance;
+    pftype average_density = get_average_cell_density();
 #endif
     //average_total_density = MIN(average_total_density, P_WATER_DENSITY); // Prevent nasty circulation behaviours in the water
     //TODO: Prevevt circulation behaviour even in the air

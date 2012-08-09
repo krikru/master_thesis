@@ -49,10 +49,32 @@ bool fvoctree::refine_subtree(octcell* c, pftype surface, pftype bottom)
     pftype lowest_cell_height = c->r[VERTICAL_DIMENSION];
 #if    NUM_DIMENSIONS == 2
 #if 0 // Step profile surface
-    pftype hdiff = .24118956;
-    pftype local_surface_height = c->get_cell_center().e[HORIZONTAL_DIMENSION1] > .5 ? SURFACE_HEIGHT + hdiff/2 : SURFACE_HEIGHT - hdiff/2;
+    //pftype hdiff = .24118956;
+    pftype hdiff = .25;
+    pftype step_x_pos = 0.9;
+    pftype low = SURFACE_HEIGHT - hdiff/2;
+    pftype high = SURFACE_HEIGHT + hdiff/2;
+    pftype min_surf_height;
+    pftype max_surf_height;
+
+    if (c->r[HORIZONTAL_DIMENSION1] < step_x_pos) {
+        min_surf_height = low;
+        if (c->get_opposite_corner()[HORIZONTAL_DIMENSION1] < step_x_pos) {
+            max_surf_height = low;
+        }
+        else {
+            max_surf_height = high;
+        }
+    }
+    else {
+        min_surf_height = max_surf_height = high;
+    }
+
+    /*
+    pftype local_surface_height = c->get_cell_center().e[HORIZONTAL_DIMENSION1] > step_x_pos ? SURFACE_HEIGHT + hdiff/2 : SURFACE_HEIGHT - hdiff/2;
     pftype min_surf_height = local_surface_height;
     pftype max_surf_height = local_surface_height;
+    */
 #elif 0 // Pilar
 #if 0 // Large pilar
     pftype hdiff = .5;

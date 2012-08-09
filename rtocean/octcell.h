@@ -14,6 +14,7 @@ using std::out_of_range;
 // Own includes
 #include "definitions.h"
 #include "nlset.h"
+#include "physics.h"
 
 ////////////////////////////////////////////////////////////////
 // CLASS DEFINITION
@@ -58,6 +59,8 @@ public:
 
     /* Navier-Stokes */
     pftype p; /* Reduced pressure = pressure/density */
+    pfvec  ccv; /* [m/s] Cell-center velocity */
+    pfvec  momentum_to_distribute; /* [kg*m/s] Net in momentum flux */
     /*Since the velocities are located in the cell faces, they are stored in the octneighbors */
 
     /* Volume of fluid */
@@ -91,6 +94,7 @@ public:
     pftype get_edge_length() const;
     pftype get_side_area() const;
     pftype get_cube_volume() const;
+    pftype get_density() const;
     uint   get_child_index_from_position(pfvec pos) const;
     bool   outside_of_cell(pfvec pos) const;
     bool   inside_of_cell(pfvec pos) const;
@@ -101,6 +105,8 @@ public:
     bool has_air() const;
     bool has_no_water() const;
     bool has_water() const;
+    bool has_no_fluid() const;
+    bool has_fluid() const;
     bool is_mixed_cell() const;
     pftype get_air_volume_coefficient() const;
     pftype get_alpha() const;
@@ -111,6 +117,7 @@ public:
     void calculate_pressure();
     void prepare_for_water();
     void create_new_air_neighbors(pfvec neighbor_center, uint dim, bool pos_dir, uint source_level);
+    void add_leaf_neighbor_lists_to_list_set(nlset &lists);
 
     /* Differentiation */
     pftype get_velocity_divergence() const;
@@ -230,6 +237,12 @@ pftype octcell::get_cube_volume() const
 }
 
 inline
+pftype octcell::get_density() const
+{
+    return physics::vol_coeffs_to_density(water_vol_coeff, total_vol_coeff);
+}
+
+inline
 uint octcell::get_child_index_from_position(pfvec pos) const
 {
 #if  DEBUG
@@ -297,6 +310,18 @@ inline
 bool octcell::has_water() const
 {
     return water_vol_coeff > 0;
+}
+
+inline
+bool octcell::has_no_fluid() const
+{
+    return total_vol_coeff <= 0;
+}
+
+inline
+bool octcell::has_fluid() const
+{
+    return total_vol_coeff > 0;
 }
 
 inline

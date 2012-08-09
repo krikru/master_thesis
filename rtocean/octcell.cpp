@@ -666,6 +666,13 @@ void octcell::create_new_air_neighbors(pfvec neighbor_center, uint dim, bool pos
     }
 }
 
+void octcell::add_leaf_neighbor_lists_to_list_set(nlset &lists)
+{
+    lists.add_neighbor_list(&(neighbor_lists[NL_HIGHER_LEVEL_OF_DETAIL]));
+    lists.add_neighbor_list(&(neighbor_lists[NL_SAME_LEVEL_OF_DETAIL_LEAF]));
+    lists.add_neighbor_list(&(neighbor_lists[NL_LOWER_LEVEL_OF_DETAIL_LEAF]));
+}
+
 ////////////////////////////////////////////////////////////////
 // PUBLIC STATIC METHODS
 ////////////////////////////////////////////////////////////////

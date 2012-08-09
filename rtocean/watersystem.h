@@ -56,13 +56,18 @@ public:
     void set_state_updated_callback(callback<void (*)(void*)> callback);
     void set_state_updated_callback(void (*function)(void*), void* parameter);
 
+    /* Static functions */
+    static pftype vol_coeffs_to_density(pftype water_volume_coeff, pftype total_volume_coeff);
+
 private:
     /* Private member variables */
 
     /* Simulation */
-    fvoctree* w ; // Water
-    pftype    t ; // Time
-    pftype    dt; // Time step
+    fvoctree* w ;     // Water
+    pftype    t ;     // Time
+    pftype    dt;     // Time step
+    pftype    max_dt; // The maximum time step length (only active if COURANT_NUMBER_LIMITATION is true)
+    pftype    max_v;  // The maximum measured courant number
     uint      num_time_steps_before_resting; // Ths number of time steps before calling the state_updated_callback function
 
     /* Control */
@@ -83,15 +88,17 @@ private:
     void _evolve();
 
     /* Simulation */
-    void transport_fluids_and_update_pressure();
-    void calculate_cell_face_properties_recursivelly(octcell* cell);
+    void calculate_cell_center_properties_recursively(octcell* cell);
+    void calculate_cell_face_properties_recursively(octcell* cell);
     void calculate_delta_alpha_recursively(octcell* cell);
     void clamp_advect_alpha_recursively(octcell* cell);
     void calculate_alpha_gradient_recursively(octcell* cell);
     void advect_cell_properties_recursivelly(octcell* cell);
+    //void convert_cell_face_vel_out_to_quasi_momentum_out_recursively(octcell* cell);
+    void distribute_ceLl_quasi_momentum_on_cell_faces_recursively(octcell* cell);
+    //void convert_cell_face_quasi_momentum_out_to_vel_out_recursively(octcell* cell);
     //bool advect_and_update_pressure_recursively(octcell* cell);
     void update_velocities_by_the_pressure_gradients_recursively(octcell* cell);
-    void update_velocities_by_advection();
 
     /* Thread safety */
     void start_operation();
@@ -132,6 +139,7 @@ void watersystem::define_water(fvoctree* water, pftype start_time, bool time_sta
         dt = 0;
         set_time_step(time_step);
     }
+    max_dt = time_step;
     started = false;
     paused = false;
     abort = false;
@@ -216,9 +224,15 @@ void watersystem::set_time_step(pftype time_step)
 #endif
     if (dt != time_step) {
         // TODO: Update time-staggered parameters (velocities)
+#if  TIME_STEP_CHANGE_CORRECTION && !COURANT_NUMBER_LIMITATION
         dt = 0.5 * (time_step - dt);
         update_velocities_by_the_pressure_gradients_recursively(w->root);
+#endif
+#if  COURANT_NUMBER_LIMITATION
+        max_dt = time_step;
+#else
         dt = time_step;
+#endif
     }
 }
 
