@@ -106,7 +106,7 @@
         %\draw (0,1)--(0,1);
         \end{tikzpicture}
     }
-    \caption{An octree configuration. \subrefp{fig:octree_child_array_example_layout} The spatial layout of the octree. A striped square denotes a non-existing cell on that location. \subrefp{fig:octree_child_array_example_data} The internal data representation of the octree. The large squares are cells, the rectangles broken into four parts are arrays containing four elements and the arrows are pointers. A $\emptyset$ sign denotes a \NULL pointer, i.e. a pointer whos value is zero.}
+    \caption{An octree configuration. \subrefp{fig:octree_child_array_example_layout} The spatial layout of the octree. A striped square denotes a non-existing cell on that location. \subrefp{fig:octree_child_array_example_data} The internal data representation of the octree. The large squares are cells, the rectangles split into four parts are arrays containing four elements and the arrows are pointers. A $\emptyset$ sign denotes a \NULL pointer, i.e. a pointer whos value is zero.}
     \label{fig:octree_child_array_example}
 \end{figure}
 
@@ -114,7 +114,7 @@ Although an octree is a \idxs{three-dimensional}{data structure} and a tree in w
 
 The \octree itself just consists of a \pointer to the \idxs{root}{cell}\indexs{root}{node} and a few \methods for manipulating the \cells in the tree. If the octree is empty, the value of the pointer is \NULL.
 
-Each cell in the tree then contains a pointer to an \idx{array} of pointers to the child cells. If a cell is a \idxs{leaf}{cell}, it doesn't have any children and the value of the pointer to the array is \NULL. If the cell does have children, the pointer points to an actual array consisting of $2^d$ pointers to \idxsp{octree}{cell}{s}. The index $i$ of an array element corresponds to the position of the child cell relative the parent cell according to
+Each cell in the tree then contains a pointer to an \idx{array} of pointers to the child cells. If a cell is a \idxs{leaf}{cell}, it doesn't have any children and the value of the pointer to the array is \NULL. If the cell does have children, the pointer points to an actual array consisting of $2^d$ pointers to \idxsp{octree}{cell}{s}. If such a pointer is \NULL, it means that the corresponding child doesn't exist. The index $i$ of an array element corresponds to the position of the child cell relative the parent cell according to
 
 \begin{equation} \label{eq:child_node_index_general}
 i \,=\, \sum_{j=0}^{d-1} \,2^j\,i_j,
@@ -129,3 +129,23 @@ i \,=\, 2^0\,i_0 + 2^1\,i_1 + 2^2\,i_2 \,=\, i_x + 2\,i_y + 4\,i_z,
 where $(i_0,\,i_1,\,i_2) = (i_x,\,i_y,\,i_z)$ and the 0th, 1st and 2nd orthogonal grid axes are the x-, y- and z-axes respectivelly.
 
 \section{Neighbor connections}
+
+In \thisprojectwork, \idxse{neighbor}{cell}{neighboring cells} are physically linked to each other, and each cell contains five \idxsp{doubly linked}{list}{s}\indexs{doubly}{lined list} whit \idxse{neighbor}{connection}{connections} to neighbor cells. The reason why doubly linked lists are used to store the connections is because their content changes all the time because of the constantly moving \idxs{water}{surface} and the dynamically changing \LODs, which both cause the grid to constantly have to \remesh itself and update its neighbors, and any nieghbor connection can have to be removed at any moment, not just the last or the first one in the list. The five doubly linked lists contains connections to
+
+\begin{enumerate}
+    \item \idxse{leaf}{cell}{Leaf cells} at the next lower \LOD,
+    \item \idxse{parent}{cell}{Parent cells} at the next lower \LOD,
+    \item Leaf cells with at the same \LOD,
+    \item Parent cells with at the same \LOD, and
+    \item Cells at the next higher \LOD
+\end{enumerate}
+
+respectively. The reason connections both to leaf cells and to parent cells are stored is because it was originally planned to use the \idxs{multigrid}{method} for solving the \idxs{pressure}{Poisson equation} that arises when the flow is choosen to be \idxse{incompressible}{flow}{incompressible} (while what actually happened was that the flow was choosen to be \idxse{compressible}{flow}{compressible}).
+
+Since using the \idxs{multigrid}{method} involved coarsening the grid, parent cells suddenly turn into leaf cells and existing leaf cells are removed. In order to avoid having to generate a new neighbor connection each time one of a cell's neighbors turns into a leaf cell (which happens a lot of times since the process of coarsening the grid to the coarsest level and then refining it again is a process that is repeated a number of times), those neighbor connections are already present, and in order to avoid having to add and remove cells to the gird, coarsening is never actually carried out; it is merly simulated by treating cells that are on a too high \LOD as if they didn't exist and instead treat their parent cells as leaf cells unless they are also on a too high \LOD.
+
+When it is desired to loop through all of a leaf cell's neighbors that also are leaf cells, each of the lists lists 1, 3 and 5 are simply looped through. For a leaf cell, each neighbor at a higher \LOD is guaranteed to also be a leaf cell.
+
+When the grid has been coarsened to a certain \LOD and it is desired to loop through all of the neighbors to a cell at that \LOD that are also currently leaf cells, each of the lists 1, 3 and 4 are looped through. Since the grid has been coarsened to the same \LOD as the cell in question, all cells connected through list 4 will be on that \LOD and consequencely also they will currently also be leaf cells.
+
+List 2 is never used but is simply used to store connections that may be moved into list 1 if the local \LOD for the cells being connected would decrease and those cells would turn into leaf cells. No neighbor connections are ever created or removed unless new cells are created or cells are removed.

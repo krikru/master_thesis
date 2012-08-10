@@ -3,14 +3,6 @@
 %TODO: Insert time values for more discretisized variables
 %TODO: Insert error bounds for more discretized equations
 
-%The \FVM is a way to realistically simulate the \idx{flow} of a \idx{fluid} by dividing the fluid into a large number of non-moving, adjactent \idxp{cell}{s} and letting the fluid flow between the cells, through the \idxp{cell face}{s}. The magnitude of the \idxs{fluid}{flux} between two cells is directly proportional to the area of the cell face between the cells and the component of the velocity of the fluid in the direction of the cell face \idx{normal}.
-
-%The motion of the fluid is described by a \PDE, or a set of \PDE\s.
-
-%When simulating fluids with the \FVM it is common to \idxe{approximation}{approximate} the fluid as being \idxse{incompressible}{fluid}{incompressible}. This is because many numerical methods for solving the discretized \PDE
-
-%This is because it is difficult to simulate compressible fluids when the \idx{time step} becomes large, due to \idxe{instability}{instabilities} in the \idx{numerical method} which leads to \idxs{spurious}{oscillations}.
-
 \newrobustcmd{\gammapath}{{\gamma[\vec{r}_1,\,\vec{r}_2]}}
 \newabbrev{\textgammapath}{\mbox{$\gammapath$}}
 
@@ -23,7 +15,7 @@ The \FVM can handle \simulation of fluids in realistic way. It is natural for re
 When using the \FVM, the simulation can be concentrated to the interesting parts of the flow by using \idxs{adaptive}{mesh refinement}, as in \citep{Popinet2003,Losasso2004}, to speed up the simulation orders of magnitude without loosing orders of magnitude in numerical precision in the interesting parts of the flow. This doesn't really have any natural correspondence when using particles. It is possible to initialize the particles with different \idxsp{effective}{size}{s} %TODO: Include reference to work where this has been done. Can't find it now! I know that I'm supposed to have it somewhere.
 in order to make some parts of flow have a lower \idxs{particle}{density} and hence require less \idxs{computational}{power} per unit volume; in that way \idxs{numerical}{precision} can be traded for speed. However, this introduces another problem --- as the flow evolves, \advection may cause large particles to end up at places in the flow where high numerical precision is desired and decrease the numerical precision to under the required level. Besides, if the particles have a high velocity relative to each other (a high \temperature), \diffusion will cause large particles and small particles to mix and the large particles will once again end up at places in the flow where high numerical precision is desired.
 
-One naive attempt to solve this problem could be to dynaimcally resize the particles as they end up in parts of the flow with different requirements on the numerical precision. However, this will add or remove mass a those locations, so the simulation will not \idxse{conservation of}{mass}{conserve mass}. A succeeding naive attempt to solve this problem in turn could be to distribute mass that has been removed uniformly over all other particles by scaling them with a factor, but that would lead to a non-physical transportation of mass wich would move the center of mass, and it would even cause the simulation to not \idxse{conservation of}{momentum}{conserve momentum}. A better remedy to this problem is to split too large particles into smaller particles and merge too small particles into larger particles as first done in \citep{Desbrun1999} and later improved in a number of reports, for example in \citep{Yan2009}. One drawback with this method is that it causes the \idxs{force}{field} to change discontinuously, hence \red{emitting weak \idxsp{shock}{wave}{s}}. %TODO: Really? %TODO: Still many particles
+One naive attempt to solve this problem could be to dynaimcally resize the particles as they end up in parts of the flow with different requirements on the numerical precision. However, this will add or remove mass a those locations, so the simulation will not \idxse{conservation of}{mass}{conserve mass}. A succeeding naive attempt to solve this problem in turn could be to distribute mass that has been removed uniformly over all other particles by scaling them with a factor, but that would lead to a non-physical transportation of mass wich would move the center of mass, and it would even cause the simulation to not \idxse{conservation of}{momentum}{conserve momentum}. A better remedy to this problem is to split too large particles into smaller particles and merge too small particles into larger particles as first done in \citep{Desbrun1999} and later improved in a number of reports, for example in \citep{Yan2009}. However, these teqniques still require a fairly large numbe of particles and are hence not suitable for real time simulations of water surfaces on large bodies of water.
 
 When applying the \FVM in \CFD, it simulates the \flow of a \fluid by dividing the fluid into a large number of non-moving, adjactent \cells and letting the fluid flow between the cells, through the \idxsp{cell}{face}{s}. The motion of the fluid is described by a set of \PDEs, usually the \idxs{Euler}{equations} or the \idxs{Navier--Stokes}{equations}.
 
@@ -58,7 +50,7 @@ F_i \,=\, \frac{1}{S_i}\oiint_{S_i}(\vec{F}\cdot\normal)\,\opd S.
 In the \FVM, cell faces are usually flat, which means that the normal vector $\normal$ is constant for a certain cell face $S_i$. \eqref{eq:fi_integral} can therefore be rewritten as
 
 \begin{equation} \label{eq:fi_flat_cell_face}
-F_i \,=\, \frac{1}{S_i}\,\normal_i\cdot\oiint_{S_i}(\vec{F})\,\opd S,
+F_i \,=\, \frac{1}{S_i}\,\normal_i\cdot\oiint_{S_i}\vec{F}\,\opd S,
 \end{equation}
 
 where $\normal_i$ is the normal of $S_i$. $F_i$, which is now just the $\normal_i$-component of the average value of the field on the cell face $S_i$, is on a staggered grid stored directly on $S_i$.
@@ -139,7 +131,7 @@ The \idxs{Navier--Stokes}{equations} are a statement of the conservation of mome
 \rho\left(\frac{\partial\vec{u}}{\partial t} + \vec{u}\cdot\nabla\vec{u}\right) = -\nabla p + \nabla\cdot\boldsymbol{\mathsf{T}} + \vec{f}
 \end{equation}
 
-where $\rho$ is the dencity of the fluid, $\vec{u}$ is the velocity, $p$ is the pressure, $\boldsymbol{\mathsf{T}}$ is the \index{stress tensor|see{deviatoric stress tensor}}\idxs{deviatoric stress}{tensor} and $\vec{f}$ is the external forces per unit volume. It should be noted that these equations do not fully describe the fluid for; for example, they do not describe convection of the fluid, nor do they describe how to obtain any of the fields $p$, $\boldsymbol{\mathsf{T}}$ or $\vec{f}$ that the Navier--Stokes equations depends on.
+where $\rho$ is the dencity of the fluid, $\vec{u}$ is the velocity, $p$ is the pressure, $\boldsymbol{\mathsf{T}}$ is the \index{stress tensor|see{deviatoric stress tensor}}\idxs{deviatoric stress}{tensor} and $\vec{f}$ is the external forces per unit volume. It should be noted that these equations do not fully describe the fluid for; for example, they do not describe convection of the fluid, nor do they describe how to obtain any of the fields $p$, $\boldsymbol{\mathsf{T}}$ or $\vec{f}$ that the Navier--Stokes equations depend on.
 
 By \idxse{time}{discretization}{time discretizing} and rewriting \eqref{eq:navier_stokes}, and choosing the value of $\vec{u}$ in timestep $n$ and the value of $\partial\vec{u}/\partial t$ in timestep $n+\frac{1}{2}$, thus introducing an $O(\Delta t)$ error where $\Delta t$ is the length of the time step, we obtain
 
@@ -158,20 +150,6 @@ and second, the velocity update is calculated as
 \begin{equation} \label{eq:velocity_update}
 \vec{u}_{n+1} \,=\, \vec{u}^*_{n+1} - \Delta t\nabla p_{n+1}.
 \end{equation}
-
-%In \thisprojectwork, a \idxs{staggered}{grid} has been used, so the velocities are stored on the \idxsp{cell}{face}{s}. Furthermore, only the velocity component relevant to \eqref{eq:fi_flat_cell_face} is stored, that is, only the velocity component in the direction of the cell face normal $\normal$. We can therefore calculate the scalar multiplication of $\normal$ with both sides of \eqref{eq:velocity_update} to get
-
-%\begin{equation} \label{eq:velocity_update_staggered_grid_pressure_derivative}
-%u_{\normal,\,n+1} \,=\, u^*_{\normal,\,n+1} - \Delta t\,p'_{\normal,\,n+1},
-%\end{equation}
-
-%where $u_{\normal,\,n}$ and $u^*_{\normal,\,n}$ are the $\normal$-direction components of $\vec{u}_{n}$ and $\vec{u}^*_{n}$ respectivelly at timestep $n$, and $p'_{\normal\,n}$ is the pressure derivative in the direction of $\normal$ at timestep $n$. Since the cell face on which $\vec{u}_{\normal}$ is stored separates two adjactent cells whose cell centers are separated by a vector parallel to $\normal$, we can using \eqref{eq:phi_derivative_final} to rewrite this equation as
-
-%\begin{equation} \label{eq:velocity_update_staggered_grid_final}
-%u_{\normal,\,m+1} \,=\, u^*_{\normal,\,m+1} - \Delta t\,\frac{p_{2,\,n+1} - p_{1,\,n+1}}{\Delta r},
-%\end{equation}
-
-%where $p_{1,\,n}$ is the pressure in the cell center of the cell which $\normal$ points from at time step $n$, $p_{2,\,n+1}$ is the pressure in the cell center of the cell which $\normal$ points to at time step $n$ and $\Delta r$ is the distance between the two cell centers.
 
 \section{Continuity equation}
 
@@ -208,6 +186,78 @@ This is known as the \idxs{continuity}{equation} and has to be satisfied in orde
 where $\rho_{n}$ is the value of $\rho$ at timestep $n$.
 
 \section{Velocity advection and conservation of momentum}
+
+Advection of the velocity is particularly tricky, mainly because the \idxs{velocity}{advection} term contains both the full velocity vector and the \divergence of the velocity, which both are non-present in the \idxsp{cell}{face}{s} where the \idxsp{velocity}{scalar}{s} are stored and therefore needs to be calculated. Besides, transporting the velocity field by using the velocity advection term is not \idxse{conservation of}{mass}{mass conserving}. In \thisprojectwork, an approach that is based on fluxing momentum through the cell faces has been taken, which in principle builds on the following steps:
+
+\begin{enumerate}
+    \item Calculate \idx{cell-centered} \idxs{momentum}{vectors} by using the the \idx{face-centered} velocity scalars
+    \item Transport the momentum in an advection step
+    \item Calculate the face-centered velocity scalars by calculating them from the momentum vectors.
+\end{enumerate}
+
+However, following these steps directly would \idxs{low-pass}{filter} the \idxs{velocity}{field} each time step, since it involves converting it from one set of points (the \idxsp{face}{center}{s}) to another set of points (the \idxsp{cell}{center}{s}), which low-pass filters the field, and then convert it back again, which also low-pass filters the field, so details in the velocity field would very quickly vanish. Instead, the last of these steps is modified so that just the momentum mismatch between the cell-centered momentum vectors and the face-centered velocity scalars is distributed on the cell faces. The method can be summarized as taking the following steps:
+
+\begin{enumerate}
+    \item Calculate the cell-centered velocity vectors by averaging the face-centered velocity scalars, tentatively using the area of the cell faces times the sum of the censities in the two adjacent cells for averaging (as done in this case). For simplicity, let's make the (incorrect) assumption that the velocity field $\vec{u}$ is location independent. We can use \eqref{eq:fi_flat_cell_face} since $\vec{u}$ is a vector field, substitute $\vec{u}$ for $\vec{F}$ and rewrite the equation as
+    
+    \begin{equation} \label{eq:u_scalar_i_from_u_vec}
+    u_i \,=\, \normvec{n}_i\cdot\vec{u}.
+    \end{equation}
+    
+    Let's define the \idxs{help}{variable} $\vec{u}^*$ as
+    
+    \begin{equation} \label{eq:u_vec_help_variable}
+    \vec{u}^* \,=\, \sum_{S_i}w_i\,\normvec{n}_i\,u_i,
+    \end{equation}
+    
+    where $S_i$ is the cell face between the cell $\vec{u}$ is being calculated for and the $i$th neighbor cell and $w_i$ is the weight of the velocity scalar at the cell face $S_i$ used in the averaging. In \thisprojectwork, $w_i$ has been defined as
+    
+    \begin{equation}
+    w_i \,=\, S_i\,(\rho_0 + \rho_i),
+    \end{equation}
+    
+    where $\rho_0$ is the average density of the cell $\vec{u}$ is being calculated for and $\rho_i$ is the average density of the $i$th neighbor cell. By using \eqref{eq:u_scalar_i_from_u_vec} in \eqref{eq:u_vec_help_variable}, we obtain
+    
+    \begin{equation}
+    \vec{u}^* \,=\, \sum_{S_i}w_i\,\normvec{n}_i\,\normvec{n}_i\cdot\vec{u}.
+    \end{equation}
+    
+    By realizing that $\sum_{S_i}w_i\,\normvec{n}_i\,\normvec{n}_i$ can be considered to be a matrix, which is in fact invertible, we can multiply both sides of the equation with the inverse and obtain
+    
+    \begin{equation}
+    \left(\sum_{S_i}w_i\,\normvec{n}_i\,\normvec{n}_i\right)^{-1}\vec{u}^* \,=\, \vec{u}.
+    \end{equation}
+    
+    By using \eqref{eq:u_vec_help_variable}, this turns into
+    
+    \begin{equation}
+    \vec{u} \,=\, \left(\sum_{S_i}w_i\,\normvec{n}_i\,\normvec{n}_i\right)^{-1}\sum_{S_i}w_i\,\normvec{n}\,u_i,
+    \end{equation}
+    
+    which can be used to calculate the cell-centered velocity vectors.
+    
+    In \thisprojectwork, the cells are \idxe{axis alignment}{axis-aligned}, so $\sum_{S_i}w_i\,\normvec{n}_i\,\normvec{n}_i$ will be a diagonal matrix and the inverse will just be the matrix consisting of the inverse of the diagonal elements. In fact, $\vec{u}$ can be calculated simply by calculating the weighted average of all $\normvec{n}_i\,u_i$ for which $\normvec{n}_i\parallel \normvec{e}_j$, where $\normvec{e}_j$ is the basis vector belonging to the $j$th dimension, such that $(\normvec{e}_0,\,\normvec{e}_1,\,\normvec{e}_2) = (\normvec{x},\,\normvec{y},\,\normvec{z})$, doing so for $j = 0,\, 1,\, 2$ and adding the three averages together, that is
+    
+    \begin{equation}
+    \vec{u} \,=\, \sum_{j=0}^2 \frac{|\normvec{n}_i\cdot\normvec{e}_j|\,w_i\,\normvec{n}_i\,u_i}{|\normvec{n}_i\cdot\normvec{e}_j|\,w_i}.
+    \end{equation}
+    
+    \item Calculate the face-centered \idxsp{velocity}{vector}{s} from the cell-centered velocity vectors, by using a bounded advection scheme since these are the vectors that are going to be advected. In \thisprojectwork, the \UPWIND scheme has been used, for which this step is simply a means of picking the cell-centered velocity vector in the cell the flow is comming from and assigning that to the cell face.
+    
+    \item Convert the face-centered velocity vectors into \idxsp{quasi-momentum}{vector}{s} by multiplying with the face-centered density (the density of the fluxed volume). Therefore, before this step can be done, the mass that is going to be advected has to be calculated so that the face-centered density can be calculated.
+    
+    \item Calculate the net momentum inflow in each cell as a vector quantity during the advection step. This is also when all mass is advected.
+    
+    \item Since the momentum in one cell, created by the velocity scalars in the cell face of the cell, automatically changes when the mass in the cell changes, calculate how much of the net momentum inflow it is that is actually created by the mass inflow. Use only the part of the cell face control volumes that lie within the cell when doing so and consider the mass to have been distributed homogenously within the cell. Note that together these parts cover exactly the entire cell once in each dimension. Since this part of the net momentum inflow has effectively already heen added to the cell, subtract it from the net momentum inflow to obtain the part of the net momentum inflow that still has to be distributed on the cell faces.
+    
+    \item Distribute the part of the net momentum inflow, that still has to be distributed, on the cell faces as momentum-scalars, by using the mass of the cell face control volume, only of the part that lie within the cell, as weight. Note that this is equivalent to using the volume of the part of the cell face control volume that lies within the cell as weight, since mass was considered to be distributed homogenously within the cell. In \thisprojectwork, since the cells are cubic and the control volume extends through half the cell, the volume of the part of the cell face control volume that lies within the cell is proportional to the cell face area, so in this case the weight is simply the cell face area.
+    
+    Since we have distributed a momentum on velocities, we have 
+    
+    \item Calculate the updated face-centered velocity scalars by multiplying the face-centered momentum scalars with the total mass contained withing the control volume of the cell face the velocity scalar is stored on.
+\end{enumerate}
+
+This method also conserves momentum.
 
 \section{Pressure calculation}
 
