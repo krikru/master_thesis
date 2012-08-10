@@ -48,10 +48,10 @@ bool fvoctree::refine_subtree(octcell* c, pftype surface, pftype bottom)
 
     pftype lowest_cell_height = c->r[VERTICAL_DIMENSION];
 #if    NUM_DIMENSIONS == 2
-#if 0 // Step profile surface
+#if 1 // Step profile surface
     //pftype hdiff = .24118956;
     pftype hdiff = .25;
-    pftype step_x_pos = 0.9;
+    pftype step_x_pos = 0.7;
     pftype low = SURFACE_HEIGHT - hdiff/2;
     pftype high = SURFACE_HEIGHT + hdiff/2;
     pftype min_surf_height;

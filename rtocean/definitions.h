@@ -105,7 +105,7 @@
 //#define  VEL_DIV_SCALE_FACTOR       SIMULATION_TIME_STEP // [s]
 #define  FLOW_DIV_SCALE_FACTOR      VEL_DIV_SCALE_FACTOR // [s]
 #define  DRAW_CELL_CENTER_VELOCITIES                 0
-#define  DRAW_CELL_FACE_VELOCITIES                   0
+#define  DRAW_CELL_FACE_VELOCITIES                   1
 #define  DRAW_ALL_VELOCITIES                         1 // Draw velocities for all cells
 //#define  VEL_TO_ARROW_LENGTH_FACTOR                  0.1 // [s]
 #define  VEL_TO_ARROW_LENGTH_FACTOR                  (1*SIMULATION_TIME_STEP) // [s]
