@@ -159,8 +159,7 @@ void watersystem::calculate_cell_center_properties_recursively(octcell* cell)
         nlset lists;
         cell->add_leaf_neighbor_lists_to_list_set(lists);
         for (nlnode* node = lists.get_first_node(); node; node = lists.get_next_node()) {
-            pftype weight = node->v.cf_area*(own_cell_density        *cell->s      +
-                                             node->v.n->get_density()*node->v.n->s );
+            pftype weight = node->v.cf_area*(own_cell_density + node->v.n->get_density());
             cell->ccv[node->v.dim] += weight * node->v.get_vel_in_pos_dir();
             weights[node->v.dim] += weight;
         }

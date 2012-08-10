@@ -18,6 +18,7 @@ using std::out_of_range;
 // ENUMS
 ////////////////////////////////////////////////////////////////
 
+/* Note that only one level od detail is allowed to differ between neighbors. */
 enum NEIGHBOR_LISTS_ENUM {
     NL_LOWER_LEVEL_OF_DETAIL_LEAF    ,
     NL_LOWER_LEVEL_OF_DETAIL_NON_LEAF,
