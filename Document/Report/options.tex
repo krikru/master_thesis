@@ -79,7 +79,8 @@
 \newflag{INDEXEDTEXTPURPLE}          {\iftoggle{DEBUG}{true}{false}}  % Controls whether indexed text becomes purple in the body text
 %\newflag{INDEXEDTEXTPURPLE}          {false}  % Controls whether indexed text becomes purple in the body text
 %\newflag{PRINTLABLES}                {\iftoggle{DEBUG}{true}{false}}  % Controls whether indexed text becomes purple in the body text
-\newflag{PRINTLABLES}                {true}  % Controls whether indexed text becomes purple in the body text
+%\newflag{PRINTLABLES}                {true}  % Controls whether indexed text becomes purple in the body text
+\newflag{PRINTLABLES}                {false}  % Controls whether indexed text becomes purple in the body text
 
 % % % % % % % %
 % APPEARANCE  %
@@ -271,8 +272,11 @@
 \declareindexkeypair      {compressibility}{compressible}
 \declareindexkey      {cube}
 \declareindexkeypair      {cube}{cubes}
+\declareindexkey      {cuboid}
+\declareindexkeypair      {cuboid}{cuboids}
 \declareindexkey      {damping}
 \declareindexkeypair      {damping}{damp}
+\declareindexkeypair      {damping}{damped}
 %\declareindexkey      {data} % Use \idxs{two-dimensional}{data} or \idxs{three-dimensional}{data} instead
 \declareindexkey      {density}
 %\declareindexkey      {depth} % Use \idxs{water}{depth} instead
@@ -344,6 +348,8 @@
 \declareindexkeypair      {property}{properties}
 \declareindexkey      {quadtree}
 \declareindexkeypair      {quadtree}{quadtrees}
+\declareindexkey      {rectangle}
+\declareindexkeypair      {rectangle}{rectangles}
 \declareindexkey      {remeshing}
 \declareindexkeypair      {remeshing}{remesh}
 \declareindexkey      {rendering}
@@ -356,6 +362,7 @@
 \declareindexkey      {spectrum}
 \declareindexkey      {surface}
 \declareindexkeypair      {surface}{surfaces}
+%\declareindexkey      {square} % Command \square already defined.
 \declareindexkey      {temperature}
 \declareindexkey      {unboundedness}
 \declareindexkeypair      {unboundedness}{unbounded}

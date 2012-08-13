@@ -1,0 +1,23 @@
+\documentclass{report}
+\usepackage{tikz}
+\usetikzlibrary{calc}
+
+\begin{document}
+    \def\unitlength{0.05\textwidth}
+    \begin{tikzpicture}[x={(\unitlength,0)},y={(0,\unitlength)}]
+    \def\arrowlength{0.5*\unitlength}
+    \coordinate (c1) at (1, 0);
+    \coordinate (c2) at (4, 1);
+    \coordinate (c3) at (5, 0);
+    
+    \coordinate (c4) at ($(c1)!0.5!(c2)$);
+    \coordinate (c5) at ($(c4)!\arrowlength!90:(c2)$);
+    
+    \coordinate (c6) at ($(c2)!0.5!(c3)$);
+    \coordinate (c7) at ($(c6)!\arrowlength!90:(c3)$);
+    
+    \draw (c1) -- (c2) -- (c3);
+    \draw[->] (c4) -- (c5);
+    \draw[->] (c6) -- (c7);
+    \end{tikzpicture}
+\end{document}

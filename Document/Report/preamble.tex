@@ -155,7 +155,8 @@
 %\newrobustcmd{\transparent}[1]{\textcolor{transparent}{#1}}
 
 % Table of contents
-\newrobustcmd{\addtotoc}[2]{\cleardoublepage\phantomsection\addcontentsline{toc}{#1}{#2}}
+\newrobustcmd{\addtotoc}[2]{\phantomsection\addcontentsline{toc}{#1}{#2}}
+\newrobustcmd{\clearaddtotoc}[2]{\cleardoublepage\addtotoc{#1}{#2}}
 % Do not add to table of contents and do not number
 \newrobustcmd{\notocpart         }[3][]{\pdfbookmark[#1]{#2}{#3}\part*         {#2}}
 \newrobustcmd{\notocchapter      }[3][]{\pdfbookmark[#1]{#2}{#3}\chapter*      {#2}}
