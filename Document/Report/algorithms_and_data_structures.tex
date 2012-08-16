@@ -193,6 +193,13 @@ Advection of the velocity is particularly tricky, mainly because the \idxs{veloc
         \def\unitlength{0.2\textwidth}
         \begin{tikzpicture}[x={(\unitlength,0)},y={(0,\unitlength)}]
         %\def\arrowlength{0.2}
+        
+        % Control volumes
+        \draw[thick,dashed,blue!100!black] (-.25,0) rectangle (1.5,1);
+        \draw[thick,dashed,blue!100!black] (.5,0) -- (.5,1);
+        \draw[thick,dashed,blue!100!black] (-.25,.5) -- (.5,.5);
+        
+        % Cells
         % Main cell
         \draw (0,0) \squarepath{1};
         % Neighbor cells
@@ -203,13 +210,9 @@ Advection of the velocity is particularly tricky, mainly because the \idxs{veloc
         \draw[->] ($(0,.75)+(+.5\arrowlength,0)$) -- +(-1\arrowlength,0);
         \draw[->] ($(1,.5)+(-.5\arrowlength,0)$) -- +(+1\arrowlength,0);
         \draw (1,0) \squarepath{1};
-        % Control volumes
-        \draw[thick,dashed,red!90!black] (-.25,0) rectangle (1.5,1);
-        \draw[thick,dashed,red!90!black] (.5,0) -- (.5,1);
-        \draw[thick,dashed,red!90!black] (-.25,.5) -- (.5,.5);
         \end{tikzpicture}
     }
-    \caption{The velocity field discretized on a staggered grid. \subrefp{fig:cell_faces_non_structured} On a \idxs{non-structured}{grid}, estimating the \idxs{velocity}{vector} in a cell given a number of \idx{face-centered} \idxs{velocity}{scalars} is non-trivial. \subrefp{fig:cell_face_control_volumes} On an axis-aligned \idxs{orthogonal}{grid}, the cell faces can be divided into groups depending on the direction of the \idxs{cell face}{normal} and meaningful \idxsp{control}{volume}{s} belonging to the cell faces can be defined. In this case the bounding volumes of all cell faces with normals parallel to the x-axis have been outlined with dashed lines. Note that $100\ \%$ of the points in the simulation domain correspond to exactly one bounding volume, as can be seen in the middle cell.}
+    \caption{The velocity field discretized on a staggered grid. \subrefp{fig:cell_faces_non_structured} On a \idxs{non-structured}{grid}, estimating the \idxs{velocity}{vector} in a cell given a number of \idx{face-centered} \idxs{velocity}{scalars} is non-trivial. \subrefp{fig:cell_face_control_volumes} On an axis-aligned \idxs{orthogonal}{grid}, the cell faces can be divided into groups depending on the direction of the \idxs{cell face}{normal} and meaningful \idxsp{control}{volume}{s} belonging to the cell faces can be defined. In this case the control volumes of all cell faces with normals parallel to the x-axis have been outlined with dashed lines. Note that $100\ \%$ of the points in the simulation domain correspond to exactly one control volume, as can be seen in the middle cell.}
     \label{fig:velocity_advection}
 \end{figure}
 
@@ -272,7 +275,9 @@ However, following these steps directly would \idxs{low-pass}{filter} the \idxs{
     
     \item Calculate the net momentum inflow in each cell as a vector quantity during the advection step. This is also when all mass is advected.
     
-    \item Since the momentum in one cell automatically changes when the mass in the cell changes, calculate how much of the net momentum inflow it is that is actually a consequence of the mass inflow. When doing so, use only the part of the cell face \idxsp{control}{volume}{s} that lie within the cell (see \figref{fig:cell_face_control_volumes}) and consider the mass to have been distributed homogenously within the cell. Note that the bounding volumes together cover each point in the cell exactly once. Since this part of the net momentum inflow has effectively already heen added to the cell, subtract it from the net momentum inflow to obtain the part of the net momentum inflow that still has to be distributed on the cell faces.
+    \item Since the momentum in one cell automatically changes when the mass in the cell changes, calculate how much of the net momentum inflow it is that is actually a consequence of the mass inflow. When doing so on an \idxs{orthogonal}{grid}, use only the part of the cell face \idxsp{control}{volume}{s} that lie within the cell (see \figref{fig:cell_face_control_volumes}) and consider the mass to have been distributed homogenously within the cell. Note that the control volumes together cover each point in the cell exactly once. For an \idxs{unstructured}{grid}, it is not possible to use control volumes in this way.
+    
+    Since this part of the net momentum inflow has effectively already heen added to the cell, subtract it from the net momentum inflow to obtain the part of the net momentum inflow that still has to be distributed on the cell faces.
     
     \item Calculate face-centered \idxsp{momentum}{scalar}{s} by multiplying the face-cen\-tered velocity scalars with the total mass contained within the control volume of the cell face the velocity scalar is stored on.
     

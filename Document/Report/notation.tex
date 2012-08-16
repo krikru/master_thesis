@@ -1,19 +1,124 @@
 %\begin{notation}% Passing the option "old" to the notation environment will redefine the notationtabular environment so that it produces an old style LaTeX tabular instead of a ctable.sty style tabular.
 \nonumchapter{Notation}
+    %\begin{multicols}{2}
     \begin{center}
+    % See http://en.wikipedia.org/wiki/Greek_alphabet
+    \begin{longtabu}{l X} % The X must be upper case
+    %\begin{longtabu}{|l|X|} % The X must be upper case
+        %\hline
+        \textbf{Notation}   & \textbf{Meaning} \\
+        \hline
+        \\
+        \endhead
         
-        \comment{
-        \begin{notationtabular}{Några mängder}{Notation}{Betydelse}
-            $\naturals$ & Mängden av naturliga tal \\
-            $\reals$ & Mängden av reella tal \\
-            $\complexes$ & Mängden av komplexa tal \\
-        \end{notationtabular}
+        $\nabla$            & The del operator, commonly used in vector algebra \\
         
-        \begin{notationtabular}{Förkortningar}{Förkortning}{Betydelse}
-            \abbrARMA\index{ARMA@\abbrARMA!abbreviation} & Auto-regressive moving average \\
-            \abbrPID\index{PID@\abbrPID!abbreviation} & Proportional, integral, differential (regulator) \\
-        \end{notationtabular}
-        }
+        \\
         
+        %alpha
+        $\alpha$            & The discretized phase fraction \\
+        $\alpha_i$          & The value of $\alpha$ in $C_i$ \\
+        $\alpha^*$          & The non-discretized phase fraction \\
+        %beta
+        %gamma
+        $\gammapath$        & A path within $\phi$'s domain, connecting the vectors
+                              $\vec{r}_1$ and $\vec{r}_2$ \\
+        %delta
+        $\Delta\vec{r}$     & Defined as $\Delta\vec{r} = \vec{r}_2 - \vec{r}_1$ \\
+        %epsilon
+        %zeta
+        %eta
+        $\eta$              & The free surface elevation \\
+        %theta
+        %iota
+        %kappa
+        %lambda
+        %mu
+        $\mu$               & The (dynamic) viscosity \\
+        %nu
+        %xi
+        %omicron
+        %pi
+        %rho
+        $\rho$              & The density \\
+        $\rho_n$            & The density in timestep $n$ \\
+        %sigma
+        %tau
+        %upsilon
+        %phi
+        $\phi$              & A signed distance function, also known as level set function;
+                              a scalar field \\
+        $\phi'_{\vec{r}}$   & The derivative of $\phi$ in the direction of $\vec{v}$ \\
+        %chi
+        %psi
+        %omega
+        $\omega$            & The angular frequency of one wave component \\
+        
+        \\
+        
+        $a$                 & The thickness in number of cells of the LOD layers
+                              (when all of them have the same thickness) \\
+        $a_i$               & The thickness in number of cells of LOD layer $i$ \\
+        %$\complexes$        & The set of complex numbers \\
+        $c$                 & The speed of the propagation of waves;
+                              a distinct level of the signed distance function $\phi$ \\
+        $C$                 & The Courant number, which is basically the ratio of a cells volume that
+                              is replaced in one time step because of flow through the cell walls \\
+        $C_i$               & The cell with index $i$ \\
+        $d$                 & The number of dimensions \\
+        $\opd S$            & An infinitesimal element in $S$ \\
+        $\opd V$            & An infinitesimal element in $V$ \\
+        $d$                 & The number of dimensions \\
+        $\normvec{e}_i$     & A \idxs{base}{vector} in $\{\normvec{e}_i\}$ that is aligned
+                              with the $i$th \idxs{grid}{axis} \\
+        $\{\normvec{e}_i\}$ & An \idxs{orthonormal}{basis} for $\mathbb{R}^d$ \\
+        $\vec{f}$           & The external forces per unit volume \\
+        $\vec{F}$           & A vector field \\
+        $F_i$               & The average field flux through $S_i$;
+                              the $\normal_i$-component of the average value of the field on the cell face $S_i$ \\
+        $i$                 & An index \\
+        $I(\alpha)$         & The interface using the discretized phase fraction \\
+        $I^*(\alpha^*)$     & The interface using the non-discretized phase fraction \\
+        $j$                 & An index \\
+        $k$                 & The wave number of one wave component; an index \\
+        $\vec{k}$           & The wave vector of one wave component \\
+        $L_c(\phi)$         & The set of all locations $\vec{r}$ where $\phi(\vec{r}) = c$ \\
+        $m$                 & The mass of the fluid in $V$ \\
+        $n$                 & The number of time steps taken \\
+        $\normal$           & The normal of $\opd S$ \\
+        $\normal_i$         & The normal of $S_i$ \\
+        $N$                 & The number of surface grid points; the size of a square matrix \\
+        $N_{\text{s}}$      & The total number of cells visible on the surface \\
+        $N_{\text{s},i}$    & The number of cells visible on the surface belonging to LOD layer $i$ \\
+        $N_{\text{t}}$      & The total number of cells used in the simulation \\
+        %$\naturals$         & The set of natural numbers \\
+        $O$                 & Symbol indicating big O notation \\
+        $p$                 & The pressure \\
+        $p_n$               & The pressure in time step $n$ \\
+        $q$                 & A known function of $\vec{r}$ \\
+        $\vec{r}$           & The location vector \\
+        $\vec{r'}$          & The location of $\opd V$ and $\opd S$ respectively \\
+        $r_i$               & The $\normvec{e}_i$ component of $\vec{r}$,
+                              such that $r_i = \normvec{e}_i\cdot\vec{r}$ \\
+        %$\reals$            & The set of real numbers \\
+        $S$                 & The surface of $V$ \\
+        $S_i$               & The cell face to the $i$th neighbor cell;
+                              the area of the cell face to the $i$th neighbor cell \\
+        $t$                 & The time \\
+        $T$                 & The temperature \\
+        $\devstressten$     & The deviatoric stress tensor \\
+        $\vec{u}$           & The velocity \\
+        $\vec{u}_n$         & The velocity in time step $n$ \\
+        $\vec{u}^*_n$       & Intermediate velocity in time step $n$ \\
+        $V$                 & A control volume \\
+        $V_{\epsilon,\text{t}}$     & The volume of the sphere with radius $\epsilon$,
+                                      centered in $\vec{r}$ \\
+        $V_{\epsilon,\text{w}}$     & The volume of the water contained within $V_{\epsilon,\text{t}}$ \\
+        $V_{i,\text{t}}$    & The total volume of $C_i$ \\
+        $V_{i,\text{w}}$    & The volume of the water contained within $V_{i,\text{t}}$ \\
+        %\hline
+        %\endfoot
+    \end{longtabu}
     \end{center}
+    %\end{multicols}
 %\end{notation}

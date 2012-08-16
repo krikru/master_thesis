@@ -26,6 +26,8 @@
 \usepackage[resetfonts]{cmap} % Help reader with interpreting ligatures (if you use cmap, you must use it before fontenc)
 \usepackage[T1]{fontenc} % Gets rid of warning "No file OMScmtt.fd. on input line 10." but loads an ugly bitmap font
 \usepackage{lmodern} % Replaces the default bitmap font used by t1enc and fontenc with the Latin Modern font
+%\usepackage{multicol} % An environment that enables a different number of columns, locally.
+\usepackage{longtable,tabu} % Handles long tables and text wrapping, see http://ctan.uib.no/macros/latex/required/tools/longtable.pdf and  http://mirror.ctan.org/macros/latex/contrib/tabu/tabu.pdf
 
 % Miscellaneous tools
 \usepackage{etoolbox} % Includes the macro \ifstrequal
@@ -246,9 +248,13 @@
 %\newrobustcmd{\si} {\nspace\indexify{s}\xspace} % For abbreviations that are indexed verbosely
 
 % Mathematics
-\newrobustcmd{\opd}[0]{\operatorname{d}} % Used e.g. in integrals and derivatives
+\newrobustcmd{\opd}[0]{\operatorname{d}\!} % Used e.g. in integrals and derivatives
 \newrobustcmd{\normal}[0]{\normvec{n}} % Used e.g. in integrals and derivatives
 \newrobustcmd{\range}[2]{#1{--}#2}
+% Sets
+\newrobustcmd{\naturals}[0]{\mathbb{N}}
+\newrobustcmd{\reals}[0]{\mathbb{R}}
+\newrobustcmd{\complexes}[0]{\mathbb{C}}
 
 % TikZ
 % Two-dimensional versions

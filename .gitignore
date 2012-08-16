@@ -44,3 +44,4 @@ _ReSharper*/
 *.ilg
 *.ind
 *.synctex.gz
+*.synctex.gz(busy)

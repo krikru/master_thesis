@@ -25,13 +25,13 @@ and \textit{\href{http://physbam.stanford.edu/~fedkiw/papers/stanford2002-07.pdf
 
 \section{Level Set method}
 
-One of the most common ways to track interfaces between two immiscible fluids is the \LS method, which is first presented in \citep{Osher1988}. In the \LS method, a \idxs{signed distance}{function}\indexs{signed}{distance function}, also called a \idxs{level set}{function}, $\phi$ is used to keep track of the distance to the surface. The absolute value of $\phi$ represents the distance to the interface, whereas the sign of $\phi$ designates the \phase. If the two phases are air and water, $\phi \leq 0$ usually designates water and $\phi > 0$ designates air, so that $\phi$ can be interpreted as the "height" when the system is in its \equilibrium position. The surface is then defined as the \isosurface, or \idxs{level}{set}, where $\phi = 0$, that is, as
+One of the most common ways to track interfaces between two immiscible fluids is the \LS method, which is first presented in \citep{Osher1988}. In the \LS method, a \idxs{signed distance}{function}\indexs{signed}{distance function}, also knows as \idxs{level set}{function}, $\phi$ is used to keep track of the distance to the surface. The absolute value of $\phi$ represents the distance to the interface, whereas the sign of $\phi$ designates the \phase. If the two phases are air and water, $\phi \leq 0$ usually designates water and $\phi > 0$ designates air, so that $\phi$ can be interpreted as the "height" when the system is in its \equilibrium position. The surface is then defined as the \isosurface, or \idxs{level}{set}, where $\phi = 0$, that is, as
 
 \begin{equation} \label{eq:level_set}
 L_c(\phi) \,=\, \{\vec{r} \,\mid\, \phi(\vec{r})=c\}
 \end{equation}
 
-where $L_c(\phi)$ is the set of all locations $\vec{r}$ where $\phi(\vec{r}) = c$. In the \LS method, $c = 0$ is used to represent the surface.
+where $c$ is a distinct level of $\phi$ and $L_c(\phi)$ is the set of all locations $\vec{r}$ where $\phi(\vec{r}) = c$. In the \LS method, $c = 0$ is used to represent the surface.
 
 In each \idxs{time}{step}, $\phi$ is transported according to the equation
 
@@ -39,42 +39,44 @@ In each \idxs{time}{step}, $\phi$ is transported according to the equation
 \frac{\partial\phi}{\partial t} + \vec{u}\cdot\nabla\phi \,=\, 0.
 \end{equation}
 
-One of the greatest strengths with this method is, besides from being simplie, its handiness when it comes to \idx{post-processing}. It is fairly easy to visualize an \isosurface of a field that is \discretized into the \nodes of \idxsp{cell}{corner}{s}, and for that reason the \LS method is often used in \FVM simulations when it is mportant that a realistic image of the flow can be \rendered, as in \citep{Losasso2004,Chentanez2011}. The \idxs{marching}{cubes}\index{algorithm!marching cubes|see{marching cubes}} algorithm, first presented in \citep{Lorensen1987}, is used to create triangle models of isosurfaces from a scalar field in a very straightforward manner, by marching through a set of adjacent cubes covering the \idxs{rendering}{domain}, and by looking at the value of the function in the \idxe{cell corner}{corners} of the cubes. In \citep{Sethian1995}, a class of fast marching methods related to the \LS method was developed.
+One of the greatest strengths with this method, besides from being simplie, is its handiness when it comes to \idx{post-processing}. It is fairly easy to visualize an \isosurface of a field that is \discretized into the \nodes of \idxsp{cell}{corner}{s}, and for that reason the \LS method is often used in \FVM simulations when it is mportant that a realistic image of the flow can be \rendered, as in \citep{Losasso2004,Chentanez2011}. The \idxs{marching}{cubes}\index{algorithm!marching cubes|see{marching cubes}} algorithm, first presented in \citep{Lorensen1987}, is used to create triangle models of isosurfaces from a scalar field in a very straightforward manner, by marching through a set of adjacent cubes covering the \idxs{rendering}{domain}, and by looking at the value of the function in the \idxe{cell corner}{corners} of the cubes. In \citep{Sethian1995}, a class of fast marching methods related to the \LS method was developed.
 
-When $\phi$ has become discretized, \eqref{eq:level_set} cannot be used directly to define the interface since the complete set of locations on which $\phi = 0$ is not available. However, the marching cubes algorithm produces a good approximation from the data that is available for where the interface is located. It has therefore, together with the \LS method, been used in numerous works that uses the \FVM, in order to visualize free surfaces, e.g.\ in \citep{Losasso2004}.
+When $\phi$ has become discretized, \eqref{eq:level_set} cannot be used directly to define the interface since it is not known exactly where the isosurface defined by $\phi = 0$ is located. However, the marching cubes algorithm produces a good approximation from the data that is available for where the interface is located. It has therefore, together with the \LS method, been used in numerous works that uses the \FVM, in order to visualize free surfaces, e.g.\ in \citep{Losasso2004}.
 
-On the other hand, probably the greatest weakness with this method is that it doesn't conserve mass perfectly after $\phi$ together with \eqref{eq:level_set_function_transport} have been discretized. Advection will cause $\phi$ to be smeared out and, as noted e.g.\ in \citep{Wojtan2009}, most of the surface details are washed away. This problem is more apparent when the simulation contains thin features, which, also as noted in \citep{Wojtan2009}, have a tendency to disappear, or start to flicker. However, it can be remedied somewhat (although not completely) by using \BFECC, which was first presented in \citep{Dupont2003} and later tested in \citep{Kim2005} both in advection of the velocity field as well as on images for illustration purposes.
+nthuerey2009
+
+
+On the other hand, probably the greatest weakness with this method is that, after the \discretization of $\phi$ and \eqref{eq:level_set_function_transport}, it doesn't conserve mass perfectly. Advection will cause $\phi$ to be smeared out and, as noted e.g.\ in \citep{Wojtan2009}, most of the surface details are washed away. This problem is more apparent when the simulation contains thin features which, as can be seen in \citep{nthuerey2009}, have a tendency to disappear or start to flicker. However, it can be remedied somewhat (although not completely) by using \BFECC, which was first presented in \citep{Dupont2003} and later tested in \citep{Kim2005} both in advection of the velocity field as well as on images for illustration purposes.
 
 \section{Volume of Fluid method}
 
-Another very commonly used way of tracking interfaces between two immiscible fluids is the \VOF method, first presented in \citep{Hirt1981}. For a non-discretized \PDE, the \VOF method uses a \idxs{phase}{fraction} $\alpha^*$ that is either $0$ or $1$ to designate the \phase. If the two phases are air and water, $\alpha^* = 0$ usually designates air and $\alpha^* = 1$ designates water, so that for a non-discretized \PDE $\alpha^*$ can be expressed as
+Another very commonly used way of tracking interfaces between two immiscible fluids is the \VOF method, first presented in \citep{Hirt1981}. For a non-discretized \PDE, the \VOF method uses a \idxs{phase}{fraction} $\alpha^*$ that is either $0$ or $1$ to designate the \phase. If the two phases are air and water, $\alpha^* = 0$ usually designates air and $\alpha^* = 1$ designates water, so that for a non-discretized \PDE, $\alpha^*$ can be expressed as
 
 \begin{equation} \label{eq:phase_fraction_continuous}
 \alpha^*(\vec{r}) \,=\, \lim_{\epsilon\,\rightarrow\,0} \frac{V_{\epsilon,\text{w}}}{V_{\epsilon,\text{t}}}\,(\vec{r}),
 \end{equation}
 
-where $V_{\epsilon,\text{t}}$ is the volume of the sphere with radius $\epsilon$, centered in $\vec{r}$, and $V_{\epsilon,\text{w}}$ is the volume of the water contained within $V_{\epsilon,\text{t}}$. This fraction can only result in 0 or 1, since $\vec{r}$ cannot be partially emerged in water, except from in the case where $\vec{r}$ is located on the interface where $\alpha^*$ \idxse{discontinuous}{jump}{jumps discontinuously} from 0 to 1 or from 1 to 0 and hence doesn't have a well defined value. The interface $I^*(\alpha^*)$ can therefore be defined as all locations where a transition takes place such that $\alpha^*$ makes this kind of jump, or in other words
+where $V_{\epsilon,\text{t}}$ is the volume of the sphere with radius $\epsilon$, centered in $\vec{r}$, and $V_{\epsilon,\text{w}}$ is the volume of the water contained within $V_{\epsilon,\text{t}}$. This fraction can only result in 0 or 1, since $\vec{r}$ cannot be partially emerged in water, except from in the case where $\vec{r}$ is located on the interface where $\alpha^*$ \idxse{discontinuous}{jump}{jumps discontinuously} from 0 to 1 or from 1 to 0 and hence doesn't have a well defined value. The interface using the non-discretized phase fraction, $I^*(\alpha^*)$, can therefore be defined as all locations where a transition takes place such that $\alpha^*$ makes this kind of jump, or in other words
 
 \begin{equation} \label{eq:vof_interface_continuous}
 I^*(\alpha^*) \,=\, \{\vec{r} \,\mid\, \cancel{\exists}\,\alpha(\vec{r})\in\mathbb{R}\}.
 \end{equation}
 
-However, in \thisprojectwork, $\alpha^*$ has been \discretized into $\alpha$ which is located at \idxsp{cell}{center}{s} and which by its discrete nautre is not able to perfectly describe how the two phases are distributed. It is therefore derised that $\alpha$ takes the whole cell it is discretized in into account, and tells how big ratio of the cell that is filled with water rather than only looking at one point. The definition of $\alpha$ is therefore
+However, in \thisprojectwork, $\alpha^*$ has been \discretized into $\alpha$ which is located at \idxsp{cell}{center}{s} and which by its discrete nature is not able to perfectly describe how the two phases are distributed. It is therefore derised that $\alpha$ takes the whole cell it is discretized in into account, and tells how big ratio of the cell that is filled with water rather than only looking at one point. The definition of $\alpha$ is therefore
 
 \begin{equation} \label{eq:phase_fraction_discretized}
 \alpha_i \,=\, \frac{V_{i,\text{w}}}{V_{i,\text{t}}}\,,
 \end{equation}
 
-where $\alpha_i$ is the value of $\alpha$ in the cell center of the cell with index $i$, $V_{i,\text{t}}$ is the total volume of the cell and $V_{i,\text{w}}$ is the total volume of the water contained within the cell. In contrast to in the non-discretized case, this fraction will never be undefined, so substituting $\alpha$ for $\alpha^*$ in \eqref{eq:vof_interface_continuous} and use that for the definition of the surface will not work. On the other hand, since the cells the interface cross through will be partially filled with water, $\alpha$ will be somewhere in between 0 and 1, or in other words
+where $\alpha_i$ is the value of $\alpha$ in $C_i$ which is the cell with index $i$, $V_{i,\text{t}}$ is the total volume of $C_i$ and $V_{i,\text{w}}$ is the volume of the water contained within $V_{i,\text{t}}$. In contrast to in the non-discretized case, this fraction will never be undefined, so substituting $\alpha$ for $\alpha^*$ in \eqref{eq:vof_interface_continuous} and use that for the definition of the surface will not work. On the other hand, since the cells the interface cross through will be partially filled with water, $\alpha$ will be somewhere in between 0 and 1. We can therefore define the interface using the discretized phase fraction as
 
 \begin{equation} \label{eq:vof_interface_discrete}
 I(\alpha) \,=\, \{C_i \,\mid\, 0 < \alpha_i < 1\}.
 \end{equation}
 
-%However, for a discretized \PDE, the \idxse{discrete}{divergence operator}{divergence operator} will always give a well defined result, so we can't same definition for $I(\alpha)$ as we did in the continuous case. On the other hand, the divergence operator applied to $\alpha$ will give a non-zero result at the boundary
+Note that this definition of the interface will not result in a surface, but in a set of cells with a volume; we can therefore speak of the thickness of the interface and conclude that it will not be perfectly sharp.
 
-In contrast to the \LS method, for which it is almost given that the interface is going to be constructed from the discretized signed distance function using the marching squares algorithm, it is when using the \VOF method not given in any way how the interface should be constructde from $\alpha$ and is in many cases not necessary. Also, as concluded in \citep{Wojtan2009}, \VOF methods are not often used in computer graphics applications due to \idxse{flotsam}{artifact}{flotsam} and \idxse{jetsam}{artifact}{jetsam artifacts}. However, there do exist various methods for constructing an interface from $\alpha$, of which most are used mainly for the advection of $\alpha$ in order to keep the interface sharp, and are not very useful when visualizing the surface.
-
+In contrast to the \LS method, for which it is almost given that the interface is going to be constructed from the discretized signed distance function by using the marching cubes algorithm, it is when using the \VOF method a non-trivial task to construct the interface from $\alpha$; in many cases, however, it is not necessary. Also, as concluded in \citep{Wojtan2009}, \VOF methods are not often used in computer graphics applications due to \idxse{flotsam}{artifact}{flotsam} and \idxse{jetsam}{artifact}{jetsam artifacts}. However, there do exist various methods for constructing an interface from $\alpha$, of which most are used mainly for the advection of $\alpha$ in order to keep the interface sharp, and are not very useful when visualizing the surface.
 
 \begin{itemize}
     \item Comparsion: \textit{\href{http://capfluidicslit.mme.pdx.edu/reference/Numerics/Gopala_ChemEngJ2008_VOFMethodsFreeSurfaceFlow.pdf}{Volume of fluid methods for immiscible-fluid and free-surface flows}}
@@ -89,8 +91,6 @@ In contrast to the \LS method, for which it is almost given that the interface i
 \subsection{Interface reconstruction}
 %\section{Internal alpha distribution}
 
-\section{Coupled Level Set/Volume of Fluid  method}
+\section{Coupled Level Set/Volume of Fluid method}
 
-\begin{itemize}
-    \item Reference: \textit{\href{http://pages.csam.montclair.edu/~yecko/icodes/SussmanPuckett_LevelSetVOF.pdf}{A Coupled Level Set and Volume-of-Fluid Method for Computing 3D and Axisymmetric Incompressible Two-Phase Flows}}
-\end{itemize}
+The \LS method has problems to conserve the mass, and the \VOF method has difficulties with keeping the interface sharp without the use of advanced \idxsp{advection}{scheme}{s}, as well as being inconvenient when \visualizing the surface. Because of this, hybrid methods called \CLSVOF methods have been developed, which aim to combine the strengths of both the \LS and the \VOF method and overcome their weaknesses. The \CLSVOF method was first developed in \citep{Puckett1998} and would in the follow-up article \citep{Sussman2000} be notet to generally be superior to either the \LS or the \VOF method alone.

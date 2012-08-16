@@ -86,6 +86,9 @@
 % APPEARANCE  %
 % % % % % % % %
 
+% Formatting
+\setlength{\extrarowsep}{0.5ex} % Specifies the vertical separation between rows in tabu tables
+
 % Names
 \renewcommand{\contentsname}{Table of Contents} % Rename Contents to Table of contents
 
@@ -201,13 +204,18 @@
 %\declareabbreviationqi{threedim}      {three-dimensional}
 %\declareabbreviationqi{twodim}        {two-dimensional}
 %\declareabbreviation  {NS}            {Navier--Stokes}
+%\declareabbreviation  {gammapath}           {{\gamma[\vec{r}_1,\,\vec{r}_2]}}
+\newrobustcmd         {\devstressten}          {\boldsymbol{\mathsf{T}}}
+\newrobustcmd         {\gammapath}          {{\gamma[\vec{r}_1,\,\vec{r}_2]}}
 \declareabbreviation  {itslimitedtime}      {its limited time}
 \declareabbreviation  {masterthesisworktime}{about five months}
 \declareabbreviationqi{NULL}                {NULL}
 \declareabbreviation  {numchildren}         {$2^d$}
 \declareabbreviationqi{Saab}                {Saab} % Saab seems to use the Gill Sans font
-\declareabbreviation  {thismasterthesiswork}{the master thesis work behind this report}
-\declareabbreviation  {thisprojectwork}     {the project work described in this report}
+%\declareabbreviation  {textgammapath}       {\mbox{$\gammapath$}}
+\newabbrev            {\textgammapath}      {\mbox{$\gammapath$}}
+\declareabbreviationqi{thismasterthesiswork}{the master thesis work behind this report}
+\declareabbreviationqi{thisprojectwork}     {the project work described in this report}
 
 % % % % % % %
 % ACRONYMS  %
@@ -223,10 +231,12 @@
 \declareacronyms{CFMM}  {continuous fast multipole}{method}
 \declareacronym {CICSAM}{compressive interface capturing scheme for arbitrary meshes}
 \declareacronym {CIP}   {constrained interpolation profile}
+\declareacronym {CLSVOF}{coupled level set/volume of fluid}
 \declareacronym {FCSCF} {fast compressive surface capturing formulation}
 \declareacronym {FCT}   {flux-corrected transport} % Used in the MULES scheme
 \declareacronyms{FMM}   {fast multipole}{method}
 \declareacronyms{FOV}   {field of}{view}
+\declareacronyms{FSM}   {free surface}{modeling}
 \declareacronyms{FVM}   {finite volume}{method}
 \declareacronyms{HRIC}  {high resolution}{interface capturing}
 \declareacronyms{LOD}   {level of}{detail}
@@ -370,8 +380,11 @@
 \declareindexkey      {vacuum}
 \declareindexkey      {velocity}
 \declareindexkeypair      {velocity}{velocities}
+\declareindexkey      {viscosity}
+\declareindexkeypair      {viscosity}{viscosities}
 \declareindexkey      {visualization}
 \declareindexkeypair      {visualization}{visualize}
+\declareindexkeypair      {visualization}{visualizing}
 \declareindexkey      {wake}
 \declareindexkey      {water}
 \declareindexkey      {wavelength}
