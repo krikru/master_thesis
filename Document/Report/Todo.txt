@@ -5,21 +5,8 @@ Sections left to write, after importance
 High importance
 ---------------
 
-* Improvements and requirements for the future:
-  * Requirements (high importance):
-    * A numerical solver that does not freeze because vacuum ioccurs or eats the entire simulkation domain up.
-    * Interaction with moving solids
-    * LODs that adapt to the camera placement and the Field of View (FOV)/Viewing frustum in order to limit the number of cells needed in the FVM
-    * Visualization of the water surface
-    * Keeping the interface sharp
-  * Improvements (medium importance):
-    * Avoiding having to simulate the air (and model it as vacuum)
-    * Avoiding spurious reflections at LOD transitions (Absorbing boundary conditions, Perfectly Matched Layers)
-  * Fancy stuff (low importance):
-    * Splash and foam
-* Already existing software. Reasons to use them: They have been tried out and they work, maybe not exactly for these purtposes, though. It saves time to use them instead of having to develop your own software. Reasons for developing you own software: You get full control of what you are doing, so you can adapt the software after your needs. You can approximate and simplify the things that are usually important but not for this purpose, so you can optimize the code for your purpose. You don't have to pay for any license; this otherwise have a tendency to become really expensive for a large company.
 * Results and conclusions: The FVM on octrees with FSM (free surface modelling) is an advanced method and takes a long time to implement, probably a few years (wor at least much longer than half a year) to make it ideal/perfect for the aim/scope/purposes of this master thesis work. Probably not the most suitable method there is today for this master thesis work even after all the programming and development has been done since it requires much computational power to be satisfactory. Spectral methods are probably a better way and have even been implemented for purposes like these. But maybe this method would be ideal in the future, since the computation load is basically the only bottleneck of the method when it has been fully implemented. When that day comes, it will have the ability to run in real time and it will outclass every other method that doesn't simulate the water "for real", since they will always miss out on certain effects that they are not able to simulate. The FVM is simply the best mathematical model (that it's still possible to implement on a computer) there is when it comes to actually describing water waves, not necessarily when it comes to simulation speed. Besides, the method used in \thisprojectwork runs in the same time complexity as the fastest of the other methods.
-* More results: How my implementation went. Problems with keeping the interface intact (incorrectly implemented Hyper-C?). Still an issue how to refrain from simulating the air as well (I want to simulate only the water! Pretend the rest is vacuum). Also having major problems with vacuum suddenly occurring in the air region, and velocities that suddenly go to infinity as a result of that, freezing the entire simulation. Then everything is "eaten up". So I clearly have some numerical instability. On the other hand, it can now manage to propagate surface waves.
+* More results: How my implementation went. Problems with keeping the interface intact (incorrectly implemented Hyper-C?). Still an issue how to refrain from simulating the air as well (I want to simulate only the water! Pretend the rest is vacuum). Also having major problems with vacuum suddenly occurring in the air region, and velocities that suddenly go to infinity as a result of that, freezing the entire simulation. Then everything is "eaten up". The limitation of the Courant number is a big problem, as it prevents the simulation from taking as large time steps as it would have to; this could maybe be remedied by switching from explicit to implicit methods. So I clearly have some numerical instability. On the other hand, it can now manage to propagate surface waves.
 
 (Results are the product of measuring the dependent variable in an experiment. Results should be measurable. Results should be quantitative whenever possible. Results should be fact-based, not opinion based. Results are often things such as distances, heights, lengths, weights, # of times, etc. In a result section of a lab report NO OPINIONS regarding the results themselves are offered (Don’t try to explain why something happened or what it means).
 
@@ -29,15 +16,32 @@ Own conclusion about results vs. conclusions: Results are often in perfect while
 
 "The average height of a basketball bounce was 24.3 cm" is a result. "People chose Pepsi as the pop they liked best 32 times" is a result. "Adding Olive Oil to plants is a bad idea if you want them to live" is a conclusion. "Julianne is a space cadet" is a conclusion. "Julianne day-dreamed 10 times during science class" is a result. "Domenickrushed for 75 yards in the football game" is a result. "It’s Emma’s world, we’re all just living in it" is a conclusion. "Kyle turned in his homework!" is a result. "Something must be wrong with Kyle" is a conclusion. "Maddiegot an A+ on her science test" is a result. "Maddieis a good science student" is a conclusion. "Twinkie Milkshakes would be a big seller" is a conclusion. "Twinkie Milkshakes got more votes than regular milkshakes" is a result.
 
-Furthermore, a discussion section is very much like the conclusion section. The conclusion section can be said to be a summary of the discussion, it's the ultimate take-away message. Therefore, the impprovements and the requirements for the future sections can be parts of the discussion, but don't have to be included in the conclusion if they are not that important for the reader to take away.
+Furthermore, a discussion section is very much like the conclusion section. The conclusion section can be said to be a summary of the discussion, it's the ultimate take-away message. Therefore, the impprovements and the requirements for the future sections can be parts of the discussion, but don't have to be included in the conclusion if they are not that important for the reader to take away.)
 
-)
+* Improvements and requirements for the future:
+  * Requirements (high importance):
+    * A numerical solver that does not freeze because vacuum ioccurs or eats the entire simulkation domain up.
+    * Interaction with moving solids
+    * LODs that adapt to the camera placement and the Field of View (FOV)/Viewing frustum in order to limit the number of cells needed in the FVM
+    * Visualization of the water surface. Mesh generation (marching cubes) + Shading/reflection (increased reflection spreading for increased height).
+    * Parallelization
+    * Keeping the interface sharp
+  * Improvements (medium importance):
+    * Avoiding having to simulate the air (and model it as vacuum)
+    * Switch from explicit to implicit methods to allow arbitrarily large time steps
+    * Wind waves
+    * Avoiding spurious reflections at LOD transitions (Absorbing boundary conditions, Perfectly Matched Layers)
+  * Fancy stuff (low importance):
+    * Splash and foam
+  * Dubious improvements
+    * Local time stepping
+* Already existing software. Reasons to use them: They have been tried out and they work, maybe not exactly for these purtposes, though. It saves time to use them instead of having to develop your own software. Reasons for developing you own software: You get full control of what you are doing, so you can adapt the software after your needs. You can approximate and simplify the things that are usually important but not for this purpose, so you can optimize the code for your purpose. You don't have to pay for any license; this otherwise have a tendency to become really expensive for a large company.
 
 Quite important
 ---------------
 
-* CIP can also mean "cubic-interpolated propagation"
-* Motivation: Cueing
+* Explain in document AND add to abstract: A method for using CBC advection schemes for incompressible flows even for uncompressible flows. Motivation: Keep alpha = 1 on an exact level (discuss the different between alpha = 0 and alpha = 1 when it comes to keeping the level exact if alpha is treated as a conservative field (or extensive property), since the level alpha = 0 will be kept but not alpha = 1, the reason for this, and the modification that makes the level alpha = 1 behave as the level alpha = 0)
+* Motivation: Visual cueing
 * Alternative approaches: Using LS method or CLSVOF method instead, using existing software (either free or proprietary, see above), or using a completely different approach like spectral methods (spectral methods would probably be the best way for anyone doing the same thing as I do)
 * TikZ plots of simulation. These plots should show: Smearing of alpha; the effect of Hyper-C when it succeeds; vacuum created in the air region that freezes the simulation and eventually eats it up.
 * Summary of methods used
@@ -52,17 +56,20 @@ May be important
 * Explain that FSM modeling (even advection schemes) is a big area of research. Papers that compare various FSM methods:
     "Volume of fluid methods for immiscible-fluid and free-surface flows" (http://capfluidicslit.mme.pdx.edu/reference/Numerics/Gopala_ChemEngJ2008_VOFMethodsFreeSurfaceFlow.pdf) compares four VOF schemes: Flux-corrected transport (FCT), Lagrangian piecewise linear interface construction (Lagrangian PLIC), Compressive interface capturing scheme for arbitrary meshes (CICSAM) and intergamma scheme.
     "MODELING OF THE WAVE BREAKING WITH CICSAM AND HRIC HIGH-RESOLUTION SCHEMES" (http://proceedings.fyper.com/eccomascfd2006/documents/85.pdf) from 2006 and "Comparison of CICSAM and HRIC high-resolution schemes for interface capturing" (http://warminski.pollub.plwww.ptmts.org.pl/Waclaw-Koron-2-08.pdf) from 2008 are both from the same two authors and compares the CICSAM and the HRIC schemes.
-* Shows that only a thin layer close to the surface needs to be modelet with the LS method: A sharp interface method for incompressible two-phase flows (http://diyhpl.us/~bryan/papers2/frey/levelsets/Sussman%20M.,%20A%20Sharp%20interface%20method.pdf)
+* This report shows that only a thin layer close to the surface needs to be modelet with the LS method: A sharp interface method for incompressible two-phase flows (http://diyhpl.us/~bryan/papers2/frey/levelsets/Sussman%20M.,%20A%20Sharp%20interface%20method.pdf)
     
 
 Not very important
 ------------------
 
 * Hoctrees
-* Notation (finish section)
+* Add list of acronyms to Notation
+* No random access to neighbor connections or neighbor cells (in the section about neighbor connections, specifically about neighbor lists)
 * Marching cubes
 * NVD
 * Splash and foam
+* \vec{r}_{C_i}, as location that specifies the position of $C_i$
+* Change indexation method; those of the "Finite Volume Method" chapter do not match those of the VOF section or the Octree section in the appendix. Also weird in the section about the velocity advection.
 
 
 

@@ -32,11 +32,14 @@ _ReSharper*/
 *-build-*
 
 #Ignoring files build by LaTeX
+*.acn
 *.aux
 *.bbl
 *.blg
 *.idx
+*.ist
 *.dvi
+*.glo
 *.out
 *.toc
 *.lof

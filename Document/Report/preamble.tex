@@ -218,6 +218,17 @@
 {\index{#1 #2}\index{#2!#1|see{#1 #2}}}% Index key has the natural order of the parts
 }
 
+% Table of technical abbreviations and acronyms
+
+%\newrobustcmd{\addtototaa}[2]{}
+\newrobustcmd{\addtototaa}[2]{\gappto\TableoftaaBody{#1 & #2 \\}}
+\let\TableoftaaBody\relax % Or it could just be defined as an empty command
+\newrobustcmd{\tableoftaa}[0]{\begin{longtabu}{l X}%
+        \textbf{Abbreviation} & \textbf{Full text} \\%
+        \hline \\ \endhead%
+        \TableoftaaBody%
+        \end{longtabu}}
+
 % Easier-to-read indexing
 \newrobustcmd{\declareindexkey}     [1]{\expandafter\newabbrev\csname #1\endcsname{\idx{#1}}}
 \newrobustcmd{\declareindexkeyq}    [1]{\expandafter\newabbrev\csname #1\endcsname{\qidx{#1}}}
@@ -225,11 +236,11 @@
 \newrobustcmd{\declareindexkeypairq}[2]{\expandafter\newabbrev\csname #2\endcsname{\qidxe{#1}{#2}}}
 %\newrobustcmd{\declareindexkeyq}[1]{\expandafter\newabbrev\csname #1\endcsname{\idxq{#1}}}
 % Abbreviations
-\newrobustcmd{\declareacronym} [2]{\iftoggle{INDEXACRONYMS}%
+\newrobustcmd{\declareacronym} [2]{\addtototaa{#1}{#2}\iftoggle{INDEXACRONYMS}%
 {\expandafter\newabbrev\csname #1\endcsname{\idxe{#1}{#2}\iftoggle{USEACRONYMS}{ (\qidxe{#2|see{#1}}{#1})}{}}[\iftoggle{USEACRONYMS}{\qidx{#1}}{\qidxe{#1}{#2}}]}%
 {\expandafter\newabbrev\csname #1\endcsname{\idx{#2}\iftoggle{USEACRONYMS}{ (\qidxe{#1|see{#2}}{#1})}{}}     [\iftoggle{USEACRONYMS}{\qidxe{#2}{#1}}{\qidx{#2}}]}
 }
-\newrobustcmd{\declareacronyms}[3]{\iftoggle{INDEXACRONYMS}%
+\newrobustcmd{\declareacronyms}[3]{\addtototaa{#1}{#2 #3}\iftoggle{INDEXACRONYMS}%
 {\expandafter\newabbrev\csname #1\endcsname{\idxe{#1}{#2 #3}\index{#3!#2|see{#1}}\index{#2 #3|see{#1}}\iftoggle{USEACRONYMS}{ (#1)}{}}[\iftoggle{USEACRONYMS}{\qidx{#1}}{\qidxe{#1}{#2 #3}}]}%
 {\expandafter\newabbrev\csname #1\endcsname{\idxs{#2}{#3}\iftoggle{USEACRONYMS}{ (\qidxe{#1|see{\iftoggle{REVERTINDEXORDEROFSPLITKEYS}{#3}{#2 #3}}}{#1})}{}}[\iftoggle{USEACRONYMS}{\qidxse{#2}{#3}{#1}}{\qidxs{#2}{#3}}]}
 }

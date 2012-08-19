@@ -105,16 +105,16 @@ In \thisprojectwork, an octree has been used to partition the \idxs{computationa
 
 Ideally, although not implemented in \thisprojectwork because of \itslimitedtime, the surface will have a higher \LOD where the \idxsp{surface}{detail}{s} are more important to the simulation, such as close to the \camera where they are more easily seen, and a lower \LOD far away from the camera where the cells take up little \idxse{screen}{space}{space on the screen}, or where they are out of the \FOV.
 
-The total number of cells $N_{\text{t}}$ used in the simulationcan can be \approximated by an expression containing the thicknesses of the different LOD layers and the number of cells visible at the surface that belong to each \LOD accoring to
+The total number of cells $N_{\text{t}}$ used in the simulationcan can be \approximated by a \idxs{double}{series} containing the thicknesses of the different LOD layers and the number of cells visible at the surface that belong to each \LOD, accoring to
 
 \begin{equation} \label{eq:number_of_cells_total_sum}
 N_{\text{t}} \,=\, \sum_{i\,=\,0}^\infty N_{\text{s},i}\sum_{j\,=\,i}^\infty a_j\cdot 2^{-(d-1)(j-i)},
 \end{equation}
 
-where $N_{\text{s},i}$ is the number of cells visible on the surface belonging to \idxs{LOD}{layer} $i$ (a lod layer is the set of all cells with a distinct given \LOD), $j$ is an index and $a_j$ is the thickness in number of cells of LOD layer $j$, where LOD layer $0$ corresponds to the highest \LOD and an increasing LOD layer index corresponds to a lower \LOD. Different LOD layers can have different thickness; if this is the case, it will also be reflected in the simulation and waves with different wavelengths will be simulated with different \accuracy. In \thisprojectwork, all LOD layers have been given the same thickness, $a$. \eqref{eq:number_of_cells_total_sum} therefore turns into
+where $N_{\text{s},i}$ is the number of cells visible on the surface belonging to \idxs{LOD}{layer} $i$ (a lod layer is the set of all cells with a distinct given \LOD), $j$ is an index and $a_j$ is the thickness in number of cells of LOD layer $j$, where LOD layer $0$ corresponds to the highest \LOD and an increasing LOD layer index corresponds to a lower \LOD. Different LOD layers can have different thickness; if this is the case, it will also be reflected in the simulation, and waves with different wavelengths will be simulated with different \accuracy. In \thisprojectwork, all LOD layers have been given the same thickness, $a$. \eqref{eq:number_of_cells_total_sum} therefore turns into an equation containing a \idxs{geometric}{series},
 
 \begin{equation} \label{eq:number_of_cells_total}
-N_{\text{t}} \,=\, d\sum_{i\,=\,0}^\infty N_{\text{s},i}\sum_{k\,=\,0}^\infty 2^{-(d-1)k} \,=\, d\,N_{\text{s}}\,\frac{1}{1-2^{-(d-1)}} \,=\, \frac{2^{d-1}}{2^{d-1}-1}\,d\,N_{\text{s}},
+N_{\text{t}} \,=\, a\sum_{i\,=\,0}^\infty N_{\text{s},i}\sum_{k\,=\,0}^\infty 2^{-(d-1)k} \,=\, a\,N_{\text{s}}\,\frac{1}{1-2^{-(d-1)}} \,=\, \frac{2^{d-1}}{2^{d-1}-1}\,a\,N_{\text{s}},
 \end{equation}
 
 where $k = j-i$ and $N_{\text{s}}$ is the total number of cells visible on the surface. We can therefore in this case conclude that

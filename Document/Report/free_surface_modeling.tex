@@ -43,9 +43,6 @@ One of the greatest strengths with this method, besides from being simplie, is i
 
 When $\phi$ has become discretized, \eqref{eq:level_set} cannot be used directly to define the interface since it is not known exactly where the isosurface defined by $\phi = 0$ is located. However, the marching cubes algorithm produces a good approximation from the data that is available for where the interface is located. It has therefore, together with the \LS method, been used in numerous works that uses the \FVM, in order to visualize free surfaces, e.g.\ in \citep{Losasso2004}.
 
-nthuerey2009
-
-
 On the other hand, probably the greatest weakness with this method is that, after the \discretization of $\phi$ and \eqref{eq:level_set_function_transport}, it doesn't conserve mass perfectly. Advection will cause $\phi$ to be smeared out and, as noted e.g.\ in \citep{Wojtan2009}, most of the surface details are washed away. This problem is more apparent when the simulation contains thin features which, as can be seen in \citep{nthuerey2009}, have a tendency to disappear or start to flicker. However, it can be remedied somewhat (although not completely) by using \BFECC, which was first presented in \citep{Dupont2003} and later tested in \citep{Kim2005} both in advection of the velocity field as well as on images for illustration purposes.
 
 \section{Volume of Fluid method}
@@ -59,13 +56,13 @@ Another very commonly used way of tracking interfaces between two immiscible flu
 where $V_{\epsilon,\text{t}}$ is the volume of the sphere with radius $\epsilon$, centered in $\vec{r}$, and $V_{\epsilon,\text{w}}$ is the volume of the water contained within $V_{\epsilon,\text{t}}$. This fraction can only result in 0 or 1, since $\vec{r}$ cannot be partially emerged in water, except from in the case where $\vec{r}$ is located on the interface where $\alpha^*$ \idxse{discontinuous}{jump}{jumps discontinuously} from 0 to 1 or from 1 to 0 and hence doesn't have a well defined value. The interface using the non-discretized phase fraction, $I^*(\alpha^*)$, can therefore be defined as all locations where a transition takes place such that $\alpha^*$ makes this kind of jump, or in other words
 
 \begin{equation} \label{eq:vof_interface_continuous}
-I^*(\alpha^*) \,=\, \{\vec{r} \,\mid\, \cancel{\exists}\,\alpha(\vec{r})\in\mathbb{R}\}.
+I^*(\alpha^*) \,=\, \{\vec{r} \,\mid\, \cancel{\exists}\,\alpha(\vec{r})\in\reals\},
 \end{equation}
 
-However, in \thisprojectwork, $\alpha^*$ has been \discretized into $\alpha$ which is located at \idxsp{cell}{center}{s} and which by its discrete nature is not able to perfectly describe how the two phases are distributed. It is therefore derised that $\alpha$ takes the whole cell it is discretized in into account, and tells how big ratio of the cell that is filled with water rather than only looking at one point. The definition of $\alpha$ is therefore
+where $\reals$ is the set of \idxsp{real}{number}{s}. However, in \thisprojectwork, $\alpha^*$ has been \discretized into $\alpha$ which is a sequence of \idxse{cell}{property}{cell properties} rather than a function of location and which by its discrete nature is uable to describe perfectly how the two phases are distributed. The value of $\alpha$ in a cell takes the whole cell into account and provides a value of how big ratio of the cell that is filled with water, rather than only looking at one point as is the case with other discretized properties. The definition of $\alpha$ is therefore the sequence of
 
 \begin{equation} \label{eq:phase_fraction_discretized}
-\alpha_i \,=\, \frac{V_{i,\text{w}}}{V_{i,\text{t}}}\,,
+\alpha_i(C_i) \,=\, \frac{V_{i,\text{w}}}{V_{i,\text{t}}}\,,
 \end{equation}
 
 where $\alpha_i$ is the value of $\alpha$ in $C_i$ which is the cell with index $i$, $V_{i,\text{t}}$ is the total volume of $C_i$ and $V_{i,\text{w}}$ is the volume of the water contained within $V_{i,\text{t}}$. In contrast to in the non-discretized case, this fraction will never be undefined, so substituting $\alpha$ for $\alpha^*$ in \eqref{eq:vof_interface_continuous} and use that for the definition of the surface will not work. On the other hand, since the cells the interface cross through will be partially filled with water, $\alpha$ will be somewhere in between 0 and 1. We can therefore define the interface using the discretized phase fraction as

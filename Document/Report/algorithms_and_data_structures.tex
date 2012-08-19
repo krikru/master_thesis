@@ -27,7 +27,7 @@
     \draw (-2*\@offset,.25) node{0};
     \draw (-2*\@offset,.75) node{1};
     \end{tikzpicture}
-    \caption{Child cells with their indexes written inside of them.}
+    \caption{A parent cell with four child cells. The numbers written inside of the child cells are their corresponding indexes in their panet's child array.}
     \label{fig:octree_child_indexes}
 \end{figure}
 
@@ -114,19 +114,17 @@ Although an octree is a \idxs{three-dimensional}{data structure} and a tree in w
 
 The \octree itself just consists of a \pointer to the \idxs{root}{cell}\indexs{root}{node} and a few \methods for manipulating the \cells in the tree. If the octree is empty, the value of the pointer is \NULL.
 
-Each cell in the tree then contains a pointer to an \idx{array} of pointers to the child cells. If a cell is a \idxs{leaf}{cell}, it doesn't have any children and the value of the pointer to the array is \NULL. If the cell does have children, the pointer points to an actual array consisting of $2^d$ pointers to \idxsp{octree}{cell}{s}. If such a pointer is \NULL, it means that the corresponding child doesn't exist. The index $i$ of an array element corresponds to the position of the child cell relative the parent cell according to
+Each cell in the tree then contains a pointer to a \idxs{child}{array}, which is an array of pointers to the child cells. If a cell is a \idxs{leaf}{cell}, it doesn't have any children and the value of the pointer to the child array is \NULL. If the cell does have children, the pointer points to an actual array consisting of \numchildren pointers to \idxsp{octree}{cell}{s}. If such a pointer is \NULL, it means that the corresponding child doesn't exist. The index $i$ of an array element corresponds to the position of the child cell relative the parent cell according to
 
 \begin{equation} \label{eq:child_node_index_general}
 i \,=\, \sum_{j=0}^{d-1} \,2^j\,i_j,
 \end{equation}
 
-where $d$ is the \dimensionality and $i_j$ is an index in the $j$th dimension that is either 0 or 1 and corresponds to the position of the child cell relativet the parent cell along the $j$th of the orthogonal \idxse{grid}{axis}{grid axes} as shown in \figref{fig:octree_child_indexes}. (Note that the $j$th element refers to the element with index $j$ and not element number $j$. Everything that is indexed will be \idxse{zero}{indexation}{zero indexed} unless anything else is stated, which means that the first element has index 0 and is refered to as the 0th element, the second element has index 1 and is refered to as the 1st element, etc.) For example, in three dimensions \eqref{eq:child_node_index_general} reduces to
+where $i_j$ is an index that is either 0 or 1 and corresponds to the position of the child cell relativet the parent cell along $\normvec{e}_j$, as shown in \figref{fig:octree_child_indexes}. Just as an example, in three dimensions \eqref{eq:child_node_index_general} reduces to
 
 \begin{equation} \label{eq:child_node_index_three_dimensions}
-i \,=\, 2^0\,i_0 + 2^1\,i_1 + 2^2\,i_2 \,=\, i_x + 2\,i_y + 4\,i_z,
+i \,=\, i_0 + 2\,i_1 + 4\,i_2.
 \end{equation}
-
-where $(i_0,\,i_1,\,i_2) = (i_x,\,i_y,\,i_z)$ and the 0th, 1st and 2nd orthogonal grid axes are the x-, y- and z-axes respectivelly.
 
 \section{Neighbor connections}
 
@@ -225,7 +223,7 @@ Advection of the velocity is particularly tricky, mainly because the \idxs{veloc
 However, following these steps directly would \idxs{low-pass}{filter} the \idxs{velocity}{field} each time step, since it involves converting it from one set of points (the \idxsp{face}{center}{s}) to another set of points (the \idxsp{cell}{center}{s}), which low-pass filters the field, and then convert it back again, which also low-pass filters the field, so details in the velocity field would very quickly vanish. Instead, the last of these steps is modified so that just the momentum mismatch between the cell-centered momentum vectors and the face-centered velocity scalars is distributed on the cell faces. The method can be summarized as taking the following steps:
 
 \begin{enumerate}
-    \item Calculate the cell-centered velocity vectors by averaging the face-centered velocity scalars, tentatively using the area of the cell faces times the sum of the densities in the two adjacent cells for averaging (as done in this case). For simplicity, let's make the (incorrect) assumption that the velocity field is equal to the cell-centered velocity vector $\vec{u}_0$ in every cell face $S_i$. We can use \eqref{eq:fi_flat_cell_face}, substitute $\vec{u}_0$ for $\vec{F}$ and rewrite the equation as
+    \item Calculate the cell-centered velocity vectors by averaging the face-centered velocity scalars, tentatively using the area of the cell faces times the sum of the densities in the two adjacent cells for averaging (as done in this case). For simplicity, let's make the (incorrect) assumption that the velocity field in every cell face $S_i$ is equal to the cell-centered velocity vector $\vec{u}_0$ for the specific cell. We can use \eqref{eq:fi_flat_cell_face}, substitute $\vec{u}_0$ for $\vec{F}$ and rewrite the equation as
     
     \begin{equation} \label{eq:u_scalar_i_from_u_vec}
     u_i \,=\, \normvec{n}_i\cdot\vec{u}_0.
@@ -237,13 +235,13 @@ However, following these steps directly would \idxs{low-pass}{filter} the \idxs{
     \vec{u}_0^* \,=\, \sum_{S_i}w_i\,\normvec{n}_i\,u_i,
     \end{equation}
     
-    where $S_i$ is the cell face between the cell $\vec{u}_0$ is being calculated for and the $i$th neighbor cell and $w_i$ is the weight of the velocity scalar at the cell face $S_i$ used in the averaging. In \thisprojectwork, $w_i$ has been defined as
+    where $w_i$ is the weight of the velocity scalar at $S_i$, used in the averaging. In \thisprojectwork, $w_i$ has been defined as
     
     \begin{equation}
     w_i \,=\, S_i\,(\rho_0 + \rho_i),
     \end{equation}
     
-    where $\rho_0$ is the average density of the cell $\vec{u}_0$ is being calculated for and $\rho_i$ is the average density of the $i$th neighbor cell. By using \eqref{eq:u_scalar_i_from_u_vec} in \eqref{eq:u_vec_help_variable}, we obtain
+    where $\rho_0$ is the average density of the specific cell and $\rho_i$ is the average density of the $i$th neighbor cell. By using \eqref{eq:u_scalar_i_from_u_vec} in \eqref{eq:u_vec_help_variable}, we obtain
     
     \begin{equation}
     \vec{u}_0^* \,=\, \sum_{S_i}w_i\,\normvec{n}_i\,\normvec{n}_i\cdot\vec{u}_0.
@@ -263,7 +261,7 @@ However, following these steps directly would \idxs{low-pass}{filter} the \idxs{
     
     which can be used to calculate the cell-centered velocity vectors.
     
-    In \thisprojectwork, the cells are \idxe{axis alignment}{axis-aligned}, so $\sum_{S_i}w_i\,\normvec{n}_i\,\normvec{n}_i$ will be a diagonal matrix and the inverse will just be the matrix consisting of the inverse of the diagonal elements. In fact, $\vec{u}_0$ can simply be calculated by calculating the weighted average of all $\normvec{n}_i\,u_i$ for which $\normvec{n}_i\parallel \normvec{e}_j$, where $\normvec{e}_j$ is the basis vector belonging to the $j$th dimension, doing so for $j = 0,\, 1,\,...\,,\,d-1$, where $d$ is the number of dimensions, and adding the $d$ averages together, that is
+    In \thisprojectwork, the cells are \idxe{axis alignment}{axis-aligned}, so $\sum_{S_i}w_i\,\normvec{n}_i\,\normvec{n}_i$ will be a diagonal matrix and the inverse will just be the matrix consisting of the inverse of the diagonal elements. In fact, $\vec{u}_0$ can simply be calculated by calculating the weighted average of all $\normvec{n}_i\,u_i$ for which $\normvec{n}_i\parallel \normvec{e}_j$, doing so for $j = 0,\, 1,\,...\,,\,d-1$ and adding the $d$ averages together, that is
     
     \begin{equation}
     \vec{u}_0 \,=\, \sum_{j=0}^{d-1} \frac{\sum_{S_i}|\normvec{n}_i\cdot\normvec{e}_j|\,w_i\,\normvec{n}_i\,u_i}{\sum_{S_i}|\normvec{n}_i\cdot\normvec{e}_j|\,w_i}.
