@@ -8,22 +8,16 @@ One of the greatest challanges with simulating an ocean is \idxs{wave}{dispersio
 \frac{\partial^2 \eta}{\partial t^2} \,=\, c^2\nabla^2\eta,
 \end{equation}
 
-which has both a simple definition and is simple to solve numerically, cannot be used. Here, $\eta$ is the free surface elevation, $t$ is the time, $c$ is the speed of the propagation of waves and $\nabla$ is the \idxs{del}{operator}\index{$\nabla$|see{del operator}}, commonly used in \idxs{vector}{algebra}.
+a \PDE which both has a simple definition and is simple to solve numerically, cannot be used. Here, $\eta$ is the free surface elevation, $t$ is the time, $c$ is the speed of the propagation of waves and $\nabla$ is the \idxs{del}{operator}\index{$\nabla$|see{del operator}}, commonly used in \idxs{vector}{algebra}.
 
 Besides, unless the \idxs{wave}{amplitude} is much smaller than the wavelenth or the \idxs{water}{depth}, strong \idxse{non-linear}{phenomenon}{non-linear phenomena} takes place. This is the cause of for example \idxs{wave}{breaking}.
 
-\section{Interaction with ships}
+\section{Fluid--Structure Interaction}
 
-As noted previously, ships have to be affected by waves, and ships have to give rise to waves. Hence, there has to be a \idxs{two-way}{interaction} between water and ships. For most of the two-dimensional wave models, which just treats the surface as a \idxs{height}{map}, there is no natural way to make water and ships interact with each other.
+As noted previously, ships have to be affected by waves, and ships also have to give rise to waves. Hence, there has to be a \idxs{two-way}{interaction} between water and ships. For most of the two-dimensional wave models, which just treats the surface as a \idxs{height}{map}, there is no natural way to make water and ships interact with each other.
 
 The ships can quite easily be made to roll in a realistic way by just approximating the \idxs{pressure}{field} felt by the \idxs{ship}{hull} by looking at the free surface elevation, even though this method is slightly incorrect since it doesn't take into account the deviations the ship itself causes the pressure field. But to make ships give rise to waves as they are traveling on the water is more challenging.
 
 One possibility is to use a separate, static height map for the wake, which moves after the ship as it is traveling. This wake will always look the same no matter where the ship is traveling and will not be affected by obstacles in the water. However, if the ship suddenly changes speed or course, so does the wake, which is a highly unnatural behaviour for a wake.
 
 A better approach may be to use a \idxs{response}{map} that tells the water how to respond when a ship is traveling on it. In that case, the wake will not be stored as a separate height map, but be merged into the same height map that is used to simulate the waves that affect the ship. The response would off course also depend on the speed of the ship so that the faster the ship goes, the higher the gerenated waves will be, and for a non-moving ship, there will be no waves generated.
-
-Difficulties:
-\begin{itemize}
-    \item Different depths gives different speeds
-    \item The water should interact with moving objects
-\end{itemize}

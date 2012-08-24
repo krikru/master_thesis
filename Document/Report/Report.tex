@@ -40,7 +40,7 @@
 
 \iftoggle{DEBUG}{
     % There must be no spaces between the filenames and the commas separating the files
-    %\includeonly{motivation}
+    %\includeonly{motivation,bibliography_pages}
     %\includeonly{method,bibliography_pages,index_pages}
     %\includeonly{results_and_conclusions,bibliography_pages,index_pages}
     %\includeonly{pde_derivation,bibliography_pages}%,index_pages}
@@ -53,39 +53,28 @@
 % % % % % % % %
 
 \pagenumbering{roman}
-%TODO: frontmatter, mainmatter and backmatter is only supported in the book class. Should I change to book??
 %\frontmatter
 
-%\include{title_pages}
-%\blankpage
-%\include{libary_page}
-%\include{copyright_note}
-\include{abstract}
-%\include{acknowledgments}
-
-% Table of contents and various lists
-\include{listings}
+\input{front_matter}
 
 \newpage
 \pagenumbering{arabic}
 %\mainmatter
 
-% The main content of the report
+% % % % % % % %
+% MAIN MATTER %
+% % % % % % % %
 
 \input{introduction}
 \input{theoretical_background}
-\input{results_and_conclusions}
+\input{analysis}
 \input{appendices}
 
-% The back matter
+% % % % % % % %
+% BACK MATTER %
+% % % % % % % %
 %\backmatter
 
 \input{back_matter}
 
 \end{document}
-
-%TODO: Check up:
-% * Turbulence model (Large Eddy Simulation for example)
-% * Mention Zalesak’s problem (for advection tests of sharp interfaces)
-% * The SWAN wave model
-% Implicit methods (Like SIMPLE)

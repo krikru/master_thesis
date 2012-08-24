@@ -1,21 +1,36 @@
 \chapter{Related work}
 
-\section{Twodimensional methods}
+% Why is CFD needed for this thesis work?
 
-\subsection{Twodimensional PDEs for shallow water}
+\CFD is a well established area of researche, and a large number of widely differing methods have been developed during the years. 
+
+\section{Two-dimensional methods}
+
+\idxse{two-dimensional}{method}{Two-dimensional methods} for simulating water waves are the easiest to understand and implement, and often the fastest when it comes to simulation speed, but are not completely realistic models and therefore can't simulate all effects that can be simulated with a \idxs{three-dimensional}{method}. Besides, they tend to become very unintuitive when it comes to modelling \FSI. That doesn't mean that it's necessarily difficult to model \FSI when a two-dimensional method is used, but there are no natural model to describe this interaction. Instead, different models that the programmer think might work have to be tried out, in order to find a good \idxse{empirical}{model}{empirical} one.
+
+\subsection{Two-dimensional PDEs for shallow water}
+
+There exist a number of different two-dimensional \PDEs which describe the evolution of the \idx{free surface elevation}, $\eta$. The ordinary wave equation, \eqref{eq:wave_equation}, will as concluded work badly for simulating surface waves in \idxs{deep}{water}, since it doesn't handle wave dispersion at all, which quickly becomes obvious when wave patters such as the \idxs{Kelvin}{wave pattern} has to be simulated.
+
+On the other hand, the wave equation does work for simulating very weak, low-frequent waves in \idxs{shallow}{water} with constant or very \idxs{mildly varying}{depth}, since those are close to linear, and are almost not affected by wave dispersion at all thanks to the low water depth. For waves with higher amplitude, there exists the \idxs{Boussinesq}{equations} and the \idxs{shallow water}{equations}, which both can be used to simulate large, non-breaking waves in shallow waters.
+
+In \appref{chap:pde_derivation}, a set of new two-dimensional \PDEs intended for simulation of water waves at varying, arbitrary water depths are derived and discussed.
 
 \subsection{Spectral methods}
 
-\begin{itemize}
-    \item Reference 1: \textit{\href{http://web1.see.asso.fr/ocoss2010/Session_4/20100531111216_Monnier_OCOSS2010-Paper_MERCUDA_item_2.pdf}{Real time modelling of multispectral ocean scenes}}
-    \item Reference 2: \textit{GPU-based simulation of Radar sea clutter}
-\end{itemize}
+These methods build on \idxsp{Fourier}{transform}{ing} a representation of the surface in the frequency domain and have, according to \citep{Monnier}, been extensively used and described in the world of computer graphics. This method is characterized by speed and, in contrast to any two-dimensional \PDE that is normally used and that describes the evolution of surface waves, handles wave dispersion very well for surface waves on \idxs{deep}{water}.
 
-\section{Threedimensional methods}
+The main drawback with this method, except from being inconvenient when modelling \FSI, as any other two-dimensional \CFD method, is that it requires a constant water depth, and hence cannot simulate \idxs{wave}{shoaling}. This issue becomes noticable when the surface water close to the \idxs{shore}{line} is observed, where waves normally behave differently than waves far off shore, but do not when using this method.
+
+\section{Three-dimensional methods}
 
 \subsection{Particles}
 
-The article \textit{\darkblue{Real-time fluid simulation with adaptive SPH}} has a section about related work that includes a short history of \SPH.
+In the \SPH method, a large number of small particles with repelling and atractive forces between neighboring particles, described by a system \idxsp{ordinary}{differential equation}{s}, are simulated. The interaction between two particles in the simulation is usually modeled by a potential like those used in \MD, for example the \LJ potential, and only interaction between particles that are located within a certain \idxs{cut-off}{distance} from each other are included in the simulation.
+
+There are a few major advantages with using this method. When the \idxs{Eulerian}{specification of the flow field} is used to describe the fluid motion, the equations tend to become more complicated as they contain \idxsp{advection}{term}{s}. In \SPH on the other hand, the \idxs{Lagrangian}{specification of the flow field} is used and no advection terms are therefore present in the equations which makes the model relatively simple, and it is easily implemented. Besides, no advection of fields with an Eulerian representation is simulated, which prevents additional problems that can arrise during the advection, and conservation of various properties, like \momentum and \energy is usually automatically well preserved as a result of that.
+
+On the other hand, the \SPH method requires that the entire simulation domain is filled with small particles, which often means that an extremely large number of particles, proportionally to the volume of the fluid, have to be simulated. This implies a very heavy workload on the computer, and as a result of that, \SPH is very seldom used in \idxsp{real-time}{simulation}{s}. Howwever, adaptive particle sizes have been used in order to decrease the amount of particles required in the less important parts of the fluid in order to remedy this problem, as for example done in 
 
 \subsubsection{Screen Space Meshes}
 

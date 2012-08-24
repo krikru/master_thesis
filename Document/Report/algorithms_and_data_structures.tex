@@ -120,7 +120,7 @@ Each cell in the tree then contains a pointer to a \idxs{child}{array}, which is
 i \,=\, \sum_{j=0}^{d-1} \,2^j\,i_j,
 \end{equation}
 
-where $i_j$ is an index that is either 0 or 1 and corresponds to the position of the child cell relativet the parent cell along $\normvec{e}_j$, as shown in \figref{fig:octree_child_indexes}. Just as an example, in three dimensions \eqref{eq:child_node_index_general} reduces to
+where $i_j$ is an index that is either 0 or 1 and corresponds to the position of the child cell relative to the parent cell along $\normvec{e}_j$, as shown in \figref{fig:octree_child_indexes}. Just as an example, in three dimensions \eqref{eq:child_node_index_general} reduces to
 
 \begin{equation} \label{eq:child_node_index_three_dimensions}
 i \,=\, i_0 + 2\,i_1 + 4\,i_2.

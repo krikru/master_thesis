@@ -1,0 +1,203 @@
+\part{Analysis}
+
+\chapter{Results}
+
+Whenever a cell with $\alpha = 0$ doesn't border to any cell with $\alpha > 0$, it is not needed any longer.
+
+The idea was to remove them, although this feature was never implemented. Although the advection scheme that is used is ideal in \idxs{one}{dimension}\index{dimensions!one|see{one dimension}}, it proved to smear the \idxs{$\alpha$}{field} out somewhat in \idxse{two}{dimensions}{two} and \idxs{three}{dimensions}, making the interface between water and vacuum become thicker and thicker, which affects both the \idxs{simulation}{quality}, since the surface becomes less and less well-defined as the simulation goes on, as well as the \preformance of the \idxs{numerical}{method} since it will have to consider more and more cells as the interface gets thicker and thicker. Another advection scheme that maybe could remedy this problem is \MULES, described in \citep{Berberovi2009} and further developed to for better handling of more than two phases in \citep{Kissling2010}, although it would have to be modified to cope with compressible flow.
+
+\HRule
+
+% Pros:
+
+The program that was developed could successfully simulate water and air and keep the two phases separated, with a region of cells containing a mix of both water and air in between. Pressure waves could be propagates in the bulks of the fluids, and gravity waves propagating on the surface in the interface between the water and the air were successfully be simulated.
+
+% Cons:
+
+The method chosen to simulate water waves in realtime, which was the \FVM on an \octree datastructure together with the \VOF, proved to be quite advanced and difficult to implemented properly within the time frame for \thismasterthesiswork, which was \masterthesisworktime. The simulations suffered from numerous problems for which there wasn't enough time to implement any remedy. Here is a list of issues that the simulation implementation from:
+
+% although there would most likely have been several ways to fix all of them in.
+
+%The limitation of the Courant number is a big problem, as it prevents the simulation from taking as large time steps as it would have to; this could maybe be remedied by switching from explicit to implicit methods. On the other hand, it can now manage to propagate surface waves.
+
+\begin{itemize}
+    \item Vacuum could suddenly occur in the air regions, causing a numerical instability that would spread through the entire simulation domain and "eat up" the contents of all other cells.
+    
+    %\item Vacuum could suddenly occur in the air regions, causing velocities to go to infinity. With constant time step, this lead to numerical instabilities, while with an adaptive time step, this lead to that the simulation went slower and slower the closer the content of a cell came to vacuum and the higher the velocity went, and it would eventually freeze completely. In any case, one of the cells would eventually lose all its content, which would start a numerical instability that would spread like wildfire and "eat up" all the rest of the air and water in the entire simulation domain. This issue did't occur until the simulation had been running for a while and was not a bug, but a result of the way the equations were solved.
+    
+    \item The simulation speed was extremely low. % Even though the tests carried out during the development of the program were only held in two dimensions, and thus heavily reduced the number of cells to be processed in each time step, the simulation still went many times slower than realt-time speed. This was partly due to the fact that no optimization or paralellization of the code was made, and partly due to the fact that the time step was restricted by the \CFL condition, which forced the time step to be as low as 0.3~ms which corresponds to a \idx{frame rate} of 3333~\FPS, while the frame rate only needed to be at \flightsimulatorfps~\FPS.
+    
+    \item There were problems with keeping the interface intact. % Unlike linear advection schemes, like \UPWIND, the \idx{Hyper-C} advection scheme, of which a variant was implemented in \thisprojectwork, is supposed to keep the interface compressed. However, the interface was not kept compressed and water was churned up in the air and formed something that closest resembled a kind of mist, which is very non-ideal for several reasons. First, visualization becomes more difficult, since the thicker the interface is the more difficult it is to know where the surface is located. Second, all cells that contain at least some water have to be processed, which means that a thick interface will decrease the simulation speed significantly. Third, a thick interface is a bad \approximation of a real surface interface, whose thickness is almost zero, and numerical errors will be introduced as a result of that.
+    
+    %It is unknown whether the the fact that the interface grew so large is a property of the Hyper-C advection scheme, if it was because the Hyper-C advection scheme was implemented incorrectly, or just because it is difficult to gereralize these kinds of interface compressing advection schemes to support complessible flows. It is also unknown whether the thickness of the interface would grow arbitrarily large if the simulation would continue to go on without being subject to numerical instability, or if the thickness would eventually stabilize at a certain level.
+\end{itemize}
+
+\HRule
+
+\begin{itemize}
+    \item Not just the water was simulated, but also the air. % This is a fact that also meant that the simulation domain needed also to have a boundary in the air. This introduced the additional problem of choosing where this boundary should be located, why it should be located at that place, and what boundary conditions it should have. The fact that the air was also simulated meant that a lot of more cells had to be processed each time step than if only the water would have been simulated, which had a significant impact on the simulation speed.
+    
+    \item The simulation used explicit numerical methods, which meant that it was limited by the \CFL condition. % This meant that the Courant number couldn't exceed one, which limited the time step to a very small value which made it practically impossible to come even near real time speed.
+    
+    \item Fluid--structure interaction was not implemnted. % This is necessary in order to be able to simulate wakes after ships or in order for waves to make ships rock forth and back.
+\end{itemize}
+
+
+\HRule
+
+\chapter{Discussion}
+
+\section{Conservation laws}
+
+\begin{itemize}
+    \item Mass
+    \item Energy
+    \item (d/d$t$)\,Momentum $-$ Force = 0
+    \item Angular momentum
+    \item (d/d$t$)\,(Center of mass) $-$ Momentum = 0
+\end{itemize}
+
+\section{Already existing software}
+
+\begin{itemize}
+    \item OpenFOAM (\red{FOAM, see} \textit{\href{http://powerlab.fsb.hr/ped/kturbo/openfoam/docs/foam.pdf}{A tensorial approach to computational continuum mechanics using object-oriented techniques}})
+\end{itemize}
+
+Reasons to use them: They have been tried out and they work, maybe not exactly for these purtposes, though. It saves time to use them instead of having to develop your own software. Reasons for developing you own software: You get full control of what you are doing, so you can adapt the software after your needs. You can approximate and simplify the things that are usually important but not for this purpose, so you can optimize the code for your purpose. You don't have to pay for any license; this otherwise have a tendency to become really expensive for a large company.
+
+\section{Other methods to use}
+
+For realtime simulation of surface waves in large bodies of water, where non-linear phenomena are not of any significant importance, the best method to use, considering both implementation time and simulation quality, is probably spectral methods.
+
+\chapter{Improvements}
+
+Except from these problems with the implementation that was made, it would need a lot of improvements in order to be applicable in a real-time flight simulator.
+
+\section{Adapdive Meshing}
+
+LODs that adapt to the camera placement and the Field of View (FOV)/Viewing frustum in order to limit the number of cells needed in the FVM
+
+\section{Fluid--Structure Interactin}
+
+see e.g.:
+
+\begin{itemize}
+    \item \textit{\href{http://physbam.stanford.edu/~fedkiw/papers/stanford2010-04.pdf}{Numerically Stable Fluid-Structure Interactions Between Compressible Flow and Solid Structures}}
+    \item \textit{\href{http://efdl.as.ntu.edu.tw/research/papers/JCP03GCIBM.pdf}{A ghost-cell immersed boundary method for flow in complex geometry}}
+    \item \textit{\href{http://www.cs.columbia.edu/~batty/papers/Batty07.pdf}{A Fast Variational Framework for Accurate Solid-Fluid Coupling}} (solid fraction, non-stick to walls)
+\end{itemize}
+
+\subsection{Immersed Boundary Method}
+
+\begin{itemize}
+    \item Reference: \textit{\href{http://www4.ncsu.edu/~zhilin/TEACHING/MA798Z/Peskin1.pdf}{The immersed boundary method}}
+    \item For compressible flow: \textit{\href{http://www.cecs.wright.edu/~haibo.dong/wp-content/themes/publications/IBM_JCP_2007.pdf}{A sharp interface immersed boundary method for compressible viscous flows}}
+\end{itemize}
+
+\subsection{Volume of Solid Method (VOS)}
+
+\begin{itemize}
+    \item Reference: \textit{The simulation of fluid-rigid body interaction}
+    \item Described in \textit{Numerical Modeling of Deforming Bubble Transport Related to Cavitating Hydraulic Turbines}
+\end{itemize}
+
+\subsection{Rigid Fluid method}
+
+\begin{itemize}
+    \item Reference: \textit{\href{http://www.amath.unc.edu/Faculty/mucha/Reprints/siggraph04.pdf}{Rigid Fluid: Animating the Interplay Between Rigid Bodies and Fluid}}
+\end{itemize}
+
+\subsection{Rotation of rigid bodies}
+
+See \textit{\href{http://en.wikipedia.org/wiki/Euler\%27s_equations_\%28rigid_body_dynamics\%29}{Euler's equations (rigid body dynamics)}}
+
+\section{Parallellization}
+
+See e.g. \textit{\href{http://gfs.sourceforge.net/papers/agbaglah2011.pdf}{Parallel simulation of multiphase flows using octree adaptivity and the volume-of-fluid method}}
+
+\subsection{Space filling curves}
+
+See e.g. \textit{\href{http://j.teresco.org/research/publications/octpart02/octpart02.pdf}{Dynamic Octree Load Balancing Using Space-Filling Curves}}
+
+and \textit{\href{http://downloads.isrn.com/journals/appmath/2012/246491.pdf}{Parallel Adaptive Mesh Refinement Combined with Additive Multigrid for the Efficient Solution of the Poisson Equation}}
+
+\section{Implicit Time-Stepping}
+
+\SIMPLE (although not co,pletely implicit (?))
+
+Switch from explicit to implicit methods to allow arbitrarily large time steps
+
+\section{Visualization}
+
+\subsection{Marching Cubes}
+
+\subsection{Surface shininess}
+
+Shading/reflection (increased reflection spreading for increased height = shininess as a function of the part of the spectrum that contains the supressed high-frequency waves)
+
+\section{Local-time stepping}
+
+Very dubious technique as you can make the method allow large time steps. (see below)
+
+\section{Large time steps}
+
+See e.g. \textit{\href{http://www.dgp.toronto.edu/people/stam/reality/Research/pdf/ns.pdf}{Stable fluids}}
+
+\section{Remedy for regions with high Courant number}
+
+\section{Perfectly matched layers}
+
+Avoiding spurious reflections at LOD transitions (Absorbing boundary conditions, Perfectly Matched Layers)
+
+See e.g. \textit{\href{http://liu.diva-portal.org/smash/get/diva2:359805/FULLTEXT01}{Memory Efficient Methods for Eulerian Free Surface Fluid Animation}}
+
+\section{Wind waves}
+
+Wind waves (wave generation)
+
+\subsection{Spectral methods}
+
+\subsection{Air-water interaction}
+
+\section{Visual effects}
+
+\subsection{Splash and foam}
+
+(See \textit{\href{http://en.wikipedia.org/wiki/Sea_foam}{Wikipedia -- Sea foam}} or search for \textit{protein skimming} or \textit{foam fractionation})
+
+Implemented in \textit{\href{http://nguyendangbinh.org/Proceedings/Eurographics/2003/cgf/volume22/issue3/paper127/paper127.pdf}{Realistic Animation of Fluid with Splash and Foam}}
+
+which references \textit{\href{http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.4.6262&rep=rep1&type=pdf}{Rendering Natura lWaters}}
+
+which in turn is based on work presented in the book \textit{\href{http://books.google.se/books?id=xuwFz1bPTHgC}{Oceanic Whitecaps: Their Role in Air-Sea Exchange Processes}} by E. C. Monahan and G. MacNiocaill.
+
+See also \textit{\href{http://www.ias.ac.in/jess/sep2002/Ps18.pdf}{Oceanic whitecaps: Sea surface features detectable via satellite that are indicators of the magnitude of the air-sea gas transfer coefficient}} (also by  E. C. Monahan)
+
+\section{Sharpening of various advected fields}
+
+\subsection{Backward Error Compensation and Forward Error Correction}
+
+\begin{itemize}
+    \item Reference: \textit{\href{http://smartech.gatech.edu/xmlui/bitstream/handle/1853/29473/2002-389.pdf}{Back and forth error compensation and correction methods for removing errors induced by uneven gradients of the level set function}}
+    \item Applied to the velocity field and images: \textit{\href{http://www.gvu.gatech.edu/~jarek/papers/FlowFixer.pdf}{FlowFixer: Using BFECC for Fluid Simulation}}
+\end{itemize}
+
+\section{Various optimizations}
+
+* Pure code optimizations
+* Local time stepping (dibious improvement)
+
+\chapter{Conclusions}
+
+The FVM on octrees with FSM (free surface modelling) is an advanced method and takes a long time to implement, probably a few years (wor at least much longer than half a year) to make it ideal/perfect for the aim/scope/purposes of this master thesis work. Probably not the most suitable method there is today for this master thesis work even after all the programming and development has been done since it requires much computational power to be satisfactory. Spectral methods are probably a better way and have even been implemented for purposes like these. But maybe this method would be ideal in the future, since the computation load is basically the only bottleneck of the method when it has been fully implemented. When that day comes, it will have the ability to run in real time and it will outclass every other method that doesn't simulate the water "for real", since they will always miss out on certain effects that they are not able to simulate. The FVM is simply the best mathematical model (that it's still possible to implement on a computer) there is when it comes to actually describing water waves, not necessarily when it comes to simulation speed. Besides, the method used in \thisprojectwork runs in the same time complexity as the fastest of the other methods.
+
+\section{Difficulties and drawbacks with the method}
+
+Difficulties:
+\begin{itemize}
+    \item Dynamical creation/termination of surface cells and determination of properties in new cells
+    \item High Courant numbers
+    \item High speeds of sound (remedied in \textit{\href{http://physbam.stanford.edu/~kwatra/papers/compressible_semi_implicit/compressible_semi_implicit.pdf}{A method for avoiding the acoustic time step restriction in compressible flow}})
+    \item Keeping a sharp interface
+    \item Making it work in realtime
+\end{itemize}

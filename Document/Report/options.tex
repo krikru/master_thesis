@@ -182,14 +182,34 @@
 \fi
 
 % Referencing
-\robustify{\eqref}
-\renewrobustcmd{\eqref}    [1]{Equation \ref{#1}}
-\newrobustcmd  {\subeqref} [1]{Equation \subref{#1}}
-\newrobustcmd  {\eqrefs}   [0]{Equations\xspace}
-\newrobustcmd  {\figref}   [1]{Figure \ref{#1}}
-\newrobustcmd  {\subfigref}[1]{Figure \subref{#1}}
+% Chapters
+\newrobustcmd  {\chapref}   [1]{Chapter~\ref{#1}}
+\newrobustcmd  {\chaprefs}  [1]{Chapters\xspace}
+% Sections
+\newrobustcmd  {\secpref}   [1]{Section~\ref{#1}}
+\newrobustcmd  {\secprefs}  [1]{Section\xspace}
+% Appendices
+\newrobustcmd  {\appref}   [1]{Appendix~\ref{#1}}
+\newrobustcmd  {\apprefs}  [1]{Appendices\xspace}
+% Figures
+\newrobustcmd  {\figref}   [1]{Figure~\ref{#1}}
+\newrobustcmd  {\subfigref}[1]{Figure~\subref{#1}}
 \newrobustcmd  {\figrefs}  [0]{Figures\xspace}
 \newrobustcmd  {\subrefp}  [1]{(\subref{#1})}
+% Tables
+\newrobustcmd  {\tabref}   [1]{Table~\ref{#1}}
+\newrobustcmd  {\subtabref}[1]{Table~\subref{#1}}
+\newrobustcmd  {\tabrefs}  [0]{Tables\xspace}
+% Equations
+\robustify{\eqref}
+\renewrobustcmd{\eqref}    [1]{Equation~\ref{#1}}
+\newrobustcmd  {\subeqref} [1]{Equation~\subref{#1}}
+\newrobustcmd  {\eqrefs}   [0]{Equations\xspace}
+% Code listings
+\newrobustcmd  {\lstref}   [1]{Code listing~\ref{#1}}
+\newrobustcmd  {\sublstref}[1]{Code listing~\subref{#1}}
+\newrobustcmd  {\lstrefs}  [0]{Code listings\xspace}
+
 
 
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
@@ -204,14 +224,16 @@
 %\declareabbreviationqi{threedim}      {three-dimensional}
 %\declareabbreviationqi{twodim}        {two-dimensional}
 %\declareabbreviation  {NS}            {Navier--Stokes}
+
 %\declareabbreviation  {gammapath}           {{\gamma[\vec{r}_1,\,\vec{r}_2]}}
-\newrobustcmd         {\devstressten}          {\boldsymbol{\mathsf{T}}}
+\newrobustcmd         {\devstressten}       {\boldsymbol{\mathsf{T}}}
+\declareabbreviation  {flightsimulatorfps}  {30}
 \newrobustcmd         {\gammapath}          {{\gamma[\vec{r}_1,\,\vec{r}_2]}}
 \declareabbreviation  {itslimitedtime}      {its limited time}
 \declareabbreviation  {masterthesisworktime}{about five months}
 \declareabbreviationqi{NULL}                {NULL}
 \declareabbreviation  {numchildren}         {$2^d$}
-\declareabbreviationqi{Saab}                {Saab} % Saab seems to use the Gill Sans font
+%\declareabbreviationqi{Saab}                {Saab} % Saab seems to use the Gill Sans font
 %\declareabbreviation  {textgammapath}       {\mbox{$\gammapath$}}
 \newabbrev            {\textgammapath}      {\mbox{$\gammapath$}}
 \declareabbreviationqi{thismasterthesiswork}{the master thesis work behind this report}
@@ -223,41 +245,46 @@
 
 % The acronyms are sorted by the abbreviated forms
 %\declareacronyms{BEM}   {boundary element}{method}
+\declareacronyms{BRDF}  {bidirectional reflectance distribution}{function} \index{distribution function!bidirectional reflectance|see{bidirectional reflectance distribution function}} \index{reflectance distribution function!bidirectional|see{bidirectional reflectance distribution function}}
 \declareacronyms{BFECC} {back and forth}{error compensation and correction}
 %\declareacronyms{CBC}   {convection boundedness}{criterion}
 \declareacronyms{CD}    {central}{difference}
 \declareacronyms{CFD}   {computational}{fluid dynamics}
-\declareacronym {CFL}   {Courant--Friedrichs--Lewy} %[\index{condition!Courant--Friedrichs--Lewy|see{Courant--Friedrichs--Lewy}}]
+\declareacronym {CFL}   {Courant--Friedrichs--Lewy} \index{condition!Courant--Friedrichs--Lewy|see{Courant--Friedrichs--Lewy}}
 \declareacronyms{CFMM}  {continuous fast multipole}{method}
 %\declareacronyms{CICSAM}{compressive}{interface capturing scheme for arbitrary meshes}
-%\declareacronyms{CIP}   {constrained interpolation}{profile}\addtototaa{}{\textit{or} cubic-interpolated propagation}\index{cubic-interpolated propagation|see{CIP}}\index{propagation!cubic-interpolated|see{CIP}}
-\declareacronym {CLSVOF}{coupled level set/volume of fluid}
+%\declareacronyms{CIP}   {constrained interpolation}{profile}\addtototaa{}{\textit{or} cubic-interpolated propagation} \index{cubic-interpolated propagation|see{CIP}}\index{propagation!cubic-interpolated|see{CIP}}
+\declareacronym {CLSVOF}{coupled level set/volume of fluid} \index{method!coupled level set/volume of fluid|see{coupled level set/volume of fluid}}
 %\declareacronyms{FCSCF} {fast compressive surface capturing}{formulation}
 %\declareacronyms{FCT}   {flux-corrected}{transport} % Used in the MULES scheme
 \declareacronyms{FMM}   {fast multipole}{method}
 \declareacronyms{FOV}   {field of}{view}
+\declareacronym {FPS}   {frames per second}
+\declareacronyms{FSI}   {fluid--structure}{interaction}
 %\declareacronyms{FSM}   {free surface}{modeling}
 \declareacronyms{FVM}   {finite volume}{method}
-%\declareacronym {hoctree}{hyperoctree}\index{octree!hyper|see(hoctree)}
+%\declareacronym {hoctree}{hyperoctree} \index{octree!hyper|see(hoctree)}
 %\declareacronyms{HRIC}  {high resolution}{interface capturing}
+\declareacronym {LJ}    {Lennard--Jones} \index{potential!Lennard--Jones|see{Lennard--Jones}}
 \declareacronyms{LOD}   {level of}{detail}
 \def            \LODs   {\mbox{\LOD\nspace s}\xspace}
-\declareacronyms{LS}    {level}{set}
+\declareacronyms{LS}    {level}{set} \index{method!level set|see{level set}}
 \declareacronyms{LUDS}  {linear upwind difference}{scheme}
 \def            \LUDSs  {\mbox{\LUDS\nspace s}\xspace}
-%\declareacronym {MAC}   {marker-and-cell}%[\index{method!marker-and-cell|see{marker-and-cell}}]
+%\declareacronym {MAC}   {marker-and-cell} \index{method!marker-and-cell|see{marker-and-cell}}
+\declareacronyms{MD}    {molecular}{dynamics} \idxs{simulation!molecular dynamics|see{molecular dynamics}} \idxs{method!molecular dynamics|see{molecular dynamics}}
 \declareacronyms{MULES} {multidimensional universal}{limiter with explicit solution}
 %\declareacronyms{NVD}   {normalised variable}{diagram}
-\declareacronyms{PCG}   {preconditioned}{conjugate gradient}
-\declareacronyms{PDE}   {partial differential}{equation}
+\declareacronyms{PCG}   {preconditioned}{conjugate gradient} \index{method!preconditioned conjugate gradient|see{preconditioned conjugate gradient}}
+\declareacronyms{PDE}   {partial differential}{equation} \index{differential equation!partial|see{partial differential equation}}
 \def            \PDEs   {\mbox{\PDE\nspace s}\xspace}
 \declareacronyms{QUICK} {quadratic upwind}{interpolation for convective kinematics}
-%\declareacronyms{SIMPLE}{semi-implicit}{method for pressure-linked equations}
-\declareacronyms{SPH}   {smoothed-particle}{hydrodynamics}
+\declareacronyms{SIMPLE}{semi-implicit}{method for pressure-linked equations}
+\declareacronyms{SPH}   {smoothed-particle}{hydrodynamics} \index{method!smoothed-particle hydrodynamics|see{smoothed-particle hydrodynamics}}
 %                UPWIND
 %\declareacronyms{UQ}    {quadratic upwind difference}{scheme}
-\declareacronyms{VOF}   {volume of}{fluid}%[\index{method!volume of fluid|see{volume of fluid}}]
-%\declareacronyms{VOS}   {volume of}{solid}%[\index{method!volume of solid|see{volume of solid}}]
+\declareacronyms{VOF}   {volume of}{fluid} \index{method!volume of fluid|see{volume of fluid}}
+%\declareacronyms{VOS}   {volume of}{solid} \index{method!volume of solid|see{volume of solid}}
 % If capitalizing certain letters would be relevant in the future, take a look at http://www.tex.ac.uk/cgi-bin/texfaq2html?label=casechange
 
 
@@ -323,6 +350,8 @@
 \declareindexkeypair      {frequency}{frequencies}
 \declareindexkey      {gradient}
 \declareindexkeypair      {gradient}{gradients}
+\declareindexkey      {gust}
+\declareindexkeypair      {gust}{gusts}
 \declareindexkey      {incompressibility}
 \declareindexkeypair      {incompressibility}{incompressible}
 \declareindexkey      {infinitesimal}
@@ -381,6 +410,8 @@
 \declareindexkeypair      {surface}{surfaces}
 %\declareindexkey      {square} % Command \square already defined.
 \declareindexkey      {temperature}
+\declareindexkeypair      {temperature}{temperatures}
+\declareindexkey      {turbulence}
 \declareindexkey      {unboundedness}
 \declareindexkeypair      {unboundedness}{unbounded}
 \declareindexkey      {UPWIND}
