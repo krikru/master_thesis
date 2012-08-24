@@ -24,42 +24,50 @@ The main drawback with this method, except from being inconvenient when modellin
 
 \section{Three-dimensional methods}
 
-\subsection{Particles}
+\idxse{three-dimensional}{method}{Three-dimensional methods} are often highly realistic in the sence that they will be able to simulate all different kind of phenomenas that can be described with the \idxs{Navier--Stokes}{equations} (see \secref{sec:ns_equations}). There are a few exceptions though.
 
-In the \SPH method, a large number of small particles with repelling and atractive forces between neighboring particles, described by a system \idxsp{ordinary}{differential equation}{s}, are simulated. The interaction between two particles in the simulation is usually modeled by a potential like those used in \MD, for example the \LJ potential, and only interaction between particles that are located within a certain \idxs{cut-off}{distance} from each other are included in the simulation.
+\subsection{Smoothed-Particle Hydrodynamics}
 
-There are a few major advantages with using this method. When the \idxs{Eulerian}{specification of the flow field} is used to describe the fluid motion, the equations tend to become more complicated as they contain \idxsp{advection}{term}{s}. In \SPH on the other hand, the \idxs{Lagrangian}{specification of the flow field} is used and no advection terms are therefore present in the equations which makes the model relatively simple, and it is easily implemented. Besides, no advection of fields with an Eulerian representation is simulated, which prevents additional problems that can arrise during the advection, and conservation of various properties, like \momentum and \energy is usually automatically well preserved as a result of that.
+The \SPH method is a highly realistic model that simulates a flow by simulating a large number of small particles. Between each pair of particles that are within a certain \idxs{cut-off}{distance} from each other, there is a repelling or atractive force, described by an \ODE. The interaction between two particles in the simulation is usually modeled by a potential like those used in \MD, for example the \LJ potential. The cut-off distance is used in order to ensure that the number of interactions is $O(N)$, an not $O(N^2)$ as for a system where all pair of particles interact with each other, whene $N$ is the number of particles in the system.
 
-On the other hand, the \SPH method requires that the entire simulation domain is filled with small particles, which often means that an extremely large number of particles, proportionally to the volume of the fluid, have to be simulated. This implies a very heavy workload on the computer, and as a result of that, \SPH is very seldom used in \idxsp{real-time}{simulation}{s}. Howwever, adaptive particle sizes have been used in order to decrease the amount of particles required in the less important parts of the fluid in order to remedy this problem, as for example done in 
+There are a few major advantages with using this method. When the \idxs{Eulerian}{specification of the flow field} is used to describe the fluid motion, the equations tend to become more complicated as they contain \idxsp{advection}{term}{s}. In \SPH on the other hand, the \idxs{Lagrangian}{specification of the flow field} is used and no advection terms are therefore present in the equations which makes the model relatively simple, and it is easily implemented. Besides, no advection of fields with an Eulerian representation is simulated, which prevents additional problems that can arrise during the advection, and conservation of various properties, like \momentum and \energy is usually automatically well preserved as a result of that. In fluid simulations, there is no need to model the air, and there is no need to keep track of where the surface of the fluid is located since this is information that can be extracted during the \idx{post-processing} phase.
 
-\subsubsection{Screen Space Meshes}
+On the other hand, the \SPH method requires that the entire simulation domain is filled with small particles, which often means that an \emph{extremely} large number of particles, proportionally to the volume of the fluid, have to be simulated. This implies a very heavy workload on the computer, and as a result of that, \SPH is very seldom used in \idxsp{real-time}{simulation}{s}. Howwever, adaptive particle sizes have been used in order to reduce the amount of particles needed in the less important parts of the fluid, like in the bulk, in order to remedy this problem, a technique that was first used in \citep{Desbrun1999} and later improved in a number of reports, for example in \citep{Yan2009}.
 
-\begin{itemize}
-    \item Reference: \textit{\href{http://www.matthiasmueller.info/publications/screenSpaceMeshes.pdf}{Screen Space Meshes}}
-\end{itemize}
+%\subsubsection{Screen Space Meshes}
 
-\subsection{Marker-and-Cell method (MAC)}
+%\begin{itemize}
+%    \item Reference: \textit{\href{http://www.matthiasmueller.info/publications/screenSpaceMeshes.pdf}{Screen Space Meshes}}
+%\end{itemize}
 
-\begin{itemize}
-    \item Reference: \textit{Numerical calculation of time-dependent viscous incompressible flow of fluid with a free surface}
-    \item Described in: \textit{\href{http://people.sc.fsu.edu/~jburkardt/pdf/fluid_flow_for_the_rest_of_us.pdf}{Fluid Flow for the Rest of Us: Tutorial of the Marker and Cell Method in Computer Graphics}}
-\end{itemize}
+%\subsection{Marker-and-Cell method (MAC)}
 
-\subsection{Boundary element method}
+%\begin{itemize}
+%    \item Reference: \textit{Numerical calculation of time-dependent viscous incompressible flow of fluid with a free surface}
+%    \item Described in: \textit{\href{http://people.sc.fsu.edu/~jburkardt/pdf/fluid_flow_for_the_rest_of_us.pdf}{Fluid Flow for the Rest of Us: Tutorial of the Marker and Cell Method in Computer Graphics}}
+%\end{itemize}
 
-\subsection{Finite element method}
+%\subsection{Boundary element method}
 
-\subsection{Finite volume method with tall cells}
+%\subsection{Finite element method}
 
-\subsection{Finite volume method with octrees}
+\subsection{Finite Volume Method on a restricted tall cell grid}
 
-%This is the method I have choosen to use for my work, with the main reference \cite{Harlow65b}
-This is the method I have choosen to use for my work, with the main reference \citealp{Losasso2004} and \citep{Popinet2003}.
+The \FVM is a highly realistic model that solves a set of \PDEs by dividing the region of interest into small \idxsp{volume}{element}{s}, and by discretising the fields that are described by the \PDEs into points in the volume elements or on the border of the volume elements, usually a fixed number of points per volume element, as well as discretizing the \PDEs into a number of \ODEs describing the evolution of the discretized fields. The volume elements are commonly referred to as \cells. The \FVM and its usage in \CFD is described in greater detail in \chapref{chap:ns_equations}.
 
-\begin{itemize}
-    \item Reference 1: \textit{\href{http://gfs.sourceforge.net/gerris.pdf}{Gerris: a tree-based adaptive solver for the incompressible Euler equations in complex geometries}}
-    \item Reference 2: \textit{\href{http://physbam.stanford.edu/~fedkiw/papers/stanford2004-02.pdf}{Simulating Water and Smoke with an Octree Data Structure}}
-\end{itemize}
+The \FVM was first used on a restricted tall cell grid in \citep{Chentanez2011}. This approach uses an orthogonal grid, where the water closest to the water surface are modeled with small \idxsp{cubic}{cell}{s}, and the water deeper down is modelled with tall cells that has the same horizontal size as the cubic cells close to the surface but stretch vertically all the way from where the surface cells end down to the bottom on which the water rests.
+
+The advantages with this approach is that it significantly reduces the number of cells that have to be processed by \approximating a large number of small cells as a much smaller number of tall cells, and it will still catch surface disturbances and simulate waves with short wavelengths with a high accuracy, and it also simulates waves with really long wave lengths relative to the water depth and an overall motion of the water with a high accuracy. On the other hand, it cannot simulate waves with intermediate wavelength with a very high accuracy.
+
+This method is ideal for sumulating flowing water when the main focus does not lie on simulating surface wave properly, but for simulating an ocean, the tall cells are not in their right elment.
+
+\subsection{Finite Volume Method on an octree grid}
+
+The aim of this method, is the same as the aim of the restricted tall cell grid approach, to reduce the number of cells that are needed in the simulation. It does so by modelling the grid with an \octree, which allows for easy \idxs{adaptive}{mesh refinement}. The fluid in importand regions of the simulation, such as that closest to a surface, is therefore modelled with a fine grid to capture the small scale visual detail, while liquid further away from such regions are modelled with increasingly large cell sizes.
+
+This method was probably used with a restricted \idxs{octree}{grid} for the first time in \citep{Popinet2003}, and was later used in \citealp{Losasso2004} to simulate water and smoke on an unrestructed octree grid in an implementation which had been adapted for \idxs{computer}{graphics} purposes. 
+
+Using this method to simulate surface waves on a large body of water allowes the propagation of surface waves to be simulated with arbitrarily high accuracy, depending on how quickly the cells grow in size when the get farther away from regions of high importance to the simulation, no matter how large the wavelength is, although it may, just like any other method that discretizes a set of \PDEs have some problems with getting the correct wave speed for the smallest waves. It also guarantees that the number of cells that are used in the simulation is $O(N_{\text{s}})$, where N_{\text{s}} is the number of cells visible on the surface.
 
 \section{Twodimensional and threedimensional hybrid methods}
 

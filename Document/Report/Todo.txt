@@ -70,7 +70,7 @@ May be important
 * Own implementations of algorithms and data structures
 * HYPER-C
 * Image showing the difference between Hyper-C and UPWIND
-* Explain that FSM modeling (even advection schemes) is a big area of research. Papers that compare various FSM methods:
+* Explain that FSM (free surface modelling) (even advection schemes) is a big area of research. Papers that compare various FSM methods:
     "Volume of fluid methods for immiscible-fluid and free-surface flows" (http://capfluidicslit.mme.pdx.edu/reference/Numerics/Gopala_ChemEngJ2008_VOFMethodsFreeSurfaceFlow.pdf) compares four VOF schemes: Flux-corrected transport (FCT), Lagrangian piecewise linear interface construction (Lagrangian PLIC), Compressive interface capturing scheme for arbitrary meshes (CICSAM) and intergamma scheme.
     "MODELING OF THE WAVE BREAKING WITH CICSAM AND HRIC HIGH-RESOLUTION SCHEMES" (http://proceedings.fyper.com/eccomascfd2006/documents/85.pdf) from 2006 and "Comparison of CICSAM and HRIC high-resolution schemes for interface capturing" (http://warminski.pollub.plwww.ptmts.org.pl/Waclaw-Koron-2-08.pdf) from 2008 are both from the same two authors and compares the CICSAM and the HRIC schemes.
 * This report shows that only a thin layer close to the surface needs to be modelet with the LS method: A sharp interface method for incompressible two-phase flows (http://diyhpl.us/~bryan/papers2/frey/levelsets/Sussman%20M.,%20A%20Sharp%20interface%20method.pdf)

@@ -1,4 +1,5 @@
 \chapter{Finite volume method}
+\label{chap:ns_equations}
 
 %TODO: Insert time values for more discretisized variables
 %TODO: Insert error bounds for more discretized equations
@@ -6,7 +7,7 @@
 %\newrobustcmd{\gammapath}{{\gamma[\vec{r}_1,\,\vec{r}_2]}}
 %\newabbrev{\textgammapath}{\mbox{$\gammapath$}}
 
-The \FVM is a way of solving a \PDE, or a set of \PDEs, where the room is \discretized into a large number of non-moving, adjactent volume elements which we will call \cells. Different \properties are discretized into certain points. \idxse{scalar}{field}{Scalar fields} are usually discretized to the \idxsp{cell}{center}{s}, or sometimes to \idxp{node}{s} of \idxse{cell}{corner}{corners} of the cells, as in \citep{Losasso2004}, which can be convenient since \interpolation of fields discretized to the cell centers tend to be more difficult. In a \idxs{collocated}{grid}, all properties are stored at the same locations, so the \idxse{vector}{property}{vector properties} are discretized to the same locations as the \idxse{scalar}{property}{scalar properties}. On a \idxs{staggered}{grid} on the other hand, the \velocity (or the \momentum, depending on implementation) is discretized to the \idxsp{cell}{face}{s}. For \thisprojectwork, a staggered grid has been used, and throughout the report the discretization locations for the various properties will be called \idxsp{storage}{location}{s}.
+The \FVM is a way of solving a \PDE, or a set of \PDEs, where the room is \discretized into a large number of non-moving, adjactent volume elements which is commonly referred to as \cells. Different \properties are discretized into certain points. \idxse{scalar}{field}{Scalar fields} are usually discretized to the \idxsp{cell}{center}{s}, or sometimes to \idxp{node}{s} of \idxse{cell}{corner}{corners} of the cells, as in \citep{Losasso2004}, which can be convenient since \interpolation of fields discretized to the cell centers tend to be more difficult. In a \idxs{collocated}{grid}, all properties are stored at the same locations, so the \idxse{vector}{property}{vector properties} are discretized to the same locations as the \idxse{scalar}{property}{scalar properties}. On a \idxs{staggered}{grid} on the other hand, the \velocity (or the \momentum, depending on implementation) is discretized to the \idxsp{cell}{face}{s}. For \thisprojectwork, a staggered grid has been used, and throughout the report the discretization locations for the various properties will be called \idxsp{storage}{location}{s}.
 
 \section{Fluid simulation}
 
@@ -121,6 +122,7 @@ where $\Delta r_i$ is the grid spacing in $\normvec{e}_i$ direction. By combinin
 %\end{samepage}
 
 \section{Navier--Stokes equations}
+\label{sec:ns_equations}
 
 The \idxs{Navier--Stokes}{equations} are a statement of the conservation of momentum for a fluid. The \idxse{general form of the}{equations of fluid motion}{general form of the} equations reads
 
