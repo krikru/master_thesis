@@ -12,7 +12,7 @@ Needs to be written:
 Needs finishing:
 * Results
 * Advection schemes
-* Octrees
+(* Octrees)
 
 * Check picture permisions (even pictures in the public domain that cannot be copyrighted may require that credit is given to the creator or the photographer)
 

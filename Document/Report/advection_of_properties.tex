@@ -34,24 +34,24 @@ $A^*\Phi$ can then more accurately be \approximated as $A\,\Phi_2$, which in tur
 
 \begin{equation}
 \begin{array}{c}
-A\,\Phi_2 \,=\, A\,(\Phi \,-\, \tfrac{1}{2}(\Phi_1 \,-\, \Phi)) \,=\, A\,\Phi \,-\, \tfrac{1}{2}(A\,A'A\,\Phi \,-\, A\,\Phi) \\
-=\, A\,(\tfrac{3}{2} \,-\, \tfrac{1}{2}A'A)\,\Phi \,=\, \tilde{A}\,\Phi,
+A\,\Phi_2 \,=\, A\,\left(\Phi \,-\, \tfrac{1}{2}(\Phi_1 \,-\, \Phi)\right) \,=\, A\,\Phi \,-\, \tfrac{1}{2}(A\,A'A\,\Phi \,-\, A\,\Phi) \\
+=\, A\,\left(\tfrac{3}{2} \,-\, \tfrac{1}{2}A'A\right)\,\Phi \,=\, \tilde{A}\,\Phi,
 \end{array}
 \end{equation}
 
 where $\tilde{A}$ is defined by
 
 \begin{equation} \label{eq:compensated_advection_operator}
-\tilde{A} \,=\, A\,(\tfrac{3}{2} \,-\, \tfrac{1}{2}A'A)
+\tilde{A} \,=\, A\,\left(\tfrac{3}{2} \,-\, \tfrac{1}{2}A'A\right)
 \end{equation}
  
 and is an improved approximation of $A$. As can be seen, $\tilde{A}$ is the product of $A$ and a \polynomial of $A'A$, and the polynomial could if desired easily be extended with more terms as discussed in the end of this \levelname. Now, if we let this operator act on an \eigenfunction $\phi$ whose \eigenvalue is $\lambda$ when $A$ is acting on it and $\lambda' = \overline{\lambda}$ when $A'$ is acting on it, we see that 
 
 \begin{equation}
-\tilde{A}\,\phi \,=\, A\,(\tfrac{3}{2} \,-\, \tfrac{1}{2}A'A)\,\phi \,=\, \lambda\,(\tfrac{3}{2} \,-\, \tfrac{1}{2}\overline{\lambda}\lambda)\,\phi \,=\, \frac{\lambda}{|\lambda|}\,(\tfrac{3}{2}\,|\lambda| \,-\, \tfrac{1}{2}|\lambda|^3)\,\phi \,=\, \tilde{\lambda}\,\phi,
+\tilde{A}\,\phi \,=\, A\,\left(\tfrac{3}{2} \,-\, \tfrac{1}{2}A'A\right)\,\phi \,=\, \lambda\,\left(\tfrac{3}{2} \,-\, \tfrac{1}{2}\overline{\lambda}\lambda\right)\,\phi \,=\, \frac{\lambda}{|\lambda|}\,\left(\tfrac{3}{2}\,|\lambda| \,-\, \tfrac{1}{2}|\lambda|^3\right)\,\phi \,=\, \tilde{\lambda}\,\phi,
 \end{equation}
 
-where $\tilde{\lambda} = \lambda/|\lambda|\,(\tfrac{3}{2}\,|\lambda| \,-\, \tfrac{1}{2}|\lambda|^3)$ is the eigenvalue of $\phi$ when $\tilde{A}$ is acting on it. If $|\lambda|$ is written as
+where $\tilde{\lambda} = \lambda/|\lambda|\,\left(\tfrac{3}{2}\,|\lambda| \,-\, \tfrac{1}{2}|\lambda|^3\right)$ is the eigenvalue of $\phi$ when $\tilde{A}$ is acting on it. If $|\lambda|$ is written as
 
 \begin{equation}
 |\lambda| \,=\, 1 - h, \quad h \leq 1
@@ -66,7 +66,7 @@ where $h$ is the damping introduced by $A$, we see that
 \end{array}
 \end{equation}
 
-The damping introduced by $\tilde{A}$ is given by $\tilde{h} = 1 - |\tilde{\lambda}|$. If we assume that possible instabilities in $A$ are small, which means that $-h \ll 1$ if $h < 0$, and since $h \leq 1$, $\tilde{h}$ can be expanded to
+The damping introduced by $\tilde{A}$ is given by $\tilde{h} = 1 - |\tilde{\lambda}|$. If we assume that possible instabilities in $A$ are small, which means that $-h \ll 1$ if $h < 0$, and consider the fact that $h \leq 1$, $\tilde{h}$ can be expanded to
 
 \begin{equation}
 \tilde{h} \,=\, 1 - |\tilde{\lambda}| \,=\, 1 - \frac{|\lambda|}{|\lambda|}\left|1 - \displaystyle\frac{3\,h^2 - 1\,h^3}{2}\right| \,=\, \displaystyle\frac{3\,h^2 - 1\,h^3}{2} \,=\, O(h^2),
