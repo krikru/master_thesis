@@ -245,8 +245,8 @@
 % % % % % % %
 
 % The acronyms are sorted by the abbreviated forms
-%\declareacronyms{BEM}   {boundary element}{method}
-\declareacronyms{BRDF}  {bidirectional reflectance distribution}{function} \index{distribution function!bidirectional reflectance|see{bidirectional reflectance distribution function}} \index{reflectance distribution function!bidirectional|see{bidirectional reflectance distribution function}}
+\declareacronyms{BEM}   {boundary element}{method}
+%\declareacronyms{BRDF}  {bidirectional reflectance distribution}{function} \index{distribution function!bidirectional reflectance|see{bidirectional reflectance distribution function}} \index{reflectance distribution function!bidirectional|see{bidirectional reflectance distribution function}}
 \declareacronyms{BFECC} {back and forth}{error compensation and correction}
 %\declareacronyms{CBC}   {convection boundedness}{criterion}
 \declareacronyms{CD}    {central}{difference}
@@ -258,21 +258,25 @@
 \declareacronym {CLSVOF}{coupled level set/volume of fluid} \index{method!coupled level set/volume of fluid|see{coupled level set/volume of fluid}}
 %\declareacronyms{FCSCF} {fast compressive surface capturing}{formulation}
 %\declareacronyms{FCT}   {flux-corrected}{transport} % Used in the MULES scheme
+\declareacronyms{FEM}   {finite element}{method}
+\declareacronyms{FFT}   {fast Fourier}{transform}\index{Fourier transform!fast|see{fast Fourier transform}}
 \declareacronyms{FMM}   {fast multipole}{method}
 \declareacronyms{FOV}   {field of}{view}
 \declareacronym {FPS}   {frames per second}
 \declareacronyms{FSI}   {fluid--structure}{interaction}
-%\declareacronyms{FSM}   {free surface}{modeling}
+\declareacronyms{FSM}   {free surface}{modeling}
 \declareacronyms{FVM}   {finite volume}{method}
 %\declareacronym {hoctree}{hyperoctree} \index{octree!hyper|see(hoctree)}
 %\declareacronyms{HRIC}  {high resolution}{interface capturing}
+\declareacronyms{LBM}   {lattice Boltzmann}{method}
 \declareacronym {LJ}    {Lennard--Jones} \index{potential!Lennard--Jones|see{Lennard--Jones}}
+\declareacronyms{LPD}   {Laplacian pyramid}{decomposition} \index{pyramid decomposition!Laplacian|see{Laplacian pyramid decomposition}}
 \declareacronyms{LOD}   {level of}{detail}
 \def            \LODs   {\mbox{\LOD\nspace s}\xspace}
 \declareacronyms{LS}    {level}{set} \index{method!level set|see{level set}}
 \declareacronyms{LUDS}  {linear upwind difference}{scheme}
 \def            \LUDSs  {\mbox{\LUDS\nspace s}\xspace}
-%\declareacronym {MAC}   {marker-and-cell} \index{method!marker-and-cell|see{marker-and-cell}}
+\declareacronym {MAC}   {marker-and-cell} \index{method!marker-and-cell|see{marker-and-cell}}
 \declareacronyms{MD}    {molecular}{dynamics} \index{simulation!molecular dynamics|see{molecular dynamics}} \index{method!molecular dynamics|see{molecular dynamics}}
 \declareacronyms{MULES} {multidimensional universal}{limiter with explicit solution}
 %\declareacronyms{NVD}   {normalised variable}{diagram}
@@ -281,9 +285,13 @@
 \declareacronyms{PCG}   {preconditioned}{conjugate gradient} \index{method!preconditioned conjugate gradient|see{preconditioned conjugate gradient}}
 \declareacronyms{PDE}   {partial differential}{equation} \index{differential equation!partial|see{partial differential equation}}
 \def            \PDEs   {\mbox{\PDE\nspace s}\xspace}
+\declareacronyms{PLIC}  {piecewise linear interface}{construction} \index{interface construction!piecewise linear|see{piecewise linear interface construction}} \index{linear interface construction!piecewise|see{piecewise linear interface construction}}
 \declareacronyms{QUICK} {quadratic upwind}{interpolation for convective kinematics}
 \declareacronyms{SIMPLE}{semi-implicit}{method for pressure-linked equations}
+\declareacronyms{SOR}   {successive}{over-relaxation} \index{relaxation!successive|see{successive over-relaxation}} \index{method!successive over-relaxation|see{successive over-relaxation}}
 \declareacronyms{SPH}   {smoothed-particle}{hydrodynamics} \index{method!smoothed-particle hydrodynamics|see{smoothed-particle hydrodynamics}}
+\declareacronyms{STACS} {switching technique for}{advection and capturing of surfaces} \index{surfaces!advection and capturing of!switching technique for|see{switching technique for advection and capturing of surfaces}}
+\declareacronyms{SWS}   {shallow water}{simulation}
 %                UPWIND
 %\declareacronyms{UQ}    {quadratic upwind difference}{scheme}
 \declareacronyms{VOF}   {volume of}{fluid} \index{method!volume of fluid|see{volume of fluid}}
@@ -304,12 +312,15 @@
 \declareindexkeypair      {approximation}{approximate}
 \declareindexkeypair      {approximation}{approximated}
 \declareindexkeypair      {approximation}{approximately}
+\declareindexkeypair      {approximation}{approximating}
 \declareindexkey      {area}
 \declareindexkeypair      {area}{areas}
 %\declareindexkey      {array} % Command \array already defined.
 \declareindexkey      {average}
 \declareindexkeypair      {average}{averaged}
 \declareindexkey      {backwash}
+\declareindexkey      {boundary}
+\declareindexkeypair      {boundary}{boundaries}
 \declareindexkey      {brain}
 \declareindexkeypair      {brain}{brains}
 \declareindexkey      {camera}
@@ -341,6 +352,12 @@
 \declareindexkey      {discretization}
 \declareindexkeypair      {discretization}{discretize}
 \declareindexkeypair      {discretization}{discretized}
+\declareindexkey      {eigenvalue}
+\declareindexkeypair      {eigenvalue}{eigenvalues}
+\declareindexkey      {eigenfunction}
+\declareindexkeypair      {eigenfunction}{eigenfunctions}
+\declareindexkey      {eigenvector}
+\declareindexkeypair      {eigenvector}{eigenvectors}
 \declareindexkey      {energy}
 \declareindexkeypair      {energy}{energys}
 \declareindexkey      {estimate}
@@ -355,6 +372,8 @@
 \declareindexkeypair      {frequency}{frequencies}
 \declareindexkey      {gradient}
 \declareindexkeypair      {gradient}{gradients}
+\declareindexkey      {grid}
+\declareindexkeypair      {grid}{grids}
 \declareindexkey      {gust}
 \declareindexkeypair      {gust}{gusts}
 \declareindexkey      {incompressibility}
@@ -365,6 +384,9 @@
 \declareindexkey      {interpolation}
 \declareindexkey      {isosurface}
 \declareindexkeypair      {isosurface}{isosurfaces}
+\declareindexkey      {iteration}
+\declareindexkeypair      {iteration}{iterate}
+\declareindexkeypair      {iteration}{iterations}
 \declareindexkey      {jump}
 \declareindexkeypair      {jump}{jumps}
 \declareindexkey      {method}
@@ -382,8 +404,14 @@
 \declareindexkeypair      {normalization}{normalized}
 \declareindexkey      {octree}
 \declareindexkeypair      {octree}{octrees}
+\declareindexkey      {offshore}
 \declareindexkey      {orthogonal}
 \declareindexkeypair      {orthogonal}{orthogonalized}
+\declareindexkey      {oscillation}
+\declareindexkeypair      {oscillation}{oscillate}
+\declareindexkeypair      {oscillation}{oscillates}
+\declareindexkey      {overshooting}
+\declareindexkeypair      {overshooting}{overshoot}
 %\declareindexkey      {particle}
 %\declareindexkeypair      {particle}{particles}
 \declareindexkey      {preformance}
@@ -391,7 +419,10 @@
 \declareindexkeypair      {phase}{phases}
 \declareindexkey      {pointer}
 \declareindexkeypair      {pointer}{pointers}
+\declareindexkey      {polynomial}
+\declareindexkeypair      {polynomial}{polynomials}
 \declareindexkey      {preconditioning}
+\declareindexkeypair      {preconditioning}{precondition}
 \declareindexkeypair      {preconditioning}{preconditioner}
 %\declareindexkey      {precision} % Use \idxs{numerical}{precision} or \accuracy instead
 \declareindexkey      {pressure}
@@ -404,12 +435,20 @@
 \declareindexkey      {remeshing}
 \declareindexkeypair      {remeshing}{remesh}
 \declareindexkey      {rendering}
+\declareindexkeypair      {rendering}{render}
 \declareindexkeypair      {rendering}{rendered}
+\declareindexkey      {resolution}
+\declareindexkeypair      {resolution}{resolutions}
 \declareindexkey      {room}
+\declareindexkey      {shore}
+\declareindexkeypair      {shore}{shoreline}
 \declareindexkey      {simulation}
 \declareindexkeypair      {simulation}{simulate}
 \declareindexkeypair      {simulation}{simulating}
 \declareindexkeypair      {simulation}{simulations}
+\declareindexkey      {smearing}
+\declareindexkeypair      {smearing}{smear}
+\declareindexkeypair      {smearing}{smeared}
 \declareindexkey      {spectrum}
 \declareindexkey      {surface}
 \declareindexkeypair      {surface}{surfaces}

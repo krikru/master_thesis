@@ -5,22 +5,24 @@ Sections left to write, after importance
 High importance
 ---------------
 
-* Check picture permisions (even pictures in the public domain that cannot be copyrighted may require that credit is given to the creator or the photographer)
-
 Needs to be written:
-* Related work
 * Discussion
 * Improvements
-* Conclusion
 
 Needs finishing:
-* Advection schemes
-* Free surface modeling
-* Finite Volume Method
-* Octrees
 * Results
+* Advection schemes
+* Octrees
 
-    
+* Check picture permisions (even pictures in the public domain that cannot be copyrighted may require that credit is given to the creator or the photographer)
+
+* Add thesis work number.
+
+* Fix issues pointed out by Magnus Johansson
+
+* Update numenclature for: Solution methods for the pressure Poison equation, advection methods
+
+* Reference section about BFECC
     
     Results are the product of measuring the dependent variable in an experiment.
     Results should be measurable.
@@ -79,6 +81,7 @@ May be important
 Not very important
 ------------------
 
+Change transported to advected?
 * Hoctrees
 * No random access to neighbor connections or neighbor cells (in the section about neighbor connections, specifically about neighbor lists)
 * Marching cubes
@@ -86,8 +89,14 @@ Not very important
 * Splash and foam
 * \vec{r}_{C_i}, as location that specifies the position of $C_i$
 * Change indexation method; those of the "Finite Volume Method" chapter do not match those of the VOF section or the Octree section in the appendix. Also weird in the section about the velocity advection.
+* Discretize in time -> Discretize temporally
+* Include \citep{Tessendorf2004} (game programming gems 4 article) in section about Laplacian pyramids?
+* Abbreviate Laplacian Pyramid Decomposition?
+* Mention PDE that can be used to update the signed distance function (see http://www.ims.nus.edu.sg/Programs/fluiddynamic/files/Lecture1-basics.pdf, p 56/67)
 
-
+Other techniques:
+* Real-Time Fluid Simulation using Discrete Sine/Cosine Transforms (unconditionally stable)
+* Screen Space Meshes (http://www.matthiasmueller.info/publications/screenSpaceMeshes.pdf)
 
 
 Phrases in need of being indexed
@@ -121,6 +130,7 @@ Topict to check up
 Miscellaneous todo's
 ====================
 
+* Fix TODO's in LaTeX code
 * Find out what UPWIND stands for
 * Mention that not al children of an octree parent cell have to exist (cross refer from the chapter Octrees to image in appendix)
 * Include plots

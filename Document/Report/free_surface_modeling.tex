@@ -1,31 +1,24 @@
 \chapter{Free Surface Modelling (FSM)}
 
-A fluid flow with a free surface in the form of a \idxs{sharp}{interface} between two \idxs{immiscible}{fluids}, such as the flow of \water and \air, is called a \idxs{two-phase}{flow}. When simulating a two-phase flow, one of the most challenging things is to represent the surface in a satisfying way. There are several ways to model the surface, all with their respective strengths and weaknesses.
+A fluid flow with a free surface in the form of a \idxs{sharp}{interface} between two \idxs{immiscible}{fluids}, such as the flow of \water and \air, is called a \idxs{two-phase}{flow}. When simulating a two-phase flow, one of the most challenging things is to represent the surface in a satisfactory way. There are several ways to model the surface, all with their respective strengths and weaknesses, of which a few of the most common are mentioned in this \levelname.
 
-In \thisprojectwork, a method called the volume of fluid method has been used, together with a variant of an advection scheme called HYPER-C. These and a few other methods for modelling the free surface will be covered briefly in this \levelname.
+In \thisprojectwork, a method known as the \VOF method has been used, together with a variant of an \idxs{advection}{scheme} called \idxse{Hyper-C}{advecion scheme}{Hyper-C}. The \VOF method and a few other methods for modelling the free surface will be covered briefly in this \levelname.
 
+%\textit{\href{http://physbam.stanford.edu/~fedkiw/papers/stanford2002-07.pdf}{Robust Treatment of Interfaces for Fluid Flows and Computer Graphics}}
 
-\HRule
-
-There are both surface trackibng methods and surface capturing methods.
-
-See also \textit{\href{http://physbam.stanford.edu/~fedkiw/papers/cam1998-17.pdf}{A Non-Oscillatory Eulerian Approach to Interfaces in Multimaterial Flows (The Ghost Fluid Method)}}
-
-and \textit{\href{http://physbam.stanford.edu/~fedkiw/papers/stanford2002-07.pdf}{Robust Treatment of Interfaces for Fluid Flows and Computer Graphics}}
-
-\begin{itemize}
-    \item Lecture: \textit{\href{http://www.ims.nus.edu.sg/Programs/fluiddynamic/files/Lecture1-basics.pdf}{Moving Interface Problems: Methods \& Applications Tutorial Lecture I}}
-\end{itemize}
+%Lecture: \textit{\href{http://www.ims.nus.edu.sg/Programs/fluiddynamic/files/Lecture1-basics.pdf}{Moving Interface Problems: Methods \& Applications Tutorial Lecture I}}
 
 \section{Mesh based surface tracking methods}
 
-\begin{itemize}
-    \item See e.g.\ \textit{\href{http://www.cc.gatech.edu/~turk/my_papers/thin_fluid_features.pdf}{Physics-Inspired Topology Changes for Thin Fluid Features}}
-\end{itemize}
+In \idxsp{mesh based surface tracking}{method}{s}\index{surface tracking method!mesh based|see{mesh based surface tracking method}}\index{tracking method!surface!mesh based|see{mesh based surface tracking method}}, the surface is modelled as a grid that moves along with the flow through \idxs{Lagrangian}{advection}.
+
+These methods results in a very precise way of representing the surface. Besides, \idxs{adapive}{mesh refinement}\index{refinement!mesh!adaptive|see{adaptive mesh refinement}} can be used to adjust the \idxs{level of}{detail} as needed, to provide a higher resolution for regions closer to the \camera or regions with more \turbulence, although as a rule of thumb, the size of the grid that modelles the surface should be of the same order of magnitude of the grid the fluids are represented on in the visible regions.
+
+On the other hand, the constantly require remeshing, just like most methods involving meshes that are exposed to Largangian advection. Besides, it needs some way to determine when the mesh should splitt, som way to detect mesh intersections, as well as some way to sew the different parts of the mesh together after they have intersected, as described in \citep{Wojtan2009}.
 
 \section{Level Set method}
 
-One of the most common ways to track interfaces between two immiscible fluids is the \LS method, which is first presented in \citep{Osher1988}. In the \LS method, a \idxs{signed distance}{function}\indexs{signed}{distance function}, also knows as \idxs{level set}{function}, $\phi$ is used to keep track of the distance to the surface. The absolute value of $\phi$ represents the distance to the interface, whereas the sign of $\phi$ designates the \phase. If the two phases are air and water, $\phi \leq 0$ usually designates water and $\phi > 0$ designates air, so that $\phi$ can be interpreted as the "height" when the system is in its \equilibrium position. The surface is then defined as the \isosurface, or \idxs{level}{set}, where $\phi = 0$, that is, as
+The \LS method, first presented in \citep{Osher1988}, is a general method for tracking interfaces and shapes and is one of the most common ways to track interfaces between two immiscible fluids. In the \LS method, a \idxs{signed distance}{function}\indexs{signed}{distance function}, also knows as \idxs{level set}{function}, $\phi$ is used to keep track of the distance to the surface. The absolute value of $\phi$ represents the distance to the interface, whereas the sign of $\phi$ designates the \phase. If the two phases are air and water, $\phi \leq 0$ usually designates water and $\phi > 0$ designates air, so that $\phi$ can be interpreted as the "height" when the system is in its \equilibrium position. The surface is then defined as the \isosurface, or \idxs{level}{set}, where $\phi = 0$, that is, as
 
 \begin{equation} \label{eq:level_set}
 L_c(\phi) \,=\, \{\vec{r} \,\mid\, \phi(\vec{r})=c\}
@@ -39,7 +32,7 @@ In each \idxs{time}{step}, $\phi$ is transported according to the equation
 \frac{\partial\phi}{\partial t} + \vec{u}\cdot\nabla\phi \,=\, 0.
 \end{equation}
 
-One of the greatest strengths with this method, besides from being simplie, is its handiness when it comes to \idx{post-processing}. It is fairly easy to visualize an \isosurface of a field that is \discretized into the \nodes of \idxsp{cell}{corner}{s}, and for that reason the \LS method is often used in \FVM simulations when it is mportant that a realistic image of the flow can be \rendered, as in \citep{Losasso2004,Chentanez2011}. The \idxs{marching}{cubes}\index{algorithm!marching cubes|see{marching cubes}} algorithm, first presented in \citep{Lorensen1987}, is used to create triangle models of isosurfaces from a scalar field in a very straightforward manner, by marching through a set of adjacent cubes covering the \idxs{rendering}{domain}, and by looking at the value of the function in the \idxe{cell corner}{corners} of the cubes. In \citep{Sethian1995}, a class of fast marching methods related to the \LS method was developed.
+One of the greatest strengths with this method, besides from being simplie, is its handiness when it comes to \idx{post-processing}. It is fairly easy to visualize an \isosurface of a field that is \discretized into the \nodes of \idxsp{cell}{corner}{s}, and for that reason the \LS method has become very popular in \FVM simulations where the possibility to quickly \render a realistic image of the surface is vital, as in \citep{Losasso2004,Chentanez2011}. The \idxs{marching}{cubes}\index{algorithm!marching cubes|see{marching cubes}} algorithm, first presented in \citep{Lorensen1987}, is used to create triangle models of isosurfaces from a scalar field in a very straightforward manner, by marching through a set of adjacent cubes covering the \idxs{rendering}{domain}, and by looking at the value of the function in the \idxe{cell corner}{corners} of the cubes. In \citep{Sethian1995}, a class of fast marching methods related to the \LS method was developed.
 
 When $\phi$ has become discretized, \eqref{eq:level_set} cannot be used directly to define the interface since it is not known exactly where the isosurface defined by $\phi = 0$ is located. However, the marching cubes algorithm produces a good approximation from the data that is available for where the interface is located. It has therefore, together with the \LS method, been used in numerous works that uses the \FVM, in order to visualize free surfaces, e.g.\ in \citep{Losasso2004}.
 
@@ -75,19 +68,18 @@ Note that this definition of the interface will not result in a surface, but in 
 
 In contrast to the \LS method, for which it is almost given that the interface is going to be constructed from the discretized signed distance function by using the marching cubes algorithm, it is when using the \VOF method a non-trivial task to construct the interface from $\alpha$; in many cases, however, it is not necessary. Also, as concluded in \citep{Wojtan2009}, \VOF methods are not often used in computer graphics applications due to \idxse{flotsam}{artifact}{flotsam} and \idxse{jetsam}{artifact}{jetsam artifacts}. However, there do exist various methods for constructing an interface from $\alpha$, of which most are used mainly for the advection of $\alpha$ in order to keep the interface sharp, and are not very useful when visualizing the surface.
 
-\begin{itemize}
-    \item Comparsion: \textit{\href{http://capfluidicslit.mme.pdx.edu/reference/Numerics/Gopala_ChemEngJ2008_VOFMethodsFreeSurfaceFlow.pdf}{Volume of fluid methods for immiscible-fluid and free-surface flows}}
-\end{itemize}
+%\begin{itemize}
+%    \item Comparsion: \textit{\href{http://capfluidicslit.mme.pdx.edu/reference/Numerics/Gopala_ChemEngJ2008_VOFMethodsFreeSurfaceFlow.pdf}{Volume of fluid methods for immiscible-fluid and free-surface flows}}
+%\end{itemize}
 
-\subsection{VOF vs. Pseudo VOF}
+%\subsection{VOF vs. Pseudo VOF}
 
-\begin{itemize}
-    \item Explanation: \textit{\href{http://www.flow3d.com/cfd-101/cfd-101-VOF.html}{VOF (Volume of Fluid) - What's in a Name?}}
-\end{itemize}
+%\begin{itemize}
+%    \item Explanation: \textit{\href{http://www.flow3d.com/cfd-101/cfd-101-VOF.html}{VOF (Volume of Fluid) - What's in a Name?}}
+%\end{itemize}
 
-\subsection{Interface reconstruction}
-%\section{Internal alpha distribution}
+%\subsection{Interface reconstruction}
 
 \section{Coupled Level Set/Volume of Fluid method}
 
-The \LS method has problems to conserve the mass, and the \VOF method has difficulties with keeping the interface sharp without the use of advanced \idxsp{advection}{scheme}{s}, as well as being inconvenient when \visualizing the surface. Therefore, hybrid methods called \CLSVOF methods have been developed, which aim to combine the strengths of both the \LS and the \VOF method and overcome their weaknesses. The \CLSVOF method was first developed in \citep{Puckett1998} and would in the follow-up article \citep{Sussman2000} be notet to generally be superior to either the \LS or the \VOF method alone.
+The \LS method has problems to conserve the mass, and the \VOF method has difficulties with keeping the interface sharp without the use of advanced \idxsp{advection}{scheme}{s}, as well as being inconvenient when \visualizing the surface. Therefore, hybrid methods called \CLSVOF methods have been developed, which aim to combine the strengths of both the \LS and the \VOF method and overcome their weaknesses by using both a \idxs{phase}{fraction} field and a \idxs{signed distance}{function}. The \CLSVOF method was first developed in \citep{Puckett1998} and would in the follow-up article \citep{Sussman2000} be notet to generally be superior to either the \LS or the \VOF method alone.

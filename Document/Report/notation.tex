@@ -33,6 +33,7 @@
     %zeta
     %eta
     $\eta$              & The free surface elevation \\
+    $\eta_i$            & The band-pass filtered free surface elevation belining to the $i$th grid \\
     %theta
     $\theta$            & The angle between the $\vec{x}$ and $\vec{\xi}$ vectors \\
     %iota
@@ -100,14 +101,15 @@
     $g$                 & The gravitational acceleration \\
     $h$                 & The water depth \\
     $h_e$               & Effective water depth \\
-    $i$                 & An index; the imaginary unit \\
+    $i$                 & A index; the imaginary unit \\
     $i_j$               & An index that is either 0 or 1 and corresponds to the position of the
                           child cell relative to the parent cell along $\normvec{e}_j$ \\
     $I(\alpha)$         & The interface using the discretized phase fraction \\
     $I^*(\alpha^*)$     & The interface using the non-discretized phase fraction \\
     $j$                 & An index \\
     $J_0$               & The zeroth order Bessel function of the first kind \\
-    $k$                 & The wave number of one wave component; an index \\
+    $k$                 & The wave number of one wave component; an index;
+                          the number of the iterations carried out \\
     $\vec{k}$           & The wave vector of one wave component \\
     $\vop{k}$           & A vector operator \\
     $\sop{k^2}$         & A scalar operator \\
@@ -120,7 +122,8 @@
     $n$                 & The number of time steps taken \\
     $\normal$           & The normal of $\opd S$ \\
     $\normal_i$         & The normal of $S_i$ \\
-    $N$                 & The number of surface grid points; the size of a square matrix \\
+    $N$                 & The number of surface grid points; the number of particles;
+                          the number of unknowns \\
     $N_{\text{s}}$      & The total number of cells visible on the surface \\
     $N_{\text{s},i}$    & The number of cells visible on the surface belonging to LOD layer $i$ \\
     $N_{\text{t}}$      & The total number of cells used in the simulation \\
