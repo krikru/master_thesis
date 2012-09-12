@@ -6,7 +6,7 @@
 
 /* Standard includes */
 #include <iostream>
-#include <windows.h>
+//#include <windows.h>
 #include <typeinfo>
 
 /* Own includes */
@@ -16,19 +16,24 @@
 // PUBLIC METHODS
 ////////////////////////////////////////////////////////////////
 
-void message_handler::display_message_box(std::string message, std::string caption, UINT message_type)
+void message_handler::display_message_box(std::string message, std::string caption, QMessageBox::Icon icon)
 {
-    MessageBoxA(0, message.c_str(), caption.c_str(), message_type);
+    QMessageBox mbox;
+    mbox.setText(QString::fromStdString(message));
+    mbox.setWindowTitle(QString::fromStdString(caption));
+    mbox.setIcon(icon);
+    mbox.exec();
+    //MessageBoxA(0, message.c_str(), caption.c_str(), message_type);
 }
 
 void message_handler::display_warning(std::string message, std::string caption)
 {
-    display_message_box(message, caption, MB_ICONWARNING);
+    display_message_box(message, caption, QMessageBox::Warning);
 }
 
 void message_handler::display_error_message(std::string message, std::string caption)
 {
-    display_message_box(message, caption, MB_ICONERROR);
+    display_message_box(message, caption, QMessageBox::Critical);
 }
 
 void message_handler::inform_about_exception(std::string caller, std::exception &error, bool terminate)
@@ -41,3 +46,4 @@ void message_handler::inform_about_exception(std::string caller, std::exception 
 #endif
     if (terminate) exit(1);
 }
+

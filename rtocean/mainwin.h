@@ -33,6 +33,7 @@ public:
 private slots:
     // Overload the close event slot
     void closeEvent(QCloseEvent *event);
+    // Overload the key press event slot
     void keyPressEvent(QKeyEvent *e);
 
     void start_simulation();
