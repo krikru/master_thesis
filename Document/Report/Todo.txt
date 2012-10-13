@@ -81,7 +81,9 @@ May be important
 Not very important
 ------------------
 
-Change transported to advected?
+* Is BFECC the MacCormack method?
+* Mention ways to calculate a_h
+* Change transported to advected?
 * Hoctrees
 * No random access to neighbor connections or neighbor cells (in the section about neighbor connections, specifically about neighbor lists)
 * Marching cubes

@@ -21,9 +21,9 @@ In \appref{chap:pde_derivation}, a set of new two-dimensional \PDEs intended for
 \subsection{Fourier Synthesis}
 %\subsection{Spectral methods}
 
-These methods, which were first presented in \citep{Mastin1987}, build on \idxsp{Fourier}{transform}{ing} a representation of the surface in the frequency domain and have, according to \citep{Monnier}, been extensively used and described in the world of computer graphics. This method operates in the \idxs{frequency}{domain}, and uses \FFT, which here is the most time consuming process, to calculate the free surface elevation. It is characterized by high speed and doesn't (in contrast to other commonly used two-dimensional \PDEs) have any problem with \idxs{wave}{dispersion}.
+This method, which w first presented in \citep{Mastin1987}, build on \idxsp{Fourier}{transform}{ing} a representation of the surface in the frequency domain and has, according to \citep{Monnier}, been extensively used and described in the world of computer graphics. This method operates in the \idxs{frequency}{domain}, and uses \FFT, which here is the most time consuming process, to calculate the free surface elevation. It is characterized by high speed and doesn't (in contrast to commonly used two-dimensional \PDEs) have any problem with \idxs{wave}{dispersion}.
 
-However, this method is often noted for the difficulties it has with \FSI, and is apparently more cumbersome than other two-dimensional methods when this point is central. Besides, it requires a constant water depth, and hence cannot simulate \idxs{wave}{shoaling}. This issue becomes noticable when animating the surface water close to the \idxs{shore}{line}, where the water is shallow and waves naturally behave differently than what they do on deep water.
+However, this method has been noted to be incompatible with \FSI, as in \citep{}. Besides, it requires a constant water depth, and hence cannot simulate \idxs{wave}{shoaling}. This issue becomes noticable when animating the surface water close to the \idxs{shore}{line}, where the water is shallow and waves naturally behave differently than what they do on deep water.
 
 This method ensures the time complexity $O(N\,\log(N))$ per time step for trivial grid setups, where $N$ is the number of \idxs{surface}{grid points}.
 
