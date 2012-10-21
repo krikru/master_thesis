@@ -1,0 +1,130 @@
+\chapter{Improvements}
+
+There are a lot of improvements that can be done on the method that was implemented in \thisprojectwork, many of them which are necessary  to make the method be practically useful in a real-time flight simulator.
+
+%\section{Adapdive Meshing}
+\section{Adapdive Grid Refinement}
+
+LODs that adapt to the camera placement and the Field of View (FOV)/Viewing frustum in order to limit the number of cells needed in the FVM
+
+View dependent adaptive grid refinement
+
+\section{Fluid--Structure Interactin}
+
+see e.g.:
+
+\begin{itemize}
+    \item \textit{\href{http://physbam.stanford.edu/~fedkiw/papers/stanford2010-04.pdf}{Numerically Stable Fluid-Structure Interactions Between Compressible Flow and Solid Structures}}
+    \item \textit{\href{http://efdl.as.ntu.edu.tw/research/papers/JCP03GCIBM.pdf}{A ghost-cell immersed boundary method for flow in complex geometry}}
+    \item \textit{\href{http://www.cs.columbia.edu/~batty/papers/Batty07.pdf}{A Fast Variational Framework for Accurate Solid-Fluid Coupling}} (solid fraction, non-stick to walls)
+\end{itemize}
+
+\subsection{Immersed Boundary Method}
+
+\begin{itemize}
+    \item Reference: \textit{\href{http://www4.ncsu.edu/~zhilin/TEACHING/MA798Z/Peskin1.pdf}{The immersed boundary method}}
+    \item For compressible flow: \textit{\href{http://www.cecs.wright.edu/~haibo.dong/wp-content/themes/publications/IBM_JCP_2007.pdf}{A sharp interface immersed boundary method for compressible viscous flows}}
+\end{itemize}
+
+\subsection{Volume of Solid Method (VOS)}
+
+\begin{itemize}
+    \item Reference: \textit{The simulation of fluid-rigid body interaction}
+    \item Described in \textit{Numerical Modeling of Deforming Bubble Transport Related to Cavitating Hydraulic Turbines}
+\end{itemize}
+
+\subsection{Rigid Fluid method}
+
+\begin{itemize}
+    \item Reference: \textit{\href{http://www.amath.unc.edu/Faculty/mucha/Reprints/siggraph04.pdf}{Rigid Fluid: Animating the Interplay Between Rigid Bodies and Fluid}}
+\end{itemize}
+
+\subsection{Rotation of rigid bodies}
+
+See \textit{\href{http://en.wikipedia.org/wiki/Euler\%27s_equations_\%28rigid_body_dynamics\%29}{Euler's equations (rigid body dynamics)}}
+
+\section{Parallellization}
+
+See e.g. \textit{\href{http://gfs.sourceforge.net/papers/agbaglah2011.pdf}{Parallel simulation of multiphase flows using octree adaptivity and the volume-of-fluid method}}
+
+\subsection{Space filling curves}
+
+See e.g. \textit{\href{http://j.teresco.org/research/publications/octpart02/octpart02.pdf}{Dynamic Octree Load Balancing Using Space-Filling Curves}}
+
+and \textit{\href{http://downloads.isrn.com/journals/appmath/2012/246491.pdf}{Parallel Adaptive Mesh Refinement Combined with Additive Multigrid for the Efficient Solution of the Poisson Equation}}
+
+\section{Unconditionaly Stable Flows}
+
+\textit{\href{http://www.dgp.toronto.edu/people/stam/reality/Research/pdf/ns.pdf}{Stable Fluids}} (is it simple to implement with te \VOF method and is it still mass conservative after that?)
+
+\SIMPLE (although not completely implicit (?))
+
+Use implicit time-stepping
+
+Switch from explicit to implicit methods + use semi-Lagrangian advection to allow arbitrarily large time steps
+
+\section{Visualization}
+
+\subsection{Marching Cubes}
+
+\subsection{Surface shininess}
+
+Shading/reflection (increased reflection spreading for increased height = shininess as a function of the part of the spectrum that contains the supressed high-frequency waves)
+
+%\section{Local-time stepping}
+
+%Very dubious technique as you can make the method allow large time steps. (see below)
+
+\section{Perfectly matched layers}
+
+Avoiding spurious reflections at LOD transitions (Absorbing boundary conditions, Perfectly Matched Layers)
+
+See e.g. \textit{\href{http://liu.diva-portal.org/smash/get/diva2:359805/FULLTEXT01}{Memory Efficient Methods for Eulerian Free Surface Fluid Animation}}, which explains explicit dampening, implicit dampening, and wave absorbing boundaries -- the perfectly matched layer approach, and evaluates methods.
+
+\section{Wind waves}
+
+\subsection{Spectral methods}
+
+See \textit{\href{http://graphics.ucsd.edu/courses/rendering/2005/jdewall/tessendorf.pdf}{Simulating Ocean Water}} for a modified Phillis spectrum (increased directional dependence)
+
+\subsection{Air-water interaction}
+
+\section{Visual effects}
+
+\subsection{Splash and foam}
+
+(See \textit{\href{http://en.wikipedia.org/wiki/Sea_foam}{Wikipedia -- Sea foam}} or search for \textit{protein skimming} or \textit{foam fractionation})
+
+Implemented in \textit{\href{http://nguyendangbinh.org/Proceedings/Eurographics/2003/cgf/volume22/issue3/paper127/paper127.pdf}{Realistic Animation of Fluid with Splash and Foam}}
+
+which references \textit{\href{http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.4.6262&rep=rep1&type=pdf}{Rendering Natura lWaters}}
+
+which in turn is based on work presented in the book \textit{\href{http://books.google.se/books?id=xuwFz1bPTHgC}{Oceanic Whitecaps: Their Role in Air-Sea Exchange Processes}} by E. C. Monahan and G. MacNiocaill.
+
+See also \textit{\href{http://www.ias.ac.in/jess/sep2002/Ps18.pdf}{Oceanic whitecaps: Sea surface features detectable via satellite that are indicators of the magnitude of the air-sea gas transfer coefficient}} (also by  E. C. Monahan)
+
+See also \textit{\href{http://cg.informatik.uni-freiburg.de/publications/2012_CGI_sprayFoamBubbles.pdf}{Unified Spray, Foam and Bubbles for Particle-Based Fluids}}
+
+\subsection{Choppy waves}
+
+horizontal offset
+
+See \textit{\href{http://graphics.ucsd.edu/courses/rendering/2005/jdewall/tessendorf.pdf}{Simulating Ocean Water}}
+
+\subsection{Turbulence}
+
+See \textit{\href{http://publications.dice.se/attachments/water\%20interaction\%20ottosson_bjorn.pdf}{Real-time Interactive Water Waves}} (2.1.3) for a discussion of why that is important.
+
+\section{Sharpening of various advected fields}
+
+\subsection{Backward Error Compensation and Forward Error Correction}
+
+\begin{itemize}
+    \item Reference: \textit{\href{http://smartech.gatech.edu/xmlui/bitstream/handle/1853/29473/2002-389.pdf}{Back and forth error compensation and correction methods for removing errors induced by uneven gradients of the level set function}}
+    \item Applied to the velocity field and images: \textit{\href{http://www.gvu.gatech.edu/~jarek/papers/FlowFixer.pdf}{FlowFixer: Using BFECC for Fluid Simulation}}
+\end{itemize}
+
+\section{Various optimizations}
+
+* Pure code optimizations
+* Local time stepping (dibious improvement)

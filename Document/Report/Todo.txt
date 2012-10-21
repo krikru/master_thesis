@@ -13,6 +13,7 @@ Needs finishing:
 * Results
 * Advection schemes
 (* Octrees)
+(* Laplacian pyramid)
 
 * Check picture permisions (even pictures in the public domain that cannot be copyrighted may require that credit is given to the creator or the photographer)
 
@@ -81,7 +82,9 @@ May be important
 Not very important
 ------------------
 
-Change transported to advected?
+* Is BFECC the MacCormack method?
+* Mention ways to calculate a_h
+* Change transported to advected?
 * Hoctrees
 * No random access to neighbor connections or neighbor cells (in the section about neighbor connections, specifically about neighbor lists)
 * Marching cubes
