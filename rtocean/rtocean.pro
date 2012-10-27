@@ -49,8 +49,8 @@ HEADERS  += mainwin.h \
 
 FORMS    += mainwin.ui
 
-LIBS += -L"C:/Program1/cygwin/usr/local/lib"
+#LIBS += -L"C:/Program1/cygwin/usr/local/lib"
 
-LIBS += -lglut
+#LIBS += -lglut
 
-INCLUDEPATH += "C:/Program1/cygwin/usr/local/include"
+#INCLUDEPATH += "C:/Program1/cygwin/usr/local/include"
