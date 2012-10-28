@@ -48,9 +48,3 @@ HEADERS  += mainwin.h \
     physics.h
 
 FORMS    += mainwin.ui
-
-#LIBS += -L"C:/Program1/cygwin/usr/local/lib"
-
-#LIBS += -lglut
-
-#INCLUDEPATH += "C:/Program1/cygwin/usr/local/include"
