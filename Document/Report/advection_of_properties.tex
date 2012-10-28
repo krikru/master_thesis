@@ -1,6 +1,6 @@
 \chapter{Advection of properties}
 
-The choise of \idxs{advection}{scheme} depends entirely on the type of filed that is being exposed to advection and the necessary requirements that field puts on the advection scheme.
+The choice of \idxs{advection}{scheme} depends entirely on the type of filed that is being exposed to advection and the necessary requirements that field puts on the advection scheme.
 
 \section{Advection of smooth fields}
 
@@ -8,7 +8,7 @@ For a field with smooth changes and no sharp edges, the type of advection scheme
 
 \subsection{Stability of linear advection schemes}
 
-Stable advection schemes have the property that they don't amplify any frequency of the field. Unstability is often characterized by escalating oscillations, usually in the frequencies close to the Nyquist frequency. Put simply, a linear advection scheme becomes unstable when an eigenvalue $\lambda_i$ of any of the \eigenfunctions in the field has an absolute value greater than one, i.e.\ $|\lambda_i| > 1$, where $\lambda_i$ is the eigenvalue of the $i$th \eigenfunction.
+Stable advection schemes have the property that they don't amplify any frequency of the field. Instability is often characterized by escalating oscillations, usually in the frequencies close to the Nyquist frequency. Put simply, a linear advection scheme becomes unstable when an eigenvalue $\lambda_i$ of any of the \eigenfunctions in the field has an absolute value greater than one, i.e.\ $|\lambda_i| > 1$, where $\lambda_i$ is the eigenvalue of the $i$th \eigenfunction.
 
 \subsection{Smearing caused by linear advection schemes}
 
@@ -16,7 +16,7 @@ It is also often desired that the advection scheme damps the frequencies of the 
 
 \subsection{Error reduction for linear advection schemes}
 
-A method that was originally intended to improve the quality of the \LS method, knows as \BFECC, can be used to recude the error of a non-ideal, linear operator $A$ acting on a smooth field $\Phi$ (or a vector or any other object that it makes sence to use a linear operator on), which is an \approximation of an ideal (at least theoretically existing) operator $A^*$ which is both stable and doesn't introduce damping. Let's assume that our goal is to improve the operator $A$ in such a way that the damping is reduced. \BFECC works under the circumstances that $A$ has a corresponding operator $A'$ which is an \approximation of $(A^*)^{-1}$ and has an equally damping effect on the frequencies in the field as $A$ has, or more specifically, $A'$ has the same \eigenfunctions as $A$ and
+A method that was originally intended to improve the quality of the \LS method, knows as \BFECC, can be used to reduce the error of a non-ideal, linear operator $A$ acting on a smooth field $\Phi$ (or a vector or any other object on which it makes sense to apply a linear operator), which is an \approximation of an ideal (at least theoretically existing) operator $A^*$ which is both stable and doesn't introduce damping. Let's assume that our goal is to improve the operator $A$ in such a way that the damping is reduced. \BFECC works under the circumstances that $A$ has a corresponding operator $A'$ which is an \approximation of $(A^*)^{-1}$ and has an equally damping effect on the frequencies in the field as $A$ has, or more specifically, $A'$ has the same \eigenfunctions as $A$ and
 
 \begin{equation}
 \lambda'_i \,=\, \overline{\lambda_i}, \,\forall\,i,
@@ -72,7 +72,7 @@ The damping introduced by $\tilde{A}$ is given by $\tilde{h} = 1 - |\tilde{\lamb
 \tilde{h} \,=\, 1 - |\tilde{\lambda}| \,=\, 1 - \frac{|\lambda|}{|\lambda|}\left|1 - \displaystyle\frac{3\,h^2 - 1\,h^3}{2}\right| \,=\, \displaystyle\frac{3\,h^2 - 1\,h^3}{2} \,=\, O(h^2),
 \end{equation}
 
-and we see that the damping introduced by $\tilde{A}$ is of second order if we consider the damping introduced by $A$ to be of first order. We can also notice that if $A$ is unstable, which means that $h < 0$ (although still very small), $\tilde{h}$ will still be positive, which means that $\tilde{A}$ is stable. \BFECC will therefore both heavily reduce damping as well as fix small instabiliies in $A$.
+and we see that the damping introduced by $\tilde{A}$ is of second order if we consider the damping introduced by $A$ to be of first order. We can also notice that if $A$ is unstable, which means that $h < 0$ (although still very small), $\tilde{h}$ will still be positive, which means that $\tilde{A}$ is stable. \BFECC will therefore both heavily reduce damping as well as fix small instabilities in $A$.
 
 Similar schemes of even higher order can be obtained by extending the \polynomial that $\tilde{A}$ is partially composed of with even more terms of type $(A'A)^n$. Since we desire that $\tilde{\lambda} = \lambda/|\lambda|$, we require that the polynomial will result in a division with $|\lambda|$ when acting on $\phi$. This result is \approximated if we let the polynomial be an approximation of $1/\sqrt{A'A}$. The polynomial can therefore be expressed as a \idxs{Taylor}{polynomial} of $1/\sqrt{A'A}$ centered around the point $A'A = 1$. The Taylor polynomial in turn is given by the first terms of the \idxs{binomial}{series} of $(1+x)^{-\frac{1}{2}}$, where $x = A'A - 1$. All these schemes will be stable as long as $A$ is stable, and all schemes with even order will also stabilize the advection process if $A$ contains instabilities that are small enough.
 
@@ -80,23 +80,23 @@ Another approach to increase the order of the advection scheme is to apply \BFEC
 
 \section{Advection of the phase fraction}
 
-In contrast to smooth fields, the phase fraction field $\alpha$ is supposed to be either 0 or 1 and have just a very thin regions in which the transtion between 0 and 1 takes place, i.e. regions in which $0 < \alpha < 1$. When advecting this field, three things are important:
+In contrast to smooth fields, the phase fraction field $\alpha$ is supposed to be either 0 or 1 and have just a very thin regions in which the transition between 0 and 1 takes place, i.e. regions in which $0 < \alpha < 1$. When advecting this field, three things are important:
 
 \begin{enumerate}
-\item That the mass is conserved, which corresponds to the conservatuion of $\alpha$,
+\item That the mass is conserved, which corresponds to the conservation of $\alpha$,
 \item That the field stays bound between 0 and 1, and
 \item That the interface stays sharp and doesn't become thicker and thicker.
 \end{enumerate}
 
 \subsection{Geometric advection schemes}
 
-\idxse{geometric}{advection scheme}{Geometric advection schemes} work by constructing a geometry for the surface by converting the discretized \idxs{phase fraction}{field} to a non-discretized phase fraction field, and by using the continuous field to calculate the fluxes between each ajacent pair of cells.
+\idxse{geometric}{advection scheme}{Geometric advection schemes} work by constructing a geometry for the surface by converting the discretized \idxs{phase fraction}{field} to a non-discretized phase fraction field, and by using the continuous field to calculate the fluxes between each adjacent pair of cells.
 
 \PLIC is one of the most well known geometric advection schemes and one of the advection schemes that introduces the least error. However, it comes at the cost of algorithmic complexity, especially in three-dimensional situations, where the tracking and reconstruction of free surfaces remains complex, as noted in \citep{Ingram2009}.
 
 Tracking of the free surface tends to be somewhat complex when using a geometric advection scheme, as a naive approach will lead to that the volume in the corners are fluxed twice in the two-dimensional case. This easily leads to unboundedness as a larger volume of one phase may be fluxed from one cell than what is currently in the cell, and therefore special concern has to be taken to the corner volumes in order to flux every part of them exactly once, as demonstrated in \citep{Rider1998}. In the three-dimensional case this becomes even more complex, as the corner volumes now are fluxed to three cells, and the edge volumes, excluding the corner volumes, to two cells.
 
-An alternative approach that avoids the complexity mentioned above is presented in \citep{Aulisa2003}, where the phase fraction field is fluxed first in the x-direction and then in the y-direction, thus only requiering each part of the cell that is being fluxed to only be fluxed to one cell at a time. However, this method is non-symmetric, as a different result would be obtained if the phase fraction field would be fluxed first in the y-direction and then in the x-direction, meaning that the order of the dimensions in which the field is fluxed in is changed; this is a fact that is discussed further in \citep{Ubbink1999} although this time for the \idxs{algebraic}{advection scheme} \idx{CICSAM}.
+An alternative approach that avoids the complexity mentioned above is presented in \citep{Aulisa2003}, where the phase fraction field is fluxed first in the x-direction and then in the y-direction, thus only requiring each part of the cell that is being fluxed to only be fluxed to one cell at a time. However, this method is non-symmetric, as a different result would be obtained if the phase fraction field would be fluxed first in the y-direction and then in the x-direction, meaning that the order of the dimensions in which the field is fluxed in is changed; this is a fact that is discussed further in \citep{Ubbink1999} although this time for the \idxs{algebraic}{advection scheme} \idx{CICSAM}.
 
 \subsection{Algebraic advection schemes}
 
@@ -106,11 +106,11 @@ As opposed to geometric advection schemes, a geometric representation of the sur
 
 %A \LUDS, like the \UPWIND scheme, the \CD scheme or the \QUICK scheme, tends to increase the region of the interface. A simple \UPWIND scheme will \idxs{low-pass}{filter} the field that is transported, eventually removing all sharp features present in the field.
 
-%Other \LUDSs, like the \CD or \QUICK schemes, will presenve sharp features, but they are on the other hand affected by \idxs{frequency}{dispersion}, thry are \unbounded (there is no limit for how large the field that is being transported can become), and they may even be unstable, especially for large \idxp{time step}{s}.
+%Other \LUDSs, like the \CD or \QUICK schemes, will preserve sharp features, but they are on the other hand affected by \idxs{frequency}{dispersion}, they are \unbounded (there is no limit for how large the field that is being transported can become), and they may even be unstable, especially for large \idxp{time step}{s}.
 
 \subsubsection{Stability}
 
-The \UPWIND scheme is both very simple to implement and unconditionally stable as long as the \CFL conditin is satisfied, and is therefore suitable to use when it is important that the energy of the field that is being transported stays bounded. 
+The \UPWIND scheme is both very simple to implement and unconditionally stable as long as the \CFL condition is satisfied, and is therefore suitable to use when it is important that the energy of the field that is being transported stays bounded. 
 
 \subsubsection{Convection Boundedness Criterion (CBC)}
 
