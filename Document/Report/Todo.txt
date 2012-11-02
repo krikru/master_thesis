@@ -15,6 +15,12 @@ Needs finishing:
 (* Octrees)
 (* Laplacian pyramid)
 
+* Add to nomeclature:
+    * <>     - ensemble average
+    * P_h    - wave spectrum
+    * eta(k) - Fourier transform of eta(r) for the wave vector k
+    * Misc. variables in the newly written sections
+
 * Include references:
     * PDE solved for correcting signed distance function: http://www.matthiasmueller.info/talks/SurfaceTrackingMM.pdf
     * Paper mentioning that Fourier synthesis cannot simulate FSI: http://developer.download.nvidia.com/GTC/SIGGRAPH_Asia_2011/PDF/WaterSim_Chentanez.pdf
