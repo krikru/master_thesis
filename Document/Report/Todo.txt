@@ -1,4 +1,4 @@
-
+﻿
 Sections left to write, after importance
 ========================================
 
@@ -14,6 +14,11 @@ Needs finishing:
 * Advection schemes
 (* Octrees)
 (* Laplacian pyramid)
+
+* Include references:
+    * PDE solved for correcting signed distance function: http://www.matthiasmueller.info/talks/SurfaceTrackingMM.pdf
+    * Paper mentioning that Fourier synthesis cannot simulate FSI: http://developer.download.nvidia.com/GTC/SIGGRAPH_Asia_2011/PDF/WaterSim_Chentanez.pdf
+    * Paper mentioning that Fourier synthesis can simulate FSI:
 
 * Check picture permisions (even pictures in the public domain that cannot be copyrighted may require that credit is given to the creator or the photographer)
 

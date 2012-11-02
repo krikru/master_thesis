@@ -43,6 +43,24 @@ see e.g.:
 
 See \textit{\href{http://en.wikipedia.org/wiki/Euler\%27s_equations_\%28rigid_body_dynamics\%29}{Euler's equations (rigid body dynamics)}}
 
+The six ship motions in the steadily translating system are defined by (see \textit{\href{http://www.shipmotions.nl/DUT/LectureNotes/OffshoreHydromechanics.pdf}{OFFSHORE HYDROMECHANICS}}, p.~18):
+
+Translation:
+
+\begin{itemize}
+    \item x-axes (back--front): Surge
+    \item y-axes (right--left): Sway
+    \item z-axes (bottom--top): Heave
+\end{itemize}
+
+Rotation:
+
+\begin{itemize}
+    \item x-axes (back--front): Roll
+    \item y-axes (right--left): Pitch
+    \item z-axes (bottom--top): Yaw
+\end{itemize}
+
 \section{Parallellization}
 
 See e.g. \textit{\href{http://gfs.sourceforge.net/papers/agbaglah2011.pdf}{Parallel simulation of multiphase flows using octree adaptivity and the volume-of-fluid method}}
@@ -53,7 +71,7 @@ See e.g. \textit{\href{http://j.teresco.org/research/publications/octpart02/octp
 
 and \textit{\href{http://downloads.isrn.com/journals/appmath/2012/246491.pdf}{Parallel Adaptive Mesh Refinement Combined with Additive Multigrid for the Efficient Solution of the Poisson Equation}}
 
-\section{Unconditionaly Stable Flows}
+\section{Unconditionally Stable Flows}
 
 \textit{\href{http://www.dgp.toronto.edu/people/stam/reality/Research/pdf/ns.pdf}{Stable Fluids}} (is it simple to implement with te \VOF method and is it still mass conservative after that?)
 
@@ -83,9 +101,25 @@ See e.g. \textit{\href{http://liu.diva-portal.org/smash/get/diva2:359805/FULLTEX
 
 \section{Wind waves}
 
+In order to get a realistic \idxs{sea}{state}\index{state of sea|see{sea state}}, it is desirable that the water surface interacts with the \wind in order to give rise to \idxsp{wind}{wave}{s}, so that the sea state is a reflection of the wind speed and direction.
+
 \subsection{Spectral methods}
 
+A very cheap and easy way to simulate wind waves is to use a \idxs{wave}{spectrum}
+
+\begin{equation} \label{eq:wave_spectrum}
+P_h(\vec{k}) = \left\langle \left|\fdfunc{\eta}(\vec{k})\right|^2 \right\rangle
+\end{equation}
+
+where $\fdfunc{\eta}(\vec{k})$ is the \idxs{Fourier}{transform} of the \idxs{free surface}{elevation} $\eta(\vec{r})$ for the wave vector $\vec{k}$, and from that spectrum create random sea states in the \idxs{frequency}{domain}. There are several 
+
 See \textit{\href{http://graphics.ucsd.edu/courses/rendering/2005/jdewall/tessendorf.pdf}{Simulating Ocean Water}} for a modified Phillis spectrum (increased directional dependence)
+
+\subsubsection{Choppy waves}
+
+horizontal offset
+
+See \textit{\href{http://graphics.ucsd.edu/courses/rendering/2005/jdewall/tessendorf.pdf}{Simulating Ocean Water}}
 
 \subsection{Air-water interaction}
 
@@ -93,23 +127,19 @@ See \textit{\href{http://graphics.ucsd.edu/courses/rendering/2005/jdewall/tessen
 
 \subsection{Splash and foam}
 
+In rough weather conditions, 
+
 (See \textit{\href{http://en.wikipedia.org/wiki/Sea_foam}{Wikipedia -- Sea foam}} or search for \textit{protein skimming} or \textit{foam fractionation})
 
 Implemented in \textit{\href{http://nguyendangbinh.org/Proceedings/Eurographics/2003/cgf/volume22/issue3/paper127/paper127.pdf}{Realistic Animation of Fluid with Splash and Foam}}
 
-which references \textit{\href{http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.4.6262&rep=rep1&type=pdf}{Rendering Natura lWaters}}
+which references \textit{\href{http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.4.6262&rep=rep1&type=pdf}{Rendering Natural Waters}}
 
 which in turn is based on work presented in the book \textit{\href{http://books.google.se/books?id=xuwFz1bPTHgC}{Oceanic Whitecaps: Their Role in Air-Sea Exchange Processes}} by E. C. Monahan and G. MacNiocaill.
 
 See also \textit{\href{http://www.ias.ac.in/jess/sep2002/Ps18.pdf}{Oceanic whitecaps: Sea surface features detectable via satellite that are indicators of the magnitude of the air-sea gas transfer coefficient}} (also by  E. C. Monahan)
 
 See also \textit{\href{http://cg.informatik.uni-freiburg.de/publications/2012_CGI_sprayFoamBubbles.pdf}{Unified Spray, Foam and Bubbles for Particle-Based Fluids}}
-
-\subsection{Choppy waves}
-
-horizontal offset
-
-See \textit{\href{http://graphics.ucsd.edu/courses/rendering/2005/jdewall/tessendorf.pdf}{Simulating Ocean Water}}
 
 \subsection{Turbulence}
 
