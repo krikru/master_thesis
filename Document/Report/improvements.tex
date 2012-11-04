@@ -69,7 +69,9 @@ Switch from explicit to implicit methods + use semi-Lagrangian advection to allo
 
 \subsection{Surface shininess}
 
-Shading/reflection (increased reflection spreading for increased height = shininess as a function of the part of the spectrum that contains the suppressed high-frequency waves)
+When \rendering \idxsp{ocean}{scene}{s}, it is not always possible to catch all the fine details in the surface. This is especially true if the \idxs{sea}{state} contains a lot of \energy in the part of the \idxs{wave}{spectrum} where the wavelength is shorter than the shortest \wavelength that can be rendered on the \idxs{computer}{screen} correctly without \folding. When this is the case, those wavelengths have to be removed from the original rendering of the scene in order to avoid getting \idxsp{Moiré}{pattern}{s} in the rendered image.
+
+%Shading/reflection (increased reflection spreading for increased height = shininess as a function of the part of the spectrum that contains the suppressed high-frequency waves)
 
 %\section{Local-time stepping}
 

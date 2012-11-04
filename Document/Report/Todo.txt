@@ -1,4 +1,4 @@
-
+﻿
 Sections left to write, after importance
 ========================================
 
@@ -66,6 +66,7 @@ Quite important
 * Explain in document AND add to abstract: A method for using CBC (Convective boundedness criterion) advection schemes for incompressible flows even for uncompressible flows. Motivation: Keep alpha = 1 on an exact level (discuss the different between alpha = 0 and alpha = 1 when it comes to keeping the level exact if alpha is treated as a conservative field (or extensive property), since the level alpha = 0 will be kept but not alpha = 1, the reason for this, and the modification that makes the level alpha = 1 behave as the level alpha = 0)
 * Alternative approaches: Using LS method or CLSVOF method instead, using existing software (either free or proprietary, see above), or using a completely different approach like spectral methods (spectral methods would probably be the best way for anyone doing the same thing as I do)
 * TikZ plots of simulation. These plots should show: Smearing of alpha; the effect of Hyper-C when it succeeds; vacuum created in the air region that freezes the simulation and eventually eats it up.
+* On modelling linear waves (extending second order PDE to forth order; including horizontal offeset PDE)
 
 May be important
 ----------------
