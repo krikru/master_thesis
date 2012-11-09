@@ -1,93 +1,64 @@
 \chapter{Improvements}
 
-There are a lot of improvements of the method that was implemented in \thisprojectwork that can be done, many of them which are necessary  to make the method be practically useful in a real-time flight simulator.
+There are a lot of improvements of the method that was implemented in \thisprojectwork that can be performed, many of them which are necessary  to make the method be practically useful in a real-time flight simulator.
 
-%\section{Adapdive Meshing}
-\section{Adaptive Grid Refinement}
+\section{Required improcements}
 
-LODs that adapt to the camera placement and the Field of View (FOV)/Viewing frustum in order to limit the number of cells needed in the FVM
+In this \levelname, some of the improvements that are required to make the method practically useful are presented.
 
-View dependent adaptive grid refinement
+\subsection{Adaptive Mesh Refinement}
 
-\section{Fluid--Structure Interaction}
+The \LOD needs to be adapted to the \idxs{camera}{placement} and the \FOV/\idxs{viewing}{frustum} as well as the water depth in order to greatly reduce the number of cells used by the \FVM in the simulation, in order to only use the minimum amount of cells that are actually needed. This is referred to as \AMR.
+	
+Without \AMR it would be impossible to simulate larges bodies of water and fine surface details real-time in the same scene, as these would require heaps of orders of magnitude more cells to still be able to simulate waves with the same short \wavelength as with \AMR.
 
-see e.g.:
+\subsection{Unconditionally stable flows}
 
-\begin{itemize}
-    \item \textit{\href{http://physbam.stanford.edu/~fedkiw/papers/stanford2010-04.pdf}{Numerically Stable Fluid-Structure Interactions Between Compressible Flow and Solid Structures}}
-    \item \textit{\href{http://efdl.as.ntu.edu.tw/research/papers/JCP03GCIBM.pdf}{A ghost-cell immersed boundary method for flow in complex geometry}}
-    \item \textit{\href{http://www.cs.columbia.edu/~batty/papers/Batty07.pdf}{A Fast Variational Framework for Accurate Solid-Fluid Coupling}} (solid fraction, non-stick to walls)
-\end{itemize}
+In order to make a \FVM simulation become practically useful for \idxsp{real-time}{simulation}{s}, it is required that the flow is \idxse{unconditionally stable}{flow}{unconditionally stable}\index{stable flow!unconditionally|see{unconditionally stable flows}}. This implies that it is necessary that arbitrarily large \timesteps can be taken without making the simulation unstable.
+	
+When it comes to physical quantities with a non-damped \oscillating behavior, simulations which use any kind of normal, \idxs{explicit}{time-stepping}\index{stepping!in time|see{time-stepping}} often tend to make them become unstable and create a \idxs{numerical}{explosion}.
 
-\subsection{Immersed Boundary Method}
+In \thisprojectwork, a kind of \idxs{leapfrog}{integration} has been used to model the time evolution of the velocity and the pressure, but even \idxs{leapfrog}{integration} becomes numerically unstable when the \period of the oscillations becomes too small in relation to the \timestep. To solve this problem, many methods \approximate the fluid or the fluids as \incompressible, whilst other use \idxse{implicit}{Euler integration}{backwards (or implicit) Euler integration}\index{integration!implicit Euler|see{implicit Euler integration}} (see 
+\secref{sec:pressure_calculation} for a more detailed discussion about this).
 
-\begin{itemize}
-    \item Reference: \textit{\href{http://www4.ncsu.edu/~zhilin/TEACHING/MA798Z/Peskin1.pdf}{The immersed boundary method}}
-    \item For compressible flow: \textit{\href{http://www.cecs.wright.edu/~haibo.dong/wp-content/themes/publications/IBM_JCP_2007.pdf}{A sharp interface immersed boundary method for compressible viscous flows}}
-\end{itemize}
+On the other hand, when it comes to advection, many advection schemes tend to become numerically unstable when the \idxs{Courant}{number} $C$ becomes too large (this normally means larger than one). Whilst most \idxsp{explicit}{Runge--Kutta method}{s}\index{method!explicit Runge--Kutta|see{explicit Runge--Kutta method}} for advecting any form of field tend to damp high frequent features in the field for $C < 1$, they do the opposite for $C > 1$ and instead enhance the high frequent features and become unstable. If a \idxs{backwards}{Runge--Kutta method}\index{method!backwards Runge--Kutta|see{backwards Runge--Kutta method}} is used instead, in an attempt to remedy this instability, the behaviors will be the reversed and high frequent features will be damped for $C > 1$, hence making the simulation stable in those regions, whilst they will be enhanced for $C < 1$, hence still making the simulation unstable.
 
-\subsection{Volume of Solid Method (VOS)}
+A remedy for this dilemma is to use semi-Lagrangian advection, which works by calculating which locations will end up on the \idxsp{discretization}{point}{s} in the end of the time step, and assigning interpolations of the field in those locations to the discretization points in the end of the time step.
 
-\begin{itemize}
-    \item Reference: \textit{The simulation of fluid-rigid body interaction}
-    \item Described in \textit{Numerical Modeling of Deforming Bubble Transport Related to Cavitating Hydraulic Turbines}
-\end{itemize}
+All of these instability issues are remedied in \textit{\href{http://www.dgp.toronto.edu/people/stam/reality/Research/pdf/ns.pdf}{Stable Fluids}} \citep{temp}.
 
-\subsection{Rigid Fluid method}
+\section{Desired improcements}
 
-\begin{itemize}
-    \item Reference: \textit{\href{http://www.amath.unc.edu/Faculty/mucha/Reprints/siggraph04.pdf}{Rigid Fluid: Animating the Interplay Between Rigid Bodies and Fluid}}
-\end{itemize}
+In this \levelname, some improvements that are not required in order to make the method practically useful, but still desired in order to improve the quality of the simulation, are presented.
 
-\subsection{Rotation of rigid bodies}
+\subsection{Parallelization}
 
-See \textit{\href{http://en.wikipedia.org/wiki/Euler\%27s_equations_\%28rigid_body_dynamics\%29}{Euler's equations (rigid body dynamics)}}
+In order to speed up the simulation further, it can be processed on multiple \cores simultaneously as well as on the \GPU. This is generally referred to as \parallelization. For parallelization to be possible, the \idxs{simulation}{domain} first has to be \partitioned, so that a small part of the domain can be processed on each core and on each \idxs{GPU}{process}.
+	
+Since the process that takes the longest time to run will decide the speed of the simulation, the size of the partitions should be roughly the same. Besides, access to data that is located outside of the partition takes extra long time, so it is desired that the number of neighbors cells for each partition that lies outside of the partition itself is kept low, which is somewhat similar to the problem of minimizing the area between the partitions. For a structured grid, the partitioning can be effectively achieved by cutting the simulation domain into square or cubic pieces. However, for an \idxs{unstructured}{grid} like an \octree, the partitioning is more difficult, but it is still very much possible.
 
-The six ship motions in the steadily translating system are defined by (see \textit{\href{http://www.shipmotions.nl/DUT/LectureNotes/OffshoreHydromechanics.pdf}{OFFSHORE HYDROMECHANICS}}, p.~18):
+For octrees, there are some very convenient algorithms that can be used which make use of \idxsp{space-filling}{curve}{s} and which are fast, easy to implement and still produce very acceptable results (see e.g. \textit{\href{http://j.teresco.org/research/publications/octpart02/octpart02.pdf}{Dynamic Octree Load Balancing Using Space-Filling Curves}} \citep{temp} and \textit{\href{http://downloads.isrn.com/journals/appmath/2012/246491.pdf}{Parallel Adaptive Mesh Refinement Combined with Additive Multigrid for the Efficient Solution of the Poisson Equation}} \citep{temp}). Another kind of partitioning is also performed in \textit{\href{http://gfs.sourceforge.net/papers/agbaglah2011.pdf}{Parallel simulation of multiphase flows using octree adaptivity and the volume-of-fluid method}} \citep{temp} which uses \idxs{domain}{decomposition}.
 
-Translation:
+\subsection{Fluid--Structure Interaction}
 
-\begin{itemize}
-    \item x-axes (back--front): Surge
-    \item y-axes (right--left): Sway
-    \item z-axes (bottom--top): Heave
-\end{itemize}
+In \thisprojectwork, no interaction between ships and the surface waves was ever modeled, in other words, no \FSI was modeled. Modeling and simulating \FSI is necessary in order to make large waves affect ships so that they start to rock forth and back, as well as in order for ships to give rise to two \idxsp{wake}{line}{s} as they \sail on the water.
+    
+Some of the methods for modeling \FSI includes the \IB method (reference \textit{\href{http://www4.ncsu.edu/~zhilin/TEACHING/MA798Z/Peskin1.pdf}{The immersed boundary method}} or \textit{\href{http://www.cecs.wright.edu/~haibo.dong/wp-content/themes/publications/IBM_JCP_2007.pdf}{A sharp interface immersed boundary method for compressible viscous flows}}), the \VOS method (reference \textit{The simulation of fluid-rigid body interaction}, also described in \textit{Numerical Modeling of Deforming Bubble Transport Related to Cavitating Hydraulic Turbines}) and the \idxs{rigid fluid}{method}\index{fluid!rigid|see{rigid fluid method}} (reference: \textit{\href{http://www.amath.unc.edu/Faculty/mucha/Reprints/siggraph04.pdf}{Rigid Fluid: Animating the Interplay Between Rigid Bodies and Fluid}})
+%See e.g.: \item \textit{\href{http://physbam.stanford.edu/~fedkiw/papers/stanford2010-04.pdf}{Numerically Stable Fluid-Structure Interactions Between Compressible Flow and Solid Structures}} \item \textit{\href{http://efdl.as.ntu.edu.tw/research/papers/JCP03GCIBM.pdf}{A ghost-cell immersed boundary method for flow in complex geometry}} \item \textit{\href{http://www.cs.columbia.edu/~batty/papers/Batty07.pdf}{A Fast Variational Framework for Accurate Solid-Fluid Coupling}} (solid fraction, non-stick to walls)
 
-Rotation:
+\subsubsection{Rotation of rigid bodies}
 
-\begin{itemize}
-    \item x-axes (back--front): Roll
-    \item y-axes (right--left): Pitch
-    \item z-axes (bottom--top): Yaw
-\end{itemize}
+The \idxs{rotation of a}{rigid body}, in this case the rotation of a \ship that is floating on the surface of the water when it is hit by large waves, depends both on the forces that acts on the \idxs{rigid}{body} as well as well as the  \idxs{moment of}{inertia} of the rigid body.
 
-\section{Parallellization}
+The dynamics of a rigid body is described by \textit{\href{http://en.wikipedia.org/wiki/Euler\%27s_equations_\%28rigid_body_dynamics\%29}{Euler's equations (rigid body dynamics)}} \citep{temp}.
 
-See e.g. \textit{\href{http://gfs.sourceforge.net/papers/agbaglah2011.pdf}{Parallel simulation of multiphase flows using octree adaptivity and the volume-of-fluid method}}
+%\section{Visualization}
 
-\subsection{Space filling curves}
+%\subsection{Marching Cubes}
 
-See e.g. \textit{\href{http://j.teresco.org/research/publications/octpart02/octpart02.pdf}{Dynamic Octree Load Balancing Using Space-Filling Curves}}
+%\subsection{Surface shininess}
 
-and \textit{\href{http://downloads.isrn.com/journals/appmath/2012/246491.pdf}{Parallel Adaptive Mesh Refinement Combined with Additive Multigrid for the Efficient Solution of the Poisson Equation}}
-
-\section{Unconditionally Stable Flows}
-
-\textit{\href{http://www.dgp.toronto.edu/people/stam/reality/Research/pdf/ns.pdf}{Stable Fluids}} (is it simple to implement with te \VOF method and is it still mass conservative after that?)
-
-\SIMPLE (although not completely implicit (?))
-
-Use implicit time-stepping
-
-Switch from explicit to implicit methods + use semi-Lagrangian advection to allow arbitrarily large time steps
-
-\section{Visualization}
-
-\subsection{Marching Cubes}
-
-\subsection{Surface shininess}
-
-When \rendering \idxsp{ocean}{scene}{s}, it is not always possible to catch all the fine details in the surface. This is especially true if the \idxs{sea}{state} contains a lot of \energy in the part of the \idxs{wave}{spectrum} where the wavelength is shorter than the shortest \wavelength that can be rendered on the \idxs{computer}{screen} correctly without \folding. When this is the case, those wavelengths have to be removed from the original rendering of the scene in order to avoid getting \idxsp{Moiré}{pattern}{s} in the rendered image.
+%When \rendering \idxsp{ocean}{scene}{s}, it is not always possible to catch all surface waves with short wavelength. This is the case if the \idxs{sea}{state} contains a lot of \energy in the part of the \idxs{wave}{spectrum} where the wavelength is shorter than the shortest \wavelength that can be rendered on the \idxs{computer}{screen} correctly, without \folding. When this is the case, those wavelengths have to be removed from the original rendering of the scene in order to avoid getting \idxsp{Moiré}{pattern}{s} in the rendered image. Besides, it is not possible to 
 
 %Shading/reflection (increased reflection spreading for increased height = shininess as a function of the part of the spectrum that contains the suppressed high-frequency waves)
 
@@ -95,17 +66,44 @@ When \rendering \idxsp{ocean}{scene}{s}, it is not always possible to catch all 
 
 %Very dubious technique as you can make the method allow large time steps. (see below)
 
-\section{Perfectly matched layers}
+\subsection{Reduction of spurious reflections in LOD transitions}
 
-Avoiding spurious reflections at LOD transitions (Absorbing boundary conditions, Perfectly Matched Layers)
+When a wave hits a boundary to a region where it propagates with a different speed, or cannot propagate at all, a partial or total reflection of the wave will occur. In natural scenes, this typically happens when the depth of the water changes abruptly from deep water to shallow, or when the wave hits a cliff or similar.
 
-See e.g. \textit{\href{http://liu.diva-portal.org/smash/get/diva2:359805/FULLTEXT01}{Memory Efficient Methods for Eulerian Free Surface Fluid Animation}}, which explains explicit dampening, implicit dampening, and wave absorbing boundaries -- the perfectly matched layer approach, and evaluates methods.
+In scenes simulated with a grid of finite size, this usually happens on the border of the grid, unless special care has been taken to this when deciding which \idxsp{boundary}{condition}{s} to use. These reflections are unwanted and referred to as \idxs{spurious}{reflections} since they don't occur in nature.
 
-\section{Wind waves}
+In scenes simulated on an \octree based \grid, this also happens in \LOD transitions, since different \idxsp{LOD}{level}{s} have different lowest wavelengths they can represent called the \idxs{Nyquist}{frequency} (which is double the cell size for rectangular cells), and the fact that a wavelength which can be represented on two different LOD levels often will propagate with different speeds on the two LOD levels, especially if the wavelength is close to the Nyquist frequency for one of the LOD levels but not close to the Nyquist frequency for the other LOD level.
+
+On scenes simulated on an arbitrary grid though, the reflections corresponding to the reflections that takes place in LOD transitions are often less noticeable as the surface of reflection is less well-defined, which causes the waves to be reflected at multiple locations and become scattered in many directions, although the waves are still eventually totally reflected.
+
+\subsubsection{Perfectly matched layers}
+
+One method for greatly reducing spurious reflections at the border of a structured grid is to use \idxs{perfeclty matched}{layers}. See e.g. \textit{\href{http://liu.diva-portal.org/smash/get/diva2:359805/FULLTEXT01}{Memory Efficient Methods for Eulerian Free Surface Fluid Animation}} \citep{temp}, which explains explicit dampening, implicit dampening, and wave absorbing boundaries -- the perfectly matched layer approach, and evaluates the methods.
+
+\subsubsection{Other absorbing boundary conditions}
+
+Another method that works when the waves have a common speed is to use absorbing boundary conditions (see \citep{temp}). This method works ideally in the \idx{one-dimensional} case if all wavelengths have the same simulated speed, and performs decently well in the \idx{two-dimensional} or \idx{three-dimensional} case. See e.g. \textit{\href{http://www.ce.ncsu.edu/centers/cmg/AWWE/}{the AWWE equations}} \citep{temp}.
+
+\HRule
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\subsection{Wind waves}
 
 In order to get a realistic \idxs{sea}{state}\index{state of sea|see{sea state}}, it is desirable that the \idxs{water}{surface} \interacts with the \wind in order to give rise to \idxsp{wind}{wave}{s}, so that the sea state is a reflection of the wind speed and direction.
 
-\subsection{Spectral methods}
+\subsubsection{Spectral methods}
 
 A very cheap and easy way to simulate wind waves is to use a wind dependent \idxs{wave}{spectrum}, which basically tells how much energy that is stored in each part of the wave spectrum in \average, depending on the \idxs{wind}{velocity}. The wave spectrum $P_h(\vec{k})$ is defined as
 
@@ -117,15 +115,15 @@ where $\fdfunc{\eta}(\vec{k})$ is the \idxs{Fourier}{transform} of the \idxs{fre
 
 See \textit{\href{http://graphics.ucsd.edu/courses/rendering/2005/jdewall/tessendorf.pdf}{Simulating Ocean Water}} for a modified Phillis spectrum (increased directional dependence)
 
+\subsubsection{Air-water interaction}
+
+\subsection{Visual effects}
+
 \subsubsection{Choppy waves}
 
 Gerstner waves (horizontal offset), almost 200 years ago (see \textit{\href{http://graphics.ucsd.edu/courses/rendering/2005/jdewall/tessendorf.pdf}{Simulating Ocean Water}})
 
-\subsection{Air-water interaction}
-
-\section{Visual effects}
-
-\subsection{Splash and foam}
+\subsubsection{Splash and foam}
 
 In rough weather conditions, 
 
@@ -141,20 +139,6 @@ See also \textit{\href{http://www.ias.ac.in/jess/sep2002/Ps18.pdf}{Oceanic white
 
 See also \textit{\href{http://cg.informatik.uni-freiburg.de/publications/2012_CGI_sprayFoamBubbles.pdf}{Unified Spray, Foam and Bubbles for Particle-Based Fluids}}
 
-\subsection{Turbulence}
+%\subsection{Turbulence}
 
-See \textit{\href{http://publications.dice.se/attachments/water\%20interaction\%20ottosson_bjorn.pdf}{Real-time Interactive Water Waves}} (2.1.3) for a discussion of why that is important.
-
-\section{Sharpening of various advected fields}
-
-\subsection{Backward Error Compensation and Forward Error Correction}
-
-\begin{itemize}
-    \item Reference: \textit{\href{http://smartech.gatech.edu/xmlui/bitstream/handle/1853/29473/2002-389.pdf}{Back and forth error compensation and correction methods for removing errors induced by uneven gradients of the level set function}}
-    \item Applied to the velocity field and images: \textit{\href{http://www.gvu.gatech.edu/~jarek/papers/FlowFixer.pdf}{FlowFixer: Using BFECC for Fluid Simulation}}
-\end{itemize}
-
-\section{Various optimizations}
-
-* Pure code optimizations
-* Local time stepping (dubious improvement)
+%See \textit{\href{http://publications.dice.se/attachments/water\%20interaction\%20ottosson_bjorn.pdf}{Real-time Interactive Water Waves}} (2.1.3) for a discussion of why that is important.

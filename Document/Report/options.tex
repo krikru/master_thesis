@@ -245,6 +245,7 @@
 % % % % % % %
 
 % The acronyms are sorted by the abbreviated forms
+\declareacronyms{AMR}   {adaptive}{mesh refinement} \index{refinement!adaptive mesh|see{adaptive mesh refinement}}
 \declareacronyms{BEM}   {boundary element}{method}
 %\declareacronyms{BRDF}  {bidirectional reflectance distribution}{function} \index{distribution function!bidirectional reflectance|see{bidirectional reflectance distribution function}} \index{reflectance distribution function!bidirectional|see{bidirectional reflectance distribution function}}
 \declareacronyms{BFECC} {back and forth}{error compensation and correction}
@@ -256,6 +257,7 @@
 %\declareacronyms{CICSAM}{compressive}{interface capturing scheme for arbitrary meshes}
 %\declareacronyms{CIP}   {constrained interpolation}{profile}\addtototaa{}{\textit{or} cubic-interpolated propagation} \index{cubic-interpolated propagation|see{CIP}}\index{propagation!cubic-interpolated|see{CIP}}
 \declareacronym {CLSVOF}{coupled level set/volume of fluid} \index{method!coupled level set/volume of fluid|see{coupled level set/volume of fluid}}
+\declareacronyms{DOF}   {degrees of}{freedom}
 %\declareacronyms{FCSCF} {fast compressive surface capturing}{formulation}
 %\declareacronyms{FCT}   {flux-corrected}{transport} % Used in the MULES scheme
 \declareacronyms{FEM}   {finite element}{method}
@@ -266,8 +268,10 @@
 \declareacronyms{FSI}   {fluid--structure}{interaction}
 \declareacronyms{FSM}   {free surface}{modeling}
 \declareacronyms{FVM}   {finite volume}{method}
+\declareacronyms{GPU}   {graphics processing}{unit} \index{processing unit!graphics!see{graphics processing unit}}
 %\declareacronym {hoctree}{hyperoctree} \index{octree!hyper|see(hoctree)}
 %\declareacronyms{HRIC}  {high resolution}{interface capturing}
+\declareacronyms{IB}    {immersed}{boundary} \index{method!immersed boudary|see{immersed boudary}}
 \declareacronyms{LBM}   {lattice Boltzmann}{method}
 \declareacronym {LJ}    {Lennard--Jones} \index{potential!Lennard--Jones|see{Lennard--Jones}}
 \declareacronyms{LPD}   {Laplacian pyramid}{decomposition} \index{pyramid decomposition!Laplacian|see{Laplacian pyramid decomposition}}
@@ -287,7 +291,7 @@
 \def            \PDEs   {\mbox{\PDE\nspace s}\xspace}
 \declareacronyms{PLIC}  {piecewise linear interface}{construction} \index{interface construction!piecewise linear|see{piecewise linear interface construction}} \index{linear interface construction!piecewise|see{piecewise linear interface construction}}
 %\declareacronyms{QUICK} {quadratic upwind}{interpolation for convective kinematics}
-\declareacronyms{SIMPLE}{semi-implicit}{method for pressure-linked equations}
+%\declareacronyms{SIMPLE}{semi-implicit}{method for pressure-linked equations}
 \declareacronyms{SOR}   {successive}{over-relaxation} \index{relaxation!successive|see{successive over-relaxation}} \index{method!successive over-relaxation|see{successive over-relaxation}}
 \declareacronyms{SPH}   {smoothed-particle}{hydrodynamics} \index{method!smoothed-particle hydrodynamics|see{smoothed-particle hydrodynamics}}
 \declareacronyms{STACS} {switching technique for}{advection and capturing of surfaces} \index{surfaces!advection and capturing of!switching technique for|see{switching technique for advection and capturing of surfaces}}
@@ -295,7 +299,7 @@
 %                UPWIND
 %\declareacronyms{UQ}    {quadratic upwind difference}{scheme}
 \declareacronyms{VOF}   {volume of}{fluid} \index{method!volume of fluid|see{volume of fluid}}
-%\declareacronyms{VOS}   {volume of}{solid} \index{method!volume of solid|see{volume of solid}}
+\declareacronyms{VOS}   {volume of}{solid} \index{method!volume of solid|see{volume of solid}}
 % If capitalizing certain letters would be relevant in the future, take a look at http://www.tex.ac.uk/cgi-bin/texfaq2html?label=casechange
 
 
@@ -326,6 +330,8 @@
 \declareindexkey      {camera}
 \declareindexkey      {cell}
 \declareindexkeypair      {cell}{cells}
+\declareindexkey      {core}
+\declareindexkeypair      {core}{cores}
 \declareindexkey      {compressibility}
 \declareindexkeypair      {compressibility}{compressible}
 \declareindexkey      {cube}
@@ -427,11 +433,20 @@
 \declareindexkey      {oscillation}
 \declareindexkeypair      {oscillation}{oscillate}
 \declareindexkeypair      {oscillation}{oscillates}
+\declareindexkeypair      {oscillation}{oscillating}
 \declareindexkey      {overshooting}
 \declareindexkeypair      {overshooting}{overshoot}
+\declareindexkey      {parallelization}
+\declareindexkeypair      {parallelization}{parallelize}
+\declareindexkeypair      {parallelization}{parallelized}
 %\declareindexkey      {particle}
 %\declareindexkeypair      {particle}{particles}
-\declareindexkey      {preformance}
+\declareindexkey      {partitioning}
+\declareindexkeypair      {partitioning}{partition}
+\declareindexkeypair      {partitioning}{partitions}
+\declareindexkeypair      {partitioning}{partitioned}
+\declareindexkey      {performance}
+\declareindexkey      {period}
 \declareindexkey      {phase}
 \declareindexkeypair      {phase}{phases}
 \declareindexkey      {pointer}
@@ -458,6 +473,11 @@
 \declareindexkey      {resolution}
 \declareindexkeypair      {resolution}{resolutions}
 \declareindexkey      {room}
+\declareindexkey      {sailing}
+\declareindexkeypair      {sailing}{sail}
+\declareindexkeypair      {sailing}{sailed}
+\declareindexkey      {ship}
+\declareindexkeypair      {ship}{ships}
 \declareindexkey      {shore}
 \declareindexkeypair      {shore}{shoreline}
 \declareindexkey      {simulation}
@@ -473,6 +493,8 @@
 %\declareindexkey      {square} % Command \square already defined.
 \declareindexkey      {temperature}
 \declareindexkeypair      {temperature}{temperatures}
+\declareindexkey      {timestep}
+\declareindexkeypair      {timestep}{timesteps}
 \declareindexkey      {turbulence}
 \declareindexkey      {unboundedness}
 \declareindexkeypair      {unboundedness}{unbounded}
