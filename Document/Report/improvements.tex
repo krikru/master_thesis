@@ -2,20 +2,20 @@
 
 There are a lot of improvements of the method that was implemented in \thisprojectwork that can be performed, many of them which are necessary  to make the method be practically useful in a real-time flight simulator.
 
-\section{Required improcements}
+\section{Required improvements}
 
 In this \levelname, some of the improvements that are required to make the method practically useful are presented.
 
 \subsection{Adaptive Mesh Refinement}
 
 The \LOD needs to be adapted to the \idxs{camera}{placement} and the \FOV/\idxs{viewing}{frustum} as well as the water depth in order to greatly reduce the number of cells used by the \FVM in the simulation, in order to only use the minimum amount of cells that are actually needed. This is referred to as \AMR.
-	
+
 Without \AMR it would be impossible to simulate larges bodies of water and fine surface details real-time in the same scene, as these would require heaps of orders of magnitude more cells to still be able to simulate waves with the same short \wavelength as with \AMR.
 
 \subsection{Unconditionally stable flows}
 
 In order to make a \FVM simulation become practically useful for \idxsp{real-time}{simulation}{s}, it is required that the flow is \idxse{unconditionally stable}{flow}{unconditionally stable}\index{stable flow!unconditionally|see{unconditionally stable flows}}. This implies that it is necessary that arbitrarily large \timesteps can be taken without making the simulation unstable.
-	
+
 When it comes to physical quantities with a non-damped \oscillating behavior, simulations which use any kind of normal, \idxs{explicit}{time-stepping}\index{stepping!in time|see{time-stepping}} often tend to make them become unstable and create a \idxs{numerical}{explosion}.
 
 In \thisprojectwork, a kind of \idxs{leapfrog}{integration} has been used to model the time evolution of the velocity and the pressure, but even \idxs{leapfrog}{integration} becomes numerically unstable when the \period of the oscillations becomes too small in relation to the \timestep. To solve this problem, many methods \approximate the fluid or the fluids as \incompressible, whilst other use \idxse{implicit}{Euler integration}{backwards (or implicit) Euler integration}\index{integration!implicit Euler|see{implicit Euler integration}} (see 
@@ -25,16 +25,16 @@ On the other hand, when it comes to advection, many advection schemes tend to be
 
 A remedy for this dilemma is to use semi-Lagrangian advection, which works by calculating which locations will end up on the \idxsp{discretization}{point}{s} in the end of the time step, and assigning interpolations of the field in those locations to the discretization points in the end of the time step.
 
-All of these instability issues are remedied in \textit{\href{http://www.dgp.toronto.edu/people/stam/reality/Research/pdf/ns.pdf}{Stable Fluids}} \citep{temp}.
+All of these instability issues are remedied in \citep{Stam1999}.
 
-\section{Desired improcements}
+\section{Desired improvements}
 
 In this \levelname, some improvements that are not required in order to make the method practically useful, but still desired in order to improve the quality of the simulation, are presented.
 
 \subsection{Parallelization}
 
 In order to speed up the simulation further, it can be processed on multiple \cores simultaneously as well as on the \GPU. This is generally referred to as \parallelization. For parallelization to be possible, the \idxs{simulation}{domain} first has to be \partitioned, so that a small part of the domain can be processed on each core and on each \idxs{GPU}{process}.
-	
+
 Since the process that takes the longest time to run will decide the speed of the simulation, the size of the partitions should be roughly the same. Besides, access to data that is located outside of the partition takes extra long time, so it is desired that the number of neighbors cells for each partition that lies outside of the partition itself is kept low, which is somewhat similar to the problem of minimizing the area between the partitions. For a structured grid, the partitioning can be effectively achieved by cutting the simulation domain into square or cubic pieces. However, for an \idxs{unstructured}{grid} like an \octree, the partitioning is more difficult, but it is still very much possible.
 
 For octrees, there are some very convenient algorithms that can be used which make use of \idxsp{space-filling}{curve}{s} and which are fast, easy to implement and still produce very acceptable results (see e.g. \textit{\href{http://j.teresco.org/research/publications/octpart02/octpart02.pdf}{Dynamic Octree Load Balancing Using Space-Filling Curves}} \citep{temp} and \textit{\href{http://downloads.isrn.com/journals/appmath/2012/246491.pdf}{Parallel Adaptive Mesh Refinement Combined with Additive Multigrid for the Efficient Solution of the Poisson Equation}} \citep{temp}). Another kind of partitioning is also performed in \textit{\href{http://gfs.sourceforge.net/papers/agbaglah2011.pdf}{Parallel simulation of multiphase flows using octree adaptivity and the volume-of-fluid method}} \citep{temp} which uses \idxs{domain}{decomposition}.
@@ -101,11 +101,15 @@ Another method that works when the waves have a common speed is to use absorbing
 
 \subsection{Wind waves}
 
-In order to get a realistic \idxs{sea}{state}\index{state of sea|see{sea state}}, it is desirable that the \idxs{water}{surface} \interacts with the \wind in order to give rise to \idxsp{wind}{wave}{s}, so that the sea state is a reflection of the wind speed and direction.
+In order to obtain a realistic \idxs{sea}{state}\index{state of sea|see{sea state}} in a simulation, it is desirable that the \idxs{water}{surface} \interacts with the \wind in order to give rise to \idxsp{wind}{wave}{s}, which makes the sea state a reflection of the wind speed and direction.
 
 \subsubsection{Spectral methods}
 
-A very cheap and easy way to simulate wind waves is to use a wind dependent \idxs{wave}{spectrum}, which basically tells how much energy that is stored in each part of the wave spectrum in \average, depending on the \idxs{wind}{velocity}. The wave spectrum $P_h(\vec{k})$ is defined as
+A very cheap and easy way to simulate wind waves is to use a wind dependent \idxs{wave}{spectrum}. A wave spectrum tells how the size of waves with different wavelengths are distributed, and from those distributions the \idxs{Fourier}{transform}.
+
+ how large waves with different wavelength are.
+
+, which basically tells how much energy that is stored in each part of the wave spectrum in \average, depending on the \idxs{wind}{velocity}. The wave spectrum $P_h(\vec{k})$ is defined as
 
 \begin{equation} \label{eq:wave_spectrum}
 P_{\eta}(\vec{k}) = \left\langle \left|\fdfunc{\eta}(\vec{k})\right|^2 \right\rangle,
