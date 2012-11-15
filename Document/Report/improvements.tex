@@ -52,20 +52,6 @@ The \idxs{rotation of a}{rigid body}, in this case the rotation of a \ship that 
 
 The dynamics of a rigid body is described by \textit{\href{http://en.wikipedia.org/wiki/Euler\%27s_equations_\%28rigid_body_dynamics\%29}{Euler's equations (rigid body dynamics)}} \citep{temp}.
 
-%\section{Visualization}
-
-%\subsection{Marching Cubes}
-
-%\subsection{Surface shininess}
-
-%When \rendering \idxsp{ocean}{scene}{s}, it is not always possible to catch all surface waves with short wavelength. This is the case if the \idxs{sea}{state} contains a lot of \energy in the part of the \idxs{wave}{spectrum} where the wavelength is shorter than the shortest \wavelength that can be rendered on the \idxs{computer}{screen} correctly, without \folding. When this is the case, those wavelengths have to be removed from the original rendering of the scene in order to avoid getting \idxsp{Moiré}{pattern}{s} in the rendered image. Besides, it is not possible to 
-
-%Shading/reflection (increased reflection spreading for increased height = shininess as a function of the part of the spectrum that contains the suppressed high-frequency waves)
-
-%\section{Local-time stepping}
-
-%Very dubious technique as you can make the method allow large time steps. (see below)
-
 \subsection{Reduction of spurious reflections in LOD transitions}
 
 When a wave hits a boundary to a region where it propagates with a different speed, or cannot propagate at all, a partial or total reflection of the wave will occur. In natural scenes, this typically happens when the depth of the water changes abruptly from deep water to shallow, or when the wave hits a cliff or similar.
@@ -113,6 +99,84 @@ Another alternative would be to simulate both the \water and the \air using the 
 
 
 
+\subsection{Rendering}
+
+In \thisprojectwork, the water surface is not rendered. To render the surface properly, there are a number of things that has to be implemented.
+
+\subsubsection{Marching Cubes}
+
+In order to find where the \idxs{water}{surface} is located, the \idxs{marching}{cubes} \idxe{algorithm!marching cubes|see{marching cubes}}{algorithm} can be used. Marching cubes is an algorithm for finding \isosurfaces from a \idxs{scalar}{field}, and works by looping over a set of adjacent cubes tiled closely together which just covers the domain that is about to be rendered. For each cube, the algorithm looks at the value of the scalar field in all eight of the cube's corners. If the field values in the corners all lie at the same side of the value $c$ that the isosurface represents, it figures that the surface doesn't cross through that cube, otherwise it does and the algorithm adapts a surface consisting of a finite number of polygons through the cube depending on what the field values in the corners are.
+
+In \thisprojectwork, the scalar field that tells where the surface is located is the \idxs{phase fraction} {field}, $\alpha$, and since $\alpha$ crosses from 0 to 1 over the \interface, the isosurface can really bee chosen for any level $0 < c < 1$ and the marching cubes algorithm will produce an isosurface lying within the interface, although it probably makes more sense to choose $c = 0.5$ which lies in the middle of the interval and makes the isosurface generation symmetric in that sense. One problem though is that the $\alpha$ field isn't discretized in the cell corners, but in the cell centers. This can be remedied by defining a new set of cubes which have their corners in the centers of the cells. This will become a bit problematic in \idxsp{LOD}{transition}{s}, for which the cubes if created in this way will stretch over two different LODs and thus not have a very well defined size. Another possible solution is to interpolate the $\alpha$ field to the cell corners so that the cells can be used directly as the cubes needed by the algorithm.
+
+If the \VOF method for tracing the surface would be switched to using the \LS method instead, a signed distance function, $\phi$, would be used instead of $\alpha$, and $c = 0$ would define where the surface is located. The discretization points for $\phi$ would be in the cell corners, so there would be no need for defining a new set of cubes in order for the marching cubes algorithm to work. However, the marching cubes algorithm would have apparent problems to generate the surface in \idxsp{LOD}{transition}{s}, since, in it's original form, requires that all cubes are of the same size, otherwise glitches may occur.
+
+The problem of generating the isosurface with the marching cubes algorithm when the domain that is to be rendered contains LOD transitions is well known, and remedies exist. For example, the one in \textit{\href{http://www.terathon.com/lengyel/Lengyel-VoxelTerrain.pdf}{Voxel-Based Terrain for Real-Time Virtual Simulations} + \href{http://www.terathon.com/voxels/}{The Transvoxel$^{\textbf{TM}}$ Algorithm}} (Lengyel, Eric. "Voxel-Based Terrain for Real-Time Virtual Simulations". PhD diss., University of California at Davis, 2010.) \citep{temp} remedies this, but only for cases where the cubes used by the algorithm can be fit into an \octree.
+
+\subsubsection{Light reflectivity and transmissivity}
+
+When \light hits the \idxs{water}{surface}, not all light is transmitted into the water. Some of the light is reflected, and the amount of light that is reflected depends on the angle of incidence as well as the polarization of the light, according to the \idxs{Fresnel}{equations}. Normally however, when rendering a \scene with \idxs{computer}{graphics}, one doesn't usually start from the light source when calculating the brightness of an object, but from the observer. On the other hand, one can use the Fresnel equations not only to calculate how much of the light is being reflected, but also how much of the light that comes from the surface originally hit the surface from above and was reflected, and how much of it hit the surface from below and was transmitted. In that way it is possible to account also for the light that has been reflected under the water, which has been filtered by the objects it has been reflected on under the surface of the water.
+
+\subsubsection{Surface shininess}
+
+When \rendering \idxsp{ocean}{scene}{s}, it is not always possible to catch all surface waves with short wavelength in the \idxs{rendered}{image}. This is the case if the \idxs{sea}{state} contains a lot of \energy in the part of the \idxs{wave}{spectrum} where the \wavelength is shorter than the shortest wavelength that can be rendered on the \idxs{computer}{screen} correctly, without introducing \folding. When this is the case, those wavelengths have better to be removed from the original rendering of the scene in order to avoid getting \idxsp{Moiré}{pattern}{s} in the rendered image. Besides, it is not possible to store and process an infinite amount of surface data, why wavelengths that are to short are removed anyway.
+
+Since the \idxs{surface}{normal} of the water surface depends on the \gradient of the \idxs{free surface}{elevation}, all surface waves will help to build up a variance in the surface normal. If viewed from a distance that is just large enough, the surface waves will not be visible, but the variance of the normal that is created by the surface waves will be visible in the reflection of a \idxs{point}{light source}\index{source!point light|see{point light source}} since a large variance in the normal will \blur out the reflection much. So if certain wavelengths are removed from the water surface, they should be accounted for by blurring out the image that is reflected in the image, or the rendered water will look much \smoother.
+
+\ 
+
+\hrule
+
+\ 
+
+Suppose that the real \idxs{free surface}{elevation}\index{surface elevation!free|see{free surface elevation}} on the location $\vec{r}$ is $\eta(\vec{r})$, where $\vec{r}$ is a \idxs{two-dimensional}{vector}, and that the free surface elevation on the location $\vec{r}$ after the short wavelengths have been removed is $\eta_0(\vec{r})$. Also suppose that $\eta_0$ is known, whereas $\eta$ is unknown. We can then only directly retrieve the normal of the smooth surface which is represented by $\eta_0$; this will be parallel with the \idx{anti-normal} $\vec{n}_0$ of $\eta_0$, which is defined as
+
+\begin{equation}
+\vec{n}_0 \,=\, \left(\!\!\!\begin{array}{c}\nabla\eta_0(\vec{r}) \\ 1\end{array}\!\!\!\right).
+\end{equation}
+
+The gradient in turn can be rewritten as
+
+\begin{equation}
+\nabla\eta_0(\vec{r}) \,=\, \nabla\mathcal{F}^{-1}\{\fdfunc{\eta}_0(\vec{k})\}(\vec{r}) \,=\, \mathcal{F}^{-1}\{\vec{k}\,\fdfunc{\eta}_0(\vec{k})\}(\vec{r}),
+\end{equation}
+
+where $\mathcal{F}^{-1}$ is the \idxs{inverse}{Fourier transform} and $\fdfunc{\eta}_0(\vec{k})$ is the \idxs{Fourier}{transform} of $\eta_0$. The anti-normal of the real surface will be
+
+\begin{equation}
+\vec{n} \,=\, \left(\!\!\!\begin{array}{c}\nabla\eta(\vec{r}) \\ 1\end{array}\!\!\!\right),
+\end{equation}
+
+where the gradient can be written as
+
+\begin{equation}
+\nabla\eta(\vec{r}) \,=\, \mathcal{F}^{-1}\{\vec{k}\,\fdfunc{\eta}(\vec{k})\}(\vec{r}),
+\end{equation}
+
+where $\fdfunc{\eta}(\vec{k})$ is the \idxs{Fourier}{transform} of $\eta$. However, only the part of $\fdfunc{\eta}(\vec{k})$ where $\vec{k}$ is small enough is known; in fact, this part is equal to $\fdfunc{\eta}_0(\vec{k})$, while the rest of $\fdfunc{\eta}(\vec{k})$,
+
+\begin{equation}
+\Delta\fdfunc{\eta}(\vec{k}) \,=\, \fdfunc{\eta}(\vec{k}) - \fdfunc{\eta}_0(\vec{k}),
+\end{equation}
+
+is unknown. On the other hand, we know that
+
+\begin{equation}
+E_{\vec{k}}[\Delta\fdfunc{\eta}] \,=\, 0,
+\end{equation}
+
+where $E_{\vec{k}}$ denotes the \idxs{expectation}{value} for a specific value of $\vec{k}$, and if the \idxs{wave}{spectrum} is known, $\Var_{\vec{k}}(\Delta\fdfunc{\eta})$ is also known, where $\Var_{\vec{k}}$ denotes the \variance for a specific value of $\vec{k}$. Knowing this, we can calculate the mean value $\vec{\mu}$ of $\nabla\eta$,
+
+\begin{equation}
+\begin{array}{c}
+\vec{\mu} \,=\, E[\nabla\eta(\vec{r})] \,=\, E\left[\mathcal{F}^{-1}\left\{\vec{k}\,\fdfunc{\eta}(\vec{k})\right\}(\vec{r})\right] \\
+=\, E\left[\mathcal{F}^{-1}\left\{\vec{k}\,\left(\fdfunc{\eta}_0(\vec{k})+\Delta\fdfunc{\eta}(\vec{k})\right)\right\}(\vec{r})\right] \\
+=\, \mathcal{F}^{-1}\left\{\vec{k}\,\left(E_{\vec{k}}[\fdfunc{\eta}_0]+E_{\vec{k}}[\Delta\fdfunc{\eta}]\right)\right\}(\vec{r}) \,=\, \mathcal{F}^{-1}\{\vec{k}\,\fdfunc{\eta}_0(\vec{k})\}(\vec{r}) \,=\, \nabla\eta_0(\vec{r})
+\end{array}
+\end{equation}
+
+\textit{\href{http://en.wikipedia.org/wiki/Multivariate\_normal\_distribution\#Non-degenerate\_case}{Multivariate normal distribution}}
+
 \subsection{Visual effects}
 
 \subsubsection{Choppy waves}
@@ -140,3 +204,7 @@ See also \textit{\href{http://cg.informatik.uni-freiburg.de/publications/2012_CG
 %\subsection{Turbulence}
 
 %See \textit{\href{http://publications.dice.se/attachments/water\%20interaction\%20ottosson_bjorn.pdf}{Real-time Interactive Water Waves}} (2.1.3) for a discussion of why that is important.
+
+%\section{Local-time stepping} % Highly dubious
+
+%Very dubious technique as you can make the method allow large time steps. (see below)
