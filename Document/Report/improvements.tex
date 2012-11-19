@@ -27,6 +27,20 @@ A remedy for this dilemma is to use semi-Lagrangian advection, which works by ca
 
 All of these instability issues are remedied in \citep{Stam1999}.
 
+\subsection{Rendering}
+
+In \thisprojectwork, the water surface is not rendered. To render the surface properly, an isosurface needs to be extracted from the \idxs{phase fraction}{data}.
+
+\subsubsection{Marching Cubes}
+
+In order to find where the \idxs{water}{surface} is located, the \idxs{marching}{cubes} \idxe{algorithm!marching cubes|see{marching cubes}}{algorithm} can be used. Marching cubes is an algorithm for finding \isosurfaces from a \idxs{scalar}{field}, and works by looping over a set of adjacent cubes tiled closely together which just covers the domain that is about to be rendered. For each cube, the algorithm looks at the value of the scalar field in all eight of the cube's corners. If the field values in the corners all lie at the same side of the value $c$ that the isosurface represents, it figures that the surface doesn't cross through that cube, otherwise it does and the algorithm adapts a surface consisting of a finite number of polygons through the cube depending on what the field values in the corners are.
+
+In \thisprojectwork, the scalar field that tells where the surface is located is the \idxs{phase fraction} {field}, $\alpha$, and since $\alpha$ crosses from 0 to 1 over the \interface, the isosurface can really bee chosen for any level $0 < c < 1$ and the marching cubes algorithm will produce an isosurface lying within the interface, although it probably makes more sense to choose $c = 0.5$ which lies in the middle of the interval and makes the isosurface generation symmetric in that sense. One problem though is that the $\alpha$ field isn't discretized in the cell corners, but in the cell centers. This can be remedied by defining a new set of cubes which have their corners in the centers of the cells. This will become a bit problematic in \idxsp{LOD}{transition}{s}, for which the cubes if created in this way will stretch over two different LODs and thus not have a very well defined size. Another possible solution is to interpolate the $\alpha$ field to the cell corners so that the cells can be used directly as the cubes needed by the algorithm.
+
+If the \VOF method for tracing the surface would be switched to using the \LS method instead, a signed distance function, $\phi$, would be used instead of $\alpha$, and $c = 0$ would define where the surface is located. The discretization points for $\phi$ would be in the cell corners, so there would be no need for defining a new set of cubes in order for the marching cubes algorithm to work. However, the marching cubes algorithm would have apparent problems to generate the surface in \idxsp{LOD}{transition}{s}, since, in it's original form, requires that all cubes are of the same size, otherwise glitches may occur.
+
+The problem of generating the isosurface with the marching cubes algorithm when the domain that is to be rendered contains LOD transitions is well known, and remedies exist. For example, the one in \textit{\href{http://www.terathon.com/lengyel/Lengyel-VoxelTerrain.pdf}{Voxel-Based Terrain for Real-Time Virtual Simulations} + \href{http://www.terathon.com/voxels/}{The Transvoxel$^{\textbf{TM}}$ Algorithm}} (Lengyel, Eric. "Voxel-Based Terrain for Real-Time Virtual Simulations". PhD diss., University of California at Davis, 2010.) \citep{temp} remedies this, but only for cases where the cubes used by the algorithm can be fit into an \octree.
+
 \section{Desired improvements}
 
 In this \levelname, some improvements that are not required in order to make the method practically useful, but still desired in order to improve the quality of the simulation, are presented.
@@ -99,23 +113,15 @@ Another alternative would be to simulate both the \water and the \air using the 
 
 
 
-\subsection{Rendering}
+\subsection{Improved rendering}
 
-In \thisprojectwork, the water surface is not rendered. To render the surface properly, there are a number of things that has to be implemented.
-
-\subsubsection{Marching Cubes}
-
-In order to find where the \idxs{water}{surface} is located, the \idxs{marching}{cubes} \idxe{algorithm!marching cubes|see{marching cubes}}{algorithm} can be used. Marching cubes is an algorithm for finding \isosurfaces from a \idxs{scalar}{field}, and works by looping over a set of adjacent cubes tiled closely together which just covers the domain that is about to be rendered. For each cube, the algorithm looks at the value of the scalar field in all eight of the cube's corners. If the field values in the corners all lie at the same side of the value $c$ that the isosurface represents, it figures that the surface doesn't cross through that cube, otherwise it does and the algorithm adapts a surface consisting of a finite number of polygons through the cube depending on what the field values in the corners are.
-
-In \thisprojectwork, the scalar field that tells where the surface is located is the \idxs{phase fraction} {field}, $\alpha$, and since $\alpha$ crosses from 0 to 1 over the \interface, the isosurface can really bee chosen for any level $0 < c < 1$ and the marching cubes algorithm will produce an isosurface lying within the interface, although it probably makes more sense to choose $c = 0.5$ which lies in the middle of the interval and makes the isosurface generation symmetric in that sense. One problem though is that the $\alpha$ field isn't discretized in the cell corners, but in the cell centers. This can be remedied by defining a new set of cubes which have their corners in the centers of the cells. This will become a bit problematic in \idxsp{LOD}{transition}{s}, for which the cubes if created in this way will stretch over two different LODs and thus not have a very well defined size. Another possible solution is to interpolate the $\alpha$ field to the cell corners so that the cells can be used directly as the cubes needed by the algorithm.
-
-If the \VOF method for tracing the surface would be switched to using the \LS method instead, a signed distance function, $\phi$, would be used instead of $\alpha$, and $c = 0$ would define where the surface is located. The discretization points for $\phi$ would be in the cell corners, so there would be no need for defining a new set of cubes in order for the marching cubes algorithm to work. However, the marching cubes algorithm would have apparent problems to generate the surface in \idxsp{LOD}{transition}{s}, since, in it's original form, requires that all cubes are of the same size, otherwise glitches may occur.
-
-The problem of generating the isosurface with the marching cubes algorithm when the domain that is to be rendered contains LOD transitions is well known, and remedies exist. For example, the one in \textit{\href{http://www.terathon.com/lengyel/Lengyel-VoxelTerrain.pdf}{Voxel-Based Terrain for Real-Time Virtual Simulations} + \href{http://www.terathon.com/voxels/}{The Transvoxel$^{\textbf{TM}}$ Algorithm}} (Lengyel, Eric. "Voxel-Based Terrain for Real-Time Virtual Simulations". PhD diss., University of California at Davis, 2010.) \citep{temp} remedies this, but only for cases where the cubes used by the algorithm can be fit into an \octree.
+In order to improve the rendering from what is just necessary (which would look almost plastic) to what is actually desired, a realistic \idxs{shading}{model} needs to be implemented.
 
 \subsubsection{Light reflectivity and transmissivity}
 
-When \light hits the \idxs{water}{surface}, not all light is transmitted into the water. Some of the light is reflected, and the amount of light that is reflected depends on the angle of incidence as well as the polarization of the light, according to the \idxs{Fresnel}{equations}. Normally however, when rendering a \scene with \idxs{computer}{graphics}, one doesn't usually start from the light source when calculating the brightness of an object, but from the observer. On the other hand, one can use the Fresnel equations not only to calculate how much of the light is being reflected, but also how much of the light that comes from the surface originally hit the surface from above and was reflected, and how much of it hit the surface from below and was transmitted. In that way it is possible to account also for the light that has been reflected under the water, which has been filtered by the objects it has been reflected on under the surface of the water.
+When \light hits the \idxs{water}{surface}, not all light is transmitted into the water. Some of the light is reflected, and the amount of light that is reflected depends on the angle of incidence as well as the polarization of the light, according to the \idxs{Fresnel}{equations}.
+
+Normally however, when rendering a \scene with \idxs{computer}{graphics}, one doesn't usually start from the light source when calculating the brightness of an object, but from the observer. On the other hand, according to the \idxs{Helmholtz}{reciprocity principle}\index{principle!Helmholtz reciprocity|see{Helmholtz reciprocity principle}}, one can use the Fresnel equations not only to calculate how much of the light is being reflected, but also the other way around to calculate how much of the light that comes from the surface originally hit the surface from above and was reflected, and how much of it hit the surface from below and was transmitted. In that way it is possible to account also for the light that has been reflected under the water, which has been filtered by the objects it has been reflected on under the surface of the water.
 
 \subsubsection{Surface shininess}
 
@@ -129,7 +135,17 @@ Since the \idxs{surface}{normal} of the water surface depends on the \gradient o
 
 \ 
 
-Suppose that the real \idxs{free surface}{elevation}\index{surface elevation!free|see{free surface elevation}} on the location $\vec{r}$ is $\eta(\vec{r})$, where $\vec{r}$ is a \idxs{two-dimensional}{vector}, and that the free surface elevation on the location $\vec{r}$ after the short wavelengths have been removed is $\eta_0(\vec{r})$. Also suppose that $\eta_0$ is known, whereas $\eta$ is unknown. We can then only directly retrieve the normal of the smooth surface which is represented by $\eta_0$; this will be parallel with the \idx{anti-normal} $\vec{n}_0$ of $\eta_0$, which is defined as
+If we simplify a water surface by removing a part of the \idxs{wave}{spectra}, we -- for \rendering purposes -- need to compensate for that by making the \reflection in the \idxs{simplified}{water surface} \idxse{diffuse}{reflection}{diffuse}. This means that there is in practice many different directions the light can \bounce off in after having hit a simplified surface, whilst for a \idxs{non-simplified}{water surface}, the light can only bounce off in one direction, which is given by the \idxs{Householder}{transformation}.
+
+Suppose that we want to calculate the \shading on the simplified water surface caused by a \idxs{point}{light source}, we then need to know what the \idxs{bidirectional reflectance}{distribution function}\index{function!bidirectional reflectance distribution|see{bidirectional reflectance distribution function}}\index{reflectance distribution function!bidirectional|see{bidirectional reflectance distribution function}} of the simplified surface looks like.
+
+Suppose that the non-simplified \idxs{free surface}{elevation}\index{surface elevation!free|see{free surface elevation}} on the location $\vec{r}$ is $\eta(\vec{r})$, where $\vec{r}$ is a \idxs{two-dimensional}{vector}, and that the simplified free surface elevation on the location $\vec{r}$, after the short wavelengths have been removed, is $\eta_0(\vec{r})$. Also suppose that $\eta_0$ is known, whereas $\eta$ is not. We can then only calculate the normal of the simplified surface, $\normvec{n}_0$. Let's also define the \idx{anti-normal} $\vec{\xi}$ of a normal $\normvec{\xi}$ as
+
+\begin{equation}
+\vec{\xi} \,=\, \frac{\normvec{\xi}}{\normvec{z}\cdot\normvec{\xi}}\,,
+\end{equation}
+
+where $\normvec{z}$ is the \idxs{unit}{vector} pointing \up (where up is the negation of the direction of the \idxs{gravitational acceleration}{vector}); this implies that the $\normvec{z}$-component of an anti-normal is always 1. The \idx{anti-normal} $\vec{n}_0$ of $\eta_0$ becomes
 
 \begin{equation}
 \vec{n}_0 \,=\, \left(\!\!\!\begin{array}{c}\nabla\eta_0(\vec{r}) \\ 1\end{array}\!\!\!\right).
@@ -141,7 +157,7 @@ The gradient in turn can be rewritten as
 \nabla\eta_0(\vec{r}) \,=\, \nabla\mathcal{F}^{-1}\{\fdfunc{\eta}_0(\vec{k})\}(\vec{r}) \,=\, \mathcal{F}^{-1}\{\vec{k}\,\fdfunc{\eta}_0(\vec{k})\}(\vec{r}),
 \end{equation}
 
-where $\mathcal{F}^{-1}$ is the \idxs{inverse}{Fourier transform} and $\fdfunc{\eta}_0(\vec{k})$ is the \idxs{Fourier}{transform} of $\eta_0$. The anti-normal of the real surface will be
+where $\mathcal{F}^{-1}$ is the \idxs{inverse}{Fourier transform} and $\fdfunc{\eta}_0(\vec{k})$ is the \idxs{Fourier}{transform} of $\eta_0$. The anti-normal of the real surface cannot be calculated since $\eta$ is unknown, but it can still be written as
 
 \begin{equation}
 \vec{n} \,=\, \left(\!\!\!\begin{array}{c}\nabla\eta(\vec{r}) \\ 1\end{array}\!\!\!\right),
@@ -159,19 +175,21 @@ where $\fdfunc{\eta}(\vec{k})$ is the \idxs{Fourier}{transform} of $\eta$. Howev
 \Delta\fdfunc{\eta}(\vec{k}) \,=\, \fdfunc{\eta}(\vec{k}) - \fdfunc{\eta}_0(\vec{k}),
 \end{equation}
 
-is unknown. On the other hand, we know that
+is unknown. On the other hand, , if we know what the \idxs{wave}{spectrum} looks like, we can calculate the distribution of $\eta$ and thus calculate the \idxs{probability}{density} that it will match the anti-normalized halfway vector.
+
+On the other hand, if we assume that the suppressed waves are small, we can make the \approximation that the \idxs{expectation}{value} of $\fdfunc{\eta}$ where the \idxs{view}{ray} hits is $\fdfunc{\eta}_0$, which means that
 
 \begin{equation}
 E_{\vec{k}}[\Delta\fdfunc{\eta}] \,=\, 0,
 \end{equation}
 
-where $E_{\vec{k}}$ denotes the \idxs{expectation}{value} for a specific value of $\vec{k}$, and if the \idxs{wave}{spectrum} is known, $\Var_{\vec{k}}(\Delta\fdfunc{\eta})$ is also known, where $\Var_{\vec{k}}$ denotes the \variance for a specific value of $\vec{k}$. Knowing this, we can calculate the mean value $\vec{\mu}$ of $\nabla\eta$,
+where $E_{\vec{k}}$ denotes the expectation value for a specific value of $\vec{k}$, and if the \idxs{wave}{spectrum} is known, $\Var_{\vec{k}}(\Delta\fdfunc{\eta})$ is also known, where $\Var_{\vec{k}}$ denotes the \variance for a specific value of $\vec{k}$. Knowing this, we can calculate the mean value $\vec{\mu}$ of $\nabla\eta$,
 
 \begin{equation}
 \begin{array}{c}
 \vec{\mu} \,=\, E[\nabla\eta(\vec{r})] \,=\, E\left[\mathcal{F}^{-1}\left\{\vec{k}\,\fdfunc{\eta}(\vec{k})\right\}(\vec{r})\right] \\
 =\, E\left[\mathcal{F}^{-1}\left\{\vec{k}\,\left(\fdfunc{\eta}_0(\vec{k})+\Delta\fdfunc{\eta}(\vec{k})\right)\right\}(\vec{r})\right] \\
-=\, \mathcal{F}^{-1}\left\{\vec{k}\,\left(E_{\vec{k}}[\fdfunc{\eta}_0]+E_{\vec{k}}[\Delta\fdfunc{\eta}]\right)\right\}(\vec{r}) \,=\, \mathcal{F}^{-1}\{\vec{k}\,\fdfunc{\eta}_0(\vec{k})\}(\vec{r}) \,=\, \nabla\eta_0(\vec{r})
+=\, \mathcal{F}^{-1}\left\{\vec{k}\,\left(E_{\vec{k}}[\fdfunc{\eta}_0]+E_{\vec{k}}[\Delta\fdfunc{\eta}]\right)\right\}(\vec{r}) \,=\, \mathcal{F}^{-1}\{\vec{k}\,\fdfunc{\eta}_0(\vec{k})\}(\vec{r}) \,=\, \nabla\eta_0(\vec{r})\,.
 \end{array}
 \end{equation}
 
