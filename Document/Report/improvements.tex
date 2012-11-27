@@ -123,7 +123,7 @@ When \light hits the \idxs{water}{surface}, not all light is transmitted into th
 
 Normally however, when rendering a \scene with \idxs{computer}{graphics}, one doesn't usually start from the light source when calculating the brightness of an object, but from the observer. On the other hand, according to the \idxs{Helmholtz}{reciprocity principle}\index{principle!Helmholtz reciprocity|see{Helmholtz reciprocity principle}}, one can use the Fresnel equations not only to calculate how much of the light is being reflected, but also the other way around to calculate how much of the light that comes from the surface originally hit the surface from above and was reflected, and how much of it hit the surface from below and was transmitted. In that way it is possible to account also for the light that has been reflected under the water, which has been filtered by the objects it has been reflected on under the surface of the water.
 
-\subsubsection{Surface shininess}
+\subsubsection{Illumination model for water surfaces}
 
 When \rendering \idxsp{ocean}{scene}{s}, it is not always possible to catch all surface waves with short wavelength in the \idxs{rendered}{image}. This is the case if the \idxs{sea}{state} contains a lot of \energy in the part of the \idxs{wave}{spectrum} where the \wavelength is shorter than the shortest wavelength that can be rendered on the \idxs{computer}{screen} correctly, without introducing \folding. When this is the case, those wavelengths have better to be removed from the original rendering of the scene in order to avoid getting \idxsp{Moiré}{pattern}{s} in the rendered image. Besides, it is not possible to store and process an infinite amount of surface data, why wavelengths that are to short are removed anyway.
 
@@ -135,7 +135,11 @@ Since the \idxs{surface}{normal} of the water surface depends on the \gradient o
 
 \ 
 
-If we simplify a water surface by removing a part of the \idxs{wave}{spectra}, we -- for \rendering purposes -- need to compensate for that by making the \reflection in the \idxs{simplified}{water surface} \idxse{diffuse}{reflection}{diffuse}. This means that there is in practice many different directions the light can \bounce off in after having hit a simplified surface, whilst for a \idxs{non-simplified}{water surface}, the light can only bounce off in one direction, which is given by the \idxs{Householder}{transformation}.
+If we simplify a water surface by removing a part of the \idxs{wave}{spectra}, we need to -- for \rendering purposes -- compensate for that by making the \reflection in the \idxs{simplified}{water surface} \idxse{diffuse}{reflection}{diffuse}.
+
+Although the high frequencies have been removed from the rendering and it isn't possible to treat them directly, it is possible to treat them statistically by using something that's known as \microfacets. A \microfacet is 
+
+%This means that there is in practice many different directions the light can \bounce off in after having hit a simplified surface, whilst for a \idxs{non-simplified}{water surface}, the light can only bounce off in one direction, which is given by the \idxs{Householder}{transformation}.
 
 Suppose that we want to calculate the \shading on the simplified water surface caused by a \idxs{point}{light source}, we then need to know what the \idxs{bidirectional reflectance}{distribution function}\index{function!bidirectional reflectance distribution|see{bidirectional reflectance distribution function}}\index{reflectance distribution function!bidirectional|see{bidirectional reflectance distribution function}} of the simplified surface looks like.
 
@@ -194,6 +198,8 @@ where $E_{\vec{k}}$ denotes the expectation value for a specific value of $\vec{
 \end{equation}
 
 \textit{\href{http://en.wikipedia.org/wiki/Multivariate\_normal\_distribution\#Non-degenerate\_case}{Multivariate normal distribution}}
+
+\textit{\href{http://en.wikipedia.org/wiki/Rendering\_equation}{Rendering equation}}
 
 \subsection{Visual effects}
 
