@@ -36,9 +36,11 @@ Needs finishing:
 
 * Fix issues pointed out by Magnus Johansson
 
-* Update numenclature for: Solution methods for the pressure Poison equation, advection methods
+* Update numenclature for: Solution methods for the pressure Poison equation, advection methods and all sections written thereafter
 
-* Reference section about BFECC
+* Add limitations of derived 2D PDE
+
+* Reference section about BFECC (what?)
     
     Results are the product of measuring the dependent variable in an experiment.
     Results should be measurable.
