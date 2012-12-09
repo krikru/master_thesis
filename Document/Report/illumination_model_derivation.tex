@@ -1,0 +1,71 @@
+\chapter{Derivation of an illumination model for sea surfaces}
+\label{chap:illumination_model_derivation}
+
+To be written \comment
+{
+If we simplify a water surface by cutting off a part of the \idxs{wave}{spectrum}, we need to -- for \rendering purposes -- compensate for that by making the \reflection in the \idxs{simplified}{water surface} \idxse{diffuse}{reflection}{diffuse}.
+
+Although the high frequencies have been removed from the rendering which makes it impossible to treat them directly, it is possible to treat them statistically by making a few \assumptions and \approximations, and by using something that is known as \microfacets, which is basically infinitesimal surface elements for which the \idxs{surface}{normal} is \stochastic but \assumed to have a known \idxs{probability}{distribution}.
+
+\HRule
+
+Suppose that we want to calculate the \shading on the simplified water surface caused by a \idxs{point}{light source}, we then need to know what the \idxs{bidirectional reflectance}{distribution function}\index{function!bidirectional reflectance distribution|see{bidirectional reflectance distribution function}}\index{reflectance distribution function!bidirectional|see{bidirectional reflectance distribution function}} of the simplified surface looks like.
+
+Suppose that the non-simplified \idxs{free surface}{elevation}\index{surface elevation!free|see{free surface elevation}} on the location $\vec{r}$ is $\eta(\vec{r})$, where $\vec{r}$ is a \idxs{two-dimensional}{vector}, and that the simplified free surface elevation on the location $\vec{r}$, after the short wavelengths have been removed, is $\eta_0(\vec{r})$. Also suppose that $\eta_0$ is known, whereas $\eta$ is not. We can then only calculate the normal of the simplified surface, $\normvec{n}_0$. Let's also define the \idx{anti-normal} $\vec{\xi}$ of a normal $\normvec{\xi}$ as
+
+\begin{equation}
+\vec{\xi} \,=\, \frac{\normvec{\xi}}{\normvec{z}\cdot\normvec{\xi}}\,,
+\end{equation}
+
+where $\normvec{z}$ is the \idxs{unit}{vector} pointing \up (where up is the negation of the direction of the \idxs{gravitational acceleration}{vector}); this implies that the $\normvec{z}$-component of an anti-normal is always 1. The \idx{anti-normal} $\vec{n}_0$ of $\eta_0$ becomes
+
+\begin{equation}
+\vec{n}_0 \,=\, \left(\!\!\!\begin{array}{c}\nabla\eta_0(\vec{r}) \\ 1\end{array}\!\!\!\right).
+\end{equation}
+
+The gradient in turn can be rewritten as
+
+\begin{equation}
+\nabla\eta_0(\vec{r}) \,=\, \nabla\mathcal{F}^{-1}\{\fdfunc{\eta}_0(\vec{k})\}(\vec{r}) \,=\, \mathcal{F}^{-1}\{\vec{k}\,\fdfunc{\eta}_0(\vec{k})\}(\vec{r}),
+\end{equation}
+
+where $\mathcal{F}^{-1}$ is the \idxs{inverse}{Fourier transform} and $\fdfunc{\eta}_0(\vec{k})$ is the \idxs{Fourier}{transform} of $\eta_0$. The anti-normal of the real surface cannot be calculated since $\eta$ is unknown, but it can still be written as
+
+\begin{equation}
+\vec{n} \,=\, \left(\!\!\!\begin{array}{c}\nabla\eta(\vec{r}) \\ 1\end{array}\!\!\!\right),
+\end{equation}
+
+where the gradient can be written as
+
+\begin{equation}
+\nabla\eta(\vec{r}) \,=\, \mathcal{F}^{-1}\{\vec{k}\,\fdfunc{\eta}(\vec{k})\}(\vec{r}),
+\end{equation}
+
+where $\fdfunc{\eta}(\vec{k})$ is the \idxs{Fourier}{transform} of $\eta$. However, only the part of $\fdfunc{\eta}(\vec{k})$ where $\vec{k}$ is small enough is known; in fact, this part is equal to $\fdfunc{\eta}_0(\vec{k})$, while the rest of $\fdfunc{\eta}(\vec{k})$,
+
+\begin{equation}
+\Delta\fdfunc{\eta}(\vec{k}) \,=\, \fdfunc{\eta}(\vec{k}) - \fdfunc{\eta}_0(\vec{k}),
+\end{equation}
+
+is unknown. On the other hand, , if we know what the \idxs{wave}{spectrum} looks like, we can calculate the distribution of $\eta$ and thus calculate the \idxs{probability}{density} that it will match the anti-normalized halfway vector.
+
+On the other hand, if we assume that the suppressed waves are small, we can make the \approximation that the \idxs{expectation}{value} of $\fdfunc{\eta}$ where the \idxs{view}{ray} hits is $\fdfunc{\eta}_0$, which means that
+
+\begin{equation}
+E_{\vec{k}}[\Delta\fdfunc{\eta}] \,=\, 0,
+\end{equation}
+
+where $E_{\vec{k}}$ denotes the expectation value for a specific value of $\vec{k}$, and if the \idxs{wave}{spectrum} is known, $\Var_{\vec{k}}(\Delta\fdfunc{\eta})$ is also known, where $\Var_{\vec{k}}$ denotes the \variance for a specific value of $\vec{k}$. Knowing this, we can calculate the mean value $\vec{\mu}$ of $\nabla\eta$,
+
+\begin{equation}
+\begin{array}{c}
+\vec{\mu} \,=\, E[\nabla\eta(\vec{r})] \,=\, E\left[\mathcal{F}^{-1}\left\{\vec{k}\,\fdfunc{\eta}(\vec{k})\right\}(\vec{r})\right] \\
+=\, E\left[\mathcal{F}^{-1}\left\{\vec{k}\,\left(\fdfunc{\eta}_0(\vec{k})+\Delta\fdfunc{\eta}(\vec{k})\right)\right\}(\vec{r})\right] \\
+=\, \mathcal{F}^{-1}\left\{\vec{k}\,\left(E_{\vec{k}}[\fdfunc{\eta}_0]+E_{\vec{k}}[\Delta\fdfunc{\eta}]\right)\right\}(\vec{r}) \,=\, \mathcal{F}^{-1}\{\vec{k}\,\fdfunc{\eta}_0(\vec{k})\}(\vec{r}) \,=\, \nabla\eta_0(\vec{r})\,.
+\end{array}
+\end{equation}
+
+\textit{\href{http://en.wikipedia.org/wiki/Multivariate\_normal\_distribution\#Non-degenerate\_case}{Multivariate normal distribution}}
+
+\textit{\href{http://en.wikipedia.org/wiki/Rendering\_equation}{Rendering equation}}
+}

@@ -125,81 +125,11 @@ Normally however, when rendering a \scene with \idxs{computer}{graphics}, one do
 
 \subsubsection{Illumination model for water surfaces}
 
-Typically, when rendering an \idxs{ocean}{scene}{s}, not the entire wave spectrum is used, but only the lowest frequencies of it, since too high frequencies will give rise to \folding, which may in turn give rise to \idxsp{Moire}{pattern}{s}. Therefore, not all frequencies will be caught in \idxs{rendered}{image}. This is especially notable if much of the \idxs{wave}{energy} in a \idxs{sea}{state} lies in the part of the \idxs{wave}{spectrum} where the \wavelength is shorter than the shortest wavelength that can be rendered correctly, without introducing folding. Besides, because of the limited resolution of the \grid, wavelengths that are too short are automatically removed even if the rendering would allow shorter wavelengths.
+Typically, when rendering an \idxs{ocean}{scene}, not the entire wave spectrum is used but only the lowest frequencies of it, since too high frequencies will give rise to \folding which may in turn give rise to unwanted effects such as \idxsp{Moire}{pattern}{s}. Besides, because of the limited resolution of the \grid, short \wavelengths will automatically be removed even if the rendering would allow shorter wavelengths. Therefore, not all frequencies will be used in the \idxs{rendered}{image}. If much of the \idxs{wave}{energy} in a \idxs{sea}{state} lies in the part of the \idxs{wave}{spectrum} that will not be used when rendering the image, such as when the surface is viewed from a far distance, this can become very evident.
 
-Since the \idxs{surface}{normal} of the water surface depends on the \gradient of the \idxs{free surface}{elevation}, all surface waves will help to build up a variance in the surface normal. If viewed from a distance that is just large enough, the surface waves will not be visible, but the variance of the normal that is created by the surface waves will be visible in the reflection of a \idxs{point}{light source}\index{source!point light|see{point light source}} since a large variance in the normal will \blur out the reflection much. So if certain wavelengths are removed from the water surface, they should be accounted for by blurring out the image that is reflected in the image, or the rendered water will look much \smoother.
+Since the \idxs{surface}{normal} of the water surface depends on the \gradient of the \idxs{free surface}{elevation}, all surface waves will help to build up a variance in the surface normal. If viewed from a distance that is just large enough, the surface waves themselves will be too small to be visible, but the variance of the normal that is created by the surface waves will be visible since it will give rise to a blur in \reflections in the surface. This is for example what often causes the reflection of the \sun in the sea to look like a long vertical stripe under the sun instead of something that looks like a sun. So if certain wavelengths are removed from the water surface, they should be accounted for by blurring out the image that is reflected in the water, of course in the correct way, or the rendered water will look too \smooth.
 
-\ 
-
-\hrule
-
-\ 
-
-If we simplify a water surface by removing a part of the \idxs{wave}{spectra}, we need to -- for \rendering purposes -- compensate for that by making the \reflection in the \idxs{simplified}{water surface} \idxse{diffuse}{reflection}{diffuse}.
-
-Although the high frequencies have been removed from the rendering and it isn't possible to treat them directly, it is possible to treat them statistically by using something that's known as \microfacets. A \microfacet is 
-
-%This means that there is in practice many different directions the light can \bounce off in after having hit a simplified surface, whilst for a \idxs{non-simplified}{water surface}, the light can only bounce off in one direction, which is given by the \idxs{Householder}{transformation}.
-
-Suppose that we want to calculate the \shading on the simplified water surface caused by a \idxs{point}{light source}, we then need to know what the \idxs{bidirectional reflectance}{distribution function}\index{function!bidirectional reflectance distribution|see{bidirectional reflectance distribution function}}\index{reflectance distribution function!bidirectional|see{bidirectional reflectance distribution function}} of the simplified surface looks like.
-
-Suppose that the non-simplified \idxs{free surface}{elevation}\index{surface elevation!free|see{free surface elevation}} on the location $\vec{r}$ is $\eta(\vec{r})$, where $\vec{r}$ is a \idxs{two-dimensional}{vector}, and that the simplified free surface elevation on the location $\vec{r}$, after the short wavelengths have been removed, is $\eta_0(\vec{r})$. Also suppose that $\eta_0$ is known, whereas $\eta$ is not. We can then only calculate the normal of the simplified surface, $\normvec{n}_0$. Let's also define the \idx{anti-normal} $\vec{\xi}$ of a normal $\normvec{\xi}$ as
-
-\begin{equation}
-\vec{\xi} \,=\, \frac{\normvec{\xi}}{\normvec{z}\cdot\normvec{\xi}}\,,
-\end{equation}
-
-where $\normvec{z}$ is the \idxs{unit}{vector} pointing \up (where up is the negation of the direction of the \idxs{gravitational acceleration}{vector}); this implies that the $\normvec{z}$-component of an anti-normal is always 1. The \idx{anti-normal} $\vec{n}_0$ of $\eta_0$ becomes
-
-\begin{equation}
-\vec{n}_0 \,=\, \left(\!\!\!\begin{array}{c}\nabla\eta_0(\vec{r}) \\ 1\end{array}\!\!\!\right).
-\end{equation}
-
-The gradient in turn can be rewritten as
-
-\begin{equation}
-\nabla\eta_0(\vec{r}) \,=\, \nabla\mathcal{F}^{-1}\{\fdfunc{\eta}_0(\vec{k})\}(\vec{r}) \,=\, \mathcal{F}^{-1}\{\vec{k}\,\fdfunc{\eta}_0(\vec{k})\}(\vec{r}),
-\end{equation}
-
-where $\mathcal{F}^{-1}$ is the \idxs{inverse}{Fourier transform} and $\fdfunc{\eta}_0(\vec{k})$ is the \idxs{Fourier}{transform} of $\eta_0$. The anti-normal of the real surface cannot be calculated since $\eta$ is unknown, but it can still be written as
-
-\begin{equation}
-\vec{n} \,=\, \left(\!\!\!\begin{array}{c}\nabla\eta(\vec{r}) \\ 1\end{array}\!\!\!\right),
-\end{equation}
-
-where the gradient can be written as
-
-\begin{equation}
-\nabla\eta(\vec{r}) \,=\, \mathcal{F}^{-1}\{\vec{k}\,\fdfunc{\eta}(\vec{k})\}(\vec{r}),
-\end{equation}
-
-where $\fdfunc{\eta}(\vec{k})$ is the \idxs{Fourier}{transform} of $\eta$. However, only the part of $\fdfunc{\eta}(\vec{k})$ where $\vec{k}$ is small enough is known; in fact, this part is equal to $\fdfunc{\eta}_0(\vec{k})$, while the rest of $\fdfunc{\eta}(\vec{k})$,
-
-\begin{equation}
-\Delta\fdfunc{\eta}(\vec{k}) \,=\, \fdfunc{\eta}(\vec{k}) - \fdfunc{\eta}_0(\vec{k}),
-\end{equation}
-
-is unknown. On the other hand, , if we know what the \idxs{wave}{spectrum} looks like, we can calculate the distribution of $\eta$ and thus calculate the \idxs{probability}{density} that it will match the anti-normalized halfway vector.
-
-On the other hand, if we assume that the suppressed waves are small, we can make the \approximation that the \idxs{expectation}{value} of $\fdfunc{\eta}$ where the \idxs{view}{ray} hits is $\fdfunc{\eta}_0$, which means that
-
-\begin{equation}
-E_{\vec{k}}[\Delta\fdfunc{\eta}] \,=\, 0,
-\end{equation}
-
-where $E_{\vec{k}}$ denotes the expectation value for a specific value of $\vec{k}$, and if the \idxs{wave}{spectrum} is known, $\Var_{\vec{k}}(\Delta\fdfunc{\eta})$ is also known, where $\Var_{\vec{k}}$ denotes the \variance for a specific value of $\vec{k}$. Knowing this, we can calculate the mean value $\vec{\mu}$ of $\nabla\eta$,
-
-\begin{equation}
-\begin{array}{c}
-\vec{\mu} \,=\, E[\nabla\eta(\vec{r})] \,=\, E\left[\mathcal{F}^{-1}\left\{\vec{k}\,\fdfunc{\eta}(\vec{k})\right\}(\vec{r})\right] \\
-=\, E\left[\mathcal{F}^{-1}\left\{\vec{k}\,\left(\fdfunc{\eta}_0(\vec{k})+\Delta\fdfunc{\eta}(\vec{k})\right)\right\}(\vec{r})\right] \\
-=\, \mathcal{F}^{-1}\left\{\vec{k}\,\left(E_{\vec{k}}[\fdfunc{\eta}_0]+E_{\vec{k}}[\Delta\fdfunc{\eta}]\right)\right\}(\vec{r}) \,=\, \mathcal{F}^{-1}\{\vec{k}\,\fdfunc{\eta}_0(\vec{k})\}(\vec{r}) \,=\, \nabla\eta_0(\vec{r})\,.
-\end{array}
-\end{equation}
-
-\textit{\href{http://en.wikipedia.org/wiki/Multivariate\_normal\_distribution\#Non-degenerate\_case}{Multivariate normal distribution}}
-
-\textit{\href{http://en.wikipedia.org/wiki/Rendering\_equation}{Rendering equation}}
+A derivation of an illumination model for sea surfaces is found in \appref{chap:illumination_model_derivation}.
 
 \subsection{Visual effects}
 
