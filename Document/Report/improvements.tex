@@ -135,13 +135,11 @@ A derivation of an illumination model for sea surfaces is found in \appref{chap:
 
 \subsubsection{Choppy waves}
 
-
-
-Gerstner waves (horizontal offset), almost 200 years ago (see \textit{\href{http://graphics.ucsd.edu/courses/rendering/2005/jdewall/tessendorf.pdf}{Simulating Ocean Water}})
+Waves of a single frequency is not a perfect \sinusoidal, but a \trochoid, which makes the curvature greater at the \idxs{wave}{crest} and lesser at the \idxs{wave}{valley}, which makes the waves look more \idxse{choppy}{waves}{choppy}. By letting sinusoidals displace the water surface, not only vertically, but also horizontally, trochoids can effectively be created and a more realistic look of the water surface is obtained. These waves are called \idxsp{Gerstner}{wave}{s} and were first found as an approximate solution to the fluid dynamic equations almost 200 years ago, as noted in \textit{\href{http://graphics.ucsd.edu/courses/rendering/2005/jdewall/tessendorf.pdf}{Simulating Ocean Water}}), and is today used extensively used in computer graphics for animating water surfaces.
 
 \subsubsection{Splash and foam}
 
-In rough weather conditions, 
+In rough weather conditions, the waves will become higher and choppier, and their crests will break more easily, forming white foam where they break, which is known as oceanic whitecaps, or just whitecaps.
 
 (See \textit{\href{http://en.wikipedia.org/wiki/Sea_foam}{Wikipedia -- Sea foam}} or search for \textit{protein skimming} or \textit{foam fractionation})
 
@@ -154,11 +152,3 @@ which in turn is based on work presented in the book \textit{\href{http://books.
 See also \textit{\href{http://www.ias.ac.in/jess/sep2002/Ps18.pdf}{Oceanic whitecaps: Sea surface features detectable via satellite that are indicators of the magnitude of the air-sea gas transfer coefficient}} (also by  E. C. Monahan)
 
 See also \textit{\href{http://cg.informatik.uni-freiburg.de/publications/2012_CGI_sprayFoamBubbles.pdf}{Unified Spray, Foam and Bubbles for Particle-Based Fluids}}
-
-%\subsection{Turbulence}
-
-%See \textit{\href{http://publications.dice.se/attachments/water\%20interaction\%20ottosson_bjorn.pdf}{Real-time Interactive Water Waves}} (2.1.3) for a discussion of why that is important.
-
-%\section{Local-time stepping} % Highly dubious
-
-%Very dubious technique as you can make the method allow large time steps. (see below)
