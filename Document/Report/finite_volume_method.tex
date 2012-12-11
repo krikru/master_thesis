@@ -132,7 +132,7 @@ The \idxs{Navier--Stokes}{equations} are a statement of the conservation of mome
 
 where $\rho$ is the density, $\vec{u}$ is the velocity, $p$ is the pressure, $\devstressten$ is the \index{stress tensor|see{deviatoric stress tensor}}\idxs{deviatoric stress}{tensor} and $\vec{f}$ is the external forces per unit volume. It should be noted that these equations do not fully describe the fluid for; for example, they do not describe convection of the fluid, nor do they describe how to obtain any of the fields $p$, $\boldsymbol{\mathsf{T}}$ or $\vec{f}$ that the Navier--Stokes equations depend on.
 
-By \idxse{time}{discretization}{time discretizing} and rewriting \eqref{eq:navier_stokes}, and choosing the value of $\vec{u}$ in timestep $n$ and the value of $\partial\vec{u}/\partial t$ in timestep $n+\frac{1}{2}$, thus introducing an $O(\Delta t)$ error where $\Delta t$ is the length of the time step, we obtain
+By \idxse{time}{discretization}{time discretizing} and rewriting \eqref{eq:navier_stokes}, and choosing the value of $\vec{u}$ in \timestep $n$ and the value of $\partial\vec{u}/\partial t$ in \timestep $n+\frac{1}{2}$, thus introducing an $O(\Delta t)$ error where $\Delta t$ is the length of the time step, we obtain
 
 \begin{equation} \label{eq:navier_stokes_time_discretized}
 \vec{u}_{n+1}  = \vec{u}_{n} + \Delta t\left(-\vec{u}_{n}\cdot\nabla\vec{u}_{n} \,+\, \frac{-\nabla p + \nabla\cdot\boldsymbol{\mathsf{T}} + \vec{f}}{\rho}\right),
@@ -178,13 +178,13 @@ where the density is defined as $\rho = \opd m/\opd V$. By subtracting the right
 \frac{\partial \rho}{\partial t} + \nabla\cdot(\rho\vec{u}) \,=\, 0.
 \end{equation}
 
-This is known as the \idxs{continuity}{equation} and has to be satisfied in order to ensure \idxs{conservation of}{mass}. \idxse{time}{discretization}{Time discretizing} this equation, and choosing to use the value of $\rho$ in timestep $n+1$ and the value of $\partial \rho/\partial t$ in time step $n+\frac{1}{2}$, thus giving an $O(\Delta t)$ error, gives
+This is known as the \idxs{continuity}{equation} and has to be satisfied in order to ensure \idxs{conservation of}{mass}. \idxse{time}{discretization}{Time discretizing} this equation, and choosing to use the value of $\rho$ in \timestep $n+1$ and the value of $\partial \rho/\partial t$ in time step $n+\frac{1}{2}$, thus giving an $O(\Delta t)$ error, gives
 
 \begin{equation} \label{eq:continuity_equation_time_discretized}
 \rho_{n+1} \,=\, \rho_{n} - \Delta t\,\nabla\cdot(\rho_{n}\vec{u}_{n}),
 \end{equation}
 
-where $\rho_n$ denotes the density in timestep $n$.
+where $\rho_n$ denotes the density in \timestep $n$.
 
 \section{Pressure calculation}
 \label{sec:pressure_calculation}

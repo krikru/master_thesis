@@ -4,3 +4,5 @@ else
     echo "The text '$1' could not be found"
 fi
 rm grepout -f
+rm grepout~ -f
+rm "#grepout#" -f
