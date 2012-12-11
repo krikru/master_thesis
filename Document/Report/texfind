@@ -1,3 +1,1 @@
-grep $1 *.tex > grepout
-emacs grepout
-rm grepout -f
+texfind.sh $1
