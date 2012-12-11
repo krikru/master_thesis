@@ -47,7 +47,7 @@ In this \levelname, some improvements that are not required in order to make the
 
 \subsection{Parallelization}
 
-In order to speed up the simulation further, it can be processed on multiple \cores simultaneously as well as on the \GPU. This is generally referred to as \parallelization. For parallelization to be possible, the \idxs{simulation}{domain} first has to be \partitioned, so that a small part of the domain can be processed on each core and on each \idxs{GPU}{process}.
+In order to speed up the simulation further, it can be processed on multiple \cores simultaneously, as well as on the \GPU (if the \octree traversal is implemented to run without recursion, since GPUs generally don't have any stack which means that they can't do recursion). This is generally referred to as \parallelization. For parallelization to be possible, the \idxs{simulation}{domain} first has to be \partitioned, so that a small part of the domain can be processed on each core and on each \idxs{GPU}{process}.
 
 Since the process that takes the longest time to run will decide the speed of the simulation, the size of the partitions should be roughly the same. Besides, access to data that is located outside of the partition takes extra long time, so it is desired that the number of neighbors cells for each partition that lies outside of the partition itself is kept low, which is somewhat similar to the problem of minimizing the area between the partitions. For a structured grid, the partitioning can be effectively achieved by cutting the simulation domain into square or cubic pieces. However, for an \idxs{unstructured}{grid} like an \octree, the partitioning is more difficult, but it is still very much possible.
 
