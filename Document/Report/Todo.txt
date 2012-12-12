@@ -10,9 +10,13 @@ Needs to be written:
 * Improvements
 
 Needs finishing:
-* Results
 (* Octrees)
 (* Laplacian pyramid)
+
+Search for (texfind):
+* \href
+* \url
+* \citep{temp}
 
 * Add to nomeclature:
     * <>     - ensemble average
@@ -21,7 +25,9 @@ Needs finishing:
     * Misc. variables in the newly written sections
 
 * Add to table of technical terms
-    * Anti-normal
+    * anti-normal
+    * structured and unstructured grid
+    * stack
 
 * Include references:
     * PDE solved for correcting signed distance function: http://www.matthiasmueller.info/talks/SurfaceTrackingMM.pdf
@@ -37,7 +43,7 @@ Needs finishing:
 
 * Update numenclature for: Solution methods for the pressure Poison equation, advection methods and all sections written thereafter
 
-* Add limitations of derived 2D PDE
+* Add limitations of derived 2D PDE (no given way to calculate a,)
 
 * Reference section about BFECC (what?)
     
