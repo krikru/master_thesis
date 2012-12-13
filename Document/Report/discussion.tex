@@ -1,28 +1,27 @@
 \chapter{Discussion}
 
-Whenever a cell with $\alpha = 0$ doesn't border to any cell with $\alpha > 0$, it is not needed any longer.
-
-The idea was to remove them, although this feature was never implemented. Although the advection scheme that is used is ideal in \idxs{one}{dimension}\index{dimensions!one|see{one dimension}}, it proved to smear the \idxs{$\alpha$}{field} out somewhat in \idxse{two}{dimensions}{two} and \idxs{three}{dimensions}, making the interface between water and vacuum become thicker and thicker, which affects both the \idxs{simulation}{quality}, since the surface becomes less and less well-defined as the simulation goes on, as well as the \performance of the \idxs{numerical}{method} since it will have to consider more and more cells as the interface gets thicker and thicker. Another advection scheme that maybe could remedy this problem is \MULES, described in \citep{Berberovi2009} and further developed to for better handling of more than two phases in \citep{Kissling2010}, although it would have to be modified to cope with compressible flow.
-
-\section{Difficulties and drawbacks with the method}
-
-Difficulties:
-\begin{itemize}
-    \item Dynamical creation/termination of surface cells and determination of properties in new cells
-    \item High Courant numbers
-    \item High speeds of sound (remedied in \textit{\href{http://physbam.stanford.edu/~kwatra/papers/compressible_semi_implicit/compressible_semi_implicit.pdf}{A method for avoiding the acoustic time step restriction in compressible flow}})
-    \item Keeping a sharp interface
-    \item Making it work in real-time
-\end{itemize}
-
-\section{Already existing software}
+As mentioned in the last chapter, there were quite many issues that needed to be dealt with in order to make \thismethod, which was the method implemented in \thisprojectwork, work well. Although the method very well can simulate phenomenas such as turbulence, nonlinearity, breaking waves, splashes, sound waves, etc., just given enough computational power and enough time to improve it, these phenomenons do not need to be simulated in a flight simulator, and there are other methods, such as the \LPD method, that are simpler to implement, run faster and still have all the required properties. Some of the difficulties with the method includes:
 
 \begin{itemize}
-    \item OpenFOAM (\red{FOAM, see} \textit{\href{http://powerlab.fsb.hr/ped/kturbo/openfoam/docs/foam.pdf}{A tensorial approach to computational continuum mechanics using object-oriented techniques}})
+    \item Dynamical creation/destruction of surface cells and determination of properties in the new cells,
+    \item Handling of high Courant numbers (described in \citep{Stam1999}),
+    \item Handling of high speeds of sound (described in \citep{Kwatra2009}),
+    \item Keeping the interface sharp (described in a vast amount of research papers, see \secref{sec:advection_of_phase_fraction}), and
+    \item Making it work in real-time.
 \end{itemize}
-
-Reasons to use them: They have been tried out and they work, maybe not exactly for these purposes, though. It saves time to use them instead of having to develop your own software. Reasons for developing you own software: You get full control of what you are doing, so you can adapt the software after your needs. You can approximate and simplify the things that are usually important but not for this purpose, so you can optimize the code for your purpose. You don't have to pay for any license; this otherwise have a tendency to become really expensive for a large company.
 
 \section{Other methods to use}
 
-For real-time simulation of surface waves in large bodies of water, where non-linear phenomena are not of any significant importance, the best method to use, considering both implementation time and simulation quality, is probably spectral methods.
+For real-time simulations of surface waves in large bodies of water, where \idxse{non-linear}{phenomenon}{non-linear phenomena} are not of any significant importance, the best method to use, considering both implementation time and simulation quality, is probably the \LPD method. If there would turn out to be an easy way to model \FSI while using the Fourier synthesis method, that method is probably to prefer, since is it very easy to implement and extend to make it simulate Gerstner waves, and because of the large number of sources describing it.
+
+\section{Speed}
+
+With its \idxs{linear}{running time}\index{time!running|see{running time}}, or $O(N)$ \idxs{time}{complexity}, where $N$ is the number of cells visible on the surface, the method implemented in \thisprojectwork places itself among the methods with the lowest time complexity, such as the \LPD method, even beating the Fourier synthesis method with its $O(N \log N)$ time complexity.
+
+However, \thismethod has a very high time constant associated with the big O notation, making it very slow, and it probably will not surpass the Fourier synthesis method in speed until a ridiculously large number of cells are being simulated, which is very impractical. The Fourier synthesis method ais still a very fast method, much thanks to its simplicity.
+
+\section{Already existing software}
+
+There is a number of software dedicated for simulating fluids under various licenses. A few of the free software \idxsp{CFD}{package}{s} that exist are OpenFOAM (originally \idx{FOAM}, for \textit{\idxs{field}{operation and manipulation}}\index{field operation and manipulation|see{FOAM}}, outlined in \textit{\href{http://powerlab.fsb.hr/ped/kturbo/openfoam/docs/foam.pdf}{A tensorial approach to computational continuum mechanics using object-oriented techniques}} \citep{temp}), which is free and open source, and \Gerris \citep{temp}, published under the Free Software GPL license. There are several commercial CFD solvers as well, including \RealFlow and \idxs{ANNSYS}{Fluent}. %For a larger list of available software, see \textit{\href{http://www.cfd-online.com/Links/soft.html}{CFD Online: Links - Software}} \citep{temp}.
+
+However, the majority of existing CFD packages are designed to produce general, high quality simulations to be used for analysis or by artists, and are not aimed towards \realtime simulations.

@@ -32,8 +32,9 @@ Search for (texfind):
 * Include references:
     * PDE solved for correcting signed distance function: http://www.matthiasmueller.info/talks/SurfaceTrackingMM.pdf
     * Paper mentioning that Fourier synthesis cannot simulate FSI: http://developer.download.nvidia.com/GTC/SIGGRAPH_Asia_2011/PDF/WaterSim_Chentanez.pdf
-    * Paper mentioning that Fourier synthesis can simulate FSI:
+    * Paper mentioning that Fourier synthesis can simulate FSI: (Is there any??)
     * Include in Poisson equation part: http://www.math.ucla.edu/~jteran/papers/MST10.pdf and http://www.youtube.com/watch?NR=1&v=BXpO4Aljekk
+    * Include in advection schemes for the phase fraction part: https://www.youtube.com/watch?v=AYQiwhU-cfE
 
 * Check picture permisions (even pictures in the public domain that cannot be copyrighted may require that credit is given to the creator or the photographer)
 
