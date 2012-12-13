@@ -17,6 +17,7 @@ Search for (texfind):
 * \href
 * \url
 * \citep{temp}
+* \levelname
 
 * Add to nomeclature:
     * <>     - ensemble average
