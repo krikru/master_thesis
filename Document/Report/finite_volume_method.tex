@@ -13,14 +13,13 @@ The \FVM is a way of solving a \PDE, or a set of \PDEs, where the room is \discr
 
 The \FVM can handle \simulation of fluids in realistic way. It is natural for representing fluids since it represents fluids, which are continuous medias (at least on the level they are simulated), in a continuous ways, in contrast to when representing the fluids as \idxse{fluid}{particles}{particles}, which are discrete.
 
-When using the \FVM, the simulation can be concentrated to the interesting parts of the flow by using \idxs{adaptive}{mesh refinement}, as in \citep{Popinet2003,Losasso2004}, to speed up the simulation orders of magnitude without loosing orders of magnitude in numerical precision in the interesting parts of the flow. This doesn't really have any natural correspondence when using particles. It is possible to initialize the particles with different \idxsp{effective}{size}{s} %TODO: Include reference to work where this has been done. Can't find it now! I know that I'm supposed to have it somewhere.
-in order to make some parts of flow have a lower \idxs{particle}{density} and hence require less \idxs{computational}{power} per unit volume; in that way \idxs{numerical}{precision} can be traded for speed. However, this introduces another problem --- as the flow evolves, \advection may cause large particles to end up at places in the flow where high numerical precision is desired and decrease the numerical precision to under the required level. Besides, if the particles have a high velocity relative to each other (a high \temperature), \diffusion will cause large particles and small particles to mix and the large particles will once again end up at places in the flow where high numerical precision is desired.
+When using the \FVM, the simulation can be concentrated to the interesting parts of the flow by using \idxs{adaptive}{mesh refinement}, as in \citep{Popinet2003,Losasso2004}, to speed up the simulation orders of magnitude without loosing orders of magnitude in numerical precision in the interesting parts of the flow. This doesn't really have any natural correspondence when using particles. It is possible to initialize the particles with different \idxsp{effective}{size}{s} in order to make some parts of flow have a lower \idxs{particle}{density} and hence require less \idxs{computational}{power} per unit volume; in that way \idxs{numerical}{precision} can be traded for speed. However, this introduces another problem --- as the flow evolves, \advection may cause large particles to end up at places in the flow where high numerical precision is desired and decrease the numerical precision to under the required level. Besides, if the particles have a high velocity relative to each other (a high \temperature), \diffusion will cause large particles and small particles to mix and the large particles will once again end up at places in the flow where high numerical precision is desired.
 
 One naive attempt to solve this problem could be to dynamically resize the particles as they end up in parts of the flow with different requirements on the numerical precision. However, this will add or remove mass a those locations, so the simulation will not \idxse{conservation of}{mass}{conserve mass}. A succeeding naive attempt to solve this problem in turn could be to distribute mass that has been removed uniformly over all other particles by scaling them with a factor, but that would lead to a non-physical transportation of mass which would move the center of mass, and it would even cause the simulation to not \idxse{conservation of}{momentum}{conserve momentum}. A better remedy to this problem is to split too large particles into smaller particles and merge too small particles into larger particles as first done in \citep{Desbrun1999} and later improved in a number of reports, for example in \citep{Yan2009}. However, these techniques still require a fairly large number of particles and are hence not suitable for real time simulations of water surfaces on large bodies of water.
 
 When applying the \FVM in \CFD, it simulates the \flow of a \fluid by dividing the fluid into a large number of non-moving, adjacent \cells and letting the fluid flow between the cells, through the \idxsp{cell}{face}{s}. The motion of the fluid is described by a set of \PDEs, usually the \idxs{Euler}{equations} or the \idxs{Navier--Stokes}{equations}.
 
-The main difference between the Navier--Stokes equations and the Euler equations is that the Navier--Stokes equations takes \index{visousity|see{viscous force}}\idxsp{viscous}{force}{s} into account whe\-reas the Euler equations do not. The Euler equations are therefore a special case of the Navier--Stokes equations. Many textbooks also omits \idxsp{external}{force}{s} when writing about the Euler equations, although gravity which is such an external force usually is included when simulating \idxs{free surface}{flow} using the Euler equations.
+The main difference between the Navier--Stokes equations and the Euler equations is that the Navier--Stokes equations takes \index{visousity|see{viscous force}}\idxsp{viscous}{force}{s} into account whe\-reas the Euler equations do not. The Euler equations are therefore a special case of the Navier--Stokes equations. Many textbooks also omit \idxsp{external}{force}{s} when writing about the Euler equations, although gravity which is such an external force usually is included when simulating \idxs{free surface}{flow} using the Euler equations.
 
 In simulations where the viscous force plays a big role, the Euler equations are not sufficient and so the Navier--Stokes equations are usually used, otherwise the Euler equations usually works as well as the Navier--Stokes equations and are even preferred to the Navies--Stokes equations because of the simplification they imply for the model as well as the computations. In \thisprojectwork, it is the Euler equations that are solved.
 
@@ -35,13 +34,13 @@ In the \PDEs, in order to calculate the \divergence of a \idxs{vector}{field}, t
 where $\vec{F}$ is a vector field, $V$ is a \idxs{control}{volume}, which in our case is the cell surrounding the point $\vec{r}$ in which the divergence is to be calculated, $S$ is the surface of $V$, with \idxs{normal}{vector} pointing outwards, $\opd V$ and $\opd S$ are \infinitesimal elements in $V$ and $S$ respectively, $\normal$ is the normal of $\opd S$ and $\vec{r'}$ is the position of $\opd V$ and $\opd S$ respectively. The divergence of $\vec{F}(\vec{r})$ is then \approximated as the \average divergence of $\vec{F}$ in $V$ and calculated as
 
 \begin{equation} \label{eq:divergence_surface_integral}
-\nabla\vec{F}(\vec{r}) \,=\, \frac{1}{V}\,\oiint_S(\vec{F}\cdot\normal)\,\opd S.
+\nabla\cdot\vec{F}(\vec{r}) \,=\, \frac{1}{V}\,\oiint_S(\vec{F}\cdot\normal)\,\opd S.
 \end{equation}
 
 In the \FVM, the surface of a cell consists of \idxsp{cell}{face}{s}, $S_i$, between the cell itself and \neighboring cells, so \eqref{eq:divergence_surface_integral} can be rewritten as
 
 \begin{equation} \label{eq:divergence_cell_face_sum}
-\nabla\vec{F}(\vec{r})\ =\ \frac{1}{V}\,\sum_{S_i} \oiint_{S_i}(\vec{F}\cdot\normal)\,\opd S\ =\ \frac{1}{V}\,\sum_{S_i} F_i\,S_i,
+\nabla\cdot\vec{F}(\vec{r})\ =\ \frac{1}{V}\,\sum_{S_i} \oiint_{S_i}(\vec{F}\cdot\normal)\,\opd S\ =\ \frac{1}{V}\,\sum_{S_i} F_i\,S_i,
 \end{equation}
 
 where $i$ is an index, $S_i$ is the \area of the cell face to the $i$th neighbor cell and $F_i$ is the average \idxs{field}{flux} through $S_i$, defined as
@@ -78,7 +77,7 @@ where $\Delta\vec{r} = \vec{r}_2 -  \vec{r}_1$ and
 \nabla\phi(\vec{r})\cdot\frac{\Delta\vec{r}}{|\Delta\vec{r}|} = \phi'_{\Delta\vec{r}}(\vec{r}),
 \end{equation}
 
-where $\phi'_{\vec{v}}$ is the \derivative of $\phi$ in the direction of $\vec{v}$. By assuming the simplest path possible from $r_1$ to $r_2$, which is just a straight line, $\Delta r$ can be written as
+where $\phi'_{\vec{v}}$ is the \derivative of $\phi$ in the direction of $\vec{v}$. By assuming the simplest path possible from $r_1$ to $r_2$, which is just a line segment, $\Delta r$ can be written as
 
 \begin{equation}
 \Delta r = \int_\gammapath\opd r'
@@ -130,7 +129,7 @@ The \idxs{Navier--Stokes}{equations} are a statement of the conservation of mome
 \rho\left(\frac{\partial\vec{u}}{\partial t} + \vec{u}\cdot\nabla\vec{u}\right) = -\nabla p + \nabla\cdot\boldsymbol{\mathsf{T}} + \vec{f},
 \end{equation}
 
-where $\rho$ is the density, $\vec{u}$ is the velocity, $p$ is the pressure, $\devstressten$ is the \index{stress tensor|see{deviatoric stress tensor}}\idxs{deviatoric stress}{tensor} and $\vec{f}$ is the external forces per unit volume. It should be noted that these equations do not fully describe the fluid for; for example, they do not describe convection of the fluid, nor do they describe how to obtain any of the fields $p$, $\boldsymbol{\mathsf{T}}$ or $\vec{f}$ that the Navier--Stokes equations depend on.
+where $\rho$ is the density, $\vec{u}$ is the velocity, $p$ is the pressure, $\devstressten$ is the \index{stress tensor|see{deviatoric stress tensor}}\idxs{deviatoric stress}{tensor}, which includes \idxsp{viscous}{force}{s}, and $\vec{f}$ is the external forces per unit volume. For the case of \idxs{Eulerian}{flow}, ${\boldsymbol{\mathsf{T}} = 0}$ so ${\nabla\cdot\boldsymbol{\mathsf{T}}}$ vanishes from the equation. It should be noted that these equations do not fully describe the behavior of the fluid; for example, they do not model the effects of \idxs{surface}{tension} or describe diffusion of various properties such as \temperature within the fluid, nor do they describe how to obtain any of the fields $p$, $\boldsymbol{\mathsf{T}}$ or $\vec{f}$ that are needed in order to solve the Navier--Stokes equations.
 
 By \idxse{time}{discretization}{time discretizing} and rewriting \eqref{eq:navier_stokes}, and choosing the value of $\vec{u}$ in \timestep $n$ and the value of $\partial\vec{u}/\partial t$ in \timestep $n+\frac{1}{2}$, thus introducing an $O(\Delta t)$ error where $\Delta t$ is the length of the time step, we obtain
 
@@ -138,9 +137,9 @@ By \idxse{time}{discretization}{time discretizing} and rewriting \eqref{eq:navie
 \vec{u}_{n+1}  = \vec{u}_{n} + \Delta t\left(-\vec{u}_{n}\cdot\nabla\vec{u}_{n} \,+\, \frac{-\nabla p + \nabla\cdot\boldsymbol{\mathsf{T}} + \vec{f}}{\rho}\right),
 \end{equation}
 
-where $\vec{u}_{n}$ denotes the velocity in time step $n$. Using a method described e.g.\ in \citep{Losasso2004}, this \PDE can be solved in two steps. First, an intermediate velocity $\vec{u}^*_n$ is calculated ignoring the pressure term, that is
+where $\vec{u}_{n}$ denotes the velocity in time step $n$. Using a method described e.g.\ in \citep{Losasso2004}, this \PDE can be solved in two steps. First, an auxiliary velocity $\vec{u}^*_n$ is calculated ignoring the pressure term, that is
 
-\begin{equation} \label{eq:intermediate_velocity}
+\begin{equation} \label{eq:auxiliary_velocity}
 \vec{u}^*_n  = \vec{u}_{n} + \Delta t\left(-\vec{u}_{n}\cdot\nabla\vec{u}_{n} \,+\, \frac{\nabla\cdot\boldsymbol{\mathsf{T}} + \vec{f}}{\rho}\right),
 \end{equation}
 
@@ -172,13 +171,13 @@ and in the limit where $V \,\rightarrow\, 0$, this equation turns into
 \frac{\partial \rho}{\partial t} \,=\, -\nabla\cdot(\rho\vec{u}),
 \end{equation}
 
-where the density is defined as $\rho = \opd m/\opd V$. By subtracting the right hand side from both sides we obtain
+where the density is defined as $\rho = \opd m/\opd V$. This can be rewritten as
 
 \begin{equation} \label{eq:continuity_equation}
 \frac{\partial \rho}{\partial t} + \nabla\cdot(\rho\vec{u}) \,=\, 0.
 \end{equation}
 
-This is known as the \idxs{continuity}{equation} and has to be satisfied in order to ensure \idxs{conservation of}{mass}. \idxse{time}{discretization}{Time discretizing} this equation, and choosing to use the value of $\rho$ in \timestep $n+1$ and the value of $\partial \rho/\partial t$ in time step $n+\frac{1}{2}$, thus giving an $O(\Delta t)$ error, gives
+This is known as the \idxs{continuity}{equation} and has to be satisfied in order to ensure \idxs{conservation of}{mass}. \idxse{time}{discretization}{Time discretizing} this equation, and choosing to use the values of $\rho$ and $\vec{u}$ in \timestep $n$ and the value of $\partial \rho/\partial t$ in time step $n+\frac{1}{2}$, thus introducing an $O(\Delta t)$ error, gives
 
 \begin{equation} \label{eq:continuity_equation_time_discretized}
 \rho_{n+1} \,=\, \rho_{n} - \Delta t\,\nabla\cdot(\rho_{n}\vec{u}_{n}),
@@ -189,11 +188,11 @@ where $\rho_n$ denotes the density in \timestep $n$.
 \section{Pressure calculation}
 \label{sec:pressure_calculation}
 
-Neither the Euler equations nor the Navier--Stokes equations specify how the pressure should be calculated, so when solving either of these two set of equations one is essentially free to calculate the pressure in whichever way desired. Together with a \idxs{pressure}{model}, the two sets of equations come in two major forms which usually differs significantly in implementation and stability: The \indexs{compressible Navier--Stokes}{equations}\indexs{compressible Euler}{equations}\compressible forms and the \indexs{incompressible Navier--Stokes}{equations}\indexs{incompressible Euler}{equations}\incompressible forms. For \thisprojectwork, the compressible Euler equations are solved.
+Neither the Euler equations nor the Navier--Stokes equations specify how the pressure should be calculated, so when solving either of these two sets of equations one is essentially free to calculate the pressure in whichever way desired. Together with a \idxs{pressure}{model}, the two sets of equations come in two major forms which usually differs significantly in implementation and stability: The \indexs{compressible Navier--Stokes}{equations}\indexs{compressible Euler}{equations}\compressible forms and the \indexs{incompressible Navier--Stokes}{equations}\indexs{incompressible Euler}{equations}\incompressible forms. For \thisprojectwork, the compressible Euler equations are solved.
 
 \subsection{Compressible flow}
 
-In nature, all fluids are compressible, so a physically correct \idxs{pressure}{model} will let the fluids contract and expand which means that for \indexs{compressible}{fluid}\idxs{compressible}{flow}, the \divergence of the \idxs{velocity}{field} is allowed to be non-zero. The \pressure is then usually expressed as a function of the density; sometimes also taking into account the \temperature and other \properties that may affect the pressure, that is
+In nature, all fluids are compressible, so a physically correct \idxs{pressure}{model} will let the fluids contract and expand which means that for \indexs{compressible}{fluid}\idxs{compressible}{flow}, the \divergence of the \idxs{velocity}{field} is allowed to be non-zero. The \pressure is then usually expressed as a function of the density, sometimes also taking into account the \temperature and other \properties that may affect the pressure, that is
 
 \begin{equation} \label{eq:pressure_compressible_flow}
 p = p\,(\rho,\,T,\,\text{other material properties}),
@@ -201,9 +200,9 @@ p = p\,(\rho,\,T,\,\text{other material properties}),
 
 where $T$ is the temperature.
 
-However, the set of fluid motion equations including \eqref{eq:pressure_compressible_flow} is \idxse{stiff}{equation}{stiff}, and ordinary \idxsp{numerical}{method}{s} for solving this set of equations are known to give rise to \indexs{spurious}{oscillations}\indexs{spurious}{oscillations}\indexify{spurious spurious oscillations} in the solutions when the \idxs{speed of}{sound} multiplied by the \idx{time step} becomes too large in relation to the \idxs{characteristic}{length} of the \cells, making the numerical methud \unstable. More generally, this stringent restriction is known as the \CFL condition.
+However, the set of fluid motion equations including \eqref{eq:pressure_compressible_flow} is \idxse{stiff}{equation}{stiff}, meaning that if an ordinary \idxs{explicit}{method} such as the \idxs{forward Euler}{method} is used, the \timestep has to be taken to be extremely small, or the method will be unstable. Ordinary \idxsp{numerical}{method}{s} for solving this set of equations are known to give rise to \idxs{spurious}{oscillations} in the solutions when the \idxs{speed of}{sound} multiplied by the \idx{time step} becomes too large in relation to the \idxs{characteristic}{length} of the \cells, making the numerical method \unstable. More generally, this stringent restriction of the \timestep is known as the \CFL condition.
 
-Still, not all solvers for compressible flow suffers from this problem. In \citep{Kwatra2009}, the \CFL condition is alleviated by introducing a \idxs{pressure}{field}, separated from the \idxs{density}{field}, and updating the pressure and velocity fields using what looks like the \index{implicit Euler method|see{backward Euler method}}\idxs{backward}{Euler method}, which leads to a \idxs{Poisson}{equation} for solving the pressure field. The remaining fields are then updated with the standard (forward) \idx{Euler method}. This technique doesn't lead to spurious acoustic oscillations and is similar to the technique used for solving incompressible flow, which also gives rise to a Poisson equation for solving the pressure field. As noted in \citep{Kwatra2009}, it also leads to the same Poisson equation as for incompressible flow in the limit where the \idxs{speed of}{sound} goes to infinity.
+Still, not all solvers for compressible flow suffers from this problem. In \citep{Kwatra2009}, the \CFL condition is alleviated by introducing a \idxs{pressure}{field}, separated from the \idxs{density}{field}, and updating the pressure and velocity fields using what looks like the \index{implicit Euler method|see{backward Euler method}}\idxs{backward}{Euler method}, which leads to a \idxs{Poisson}{equation} for solving the pressure field. The remaining fields are then evolved with the standard (forward) \idx{Euler method}. This technique doesn't lead to spurious acoustic oscillations and is similar to the technique used for solving incompressible flow, which also gives rise to a Poisson equation for solving the pressure field. As noted in \citep{Kwatra2009}, it also leads to the same Poisson equation as for incompressible flow in the limit where the \idxs{speed of}{sound} goes to infinity.
 
 \subsection{Incompressible Navier--Stokes equations}
 
@@ -227,15 +226,23 @@ and
 \nabla\cdot\vec{u} \,=\, 0.
 \end{equation}
 
-Furthermore, %TODO: Furthermore what?
+By combining \eqref{eq:density_divergence_incompressible_flow} and \eqref{eq:velocity_divergence_incompressible_flow}, \eqref{eq:continuity_equation_time_discretized} turns into just
+
+\begin{equation} \label{eq:continuity_equation_superfluous}
+{\rho_{n+1} \,=\, \rho_n}
+\end{equation}
+
+and becomes superfluous.
+
+Furthermore, it turns out that when the flow is compressible, we have
 
 \begin{equation} \label{eq:deviatoric_stress_tensor_incompressible_flow}
 \nabla\cdot\boldsymbol{\mathsf{T}} \,=\, \mu\nabla^2\vec{u},
 \end{equation}
 
-where $\mu$ is the (dynamic) \viscosity\index{dynamic viscosity|see{viscosity}}. For simplicity, we can assume that we use a set of units where $\rho = 1$. \eqref{eq:intermediate_velocity} can then be rewritten as
+where $\mu$ is the (dynamic) \viscosity\index{dynamic viscosity|see{viscosity}}. For simplicity, we can assume that we use a set of units where $\rho = 1$. \eqref{eq:auxiliary_velocity} can then be rewritten as
 
-\begin{equation} \label{eq:intermediate_velocity_reduced}
+\begin{equation} \label{eq:auxiliary_velocity_reduced}
 \vec{u}^*_n \,= \, \vec{u}_{n} + \Delta t(- \vec{u}_{n}\cdot\nabla\vec{u}_{n} \,+\, \mu\nabla^2\vec{u}_{n} + \vec{f}),
 \end{equation}
 
@@ -247,13 +254,15 @@ However, \eqref{eq:velocity_update}, which is used to update the velocity, conta
 \nabla^2 p_{n+1} \,=\, \frac{\nabla\cdot\vec{u}^*_n}{\Delta t}
 \end{equation}
 
-which need to be solved before we can update the velocity completely.
+which needs to be solved before we can update the velocity completely.
 
-When \idxse{spatial}{discretization}{discretizing} this equation spatially a \idxs{system of linear}{equations} is obtained, for which there exists many solution methods with varying speed and accuracy. As a comparison, it can be noted that the naive \idxs{Gaussian}{elimination}\index{algorithm!Gaussian elimination|see{Gaussian elimination}} algorithm, or the \idxs{Gauss--Jordan}{elimination}\index{algorithm!Gauss--Jordan elimination|see{Gauss--Jordan elimination}} algorithm for a \idx{multi-core} system, has a \idxs{time}{complexity} of $O(N^3)$ for an $N\times N$ \idx{matrix}, where the $O$ symbol indicates \idxs{big O}{notation}\index{O!big O notation|see{big O notation}} and $N$ is the number of unknowns. However, an $O(N^3)$ time for solving the pressure Poisson equation would slow down the simulation tremendously, since it otherwise runs in $O(N)$ time per time step.
+When \idxse{spatial}{discretization}{discretizing} this equation spatially a \idxs{system of linear}{equations} is obtained, for which there exist many solution methods with varying speed and accuracy. As a comparison, it can be noted that the naive \idxs{Gaussian}{elimination}\index{algorithm!Gaussian elimination|see{Gaussian elimination}} algorithm, or the \idxs{Gauss--Jordan}{elimination}\index{algorithm!Gauss--Jordan elimination|see{Gauss--Jordan elimination}} algorithm for a \idx{multi-core} system, has a \idxs{time}{complexity} of $O(N^3)$ for an $N\times N$ \idx{matrix}, where the $O$ symbol indicates \idxs{big O}{notation}\index{O!big O notation|see{big O notation}} and $N$ is the number of unknowns. However, an $O(N^3)$ time for solving the pressure Poisson equation would slow down the simulation tremendously, since it otherwise runs in $O(N)$ time per time step.
 
-Since \incompressibility is only an \approximate \property of the fluid, it is arguably enough to only approximately solve the pressure Poisson equation, which is the governing equation for incompressibility. This assumptions enables a large set of fast, iterative methods for solving the pressure equation, such as the \idxse{multilevel}{acceleration}{multilevel accelerated} \idxs{Jacobi}{method} used in \citep{Popinet2003}. However, there exist iterative methods that will solve the pressure Poisson equation down to \idxs{machine}{precision} in only a few number of iterations, such as the \PCG method, which can be applied if the matrix is \idxse{symmetric}{matrix}{symmetric}; this method was used in \citep{Losasso2004} with an \idxs{incomplete}{LU Cholesky factorization}\index{factorization!incomplete LU Cholesky|see{incomplete LU Cholesky factorization}}\index{Cholesky factorization!incomplete LU|see{incomplete LU Cholesky factorization}} as \preconditioner.
+Since \incompressibility is only an \approximate \property of the fluid, it is arguably enough to only approximately solve the pressure Poisson equation, which is the governing equation for incompressibility. This assumption enables a large set of fast, iterative methods for solving the pressure equation, such as the \idxse{multilevel}{acceleration}{multilevel accelerated} \idxs{Jacobi}{method} used in \citep{Popinet2003}. However, there exist iterative methods that will solve the pressure Poisson equation down to \idxs{machine}{precision} in only a few number of iterations, such as the \PCG method, which can be applied if the matrix is \idxse{symmetric}{matrix}{symmetric}; this method was used in \citep{Losasso2004} with an \idxs{incomplete}{LU Cholesky factorization}\index{factorization!incomplete LU Cholesky|see{incomplete LU Cholesky factorization}}\index{Cholesky factorization!incomplete LU|see{incomplete LU Cholesky factorization}} as \preconditioner.
 
-If the pressure equation is only solved approximately, \eqref{eq:velocity_divergence_incompressible_flow} is not perfectly satisfied, so each cell will gain or lose some mass during each time step. If perfect \idxs{conservation of}{mass} is essential, the deviation of mass has to be recorder, and for that reason we will reintroduce the \idxs{density}{field} $\rho$. Instead of satisfying \eqref{eq:velocity_divergence_incompressible_flow}, one would rather prefer that the density very quickly becomes one again. The time $n+1$ density is given by \eqref{eq:continuity_equation_time_discretized} which is fully determined since $\rho_{n+1}$ is the only unknown in the equation, but the time $n+2$ density is given by substituting $n+1$ for $n$ in \eqref{eq:continuity_equation_time_discretized}, that is
+If the pressure equation is only solved approximately, \eqref{eq:velocity_divergence_incompressible_flow} is not perfectly satisfied, and hence \eqref{eq:continuity_equation_superfluous} doesn't hold. If perfect \idxs{conservation of}{mass} is essential, the deviation of mass has to be recorded so that they can be accounted for, and \eqref{eq:continuity_equation_time_discretized} has to be used again.
+
+Instead of trying to satisfy \eqref{eq:velocity_divergence_incompressible_flow}, which obviously doesn't work too well and would lead to uncontrolled fluctuations in density, one would rather prefer that the density very quickly becomes one again. The time $n+1$ density is given by \eqref{eq:continuity_equation_time_discretized} which is fully determined since $\rho_{n+1}$ is the only unknown in the equation, but the time $n+2$ density is given by substituting $n+1$ for $n$ in \eqref{eq:continuity_equation_time_discretized}, that is
 
 \begin{equation} \label{eq:continuity_equation_time_discretized_postponed}
 \rho_{n+2} \,=\, \rho_{n+1} - \Delta t\,\nabla\cdot(\rho_{n+1}\vec{u}_{n+1})
@@ -265,13 +274,13 @@ which is underdetermined since $\vec{u}_{n+1}$ also is unknown. We can therefore
 \rho_{n+2} \,=\, 1.
 \end{equation}
 
-Perfect satisfaction of \eqref{eq:density_conservation} will not take place due to a not perfectly solved pressure equation, but it is still the goal and also what we are going to assume. By rearranging \eqref{eq:continuity_equation_time_discretized_postponed} and expanding the divergence, we obtain
+Perfect satisfaction of \eqref{eq:density_conservation} will not take place due to an imperfectly solved pressure equation, but it is still the goal and also what we are going to assume. By rearranging \eqref{eq:continuity_equation_time_discretized_postponed} and expanding the divergence, we obtain
 
 \begin{equation} \label{eq:velocity_divergence_density_conservation_premature}
 \nabla\cdot\vec{u}_{n+1} \,=\, \frac{1-\rho_{n+1}^{-1}\,\rho_{n+2}}{\Delta t} \,-\, \rho_{n+1}^{-1}\,\vec{u}_{n+1}\cdot\nabla\rho_{n+1}.
 \end{equation}
 
-If we assume that the \idxs{Courant}{number} $C$, which is basically the ratio of a cells volume that is replaced in one time step because of flow through the cell walls, is much lower than one, that is
+If we assume that the \idxs{Courant}{number} $C$, which is basically the volume fraction of a cell that is replaced during one \timestep because of flow through the cell walls, is much lower than one, that is
 
 \begin{equation}
 C \ll 1,
@@ -299,7 +308,9 @@ where $q$ is a known function of $\vec{r}$.
 
 \subsection{Solution of the pressure Poison equation}
 
-There are a number of ways to solve the pressure Poisson equation. To begin with, we can realize that since the system is discretized, and since the Poisson equation is linear by nature, the equation can be written as a system of linear equations, or as
+\label{sec:pressure_poison_equation_solution}
+
+There are a number of ways to solve the pressure Poisson equation. To begin with, we can realize that since the system is discretized, and since the Poisson equation is linear by nature, the equation can be written as a system of linear equations, that is
 
 \begin{equation} \label{eq:pressure_poissin_equation_matrix}
 \mathbf{A\,p} \,=\, \mathbf{q},

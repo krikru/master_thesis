@@ -18,6 +18,9 @@ Search for (texfind):
 * \url
 * \citep{temp}
 * \levelname
+* intermediate (replace with auxiliary in the case of velocity)
+* ; (looks awkward on some places)
+* naiive, naive, naiivity, etc. (put into index)
 
 * Add to nomeclature:
     * <>     - ensemble average
