@@ -8,6 +8,7 @@ High importance
 Needs to be written:
 * Discussion
 * Improvements
+* Library page
 
 Needs finishing:
 (* Octrees)
@@ -48,7 +49,7 @@ Search for (texfind):
 
 * Update numenclature for: Solution methods for the pressure Poison equation, advection methods and all sections written thereafter
 
-* Add limitations of derived 2D PDE (no given way to calculate a,)
+* Add limitations of derived 2D PDE (no given way to calculate h and a)
 
 * Reference section about BFECC (what?)
     
