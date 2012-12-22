@@ -227,14 +227,18 @@ In this case, since $K(x)$ was found to vanish very quickly as $x\rightarrow\inf
 which is a modified version of \eqref{eq:kerneltofdkernel}, and comparing $\fdfunc{K}^*$ with $\fdfunc{K}$, than to calculate $K$ from \eqref{eq:fdkerneltokernel} directly. A function that was found both to be simple and to have a high visual resemblance with $\fdfunc{K}$ after transformed according to \eqref{eq:kerneltofdkernelmodified} was
 
 \begin{equation} \label{eq:empirical}
-K^*(x) = \frac{1}{8\,\pi^3\,x\,(1\,+\,x)}\,e^{-x^2/4},
+K^*(x) = \frac{1}{2\,\pi\,x\,(1\,+\,x)}\,e^{-x^2/4},
 \end{equation}
 
-where $^*$ denotes an \estimate. Note that both $K$, $\fdfunc{K}$ and the arguments they take are \idx{dimensionless}. $K$ is therefore the \idxs{dimensionless}{convolution kernel}.
+where $^*$ denotes an \estimate. A comparison between $\fdfunc{K}^*$ when $K^*$ is given by \eqref{eq:empirical} and $\fdfunc{K}$ can be seen in \figref{fig:transformedkernel}. Note that both $K$, $\fdfunc{K}$ and the arguments they take are \idx{dimensionless}. $K$ is therefore the \idxs{dimensionless}{convolution kernel}.
 
-%TODO: Include plots
-%\input{comparison.tex}
-%\input{comparison_tikz.tex}
+\begin{figure}
+    \centering
+    \subcaptionbox{\label{fig:transformedkernelcomparison}}[.43\textwidth]{\input{comparison.tex}}
+    \subcaptionbox{\label{fig:transformedkernelratio}}[.53\textwidth]{\input{ratio.tex}}
+    \caption{Comparison of the \idxs{impulse}{response} of \eqref{eq:empirical} and the impulse response of an ideal kernel. The fluctuations for the higher values of $\xi$ in \subrefp{fig:transformedkernelratio} are purely due to \idxs{numerical}{errors}.}
+    \label{fig:transformedkernel}
+\end{figure}
 
 Expanding \eqref{eq:opcfconvolution} yields
 
