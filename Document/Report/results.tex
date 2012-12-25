@@ -1,5 +1,21 @@
 \chapter{Results}
 
+\begin{figure}
+    \centering
+    \subcaptionbox{\label{fig:initialconditionscreenshoot}}[.475\textwidth]{
+        \begin{tikzpicture}[x={(.35\textwidth,0)},y={(0,.35\textwidth)}]
+        \input{Images/Screenshots/initial_condition}
+        \end{tikzpicture}
+    }
+    \subcaptionbox{\label{fig:splashscreenshoot}}[.475\textwidth]{
+        \begin{tikzpicture}[x={(.35\textwidth,0)},y={(0,.35\textwidth)}]
+        \input{Images/Screenshots/splash}
+        \end{tikzpicture}
+    }
+    \caption{Screenshots: \subrefp{fig:screenshot1} and \subrefp{fig:screenshot2}.}
+    \label{fig:screenshots}
+\end{figure}
+
 % Pros:
 
 The program that was developed could successfully simulate water and air and keep the two phases separated, with a region of cells containing a mix of both water and air in between. Pressure waves could be propagated within the fluids, and gravity waves, or surface waves, propagating on the surface in the interface between the water and the air were successfully simulated.
