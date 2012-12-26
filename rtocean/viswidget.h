@@ -10,6 +10,7 @@
 #include <fstream>
 
 // Qt includes
+#include <QString>
 #include <QGLWidget>
 #include <QTimer>
 
@@ -22,23 +23,6 @@
 ////////////////////////////////////////////////////////////////
 
 typedef base_float_vec3<GLfloat> color3;
-
-////////////////////////////////////////////////////////////////
-// ENUMS
-////////////////////////////////////////////////////////////////
-
-enum SCALAR_PROPERTY {
-    SP_NO_SCALAR_PROPERTY,
-    SP_ALPHA,
-    SP_WATER_VOLUME_COEFFICIENT,
-    SP_AIR_VOLUME_COEFFICIENT,
-    SP_TOTAL_VOLUME_COEFFICIENT,
-    SP_PRESSURE,
-    SP_PRESSURE_DEVIATION,
-    SP_VELOCITY_DIVERGENCE,
-    SP_FLOW_DIVERGENCE,
-    NUM_SCALAR_PROPERTIES
-};
 
 ////////////////////////////////////////////////////////////////
 // CLASS DEFINITION
@@ -59,7 +43,7 @@ private:
 private:
     /* Private static member variables */
     std::ofstream tikz_file;
-    bool drawing_to_tikz;
+    bool drawing_tikz_image;
     GLfloat tikz_line_opacity;
     bool tikz_line_color_black;
     /* Colors */
@@ -67,26 +51,29 @@ private:
     static GLfloat* NEIGHBOR_CONNECTION_G;
     static GLfloat* NEIGHBOR_CONNECTION_B;
     static GLfloat* NEIGHBOR_CONNECTION_A;
+    /* Scalar property names */
 
 public:
     /* Constructor */
     explicit viswidget(QWidget *parent = 0);
 
     /* Public methods */
-    void initializeGL();
-    void paintGL();
-    void save_screen_as_tikz_picture();
-    void resizeGL(int w, int h);
+    void save_screen_as_tikz_picture(QString file_name);
     void set_system_to_visualize(watersystem* system);
     void set_scalar_property_to_visualize(uint property);
+    uint get_scalar_property_to_visualize() const;
+
+protected:
+    /* Protected methods */
+    void initializeGL();
+    void paintGL();
+    void resizeGL(int w, int h);
     
 signals:
     
 public slots:
 
 private:
-    /* Private methods */
-
     /* Complex functions */
     void visualize_fvoctree(const fvoctree *tree);
     void set_up_model_view_matrix(GLdouble scale_factor = 1);
@@ -131,7 +118,7 @@ private:
     static void init_neighbor_connection_colors();
 
     // More or less drawing primitives
-    void start_tikz_picture();
+    void start_tikz_picture(QString file_name);
     void end_tikz_picture();
     void quick_set_color(GLfloat r, GLfloat g, GLfloat b, GLfloat a);
     void set_line_style(GLfloat width, GLfloat r, GLfloat g, GLfloat b, GLfloat a);

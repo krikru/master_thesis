@@ -30,14 +30,14 @@ public:
     mustinit& operator /= (const mustinit &a) { declare_reading(); return *this = value / a; }
 
     //template<typename T2>
-    friend std::ostream & operator << (std::ostream  &os , const mustinit &a) { a.declare_reading(); return os  << a.value; }
-    friend std::wostream& operator << (std::wostream &wos, const mustinit &a) { a.declare_reading(); return wos << a.value; }
+    //friend std::ostream & operator << (std::ostream  &os , const mustinit &a) { a.declare_reading(); return os  << a.value; }
+    //friend std::wostream& operator << (std::wostream &wos, const mustinit &a) { a.declare_reading(); return wos << a.value; }
 
-    friend std::istream & operator >> (std::istream  &is , mustinit &a) { return is  >> a.value; }
-    friend std::wistream& operator >> (std::wistream &wis, mustinit &a) { return wis >> a.value; }
+    //friend std::istream & operator >> (std::istream  &is , mustinit &a) { return is  >> a.value; }
+    //friend std::wistream& operator >> (std::wistream &wis, mustinit &a) { return wis >> a.value; }
 
-    const mustinit operator + () const { declare_reading(); return *this; }
-    const mustinit operator - () const { declare_reading(); return static_cast<mustinit>(-value); }
+    //const mustinit operator + () const { declare_reading(); return *this; }
+    //const mustinit operator - () const { declare_reading(); return static_cast<mustinit>(-value); }
 
     const mustinit operator++ (int) {    // Post Increment operator
         declare_reading();

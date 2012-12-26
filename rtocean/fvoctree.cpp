@@ -47,13 +47,14 @@ bool fvoctree::refine_subtree(octcell* c, pftype surface, pftype bottom)
     pftype s = c->s;
 
     pftype lowest_cell_height = c->r[VERTICAL_DIMENSION];
+    pftype min_max_balance = 0.5;
 #if    NUM_DIMENSIONS == 2
 #if 1 // Step profile surface
     //pftype hdiff = .24118956;
-    pftype hdiff = .25;
-    pftype step_x_pos = 0.7;
-    pftype low = SURFACE_HEIGHT - hdiff/2;
-    pftype high = SURFACE_HEIGHT + hdiff/2;
+    pftype hdiff = 14.0/64;
+    pftype step_x_pos = 45.0/64;
+    pftype low = SURFACE_HEIGHT;
+    pftype high = SURFACE_HEIGHT + hdiff;
     pftype min_surf_height;
     pftype max_surf_height;
 
@@ -64,6 +65,7 @@ bool fvoctree::refine_subtree(octcell* c, pftype surface, pftype bottom)
         }
         else {
             max_surf_height = high;
+            min_max_balance = (step_x_pos - c->r[HORIZONTAL_DIMENSION1])/c->get_edge_length();
         }
     }
     else {
@@ -151,7 +153,7 @@ bool fvoctree::refine_subtree(octcell* c, pftype surface, pftype bottom)
         if (lowest_cell_height + s > min_surf_height) {
             /* Cell is a surface cell */
             /* Estimate beta */
-            pftype mean_height_diff = (MAX(min_surf_height - lowest_cell_height, 0) + MIN(pftype(max_surf_height - lowest_cell_height), s))/2;
+            pftype mean_height_diff = min_max_balance*MAX(min_surf_height - lowest_cell_height, 0) + (1-min_max_balance)*MIN(pftype(max_surf_height - lowest_cell_height), s);
             beta = mean_height_diff / c->s;
         }
         else {

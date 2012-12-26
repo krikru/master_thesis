@@ -53,8 +53,10 @@ public:
     void      continue_simulation();
     void      abort_ongoing_operation();
     /* Callback */
-    void set_state_updated_callback(callback<void (*)(void*)> callback);
-    void set_state_updated_callback(void (*function)(void*), void* parameter);
+    void set_state_updated_callback   (callback<void (*)(void*)> callback);
+    void set_state_updated_callback   (void (*function)(void*), void* parameter);
+    void set_take_printscreen_callback(callback<void (*)(void*)> callback);
+    void set_take_printscreen_callback(void (*function)(void*), void* parameter);
 
     /* Static functions */
     static pftype vol_coeffs_to_density(pftype water_volume_coeff, pftype total_volume_coeff);
@@ -80,6 +82,7 @@ private:
     /* Callback */
     //callback<void (*)(void*, string)> output_callback;
     callback<void (*)(void*)> state_updated_callback;
+    callback<void (*)(void*)> take_printscreen_callback;
 
 private:
     /* Private methods */
@@ -327,13 +330,26 @@ void watersystem::set_state_updated_callback(void (*function)(void*), void* para
     state_updated_callback.param = parameter;
 }
 
+inline
+void watersystem::set_take_printscreen_callback(callback<void (*)(void*)> callback)
+{
+    take_printscreen_callback = callback;
+}
+
+inline
+void watersystem::set_take_printscreen_callback(void (*function)(void*), void* parameter)
+{
+    take_printscreen_callback.func  = function ;
+    take_printscreen_callback.param = parameter;
+}
+
 /* Miscellaneous */
 
 inline
 void watersystem::process_events()
 {
     // Let the application process its events
-    if (state_updated_callback.func) {
+    if (state_updated_callback.is_defined()) {
         state_updated_callback.func(state_updated_callback.param);
     }
 }
