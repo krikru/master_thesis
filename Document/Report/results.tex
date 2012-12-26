@@ -1,19 +1,150 @@
 \chapter{Results}
 
+\newlength{\screenshotwidth}
+\setlength{\screenshotwidth}{.475\textwidth}
+
+\newlength{\screenshotunitlength}
+\setlength{\screenshotunitlength}{.325\textwidth}
+
+\newlength{\initiallinewidth}
+\setlength{\initiallinewidth}{.25pt}
+
 \begin{figure}
     \centering
-    \subcaptionbox{\label{fig:initialconditionscreenshoot}}[.475\textwidth]{
-        \begin{tikzpicture}[x={(.35\textwidth,0)},y={(0,.35\textwidth)}]
-        \input{Images/Screenshots/initial_condition}
+    \subcaptionbox{$t = 0 \text{ s}$}[\screenshotwidth]{
+        \begin{tikzpicture}[x={(\screenshotunitlength,0)},y={(0,\screenshotunitlength)}]
+        \input{Images/Screenshots/screenshot_alpha_at_0}
         \end{tikzpicture}
     }
-    \subcaptionbox{\label{fig:splashscreenshoot}}[.475\textwidth]{
-        \begin{tikzpicture}[x={(.35\textwidth,0)},y={(0,.35\textwidth)}]
-        \input{Images/Screenshots/splash}
+    \subcaptionbox{$t = 0.075 \text{ s}$}[\screenshotwidth]{
+        \begin{tikzpicture}[x={(\screenshotunitlength,0)},y={(0,\screenshotunitlength)}]
+        \input{Images/Screenshots/screenshot_alpha_at_0.075}
         \end{tikzpicture}
     }
-    \caption{Screenshots: \subrefp{fig:screenshot1} and \subrefp{fig:screenshot2}.}
-    \label{fig:screenshots}
+    \subcaptionbox{$t = 0.15 \text{ s}$}[\screenshotwidth]{
+       \begin{tikzpicture}[x={(\screenshotunitlength,0)},y={(0,\screenshotunitlength)}]
+       \input{Images/Screenshots/screenshot_alpha_at_0.15}
+       \end{tikzpicture}
+    }
+    \subcaptionbox{$t = 0.3 \text{ s}$}[\screenshotwidth]{
+        \begin{tikzpicture}[x={(\screenshotunitlength,0)},y={(0,\screenshotunitlength)}]
+        \input{Images/Screenshots/screenshot_alpha_at_0.3}
+        \end{tikzpicture}
+    }
+    \subcaptionbox{$t = 0.6 \text{ s}$}[\screenshotwidth]{
+        \begin{tikzpicture}[x={(\screenshotunitlength,0)},y={(0,\screenshotunitlength)}]
+        \input{Images/Screenshots/screenshot_alpha_at_0.6}
+        \end{tikzpicture}
+    }
+    \subcaptionbox{$t = 0.9 \text{ s}$}[\screenshotwidth]{
+        \begin{tikzpicture}[x={(\screenshotunitlength,0)},y={(0,\screenshotunitlength)}]
+        \input{Images/Screenshots/screenshot_alpha_at_0.9}
+        \end{tikzpicture}
+    }
+    \subcaptionbox{$t = 1.25 \text{ s}$}[\screenshotwidth]{
+        \begin{tikzpicture}[x={(\screenshotunitlength,0)},y={(0,\screenshotunitlength)}]
+        \input{Images/Screenshots/screenshot_alpha_at_1.25}
+        \end{tikzpicture}
+    }
+    \subcaptionbox{$t = 1.75 \text{ s}$}[\screenshotwidth]{
+        \begin{tikzpicture}[x={(\screenshotunitlength,0)},y={(0,\screenshotunitlength)}]
+        \input{Images/Screenshots/screenshot_alpha_at_1.75}
+        \end{tikzpicture}
+    }
+    \caption{Phase fraction, $\alpha$}
+    \label{fig:screenshots_alpha}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \subcaptionbox{$t = 0 \text{ s}$}[\screenshotwidth]{
+        \begin{tikzpicture}[x={(\screenshotunitlength,0)},y={(0,\screenshotunitlength)}]
+        \input{Images/Screenshots/screenshot_water_volume_coefficient_at_0}
+        \end{tikzpicture}
+    }
+    \subcaptionbox{$t = 0.075 \text{ s}$}[\screenshotwidth]{
+        \begin{tikzpicture}[x={(\screenshotunitlength,0)},y={(0,\screenshotunitlength)}]
+        \input{Images/Screenshots/screenshot_water_volume_coefficient_at_0.075}
+        \end{tikzpicture}
+    }
+    \subcaptionbox{$t = 0.15 \text{ s}$}[\screenshotwidth]{
+       \begin{tikzpicture}[x={(\screenshotunitlength,0)},y={(0,\screenshotunitlength)}]
+       \input{Images/Screenshots/screenshot_water_volume_coefficient_at_0.15}
+       \end{tikzpicture}
+    }
+    \subcaptionbox{$t = 0.3 \text{ s}$}[\screenshotwidth]{
+        \begin{tikzpicture}[x={(\screenshotunitlength,0)},y={(0,\screenshotunitlength)}]
+        \input{Images/Screenshots/screenshot_water_volume_coefficient_at_0.3}
+        \end{tikzpicture}
+    }
+    \subcaptionbox{$t = 0.6 \text{ s}$}[\screenshotwidth]{
+        \begin{tikzpicture}[x={(\screenshotunitlength,0)},y={(0,\screenshotunitlength)}]
+        \input{Images/Screenshots/screenshot_water_volume_coefficient_at_0.6}
+        \end{tikzpicture}
+    }
+    \subcaptionbox{$t = 0.9 \text{ s}$}[\screenshotwidth]{
+        \begin{tikzpicture}[x={(\screenshotunitlength,0)},y={(0,\screenshotunitlength)}]
+        \input{Images/Screenshots/screenshot_water_volume_coefficient_at_0.9}
+        \end{tikzpicture}
+    }
+    \subcaptionbox{$t = 1.25 \text{ s}$}[\screenshotwidth]{
+        \begin{tikzpicture}[x={(\screenshotunitlength,0)},y={(0,\screenshotunitlength)}]
+        \input{Images/Screenshots/screenshot_water_volume_coefficient_at_1.25}
+        \end{tikzpicture}
+    }
+    \subcaptionbox{$t = 1.75 \text{ s}$}[\screenshotwidth]{
+        \begin{tikzpicture}[x={(\screenshotunitlength,0)},y={(0,\screenshotunitlength)}]
+        \input{Images/Screenshots/screenshot_water_volume_coefficient_at_1.75}
+        \end{tikzpicture}
+    }
+    \caption{Water volume coefficient}
+    \label{fig:screenshots_water_volume_coefficient}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \subcaptionbox{$t = 0 \text{ s}$}[\screenshotwidth]{
+        \begin{tikzpicture}[x={(\screenshotunitlength,0)},y={(0,\screenshotunitlength)}]
+        \input{Images/Screenshots/screenshot_air_volume_coefficient_at_0}
+        \end{tikzpicture}
+    }
+    \subcaptionbox{$t = 0.075 \text{ s}$}[\screenshotwidth]{
+        \begin{tikzpicture}[x={(\screenshotunitlength,0)},y={(0,\screenshotunitlength)}]
+        \input{Images/Screenshots/screenshot_air_volume_coefficient_at_0.075}
+        \end{tikzpicture}
+    }
+    \subcaptionbox{$t = 0.15 \text{ s}$}[\screenshotwidth]{
+       \begin{tikzpicture}[x={(\screenshotunitlength,0)},y={(0,\screenshotunitlength)}]
+       \input{Images/Screenshots/screenshot_air_volume_coefficient_at_0.15}
+       \end{tikzpicture}
+    }
+    \subcaptionbox{$t = 0.3 \text{ s}$}[\screenshotwidth]{
+        \begin{tikzpicture}[x={(\screenshotunitlength,0)},y={(0,\screenshotunitlength)}]
+        \input{Images/Screenshots/screenshot_air_volume_coefficient_at_0.3}
+        \end{tikzpicture}
+    }
+    \subcaptionbox{$t = 0.6 \text{ s}$}[\screenshotwidth]{
+        \begin{tikzpicture}[x={(\screenshotunitlength,0)},y={(0,\screenshotunitlength)}]
+        \input{Images/Screenshots/screenshot_air_volume_coefficient_at_0.6}
+        \end{tikzpicture}
+    }
+    \subcaptionbox{$t = 0.9 \text{ s}$}[\screenshotwidth]{
+        \begin{tikzpicture}[x={(\screenshotunitlength,0)},y={(0,\screenshotunitlength)}]
+        \input{Images/Screenshots/screenshot_air_volume_coefficient_at_0.9}
+        \end{tikzpicture}
+    }
+    \subcaptionbox{$t = 1.25 \text{ s}$}[\screenshotwidth]{
+        \begin{tikzpicture}[x={(\screenshotunitlength,0)},y={(0,\screenshotunitlength)}]
+        \input{Images/Screenshots/screenshot_air_volume_coefficient_at_1.25}
+        \end{tikzpicture}
+    }
+    \subcaptionbox{$t = 1.75 \text{ s}$}[\screenshotwidth]{
+        \begin{tikzpicture}[x={(\screenshotunitlength,0)},y={(0,\screenshotunitlength)}]
+        \input{Images/Screenshots/screenshot_air_volume_coefficient_at_1.75}
+        \end{tikzpicture}
+    }
+    \caption{Air volume coefficient}
+    \label{fig:screenshots_air_volume_coefficient}
 \end{figure}
 
 % Pros:
