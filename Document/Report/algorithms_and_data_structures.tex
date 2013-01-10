@@ -210,13 +210,13 @@ Advection of the velocity is particularly tricky, mainly because the \idxs{veloc
         \draw (1,0) \squarepath{1};
         \end{tikzpicture}
     }
-    \caption{The velocity field discretized on a staggered grid. \subrefp{fig:cell_faces_non_structured} On a \idxs{non-structured}{grid}, estimating the \idxs{velocity}{vector} in a cell given a number of \idx{face-centered} \idxs{velocity}{scalars} is non-trivial. \subrefp{fig:cell_face_control_volumes} On an axis-aligned \idxs{orthogonal}{grid}, the cell faces can be divided into groups depending on the direction of the \idxs{cell face}{normal} and meaningful \idxsp{control}{volume}{s} belonging to the cell faces can be defined. In this case the control volumes of all cell faces with normals parallel to the x-axis have been outlined with dashed lines. Note that $100\ \%$ of the points in the simulation domain correspond to exactly one control volume, as can be seen in the middle cell.}
+    \caption{The velocity field discretized on a staggered grid. \subrefp{fig:cell_faces_non_structured} On a \idxs{non-structured}{grid}, estimating the \idxs{velocity}{vector} in a cell given a number of \idx{face-centered} \idxs{velocity}{scalars} is non-trivial. \subrefp{fig:cell_face_control_volumes} On an axis-aligned \idxs{orthogonal}{grid}, the cell faces can be divided into groups depending on the direction of the \idxs{cell face}{normal} and meaningful \idxsp{control}{volume}{s} belonging to the cell faces can be defined. In this case the control volumes of all cell faces with normals parallel to the x-axis have been outlined with dashed lines. Note that every point in the simulation domain corresponds to exactly one control volume, as can be seen in the middle cell. Only the control volumes in the horizontal direction have been illustrated in the figure.}
     \label{fig:velocity_advection}
 \end{figure}
 
 \begin{enumerate}
-    \item Calculate \idx{cell-centered} \idxs{momentum}{vectors} by using the the \idx{face-centered} velocity scalars
-    \item Transport the momentum in an advection step
+    \item Calculate \idx{cell-centered} \idxsp{momentum}{vector}{s} by using the the \idx{face-centered} \idxsp{velocity}{scalar}{s},
+    \item Transport the momentum in an advection step, and
     \item Calculate the face-centered velocity scalars by calculating them from the momentum vectors.
 \end{enumerate}
 
