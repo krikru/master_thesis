@@ -58,8 +58,8 @@ public:
     base_float_vec3<T> random_normalized_orthogonal_vector () const;
 };
 
-typedef  base_float_vec3<float >  fvec3;
-typedef  base_float_vec3<double>  dvec3;
+//typedef  base_float_vec3<float >  fvec3;
+//typedef  base_float_vec3<double>  dvec3;
 
 /****************************************************************
  * Class related functions

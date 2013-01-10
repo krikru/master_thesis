@@ -29,9 +29,11 @@ mainwin::mainwin(QWidget *parent) :
     // Set up user interface
     ui->setupUi(this);
 
-    // Set up main window
+    // Set up user interface components
+    ui->statusBar->setFont(QFont("Courier", 8));
+
+    // Show ui
     this->show();
-    // Set central widget
 
     /* Connect menu items with functions */
     QObject::connect(ui->actionPause, SIGNAL(triggered(bool)),
@@ -97,6 +99,7 @@ void mainwin::keyPressEvent(QKeyEvent *e)
             }
             ui->visualization_vw->set_scalar_property_to_visualize(scalar_property_number);
             ui->statusBar->showMessage(QString("Visualizing ") + scalar_propery_names[scalar_property_number]);
+            ui->visualization_vw->updateGL();
             //ui->statusBar->showMessage(scalar_propery_names[scalar_property_number]);
             //ui->statusBar->showMessage("Pressure deviation");
             //cout << "Address to statusBar: " << ui->statusBar << endl;
@@ -117,7 +120,8 @@ void mainwin::start_simulation()
     try
     {
         system.define_water(new fvoctree(0, 0));
-        system.set_state_updated_callback(do_events, this);
+        system.set_state_updated_callback(do_events_callback, this);
+        system.set_take_printscreen_callback(take_printscreens_callback, this);
         system.set_number_of_time_steps_before_resting(NUM_TIME_STEPS_PER_FRAME);
         ui->visualization_vw->set_system_to_visualize(&system);
         ui->visualization_vw->set_scalar_property_to_visualize(DEFAULT_SCALAR_PROPERTY_TO_VISUALIZE);
@@ -136,7 +140,7 @@ void mainwin::initialize_scalar_propery_names()
 {
 #if  DEBUG
     for (uint i = 0; i < NUM_SCALAR_PROPERTIES; i++) {
-        scalar_propery_names[i] = 0;
+        scalar_propery_names[i] = "";
     }
 #endif
 
@@ -152,7 +156,7 @@ void mainwin::initialize_scalar_propery_names()
 
 #if  DEBUG
     for (uint i = 0; i < NUM_SCALAR_PROPERTIES; i++) {
-        if (!scalar_propery_names[i]) {
+        if (scalar_propery_names[i].isEmpty()) {
             throw logic_error("Not all scalar property names have been initialized");
         }
     }
@@ -165,13 +169,13 @@ void mainwin::run_simulation()
     int result = system.run_simulation(SIMULATION_TIME_STEP);
     switch (result) {
     case (SR_FINISHED):
-        ui->statusBar->showMessage("Simulation finished.");
+        ui->statusBar->showMessage("Simulation finished at time = " + QString::number(system.get_time(), 'f', 6) + " s");
         break;
     case (SR_PAUSED):
-        ui->statusBar->showMessage("Paused");
+        ui->statusBar->showMessage("Paused at time = " + QString::number(system.get_time(), 'f', 6) + " s");
         break;
     case (SR_ABORTED):
-        ui->statusBar->showMessage("Simulation aborted.");
+        ui->statusBar->showMessage("Simulation aborted at time = " + QString::number(system.get_time(), 'f', 6) + " s");
         break;
     default:
         throw logic_error("Unknown simulation result");
@@ -189,7 +193,7 @@ bool mainwin::toggle_pause_simulation()
 #if  BREAK_MAIN_LOOP_WHEN_PAUSING
                 run_simulation();
 #else
-                ui->statusBar->showMessage("Simulating");
+                ui->statusBar->showMessage("Simulating; time = " + QString::number(system.get_time(), 'f', 6) + " s");
                 system.continue_simulation();
 #endif
                 return false;
@@ -198,7 +202,7 @@ bool mainwin::toggle_pause_simulation()
 #if  BREAK_MAIN_LOOP_WHEN_PAUSING
                 system.pause_simulation(true);
 #else
-                ui->statusBar->showMessage("Paused");
+                ui->statusBar->showMessage("Paused at time = " + QString::number(system.get_time(), 'f', 6) + " s");
                 system.pause_simulation(false);
 #endif
                 return true;
@@ -214,10 +218,16 @@ bool mainwin::toggle_pause_simulation()
     return false; // Only to prevent warning
 }
 
-void mainwin::save_screen_as_tikz_picture()
+void mainwin::save_screen_as_tikz_picture(QString file_name)
 {
-    cout << "Visualizing system..." << endl;
-    ui->visualization_vw->save_screen_as_tikz_picture();
+    try
+    {
+        cout << "Visualizing system..." << endl;
+        ui->visualization_vw->save_screen_as_tikz_picture(file_name);
+    }
+    catch (std::exception &e) {
+        message_handler::inform_about_exception("mainwin::save_screen_as_tikz_picture()", e, true);
+    }
 }
 
 void mainwin::on_actionAbout_rtocean_triggered()
@@ -246,6 +256,7 @@ void mainwin::do_events()
     /* Visualize */
     cout << "Visualizing system..." << endl;
     ui->visualization_vw->updateGL();
+    ui->statusBar->showMessage("Simulating; time = " + QString::number(system.get_time(), 'f', 6) + " s");
     cout << "Took " << (clock() - time_starting_to_render)/1000.0 << " seconds." << endl << endl;
 
     /* Let Qt do its stuff */
@@ -262,12 +273,35 @@ void mainwin::do_events()
     cout << "Evolving system..." << endl;
 }
 
-void mainwin::do_events(void* mainwin_object)
+void mainwin::take_printscreens()
+{
+    uint old_property = ui->visualization_vw->get_scalar_property_to_visualize();
+    for (size_t i = 0; i < NUM_PRINTSCREEN_SCALAR_PROPERTIES; i++) {
+        SCALAR_PROPERTY property = PRINTSCREEN_SCALAR_PROPERTIES[i];
+        QString property_name = scalar_propery_names[property];
+        QString file_name = "screenshot_" + property_name.replace(' ', '_') + "_at_" + QString::number(system.get_time()) + ".tex";
+        ui->visualization_vw->set_scalar_property_to_visualize(property);
+        save_screen_as_tikz_picture(file_name);
+    }
+    ui->visualization_vw->set_scalar_property_to_visualize(old_property);
+}
+
+void mainwin::do_events_callback(void* mainwin_object)
 {
 #if  DEBUG
     if (!mainwin_object) {
-        throw logic_error("Callback function was called with a NULL pointer");
+        throw logic_error("do_events callback function was called with a NULL pointer");
     }
 #endif
     static_cast<mainwin*>(mainwin_object)->do_events();
+}
+
+void mainwin::take_printscreens_callback(void* mainwin_object)
+{
+#if  DEBUG
+    if (!mainwin_object) {
+        throw logic_error("take_printscreen_callback was called with a NULL pointer");
+    }
+#endif
+    static_cast<mainwin*>(mainwin_object)->take_printscreens();
 }

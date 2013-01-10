@@ -38,7 +38,7 @@ viswidget::viswidget(QWidget *parent) :
     /* Init member variables */
     system_to_visualize = 0;
     scalar_property_to_visualize = 0;
-    drawing_to_tikz = false;
+    drawing_tikz_image = false;
 
     init_neighbor_connection_colors();
 }
@@ -61,17 +61,17 @@ void viswidget::initializeGL()
 
 void viswidget::paintGL()
 {
-    static bool first_time_called = true;
-    if (first_time_called) {
-        first_time_called = false;
-        t = 0;
-    }
-    else {
-        t += FRAME_MS * .001;
-    }
-
     try
     {
+        static bool first_time_called = true;
+        if (first_time_called) {
+            first_time_called = false;
+            t = 0;
+        }
+        else {
+            t += FRAME_MS * .001;
+        }
+
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         if (!system_to_visualize) {
             /* Nothing to draw */
@@ -96,12 +96,12 @@ void viswidget::paintGL()
     }
 }
 
-void viswidget::save_screen_as_tikz_picture()
+void viswidget::save_screen_as_tikz_picture(QString file_name)
 {
     if (NUM_DIMENSIONS != 2) {
         message_handler::display_message_box("Saving the screen as a TikZ picture is currently only suported in two dimensions");
     }
-    start_tikz_picture();
+    start_tikz_picture(file_name);
     visualize_fvoctree(system_to_visualize->get_water());
     end_tikz_picture();
 }
@@ -131,6 +131,11 @@ void viswidget::set_scalar_property_to_visualize(uint property)
     }
 #endif
     scalar_property_to_visualize = property;
+}
+
+uint viswidget::get_scalar_property_to_visualize() const
+{
+    return scalar_property_to_visualize;
 }
 
 ////////////////////////////////////////////////////////////////
@@ -480,7 +485,7 @@ void viswidget::quick_draw_cell(const octcell* cell)
     pfvec r1 = cell->r;
     // Optimize
     pfvec r2 = cell->get_opposite_corner();
-    if (drawing_to_tikz) {
+    if (drawing_tikz_image) {
         tikz_file << "\\draw";
         if (!tikz_line_color_black || tikz_line_opacity != 1) {
             tikz_file << "[";
@@ -759,7 +764,9 @@ void viswidget::visualize_parent_cells_recursively(const octcell *cell)
         return;
     }
     else {
-        quick_draw_cell(cell);
+        if (cell->get_number_of_children() < cell->MAX_NUM_CHILDREN) {
+            quick_draw_cell(cell);
+        }
     }
 
     for (uint i = 0; i < octcell::MAX_NUM_CHILDREN; i++) {
@@ -1020,15 +1027,15 @@ void viswidget::init_neighbor_connection_colors()
 #endif
 }
 
-void viswidget::start_tikz_picture()
+void viswidget::start_tikz_picture(QString file_name)
 {
 #if  DEBUG
-    if (drawing_to_tikz) {
+    if (drawing_tikz_image) {
         throw logic_error("Trying to start TikZ picture when already drawing to TikZ");
     }
 #endif
-    drawing_to_tikz = true;
-    tikz_file.open("tikz_test.tex");
+    drawing_tikz_image = true;
+    tikz_file.open(file_name.toStdString().c_str());
     tikz_file.setf(std::ios::fixed, std::ios::floatfield); // LaTeX doesn't support scientific notation
     //tikz_file << "\\begin{tikzpicture}[x={(.35\\textwidth,0)},y={(0,.35\\textwidth)}]" << endl;
     tikz_file << "\\def\\initiallinewidth{" << INITIAL_PGF_LINE_WIDTH << "}" << endl;
@@ -1037,13 +1044,13 @@ void viswidget::start_tikz_picture()
 void viswidget::end_tikz_picture()
 {
 #if  DEBUG
-    if (!drawing_to_tikz) {
+    if (!drawing_tikz_image) {
         throw logic_error("Trying to end TikZ picture while not drawing to TikZ");
     }
 #endif
     //tikz_file << "\\end{tikzpicture}";
     tikz_file.close();
-    drawing_to_tikz = false;
+    drawing_tikz_image = false;
 }
 
 void viswidget::quick_set_color(GLfloat r, GLfloat g, GLfloat b, GLfloat a)
@@ -1064,7 +1071,7 @@ void viswidget::quick_set_color(GLfloat r, GLfloat g, GLfloat b, GLfloat a)
 void viswidget::set_line_style(GLfloat width, GLfloat  r, GLfloat g, GLfloat b, GLfloat a)
 {
     static bool blending_enabled = false;
-    if (drawing_to_tikz) {
+    if (drawing_tikz_image) {
         tikz_line_opacity = a;
         if (!a) {
             //tikz_line_color_black = true;
@@ -1125,7 +1132,7 @@ void viswidget::quick_fill_cell_2d(const octcell *cell, color3 color, GLfloat al
     pfvec p10 = p00;
     p10[DIM_Y] += cell->s;
     pfvec p11 = p10 + p01 - p00;
-    if (drawing_to_tikz) {
+    if (drawing_tikz_image) {
         tikz_file << "\\definecolor{fillcolor}{rgb}{" << color[0] << "," << color[1] << "," << color[2] << "}" << endl;
         tikz_file << "\\fill[fillcolor";
         if (alpha != 1) {
@@ -1169,7 +1176,7 @@ void viswidget::quick_draw_triangle(pfvec p1, pfvec p2, pfvec p3)
 /* set_line_style should have been called at least once before calling this function */
 void viswidget::quick_draw_line(GLfloat ax, GLfloat ay, GLfloat az, GLfloat bx, GLfloat by, GLfloat bz)
 {
-    if (drawing_to_tikz) {
+    if (drawing_tikz_image) {
         tikz_file << "\\draw";
         if (!tikz_line_color_black || tikz_line_opacity != 1) {
             tikz_file << "[";

@@ -37,7 +37,7 @@ private slots:
 
     void start_simulation();
     bool toggle_pause_simulation();
-    void save_screen_as_tikz_picture();
+    void save_screen_as_tikz_picture(QString file_name = "screenshot.tex");
 
     // Slots connected to UI items
     void on_actionAbout_rtocean_triggered();
@@ -47,12 +47,14 @@ private:
     void initialize_scalar_propery_names();
     void run_simulation();
     void do_events();
-    static void do_events(void* mainwin_object);
+    void take_printscreens();
+    static void do_events_callback(void* mainwin_object);
+    static void take_printscreens_callback(void* mainwin_object);
 
 private:
     Ui::mainwin *ui;
     watersystem system;
-    char const *scalar_propery_names[NUM_SCALAR_PROPERTIES];
+    QString scalar_propery_names[NUM_SCALAR_PROPERTIES];
 };
 
 #endif // MAINWIN_H

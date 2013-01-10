@@ -105,6 +105,7 @@ int watersystem::run_simulation(pftype time_step)
 
 void watersystem::_evolve()
 {
+    static size_t current_print_screen_index = 0;
     /* Check if dt needs to be decreased */
     if (max_v) {
         dt *= MAX_RECOMMENDED_V / max_v;
@@ -116,8 +117,26 @@ void watersystem::_evolve()
         dt = max_dt;
     }
     max_v = 0;
+    /* Check if next_print_screen is going to be taken after this time step */
+    bool take_printscreen_after_time_step = false;
+    if (current_print_screen_index < NUM_PRINTSCREEN_TIMES &&
+            t + dt >= PRINTSCREEN_TIMES[current_print_screen_index]) {
+        take_printscreen_after_time_step = true;
+        dt = PRINTSCREEN_TIMES[current_print_screen_index] - t;
+#if  DEBUG
+        if (dt < 0) {
+            throw logic_error("Want's to step back in time because if printscreen");
+        }
+#endif
+    }
     /* Update the time */
-    t += dt;
+    if (take_printscreen_after_time_step) {
+        t = PRINTSCREEN_TIMES[current_print_screen_index];
+        current_print_screen_index++;
+    }
+    else {
+        t += dt;
+    }
     /* Calculate cell-center velocity vectors */
     calculate_cell_center_properties_recursively(w->root);
     /*
@@ -140,6 +159,10 @@ void watersystem::_evolve()
     //convert_cell_face_quasi_momentum_out_to_vel_out_recursively(w->root);
 
     update_velocities_by_the_pressure_gradients_recursively(w->root);
+
+    if (take_printscreen_after_time_step && take_printscreen_callback.is_defined()) {
+        take_printscreen_callback.func(take_printscreen_callback.param);
+    }
 }
 
 /*

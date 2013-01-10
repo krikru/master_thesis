@@ -4,11 +4,12 @@
 #
 #-------------------------------------------------
 
+QMAKE_CXXFLAGS += -Wall
+
 QT       += core gui opengl
 
 TARGET = rtocean
 TEMPLATE = app
-
 
 SOURCES += main.cpp\
         mainwin.cpp \

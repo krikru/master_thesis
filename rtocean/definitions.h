@@ -23,25 +23,25 @@
 ////////////////////////////////////////////////////////////////
 
 /* Essential */
-#define  DEBUG                      0
-#define  INITIALIZE_FLOATS_TO_NAN                   1 // Weaker
+#define  DEBUG                      1
 #define  CHECK_INITIALIZATION_OF_FLOATS             0 // Stronger
+#define  INITIALIZE_FLOATS_TO_NAN                   1 // Weaker
 #define  NUM_DIMENSIONS             2 /* 2 or 3 */
 //#define  NUM_DIRECTIONS             (2*NUM_DIMENSIONS)
-#define  LOGICAL_AXIS_ORDER         1
+#define  LOGICAL_AXIS_ORDER         1 // Attempts to test (if false) wether the axis order has any affection on the simulation or not.
 #define  NO_ATMOSPHERE              0
 #define  VACUUM_HAS_PRESSURE        0
 #define  ALLOW_NEGATIVE_PRESSURES   0
 #define  INTERPOLATE_SURFACE_PRESSURE               0
-#define  COMPRESS_INTERFACE_VERTICALLY              1
-#define  TIME_STEP_CHANGE_CORRECTION                1 // Weaker
-#define  COURANT_NUMBER_LIMITATION                  1 // Stronger
+//#define  COMPRESS_INTERFACE_VERTICALLY              1 // Not used
+#define  COURANT_NUMBER_LIMITATION                  1 // Stronger. Adaptive time step (?)
+#define  TIME_STEP_CHANGE_CORRECTION                1 // Weaker. Time step changes kind of messes up the staggering of the time step in leapfrog integration; this attempts to compensate for that.
 
 /* Precision */
 #define  USE_DOUBLE_PRECISION_FOR_PHYSICS           1
 
 /* Advection scheme */
-#define  NO_SCHEME                  0
+//#define  NO_SCHEME                  0 // Mustn't be used. Acts only as an undefined value.
 #define  UPWIND                     1
 //#define  HRIC                       2
 #define  HYPER_C                    3
@@ -62,9 +62,10 @@
 //#define  SIMULATION_TIME_STEP       (FRAME_MS/1000.0) // [s]
 //#define  SIMULATION_TIME_STEP       .01 // [s]
 //#define  SIMULATION_TIME_STEP       .001 // [s]
-#define  SIMULATION_TIME_STEP       .0003 // [s]
+////#define  SIMULATION_TIME_STEP       .0003 // [s]
+//#define  SIMULATION_TIME_STEP       .00015 // [s]
 //#define  SIMULATION_TIME_STEP       .0001 // [s]
-//#define  SIMULATION_TIME_STEP       .000075 // [s]
+#define  SIMULATION_TIME_STEP       .000075 // [s]
 //#define  SIMULATION_TIME_STEP       .00003 // [s]
 //#define  SIMULATION_TIME_STEP       .00001 // [s]
 //#define  SIMULATION_TIME_STEP       .000003 // [s]
@@ -74,7 +75,7 @@
 
 /* Grid */
 #define  MIN_LOD_LAYER_THICKNESS    1    // [Number of cells]
-#define  SURFACE_HEIGHT             0.65 // [m]
+#define  SURFACE_HEIGHT             (36.0/64) // [m]
 #define  SURFACE_ACCURACY           0.02 // [m] Maximum size of the surface cells
 //#define  SURFACE_ACCURACY           0.01 // [m] Maximum size of the surface cells
 //#define  SURFACE_ACCURACY           0.005 // [m] Maximum size of the surface cells
@@ -105,8 +106,8 @@
 //#define  VEL_DIV_SCALE_FACTOR       SIMULATION_TIME_STEP // [s]
 #define  FLOW_DIV_SCALE_FACTOR      VEL_DIV_SCALE_FACTOR // [s]
 #define  DRAW_CELL_CENTER_VELOCITIES                 0
-#define  DRAW_CELL_FACE_VELOCITIES                   1
-#define  DRAW_ALL_VELOCITIES                         1 // Draw velocities for all cells
+#define  DRAW_CELL_FACE_VELOCITIES                   0
+#define  DRAW_ALL_VELOCITIES                         1 // Draw velocities for all cells and not onyly for some of them (only effective if velocities are actually drawn)
 //#define  VEL_TO_ARROW_LENGTH_FACTOR                  0.1 // [s]
 #define  VEL_TO_ARROW_LENGTH_FACTOR                  (1*SIMULATION_TIME_STEP) // [s]
 #define  DRAW_CELL_CUBES            1
@@ -129,75 +130,6 @@
 #define  NEIGHBOR_CONNECTIONS_DIST_SCALING           (1 / SCALE_FACTOR)
 
 /* Tests */
-
-/* Graphics constants */
-const float  BACKGROUND_BRIGHTNESS  = 1;
-const float  LEAF_CUBE_BRIGHTNESS   = BACKGROUND_BRIGHTNESS >= 0.5 ? 0   :   1;
-const float  PARENT_CUBE_BRIGHTNESS = BACKGROUND_BRIGHTNESS >= 0.5 ? BACKGROUND_BRIGHTNESS-0.25 : BACKGROUND_BRIGHTNESS+0.25;
-
-const float  BACKGROUND_R           = BACKGROUND_BRIGHTNESS;
-const float  BACKGROUND_G           = BACKGROUND_BRIGHTNESS;
-const float  BACKGROUND_B           = BACKGROUND_BRIGHTNESS;
-const float  BACKGROUND_A           = 1;
-const float  SURFACE_R              = 0;
-const float  SURFACE_G              = 0;
-const float  SURFACE_B              = 1;
-const float  SURFACE_A              = 1;
-const float  LEAF_CUBE_R            = LEAF_CUBE_BRIGHTNESS;
-const float  LEAF_CUBE_G            = LEAF_CUBE_BRIGHTNESS;
-const float  LEAF_CUBE_B            = LEAF_CUBE_BRIGHTNESS;
-const float  LEAF_CUBE_A            = 1;
-const float  PARENT_CUBE_R          = PARENT_CUBE_BRIGHTNESS;
-const float  PARENT_CUBE_G          = PARENT_CUBE_BRIGHTNESS;
-const float  PARENT_CUBE_B          = PARENT_CUBE_BRIGHTNESS;
-const float  PARENT_CUBE_A          = 1;
-// Red
-const float  LOWER_LOD_NON_LEAF_NEIGHBOR_CONNECTION_R  = 1;
-const float  LOWER_LOD_NON_LEAF_NEIGHBOR_CONNECTION_G  = 0;
-const float  LOWER_LOD_NON_LEAF_NEIGHBOR_CONNECTION_B  = 0;
-const float  LOWER_LOD_NON_LEAF_NEIGHBOR_CONNECTION_A  = 1;
-// Yellow
-const float  LOWER_LOD_LEAF_NEIGHBOR_CONNECTION_R      = 1;
-const float  LOWER_LOD_LEAF_NEIGHBOR_CONNECTION_G      = 1;
-const float  LOWER_LOD_LEAF_NEIGHBOR_CONNECTION_B      = 0;
-const float  LOWER_LOD_LEAF_NEIGHBOR_CONNECTION_A      = 1;
-// Green
-const float  SAME_LOD_NON_LEAF_NEIGHBOR_CONNECTION_R   = 0;
-const float  SAME_LOD_NON_LEAF_NEIGHBOR_CONNECTION_G   = 1;
-const float  SAME_LOD_NON_LEAF_NEIGHBOR_CONNECTION_B   = 0;
-const float  SAME_LOD_NON_LEAF_NEIGHBOR_CONNECTION_A   = 1;
-// Cyan
-const float  SAME_LOD_LEAF_NEIGHBOR_CONNECTION_R       = 0;
-const float  SAME_LOD_LEAF_NEIGHBOR_CONNECTION_G       = 1;
-const float  SAME_LOD_LEAF_NEIGHBOR_CONNECTION_B       = 1;
-const float  SAME_LOD_LEAF_NEIGHBOR_CONNECTION_A       = 1;
-// Blue
-const float  HIGHER_LOD_NEIGHBOR_CONNECTION_R          = 0;
-const float  HIGHER_LOD_NEIGHBOR_CONNECTION_G          = 0;
-const float  HIGHER_LOD_NEIGHBOR_CONNECTION_B          = 1;
-const float  HIGHER_LOD_NEIGHBOR_CONNECTION_A          = 1;
-
-const float  FINEST_NEIGHBOR_CONNECTION_R              = 0;
-const float  FINEST_NEIGHBOR_CONNECTION_G              = 0;
-const float  FINEST_NEIGHBOR_CONNECTION_B              = 0;
-const float  FINEST_NEIGHBOR_CONNECTION_A              = 1;
-const float  MIDDLE_MARK_R          = 0.5;
-const float  MIDDLE_MARK_G          = 0.5;
-const float  MIDDLE_MARK_B          = 0.5;
-const float  MIDDLE_MARK_A          = 1;
-
-const float  WATER_CELL_MARK_R      = 0.5;
-const float  WATER_CELL_MARK_G      = 0.5;
-const float  WATER_CELL_MARK_B      = 0.5;
-const float  WATER_CELL_MARK_A      = 1;
-const float  AIR_CELL_MARK_R        = 1;
-const float  AIR_CELL_MARK_G        = 0;
-const float  AIR_CELL_MARK_B        = 0;
-const float  AIR_CELL_MARK_A        = 1;
-const float  VELOCITY_R             = 0;
-const float  VELOCITY_G             = 0;
-const float  VELOCITY_B             = 0;
-const float  VELOCITY_A             = 1;
 
 ////////////////////////////////////////////////////////////////
 // TYPEDEFS
@@ -257,8 +189,103 @@ enum DIMENSION {
 #define  VERTICAL_DIMENSION     DIM_Z
 #endif
 
+enum SCALAR_PROPERTY {
+    SP_NO_SCALAR_PROPERTY,
+    SP_ALPHA,
+    SP_WATER_VOLUME_COEFFICIENT,
+    SP_AIR_VOLUME_COEFFICIENT,
+    SP_TOTAL_VOLUME_COEFFICIENT,
+    SP_PRESSURE,
+    SP_PRESSURE_DEVIATION,
+    SP_VELOCITY_DIVERGENCE,
+    SP_FLOW_DIVERGENCE,
+    NUM_SCALAR_PROPERTIES
+};
+
 ////////////////////////////////////////////////////////////////
 // CONSTANTS
+////////////////////////////////////////////////////////////////
+
+/* Graphics constants */
+const float  BACKGROUND_BRIGHTNESS  = 1;
+const float  LEAF_CUBE_BRIGHTNESS   = BACKGROUND_BRIGHTNESS >= 0.5 ? 0   :   1;
+const float  PARENT_CUBE_BRIGHTNESS = BACKGROUND_BRIGHTNESS >= 0.5 ? BACKGROUND_BRIGHTNESS-0.25 : BACKGROUND_BRIGHTNESS+0.25;
+
+const float  BACKGROUND_R           = BACKGROUND_BRIGHTNESS;
+const float  BACKGROUND_G           = BACKGROUND_BRIGHTNESS;
+const float  BACKGROUND_B           = BACKGROUND_BRIGHTNESS;
+const float  BACKGROUND_A           = 1;
+const float  SURFACE_R              = 0;
+const float  SURFACE_G              = 0;
+const float  SURFACE_B              = 1;
+const float  SURFACE_A              = 1;
+const float  LEAF_CUBE_R            = LEAF_CUBE_BRIGHTNESS;
+const float  LEAF_CUBE_G            = LEAF_CUBE_BRIGHTNESS;
+const float  LEAF_CUBE_B            = LEAF_CUBE_BRIGHTNESS;
+const float  LEAF_CUBE_A            = 1;
+const float  PARENT_CUBE_R          = PARENT_CUBE_BRIGHTNESS;
+const float  PARENT_CUBE_G          = PARENT_CUBE_BRIGHTNESS;
+const float  PARENT_CUBE_B          = PARENT_CUBE_BRIGHTNESS;
+const float  PARENT_CUBE_A          = 1;
+// Red
+const float  LOWER_LOD_NON_LEAF_NEIGHBOR_CONNECTION_R   = 1;
+const float  LOWER_LOD_NON_LEAF_NEIGHBOR_CONNECTION_G   = 0;
+const float  LOWER_LOD_NON_LEAF_NEIGHBOR_CONNECTION_B   = 0;
+const float  LOWER_LOD_NON_LEAF_NEIGHBOR_CONNECTION_A   = 1;
+// Yellow
+const float  LOWER_LOD_LEAF_NEIGHBOR_CONNECTION_R       = 1;
+const float  LOWER_LOD_LEAF_NEIGHBOR_CONNECTION_G       = 1;
+const float  LOWER_LOD_LEAF_NEIGHBOR_CONNECTION_B       = 0;
+const float  LOWER_LOD_LEAF_NEIGHBOR_CONNECTION_A       = 1;
+// Green
+const float  SAME_LOD_NON_LEAF_NEIGHBOR_CONNECTION_R    = 0;
+const float  SAME_LOD_NON_LEAF_NEIGHBOR_CONNECTION_G    = 1;
+const float  SAME_LOD_NON_LEAF_NEIGHBOR_CONNECTION_B    = 0;
+const float  SAME_LOD_NON_LEAF_NEIGHBOR_CONNECTION_A    = 1;
+// Cyan
+const float  SAME_LOD_LEAF_NEIGHBOR_CONNECTION_R        = 0;
+const float  SAME_LOD_LEAF_NEIGHBOR_CONNECTION_G        = 1;
+const float  SAME_LOD_LEAF_NEIGHBOR_CONNECTION_B        = 1;
+const float  SAME_LOD_LEAF_NEIGHBOR_CONNECTION_A        = 1;
+// Blue
+const float  HIGHER_LOD_NEIGHBOR_CONNECTION_R           = 0;
+const float  HIGHER_LOD_NEIGHBOR_CONNECTION_G           = 0;
+const float  HIGHER_LOD_NEIGHBOR_CONNECTION_B           = 1;
+const float  HIGHER_LOD_NEIGHBOR_CONNECTION_A           = 1;
+
+const float  FINEST_NEIGHBOR_CONNECTION_R               = 0;
+const float  FINEST_NEIGHBOR_CONNECTION_G               = 0;
+const float  FINEST_NEIGHBOR_CONNECTION_B               = 0;
+const float  FINEST_NEIGHBOR_CONNECTION_A               = 1;
+const float  MIDDLE_MARK_R          = 0.5;
+const float  MIDDLE_MARK_G          = 0.5;
+const float  MIDDLE_MARK_B          = 0.5;
+const float  MIDDLE_MARK_A          = 1;
+
+const float  WATER_CELL_MARK_R      = 0.5;
+const float  WATER_CELL_MARK_G      = 0.5;
+const float  WATER_CELL_MARK_B      = 0.5;
+const float  WATER_CELL_MARK_A      = 1;
+const float  AIR_CELL_MARK_R        = 1;
+const float  AIR_CELL_MARK_G        = 0;
+const float  AIR_CELL_MARK_B        = 0;
+const float  AIR_CELL_MARK_A        = 1;
+const float  VELOCITY_R             = 0;
+const float  VELOCITY_G             = 0;
+const float  VELOCITY_B             = 0;
+const float  VELOCITY_A             = 1;
+
+/* Screenshots */
+//const pftype PRINTSCREEN_TIMES[]    = {};
+//const pftype PRINTSCREEN_TIMES[]    = {0};
+const pftype PRINTSCREEN_TIMES[]    = {0, .075, 0.15, 0.3, 0.6, .9, 1.25, 1.75};
+const size_t NUM_PRINTSCREEN_TIMES  = (sizeof(PRINTSCREEN_TIMES))/sizeof(pftype);
+
+const SCALAR_PROPERTY PRINTSCREEN_SCALAR_PROPERTIES[]   = {SP_ALPHA, SP_WATER_VOLUME_COEFFICIENT, SP_AIR_VOLUME_COEFFICIENT, SP_PRESSURE};
+const size_t          NUM_PRINTSCREEN_SCALAR_PROPERTIES = (sizeof(PRINTSCREEN_SCALAR_PROPERTIES))/sizeof(SCALAR_PROPERTY);
+
+////////////////////////////////////////////////////////////////
+// MATHEMATICAL AND PHYSICAL CONSTANTS
 ////////////////////////////////////////////////////////////////
 
 /* Miscellaneous constants */

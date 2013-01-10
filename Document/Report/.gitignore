@@ -1,3 +1,4 @@
+# Compiled documents
 Report.pdf
 Report - copy.pdf
 Report.dvi
@@ -15,3 +16,10 @@ Test2.pdf
 Test2.dvi
 Test2.ps
 Test2.out.ps
+
+# Compiled tikz images
+Report*.pdf
+*.dpth
+
+# Miscellaneous files
+*.auxlock
