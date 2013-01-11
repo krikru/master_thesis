@@ -60,15 +60,15 @@ In \thisprojectwork, no interaction between ships and the surface waves was ever
 Some of the methods for modeling \FSI includes the \IB method (reference \textit{\href{http://www4.ncsu.edu/~zhilin/TEACHING/MA798Z/Peskin1.pdf}{The immersed boundary method}} or \textit{\href{http://www.cecs.wright.edu/~haibo.dong/wp-content/themes/publications/IBM_JCP_2007.pdf}{A sharp interface immersed boundary method for compressible viscous flows}}), the \VOS method (reference \textit{The simulation of fluid-rigid body interaction}, also described in \textit{Numerical Modeling of Deforming Bubble Transport Related to Cavitating Hydraulic Turbines}) and the \idxs{rigid fluid}{method}\index{fluid!rigid|see{rigid fluid method}} (reference: \textit{\href{http://www.amath.unc.edu/Faculty/mucha/Reprints/siggraph04.pdf}{Rigid Fluid: Animating the Interplay Between Rigid Bodies and Fluid}})
 %See e.g.: \item \textit{\href{http://physbam.stanford.edu/~fedkiw/papers/stanford2010-04.pdf}{Numerically Stable Fluid-Structure Interactions Between Compressible Flow and Solid Structures}} \item \textit{\href{http://efdl.as.ntu.edu.tw/research/papers/JCP03GCIBM.pdf}{A ghost-cell immersed boundary method for flow in complex geometry}} \item \textit{\href{http://www.cs.columbia.edu/~batty/papers/Batty07.pdf}{A Fast Variational Framework for Accurate Solid-Fluid Coupling}} (solid fraction, non-stick to walls)
 
-\section{Desired improvements}
-
-In this \levelname, some improvements that are not required in order to make the method practically useful, but still desired in order to improve the quality of the simulation, are presented.
-
 \subsubsection{Rotation of rigid bodies}
 
 The \idxs{rotation of a}{rigid body}, in this case the rotation of a \ship that is floating on the surface of the water when it is hit by large waves, depends both on the forces that acts on the \idxs{rigid}{body} as well as well as the  \idxs{moment of}{inertia} of the rigid body.
 
 The dynamics of a rigid body is described by \textit{\href{http://en.wikipedia.org/wiki/Euler\%27s_equations_\%28rigid_body_dynamics\%29}{Euler's equations (rigid body dynamics)}} \citep{temp}.
+
+\section{Desired improvements}
+
+In this \levelname, some improvements that are not required in order to make the method practically useful, but still desired in order to improve the quality of the simulation, are presented.
 
 \subsection{Reduction of spurious reflections in LOD transitions}
 

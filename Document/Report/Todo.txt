@@ -19,6 +19,7 @@ Search for (texfind):
 * \url
 * \citep{temp}
 * \levelname
+* two-dimensional, three-dimensional
 * intermediate (replace with auxiliary in the case of velocity)
 * ; (looks awkward on some places)
 * naiive, naive, naiivity, etc. (put into index)
