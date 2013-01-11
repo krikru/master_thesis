@@ -1,0 +1,1 @@
+When compiling the document you have to provide pdflatex with the flag -shell-escape and the file to be compiled is Report.tex.

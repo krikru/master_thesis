@@ -148,6 +148,7 @@
 %\renewrobustcmd{\vec}[1]{\mathbf{#1}} % For bold font vectors (deosn't work for all characters, for example \pi\pixi)
 % % % Normalized vectors
 \newrobustcmd{\normvec}[1]{\hat{#1}} % Hats over normalized vectors
+\newrobustcmd{\anormvec}[1]{\check{#1}} % Hats over normalized vectors
 %\newrobustcmd{\normvec}[1]{\widehat{#1}} % Wide hats over normalized vectors
 % % % Operators
 \newrobustcmd{\sop}[1]{\widehat{#1}} % For scalar operators
@@ -226,24 +227,27 @@
 %\declareabbreviationqi{twodim}        {two-dimensional}
 %\declareabbreviation  {NS}            {Navier--Stokes}
 
-%\declareabbreviation  {gammapath}           {{\gamma[\vec{r}_1,\,\vec{r}_2]}}
-\newrobustcmd         {\devstressten}       {\boldsymbol{\mathsf{T}}}
-\declareabbreviation  {flightsimulatorfps}  {30}
-\newrobustcmd         {\gammapath}          {{\gamma[\vec{r}_1,\,\vec{r}_2]}}
-\declareabbreviation  {itslimitedtime}      {its limited time}
-\declareabbreviation  {masterthesisworktime}{about five months}
-\declareabbreviationqi{NULL}                {NULL}
-\declareabbreviation  {numchildren}         {$2^d$}
-\declareabbreviationqi{realtime}            {real-time}
-%\declareabbreviationqi{Saab}                {Saab} % Saab seems to use the Gill Sans font
-%\declareabbreviation  {textgammapath}       {\mbox{$\gammapath$}}
-\newabbrev            {\textgammapath}      {\mbox{$\gammapath$}}
-\declareabbreviationqi{thismasterthesiswork}{the master thesis work behind this report}
-\declareabbreviationqi{thismethod}          {the FVM on an octree}
-\declareabbreviationqi{thisprojectwork}     {the project work described in this report}
-\declareabbreviation  {timestep}            {\idxs{time}{step}}
-\declareabbreviation  {timesteps}           {\idxsp{time}{step}{s}}
-%\declareabbreviationqi{thisreport}          {this report}
+%\declareabbreviation  {gammapath}            {{\gamma[\vec{r}_1,\,\vec{r}_2]}}
+\newrobustcmd         {\devstressten}        {\boldsymbol{\mathsf{T}}}
+\declareabbreviation  {flightsimulatorfps}   {30}
+\newrobustcmd         {\gammapath}           {{\gamma[\vec{r}_1,\,\vec{r}_2]}}
+\declareabbreviation  {itslimitedtime}       {its limited time}
+\declareabbreviation  {masterthesisworktime} {about five months}
+\declareabbreviationqi{NULL}                 {NULL}
+\declareabbreviation  {numchildren}          {$2^d$}
+\declareabbreviationqi{realtime}             {real-time}
+%\declareabbreviationqi{Saab}                 {Saab} % Saab seems to use the Gill Sans font
+\declareabbreviationqi{surfacewaterrendering}{the rendering of surface water}
+%\declareabbreviation  {textgammapath}        {\mbox{$\gammapath$}}
+\newabbrev            {\textgammapath}       {\mbox{$\gammapath$}}
+\declareabbreviationqi{thismasterthesiswork} {the master thesis work behind this report}
+\declareabbreviationqi{thismethod}           {the FVM on an octree}
+\declareabbreviationqi{thisprojectwork}      {the project work described in this report}
+\declareabbreviation  {timestep}             {\idxs{time}{step}}
+\declareabbreviation  {timesteps}            {\idxsp{time}{step}{s}}
+\declareabbreviation  {threedimensional}     {\idx{three-dimensional}}
+\declareabbreviation  {twodimensional}       {\idx{two-dimensional}}
+%\declareabbreviationqi{thisreport}           {this report}
 
 % % % % % % %
 % ACRONYMS  %
@@ -252,8 +256,9 @@
 % The acronyms are sorted by the abbreviated forms
 \declareacronyms{AMR}   {adaptive}{mesh refinement} \index{refinement!adaptive mesh|see{adaptive mesh refinement}}
 \declareacronyms{BEM}   {boundary element}{method}
-%\declareacronyms{BRDF}  {bidirectional reflectance distribution}{function} \index{distribution function!bidirectional reflectance|see{bidirectional reflectance distribution function}} \index{reflectance distribution function!bidirectional|see{bidirectional reflectance distribution function}}
+\declareacronyms{BRDF}  {bidirectional reflectance distribution}{function} \index{distribution function!bidirectional reflectance|see{bidirectional reflectance distribution function}} \index{reflectance distribution function!bidirectional|see{bidirectional reflectance distribution function}}
 \declareacronyms{BFECC} {back and forth}{error compensation and correction}
+\declareacronyms{BTDF}  {bidirectional transmittance distribution}{function} \index{distribution function!bidirectional transmittance|see{bidirectional transmittance distribution function}} \index{transmittance distribution function!bidirectional|see{bidirectional transmittance distribution function}}
 \declareacronyms{CBC}   {convection boundedness}{criterion} \index{boundedness criterion!convection|see{convection boundedness criterion}}
 %\declareacronyms{CD}    {central}{difference}
 \declareacronyms{CFD}   {computational}{fluid dynamics}
@@ -341,6 +346,9 @@
 \declareindexkey      {average}
 \declareindexkeypair      {average}{averaged}
 \declareindexkey      {backwash}
+\declareindexkey      {bias}
+\declareindexkeypair      {bias}{biased}
+\declareindexkeypair      {bias}{biasing}
 \declareindexkey      {blur}
 \declareindexkeypair      {blur}{blurring}
 \declareindexkey      {bouncing}
@@ -528,6 +536,9 @@
 \declareindexkeypair      {sampling}{samples}
 \declareindexkey      {scene}
 \declareindexkeypair      {scene}{scenes}
+\declareindexkey      {sequence}
+\declareindexkeypair      {sequence}{sequences}
+\declareindexkey      {series}
 \declareindexkey      {ship}
 \declareindexkeypair      {ship}{ships}
 \declareindexkey      {shore}
