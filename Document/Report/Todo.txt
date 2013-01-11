@@ -6,8 +6,6 @@ High importance
 ---------------
 
 Needs to be written:
-* Discussion
-* Improvements
 * Library page
 
 Needs finishing:
@@ -18,8 +16,8 @@ Search for (texfind):
 * \href
 * \url
 * \citep{temp}
+* TODO
 * \levelname
-* intermediate (replace with auxiliary in the case of velocity)
 * ; (looks awkward on some places)
 * naiive, naive, naiivity, etc. (put into index)
 
@@ -28,6 +26,7 @@ Search for (texfind):
     * P_h    - wave spectrum
     * eta(k) - Fourier transform of eta(r) for the wave vector k
     * Misc. variables in the newly written sections
+    * Update numenclature for: Solution methods for the pressure Poison equation, advection methods and all sections written thereafter
 
 * Add to table of technical terms
     * anti-normal
@@ -47,11 +46,7 @@ Search for (texfind):
 
 * Fix issues pointed out by Magnus Johansson
 
-* Update numenclature for: Solution methods for the pressure Poison equation, advection methods and all sections written thereafter
-
 * Add limitations of derived 2D PDE (no given way to calculate h and a)
-
-* Reference section about BFECC (what?)
     
     Results are the product of measuring the dependent variable in an experiment.
     Results should be measurable.
@@ -92,14 +87,12 @@ Quite important
 ---------------
 
 * Explain in document AND add to abstract: A method for using CBC (Convective boundedness criterion) advection schemes for incompressible flows even for uncompressible flows. Motivation: Keep alpha = 1 on an exact level (discuss the different between alpha = 0 and alpha = 1 when it comes to keeping the level exact if alpha is treated as a conservative field (or extensive property), since the level alpha = 0 will be kept but not alpha = 1, the reason for this, and the modification that makes the level alpha = 1 behave as the level alpha = 0)
-* Alternative approaches: Using LS method or CLSVOF method instead, using existing software (either free or proprietary, see above), or using a completely different approach like spectral methods (spectral methods would probably be the best way for anyone doing the same thing as I do)
+
 * TikZ plots of simulation. These plots should show: Smearing of alpha; the effect of Hyper-C when it succeeds; vacuum created in the air region that freezes the simulation and eventually eats it up.
-* On modelling linear waves (extending second order PDE to forth order; including horizontal offeset PDE)
 
 May be important
 ----------------
 
-* Own implementations of algorithms and data structures
 * HYPER-C
 * Image showing the difference between Hyper-C and UPWIND
 * Explain that FSM (free surface modelling) (even advection schemes) is a big area of research. Papers that compare various FSM methods:
@@ -113,22 +106,12 @@ Not very important
 
 * Is BFECC the MacCormack method?
 * Mention ways to calculate a_h
-* Change transported to advected?
-* Hoctrees
 * No random access to neighbor connections or neighbor cells (in the section about neighbor connections, specifically about neighbor lists)
-* Marching cubes
 * NVD
-* Splash and foam
 * \vec{r}_{C_i}, as location that specifies the position of $C_i$
 * Change indexation method; those of the "Finite Volume Method" chapter do not match those of the VOF section or the Octree section in the appendix. Also weird in the section about the velocity advection.
 * Discretize in time -> Discretize temporally
-* Include \citep{Tessendorf2004} (game programming gems 4 article) in section about Laplacian pyramids?
-* Abbreviate Laplacian Pyramid Decomposition?
 * Mention PDE that can be used to update the signed distance function (see http://www.ims.nus.edu.sg/Programs/fluiddynamic/files/Lecture1-basics.pdf, p 56/67)
-
-Other techniques:
-* Real-Time Fluid Simulation using Discrete Sine/Cosine Transforms (unconditionally stable)
-* Screen Space Meshes (http://www.matthiasmueller.info/publications/screenSpaceMeshes.pdf)
 
 
 Phrases in need of being indexed
@@ -149,7 +132,6 @@ Topics to cover
 ===============
 
 * My modification of CICSAM (or the VOF method)
-* Velocity advection term (in the FVM chapter)
 
 Topict to check up
 ==================
@@ -157,24 +139,15 @@ Topict to check up
 * Turbulens model (Large Eddy Simulation for example)
 * Mention Zalesak’s problem (for advection tests of sharp interfaces)
 * The SWAN wave model
-* Implicit methods (Like SIMPLE)
 
 Miscellaneous todo's
 ====================
 
-* Fix TODO's in LaTeX code
 * Find out what UPWIND stands for
 * Mention that not al children of an octree parent cell have to exist (cross refer from the chapter Octrees to image in appendix)
-* Include plots
 * Include glossary (see http://en.wikibooks.org/wiki/LaTeX/Glossary)
 * Use frontmatter, mainmatter and backmatter (which are only available for the book class by default)
-* Prevent abstract from messing up the page numbering
-* Fins some good way to abbreviate long names using code (the abbrevs package in not good for several reasons)
-* Hint readers to click on the links in the bibliography (there are a lot of links to free-access pdf files)
-
-...
-
-* Use Piponet's paper as main reference instead of Losasso's? (No.)
+* Fins some good way to abbreviate long names using code (the abbrevs package is not good for several reasons)
 
 Bugs to fix in the report
 =========================

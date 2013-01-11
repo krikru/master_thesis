@@ -15,6 +15,8 @@ As mentioned in the last chapter, there were quite many issues that needed to be
 
 For real-time simulations of surface waves in large bodies of water, where \idxse{non-linear}{phenomenon}{non-linear phenomena} are not of any significant importance, the best method to use, considering both implementation time and simulation quality, is probably the \LPD method. If there would turn out to be an easy way to model \FSI while using the Fourier synthesis method, that method is probably to prefer, since is it very easy to implement and extend to make it simulate Gerstner waves, and because of the large number of sources describing it.
 
+On the other hand, if the \FVM is going to be used anyway, maybe a better approach than using the \VOF method would be to use the \LS method, or perhaps the \CLSVOF method, since those methods don't suffer from \diffusion of the interface. Besides, since the property that is used for determining where the surface is located is stored in the corners of the cells, the \idxs{marching}{cubes} algorithm can be used more easily.
+
 \section{Speed}
 
 With its \idxs{linear}{running time}\index{time!running|see{running time}}, or $O(N)$ \idxs{time}{complexity}, where $N$ is the number of cells visible on the surface, the method implemented in \thisprojectwork places itself among the methods with the lowest time complexity, such as the \LPD method, even beating the Fourier synthesis method with its $O(N \log N)$ time complexity.
