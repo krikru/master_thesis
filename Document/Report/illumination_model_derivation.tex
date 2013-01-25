@@ -5,11 +5,13 @@
 {
 If we simplify a water surface by cutting off a part of the \idxs{wave}{spectrum}, we need to --- for \rendering purposes --- compensate for that by making the \reflection in the \idxs{simplified}{water surface} \idxse{diffuse}{reflection}{diffuse}. The \idxs{illumination}{model} derived in this appendix models this diffusion and was developed outside of the scope of \thismasterthesiswork.
 
-\section{Microfacet distribution}
+\section{Microfacets}
 
 Although the high frequencies have been removed from the rendering, which makes it impossible to treat them directly, it is possible to treat them statistically by making a few \assumptions and \approximations, and by using something known as \microfacets, which are basically infinitesimal surface elements for which the \idxs{surface}{normal} is \stochastic but \assumed to have a known \idxs{probability}{distribution}, tiled one after each other.
 
-Before we can start deriving the illumination model we need to make a few \assumptions. First, let's say that all frequencies of the wave spectrum is superposed linearly on top of each other and that there is no \idxs{horizontal}{displacement}, i.e.\ the waves are not \idxsp{Gerstner}{wave}{s}, or that the \idxs{wave}{amplitude} is much smaller than the \wavelength which will virtually linearize the waves and also make the horizontal displacement very small in comparison to the wavelength.
+Let's start by calculating the \idxs{probability}{distribution} for the direction of a reflected \ray, so we can know the likelyhood that what is reflected in the water surface is the \sun. But before we can start doing that, we need to make a few \assumptions.
+
+First, let's \assume that all frequencies of the wave spectrum is superposed linearly on top of each other and that there is no \idxs{horizontal}{displacement}, i.e.\ the waves are not \idxsp{Gerstner}{wave}{s}, or that the \idxs{wave}{amplitude} is much smaller than the \wavelength which will virtually linearize the waves and also make the horizontal displacement very small in comparison to the wavelength.
 
 Second, to make things simpler, let's assume that both the fraction of the water surface that is hidden behind other waves and hence is not visible to the observer, and the fraction of the surface that is shadowed, i.e. is hidden from the sun behind other waves, are almost zero.
 
@@ -21,13 +23,13 @@ We can therefore only calculate the normal of the simplified surface, let's call
 \anormvec{\xi} \,=\, \frac{\vec{\xi}}{\normvec{z}\cdot\vec{\xi}}\,,
 \end{equation}
 
-where $\normvec{z}$ is the \idxs{unit}{vector} in the positive vertical direction (which is the negation of the direction of the \idxs{gravitational acceleration}{vector}). This implies that the $\normvec{z}$-component of an anti-normalized vector is always 1. The \idx{anti-normal} $\anormvec{n}_0$ of $\eta_0$ becomes
+where $\normvec{z}$ is the \idxs{unit}{vector} in the positive vertical direction (which is the negation of the direction of the \idxs{gravitational acceleration}{vector}, or the normal of a flat water surface). This implies that the $\normvec{z}$-component of an anti-normalized vector always is 1. The \idx{anti-normal} $\anormvec{n}_0$ of $\eta_0$ becomes
 
 \begin{equation}
-\anormvec{n}_0 \,=\, \left(\!\!\!\begin{array}{c}-\nabla\eta_0(\vec{r}) \\ 1\end{array}\!\!\!\right).
+\anormvec{n}_0 \,=\, \left(\!\!\!\begin{array}{c}-\nabla\eta_0(\vec{r}) \\ 1\end{array}\!\!\!\right),
 \end{equation}
 
-The \gradient in turn can be rewritten as
+where the last component is the $\normvec{z}$-component. The \gradient in turn can be rewritten as
 
 \begin{equation}
 \nabla\eta_0(\vec{r}) \,=\, \nabla\mathcal{F}^{-1}\{\fdfunc{\eta}_0(\vec{k})\}(\vec{r}) \,=\, \mathcal{F}^{-1}\{\vec{k}\,\fdfunc{\eta}_0(\vec{k})\}(\vec{r}),
@@ -45,7 +47,7 @@ where the gradient can be written as
 \nabla\eta(\vec{r}) \,=\, \mathcal{F}^{-1}\{\vec{k}\,\fdfunc{\eta}(\vec{k})\}(\vec{r}),
 \end{equation}
 
-where $\fdfunc{\eta}(\vec{k})$ is the \idxs{Fourier}{transform} of $\eta$. However, only the part of $\fdfunc{\eta}(\vec{k})$ where $\vec{k}$ is small enough is known; in fact, this part is equal to $\fdfunc{\eta}_0(\vec{k})$, while the reminding part of $\fdfunc{\eta}(\vec{k})$,
+and where $\fdfunc{\eta}(\vec{k})$ is the \idxs{Fourier}{transform} of $\eta$. However, only the part of $\fdfunc{\eta}(\vec{k})$ where $\vec{k}$ is small enough is known; in fact, this part is equal to $\fdfunc{\eta}_0(\vec{k})$, while the reminding part of $\fdfunc{\eta}(\vec{k})$,
 
 \begin{equation}
 \fdfunc{\eta}'(\vec{k}) \,=\, \fdfunc{\eta}(\vec{k}) - \fdfunc{\eta}_0(\vec{k}),
@@ -53,17 +55,17 @@ where $\fdfunc{\eta}(\vec{k})$ is the \idxs{Fourier}{transform} of $\eta$. Howev
 
 is unknown. On the other hand, if we know what the \idxs{wave}{spectrum} looks like, we can calculate the \idxs{probability}{distribution} of $\eta$.
 
-If $\vec{r}$ is assumed to be \idxse{uniform}{distribution}{uniformly distributed} over a large surface area, i.e. there is no \bias in the distribution of $\vec{r}$ regarding to the surface slope $\nabla\eta$ or any other local property of the surface, the distribution of $\fdfunc{\eta}'$ is directly given by the wave spectrum. And from that distribution we will be able to get something we are going to need later, namely the distribution of $\nabla\eta'$.
+If $\vec{r}$ is assumed to be \idxse{uniform}{distribution}{uniformly distributed} over a large surface area, i.e. there is no \bias in the distribution of $\vec{r}$ regarding to the surface slope $\nabla\eta$ or any other local property of the surface for that matter, the distribution of $\fdfunc{\eta}'$ is directly given by the wave spectrum. And from that distribution we will be able to get something we are going to need later, namely the distribution of $\nabla\eta'$.
 
 \subsection{Wave spectra}
 
-Almost every wave spectrum, $S$, used in \idxs{computer}{graphics} is a function of the wave vector $\vec{k}$, giving the \variance of the free surface elevation --- what we call $\eta$ --- per unit \idxs{reciprocal}{length} squared (the elements of $\vec{k}$ are reciprocal lengths), and thus has the unit $\text{m}^4$, or in other words
+Almost every \idxs{wave}{spectrum}, $S$, used in \idxs{computer}{graphics}, is a function of the wave vector $\vec{k}$ and gives the \variance of the free surface elevation --- what we call $\eta$ --- per unit \idxs{reciprocal}{length} squared (the elements of $\vec{k}$ are reciprocal lengths), and thus has the unit $\text{m}^4$. If $S$ assumes that the wave components corresponding to the wave vectors are on exponential form ($e^{i(\vec{k}\cdot\vec{r}-\omega t)}$), which is what $\fdfunc{\eta}$ also assumes, rather than on a \sinusoidal form ($\sin(\vec{k}\cdot\vec{r}-\omega t)$), which otherwise is a pretty common case in computer graphics, this means that
 
 \begin{equation} \label{eq:wave_spectrum_definition}
-S(\vec{k}) \,=\, \frac{\opd \Var(\eta(\vec{r}))}{\opd\vec{k}^2},
+S(\vec{k}) \,=\, \frac{\opd \Var(\eta(\vec{r}))}{\opd\vec{k}\,^{\,2}},
 \end{equation}
 
-where $\Var$ denotes the \variance of $\eta$ on any given location $\vec{r}$ and $\opd\vec{k}^2$ is an infinitesimal reciprocal area element, centered around $\vec{k}$. Here, $\opd \Var(\eta(\vec{r}))$ denotes the additional variance of $\eta$ caused solely by the part of the wave spectrum specified by $\opd\vec{k}^2$.
+where $\Var$ denotes the \variance of $\eta$ on any given location $\vec{r}$ and $\opd\vec{k}^{\,2}$ is an \infinitesimal \idxs{reciprocal}{area} element, centered around $\vec{k}$. Here, $\opd \Var(\eta(\vec{r}))$ denotes the additional variance of $\eta$ caused solely by the part of the wave spectrum specified by $\opd\vec{k}^{\,2}$.
 
 Besides, the average value of $\fdfunc{\eta}(\vec{k})$ is assumed to be 0 for any given wave vector $\vec{k}$, that is
 
@@ -97,10 +99,10 @@ By using \eqref{eq:zero_expectation_value_real_space}, and by assuming that $\ve
 \Var(\eta) \,=\, E[|\eta - E[\eta]|^2] \,=\, E[|\eta|^2] \,=\, \frac{\displaystyle \int_A|\eta|^2(\vec{r})\opd\vec{r}^2}{A}
 \end{equation}
 
-\eqref{eq:wave_spectrum_definition} implies that the additional variance of $\eta$, $\Delta\Var(\eta)$, caused by a part of the wave spectrum specified by a small reciprocal area element $\Delta\vec{k}^2$ is
+\eqref{eq:wave_spectrum_definition} implies that the additional variance of $\eta$, $\Delta\Var(\eta)$, caused by a part of the wave spectrum specified by a small reciprocal area element $\Delta\vec{k}^{\,2}$ is
 
 \begin{equation}
-\Delta\Var(\eta) \,=\, \int_{\Delta\vec{k}^2}\opd \Var(\eta(\vec{r})) \,=\, \int_{\Delta\vec{k}^2}\frac{\opd \Var(\eta(\vec{r}))}{\opd\vec{k}^2}\opd\vec{k}^2 \,=\, \int_{\Delta\vec{k}^2}S(\vec{k})\opd\vec{k}^2.
+\Delta\Var(\eta) \,=\, \int_{\Delta\vec{k}^{\,2}}\opd \Var(\eta(\vec{r})) \,=\, \int_{\Delta\vec{k}^{\,2}}\frac{\opd \Var(\eta(\vec{r}))}{\opd\vec{k}^{\,2}}\opd\vec{k}^{\,2} \,=\, \int_{\Delta\vec{k}^{\,2}}S(\vec{k})\opd\vec{k}^{\,2}.
 \end{equation}
 
 $\Delta\Var(\eta)$ in turn, can be rewritten as
@@ -119,12 +121,12 @@ where in turn
 
 \begin{equation}
 \Delta\fdfunc{\eta}(\vec{k}) \,=\, \begin{cases}
-\fdfunc{\eta}(\vec{k}), & \vec{k} \in \Delta\vec{k}^2 \\
+\fdfunc{\eta}(\vec{k}), & \vec{k} \in \Delta\vec{k}^{\,2} \\
 0, & \text{otherwise}
 \end{cases}.
 \end{equation}
 
-If we choose $\Delta\vec{k}^2$ such that it contains one of the Dirac impulses
+If we choose $\Delta\vec{k}^{\,2}$ such that it contains one of the Dirac impulses
 
 
 
@@ -143,7 +145,13 @@ If we choose $\Delta\vec{k}^2$ such that it contains one of the Dirac impulses
 
 
 
+\HRule
 
+Reality condition (for $\eta\in\mathbb{R}$):
+
+\begin{equation}
+\fdfunc{\eta}(-\vec{\xi}\,) \,=\, \overline{\fdfunc{\eta}(\vec{\xi}\,)}
+\end{equation}
 
 \HRule
 
