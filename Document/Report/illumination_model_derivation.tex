@@ -1,6 +1,15 @@
 \chapter{Derivation of an illumination model for sea surfaces}
 \label{chap:illumination_model_derivation}
 
+\begin{itemize}
+\item Reflection coefficient
+\item Transmission term
+\item Slope of the surface
+\item Chance of shading/hiding
+\end{itemize}
+
+\HRule
+
 %To be written \comment
 {
 If we simplify a water surface by cutting off a part of the \idxs{wave}{spectrum}, we need to --- for \rendering purposes --- compensate for that by making the \reflection in the \idxs{simplified}{water surface} \idxse{diffuse}{reflection}{diffuse}. The \idxs{illumination}{model} derived in this appendix models this diffusion and was developed outside of the scope of \thismasterthesiswork.
@@ -65,45 +74,13 @@ S(\vec{k}) \,=\, \frac{\opd \Var(\eta(\vec{r}))}{\opd\vec{k}^2},
 
 where $\Var$ denotes the \variance of $\eta$ on any given location $\vec{r}$ and $\opd\vec{k}^2$ is an infinitesimal reciprocal area element, centered around $\vec{k}$. Here, $\opd \Var(\eta(\vec{r}))$ denotes the additional variance of $\eta$ caused solely by the part of the wave spectrum specified by $\opd\vec{k}^2$.
 
-Besides, the average value of $\fdfunc{\eta}(\vec{k})$ is assumed to be 0 for any given wave vector $\vec{k}$, that is
-
-\begin{equation} \label{eq:zero_expectation_value_reciprocal_space}
-E[\fdfunc{\eta}(\vec{k})] \,=\, 0,
-\end{equation}
-
-where $E$ denotes the expectation value, which after an inverse Fourier transformation also results in 
-
-\begin{equation} \label{eq:zero_expectation_value_real_space}
-E[\eta(\vec{r})] \,=\, 0.
-\end{equation}
-
-Let's assume that $\eta$ is periodic in both dimensions with the period $P$ (as often is the case in \idxs{computer}{graphics}), with a large surface element $A$ that keeps repeating itself, such that
-
-\begin{equation} \label{eq:water_surface_periodicity}
-\eta(\vec{r}+P\normvec{x}) \,=\, \eta(\vec{r}+P\normvec{y}) \,=\, \eta(\vec{r}),\,\forall\,\vec{r},
-\end{equation}
-
-where $\normvec{x}$ and $\normvec{y}$ are the orthonormal basis vectors generating the horizontal plane. This implies implies that $\fdfunc{\eta}$ is discrete with \idxsp{Dirac}{impulse}{s} lying at the fixed distance $d = 2\pi/P$ from each other, such that
-
-\begin{equation}
-\fdfunc{\eta}(\vec{k}) \,=\, 4\pi^2\sum_{m=-\infty}^{+\infty}\sum_{n=-\infty}^{+\infty} \fdfunc{\eta}(m,\,n)\delta(\vec{r} - md\normvec{x} - nd\normvec{y}),
-\end{equation}
-
-where $\fdfunc{\eta}(m,\,n)$ is a \twodimensional \sequence of coefficients associated with $\fdfunc{\eta}$, and $m$ and $n$ are two integers used to number term in the \series.
-
-By using \eqref{eq:zero_expectation_value_real_space}, and by assuming that $\vec{r}$ is \idxse{uniform}{distribution}{uniformly distributed} within $A$, the variance can be defined as
-
-\begin{equation}
-\Var(\eta) \,=\, E[|\eta - E[\eta]|^2] \,=\, E[|\eta|^2] \,=\, \frac{\displaystyle \int_A|\eta|^2(\vec{r})\opd\vec{r}^2}{A}
-\end{equation}
-
 \eqref{eq:wave_spectrum_definition} implies that the additional variance of $\eta$, $\Delta\Var(\eta)$, caused by a part of the wave spectrum specified by a small reciprocal area element $\Delta\vec{k}^2$ is
 
 \begin{equation}
 \Delta\Var(\eta) \,=\, \int_{\Delta\vec{k}^2}\opd \Var(\eta(\vec{r})) \,=\, \int_{\Delta\vec{k}^2}\frac{\opd \Var(\eta(\vec{r}))}{\opd\vec{k}^2}\opd\vec{k}^2 \,=\, \int_{\Delta\vec{k}^2}S(\vec{k})\opd\vec{k}^2.
 \end{equation}
 
-$\Delta\Var(\eta)$ in turn, can be rewritten as
+Since there is no \correlation between wave components of different \wavelengths, $\Delta\Var(\eta)$ in turn can be rewritten as
 
 \begin{equation}
 \Var(\Delta\eta(\vec{r})),
@@ -123,6 +100,40 @@ where in turn
 0, & \text{otherwise}
 \end{cases}.
 \end{equation}
+
+Besides, the average value of $\fdfunc{\eta}(\vec{k})$ is assumed to be 0 for any given wave vector $\vec{k}$, that is
+
+\begin{equation} \label{eq:zero_expectation_value_reciprocal_space}
+E[\fdfunc{\eta}(\vec{k})] \,=\, 0,
+\end{equation}
+
+where $E$ denotes the expectation value, which after an inverse Fourier transformation also results in 
+
+\begin{equation} \label{eq:zero_expectation_value_real_space}
+E[\eta(\vec{r})] \,=\, 0.
+\end{equation}
+
+Let's assume that $\eta$ is periodic in both dimensions with the period $P$ (as often is the case in \idxs{computer}{graphics}), with a large surface element $A$ (with \mbox{$|A| = P^2$}) that keeps repeating itself, such that
+
+\begin{equation} \label{eq:water_surface_periodicity}
+\eta(\vec{r}+P\normvec{x}) \,=\, \eta(\vec{r}+P\normvec{y}) \,=\, \eta(\vec{r}),\,\forall\,\vec{r},
+\end{equation}
+
+where $\normvec{x}$ and $\normvec{y}$ are the \index{vector!orthonormal basis|see{orthonormal basis vector}}\idxsp{orthonormal}{basis vector}{s} generating the \idxs{horizontal}{plane}. This implies implies that $\fdfunc{\eta}$ is discrete with \idxsp{Dirac}{impulse}{s} lying at the fixed distance $d = 2\pi/P$ from each other, such that
+
+\begin{equation}
+\fdfunc{\eta}(\vec{k}) \,=\, 4\pi^2\sum_{m=-\infty}^{+\infty}\sum_{n=-\infty}^{+\infty} \fdfunc{\eta}(m,\,n)\delta(\vec{r} - md\normvec{x} - nd\normvec{y}),
+\end{equation}
+
+where $\fdfunc{\eta}(m,\,n)$ is a \twodimensional \sequence of coefficients associated with $\fdfunc{\eta}$, and $m$ and $n$ are two integers used to number term in the \series.
+
+By using \eqref{eq:zero_expectation_value_real_space}, and by assuming that $\vec{r}$ is \idxse{uniform}{distribution}{uniformly distributed} within $A$, the variance can be defined as
+
+\begin{equation}
+\Var(\eta) \,=\, E[|\eta - E[\eta]|^2] \,=\, E[|\eta|^2] \,=\, \frac{\displaystyle \int_A|\eta|^2(\vec{r})\opd\vec{r}^2}{A}
+\end{equation}
+
+\HRule
 
 If we choose $\Delta\vec{k}^2$ such that it contains one of the Dirac impulses
 

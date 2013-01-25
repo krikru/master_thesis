@@ -1,6 +1,6 @@
 ﻿
-Sections left to write, after importance
-========================================
+Things left to do, after importance
+===================================
 
 High importance
 ---------------
@@ -11,6 +11,10 @@ Needs to be written:
 Needs finishing:
 (* Octrees)
 (* Laplacian pyramid)
+
+Add to abstract and to conclusions:
+* Derivation of 2D PDE
+* Derivation of illumination model
 
 Search for (texfind):
 * \href
