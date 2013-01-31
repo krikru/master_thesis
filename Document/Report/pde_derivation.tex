@@ -142,7 +142,7 @@ The \idx{convolution theorem} states that
 \mathcal{F}\{f\,*\,g\} = \mathcal{F}\{f\}\,\cdot\,\mathcal{F}\{g\},
 \end{equation}
 
-where $\mathcal{F}$ denotes the \idxs{non-uniform}{Fourier transform} and $\cdot$ denotes point-wise multiplication. By Fourier transforming \eqref{eq:fconvolutioneffect} using this theorem, we obtain
+where $\mathcal{F}$ denotes the \idxs{non-unitary}{Fourier transform} and $\cdot$ denotes point-wise multiplication. By Fourier transforming \eqref{eq:fconvolutioneffect} using this theorem, we obtain
 
 \begin{equation}
 \mathcal{F}\{f\}(\vec{k})\ \mathcal{F}\{\eta\}(\vec{k},\,t) = \fdfunc{K}(\vec{k}\,h)\ \mathcal{F}\{\eta\}(\vec{k},\,t)
@@ -154,7 +154,7 @@ which can be rewritten as
 \mathcal{F}\{f\}(\vec{k}) = \fdfunc{K}(\vec{k}\,h)
 \end{equation}
 
-by canceling out $\mathcal{F}\{\eta\}(\vec{k},\,t)$ on both sides. For scaling of a function with a real, non-zero number $a$, the non-uniform Fourier transform has the following property:
+by canceling out $\mathcal{F}\{\eta\}(\vec{k},\,t)$ on both sides. For scaling of a function with a real, non-zero number $a$, the non-unitary Fourier transform has the following property:
 
 \begin{equation} \label{eq:fourierscaling}
 \mathcal{F}\{h\}(\vec{\xi}) = \frac{1}{|a|^d}\,\mathcal{F}\{f\}\left(\frac{\vec{\xi}}{a}\right)
@@ -168,7 +168,7 @@ where $d$ is the number of dimensions and $\vec{x}$ is a vector with dimensionle
 K(\vec{x}) = h^2\,f(h\,\vec{x}).
 \end{equation}
 
-Since we are working in \idxs{two}{dimensions}, we have $d = 2$, and the scaling property of the non-uniform Fourier transform (\eqref{eq:fourierscaling}) tells us that
+Since we are working in \idxs{two}{dimensions}, we have $d = 2$, and the scaling property of the non-unitary Fourier transform (\eqref{eq:fourierscaling}) tells us that
 
 \begin{equation}
 \mathcal{F}\{K\}(\vec{\xi}) = h^2\,\frac{1}{|h|^2}\,\mathcal{F}\{f\}\left(\frac{\vec{\xi}}{h}\right)
@@ -180,13 +180,13 @@ which, by using \eqref{eq:ffourier} can be rewritten as
 \mathcal{F}\{K\}(\vec{\xi}) = \fdfunc{K}(\vec{\xi}).
 \end{equation}
 
-$K(\vec{x})$ is obtained by \idxse{reverse}{non-uniform Fourier transform}{reverse Fourier transforming} this equation:
+$K(\vec{x})$ is obtained by \idxse{reverse}{non-unitary Fourier transform}{reverse Fourier transforming} this equation:
 
 \begin{equation} \label{eq:kernelfour2d}
 K(\vec{x})\, = \,\mathcal{F}^{-1}\{\fdfunc{K}(\vec{\xi})\}(\vec{x})\, = \,\frac{1}{(2\,\pi)^2}\iint\fdfunc{K}(\vec{\xi})\,e^{i\,\vec{\xi}\cdot\vec{x}}\,\opd\vec{\xi}
 \end{equation}
 
-where $\mathcal{F}^{-1}$ denotes the \idxs{reverse}{non-uniform Fourier transform}. Although it is very difficult (if not impossible) to obtain the reverse Fourier transform of this function analytically, it is possible to \idxe{approximation}{approximate} it numerically and use the approximation in the convolution filter instead.
+where $\mathcal{F}^{-1}$ denotes the \idxs{reverse}{non-unitary Fourier transform}. Although it is very difficult (if not impossible) to obtain the reverse Fourier transform of this function analytically, it is possible to \idxe{approximation}{approximate} it numerically and use the approximation in the convolution filter instead.
 
 With no loss of generality, we can pick a \idxs{polar}{coordinate system}\index{system!polar coordinate|see{polar coordinate system}} $(\xi,\,\theta)$ such that the vector $\vec{x}$ lies on the $\theta = 0$ axis. In that case, \eqref{eq:kernelfour2d} can be rewritten as
 

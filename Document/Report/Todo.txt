@@ -26,6 +26,13 @@ Search for (texfind):
 * ; (looks awkward on some places)
 * naiive, naive, naiivity, etc. (put into index)
 
+Estethic improvements:
+* \vec{k}^2 -> \vec{k}^{\,2}
+* \vec{r}) -> \vec{r}\,)
+* ? \vec{k})   -> \vec{k}\,)
+* ? \vec{x})   -> \vec{x}\,)
+* ? \vec{\xi}) -> \vec{\xi}\,)
+
 * Add to nomeclature:
     * <>     - ensemble average
     * P_h    - wave spectrum
