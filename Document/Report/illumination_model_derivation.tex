@@ -18,7 +18,7 @@ If we simplify a water surface by cutting off a part of the \idxs{wave}{spectrum
 
 Although the high frequencies have been removed from the rendering, which makes it impossible to treat them directly, it is possible to treat them statistically by making a few \assumptions and \approximations, and by using something known as \microfacets, which are basically infinitesimal surface elements for which the \idxs{surface}{normal} is \stochastic but \assumed to have a known \idxs{probability}{distribution}, tiled one after each other.
 
-Let's start by calculating the \idxs{probability}{distribution} for the direction of a reflected \ray, so we can know the likelyhood that what is reflected in the water surface is the \sun. But before we can start doing that, we need to make a few \assumptions.
+Let's start by calculating the \idxs{probability}{distribution} for the direction of a reflected \ray, so we can know the likelihood that what is reflected in the water surface is the \sun. But before we can start doing that, we need to make a few \assumptions.
 
 First, let's \assume that all frequencies of the wave spectrum is superposed linearly on top of each other and that there is no \idxs{horizontal}{displacement}, i.e.\ the waves are not \idxsp{Gerstner}{wave}{s}, or that the \idxs{wave}{amplitude} is much smaller than the \wavelength which will virtually linearize the waves and also make the horizontal displacement very small in comparison to the wavelength.
 
@@ -87,7 +87,7 @@ where $\Var(\eta)$ denotes the \variance of $\eta$ with regard to $\vec{r}$, for
 Since there is no \correlation between wave components of different \wavelengths, $\Var_{\Delta\vec{k}}(\eta)$ in turn can be rewritten as
 
 \begin{equation} \label{eq:variance_k_eta_to_variance_eta_k}
-\Var(\eta_{\Delta\vec{k}}),
+\Var_{\Delta\vec{k}}(\eta) \,=\, \Var(\eta_{\Delta\vec{k}}),
 \end{equation}
 
 where
@@ -108,19 +108,19 @@ where in turn
 Besides, the average value of $\fdfunc{\eta}(\vec{k})$ is assumed to be 0 for any given wave vector $\vec{k}$, that is
 
 \begin{equation} \label{eq:zero_expectation_value_reciprocal_space}
-E_{\vec{k}}[\fdfunc{\eta}] \,=\, 0,\ \forall\ \vec{k},
+\E_{\vec{k}}[\fdfunc{\eta}] \,=\, 0,\ \forall\ \vec{k},
 \end{equation}
 
-where $E_{\vec{k}}$ denotes the expectation value with regard to time, for a fixed value of $\vec{k}$. After \idxsp{inverse}{Fourier transform}{ing}, this also results in 
+where $\E_{\vec{k}}$ denotes the expectation value with regard to time, for a fixed value of $\vec{k}$. After \idxsp{inverse}{Fourier transform}{ing}, this also results in 
 
 \begin{equation} \label{eq:zero_expectation_value_real_space_with_regard_to_t}
-E_{\vec{r}}[\eta] \,=\, 0,\ \forall\ \vec{r},
+\E_{\vec{r}}[\eta] \,=\, 0,\ \forall\ \vec{r},
 \end{equation}
 
-where $E_{\vec{r}}$ denotes the expectation value with regard to time, for a fixed value of $\vec{r}$, and can be defined as
+where $\E_{\vec{r}}$ denotes the expectation value with regard to time, for a fixed value of $\vec{r}$, and can be defined as
 
 \begin{equation} \label{eq:expectation_value_with_regard_to_t_definition}
-E_{\vec{r}}[f] \,=\, \lim_{T\to\infty}\frac{1}{T}\int_0^T f(\vec{r},\,t)\opd t,
+\E_{\vec{r}}[f] \,=\, \lim_{T\to\infty}\frac{1}{T}\int_0^T f(\vec{r},\,t)\opd t,
 \end{equation}
 
 where $f$ is a function of $\vec{r}$ and $t$.
@@ -134,78 +134,95 @@ Let's assume that $\eta$ is periodic in both dimensions with the period $P$ (as 
 where $\normvec{x}$ and $\normvec{y}$ are the \index{vector!orthonormal basis|see{orthonormal basis vector}}\idxsp{orthonormal}{basis vector}{s} generating the \idxs{horizontal}{plane}. This implies implies that $\fdfunc{\eta}$ is discrete with \idxsp{Dirac}{impulse}{s} lying at the fixed distance $d = 2\pi/P$ from each other, such that
 
 \begin{equation} \label{eq:fd_eta_series}
-\fdfunc{\eta}(\vec{k}) \,=\, 4\pi^2\sum_{m=-\infty}^{+\infty}\sum_{n=-\infty}^{+\infty} \fdfunc{\eta}(m,\,n)\,\delta(\vec{k} - md\normvec{x} - nd\normvec{y}),
+\renewcommand*{\arraystretch}{2}
+\begin{array}{c}
+\displaystyle \fdfunc{\eta}(\vec{k}) \,=\, 4\pi^2\sum_{m=-\infty}^{+\infty}\sum_{n=-\infty}^{+\infty} \fdfunc{\eta}(m,\,n)\,\delta(\vec{k} - md\normvec{x} - nd\normvec{y}) \\
+\displaystyle =\, 4\pi^2\sum_{m=-\infty}^{+\infty}\sum_{n=-\infty}^{+\infty} \fdfunc{\eta}(m,\,n)\,\delta(\vec{k} - \vec{k}_{m,n}),
+\end{array}
 \end{equation}
 
-where $\fdfunc{\eta}(m,\,n)$ is a \twodimensional \sequence of coefficients associated with $\fdfunc{\eta}$, and $m$ and $n$ are two integers used to index the terms in the \series.
+where $\fdfunc{\eta}(m,\,n)$ is a \twodimensional \sequence of coefficients associated with $\fdfunc{\eta}$, $m$ and $n$ are two integers used to index the terms in the \series, and $\vec{k}_{m,n} = md\normvec{x} + nd\normvec{y}$.
 
-By  assuming that $\vec{r}$ is \idxse{uniform}{distribution}{uniformly distributed} within $A$, the variance can be defined as
+By \assuming that $\vec{r}$ is \idxse{uniform}{distribution}{uniformly distributed} within $A$, the variance can be defined as
 
 \begin{equation} \label{eq:variance_definition}
-\Var(\eta) \,=\, E_{A,t}[\,|\eta - E_{A,t}[\eta]\,|^2\,],
+\Var(f) \,=\, \E_{A,t}[\,|f - \E_{A,t}[f]\,|^2\,],
 \end{equation}
 
-where $E_{A,t}$ denotes the expectation value for a $\vec{r}$ that is uniformly distributed within $A$, for a fixed time, and can be defined as
+where $\E_{A,t}$ denotes the expectation value for a $\vec{r}$ that is uniformly distributed within $A$, for a fixed time, and can be defined as
 
 \begin{equation} \label{eq:expectation_value_with_regard_to_r_definition}
-E_{A,t}[f] \,=\, \frac{1}{A}\int_A f(\vec{r},\,t)\opd\vec{r}.
+\E_{A,t}[f] \,=\, \frac{1}{A}\int_A f(\vec{r},\,t)\opd\vec{r}.
 \end{equation}
 
-By realizing that this expectation value will be time independent for $f = \eta$, we can use \eqref{eq:zero_expectation_value_real_space_with_regard_to_t} and \eqref{eq:expectation_value_with_regard_to_t_definition} to get
+By realizing that this expectation value will be time independent for $f(\vec{r}) = \varphi(\vec{r})$, where $\varphi$ is any periodic (obeying \eqref{eq:water_surface_periodicity}) free surface elevation which is mass conserving (the integral over $A$ is time independent), we can use \eqref{eq:zero_expectation_value_real_space_with_regard_to_t} and \eqref{eq:expectation_value_with_regard_to_t_definition} to get
 
 \begin{equation} \label{eq:zero_expectation_value_real_space_with_regard_to_r}
 \renewcommand*{\arraystretch}{2}
 \begin{array}{c}
-\displaystyle E_{A,t}[\eta] \,=\, \lim_{T\to\infty}\frac{1}{T}\int_0^T\frac{1}{A}\int_A \eta(\vec{r},\,t)\opd\vec{r}\opd t \\
-\displaystyle =\, \frac{1}{A}\int_A\lim_{T\to\infty}\frac{1}{T}\int_0^T \eta(\vec{r},\,t)\opd t\opd\vec{r} \,=\, \frac{1}{A}\int_A E_{\vec{r}}[\eta]\opd\vec{r} \,=\, 0.
+\displaystyle \E_{A,t}[\varphi] \,=\, \lim_{T\to\infty}\frac{1}{T}\int_0^T\frac{1}{A}\int_A \varphi(\vec{r},\,t)\opd\vec{r}\opd t \\
+\displaystyle =\, \frac{1}{A}\int_A\lim_{T\to\infty}\frac{1}{T}\int_0^T \varphi(\vec{r},\,t)\opd t\opd\vec{r} \,=\, \frac{1}{A}\int_A \E_{\vec{r}}[\varphi]\opd\vec{r} \,=\, 0.
 \end{array}
 \end{equation}
-
 
 By using using \eqref{eq:expectation_value_with_regard_to_r_definition} and \eqref{eq:zero_expectation_value_real_space_with_regard_to_r}, \eqref{eq:variance_definition} becomes
 
-\begin{equation}
-\Var(\eta) \,=\, \frac{1}{A}\int_A|\eta(\vec{r})|^2\opd\vec{r}.
+\begin{equation} \label{eq:variance_integral}
+\Var(\varphi) \,=\, \frac{1}{A}\int_A|\varphi(\vec{r})|^2\opd\vec{r}.
 \end{equation}
 
-If we choose $\Delta\vec{k}$ such that $\fdfunc{\eta}_{\Delta\vec{k}}$ contains one of the Dirac impulses in \eqref{eq:fd_eta_series}, whose indexes are $m$ and $n$, and refer to this $\fdfunc{\eta}_{\Delta\vec{k}}$  as $\fdfunc{\eta}_{m,n}$, that is
+\eqref{eq:fd_eta_series} can be reduced to
 
-\begin{equation} \label{eq:fd_eta_one_dirac}
-\fdfunc{\eta}_{m,n}(\vec{k}) \,=\, 4\pi^2\,\fdfunc{\eta}(m,\,n)\,\delta(\vec{k} - md\normvec{x} - nd\normvec{y}),
+\begin{equation} \label{eq:fd_eta_series_reduced}
+\fdfunc{\eta}(\vec{k}) \,=\, \sum_{m=-\infty}^{+\infty}\sum_{n=-\infty}^{+\infty} \fdfunc{\eta}_{m,n}(\vec{k}),
 \end{equation}
 
-then \eqref{eq:eta_k_of_fd_eta_k} becomes
+where
 
-\begin{equation}
+\begin{equation} \label{eq:fd_eta_mn_definition}
+\fdfunc{\eta}_{m,n}(\vec{k}) \,=\, 4\pi^2 \fdfunc{\eta}(m,\,n)\,\delta(\vec{k} - \vec{k}_{m,n}),
+\end{equation}
+
+and if we define $\Delta\vec{k}_{m,n}$ as a square that has the side $d$, is aligned with $\normvec{x}$ and $\normvec{y}$ and is centered in $\vec{k}_{m,n}$, we see that
+
+\begin{equation} \label{eq:fd_eta_dk_mn_definition}
+\fdfunc{\eta}_{\Delta\vec{k}_{m,n}}(\vec{k}) \,=\, \fdfunc{\eta}_{m,n}(\vec{k}).
+\end{equation}
+
+It follows naturally to do the same thing with the real space representation, $\eta(\vec{r})$, and write it as
+
+\begin{equation} \label{eq:eta_series_reduced}
+\eta(\vec{r}) \,=\, \sum_{m=-\infty}^{+\infty}\sum_{n=-\infty}^{+\infty} \eta_{m,n}(\vec{r}),
+\end{equation}
+
+where
+
+\begin{equation} \label{eq:eta_mn_definition}
 \renewcommand*{\arraystretch}{1.5}
 \begin{array}{c}
 \displaystyle \eta_{m,n}(\vec{r}) \,=\, \mathcal{F}^{-1}\{\fdfunc{\eta}_{m,n}(\vec{k})\}(\vec{r}) \,=\, \frac{1}{(2\pi)^2} \int_{\mathbb{R}^2} \fdfunc{\eta}_{m,n}(\vec{k}) e^{i\vec{k}\cdot\vec{r}}\opd \vec{k} \\
-\displaystyle =\, \frac{1}{4\pi^2} \int_{\mathbb{R}^2} 4\pi^2\,\fdfunc{\eta}(m,\,n)\,\delta(\vec{k} - md\normvec{x} - nd\normvec{y}) e^{i\vec{k}\cdot\vec{r}}\opd \vec{k} \\
-\displaystyle =\, \fdfunc{\eta}(m,\,n)\,e^{i\vec{K}\cdot\vec{r}},
+\displaystyle =\, \frac{1}{4\pi^2} \int_{\mathbb{R}^2} 4\pi^2\,\fdfunc{\eta}(m,\,n)\,\delta(\vec{k} - md\normvec{x} - nd\normvec{y}) e^{i\vec{k}\cdot\vec{r}}\opd \vec{k} \,=\, \fdfunc{\eta}(m,\,n)\,e^{i\vec{k}_{m,n}\cdot\vec{r}}.
 \end{array}
 \end{equation}
 
-where $\vec{K} = md\normvec{x} + nd\normvec{y}$. Taking the gradient of this yields
+Taking the gradient of this yields
 
 \begin{equation} \label{eq:grad_eta_one_dirac}
-\nabla\eta_{m,n}(\vec{r}) \,=\, \nabla(\fdfunc{\eta}(m,\,n)\,e^{i\vec{K}\cdot\vec{r}}) \,=\, \vec{K}\,\fdfunc{\eta}(m,\,n)\,e^{i\vec{K}\cdot\vec{r}} \,=\, \vec{K}\,\eta_{m,n}(\vec{r}),
+\nabla\eta_{m,n}(\vec{r}) \,=\, \nabla(\fdfunc{\eta}(m,\,n)\,e^{i\vec{k}_{m,n}\cdot\vec{r}}) \,=\, \vec{k}_{m,n}\,\fdfunc{\eta}(m,\,n)\,e^{i\vec{k}_{m,n}\cdot\vec{r}} \,=\, \vec{k}_{m,n}\,\eta_{m,n}(\vec{r}).
 \end{equation}
 
-which is a vector.
+Let's \assume that the surface gradient is \idxse{normal}{distribution}{normal distributed}. For vectors, the corresponding distribution is the \textit{\href{http://en.wikipedia.org/wiki/Multivariate\_normal\_distribution\#Non-degenerate\_case}{Multivariate normal distribution}}, and requires that the \mean as well as the \idxs{covariance}{matrix} of the vector are known. The covariance matrix, $\Sigma$, of a stochastic vector $\vec{x}$ is defined as
 
-The correspondence of a normal distribution for vectors is called \textit{\href{http://en.wikipedia.org/wiki/Multivariate\_normal\_distribution\#Non-degenerate\_case}{Multivariate normal distribution}}, and requires that the \idxs{covariance}{matrix} of the vector is known. The covariance matrix, $\Sigma(\vec{x})$, of a stochastic vector $\vec{x}$ is defined as
-
-\begin{equation} \label{eq:covariance_matrix_definition}
-\Sigma_{i,j}(\vec{x}) \,=\, \Cov(x_i,\,x_j) \,=\, \E[(x_i - \E[x_i])(x_j - \E[x_j])].
+\begin{equation} \label{eq:covariance_matrix_element_definition}
+\Sigma_{i,j}(\vec{x}) \,=\, \Cov(x_i,\,x_j) \,=\, \E[(x_i - \E[x_i])(x_j - \E[x_j])],
 \end{equation}
 
-In our case, that means that 
+where $\Sigma_{i,j}$ is the element at row $i$ and in column $j$ in $\Sigma$. Combining this with \eqref{eq:grad_eta_one_dirac} gives
 
-\begin{equation} \label{eq:covariance_matrix_definition}
+\begin{equation} \label{eq:covariance_matrix_gradient_eta_mn}
 \renewcommand*{\arraystretch}{2}
 \begin{array}{c}
-\Sigma_{i,j}(\nabla\,\eta_{m,n}(\vec{r})) \,=\, \Sigma_{i,j}(\vec{K}\,\eta_{m,n}(\vec{r})) \\
-
+\Sigma(\nabla\,\eta_{m,n}(\vec{r})) \,=\, \Sigma(\vec{k}_{m,n}\,\eta_{m,n}(\vec{r})) \\
 =\,
 \left[\renewcommand*{\arraystretch}{1}
 \begin{array}{cc}
@@ -213,7 +230,7 @@ In our case, that means that
 mnd^2 & (nd)^2
 \end{array}
 \right]
-\Var(\eta_{m,n}(\vec{r})) \,=\, \vec{K}\otimes\vec{K} \Var(\eta_{m,n}(\vec{r})),
+\Var(\eta_{m,n}(\vec{r})) \,=\, \vec{k}_{m,n}\otimes\vec{k}_{m,n} \Var(\eta_{m,n}(\vec{r})),
 \end{array}
 \end{equation}
 
@@ -252,6 +269,113 @@ which implies that
 \begin{equation} \label{eq:covariance_matrix_sum}
 \Sigma(\vec{x} + \vec{y}) \,=\, \Sigma(\vec{x}) + \Sigma(\vec{y}).
 \end{equation}
+
+Combining this with \eqref{eq:eta_series_reduced} and \eqref{eq:covariance_matrix_gradient_eta_mn} gives
+
+\begin{equation} \label{eq:covariance_matrix_gradient_eta}
+\renewcommand*{\arraystretch}{2}
+\begin{array}{c}
+\displaystyle \Sigma(\nabla\,\eta(\vec{r})) \,=\, \Sigma\left(\nabla\left(\sum_{m=-\infty}^{+\infty}\sum_{n=-\infty}^{+\infty} \eta_{m,n}(\vec{r})\right)\right) \\
+\displaystyle =\, \sum_{m=-\infty}^{+\infty}\sum_{n=-\infty}^{+\infty}\Sigma\left(\nabla\eta_{m,n}(\vec{r})\right) \,=\, \sum_{m=-\infty}^{+\infty}\sum_{n=-\infty}^{+\infty}\vec{k}_{m,n}\otimes\vec{k}_{m,n} \Var(\eta_{m,n}(\vec{r})).
+\end{array}
+\end{equation}
+
+If we combine \eqref{eq:variance_k_eta}, \eqref{eq:variance_k_eta_to_variance_eta_k} and \eqref{eq:fd_eta_dk_mn_definition}, we see that
+
+\begin{equation} \label{eq:covariance_matrix_gradient_eta}
+\Var(\eta_{m,n}(\vec{r})) \,=\, \Var(\eta_{\Delta\vec{k}_{m,n}}(\vec{r})) \,=\, \Var_{\Delta\vec{k}_{m,n}}(\eta(\vec{r})) \,=\, \int_{\Delta\vec{k}_{m,n}}S(\vec{k})\opd\vec{k}.
+\end{equation}
+
+\eqref{eq:covariance_matrix_gradient_eta} can be rewritten as
+
+\begin{equation}
+\Sigma(\nabla\,\eta(\vec{r})) \,=\, \sum_{m=-\infty}^{+\infty}\sum_{n=-\infty}^{+\infty}\vec{k}_{m,n}\otimes\vec{k}_{m,n} \int_{\Delta\vec{k}_{m,n}}S(\vec{k})\opd\vec{k}
+\end{equation}
+
+and since the unit of all $\Delta\vec{k}_{m,n}$ is $\mathbb{R}^2$, in the limit when $P\to\infty$ and $d\to 0$ we get
+
+\begin{equation}
+\Sigma(\nabla\,\eta(\vec{r})) \,=\, \int_{\mathbb{R}^2}\vec{k}\otimes\vec{k}\,S(\vec{k})\opd\vec{k}.
+\end{equation}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\HRule
+
+By combining \eqref{eq:variance_integral} and \eqref{eq:eta_mn_definition}, we get
+
+\begin{equation} \label{eq:variance_integral_eta_mn}
+\Var(\eta_{m,n}(\vec{r})) \,=\, \frac{1}{A}\int_A\left|\fdfunc{\eta}(m,\,n)\,e^{i\vec{k}_{m,n}\cdot\vec{r}}\right|^2\opd\vec{r} \,=\, \left|\fdfunc{\eta}(m,\,n)\right|^2,
+\end{equation}
+
+so \eqref{eq:covariance_matrix_gradient_eta} becomes
+
+\begin{equation}
+\displaystyle \Sigma(\nabla\,\eta(\vec{r})) \,=\, \sum_{m=-\infty}^{+\infty}\sum_{n=-\infty}^{+\infty}\vec{k}_{m,n}\otimes\vec{k}_{m,n} \left|\fdfunc{\eta}(m,\,n)\right|^2,
+\end{equation}
+
+which by using \eqref{eq:fd_eta_series} can be further rewritten as
+
+\begin{equation}
+\displaystyle \Sigma(\nabla\,\eta(\vec{r})) \,=\, \frac{1}{4\pi^2} \int_{\mathbb{R}^2}\vec{k}\otimes\vec{k} \left|\fdfunc{\eta}(\vec{k})\right|^2\opd\vec{k}.
+\end{equation}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -293,8 +417,8 @@ combining \eqref{eq:variance_k_eta}, \eqref{eq:variance_k_eta_to_variance_eta_k}
 \begin{equation}
 \renewcommand*{\arraystretch}{1.5}
 \begin{array}{c}
-\displaystyle \Var_{\Delta\vec{k}}(\nabla\eta) \,=\, \Var(\nabla\eta_{\Delta\vec{k}}) \,=\, \Var(\vec{K}\eta_{\Delta\vec{k}}) \,=\, \vec{K}\,\Var(\eta_{\Delta\vec{k}}) \\
-\displaystyle =\, \vec{K}\,\int_{\Delta\vec{k}}S(\vec{k})\opd\vec{k} \,=\, \int_{\Delta\vec{k}}\vec{k}\,S(\vec{k})\opd\vec{k},
+\displaystyle \Var_{\Delta\vec{k}}(\nabla\eta) \,=\, \Var(\nabla\eta_{\Delta\vec{k}}) \,=\, \Var(\vec{k}_{m,n}\eta_{\Delta\vec{k}}) \,=\, \vec{k}_{m,n}\,\Var(\eta_{\Delta\vec{k}}) \\
+\displaystyle =\, \vec{k}_{m,n}\,\int_{\Delta\vec{k}}S(\vec{k})\opd\vec{k} \,=\, \int_{\Delta\vec{k}}\vec{k}\,S(\vec{k})\opd\vec{k},
 \end{array}
 \end{equation}
 
@@ -325,9 +449,9 @@ If the \idxs{wave}{spectrum} is known, $\Var_{\vec{k}}(\Delta\fdfunc{\eta})$ is 
 \begin{equation}
 \renewcommand*{\arraystretch}{1.5}
 \begin{array}{c}
-\vec{\mu} \,=\, E[\nabla\eta(\vec{r})] \,=\, E\left[\mathcal{F}^{-1}\left\{\vec{k}\,\fdfunc{\eta}(\vec{k})\right\}(\vec{r})\right] \\
+\vec{\mu} \,=\, \E[\nabla\eta(\vec{r})] \,=\, E\left[\mathcal{F}^{-1}\left\{\vec{k}\,\fdfunc{\eta}(\vec{k})\right\}(\vec{r})\right] \\
 =\, E\left[\mathcal{F}^{-1}\left\{\vec{k}\,\left(\fdfunc{\eta}_0(\vec{k})+\Delta\fdfunc{\eta}(\vec{k})\right)\right\}(\vec{r})\right] \\
-=\, \mathcal{F}^{-1}\left\{\vec{k}\,\left(E_{\vec{k}}[\fdfunc{\eta}_0]+E_{\vec{k}}[\Delta\fdfunc{\eta}]\right)\right\}(\vec{r}) \,=\, \mathcal{F}^{-1}\{\vec{k}\,\fdfunc{\eta}_0(\vec{k})\}(\vec{r}) \,=\, \nabla\eta_0(\vec{r})\,.
+=\, \mathcal{F}^{-1}\left\{\vec{k}\,\left(\E_{\vec{k}}[\fdfunc{\eta}_0]+\E_{\vec{k}}[\Delta\fdfunc{\eta}]\right)\right\}(\vec{r}) \,=\, \mathcal{F}^{-1}\{\vec{k}\,\fdfunc{\eta}_0(\vec{k})\}(\vec{r}) \,=\, \nabla\eta_0(\vec{r})\,.
 \end{array}
 \end{equation}
 
