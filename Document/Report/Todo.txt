@@ -9,6 +9,7 @@ Needs to be written:
 * Library page
 
 Needs finishing:
+* Appendix about illumination model
 (* Octrees)
 (* Laplacian pyramid)
 
@@ -33,18 +34,6 @@ Estethic improvements:
 * ? \vec{x})   -> \vec{x}\,)
 * ? \vec{\xi}) -> \vec{\xi}\,)
 
-* Add to nomeclature:
-    * <>     - ensemble average
-    * P_h    - wave spectrum
-    * eta(k) - Fourier transform of eta(r) for the wave vector k
-    * Misc. variables in the newly written sections
-    * Update numenclature for: Solution methods for the pressure Poison equation, advection methods and all sections written thereafter
-
-* Add to table of technical terms
-    * anti-normal
-    * structured and unstructured grid
-    * stack
-
 * Include references:
     * PDE solved for correcting signed distance function: http://www.matthiasmueller.info/talks/SurfaceTrackingMM.pdf
     * Paper mentioning that Fourier synthesis cannot simulate FSI: http://developer.download.nvidia.com/GTC/SIGGRAPH_Asia_2011/PDF/WaterSim_Chentanez.pdf
@@ -52,13 +41,29 @@ Estethic improvements:
     * Include in Poisson equation part: http://www.math.ucla.edu/~jteran/papers/MST10.pdf and http://www.youtube.com/watch?NR=1&v=BXpO4Aljekk
     * Include in advection schemes for the phase fraction part: https://www.youtube.com/watch?v=AYQiwhU-cfE, https://www.youtube.com/watch?v=F3_R2WV0V04, https://www.youtube.com/watch?v=xdpt5PeY0vc, https://www.youtube.com/watch?v=v5txXX_nkRk
 
+* Add image to appendix about illumination model (see http://tex.stackexchange.com/questions/28850/how-to-learn-to-create-general-functional-shadings-wifth-pgf)
+
+* Add to table of technical terms
+    * anti-normal
+    * structured and unstructured grid
+    * stack
+
 * Check picture permisions (even pictures in the public domain that cannot be copyrighted may require that credit is given to the creator or the photographer)
 
 * Add thesis work number.
 
 * Fix issues pointed out by Magnus Johansson
 
+* Fix issues pointed out by Kenneth
+
 * Add limitations of derived 2D PDE (no given way to calculate h and a)
+
+* Add to nomeclature:
+    * <>     - ensemble average
+    * P_h    - wave spectrum
+    * eta(k) - Fourier transform of eta(r) for the wave vector k
+    * Misc. variables in the newly written sections
+    * Update numenclature for: Solution methods for the pressure Poison equation, advection methods and all sections written thereafter
     
     Results are the product of measuring the dependent variable in an experiment.
     Results should be measurable.
