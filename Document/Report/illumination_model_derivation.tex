@@ -282,7 +282,7 @@ Combining this with \eqref{eq:eta_series_reduced} and \eqref{eq:covariance_matri
 
 If we combine \eqref{eq:variance_k_eta}, \eqref{eq:variance_k_eta_to_variance_eta_k} and \eqref{eq:fd_eta_dk_mn_definition}, we see that
 
-\begin{equation} \label{eq:covariance_matrix_gradient_eta}
+\begin{equation}
 \Var(\eta_{m,n}(\vec{r})) \,=\, \Var(\eta_{\Delta\vec{k}_{m,n}}(\vec{r})) \,=\, \Var_{\Delta\vec{k}_{m,n}}(\eta(\vec{r})) \,=\, \int_{\Delta\vec{k}_{m,n}}S(\vec{k})\opd\vec{k}.
 \end{equation}
 
@@ -294,15 +294,31 @@ If we combine \eqref{eq:variance_k_eta}, \eqref{eq:variance_k_eta_to_variance_et
 
 and since the unit of all $\Delta\vec{k}_{m,n}$ is $\mathbb{R}^2$, in the limit when $P\to\infty$ and $d\to 0$ we get
 
-\begin{equation}
-\Sigma(\nabla\,\eta(\vec{r})) \,=\, \int_{\mathbb{R}^2}\vec{k}\otimes\vec{k}\,S(\vec{k})\opd\vec{k}.
+\begin{equation} \label{eq:covariance_matrix_gradient_eta_final}
+\Sigma(\nabla\,\eta(\vec{r})) \,=\, \int_{\mathbb{R}^2}\vec{k}\otimes\vec{k}\,S(\vec{k})\opd\vec{k},
 \end{equation}
 
+which means that we know the covariance matrix of $\nabla\eta$. Additionally, by differentiating \eqref{eq:zero_expectation_value_real_space_with_regard_to_t}, we get
 
+\begin{equation}
+\E_{\vec{r}}[\nabla\eta] \,=\, 0,\ \forall\ \vec{r},
+\end{equation}
 
+so we know the expectation value of $\nabla\eta$ as well, which means that we know the distribution of $\nabla\eta$ since we assumed it was multivariate normal distributed. The multivariate normal distribution density $f$ of a stochastic vector $\vec{x}$ is given by
 
+\begin{equation} \label{eq:multivariate_normal_distribution_density}
+f(\vec{x}) \,=\, \frac{1}{(2\pi)^{d/2}|\Sigma|^{1/2}}\exp\left(-\frac{1}{2}(\vec{x}-\vec{\mu})^{\T}\Sigma^{-1}(\vec{x}-\vec{\mu})\right),
+\end{equation}
 
+where $d$ is the \dimensionality of $\vec{x}$, $\vec{\mu} = \E[\vec{x}]$ is the expectation value of $\vec{x}$, $\Sigma = \Sigma(\vec{x})$ is the covariance matrix of $\vec{x}$, $|\Sigma|$ is the \determinant of $\Sigma$, $\exp$ is the \idxs{exponential}{function}, and a superscripted $\T$ denotes the \transpose of a matrix (note that vectors can be treated as column matrices).
 
+The distribution density $f$ of $\nabla\eta$ is therefore given by
+
+\begin{equation} \label{eq:eta_grad_distribution}
+f(\nabla\eta) \,=\, \frac{1}{2\pi|\Sigma|^{1/2}}\exp\left(-\frac{1}{2}(\nabla\eta)^{\T}\Sigma^{-1}(\nabla\eta)\right),
+\end{equation}
+
+where $\Sigma = \Sigma(\nabla\eta)$ is given by \eqref{eq:covariance_matrix_gradient_eta_final}.
 
 
 
