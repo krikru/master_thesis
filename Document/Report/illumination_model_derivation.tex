@@ -12,19 +12,23 @@
 
 %To be written \comment
 {
-If we simplify a water surface by cutting off a part of the \idxs{wave}{spectrum}, we need to --- for \rendering purposes --- compensate for that by making the \reflection in the \idxs{simplified}{water surface} \idxse{diffuse}{reflection}{diffuse}. The \idxs{illumination}{model} derived in this appendix models this diffusion and was developed outside of the scope of \thismasterthesiswork.
+If we simplify a water surface by cutting off a part of the \idxs{wave}{spectrum}, such the part containing all frequencies over the \idxs{Nyquist}{frequency}, we will loose surface details which we --- for \visualization purposes --- need to compensate for by making \reflections in the water surface \idxse{diffuse}{reflection}{diffuse}.
+
+For that reason, an \idxs{illumination}{model} --- that was developed outside of the scope of \thismasterthesiswork\ \,---\ \,is derived in this appendix, and it models this diffuseness.
 
 \section{Microfacets}
 
-Although the high frequencies have been removed from the rendering, which makes it impossible to treat them directly, it is possible to treat them statistically by making a few \assumptions and \approximations, and by using something known as \microfacets, which are basically infinitesimal surface elements for which the \idxs{surface}{normal} is \stochastic but \assumed to have a known \idxs{probability}{distribution}, tiled one after each other.
+Although some of the frequencies has been removed from the rendering, and hence become impossible to treat directly, it is still possible to treat them statistically after making a few \assumptions and \approximations.
 
-Let's start by calculating the \idxs{probability}{distribution} for the direction of a reflected \ray, so we can know the likelihood that what is reflected in the water surface is the \sun. But before we can start doing that, we need to make a few \assumptions.
+If we know the \idxs{probability}{distribution} for all removed frequencies, we can calculate the distribution for the surface normal, which means that we can calculate the distribution for the direction of a \ray that has just been reflected on the surface is we know the direction from which it came. This means that we can calculate the likelihood that the object which is being reflected in a specific point on the surface is the \sun, which in turn makes it possible to calculate the brightness of that point as perceived by the viewer. But before we can start doing that, we need to make a few \assumptions.
 
-First, let's \assume that all frequencies of the wave spectrum is superposed linearly on top of each other and that there is no \idxs{horizontal}{displacement}, i.e.\ the waves are not \idxsp{Gerstner}{wave}{s}, or that the \idxs{wave}{amplitude} is much smaller than the \wavelength which will virtually linearize the waves and also make the horizontal displacement very small in comparison to the wavelength.
+Let's model the surface by something known as \microfacets, which are basically infinitesimal surface elements, tiled one after each other, for which the \idxs{surface}{normal} is \assumed to be \stochastically distributed with a known \idxs{probability}{distribution} --- we will come to this later.
 
-Second, to make things simpler, let's assume that both the fraction of the water surface that is hidden behind other waves and hence is not visible to the observer, and the fraction of the surface that is shadowed, i.e. is hidden from the sun behind other waves, are almost zero.
+First, let's \assume that all frequencies of the wave spectrum are \superposed linearly on top of each other. This implies that there is no \idxs{horizontal}{displacement}, that is, either the waves are not \idxsp{Gerstner}{wave}{s}, or the \idxs{wave}{amplitude} is so much smaller than the \wavelength that it is considered negligible whether the waves are Gerstner waves or not.
 
-Now, let's call the \index{elevation!free surface|see{free surface elevation}}\idxs{free}{surface elevation} of the actual water surface $\eta$, and the free surface elevation of the simplified surface (from which a part of the wave spectrum has been cut off) $\eta_0$, and make them functions of $\vec{r}$ which is a \twodimensional vector in the horizontal plane. We can start by noting that $\eta_0$ contains less information about the actual water surface than $\eta$, and that $\eta_0$ is known, whereas $\eta$ is not.
+Second, to make things simpler, let's assume that both the fraction of the water surface that is hidden behind other waves, and hence is not visible to the observer, and the fraction of the surface that is \shadowed, i.e. is hidden from the sun behind other waves, are almost zero.
+
+Now, let's denote the \index{elevation!free surface|see{free surface elevation}}\idxs{free}{surface elevation} of the actual water surface as $\eta$, and the free surface elevation of the simplified surface (from which a part of the wave spectrum has been cut off) as $\eta_0$, and make them functions of $\vec{r}$ which is a \twodimensional vector in the horizontal plane. We can start by noting that $\eta_0$ contains less information about the actual water surface than $\eta$, and that $\eta_0$ is known, whereas $\eta$ is not.
 
 We can therefore only calculate the normal of the simplified surface, let's call this $\normvec{n}_0$. Let's also define the \idx{anti-normalization} $\anormvec{\xi}$ of a vector $\vec{\xi}$ as
 
@@ -343,25 +347,12 @@ where $\Sigma = \Sigma(\nabla\eta)$ is given by \eqref{eq:covariance_matrix_grad
 
 
 
-\HRule
 
-By combining \eqref{eq:variance_integral} and \eqref{eq:eta_mn_definition}, we get
 
-\begin{equation} \label{eq:variance_integral_eta_mn}
-\Var(\eta_{m,n}(\vec{r})) \,=\, \frac{1}{A}\int_A\left|\fdfunc{\eta}(m,\,n)\,e^{i\vec{k}_{m,n}\cdot\vec{r}}\right|^2\opd\vec{r} \,=\, \left|\fdfunc{\eta}(m,\,n)\right|^2,
-\end{equation}
 
-so \eqref{eq:covariance_matrix_gradient_eta} becomes
 
-\begin{equation}
-\displaystyle \Sigma(\nabla\,\eta(\vec{r})) \,=\, \sum_{m=-\infty}^{+\infty}\sum_{n=-\infty}^{+\infty}\vec{k}_{m,n}\otimes\vec{k}_{m,n} \left|\fdfunc{\eta}(m,\,n)\right|^2,
-\end{equation}
 
-which by using \eqref{eq:fd_eta_series} can be further rewritten as
 
-\begin{equation}
-\displaystyle \Sigma(\nabla\,\eta(\vec{r})) \,=\, \frac{1}{4\pi^2} \int_{\mathbb{R}^2}\vec{k}\otimes\vec{k} \left|\fdfunc{\eta}(\vec{k})\right|^2\opd\vec{k}.
-\end{equation}
 
 
 
@@ -408,41 +399,6 @@ which by using \eqref{eq:fd_eta_series} can be further rewritten as
 
 
 
-
-
-
-
-
-
-\HRule
-
-If we define the variance of a stochastic vector $\vec{x}$ results in the \idxs{covariance}{matrix}, that is
-
-\begin{equation}
-\Var(\vec{x}) \,=\, \Sigma(\vec{x}),
-\end{equation}
-
-where $\Sigma(\vec{x})$ is the covariance matrix, such that
-
-\begin{equation}
-\Sigma_{i,j}(\vec{x}) \,=\, \Cov(x_i,\,x_j) \,=\, \E[(x_i - \E[x_i])(x_j - \E[x_j])],
-\end{equation}
-
-combining \eqref{eq:variance_k_eta}, \eqref{eq:variance_k_eta_to_variance_eta_k} and \eqref{eq:grad_eta_one_dirac} gives us
-
-\begin{equation}
-\renewcommand*{\arraystretch}{1.5}
-\begin{array}{c}
-\displaystyle \Var_{\Delta\vec{k}}(\nabla\eta) \,=\, \Var(\nabla\eta_{\Delta\vec{k}}) \,=\, \Var(\vec{k}_{m,n}\eta_{\Delta\vec{k}}) \,=\, \vec{k}_{m,n}\,\Var(\eta_{\Delta\vec{k}}) \\
-\displaystyle =\, \vec{k}_{m,n}\,\int_{\Delta\vec{k}}S(\vec{k})\opd\vec{k} \,=\, \int_{\Delta\vec{k}}\vec{k}\,S(\vec{k})\opd\vec{k},
-\end{array}
-\end{equation}
-
-which implies that 
-
-\begin{equation}
-\Var(\nabla\eta) \,=\, \int_{\mathbb{R}^2}\vec{k}\,S(\vec{k})\opd\vec{k}.
-\end{equation}
 
 
 
