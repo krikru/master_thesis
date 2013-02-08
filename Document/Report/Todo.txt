@@ -27,6 +27,8 @@ Search for (texfind):
 * ; (looks awkward on some places)
 * naiive, naive, naiivity, etc. (put into index)
 * which, that ("which" merely adds superfluous information and doesn't restrict the subject; "that" does restrict the subject)
+* assume, assumption, etc. approximate, approximation, etc.
+* lying (located?)
 
 Estethic improvements:
 * \vec{k}^2 -> \vec{k}^{\,2}

@@ -12,31 +12,33 @@
 
 %To be written \comment
 {
-If we simplify a water surface by cutting off a part of the \idxs{wave}{spectrum}, such the part containing all frequencies over the \idxs{Nyquist}{frequency}, we will loose surface details which we --- for \visualization purposes --- need to compensate for by making \reflections in the water surface \idxse{diffuse}{reflection}{diffuse}.
+If we simplify a water surface by cutting off a part of the \idxs{wave}{spectrum}, such as the part containing all frequencies over the \idxs{Nyquist}{frequency}, we will loose surface details which we --- for \visualization purposes --- need to compensate for by making \reflections in the water surface \idxse{diffuse}{reflection}{diffuse}.
 
-For that reason, an \idxs{illumination}{model} --- that was developed outside of the scope of \thismasterthesiswork\ \,---\ \,is derived in this appendix, and it models this diffuseness.
+For that reason, an \idxs{illumination}{model} --- which was developed outside of the scope of \thismasterthesiswork\ \,---\ \,is derived in this appendix, and it models this diffuseness.
 
 \section{Microfacets}
 
-Although some of the frequencies has been removed from the rendering, and hence become impossible to treat directly, it is still possible to treat them statistically after making a few \assumptions and \approximations.
+Although some of the frequencies has been removed from the rendering, and hence become impossible to treat directly, it is still possible to treat them statistically.
 
-If we know the \idxs{probability}{distribution} for all removed frequencies, we can calculate the distribution for the surface normal, which means that we can calculate the distribution for the direction of a \ray that has just been reflected on the surface is we know the direction from which it came. This means that we can calculate the likelihood that the object which is being reflected in a specific point on the surface is the \sun, which in turn makes it possible to calculate the brightness of that point as perceived by the viewer. But before we can start doing that, we need to make a few \assumptions.
+To model the water surface, we will use something known as \microfacets, which are basically infinitesimal surface elements, tiled one after another, for which the \idxs{surface}{normal} is \assumed to be \stochastically distributed with a known \idxs{probability}{distribution} --- we will cover this later. These microfacets are on a much smaller \scale than what is actually represented in the \rendering.
 
-Let's model the surface by something known as \microfacets, which are basically infinitesimal surface elements, tiled one after each other, for which the \idxs{surface}{normal} is \assumed to be \stochastically distributed with a known \idxs{probability}{distribution} --- we will come to this later.
+The idea is that if we know the \idxs{probability}{distribution} for all removed frequencies, we can calculate the distribution for the surface normal. This makes it possible to calculate the distribution for the \idxs{reflection}{direction} of a \ray that is \reflected on the water surface, for a certain \idxs{incident}{direction}, which in turn makes it possible to calculate the likelihood that the object of which the reflection can be seen in a specific point on the surface is --- for example --- the \sun.
 
-First, let's \assume that all frequencies of the wave spectrum are \superposed linearly on top of each other. This implies that there is no \idxs{horizontal}{displacement}, that is, either the waves are not \idxsp{Gerstner}{wave}{s}, or the \idxs{wave}{amplitude} is so much smaller than the \wavelength that it is considered negligible whether the waves are Gerstner waves or not.
+This means that we can calculate the average brightness of a point on the surface as perceived by the viewer. Besides, if we \assume that the removed frequencies correspond to waves that are so short that the wave tips become indistinguishable from one another (it helps if the viewer has a bad sight), the average brightness will probably also be a good approximation of the actual brightness the viewer perceives. But before we can start to calculate this value, we need to make a few \assumptions.
 
-Second, to make things simpler, let's assume that both the fraction of the water surface that is hidden behind other waves, and hence is not visible to the observer, and the fraction of the surface that is \shadowed, i.e. is hidden from the sun behind other waves, are almost zero.
+First, let's \assume that all frequencies of the wave spectrum are \superposed linearly on top of each other. This implies that there is no \idxs{horizontal}{displacement} --- that is, either the waves are not \idxsp{Gerstner}{wave}{s}, or the \idxs{wave}{amplitude} is so much smaller than the \wavelength that whether the waves are Gerstner waves or not is considered negligible.
 
-Now, let's denote the \index{elevation!free surface|see{free surface elevation}}\idxs{free}{surface elevation} of the actual water surface as $\eta$, and the free surface elevation of the simplified surface (from which a part of the wave spectrum has been cut off) as $\eta_0$, and make them functions of $\vec{r}$ which is a \twodimensional vector in the horizontal plane. We can start by noting that $\eta_0$ contains less information about the actual water surface than $\eta$, and that $\eta_0$ is known, whereas $\eta$ is not.
+Second, to make things simpler, let's \assume that both the fraction of the water surface that is hidden behind other waves, and hence is not visible to the viewer, and the fraction of the surface that is \shadowed, i.e. is hidden from the sun behind other waves, are almost zero. In other words, our \microfacets can be assumed not to cover any of the other microfacets, either from the sun or from the viewer.
 
-We can therefore only calculate the normal of the simplified surface, let's call this $\normvec{n}_0$. Let's also define the \idx{anti-normalization} $\anormvec{\xi}$ of a vector $\vec{\xi}$ as
+Now, let's denote the \index{elevation!free surface|see{free surface elevation}}\idxs{free}{surface elevation} of the actual water surface as $\eta$, and the free surface elevation of the simplified surface (from which a part of the wave spectrum has been cut off) as $\eta_0$, and make them functions of $\vec{r}$, which is a \twodimensional vector in the horizontal plane. We can start by noting that $\eta_0$ is less detailed and contains less information about the actual water surface than $\eta$, and that $\eta_0$ is known, whereas $\eta$ is not.
 
-\begin{equation}
+We can therefore only calculate the normal of the simplified surface --- let's call this normal $\normvec{n}_0$. Let's also define the \idx{anti-normalization} $\anormvec{\xi}$ of a vector $\vec{\xi}$ as
+
+\begin{equation} \label{eq:anti_normal_definition}
 \anormvec{\xi} \,=\, \frac{\vec{\xi}}{\normvec{z}\cdot\vec{\xi}}\,,
 \end{equation}
 
-where $\normvec{z}$ is the \idxs{unit}{vector} in the positive vertical direction (which is the negation of the direction of the \idxs{gravitational acceleration}{vector}, or the normal of a flat water surface). This implies that the $\normvec{z}$-component of an anti-normalized vector always is 1. The \idx{anti-normal} $\anormvec{n}_0$ of $\eta_0$ becomes
+where $\normvec{z}$ is the \idxs{unit}{vector} in the positive vertical direction (which is the negation of the direction of the \idxs{gravitational acceleration}{vector}, or the normal of a flat water surface). This implies that the $\normvec{z}$-component of an anti-normalized vector always is 1. Note that the anti-normalization of a vector is only defined if the original vector has a non-zero $\normvec{z}$-component, and that when it is defined, it is parallel to the original vector. The \idx{anti-normal} $\anormvec{n}_0$ of the surface $\eta_0$ becomes
 
 \begin{equation}
 \anormvec{n}_0 \,=\, \left(\!\!\!\begin{array}{c}-\nabla\eta_0(\vec{r}) \\ 1\end{array}\!\!\!\right),
@@ -54,13 +56,13 @@ where $\mathcal{F}^{-1}$ is the \index{operator!inverse non-unitary Fourier tran
 \anormvec{n} \,=\, \left(\!\!\!\begin{array}{c}-\nabla\eta(\vec{r}) \\ 1\end{array}\!\!\!\right),
 \end{equation}
 
-where the gradient can be written as
+where the gradient in turn can be written as
 
 \begin{equation}
 \nabla\eta(\vec{r}) \,=\, \mathcal{F}^{-1}\{\vec{k}\,\fdfunc{\eta}(\vec{k})\}(\vec{r}),
 \end{equation}
 
-and where $\fdfunc{\eta}(\vec{k})$ is the \idxs{Fourier}{transform} of $\eta$. However, only the part of $\fdfunc{\eta}(\vec{k})$ where $\vec{k}$ is small enough is known; in fact, this part is equal to $\fdfunc{\eta}_0(\vec{k})$, while the reminding part of $\fdfunc{\eta}(\vec{k})$,
+where $\fdfunc{\eta}(\vec{k})$ is the \idxs{Fourier}{transform} of $\eta$. However, only the part of $\fdfunc{\eta}(\vec{k})$ where the wave spectrum has not been cut off is known; in fact, this part is equal to $\fdfunc{\eta}_0(\vec{k})$, while the reminding part of $\fdfunc{\eta}(\vec{k})$, defined as
 
 \begin{equation}
 \fdfunc{\eta}'(\vec{k}) \,=\, \fdfunc{\eta}(\vec{k}) - \fdfunc{\eta}_0(\vec{k}),
@@ -68,33 +70,33 @@ and where $\fdfunc{\eta}(\vec{k})$ is the \idxs{Fourier}{transform} of $\eta$. H
 
 is unknown. On the other hand, if we know what the \idxs{wave}{spectrum} looks like, we can calculate the \idxs{probability}{distribution} of $\eta$.
 
-If $\vec{r}$ is assumed to be \idxse{uniform}{distribution}{uniformly distributed} over a large surface area, i.e. there is no \bias in the distribution of $\vec{r}$ regarding to the surface slope $\nabla\eta$ or any other local property of the surface for that matter, the distribution of $\fdfunc{\eta}'$ is directly given by the wave spectrum. And from that distribution we will be able to get something we are going to need later, namely the distribution of $\nabla\eta'$.
+If $\vec{r}$ is assumed to be \idxse{uniform}{distribution}{uniformly distributed} over a large surface area, i.e. there is no \bias in the distribution of $\vec{r}$ regarding to the surface slope $\nabla\eta$, or any other local property of the surface for that matter, the distribution of $\fdfunc{\eta}'$ is easily obtained by looking at the wave spectrum. And from that distribution we will be able to get something that is more valuable to us, namely the distribution of $\nabla\eta'$.
 
 \subsection{Wave spectra}
 
 When using a \idxs{wave}{spectrum}, the free surface elevation, what we call $\eta$, is considered indeterministic, that is, \stochastic. Almost every \idxs{wave}{spectrum}, $S$, used in \idxs{computer}{graphics}, is a function of the wave vector $\vec{k}$ and gives the \variance of the free surface elevation per unit \idxs{reciprocal}{length} squared (the elements of $\vec{k}$ are reciprocal lengths), and thus has the unit $\text{m}^4$. 
 
-If $S$ assumes that the wave components corresponding to the wave vectors are on exponential form ($e^{i(\vec{k}\cdot\vec{r}-\omega t)}$), which is what $\fdfunc{\eta}$ also assumes, rather than on a \sinusoidal form ($\sin(\vec{k}\cdot\vec{r}-\omega t)$), which otherwise is a pretty common case in computer graphics, this means that
+If $S$ assumes that the wave components corresponding to the wave vectors are on the exponential form $e^{i(\vec{k}\cdot\vec{r}-\omega t)}$, which is what $\fdfunc{\eta}$ also assumes, rather than on the \sinusoidal form $\sin(\vec{k}\cdot\vec{r}-\omega t)$, which otherwise is a pretty common case in computer graphics, this means that
 
 \begin{equation} \label{eq:wave_spectrum_definition}
 S(\vec{k}) \,=\, \frac{\opd \Var(\eta)}{\opd\vec{k}},
 \end{equation}
 
-where $\Var(\eta)$ denotes the \variance of $\eta$ with regard to $\vec{r}$, for a fixed time $t$, and $\opd\vec{k}$ is an \infinitesimal \idxs{reciprocal}{area} element, centered around $\vec{k}$. Here, $\opd\Var(\eta)$ denotes the additional variance of $\eta$ caused solely by the part of the wave spectrum specified by $\opd\vec{k}$.
+where $\Var$ is the \idxs{variance}{operator} with respect to $\vec{r}$ ($\vec{r}$ is considered to be stochastically distributed), for a fixed time $t$, and $\opd\vec{k}$ is an \infinitesimal \idxs{reciprocal}{area} element, centered around $\vec{k}$. Here, $\opd\Var(\eta)$ denotes the additional variance within $\eta$ caused solely by the part of the wave spectrum specified by $\opd\vec{k}$.
 
-\eqref{eq:wave_spectrum_definition} implies that the additional variance of $\eta$ --- $\Var_{\Delta\vec{k}}(\eta)$ --- caused by a part of the wave spectrum specified by a reciprocal area element $\Delta\vec{k}$ is
+\eqref{eq:wave_spectrum_definition} implies that the additional variance in $\eta$ --- $\Var_{\Delta\vec{k}}(\eta)$ --- caused by a part of the wave spectrum specified by a reciprocal area element $\Delta\vec{k}$ is
 
 \begin{equation} \label{eq:variance_k_eta}
 \Var_{\Delta\vec{k}}(\eta) \,=\, \int_{\Delta\vec{k}}\opd \Var(\eta) \,=\, \int_{\Delta\vec{k}}\frac{\opd \Var(\eta)}{\opd\vec{k}}\opd\vec{k} \,=\, \int_{\Delta\vec{k}}S(\vec{k})\opd\vec{k}.
 \end{equation}
 
-Since there is no \correlation between wave components of different \wavelengths, $\Var_{\Delta\vec{k}}(\eta)$ in turn can be rewritten as
+Since the variance doesn't \correlate wave components of different \wavelengths, we have
 
 \begin{equation} \label{eq:variance_k_eta_to_variance_eta_k}
-\Var_{\Delta\vec{k}}(\eta) \,=\, \Var(\eta_{\Delta\vec{k}}),
+\Var(\eta_{\Delta\vec{k}}) \,=\, \Var_{\Delta\vec{k}}(\eta),
 \end{equation}
 
-where
+where $\eta_{\Delta\vec{k}}$ is defined as
 
 \begin{equation} \label{eq:eta_k_of_fd_eta_k}
 \eta_{\Delta\vec{k}} \,=\, \mathcal{F}^{-1}\{\fdfunc{\eta}_{\Delta\vec{k}}(\vec{k})\},
@@ -109,19 +111,19 @@ where in turn
 \end{cases}.
 \end{equation}
 
-Besides, the average value of $\fdfunc{\eta}(\vec{k})$ is assumed to be 0 for any given wave vector $\vec{k}$, that is
+Besides, the time average of $\fdfunc{\eta}(\vec{k})$ is assumed to be 0 for any given wave vector $\vec{k}$, that is
 
 \begin{equation} \label{eq:zero_expectation_value_reciprocal_space}
 \E_{\vec{k}}[\fdfunc{\eta}] \,=\, 0,\ \forall\ \vec{k},
 \end{equation}
 
-where $\E_{\vec{k}}$ denotes the expectation value with regard to time, for a fixed value of $\vec{k}$. After \idxsp{inverse}{Fourier transform}{ing}, this also results in 
+where $\E_{\vec{k}}$ is the \idxs{expectation value}{operator} with respect to time, for a fixed value of $\vec{k}$. After \idxsp{inverse}{Fourier transform}{ing}, this also results in 
 
 \begin{equation} \label{eq:zero_expectation_value_real_space_with_regard_to_t}
 \E_{\vec{r}}[\eta] \,=\, 0,\ \forall\ \vec{r},
 \end{equation}
 
-where $\E_{\vec{r}}$ denotes the expectation value with regard to time, for a fixed value of $\vec{r}$, and can be defined as
+where $\E_{\vec{r}}$ is the \idxs{expectation value}{operator} with respect to time, for a fixed value of $\vec{r}$, and can be defined as
 
 \begin{equation} \label{eq:expectation_value_with_regard_to_t_definition}
 \E_{\vec{r}}[f] \,=\, \lim_{T\to\infty}\frac{1}{T}\int_0^T f(\vec{r},\,t)\opd t,
@@ -129,13 +131,13 @@ where $\E_{\vec{r}}$ denotes the expectation value with regard to time, for a fi
 
 where $f$ is a function of $\vec{r}$ and $t$.
 
-Let's assume that $\eta$ is periodic in both dimensions with the period $P$ (as often is the case in \idxs{computer}{graphics}) with a large surface element $A$ (with \mbox{$|A| = P^2$}) that keeps repeating itself, such that
+Let's assume that $\eta$ is periodic in both horizontal dimensions with the period $P$ (this is a commit trick in \idxs{computer}{graphics}) with a large, square surface element $A$ (with \mbox{$|A| = P^2$}) that keeps repeating itself, such that
 
 \begin{equation} \label{eq:water_surface_periodicity}
 \eta(\vec{r}+P\normvec{x}) \,=\, \eta(\vec{r}+P\normvec{y}) \,=\, \eta(\vec{r}),\ \forall\ \vec{r},
 \end{equation}
 
-where $\normvec{x}$ and $\normvec{y}$ are the \index{vector!orthonormal basis|see{orthonormal basis vector}}\idxsp{orthonormal}{basis vector}{s} generating the \idxs{horizontal}{plane}. This implies implies that $\fdfunc{\eta}$ is discrete with \idxsp{Dirac}{impulse}{s} lying at the fixed distance $d = 2\pi/P$ from each other, such that
+where $\normvec{x}$ and $\normvec{y}$ are the \index{vector!orthonormal basis|see{orthonormal basis vector}}\idxsp{orthonormal}{basis vector}{s} generating the \idxs{horizontal}{plane}. This implies that $\fdfunc{\eta}$ is discrete, with \idxsp{Dirac}{impulse}{s} arranged in the intersection points of a square grid with the size $d = 2\pi/P$, such that
 
 \begin{equation} \label{eq:fd_eta_series}
 \renewcommand*{\arraystretch}{2}
@@ -147,33 +149,36 @@ where $\normvec{x}$ and $\normvec{y}$ are the \index{vector!orthonormal basis|se
 
 where $\fdfunc{\eta}(m,\,n)$ is a \twodimensional \sequence of coefficients associated with $\fdfunc{\eta}$, $m$ and $n$ are two integers used to index the terms in the \series, and $\vec{k}_{m,n} = md\normvec{x} + nd\normvec{y}$.
 
-By \assuming that $\vec{r}$ is \idxse{uniform}{distribution}{uniformly distributed} within $A$, the variance can be defined as
+\comment
+{
+By \assuming that $\vec{r}$ is \idxse{uniform}{distribution}{uniformly distributed} within $A$, the \idxs{variance}{operator} with respect to $\vec{r}$ can be defined as
 
 \begin{equation} \label{eq:variance_definition}
 \Var(f) \,=\, \E_{A,t}[\,|f - \E_{A,t}[f]\,|^2\,],
 \end{equation}
 
-where $\E_{A,t}$ denotes the expectation value for a $\vec{r}$ that is uniformly distributed within $A$, for a fixed time, and can be defined as
+where $\E_{A,t}$ denotes the \idxs{expectation value}{operator} with regard to  $\vec{r}$ (which is uniformly distributed within $A$), for a fixed time $t$, and can be defined as
 
 \begin{equation} \label{eq:expectation_value_with_regard_to_r_definition}
-\E_{A,t}[f] \,=\, \frac{1}{A}\int_A f(\vec{r},\,t)\opd\vec{r}.
+\E_{A,t}[f] \,=\, \frac{1}{|A|}\int_A f(\vec{r},\,t)\opd\vec{r}.
 \end{equation}
 
-By realizing that this expectation value will be time independent for $f(\vec{r}) = \varphi(\vec{r})$, where $\varphi$ is any periodic (obeying \eqref{eq:water_surface_periodicity}) free surface elevation which is mass conserving (the integral over $A$ is time independent), we can use \eqref{eq:zero_expectation_value_real_space_with_regard_to_t} and \eqref{eq:expectation_value_with_regard_to_t_definition} to get
+By realizing that this \idxs{expectation}{value} will be time independent for $f(\vec{r}) = \varphi(\vec{r})$, where $\varphi$ is any periodic (obeying \eqref{eq:water_surface_periodicity}), free surface elevation that conserves mass, meaning that the integral over $A$ is time independent, we can use \eqref{eq:zero_expectation_value_real_space_with_regard_to_t} and \eqref{eq:expectation_value_with_regard_to_t_definition} to get
 
 \begin{equation} \label{eq:zero_expectation_value_real_space_with_regard_to_r}
 \renewcommand*{\arraystretch}{2}
 \begin{array}{c}
-\displaystyle \E_{A,t}[\varphi] \,=\, \lim_{T\to\infty}\frac{1}{T}\int_0^T\frac{1}{A}\int_A \varphi(\vec{r},\,t)\opd\vec{r}\opd t \\
-\displaystyle =\, \frac{1}{A}\int_A\lim_{T\to\infty}\frac{1}{T}\int_0^T \varphi(\vec{r},\,t)\opd t\opd\vec{r} \,=\, \frac{1}{A}\int_A \E_{\vec{r}}[\varphi]\opd\vec{r} \,=\, 0.
+\displaystyle \E_{A,t}[\varphi] \,=\, \frac{1}{|A|}\int_A \varphi(\vec{r},\,t)\opd\vec{r} \,=\, \lim_{T\to\infty}\frac{1}{T}\int_0^T\frac{1}{|A|}\int_A \varphi(\vec{r},\,t)\opd\vec{r}\opd t \\
+\displaystyle =\, \frac{1}{|A|}\int_A\lim_{T\to\infty}\frac{1}{T}\int_0^T \varphi(\vec{r},\,t)\opd t\opd\vec{r} \,=\, \frac{1}{|A|}\int_A \E_{\vec{r}}[\varphi]\opd\vec{r} \,=\, 0.
 \end{array}
 \end{equation}
 
 By using using \eqref{eq:expectation_value_with_regard_to_r_definition} and \eqref{eq:zero_expectation_value_real_space_with_regard_to_r}, \eqref{eq:variance_definition} becomes
 
 \begin{equation} \label{eq:variance_integral}
-\Var(\varphi) \,=\, \frac{1}{A}\int_A|\varphi(\vec{r})|^2\opd\vec{r}.
+\Var(\varphi) \,=\, \frac{1}{|A|}\int_A|\varphi(\vec{r})|^2\opd\vec{r}.
 \end{equation}
+}
 
 \eqref{eq:fd_eta_series} can be reduced to
 
@@ -212,10 +217,14 @@ where
 Taking the gradient of this yields
 
 \begin{equation} \label{eq:grad_eta_one_dirac}
-\nabla\eta_{m,n}(\vec{r}) \,=\, \nabla(\fdfunc{\eta}(m,\,n)\,e^{i\vec{k}_{m,n}\cdot\vec{r}}) \,=\, \vec{k}_{m,n}\,\fdfunc{\eta}(m,\,n)\,e^{i\vec{k}_{m,n}\cdot\vec{r}} \,=\, \vec{k}_{m,n}\,\eta_{m,n}(\vec{r}).
+\renewcommand*{\arraystretch}{1.5}
+\begin{array}{c}
+\displaystyle \nabla\eta_{m,n}(\vec{r}) \,=\, \nabla(\fdfunc{\eta}(m,\,n)\,e^{i\vec{k}_{m,n}\cdot\vec{r}}) \\
+\displaystyle =\, \vec{k}_{m,n}\,\fdfunc{\eta}(m,\,n)\,e^{i\vec{k}_{m,n}\cdot\vec{r}} \,=\, \vec{k}_{m,n}\,\eta_{m,n}(\vec{r}).
+\end{array}
 \end{equation}
 
-Let's \assume that the surface gradient is \idxse{normal}{distribution}{normal distributed}. For vectors, the corresponding distribution is the \textit{\href{http://en.wikipedia.org/wiki/Multivariate\_normal\_distribution\#Non-degenerate\_case}{Multivariate normal distribution}}, and requires that the \mean as well as the \idxs{covariance}{matrix} of the vector are known. The covariance matrix, $\Sigma$, of a stochastic vector $\vec{x}$ is defined as
+Let's \assume that the surface gradient is \idxse{normal}{distribution}{normally distributed}. For vectors, the corresponding distribution is the \textit{\href{http://en.wikipedia.org/wiki/Multivariate\_normal\_distribution\#Non-degenerate\_case}{Multivariate normal distribution}}, and requires that the \mean as well as the \idxs{covariance}{matrix} of the vector are known. The covariance matrix, $\Sigma$, of a stochastic vector $\vec{x}$ is defined as
 
 \begin{equation} \label{eq:covariance_matrix_element_definition}
 \Sigma_{i,j}(\vec{x}) \,=\, \Cov(x_i,\,x_j) \,=\, \E[(x_i - \E[x_i])(x_j - \E[x_j])],
@@ -287,10 +296,10 @@ Combining this with \eqref{eq:eta_series_reduced} and \eqref{eq:covariance_matri
 If we combine \eqref{eq:variance_k_eta}, \eqref{eq:variance_k_eta_to_variance_eta_k} and \eqref{eq:fd_eta_dk_mn_definition}, we see that
 
 \begin{equation}
-\Var(\eta_{m,n}(\vec{r})) \,=\, \Var(\eta_{\Delta\vec{k}_{m,n}}(\vec{r})) \,=\, \Var_{\Delta\vec{k}_{m,n}}(\eta(\vec{r})) \,=\, \int_{\Delta\vec{k}_{m,n}}S(\vec{k})\opd\vec{k}.
+\Var(\eta_{m,n}(\vec{r})) \,=\, \Var(\eta_{\Delta\vec{k}_{m,n}}(\vec{r})) \,=\, \Var_{\Delta\vec{k}_{m,n}}(\eta(\vec{r})) \,=\, \int_{\Delta\vec{k}_{m,n}}S(\vec{k})\opd\vec{k},
 \end{equation}
 
-\eqref{eq:covariance_matrix_gradient_eta} can be rewritten as
+so \eqref{eq:covariance_matrix_gradient_eta} can be rewritten as
 
 \begin{equation}
 \Sigma(\nabla\,\eta(\vec{r})) \,=\, \sum_{m=-\infty}^{+\infty}\sum_{n=-\infty}^{+\infty}\vec{k}_{m,n}\otimes\vec{k}_{m,n} \int_{\Delta\vec{k}_{m,n}}S(\vec{k})\opd\vec{k}
