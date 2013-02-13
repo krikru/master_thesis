@@ -30,45 +30,45 @@ First, let's \assume that all frequencies of the wave spectrum are \superposed l
 
 Second, to make things simpler, let's \assume that both the fraction of the water surface that is hidden behind other waves, and hence is not visible to the viewer, and the fraction of the surface that is \shadowed, i.e. is hidden from the sun behind other waves, are almost zero. In other words, our \microfacets can be assumed not to cover any of the other microfacets, either from the sun or from the viewer.
 
-Now, let's denote the \index{elevation!free surface|see{free surface elevation}}\idxs{free}{surface elevation} of the actual water surface as $\eta$, and the free surface elevation of the simplified surface (from which a part of the wave spectrum has been cut off) as $\eta_0$, and make them functions of $\vec{r}$, which is a \twodimensional vector in the horizontal plane. We can start by noting that $\eta_0$ is less detailed and contains less information about the actual water surface than $\eta$, and that $\eta_0$ is known, whereas $\eta$ is not.
+Now, let's denote the \index{elevation!free surface|see{free surface elevation}}\idxs{free}{surface elevation} of the actual water surface as $\eta^*$, and the free surface elevation of the simplified surface (from which a part of the wave spectrum has been cut off) as $\eta$, and make them functions of $\vec{r}$, which is a \twodimensional vector in the horizontal plane. We can start by noting that $\eta$ is less detailed and contains less information about the actual water surface than $\eta^*$, and that $\eta$ is known, whereas $\eta^*$ is not.
 
-We can therefore only calculate the normal of the simplified surface --- let's call this normal $\normvec{n}_0$. Let's also define the \idx{anti-normalization} $\anormvec{\xi}$ of a vector $\vec{\xi}$ as
+We can therefore only calculate the normal of the simplified surface --- let's call this normal $\normvec{n}$. Let's also define the \idx{anti-normalization} $\anormvec{\xi}$ of a vector $\vec{\xi}$ as
 
 \begin{equation} \label{eq:anti_normal_definition}
 \anormvec{\xi} \,=\, \frac{\vec{\xi}}{\normvec{z}\cdot\vec{\xi}}\,,
 \end{equation}
 
-where $\normvec{z}$ is the \idxs{unit}{vector} in the positive vertical direction (which is the negation of the direction of the \idxs{gravitational acceleration}{vector}, or the normal of a flat water surface). This implies that the $\normvec{z}$-component of an anti-normalized vector always is 1. Note that the anti-normalization of a vector is only defined if the original vector has a non-zero $\normvec{z}$-component, and that when it is defined, it is parallel to the original vector. The \idx{anti-normal} $\anormvec{n}_0$ of the surface $\eta_0$ becomes
+where $\normvec{z}$ is the \idxs{unit}{vector} in the positive vertical direction (which is the negation of the direction of the \idxs{gravitational acceleration}{vector}, or the normal of a flat water surface). This implies that the $\normvec{z}$-component of an anti-normalized vector always is 1. Note that the anti-normalization of a vector is only defined if the original vector has a non-zero $\normvec{z}$-component, and that when it is defined, it is parallel to the original vector. The \idx{anti-normal} $\anormvec{n}$ of the surface $\eta$ becomes
 
-\begin{equation}
-\anormvec{n}_0 \,=\, \left(\!\!\!\begin{array}{c}-\nabla\eta_0(\vec{r}) \\ 1\end{array}\!\!\!\right),
+\begin{equation} \label{eq:anti_normal_from_gradient}
+\anormvec{n} \,=\, \left(\!\!\!\begin{array}{c}-\nabla\eta(\vec{r}) \\ 1\end{array}\!\!\!\right),
 \end{equation}
 
 where the last component is the $\normvec{z}$-component. The \gradient in turn can be rewritten as
 
 \begin{equation}
-\nabla\eta_0(\vec{r}) \,=\, \nabla\mathcal{F}^{-1}\{\fdfunc{\eta}_0(\vec{k})\}(\vec{r}) \,=\, \mathcal{F}^{-1}\{\vec{k}\,\fdfunc{\eta}_0(\vec{k})\}(\vec{r}),
+\nabla\eta(\vec{r}) \,=\, \nabla\mathcal{F}^{-1}\{\fdfunc{\eta}(\vec{k})\}(\vec{r}) \,=\, \mathcal{F}^{-1}\{\vec{k}\,\fdfunc{\eta}(\vec{k})\}(\vec{r}),
 \end{equation}
 
-where $\mathcal{F}^{-1}$ is the \index{operator!inverse non-unitary Fourier transform|see{inverse non-unitary Fourier transform operator}}\index{non-unitary Fourier transform operator!inverse|see{inverse non-unitary Fourier transform operator}}\idxs{inverse non-unitary}{Fourier transform operator}, $\fdfunc{\eta}_0(\vec{k})$ is the \idxs{Fourier}{transform} of $\eta_0(\vec{r})$ and $\vec{k}$ is the \idxs{wave}{vector}. Since $\eta$ is unknown, the anti-normal of the real surface, $\anormvec{n}$, cannot be calculated, although it can still be written as
+where $\mathcal{F}^{-1}$ is the \index{operator!inverse non-unitary Fourier transform|see{inverse non-unitary Fourier transform operator}}\index{non-unitary Fourier transform operator!inverse|see{inverse non-unitary Fourier transform operator}}\idxs{inverse non-unitary}{Fourier transform operator}, $\fdfunc{\eta}(\vec{k})$ is the \idxs{Fourier}{transform} of $\eta(\vec{r})$ and $\vec{k}$ is the \idxs{wave}{vector}. Since $\eta^*$ is unknown, the anti-normal of the real surface, $\anormvec{n}^*$, cannot be calculated, although it can still be written as
 
 \begin{equation} \label{eq:eta_anti_normal}
-\anormvec{n} \,=\, \left(\!\!\!\begin{array}{c}-\nabla\eta(\vec{r}) \\ 1\end{array}\!\!\!\right),
+\anormvec{n}^* \,=\, \left(\!\!\!\begin{array}{c}-\nabla\eta^*(\vec{r}) \\ 1\end{array}\!\!\!\right),
 \end{equation}
 
 where the gradient in turn can be written as
 
 \begin{equation}
-\nabla\eta(\vec{r}) \,=\, \mathcal{F}^{-1}\{\vec{k}\,\fdfunc{\eta}(\vec{k})\}(\vec{r}),
+\nabla\eta^*(\vec{r}) \,=\, \mathcal{F}^{-1}\{\vec{k}\,\fdfunc{\eta}^*(\vec{k})\}(\vec{r}),
 \end{equation}
 
-where $\fdfunc{\eta}(\vec{k})$ is the \idxs{Fourier}{transform} of $\eta$. However, only the part of $\fdfunc{\eta}(\vec{k})$ where the wave spectrum has not been cut off is known; in fact, this part is equal to $\fdfunc{\eta}_0(\vec{k})$, while the reminding part of $\fdfunc{\eta}(\vec{k})$ is unknown. On the other hand, if we know what the \idxs{wave}{spectrum} looks like, we can calculate the \idxs{probability}{distribution} of $\eta$.
+where $\fdfunc{\eta}^*(\vec{k})$ is the \idxs{Fourier}{transform} of $\eta^*$. However, only the part of $\fdfunc{\eta}^*(\vec{k})$ where the wave spectrum has not been cut off is known; in fact, this part is equal to $\fdfunc{\eta}(\vec{k})$, while the reminding part of $\fdfunc{\eta}^*(\vec{k})$ is unknown. On the other hand, if we know what the \idxs{wave}{spectrum} looks like, we can calculate the \idxs{probability}{distribution} of $\eta^*$.
 
-If $\vec{r}$ is assumed to be \idxse{uniform}{distribution}{uniformly distributed} over a large surface area, i.e. there is no \bias in the distribution of $\vec{r}$ regarding to the surface slope $\nabla\eta$, or any other local property of the surface for that matter, the distribution of $\fdfunc{\eta}$ is easily obtained by looking at the wave spectrum. And from that distribution we will be able to get something that is more valuable to us, namely the distribution of $\nabla\eta$.
+If $\vec{r}$ is assumed to be \idxse{uniform}{distribution}{uniformly distributed} over a large surface area, i.e. there is no \bias in the distribution of $\vec{r}$ regarding to the surface slope $\nabla\eta^*$, or any other local property of the surface for that matter, the distribution of $\fdfunc{\eta}^*$ is easily obtained by looking at the wave spectrum. And from that distribution we will be able to get something that is more valuable to us, namely the distribution of $\nabla\eta^*$.
 
 \subsection{Wave spectra}
 
-When using a \idxs{wave}{spectrum}, the free surface elevation is considered indeterministic, that is, \stochastic. Let's consider $\psi$ to be a completely unknown free surface elevation (as opposed to $\eta$, for which the \idxs{frequency}{domain} representation $\fdfunc{\eta}$ known in a part of the spectrum but unknown everywhere else). Almost every \idxs{wave}{spectrum}, $S$, used in \idxs{computer}{graphics}, is a function of the wave vector $\vec{k}$ and gives the \variance of the free surface elevation per unit \idxs{reciprocal}{length} squared (the elements of $\vec{k}$ are reciprocal lengths), and thus has the unit $\text{m}^4$. 
+When using a \idxs{wave}{spectrum}, the free surface elevation is considered indeterministic, that is, \stochastic. Let's consider $\psi$ to be a completely unknown free surface elevation (as opposed to $\eta^*$, for which the \idxs{frequency}{domain} representation $\fdfunc{\eta}^*$ known in a part of the spectrum but unknown everywhere else). Almost every \idxs{wave}{spectrum}, $S$, used in \idxs{computer}{graphics}, is a function of the wave vector $\vec{k}$ and gives the \variance of the free surface elevation per unit \idxs{reciprocal}{length} squared (the elements of $\vec{k}$ are reciprocal lengths), and thus has the unit $\text{m}^4$. 
 
 If $S$ assumes that the wave components corresponding to the wave vectors are on the exponential form $e^{i(\vec{k}\cdot\vec{r}-\omega t)}$, which is what $\fdfunc{\psi}$ also assumes, rather than on the \sinusoidal form $\sin(\vec{k}\cdot\vec{r}-\omega t)$, which otherwise is a pretty common case in computer graphics, this means that
 
@@ -355,7 +355,7 @@ where $d$ is the \dimensionality of $\vec{x}$, $\vec{\mu} = \E[\vec{x}]$ is the 
 
 The distribution density $f$ of $\nabla\psi$ is therefore given by
 
-\begin{equation} \label{eq:eta_grad_distribution}
+\begin{equation} \label{eq:psi_grad_distribution}
 f(\nabla\psi(\vec{r})) \,=\, \frac{1}{2\pi|\Sigma|^{1/2}}\exp\left(-\frac{1}{2}(\nabla\psi(\vec{r})-\vec{\mu})^{\T}\Sigma^{-1}(\nabla\psi(\vec{r})-\vec{\mu})\right),
 \end{equation}
 
@@ -365,22 +365,22 @@ where $\vec{\mu} = \E[\nabla\psi(\vec{r})]$, and $\Sigma = \Sigma(\nabla\psi(\ve
 {
 \HRule
 
-Reality condition (for $\eta\in\mathbb{R}$):
+Reality condition (for $\eta^*\in\mathbb{R}$):
 
 \begin{equation}
-\fdfunc{\eta}(-\vec{\xi}\,) \,=\, \overline{\fdfunc{\eta}(\vec{\xi}\,)}
+\fdfunc{\eta}^*(-\vec{\xi}\,) \,=\, \overline{\fdfunc{\eta}^*(\vec{\xi}\,)}
 \end{equation}
 
 \HRule
 
-If the \idxs{wave}{spectrum} is known, $\Var_{\vec{k}}(\Delta\fdfunc{\eta})$ is also known. Knowing this, we can calculate the mean value $\vec{\mu}$ of $\nabla\eta$,
+If the \idxs{wave}{spectrum} is known, $\Var_{\vec{k}}(\Delta\fdfunc{\eta}^*)$ is also known. Knowing this, we can calculate the mean value $\vec{\mu}$ of $\nabla\eta^*$,
 
 \begin{equation}
 \renewcommand*{\arraystretch}{1.5}
 \begin{array}{c}
-\vec{\mu} \,=\, \E[\nabla\eta(\vec{r})] \,=\, E\left[\mathcal{F}^{-1}\left\{\vec{k}\,\fdfunc{\eta}(\vec{k})\right\}(\vec{r})\right] \\
-=\, E\left[\mathcal{F}^{-1}\left\{\vec{k}\,\left(\fdfunc{\eta}_0(\vec{k})+\Delta\fdfunc{\eta}(\vec{k})\right)\right\}(\vec{r})\right] \\
-=\, \mathcal{F}^{-1}\left\{\vec{k}\,\left(\E_{\vec{k}}[\fdfunc{\eta}_0]+\E_{\vec{k}}[\Delta\fdfunc{\eta}]\right)\right\}(\vec{r}) \,=\, \mathcal{F}^{-1}\{\vec{k}\,\fdfunc{\eta}_0(\vec{k})\}(\vec{r}) \,=\, \nabla\eta_0(\vec{r})\,.
+\vec{\mu} \,=\, \E[\nabla\eta^*(\vec{r})] \,=\, E\left[\mathcal{F}^{-1}\left\{\vec{k}\,\fdfunc{\eta}^*(\vec{k})\right\}(\vec{r})\right] \\
+=\, E\left[\mathcal{F}^{-1}\left\{\vec{k}\,\left(\fdfunc{\eta}(\vec{k})+\Delta\fdfunc{\eta}^*(\vec{k})\right)\right\}(\vec{r})\right] \\
+=\, \mathcal{F}^{-1}\left\{\vec{k}\,\left(\E_{\vec{k}}[\fdfunc{\eta}]+\E_{\vec{k}}[\Delta\fdfunc{\eta}^*]\right)\right\}(\vec{r}) \,=\, \mathcal{F}^{-1}\{\vec{k}\,\fdfunc{\eta}(\vec{k})\}(\vec{r}) \,=\, \nabla\eta(\vec{r})\,.
 \end{array}
 \end{equation}
 
@@ -389,10 +389,10 @@ If the \idxs{wave}{spectrum} is known, $\Var_{\vec{k}}(\Delta\fdfunc{\eta})$ is 
 
 \subsection{Surface normal distribution}
 
-Since the \idxe{surface}{normal}{normal} of the water surface is the normalization of the \idx{anti-normal} $\anormvec{n}$ which is described by \eqref{eq:eta_anti_normal}, we need to know the distribution of $\nabla\eta$ in order to know the distribution of the surface normal. However, since we know $\eta_0$, which has been generated from a \idxs{wave}{spectrum} $S_0$ which is a reduced version of the full wave spectrum $S$ from which a part has been cut off, \eqref{eq:eta_grad_distribution} cannot be used, since it involves the free surface elevation $\psi$ which is completely unknown. Or more generically, if $\eta_0$ can be considered to be a \idxse{low-pass}{filter}{(low-pass) filter} version of $\eta$, with \idxs{transfer}{function} $H$, such that
+Since the \idxe{surface}{normal}{normal} of the water surface is the normalization of the \idx{anti-normal} $\anormvec{n}$ which is described by \eqref{eq:eta_anti_normal}, we need to know the distribution of $\nabla\eta^*$ in order to know the distribution of the surface normal. However, since we know $\eta$, which has been generated from a \idxs{wave}{spectrum} $S$ for simplified water surfaces, which is a reduced version of the full wave spectrum $S^*$ from which a part has been cut off, \eqref{eq:psi_grad_distribution} cannot be used, since it involves the free surface elevation $\psi$ which is completely unknown. Or more generically, if $\eta$ can be considered to be a \idxse{low-pass}{filter}{(low-pass) filter} version of $\eta^*$, with \idxs{transfer}{function} $H$, such that
 
 \begin{equation}
-\fdfunc{\eta}_0(\vec{k}) \,=\, H(\vec{k})\fdfunc{\eta}(\vec{k}),
+\fdfunc{\eta}(\vec{k}) \,=\, H(\vec{k})\fdfunc{\eta}^*(\vec{k}),
 \end{equation}
 
 we can use \eqrefs \ref{eq:wave_spectrum_definition}--\ref{eq:fd_eta_delta_k_definition} and \eqref{eq:variance_definition} to conclude that
@@ -400,41 +400,41 @@ we can use \eqrefs \ref{eq:wave_spectrum_definition}--\ref{eq:fd_eta_delta_k_def
 \begin{equation} \label{spectrum_reduced_definition}
 \renewcommand*{\arraystretch}{2}
 \begin{array}{c}
-\displaystyle S_0(\vec{k}) \,=\, \frac{\opd \Var(\eta_0)}{\opd\vec{k}} \,=\, \frac{\Var(\eta_{0,\opd\vec{k}})}{\opd\vec{k}} \,=\, \frac{\E[(\eta_{0,\opd\vec{k}}-\E[\eta_{0,\opd\vec{k}}])^2]}{\opd\vec{k}} \\
-\displaystyle =\, \frac{\E[(H(\vec{k})\eta_{\opd\vec{k}}-\E[H(\vec{k})\eta_{\opd\vec{k}}])^2]}{\opd\vec{k}} \,=\, H(\vec{k})^2\frac{\E[(\eta_{\opd\vec{k}}-\E[\eta_{\opd\vec{k}}])^2]}{\opd\vec{k}} \\
-\displaystyle =\, H^2(\vec{k})\frac{\Var(\eta_{\opd\vec{k}})}{\opd\vec{k}} \,=\, H^2(\vec{k})S(\vec{k}),
+\displaystyle S(\vec{k}) \,=\, \frac{\opd \Var(\eta)}{\opd\vec{k}} \,=\, \frac{\Var(\eta_{\opd\vec{k}})}{\opd\vec{k}} \,=\, \frac{\E[(\eta_{\opd\vec{k}}-\E[\eta_{\opd\vec{k}}])^2]}{\opd\vec{k}} \\
+\displaystyle =\, \frac{\E[(H(\vec{k})\eta^*_{\opd\vec{k}}-\E[H(\vec{k})\eta^*_{\opd\vec{k}}])^2]}{\opd\vec{k}} \,=\, H(\vec{k})^2\frac{\E[(\eta^*_{\opd\vec{k}}-\E[\eta^*_{\opd\vec{k}}])^2]}{\opd\vec{k}} \\
+\displaystyle =\, H^2(\vec{k})\frac{\Var(\eta^*_{\opd\vec{k}})}{\opd\vec{k}} \,=\, H^2(\vec{k})S^*(\vec{k}),
 \end{array}
 \end{equation}
 
-where $\fdfunc{\eta}_{\opd\vec{k}}$ and $\fdfunc{\eta}_{0,\opd\vec{k}}$ are defined by \eqref{eq:fd_eta_delta_k_definition}, where $\Delta\vec{k}$ has been replaced with $\opd\vec{k}$ and $\fdfunc{\phi}$ has been replaced with $\eta$ and $\eta_0$ respectively.
+where $\fdfunc{\eta}_{\opd\vec{k}}$ and $\fdfunc{\eta}^*_{\opd\vec{k}}$ are defined by \eqref{eq:fd_eta_delta_k_definition}, where $\Delta\vec{k}$ has been replaced by $\opd\vec{k}$ and where $\fdfunc{\phi}$ has been replaced by $\eta$ and $\eta^*$ respectively.
 
-Since $\Sigma(\vec{x}+\vec{y}) = \Sigma(\vec{x})+\Sigma(\vec{y})$ (according to \eqref{eq:covariance_matrix_sum}) for all stochastically independent vectors $\vec{x}$ and $\vec{y}$, we will \assume that the part of $\eta$ that is left out in $\eta_0$ can advantageously be simulated with a free surface elevation $\eta'$ that has a gradient with the \idxs{covariance}{matrix} $\Sigma(\nabla\eta'(\vec{r})) = \Sigma(\nabla\eta(\vec{r})) - \Sigma(\nabla\eta_0(\vec{r}))$. This matrix can according to  \eqref{eq:covariance_matrix_gradient_eta_final} be rewritten as
+Since $\Sigma(\vec{x}+\vec{y}) = \Sigma(\vec{x})+\Sigma(\vec{y})$ (according to \eqref{eq:covariance_matrix_sum}) for all stochastically independent vectors $\vec{x}$ and $\vec{y}$, we will \assume that the part of $\eta^*$ that is left out in $\eta$ can advantageously be simulated with a free surface elevation $\eta'$ that has a gradient with the \idxs{covariance}{matrix} $\Sigma(\nabla\eta'(\vec{r})) = \Sigma(\nabla\eta^*(\vec{r})) - \Sigma(\nabla\eta(\vec{r}))$. This matrix can according to  \eqref{eq:covariance_matrix_gradient_eta_final} be rewritten as
 
 \begin{equation}
 \renewcommand*{\arraystretch}{2}
 \begin{array}{c}
-\displaystyle \Sigma(\nabla\eta'(\vec{r})) \,=\, \Sigma(\nabla\eta(\vec{r})) - \Sigma(\nabla\eta_0(\vec{r})) \\
-\displaystyle =\, \int_{\mathbb{R}^2}\vec{k}\otimes\vec{k}\,S(\vec{k})\opd\vec{k} \,- \int_{\mathbb{R}^2}\vec{k}\otimes\vec{k}\,S_0(\vec{k})\opd\vec{k} \\
-\displaystyle =\, \int_{\mathbb{R}^2}\vec{k}\otimes\vec{k}\,(1-H^2(\vec{k}))S(\vec{k})\opd\vec{k} \,=\, \int_{\mathbb{R}^2}\vec{k}\otimes\vec{k}\,S'(\vec{k})\opd\vec{k},
+\displaystyle \Sigma(\nabla\eta'(\vec{r})) \,=\, \Sigma(\nabla\eta^*(\vec{r})) - \Sigma(\nabla\eta(\vec{r})) \\
+\displaystyle =\, \int_{\mathbb{R}^2}\vec{k}\otimes\vec{k}\,S^*(\vec{k})\opd\vec{k} \,- \int_{\mathbb{R}^2}\vec{k}\otimes\vec{k}\,S(\vec{k})\opd\vec{k} \\
+\displaystyle =\, \int_{\mathbb{R}^2}\vec{k}\otimes\vec{k}\,(1-H^2(\vec{k}))S^*(\vec{k})\opd\vec{k} \,=\, \int_{\mathbb{R}^2}\vec{k}\otimes\vec{k}\,S'(\vec{k})\opd\vec{k},
 \end{array}
 \end{equation}
 
 where
 
 \begin{equation}
-S'(\vec{k}) = S(\vec{k}) - S_0(\vec{k}) = (1-H^2(\vec{k}))S(\vec{k})
+S'(\vec{k}) = S^*(\vec{k}) - S(\vec{k}) = (1-H^2(\vec{k}))S^*(\vec{k})
 \end{equation}
 
-is the \idxs{wave}{spectrum} of $\eta'$, which is the simulated part of $\eta$. The expectation value for $\eta'(\vec{r})$, is according to \eqref{eq:psi_of_r_expectation_value} \assumed to be
+is the \idxs{wave}{spectrum} of $\eta'$, which is the simulated part of $\eta^*$. The expectation value for $\eta'(\vec{r})$, is according to \eqref{eq:psi_of_r_expectation_value} \assumed to be
 
 \begin{equation}
 E[\eta'(\vec{r})] \,=\, 0.
 \end{equation}
 
-Since $\eta_0$ is known when a scene is rendered, we have $\E[\nabla\eta_0(\vec{r})] = \nabla\eta_0(\vec{r})$ and $\Sigma(\nabla\eta_0(\vec{r})) \,=\, 0_{2,2}$, where $0_{2,2}$ is the $2\times 2$ matrix in which all elements are 0. Knowing this, since $\E[\vec{x}+\vec{y}] = \E[\vec{x}]+\E[\vec{y}]$ for all vectors $\vec{x}$ and $\vec{y}$, we have
+Since $\eta$ is perfectly known when a scene is rendered, we have $\E[\nabla\eta(\vec{r})] = \nabla\eta(\vec{r})$ and $\Sigma(\nabla\eta(\vec{r})) \,=\, 0_{2,2}$, where $0_{2,2}$ is the $2\times 2$ matrix in which all elements are 0. Knowing this, since $\E[\vec{x}+\vec{y}] = \E[\vec{x}]+\E[\vec{y}]$ for all vectors $\vec{x}$ and $\vec{y}$, we have
 
 \begin{equation} \label{eq:nabla_eta_expectation_value}
-\E[\nabla\eta(\vec{r})] \,=\, \E[\nabla\eta'(\vec{r})] + \E[\nabla\eta_0(\vec{r})] \,=\, \E[\nabla\eta_0(\vec{r})],
+\E[\nabla\eta^*(\vec{r})] \,=\, \E[\nabla\eta'(\vec{r})] + \E[\nabla\eta(\vec{r})] \,=\, \E[\nabla\eta(\vec{r})],
 \end{equation}
 
 and also
@@ -442,12 +442,12 @@ and also
 \begin{equation} \label{eq:nabla_eta_covariance_matrix}
 \renewcommand*{\arraystretch}{2}
 \begin{array}{c}
-\displaystyle \Sigma(\nabla\eta(\vec{r})) \,=\, \Sigma(\nabla\eta'(\vec{r})) + \Sigma(\nabla\eta_0(\vec{r})) \,=\, \Sigma(\nabla\eta'(\vec{r})) \\
+\displaystyle \Sigma(\nabla\eta^*(\vec{r})) \,=\, \Sigma(\nabla\eta'(\vec{r})) + \Sigma(\nabla\eta(\vec{r})) \,=\, \Sigma(\nabla\eta'(\vec{r})) \\
 \displaystyle =\, \int_{\mathbb{R}^2}\vec{k}\otimes\vec{k}\,S'(\vec{k})\opd\vec{k}.
 \end{array}
 \end{equation}
 
-The distribution of $\nabla\eta(\vec{r})$ is then given by \eqref{eq:eta_grad_distribution}, where $\psi$ is replaced with $\eta$, $\vec{\mu} = \E[\nabla\eta(\vec{r})]$ is given by \eqref{eq:nabla_eta_expectation_value} and $\Sigma = \Sigma(\nabla\eta(\vec{r}))$ is given by \eqref{eq:nabla_eta_covariance_matrix}.
+The distribution of $\nabla\eta^*(\vec{r})$ is then given by \eqref{eq:psi_grad_distribution}, where $\psi$ is replaced by $\eta^*$, $\vec{\mu} = \E[\nabla\eta^*(\vec{r})]$ is given by \eqref{eq:nabla_eta_expectation_value} and $\Sigma = \Sigma(\nabla\eta^*(\vec{r}))$ is given by \eqref{eq:nabla_eta_covariance_matrix}.
 
 \section{The rendering equation}
 
@@ -457,11 +457,11 @@ When doing \idxs{physically based}{rendering}, one often starts from an equation
 \renewcommand*{\arraystretch}{1.5}
 \begin{array}{c}
 L_{\text{o}}(\vec{r},\,\normvec{\omega}_{\text{o}},\, \lambda,\, t) \,= \\
-\displaystyle L_{\text{e}}(\vec{r},\, \normvec{\omega}_{\text{o}},\, \lambda,\, t) \ + \ \int_\Omega \rho'_{\text{r}}(\vec{r},\, \normvec{\omega}_{\text{i}},\, \normvec{\omega}_{\text{o}},\, \lambda,\, t)\, L_{\text{i}}(\vec{r},\, \normvec{\omega}_{\text{i}},\, \lambda,\, t)\, (\normvec{\omega}_{\text{i}}\,\cdot\,\normvec{n})\, \operatorname d \normvec{\omega}_{\text{i}},
+\displaystyle L_{\text{e}}(\vec{r},\, \normvec{\omega}_{\text{o}},\, \lambda,\, t) \ + \ \int_\Omega \rho'_{\text{r}}(\vec{r},\, \normvec{\omega}_{\text{i}},\, \normvec{\omega}_{\text{o}},\, \lambda,\, t)\, L_{\text{i}}(\vec{r},\, \normvec{\omega}_{\text{i}},\, \lambda,\, t)\, (\normvec{\omega}_{\text{i}}\,\cdot\,\normvec{n})\, \opd \normvec{\omega}_{\text{i}},
 \end{array}
 \end{equation}
 
-where $L_{\text{o}}$ is the total \idxs{spectral}{radiance} of \index{light!wavelength}\idxe{wavelength!light}{wavelength} $\lambda$ directed outward along direction $\normvec{\omega}_{\text{o}}$ at time $t$, from location $\vec{r}$ at the surface; $L_{\text{e}}$ is the spectral radiance emitted by the surface itself, $\rho'_{\text{r}}$ is the \BRDF which was first defined in \citep{temp} and describes how light from different directions are reflected on the surface, $L_{\text{i}}$ is the \idxs{spectral}{radiance} incoming from direction $\normvec{\omega}_{\text{i}}$, $\normvec{n}$ is the \idxs{surface}{normal}, and $\Omega$ is the \idxs{unit}{hemisphere} containing all possible directions for the incoming reflected light, and thus all possible values for $\normvec{\omega}_{\text{i}}$ (but also all possible values for $\normvec{\omega}_{\text{o}}$). Note that both $\normvec{\omega}_{\text{i}}$ and $\normvec{\omega}_{\text{o}}$ are directed outwards from the surface.
+where $L_{\text{o}}$ is the total \idxs{spectral}{radiance} (or power per unit solid-angle-in-the-direction-of-a-ray and unit projected-area-perpendicular-to-the-ray and unit wavelength) of \index{light!wavelength}\idxe{wavelength!light}{wavelength} $\lambda$ directed outward along direction $\normvec{\omega}_{\text{o}}$ at time $t$, from location $\vec{r}$ at the surface; $L_{\text{e}}$ is the spectral radiance emitted by the surface itself, $\rho'_{\text{r}}$ is the \BRDF which was first defined in \citep{temp} and describes how light from different directions are reflected on the surface, $L_{\text{i}}$ is the \idxs{spectral}{radiance} incoming from direction $\normvec{\omega}_{\text{i}}$, $\normvec{n}$ is the \idxs{surface}{normal}, and $\Omega$ is the \idxs{unit}{hemisphere} containing all possible directions for the incoming reflected light, and thus all possible values for $\normvec{\omega}_{\text{i}}$ (but also all possible values for $\normvec{\omega}_{\text{o}}$). Note that both $\normvec{\omega}_{\text{i}}$ and $\normvec{\omega}_{\text{o}}$ are directed outwards from the surface.
 
 While this equation can lay the foundation for many very realistic renderings of \threedimensional scenes, and can make the reflective properties of a surface vary for different positions, for different points in time, for different wavelengths, which allows the surface to have a color and not just a gray-scale, and even for different rotations of the surface, there are several aspects of light it can't grasp. Some of these aspects, which are relevant to \surfacewaterrendering, include
 
@@ -496,21 +496,57 @@ To account for transmission and polarization, we will modify \eqref{eq:rendering
 \begin{equation} \label{eq:rendering_equation_improved}
 \renewcommand*{\arraystretch}{1.5}
 \begin{array}{cl}
-L_{\text{o}}(\vec{r},\,\normvec{\omega}_{\text{o}},\, \lambda,\, t) \,=\, L_{\text{e}}(\vec{r},\, \normvec{\omega}_{\text{o}},\, \lambda,\, t) \ + \\
-\displaystyle \int_{\Omega_{\text{r}}} \rho'_{\text{r}}(\vec{r},\, \normvec{\omega}_{\text{i}},\, \normvec{\omega}_{\text{o}},\, \lambda,\, t)\, L_{\text{i}}(\vec{r},\, \normvec{\omega}_{\text{i}},\, \lambda,\, t)\, (\normvec{\omega}_{\text{i}}\,\cdot\,\normvec{n})\, \operatorname d \normvec{\omega}_{\text{i}} \ + \\
-\displaystyle \int_{\Omega_{\text{t}}} \rho'_{\text{t}}(\vec{r},\, \normvec{\omega}_{\text{i}},\, \normvec{\omega}_{\text{o}},\, \lambda,\, t)\, L_{\text{i}}(\vec{r},\, \normvec{\omega}_{\text{i}},\, \lambda,\, t)\, (\normvec{\omega}_{\text{i}}\,\cdot\,(-\normvec{n}))\, \operatorname d \normvec{\omega}_{\text{i}} & \!\!\!\! ,
+L_{x,\text{o}}(\vec{r},\,\normvec{\omega}_{\text{o}},\, \lambda,\, t) \,=\, L_{x,\text{e}}(\vec{r},\, \normvec{\omega}_{\text{o}},\, \lambda,\, t) \ + \\
+\displaystyle \int_{\Omega_{\text{r}}} \rho'_{x,\text{r}}(\vec{r},\, \normvec{\omega}_{\text{i}},\, \normvec{\omega}_{\text{o}},\, \lambda,\, t)\, L_{x,\text{i}}(\vec{r},\, \normvec{\omega}_{\text{i}},\, \lambda,\, t)\, (\normvec{\omega}_{\text{i}}\,\cdot\,\normvec{n})\, \opd \normvec{\omega}_{\text{i}} \ + \\
+\displaystyle \int_{\Omega_{\text{t}}} \rho'_{x,\text{t}}(\vec{r},\, \normvec{\omega}_{\text{i}},\, \normvec{\omega}_{\text{o}},\, \lambda,\, t)\, L_{x,\text{i}}(\vec{r},\, \normvec{\omega}_{\text{i}},\, \lambda,\, t)\, (\normvec{\omega}_{\text{i}}\,\cdot\,(-\normvec{n}))\, \opd \normvec{\omega}_{\text{i}} & \!\!\!\! ,
 \end{array}
 \end{equation}
 
-where $\Omega_{\text{r}}$ is the \idxs{unit}{hemisphere} containing all possible directions for the incoming reflected light, $\Omega_{\text{t}}$ is the \idxs{unit}{hemisphere} containing all possible directions for the incoming transmitted light (which is also the \idxs{relative}{complement} of $\Omega_{\text{r}}$ in the \idxs{unit}{sphere}, i.e. all points in the unit sphere that are not contained in $\Omega_{\text{r}}$), and $\rho'_{\text{t}}$ is the \BTDF which describes how light from different directions are transmitted through the surface.
+where $x$ is either s or p, depending on if the light is s or p polarized, $\Omega_{\text{r}}$ is the \idxs{unit}{hemisphere} containing all possible directions for the incoming reflected light, $\Omega_{\text{t}}$ is the \idxs{unit}{hemisphere} containing all possible directions for the incoming transmitted light (which is also the \idxs{relative}{complement} of $\Omega_{\text{r}}$ in the \idxs{unit}{sphere}, i.e. all points in the unit sphere that are not contained in $\Omega_{\text{r}}$), and $\rho'_{\text{t}}$ is the \BTDF which describes how light from different directions are transmitted through the surface.
 
-The parameters $\vec{r}$, $t$ and $\lambda$ can be removed from the equation since they are of no importance to the derivation of the illumination model; one will just have to keep in mind that the functions depend on $\vec{r}$ and $t$ --- however, they don't have any specific dependence on $\lambda$. Even the term $L_{\text{e}}$ can be removed since water surfaces is generally not considered to emit any electromagnetic radiation. We can therefore simplify \eqref{eq:rendering_equation_improved} somewhat to
+The parameters $x$, $\vec{r}$, $t$ and $\lambda$ can be removed from the equation since they are of no importance to the derivation of the illumination model; one will just have to keep in mind that the functions depend on $x$, $\vec{r}$, $t$ and $\lambda$. Even the term $L_{x, \text{e}}$ can safely be removed since water surfaces is generally not considered to emit any electromagnetic radiation. We can therefore simplify \eqref{eq:rendering_equation_improved} to
 
 \begin{equation} \label{eq:rendering_equation_reduced}
 \renewcommand*{\arraystretch}{1.5}
 \begin{array}{cl}
 L_{\text{o}}(\normvec{\omega}_{\text{o}}) \,= \\
-\displaystyle \int_{\Omega_{\text{r}}} \rho'_{\text{r}}(\normvec{\omega}_{\text{i}},\, \normvec{\omega}_{\text{o}})\, L_{\text{i}}(\normvec{\omega}_{\text{i}})\, (\normvec{\omega}_{\text{i}}\,\cdot\,\normvec{n})\, \operatorname d \normvec{\omega}_{\text{i}} \ + \\[1ex]
-\displaystyle \int_{\Omega_{\text{t}}} \rho'_{\text{t}}(\normvec{\omega}_{\text{i}},\, \normvec{\omega}_{\text{o}})\, L_{\text{i}}(\normvec{\omega}_{\text{i}})\, (\normvec{\omega}_{\text{i}}\,\cdot\,(-\normvec{n}))\, \operatorname d \normvec{\omega}_{\text{i}} & \!\!\!\! .
+\displaystyle \int_{\Omega_{\text{r}}} \rho'_{\text{r}}(\normvec{\omega}_{\text{i}},\, \normvec{\omega}_{\text{o}})\, L_{\text{i}}(\normvec{\omega}_{\text{i}})\, (\normvec{\omega}_{\text{i}}\,\cdot\,\normvec{n})\, \opd \normvec{\omega}_{\text{i}} \ + \\[1ex]
+\displaystyle \int_{\Omega_{\text{t}}} \rho'_{\text{t}}(\normvec{\omega}_{\text{i}},\, \normvec{\omega}_{\text{o}})\, L_{\text{i}}(\normvec{\omega}_{\text{i}})\, (\normvec{\omega}_{\text{i}}\,\cdot\,(-\normvec{n}))\, \opd \normvec{\omega}_{\text{i}} & \!\!\!\! .
 \end{array}
 \end{equation}
+
+Here, $\rho'_{\text{r}}(\normvec{\omega}_{\text{i}},\, \normvec{\omega}_{\text{o}})$ is defined as
+
+\begin{equation} \label{eq:brdf_definition}
+\rho'_{\text{r}}(\normvec{\omega}_{\text{i}},\, \normvec{\omega}_{\text{o}}) \,=\, \frac{\opd L_{\text{o}}(\normvec{\omega}_{\text{o}})}{\opd E_{\text{i}}(\normvec{\omega}_{\text{i}})} \,=\, \frac{\opd L_{\text{o}}(\normvec{\omega}_{\text{o}})}{\opd \Phi_{\text{i}}(\normvec{\omega}_{\text{i}})A^{-1}},
+\end{equation}
+
+where $E_{\text{i}}$ is the total spectral irradiance (or \idxs{incident}{power} per unit surface area and unit wavelength) of \index{light!wavelength}\idxe{wavelength!light}{wavelength} $\lambda$, coming from direction $\normvec{\omega}_{\text{i}}$, and $\Phi_{\text{i}}$ is the total spectral radiant flux (or \idxs{incident}{power} per unit wavelength) of \index{light!wavelength}\idxe{wavelength!light}{wavelength} $\lambda$, coming from direction $\normvec{\omega}_{\text{i}}$, and $A$ is the area of the surface element that is being illuminated.
+
+Here, $\opd L_{\text{o}}$ is the \infinitesimal increase in $L_{\text{o}}$, caused by $\opd E_{\text{i}}$ which is the \infinitesimal increase in $E_{\text{i}}$, or caused by $\opd \Phi_{\text{i}}$ which is the \infinitesimal increase in $\Phi_{\text{i}}$. \comment{, which in turn is caused by $\opd\normvec{\omega}_{\text{i}}$, which can be thought of as an infinitesimal increase in the solid angle of some light intake from which light can reach the surface}
+
+Since \radiance is power per unit projected-area-perpendicular-to-a-ray and unit solid angle, we can rewrite $L_{\text{o}}$ as
+
+\begin{equation} \label{eq:outgoing_radiance_definition}
+L_{\text{o}} \,=\, \frac{\opd \Phi_{\text{o}}(\normvec{\omega}_{\text{o}})(A\cos\theta_{\text{o}})^{-1}}{\opd \normvec{\omega}_{\text{o}}},
+\end{equation}
+
+where $\Phi_{\text{o}}$ is the total reflected spectral power (or \idxs{reflected}{power} per unit wavelength), and $\theta_{\text{o}}$ is the angle between $\normvec{\omega}_{\text{o}}$ and the surface normal $\normvec{n}$ which can be written as
+
+\begin{equation} \label{eq:normal_from_antinormal}
+\normvec{n} \,=\, \frac{\anormvec{n}}{|\anormvec{n}|},
+\end{equation}
+
+where $\anormvec{n}$ is given by \eqref{eq:anti_normal_from_gradient}. In \eqref{eq:outgoing_radiance_definition}, $\opd \Phi_{\text{o}}$ is the infinitesimal increase in $\Phi_{\text{o}}$, caused by $\opd \normvec{\omega}_{\text{o}}$, which can be thought of as an infinitesimal increase in the solid angle of some light outlet through which the spectral power of the reflected light is measured. By using \eqref{eq:anti_normal_from_gradient}, we can rewrite \eqref{eq:brdf_definition} as
+
+\begin{equation} \label{eq:brdf_rewritten}
+\renewcommand*{\arraystretch}{2}
+\begin{array}{cl}
+\displaystyle \rho'_{\text{r}}(\normvec{\omega}_{\text{i}},\, \normvec{\omega}_{\text{o}}) \,=\, \frac{\opd^2 \Phi_{\text{o}}(\normvec{\omega}_{\text{o}})(A\cos\theta_{\text{o}})^{-1}}{\opd \normvec{\omega}_{\text{o}}\opd \Phi_{\text{i}}(\normvec{\omega}_{\text{i}})A^{-1}} \,=\, \frac{\opd^2 \Phi_{\text{o}}(\normvec{\omega}_{\text{o}})}{\opd \normvec{\omega}_{\text{o}}\opd \Phi_{\text{i}}(\normvec{\omega}_{\text{i}})\cos\theta_{\text{o}}} \\
+\displaystyle =\, (\cos\theta_{\text{o}})^{-1}\, \frac{\opd}{\opd \normvec{\omega}_{\text{o}}}\left(\frac{\opd \Phi_{\text{o}}(\normvec{\omega}_{\text{o}})}{\opd \Phi_{\text{i}}(\normvec{\omega}_{\text{i}})}\right),
+\end{array}
+\end{equation}
+
+which is basically the distribution density of the reflection direction $\normvec{\omega}_{\text{o}}$ for a ray that hits the surface with the direction $\normvec{\omega}_{\text{i}}$, divided by $\cos\theta_{\text{o}}$.
+
+In our case, 
