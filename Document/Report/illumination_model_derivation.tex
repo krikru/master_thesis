@@ -451,7 +451,7 @@ The distribution of $\nabla\eta^*(\vec{r})$ is then given by \eqref{eq:psi_grad_
 
 \section{The rendering equation}
 
-When doing \idxs{physically based}{rendering}, one often starts from an equation known as the \idxs{rendering}{equation}, which was simultaneously introduced in \idxs{computer}{graphics} in \citep{temp} and \citep{temp}, and is given as
+When doing \idxs{physically based}{rendering}, one often starts from an equation known as the \idxs{rendering}{equation}. This equation is what ties everything that has been covered in this appendix together. It was simultaneously introduced in \idxs{computer}{graphics} in \citep{temp} and \citep{temp}, and is given as
 
 \begin{equation} \label{eq:rendering_equation_original}
 \renewcommand*{\arraystretch}{1.5}
@@ -541,12 +541,110 @@ where $\anormvec{n}$ is given by \eqref{eq:anti_normal_from_gradient}. In \eqref
 
 \begin{equation} \label{eq:brdf_rewritten}
 \renewcommand*{\arraystretch}{2}
-\begin{array}{cl}
+\begin{array}{c}
 \displaystyle \rho'_{\text{r}}(\normvec{\omega}_{\text{i}},\, \normvec{\omega}_{\text{o}}) \,=\, \frac{\opd^2 \Phi_{\text{o}}(\normvec{\omega}_{\text{o}})(A\cos\theta_{\text{o}})^{-1}}{\opd \normvec{\omega}_{\text{o}}\opd \Phi_{\text{i}}(\normvec{\omega}_{\text{i}})A^{-1}} \,=\, \frac{\opd^2 \Phi_{\text{o}}(\normvec{\omega}_{\text{o}})}{\opd \normvec{\omega}_{\text{o}}\opd \Phi_{\text{i}}(\normvec{\omega}_{\text{i}})\cos\theta_{\text{o}}} \\
 \displaystyle =\, (\cos\theta_{\text{o}})^{-1}\, \frac{\opd}{\opd \normvec{\omega}_{\text{o}}}\left(\frac{\opd \Phi_{\text{o}}(\normvec{\omega}_{\text{o}})}{\opd \Phi_{\text{i}}(\normvec{\omega}_{\text{i}})}\right),
 \end{array}
 \end{equation}
 
-which is basically the distribution density of the reflection direction $\normvec{\omega}_{\text{o}}$ for a ray that hits the surface with the direction $\normvec{\omega}_{\text{i}}$, divided by $\cos\theta_{\text{o}}$.
+which is basically the distribution density of the reflection direction $\normvec{\omega}_{\text{o}}$ for the reflection of a ray that comes from the direction $\normvec{\omega}_{\text{i}}$, divided by $\cos\theta_{\text{o}}$.
 
-In our case, 
+But how will we know the distribution of the reflection direction for a ray that is being reflected? Well, we know that in order for a ray that comes from the direction $\normvec{\omega}_{\text{i}}$ to be reflected in the direction $\cos\theta_{\text{o}}$, the surface has to be angeled in a certain way. Here, the surface we are talking about is the actual surface, or the surface of the \microfacet the ray is hitting, which is described by $\eta^*$, rather than the simplified surface which is described by $\eta$.
+
+The equation that describes the reflection is given by the \index{reflection!Householder|see{Householder transformation}}\idxs{Householder}{transformation}, which states that the reflection $\vec{r}'$ of a point $\vec{r}$ in a plane with the surface normal $\normvec{h}$, is given by
+
+\begin{equation}
+\vec{r}' \,=\, \vec{r} - 2(\normvec{v}^{\Hermitian}\vec{r})\normvec{v},
+\end{equation}
+
+where a superscripted $\Hermitian$ denotes the \idxs{Hermitian}{transpose} operator, which performs the normal transpose and conjugates the elements. The right hand side of this equation is referred to as the Householder transformation of $\vec{r}$. For surface normals with real-valued elements, this becomes
+
+\begin{equation}
+\vec{r}' \,=\, \vec{r} - 2(\normvec{v}\cdot\vec{r})\normvec{v}.
+\end{equation}
+
+In our case, we know that the reflection direction $\normvec{\omega}_{\text{o}}$, is the reflection of the incident direction, or the reflection of the opposite of the direction $\normvec{\omega}_{\text{i}}$ from which the incident ray came. Let's also refer to the normal of the \microfacet as $\normvec{h}$, and that will give us
+
+\begin{equation} \label{eq:householder_equation}
+\normvec{\omega}_{\text{o}} \,=\, 2(\normvec{h}\cdot\normvec{\omega}_{\text{i}})\normvec{h} - \normvec{\omega}_{\text{i}}.
+\end{equation}
+
+Let's find what value $\normvec{h}$ must have in order for this equation to be satisfied. By rewriting  \eqref{eq:householder_equation}, we get
+
+\begin{equation}
+\normvec{h} \,=\, \frac{1}{2(\normvec{h}\cdot\normvec{\omega}_{\text{i}})}\,(\normvec{\omega}_{\text{i}} + \normvec{\omega}_{\text{o}}).
+\end{equation}
+
+By substituting $x$ for $(2(\normvec{h}\cdot\normvec{\omega}_{\text{i}}))^{-1}$, we get
+
+\begin{equation} \label{eq:householder_equation_x_introduced}
+\normvec{h} \,=\, x(\normvec{\omega}_{\text{i}} + \normvec{\omega}_{\text{o}}),
+\end{equation}
+
+and inserting this back into \eqref{eq:householder_equation} gives
+
+\begin{equation}
+\normvec{\omega}_{\text{o}} \,=\, 2(x(\normvec{\omega}_{\text{i}} + \normvec{\omega}_{\text{o}})\cdot\normvec{\omega}_{\text{i}})x(\normvec{\omega}_{\text{i}} + \normvec{\omega}_{\text{o}}) - \normvec{\omega}_{\text{i}}
+\end{equation}
+
+which can easily be rewritten to
+
+\begin{equation} \label{eq:householder_x_second_order_with_vectors}
+\vec{0} \,=\, 2((\normvec{\omega}_{\text{i}} + \normvec{\omega}_{\text{o}})\cdot\normvec{\omega}_{\text{i}})x^2(\normvec{\omega}_{\text{i}} + \normvec{\omega}_{\text{o}}) - \normvec{\omega}_{\text{i}} - \normvec{\omega}_{\text{o}} \,=\, (2(\normvec{\omega}_{\text{i}} + \normvec{\omega}_{\text{o}})\cdot\normvec{\omega}_{\text{i}}\,x^2 - 1)(\normvec{\omega}_{\text{i}} + \normvec{\omega}_{\text{o}}).
+\end{equation}
+
+Both $\normvec{\omega}_{\text{i}}$ and $\normvec{\omega}_{\text{o}}$ are located in $\Omega_{\textbf{r}}$ which is on the positive side of the surface, or in other words,
+
+\begin{equation} \label{eq:reflection_direction_and_direction_against_light_source_on_positive_side_of_surface}
+\normvec{\omega}_{\text{i}}\cdot\normvec{h} > 0,\, \normvec{\omega}_{\text{o}}\cdot\normvec{h} > 0 \Rightarrow (\normvec{\omega}_{\text{i}} + \normvec{\omega}_{\text{o}})\cdot\normvec{h} > 0.
+\end{equation}
+
+This means that $\normvec{\omega}_{\text{i}} + \normvec{\omega}_{\text{o}} \neq \vec{0}$, otherwise we would have $(\normvec{\omega}_{\text{i}} + \normvec{\omega}_{\text{o}})\cdot\normvec{h} = \vec{0}\cdot\normvec{h} \not > 0$. Since $\normvec{\omega}_{\text{i}} + \normvec{\omega}_{\text{o}} \neq \vec{0}$, we can rewrite \eqref{eq:householder_x_second_order_with_vectors} as
+
+\begin{equation}
+2(\normvec{\omega}_{\text{i}} + \normvec{\omega}_{\text{o}})\cdot\normvec{\omega}_{\text{i}}\,x^2 = 1,
+\end{equation}
+
+which means that
+
+\begin{equation}
+x = \pm\,\sqrt{\frac{1}{2(\normvec{\omega}_{\text{i}} + \normvec{\omega}_{\text{o}})\cdot\normvec{\omega}_{\text{i}}}}\,.
+\end{equation}
+
+Substituting this back into \eqref{eq:householder_equation_x_introduced} yields
+
+\begin{equation} \label{eq:householder_equation_x_replaced}
+\normvec{h} \,=\, \pm\frac{\normvec{\omega}_{\text{i}} + \normvec{\omega}_{\text{o}}}{\sqrt{2(\normvec{\omega}_{\text{i}} + \normvec{\omega}_{\text{o}})\cdot\normvec{\omega}_{\text{i}}}}\,.
+\end{equation}
+
+Now, since the distance is equally long both from the unreflected point and from the reflected point, to any point in the reflection plane, and since the \idxs{Householder}{transformation} assumes that the reflection plane contains the origin, we have
+
+\begin{equation}
+|\normvec{\omega}_{\text{i}}| \,=\, |\normvec{\omega}_{\text{o}}|,
+\end{equation}
+
+which means that
+
+\begin{equation}
+\renewcommand*{\arraystretch}{1.5}
+\begin{array}{rl}
+\displaystyle \sqrt{2(\normvec{\omega}_{\text{i}} + \normvec{\omega}_{\text{o}})\cdot\normvec{\omega}_{\text{i}}} & =\, \sqrt{2|\normvec{\omega}_{\text{i}}|^2 + 2\normvec{\omega}_{\text{i}}\cdot \normvec{\omega}_{\text{o}}} \\
+\displaystyle & =\, \sqrt{|\normvec{\omega}_{\text{i}}|^2 + |\normvec{\omega}_{\text{0}}|^2 + 2\normvec{\omega}_{\text{i}}\cdot \normvec{\omega}_{\text{o}}} \\
+\displaystyle & =\, \sqrt{(\normvec{\omega}_{\text{i}}+\normvec{\omega}_{\text{o}})^2} \\
+\displaystyle & =\, |\normvec{\omega}_{\text{i}}+\normvec{\omega}_{\text{o}}|.
+\end{array}
+\end{equation}
+
+So, we get
+
+\begin{equation} \label{eq:halfway_vector_two_alternatives}
+\normvec{h} \,=\, \pm\frac{\normvec{\omega}_{\text{i}} + \normvec{\omega}_{\text{o}}}{|\normvec{\omega}_{\text{i}}+\normvec{\omega}_{\text{o}}|}\,,
+\end{equation}
+
+which by using \eqref{eq:reflection_direction_and_direction_against_light_source_on_positive_side_of_surface} nicely reduces to
+
+\begin{equation} \label{eq:halfway_vector_final}
+\normvec{h} \,=\, \frac{\normvec{\omega}_{\text{i}} + \normvec{\omega}_{\text{o}}}{|\normvec{\omega}_{\text{i}}+\normvec{\omega}_{\text{o}}|}\,.
+\end{equation}
+
+In \idxs{computer}{graphics},
