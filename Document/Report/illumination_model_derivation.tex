@@ -1,4 +1,5 @@
-\chapter{Derivation of an illumination model for sea surfaces}
+%\chapter{Derivation of an illumination model for sea surfaces}
+\chapter{An illumination model for sea surfaces}
 \label{chap:illumination_model_derivation}
 
 \begin{itemize}
@@ -224,7 +225,7 @@ Taking the gradient of this yields
 \end{array}
 \end{equation}
 
-Let's \assume that the components of the surface gradient is \idxse{normal}{distribution}{normally distributed}. For vectors, the corresponding distribution is the \textit{\href{http://en.wikipedia.org/wiki/Multivariate\_normal\_distribution\#Non-degenerate\_case}{multivariate normal distribution}} which is a generalization of the normal distribution, so let's assume that $\nabla\psi$ is multivariate normal distributed.
+Let's \assume that the components of the gradient of the free surface elevation are \idxse{normal}{distribution}{normally distributed}. For vectors, the corresponding distribution is the \textit{\href{http://en.wikipedia.org/wiki/Multivariate\_normal\_distribution\#Non-degenerate\_case}{multivariate normal distribution}} which is a generalization of the normal distribution, so let's assume that $\nabla\psi$ is multivariate normal distributed.
 
 Just like the normal distribution, the multivariate normal distribution requires that the \mean is known, but instead of relying on the variance, it relies on the \idxs{covariance}{matrix} of the vector, which is a generalization of the variance with the only difference that the ordinary \idxs{product}{operator} has been replaced by the \idxs{outer product}{operator} $\otimes$, which is defined as
 
@@ -447,7 +448,13 @@ and also
 \end{array}
 \end{equation}
 
-The distribution of $\nabla\eta^*(\vec{r})$ is then given by \eqref{eq:psi_grad_distribution}, where $\psi$ is replaced by $\eta^*$, $\vec{\mu} = \E[\nabla\eta^*(\vec{r})]$ is given by \eqref{eq:nabla_eta_expectation_value} and $\Sigma = \Sigma(\nabla\eta^*(\vec{r}))$ is given by \eqref{eq:nabla_eta_covariance_matrix}.
+The distribution of $\nabla\eta^*(\vec{r})$ is then given by replacing $\psi$ by $\eta^*$ \eqref{eq:psi_grad_distribution}, that is
+
+\begin{equation} \label{eq:eta_grad_distribution_r_uniformly_distributed}
+f(\nabla\eta^*(\vec{r})) \,=\, \frac{1}{2\pi|\Sigma|^{1/2}}\exp\left(-\frac{1}{2}(\nabla\eta^*(\vec{r})-\vec{\mu})^{\T}\Sigma^{-1}(\nabla\eta^*(\vec{r})-\vec{\mu})\right),
+\end{equation}
+
+where $\vec{\mu} = \E[\nabla\eta^*(\vec{r})]$ is given by \eqref{eq:nabla_eta_expectation_value} and $\Sigma = \Sigma(\nabla\eta^*(\vec{r}))$ is given by \eqref{eq:nabla_eta_covariance_matrix}.
 
 \section{The rendering equation}
 
@@ -549,7 +556,7 @@ where $\anormvec{n}$ is given by \eqref{eq:anti_normal_from_gradient}. In \eqref
 
 which is basically the distribution density of the reflection direction $\normvec{\omega}_{\text{o}}$ for the reflection of a ray that comes from the direction $\normvec{\omega}_{\text{i}}$, divided by $\cos\theta_{\text{o}}$.
 
-But how will we know the distribution of the reflection direction for a ray that is being reflected? Well, we know that in order for a ray that comes from the direction $\normvec{\omega}_{\text{i}}$ to be reflected in the direction $\cos\theta_{\text{o}}$, the surface has to be angeled in a certain way. Here, the surface we are talking about is the actual surface, or the surface of the \microfacet the ray is hitting, which is described by $\eta^*$, rather than the simplified surface which is described by $\eta$.
+But how will we know the distribution of the reflection direction for a ray that is being reflected? Well, we know that in order for a ray that comes from the direction $\normvec{\omega}_{\text{i}}$ to be reflected in the direction $\normvec{\omega}_{\text{o}}$, the surface has to be angeled in a certain way. Here, the surface we are talking about is the actual surface, or the surface of the \microfacet the ray is hitting, which is described by $\eta^*$, rather than the simplified surface which is described by $\eta$.
 
 The equation that describes the reflection is given by the \index{reflection!Householder|see{Householder transformation}}\idxs{Householder}{transformation}, which states that the reflection $\vec{r}'$ of a point $\vec{r}$ in a plane with the surface normal $\normvec{h}$, is given by
 
@@ -563,7 +570,7 @@ where a superscripted $\Hermitian$ denotes the \idxs{Hermitian}{transpose} opera
 \vec{r}' \,=\, \vec{r} - 2(\normvec{v}\cdot\vec{r})\normvec{v}.
 \end{equation}
 
-In our case, we know that the reflection direction $\normvec{\omega}_{\text{o}}$, is the reflection of the incident direction, or the reflection of the opposite of the direction $\normvec{\omega}_{\text{i}}$ from which the incident ray came. Let's also refer to the normal of the \microfacet as $\normvec{h}$, and that will give us
+In our case, we know that the reflection direction $\normvec{\omega}_{\text{o}}$, is the reflection of the incident direction, or the reflection of the opposite of the direction $\normvec{\omega}_{\text{i}}$ from which the incident ray came. Let's also refer to the normal the \microfacet would need to have in order for a ray that comes from the direction $\normvec{\omega}_{\text{i}}$ to be reflected in the direction $\normvec{\omega}_{\text{o}}$ as $\normvec{h}$. This will give us
 
 \begin{equation} \label{eq:householder_equation}
 \normvec{\omega}_{\text{o}} \,=\, 2(\normvec{h}\cdot\normvec{\omega}_{\text{i}})\normvec{h} - \normvec{\omega}_{\text{i}}.
@@ -595,8 +602,14 @@ which can easily be rewritten to
 
 Both $\normvec{\omega}_{\text{i}}$ and $\normvec{\omega}_{\text{o}}$ are located in $\Omega_{\textbf{r}}$ which is on the positive side of the surface, or in other words,
 
-\begin{equation} \label{eq:reflection_direction_and_direction_against_light_source_on_positive_side_of_surface}
-\normvec{\omega}_{\text{i}}\cdot\normvec{h} > 0,\, \normvec{\omega}_{\text{o}}\cdot\normvec{h} > 0 \Rightarrow (\normvec{\omega}_{\text{i}} + \normvec{\omega}_{\text{o}})\cdot\normvec{h} > 0.
+\begin{equation} \label{eq:reflection_direction_and_direction_against_light_source_on_positive_side_of_surface_separate}
+\normvec{\omega}_{\text{i}}\cdot\normvec{h} > 0,\, \normvec{\omega}_{\text{o}}\cdot\normvec{h} > 0,
+\end{equation}
+
+which also leads to the inequality
+
+\begin{equation} \label{eq:reflection_direction_and_direction_against_light_source_on_positive_side_of_surface_together}
+(\normvec{\omega}_{\text{i}} + \normvec{\omega}_{\text{o}})\cdot\normvec{h} > 0.
 \end{equation}
 
 This means that $\normvec{\omega}_{\text{i}} + \normvec{\omega}_{\text{o}} \neq \vec{0}$, otherwise we would have $(\normvec{\omega}_{\text{i}} + \normvec{\omega}_{\text{o}})\cdot\normvec{h} = \vec{0}\cdot\normvec{h} \not > 0$. Since $\normvec{\omega}_{\text{i}} + \normvec{\omega}_{\text{o}} \neq \vec{0}$, we can rewrite \eqref{eq:householder_x_second_order_with_vectors} as
@@ -630,6 +643,7 @@ which means that
 \begin{array}{rl}
 \displaystyle \sqrt{2(\normvec{\omega}_{\text{i}} + \normvec{\omega}_{\text{o}})\cdot\normvec{\omega}_{\text{i}}} & =\, \sqrt{2|\normvec{\omega}_{\text{i}}|^2 + 2\normvec{\omega}_{\text{i}}\cdot \normvec{\omega}_{\text{o}}} \\
 \displaystyle & =\, \sqrt{|\normvec{\omega}_{\text{i}}|^2 + |\normvec{\omega}_{\text{0}}|^2 + 2\normvec{\omega}_{\text{i}}\cdot \normvec{\omega}_{\text{o}}} \\
+\displaystyle & =\, \sqrt{\normvec{\omega}_{\text{i}}^2 + \normvec{\omega}_{\text{0}}^2 + 2\normvec{\omega}_{\text{i}}\cdot \normvec{\omega}_{\text{o}}} \\
 \displaystyle & =\, \sqrt{(\normvec{\omega}_{\text{i}}+\normvec{\omega}_{\text{o}})^2} \\
 \displaystyle & =\, |\normvec{\omega}_{\text{i}}+\normvec{\omega}_{\text{o}}|.
 \end{array}
@@ -641,10 +655,40 @@ So, we get
 \normvec{h} \,=\, \pm\frac{\normvec{\omega}_{\text{i}} + \normvec{\omega}_{\text{o}}}{|\normvec{\omega}_{\text{i}}+\normvec{\omega}_{\text{o}}|}\,,
 \end{equation}
 
-which by using \eqref{eq:reflection_direction_and_direction_against_light_source_on_positive_side_of_surface} nicely reduces to
+which by using \eqref{eq:reflection_direction_and_direction_against_light_source_on_positive_side_of_surface_together} nicely reduces to
 
 \begin{equation} \label{eq:halfway_vector_final}
-\normvec{h} \,=\, \frac{\normvec{\omega}_{\text{i}} + \normvec{\omega}_{\text{o}}}{|\normvec{\omega}_{\text{i}}+\normvec{\omega}_{\text{o}}|}\,.
+\normvec{h} \,=\, \frac{\normvec{\omega}_{\text{i}} + \normvec{\omega}_{\text{o}}}{|\normvec{\omega}_{\text{i}}+\normvec{\omega}_{\text{o}}|}\,,
 \end{equation}
 
-In \idxs{computer}{graphics},
+which is just the normalization of $\normvec{\omega}_{\text{i}}+\normvec{\omega}_{\text{o}}$. In \idxs{computer}{graphics}, this vector is known as the \idxs{halfway}{vector}, since it is a \idxs{direction}{vector} that is "half way" between the direction vectors $\normvec{\omega}_{\text{i}}$ and $\normvec{\omega}_{\text{o}}$.
+
+\eqref{eq:brdf_rewritten} can be rewritten to
+
+\begin{equation}
+\rho'_{\text{r}}(\normvec{\omega}_{\text{i}},\, \normvec{\omega}_{\text{o}}) \,=\, (\cos\theta_{\text{o}})^{-1}\, \frac{\opd \anormvec{h}}{\opd \normvec{\omega}_{\text{o}}}\,\frac{\opd}{\opd \anormvec{h}}\left(\frac{\opd \Phi_{\text{o}}(\normvec{\omega}_{\text{o}})}{\opd \Phi_{\text{i}}(\normvec{\omega}_{\text{i}})}\right).
+\end{equation}
+
+Here, the term $\opd\,(\opd \Phi_{\text{o}}(\normvec{\omega}_{\text{o}})/\!\opd \Phi_{\text{i}}(\normvec{\omega}_{\text{i}}))$ can be identified as the ratio between the \idxs{reflected}{radient flux}, that was reflected on a \microfacet with a surface \idx{anti-normal} withing $\opd \anormvec{h}$, and the \idxs{incident}{radient flux}, for radiation coming from the direction $\normvec{\omega}_{\text{i}}$.
+
+The anti-normal of the \microfacet is given by \eqref{eq:eta_anti_normal}, where the distribution of the first two elements is given by \eqref{eq:eta_grad_distribution_r_uniformly_distributed} for a \idxse{uniform}{distribution}{uniformly distributed} $\vec{r}$. However, here it is the incident rays that determine the distribution of $\vec{r}$, so $\vec{r}$ will not be uniformly distributed but somewhat \biased towards microfacets facing the light source.
+
+If a large surface, whose area when projected down to the horizontal plane is $A_{\text{h}}$, is subdivided into $n$ microfacets, all with a projected area $a_{\text{h}} = A_{\text{h}}/n$, the total project area of all microfacets whose gradient of the free surface elevation lies within $\opd\nabla\eta^*(\vec{r})$ will be
+
+\begin{equation}
+\opd A_{\text{h}} \,=\, A_{\text{h}}\,f(\nabla\eta^*(\vec{r}))\opd \nabla\eta^*(\vec{r}).
+\end{equation}
+
+When projected onto the plane $\Pi_i$ that is orthogonal to $\normvec{\omega}_{\text{i}}$, the total area of all microfacets will be
+
+\begin{equation}
+A_{\Pi_i} \,=\, A_{\text{h}}\,\normvec{\omega}_{\text{i}}\cdot\normvec{n}\,(\normvec{n}\cdot\normvec{z})^{-1} \,=\, A_{\text{h}}\,\normvec{\omega}_{\text{i}}\cdot\anormvec{n}
+\end{equation}
+
+and the total area of all microfacets whose gradient of the free surface elevation lies within $\opd\nabla\eta^*(\vec{r})$ will be
+
+\begin{equation}
+\opd A_{\Pi_i} \,=\, \opd A_{\text{h}}\,\normvec{\omega}_{\text{i}}\cdot\normvec{h}\,(\normvec{h}\cdot\normvec{z})^{-1} \,=\, \opd A_{\text{h}}\,\normvec{\omega}_{\text{i}}\cdot\anormvec{h},
+\end{equation}
+
+where $\normvec{h}$ is the normal the free surface elevation with the gradient around which $\opd\nabla\eta^*(\vec{r})$ is centered.
