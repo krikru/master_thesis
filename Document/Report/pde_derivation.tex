@@ -7,19 +7,19 @@ In this appendix, I will present a new \idx{two-dimensional} \index{dimensionali
 The equation is derived from the \idxs{dispersion}{relation} that is obtained in \idxs{Airy wave}{theory}\index{wave theory!Airy|see{Airy wave theory}} \citep{temp}, namely:
 
 \begin{equation} \label{eq:dispersion}
-\omega^2(k) = \left(g\,+\,\frac{\gamma}{\rho}\,k^2\right)\,k\,\tanh(k\,h),
+\omega^2(k) \,=\, \left(g\,+\,\frac{\gamma}{\rho}\,k^2\right)\,k\,\tanh(k\,h),
 \end{equation}
 
 where $k$ is the \idx{wavenumber} of one \idxs{wave}{component}, $\omega$ is the \idxs{angular}{freequency} of the component, $g$ is the \idxs{gravitational}{acceleration}, $h$ is the \idxs{water}{depth} and $\gamma$ is the \idxs{surface}{tension}. Since this equation describes waves of a single \idx{wavelength}, we can assume that the \idxs{free surface}{elevation} for one wave component can be described by
 
 \begin{equation} \label{eq:component}
-\eta(\vec{r},\,t) = A\,e^{i(\vec{k}\cdot\vec{r}\,-\,\omega\,t)},
+\eta(\vec{r},\,t) \,=\, A\,e^{i(\vec{k}\cdot\vec{r}\,-\,\omega\,t)},
 \end{equation}
 
 where $\eta$ is the so far \idx{complex-valued} free surface elevation, $A$ is the \idxs{wave}{amplitude} which can be any \idxs{complex}{number} and $\vec{k}$ is the wave vector. We make the observation that $k$ and $\vec{k}$ are related to each other by
 
 \begin{equation} \label{eq:kvectok}
-k = \left|\vec{k}\right|.
+k \,=\, \left|\vec{k}\right|.
 \end{equation}
 
 Although \eqref{eq:component} describes the time evolution of all wave components, it includes variables from the \idxs{frequency}{domain} ($\vec{k}$ and $\omega$ --- note that $k$ depends on $\vec{k}$ according to \eqref{eq:kvectok}), which are not available when working purely in the spatial domain. Furthermore, the equation is indirectly dependent on $h$ and assumes that this variable has the same value on all locations, which may not be the case. We therefore need a way to express the time evolution of the free surface which does not use frequency domain variables and is robust even for varying water depths.
@@ -27,48 +27,48 @@ Although \eqref{eq:component} describes the time evolution of all wave component
 By \idxe{differentiation!in time}{differentiating} \eqref{eq:component} in time, we obtain
 
 \begin{equation}
-\frac{\partial\eta(\vec{r},\,t)}{\partial t} = -i\,\omega\,A\,e^{i(\vec{k}\cdot\vec{r}\,-\,\omega\,t)},
+\frac{\partial\eta(\vec{r},\,t)}{\partial t} \,=\, -i\,\omega\,A\,e^{i(\vec{k}\cdot\vec{r}\,-\,\omega\,t)},
 \end{equation}
 
 where $i$ is the \idxs{imaginary}{unit}. The equation can be rewritten as
 
 \begin{equation}
-\frac{\partial}{\partial t}\eta(\vec{r},\,t) = -i\,\omega\,\eta(\vec{r},\,t).
+\frac{\partial}{\partial t}\eta(\vec{r},\,t) \,=\, -i\,\omega\,\eta(\vec{r},\,t).
 \end{equation}
 
 In a manner inspired by the derivation of the \idxs{Schrödinger}{equation}, such as the derivation in \citep{Bransden2000}, let's define the \idxs{scalar}{operator}
 
 \begin{equation} \label{eq:opomega}
-\sop{\omega} = i\frac{\partial}{\partial t}
+\sop{\omega} \,=\, i\frac{\partial}{\partial t}
 \end{equation}
 
 and we see that
 
 \begin{equation} \label{eq:opomegaaction}
-\sop{\omega}\,\eta = \omega\,\eta
+\sop{\omega}\,\eta \,=\, \omega\,\eta
 \end{equation}
 
 for a wave component described by \eqref{eq:component}. By taking the \idx{gradient} of \eqref{eq:component}, we obtain
 
 \begin{equation}
-\nabla\eta(\vec{r},\,t) = i\,\vec{k}\,A\,e^{i(\vec{k}\cdot\vec{r}\,-\,\omega\,t)}
+\nabla\eta(\vec{r},\,t) \,=\, i\,\vec{k}\,A\,e^{i(\vec{k}\cdot\vec{r}\,-\,\omega\,t)}
 \end{equation}
 
 which can be written as
 
 \begin{equation}
-\nabla\eta(\vec{r},\,t) = i\,\vec{k}\,\eta(\vec{r},\,t).
+\nabla\eta(\vec{r},\,t) \,=\, i\,\vec{k}\,\eta(\vec{r},\,t).
 \end{equation}
 
 Let's define the \idxse{vector}{operator}{vector} and \idxsp{scalar}{operator}{s}
 
 \begin{samepage}
 \begin{equation} \label{eq:opkvec}
-\vop{k} = -i\,\nabla
+\vop{k} \,=\, -i\,\nabla
 \end{equation}
 
 \begin{equation} \label{eq:opk2}
-\sop{k^2} = \vop{k}^2 = -\nabla^2
+\sop{k^2} \,=\, \vop{k}^2 \,=\, -\nabla^2
 \end{equation}
 \end{samepage}
 
@@ -76,37 +76,37 @@ and we see that
 
 \begin{samepage}
 \begin{equation} \label{eq:opkvec1action}
-\phantom{and}\quad\vop{k}\,\eta = \vec{k}\,\eta,\quad\text{and}
-%\vop{k}\,\eta = \vec{k}\,\eta,
+\phantom{and}\quad\vop{k}\,\eta \,=\, \vec{k}\,\eta,\quad\text{and}
+%\vop{k}\,\eta \,=\, \vec{k}\,\eta,
 \end{equation}
 
 \begin{equation} \label{eq:opk2action}
-\sop{k^2}\,\eta = k^2\,\eta
+\sop{k^2}\,\eta \,=\, k^2\,\eta
 \end{equation}
 \end{samepage}
 
 for a wave component described by \eqref{eq:component}. By multiplying both sides of \eqref{eq:dispersion} with $\eta$, we obtain
 
 \begin{equation}
-\omega^2\,\eta = \left(g\,+\,\frac{\gamma}{\rho}\,k^2\right)\,k\,\tanh(k\,h)\,\eta
+\omega^2\,\eta \,=\, \left(g\,+\,\frac{\gamma}{\rho}\,k^2\right)\,k\,\tanh(k\,h)\,\eta
 \end{equation}
 
 which can be rewritten as
 
 \begin{equation} \label{eq:diffeqbad}
-\sop{\omega}^2\,\eta = \left(g\,+\,\frac{\gamma}{\rho}\,\sop{k^2}\right)\,k\,\tanh(k\,h)\,\eta.
+\sop{\omega}^2\,\eta \,=\, \left(g\,+\,\frac{\gamma}{\rho}\,\sop{k^2}\right)\,k\,\tanh(k\,h)\,\eta.
 \end{equation}
 
 We now have an equation almost free from $\vec{k}$ and $\omega$. However, the factor $k\,\tanh(k\,h)$ persists and is difficult to turn into an operator free from $\vec{k}$. One solution is to turn this factor into a \idxs{convolution}{filter} which works by calculating the \idx{convolution} between the operand and a \idxs{convolution}{kernel}. However, the kernel proves to be difficult to obtain due to the asymptotically increasing value of $k\,\tanh(k\,h)$ as $k\rightarrow\infty$. A possibility is to rewrite \eqref{eq:diffeqbad} into
 
 \begin{equation} \label{eq:diffeqbetter}
-\sop{\omega}^2\,\eta = h\,\left(g\,+\,\frac{\gamma}{\rho}\,\sop{k^2}\right)\,\sop{k^2}\,\fdfunc{K}(\vec{k}\,h)\,\eta,
+\sop{\omega}^2\,\eta \,=\, h\,\left(g\,+\,\frac{\gamma}{\rho}\,\sop{k^2}\right)\,\sop{k^2}\,\fdfunc{K}(\vec{k}\,h)\,\eta,
 \end{equation}
 
 where
 
 \begin{equation} \label{eq:transkernelofxivec}
-\fdfunc{K}(\vec{\xi}) = \begin{cases}
+\fdfunc{K}(\vec{\xi}) \,=\, \begin{cases}
 1                                                  , & \quad \vec{\xi} = \vec{0} \\[.5em]
 \displaystyle\frac{\tanh(|\vec{\xi}|)}{|\vec{\xi}|}, & \quad \vec{\xi} \neq \vec{0}
 \end{cases}\ ,
@@ -115,75 +115,75 @@ where
 a $\fdfunc{\ }$ denotes a function or a variable in the frequency domain and $\vec{\xi}$ is a \idxs{dimensionless}{vector}\index{unitless!see{dimensionless}} in the frequency domain, and turn $\fdfunc{K}(\vec{\xi})$ into a convolution filter. The effect of a \idxs{scalar}{operator} $\sop{C}$ applying the filter on a function described by \eqref{eq:component} would be
 
 \begin{equation} \label{eq:opceffect}
-\sop{C}\,\eta(\vec{r},\,t) = \fdfunc{K}(\vec{k}\,h)\,\eta(\vec{r},\,t)
+\sop{C}\,\eta(\vec{r},\,t) \,=\, \fdfunc{K}(\vec{k}\,h)\,\eta(\vec{r},\,t)
 \end{equation}
 
 and since the operator applies a convolution filter, it can be described by
 
 \begin{equation} \label{eq:opcfconvolution}
-\sop{C}\,\eta(\vec{r},\,t) = \{f\,*\,\eta\}(\vec{r},\,t),
+\sop{C}\,\eta(\vec{r},\,t) \,=\, \{f\,*\,\eta\}(\vec{r},\,t),
 \end{equation}
 
 where $f$ is the \idxs{convolution}{kernel}. With this new operator, \eqref{eq:diffeqbetter} can be rewritten further into
 
 \begin{equation} \label{eq:diffeqspatial}
-\sop{\omega}^2\,\eta = h\,\left(g\,+\,\frac{\gamma}{\rho}\,\sop{k^2}\right)\,\sop{k^2}\,\sop{C}\,\eta.
+\sop{\omega}^2\,\eta \,=\, h\,\left(g\,+\,\frac{\gamma}{\rho}\,\sop{k^2}\right)\,\sop{k^2}\,\sop{C}\,\eta.
 \end{equation}
 
 which is a \PDE completely free from variables in the frequency domain. Combining \eqref{eq:opceffect} and \eqref{eq:opcfconvolution} yields
 
 \begin{equation} \label{eq:fconvolutioneffect}
-\{f\,*\,\eta\}(\vec{r},\,t) = \fdfunc{K}(\vec{k}\,h)\,\eta(\vec{r},\,t).
+\{f\,*\,\eta\}(\vec{r},\,t) \,=\, \fdfunc{K}(\vec{k}\,h)\,\eta(\vec{r},\,t).
 \end{equation}
 
-The \idx{convolution theorem} states that
-
+The \idx{convolution theorem} \citep{temp} (\textit{there is a constant factor involved here too, is this 1 for this version of the Fourier transform?) states that
+}
 \begin{equation} \label{eq:convolutiontheorem}
-\mathcal{F}\{f\,*\,g\} = \mathcal{F}\{f\}\,\cdot\,\mathcal{F}\{g\},
+\mathcal{F}\{f\,*\,g\} \,=\, \mathcal{F}\{f\}\,\cdot\,\mathcal{F}\{g\},
 \end{equation}
 
 where $\mathcal{F}$ denotes the \idxs{non-unitary}{Fourier transform} and $\cdot$ denotes point-wise multiplication. By Fourier transforming \eqref{eq:fconvolutioneffect} using this theorem, we obtain
 
 \begin{equation}
-\mathcal{F}\{f\}(\vec{k})\ \mathcal{F}\{\eta\}(\vec{k},\,t) = \fdfunc{K}(\vec{k}\,h)\ \mathcal{F}\{\eta\}(\vec{k},\,t)
+\mathcal{F}\{f\}(\vec{k})\ \mathcal{F}\{\eta\}(\vec{k},\,t) \,=\, \fdfunc{K}(\vec{k}\,h)\ \mathcal{F}\{\eta\}(\vec{k},\,t)
 \end{equation}
 
 which can be rewritten as
 
 \begin{equation} \label{eq:ffourier}
-\mathcal{F}\{f\}(\vec{k}) = \fdfunc{K}(\vec{k}\,h)
+\mathcal{F}\{f\}(\vec{k}) \,=\, \fdfunc{K}(\vec{k}\,h)
 \end{equation}
 
 by canceling out $\mathcal{F}\{\eta\}(\vec{k},\,t)$ on both sides. For scaling of a function with a real, non-zero number $a$, the non-unitary Fourier transform has the following property:
 
 \begin{equation} \label{eq:fourierscaling}
-\mathcal{F}\{h\}(\vec{\xi}) = \frac{1}{|a|^d}\,\mathcal{F}\{f\}\left(\frac{\vec{\xi}}{a}\right)
+\mathcal{F}\{h\}(\vec{\xi}) \,=\, \frac{1}{|a|^d}\,\mathcal{F}\{f\}\left(\frac{\vec{\xi}}{a}\right)
 ,\quad
-h(\vec{x}) = f(a\vec{x})\ \forall\ \vec{x},
+h(\vec{x}) \,=\, f(a\vec{x})\ \forall\ \vec{x},
 \end{equation}
 
 where $d$ is the number of dimensions and $\vec{x}$ is a vector with dimensionless values in the \idxs{spatial}{domain}. Let's define the function
 
 \begin{equation} \label{eq:ftokernel}
-K(\vec{x}) = h^2\,f(h\,\vec{x}).
+K(\vec{x}) \,=\, h^2\,f(h\,\vec{x}).
 \end{equation}
 
 Since we are working in \idxs{two}{dimensions}, we have $d = 2$, and the scaling property of the non-unitary Fourier transform (\eqref{eq:fourierscaling}) tells us that
 
 \begin{equation}
-\mathcal{F}\{K\}(\vec{\xi}) = h^2\,\frac{1}{|h|^2}\,\mathcal{F}\{f\}\left(\frac{\vec{\xi}}{h}\right)
+\mathcal{F}\{K\}(\vec{\xi}) \,=\, h^2\,\frac{1}{|h|^2}\,\mathcal{F}\{f\}\left(\frac{\vec{\xi}}{h}\right)
 \end{equation}
 
 which, by using \eqref{eq:ffourier} can be rewritten as
 
 \begin{equation}
-\mathcal{F}\{K\}(\vec{\xi}) = \fdfunc{K}(\vec{\xi}).
+\mathcal{F}\{K\}(\vec{\xi}) \,=\, \fdfunc{K}(\vec{\xi}).
 \end{equation}
 
 $K(\vec{x})$ is obtained by \idxse{reverse}{non-unitary Fourier transform}{reverse Fourier transforming} this equation:
 
 \begin{equation} \label{eq:kernelfour2d}
-K(\vec{x})\, = \,\mathcal{F}^{-1}\{\fdfunc{K}(\vec{\xi})\}(\vec{x})\, = \,\frac{1}{(2\,\pi)^2}\iint\fdfunc{K}(\vec{\xi})\,e^{i\,\vec{\xi}\cdot\vec{x}}\,\opd\vec{\xi}
+K(\vec{x}) \,=\, \mathcal{F}^{-1}\{\fdfunc{K}(\vec{\xi})\}(\vec{x}) \,=\, \frac{1}{(2\,\pi)^2}\int_{\mathbb{R}^2}\fdfunc{K}(\vec{\xi})\,e^{i\,\vec{\xi}\cdot\vec{x}}\,\opd\vec{\xi}
 \end{equation}
 
 where $\mathcal{F}^{-1}$ denotes the \idxs{reverse}{non-unitary Fourier transform}. Although it is very difficult (if not impossible) to obtain the reverse Fourier transform of this function analytically, it is possible to \idxe{approximation}{approximate} it numerically and use the approximation in the convolution filter instead.
@@ -191,43 +191,43 @@ where $\mathcal{F}^{-1}$ denotes the \idxs{reverse}{non-unitary Fourier transfor
 With no loss of generality, we can pick a \idxs{polar}{coordinate system}\index{system!polar coordinate|see{polar coordinate system}} $(\xi,\,\theta)$ such that the vector $\vec{x}$ lies on the $\theta = 0$ axis. In that case, \eqref{eq:kernelfour2d} can be rewritten as
 
 \begin{equation}
-K(\vec{x})\, = \,\frac{1}{(2\,\pi)^2}\int_{\xi=0}^\infty\int_{\theta=0}^{2\,\pi}\fdfunc{K}(\xi, \theta)\,e^{i\,\xi\,x\cos\theta}\,\xi\,\opd\xi\,\opd\theta,
+K(\vec{x}) \,=\, \frac{1}{(2\,\pi)^2}\int_{\xi=0}^\infty\int_{\theta=0}^{2\,\pi}\fdfunc{K}(\xi, \theta)\,e^{i\,\xi\,x\cos\theta}\,\xi\,\opd\theta\,\opd\xi,
 \end{equation}
 
 where $\xi = |\vec{\xi}|$ and $\theta$ is the angle between the $\vec{x}$ and $\vec{\xi}$ vectors. By realizing that $\fdfunc{K}$ is circular symmetric, i.e.
 
 \begin{equation}
-\fdfunc{K}(\vec{\xi}) = \fdfunc{K}(\xi),
+\fdfunc{K}(\vec{\xi}) \,=\, \fdfunc{K}(\xi),
 \end{equation}
 
 and that this leads to that $K$ also is circular symmetric, i.e.
 
 \begin{equation}
-K(\vec{x}) = K(x),
+K(\vec{x}) \,=\, K(x),
 \end{equation}
 
 where $x = |\vec{x}|$, the integral over $\theta$ may be carried out, and the Fourier transform is now written
 
 \begin{equation} \label{eq:fdkerneltokernel}
-K(x)\, = \,\frac{1}{2\,\pi}\int_0^\infty\fdfunc{K}(\xi)\,J_0(x\,\xi)\,\xi\,\opd\xi\, = \,\frac{1}{2\,\pi}\,F_0\{\fdfunc{K}\}(x),
+K(x) \,=\, \frac{1}{2\,\pi}\int_0^\infty\fdfunc{K}(\xi)\,J_0(x\,\xi)\,\xi\,\opd\xi \,=\, \frac{1}{2\,\pi}\,F_0\{\fdfunc{K}\}(x),
 \end{equation}
 
 where $J_0$ is the \idxs{zeroth order}{Bessel function of the first kind} and $F_0$ denotes the \idxs{zeroth order}{Hankel transform}, which can be calculated more efficiently than the reverse \idxs{two-dimensional}{Fourier transform}. The corresponding transformation for calculating $\fdfunc{K}$ from $K$ is given by
 
 \begin{equation} \label{eq:kerneltofdkernel}
-\fdfunc{K}(\xi) = 2\,\pi\,F_0\{K\}(\xi).
+\fdfunc{K}(\xi) \,=\, 2\,\pi\,F_0\{K\}(\xi).
 \end{equation}
 
 In this case, since $K(x)$ was found to vanish very quickly as $x\rightarrow\infty$, it was more efficient to solve \eqref{eq:kerneltofdkernel} by guessing a function $K^*$ for $K$, transforming it according to
 
 \begin{equation} \label{eq:kerneltofdkernelmodified}
-\fdfunc{K}^*(\xi) = 2\,\pi\,F_0\{K^*\}(\xi),
+\fdfunc{K}^*(\xi) \,=\, 2\,\pi\,F_0\{K^*\}(\xi),
 \end{equation}
 
 which is a modified version of \eqref{eq:kerneltofdkernel}, and comparing $\fdfunc{K}^*$ with $\fdfunc{K}$, than to calculate $K$ from \eqref{eq:fdkerneltokernel} directly. A function that was found both to be simple and to have a high visual resemblance with $\fdfunc{K}$ after transformed according to \eqref{eq:kerneltofdkernelmodified} was
 
 \begin{equation} \label{eq:empirical}
-K^*(x) = \frac{1}{2\,\pi\,x\,(1\,+\,x)}\,e^{-x^2/4},
+K^*(x) \,=\, \frac{1}{2\,\pi\,x\,(1\,+\,x)}\,e^{-x^2/4},
 \end{equation}
 
 where $^*$ denotes an \estimate. A comparison between $\fdfunc{K}^*$ when $K^*$ is given by \eqref{eq:empirical} and $\fdfunc{K}$ can be seen in \figref{fig:transformedkernel}. Note that both $K$, $\fdfunc{K}$ and the arguments they take are \idx{dimensionless}. $K$ is therefore the \idxs{dimensionless}{convolution kernel}.
@@ -243,19 +243,19 @@ where $^*$ denotes an \estimate. A comparison between $\fdfunc{K}^*$ when $K^*$ 
 Expanding \eqref{eq:opcfconvolution} yields
 
 \begin{equation} \label{eq:opcfintegral}
-\sop{C}\,\eta(\vec{r},\,t) = \iint f(\Delta\vec{r})\,\eta(\vec{r}-\Delta\vec{r},\,t)\,\opd\Delta\vec{r}
+\sop{C}\,\eta(\vec{r},\,t) \,=\, \int_{\mathbb{R}^2}f(\Delta\vec{r})\,\eta(\vec{r}-\Delta\vec{r},\,t)\,\opd\Delta\vec{r}
 \end{equation}
 
 which, by using \eqref{eq:ftokernel}, can be rewritten to
 
 \begin{equation} \label{eq:opchunknown}
-\sop{C}_h\,\eta(\vec{r},\,t) = a_h\iint K\left(\frac{\Delta\vec{r}}{h}\right)\,\eta(\vec{r}-\Delta\vec{r},\,t)\,\opd\Delta\vec{r},
+\sop{C}_h\,\eta(\vec{r},\,t) \,=\, a_h\int_{\mathbb{R}^2}K\left(\frac{\Delta\vec{r}}{h}\right)\,\eta(\vec{r}-\Delta\vec{r},\,t)\,\opd\Delta\vec{r},
 \end{equation}
 
 where the index $h$ is introduced to make it apparent that $\sop{C}$ is actually a function of the \idxs{water}{depth} $h$, and where
 
 \begin{equation} \label{eq:aofh}
-a_h = 1/h^2.
+a_h \,=\, 1/h^2.
 \end{equation}
 
 We could just use this definition of $\sop{C}$ and plug it into \eqref{eq:diffeqspatial} and, by being \naive and \assuming that since \eqref{eq:diffeqspatial} is independent of $\vec{k}$, it would describe not only the behavior of single wave components fixed to a specific wave vector $\vec{k}$ which are described by \eqref{eq:component}, but the behavior of any free surface elevation $\eta(\vec{r},\,t)$, we would have a \PDE that we could use for simulating single wave components as well as complex (in the sense of being non-simple) surfaces.
@@ -263,7 +263,7 @@ We could just use this definition of $\sop{C}$ and plug it into \eqref{eq:diffeq
 A problem, though, is that $h$ is not a constant unless the sea bottom is perfectly flat, but dependent on the location, so \eqref{eq:opchunknown} is not directly applicable. The simplest remedy for this would be to just substitute $h$ for the water depth of the local position $h(\vec{r})$:
 
 \begin{equation} \label{eq:opchlocal}
-\sop{C}_{h(\vec{r})}\,\eta(\vec{r},\,t) = a_{h(\vec{r})}\iint K\left(\frac{\Delta\vec{r}}{h(\vec{r})}\right)\,\eta(\vec{r}-\Delta\vec{r},\,t)\,\opd\Delta\vec{r},
+\sop{C}_{h(\vec{r})}\,\eta(\vec{r},\,t) \,=\, a_{h(\vec{r})}\int_{\mathbb{R}^2}K\left(\frac{\Delta\vec{r}}{h(\vec{r})}\right)\,\eta(\vec{r}-\Delta\vec{r},\,t)\,\opd\Delta\vec{r},
 \end{equation}
 
 where $a_{h(\vec{r})} = 1/h^2(\vec{r})$. Unfortunately, this method has other problems that occur when the bottom topography is unpleasant. For example, if one part of the water is surrounded by ground, as is the case with lakes, this simple version of the operator would be affected by parts of the water from which $\vec{r}$ is isolated. Hence, waves in one lake could, similar to in \idxs{quantum}{mechanics}, \tunnel into another, nearby lake, which is not the case in reality.
@@ -275,43 +275,43 @@ A possible remedy for this problem is to try to limit the convolution filter and
 Anyway, assuming we have defined an effective depth \mbox{$h_e(\vec{r},\,\vec{r}-\Delta\vec{r})$} in some way, which can be calculated efficiently (this essentially means in $O(1)$ time in average for any distance $|\Delta\vec{r}\,|$), we can use that definition:
 
 \begin{equation} \label{eq:opcheffective}
-\sop{C}_{h_e}\,\eta(\vec{r},\,t) = a_{h_e}\,\iint K\left(\frac{\Delta\vec{r}}{h_e(\vec{r},\,\vec{r}-\Delta\vec{r})}\right)\,\eta(\vec{r}-\Delta\vec{r},\,t)\,\opd\Delta\vec{r}
+\sop{C}_{h_e}\,\eta(\vec{r},\,t) \,=\, a_{h_e}\,\int_{\mathbb{R}^2}K\left(\frac{\Delta\vec{r}}{h_e(\vec{r},\,\vec{r}-\Delta\vec{r})}\right)\,\eta(\vec{r}-\Delta\vec{r},\,t)\,\opd\Delta\vec{r}
 \end{equation}
 
 which will be the most general definition of $\sop{C}$ and hopefully robust enough to be useful in a simulation. Here, $a_{h_e}$ is an unknown \idxs{scale}{factor} associated with $h_e$. One problem here, though, is that different values for $h_e$ are used for each value of $\vec{r}$, so there is no trivial way to obtain $a_{h_e}$. However, by examining \eqref{eq:transkernelofxivec}, we see that the convolution filter is in fact a kind of \idxs{low-pass}{filter}, since $\fdfunc{K}(\vec{0}) = 1$. We therefore require that if we apply it on a constant function, it will have no effect:
 
 \begin{equation} \label{eq:opcproperscaling}
-\sop{C}\,\eta(\vec{r},\,t) = \eta(\vec{r},\,t),\quad\eta(\vec{r},\,t) = \eta_0\ \forall\ \vec{r},\,t.
+\sop{C}\,\eta(\vec{r},\,t) \,=\, \eta(\vec{r},\,t),\quad\eta(\vec{r},\,t) \,=\, \eta_0\ \forall\ \vec{r},\,t.
 \end{equation}
 
 By combining \eqref{eq:opcheffective} and \eqref{eq:opcproperscaling} and isolating $a_{h_e}$, we get
 
 \begin{equation} \label{eq:scalingheffective}
-a_{h_e} = \frac{1}{\displaystyle\iint K\left(\frac{\Delta\vec{r}}{h_e(\vec{r},\,\vec{r}-\Delta\vec{r})}\right) \opd\Delta\vec{r}}.
+a_{h_e} \,=\, \frac{1}{\displaystyle\int_{\mathbb{R}^2}K\left(\frac{\Delta\vec{r}}{h_e(\vec{r},\,\vec{r}-\Delta\vec{r})}\right) \opd\Delta\vec{r}}.
 \end{equation}
 
 By using the effective water depth $h_e$, and $\sop{C}_{h_e}$, which is the most \idx{robust} of our $\sop{C}$ operators, \eqref{eq:diffeqspatial} becomes
 
 \begin{equation} \label{eq:diffeqonehstillunknown}
-\sop{\omega}^2\,\eta = h\,\left(g\,+\,\frac{\gamma}{\rho}\,\sop{k^2}\right)\,\sop{k^2}\,\sop{C}_{h_e}\,\eta
+\sop{\omega}^2\,\eta \,=\, h\,\left(g\,+\,\frac{\gamma}{\rho}\,\sop{k^2}\right)\,\sop{k^2}\,\sop{C}_{h_e}\,\eta
 \end{equation}
 
 which still contains $h$ at one place. Using \eqref{eq:aofh}, we can substitute $h$ for $a_{h_e}^{-1/2}$ and obtain
 
 \begin{equation} \label{eq:diffeqcomplete}
-\sop{\omega}^2\,\eta = a_{h_e}^{-1/2}\,\left(g\,+\,\frac{\gamma}{\rho}\,\sop{k^2}\right)\,\sop{k^2}\,\sop{C}_{h_e}\,\eta
+\sop{\omega}^2\,\eta \,=\, a_{h_e}^{-1/2}\,\left(g\,+\,\frac{\gamma}{\rho}\,\sop{k^2}\right)\,\sop{k^2}\,\sop{C}_{h_e}\,\eta
 \end{equation}
 
 which is a \PDE completely free from variables in the frequency domain and which is believed to be robust even for varying water depths, which was the goal. By using the definition for $\sop{\omega}$ (\eqref{eq:opomega}), the definition for $\sop{k^2}$ (\eqref{eq:opk2}) and the definition for $\sop{C}_{h_e}$ (\eqref{eq:opcheffective}, \eqref{eq:scalingheffective}), the equation can be rewritten as
 
 \begin{equation} \label{eq:diffeqnouserdefinedoperators}
-\frac{\partial^2}{\partial t^2}\,\eta = a_{h_e}^{-1/2}\,\left(g\,-\,\frac{\gamma}{\rho}\,\nabla^2\right)\,\nabla^2\,\frac{\displaystyle\iint K\left(\frac{\Delta\vec{r}}{h_e(\vec{r},\,\vec{r}-\Delta\vec{r})}\right)\,\eta(\vec{r}-\Delta\vec{r},\,t)\,\opd\Delta\vec{r}}{\displaystyle\iint K\left(\frac{\Delta\vec{r}}{h_e(\vec{r},\,\vec{r}-\Delta\vec{r})}\right) \opd\Delta\vec{r}}.
+\frac{\partial^2}{\partial t^2}\,\eta \,=\, a_{h_e}^{-1/2}\,\left(g\,-\,\frac{\gamma}{\rho}\,\nabla^2\right)\,\nabla^2\,\frac{\displaystyle\int_{\mathbb{R}^2}K\left(\frac{\Delta\vec{r}}{h_e(\vec{r},\,\vec{r}-\Delta\vec{r})}\right)\,\eta(\vec{r}-\Delta\vec{r},\,t)\,\opd\Delta\vec{r}}{\displaystyle\int_{\mathbb{R}^2}K\left(\frac{\Delta\vec{r}}{h_e(\vec{r},\,\vec{r}-\Delta\vec{r})}\right) \opd\Delta\vec{r}}.
 \end{equation}
 
 Note that the order of the operators matters when we use this definition for $C$, contrary to in \eqref{eq:dispersion} which we started from, where the order of the factors on the right hand side doesn't matter. If, for example, \eqref{eq:diffeqcomplete} is modified so that $C_{h_e}$ is placed furthest to the left, we end up with the \PDE
 
 \begin{equation} \label{eq:diffeqnouserdefinedoperatorsvariant}
-\frac{\partial^2}{\partial t^2}\,\eta = \frac{\displaystyle\iint K\left(\frac{\Delta\vec{r}}{h_e(\vec{r},\,\vec{r}-\Delta\vec{r})}\right)\,\left(g\,-\,\frac{\gamma}{\rho}\,\nabla^2\right)\,\nabla^2\,\eta(\vec{r}-\Delta\vec{r},\,t)\,\opd\Delta\vec{r}}{\sqrt{\displaystyle\iint K\left(\frac{\Delta\vec{r}}{h_e(\vec{r},\,\vec{r}-\Delta\vec{r})}\right) \opd\Delta\vec{r}}}
+\frac{\partial^2}{\partial t^2}\,\eta \,=\, \frac{\displaystyle\int_{\mathbb{R}^2}K\left(\frac{\Delta\vec{r}}{h_e(\vec{r},\,\vec{r}-\Delta\vec{r})}\right)\,\left(g\,-\,\frac{\gamma}{\rho}\,\nabla^2\right)\,\nabla^2\,\eta(\vec{r}-\Delta\vec{r},\,t)\,\opd\Delta\vec{r}}{\sqrt{\displaystyle\int_{\mathbb{R}^2}K\left(\frac{\Delta\vec{r}}{h_e(\vec{r},\,\vec{r}-\Delta\vec{r})}\right) \opd\Delta\vec{r}}}
 \end{equation}
 
 instead, which is different from \eqref{eq:diffeqnouserdefinedoperators}. It is unknown which order of the operators would be the most "appropriate".
