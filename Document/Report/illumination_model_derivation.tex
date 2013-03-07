@@ -25,11 +25,13 @@ To model the water surface, we will use something known as \microfacets, which a
 
 The idea is that if we know the \idxs{probability}{distribution} for all removed frequencies, we can calculate the distribution for the surface normal. This makes it possible to calculate the distribution for the \idxs{reflection}{direction} of a \ray that is \reflected on the water surface, for a certain \idxs{incident}{direction}, which in turn makes it possible to calculate the likelihood that the object of which the reflection can be seen in a specific point on the surface is --- for example --- the \sun.
 
-This means that we can calculate the average brightness of a point on the surface as perceived by the viewer. Besides, if we \assume that the removed frequencies correspond to waves that are so short that the wave tips become indistinguishable from one another (it helps if the viewer has a bad sight), the average brightness will probably also be a good approximation of the actual brightness the viewer perceives. But before we can start to calculate this value, we need to make a few \assumptions.
+This means that we can calculate the average brightness of a point on the surface as perceived by the observer. Besides, if we \assume that the removed frequencies correspond to waves that are so short that the wave tips become indistinguishable from one another (it helps if the observer has a bad sight), the average brightness will probably also be a good approximation of the actual brightness perceived by the observer. But before we can start to calculate this value, we need to make a few \assumptions.
 
 First, let's \assume that all frequencies of the wave spectrum are \superposed linearly on top of each other. This implies that there is no \idxs{horizontal}{displacement} --- that is, either the waves are not \idxsp{Gerstner}{wave}{s}, or the \idxs{wave}{amplitude} is so much smaller than the \wavelength that whether the waves are Gerstner waves or not is considered negligible.
 
-Second, to make things simpler, let's \assume that both the fraction of the water surface that is hidden behind other waves, and hence is not visible to the viewer, and the fraction of the surface that is \shadowed, i.e. is hidden from the sun behind other waves, are almost zero. In other words, our \microfacets can be assumed not to cover any of the other microfacets, either from the sun or from the viewer.
+Second, to make things simpler, let's \assume that both the fraction of the water surface that is hidden behind other waves, and hence is not visible to the observer, and the fraction of the surface that is \shadowed, i.e. is hidden from the sun behind other waves, are almost zero. In other words, our \microfacets can be assumed not to cover any of the other microfacets, either from the sun or from the observer.
+
+Third, let's also assume that no light will ever be reflected twice on the water surface before reaching the observer.
 
 Now, let's denote the \index{elevation!free surface|see{free surface elevation}}\idxs{free}{surface elevation} of the actual water surface as $\eta^*$, and the free surface elevation of the simplified surface (from which a part of the wave spectrum has been cut off) as $\eta$, and make them functions of $\vec{r}$, which is a \twodimensional vector in the horizontal plane. We can start by noting that $\eta$ is less detailed and contains less information about the actual water surface than $\eta^*$, and that $\eta$ is known, whereas $\eta^*$ is not.
 
@@ -509,7 +511,7 @@ L_{x,\text{o}}(\vec{r},\,\normvec{\omega}_{\text{o}},\, \lambda,\, t) \,=\, L_{x
 \end{array}
 \end{equation}
 
-where $x$ is either s or p, depending on if the light is s or p polarized, $\Omega_{\text{r}}$ is the \idxs{unit}{hemisphere} containing all possible directions for the incoming reflected light, $\Omega_{\text{t}}$ is the \idxs{unit}{hemisphere} containing all possible directions for the incoming transmitted light (which is also the \idxs{relative}{complement} of $\Omega_{\text{r}}$ in the \idxs{unit}{sphere}, i.e. all points in the unit sphere that are not contained in $\Omega_{\text{r}}$), and $\rho'_{\text{t}}$ is the \BTDF which describes how light from different directions are transmitted through the surface.
+where $x$ is the light polarization, which is either s or p, depending on if the light is s or p polarized, $\Omega_{\text{r}}$ is the \idxs{unit}{hemisphere} containing all possible directions for the incoming reflected light, $\Omega_{\text{t}}$ is the \idxs{unit}{hemisphere} containing all possible directions for the incoming transmitted light (which is also the \idxs{relative}{complement} of $\Omega_{\text{r}}$ in the \idxs{unit}{sphere}, i.e. all points in the unit sphere that are not contained in $\Omega_{\text{r}}$), and $\rho'_{\text{t}}$ is the \BTDF which describes how light from different directions are transmitted through the surface.
 
 The parameters $x$, $\vec{r}$, $t$ and $\lambda$ can be removed from the equation since they are of no importance to the derivation of the illumination model; one will just have to keep in mind that the functions depend on $x$, $\vec{r}$, $t$ and $\lambda$. Even the term $L_{x, \text{e}}$ can safely be removed since water surfaces is generally not considered to emit any electromagnetic radiation. We can therefore simplify \eqref{eq:rendering_equation_improved} to
 
@@ -528,7 +530,7 @@ Here, $\rho'_{\text{r}}(\normvec{\omega}_{\text{i}},\, \normvec{\omega}_{\text{o
 \rho'_{\text{r}}(\normvec{\omega}_{\text{i}},\, \normvec{\omega}_{\text{o}}) \,=\, \frac{\opd L_{\text{o}}(\normvec{\omega}_{\text{o}})}{\opd E_{\text{i}}(\normvec{\omega}_{\text{i}})} \,=\, \frac{\opd L_{\text{o}}(\normvec{\omega}_{\text{o}})}{\opd \Phi_{\text{i}}(\normvec{\omega}_{\text{i}})A^{-1}},
 \end{equation}
 
-where $E_{\text{i}}$ is the total spectral irradiance (or \idxs{incident}{power} per unit surface area and unit wavelength) of \index{light!wavelength}\idxe{wavelength!light}{wavelength} $\lambda$, coming from direction $\normvec{\omega}_{\text{i}}$, and $\Phi_{\text{i}}$ is the total spectral radiant flux (or \idxs{incident}{power} per unit wavelength) of \index{light!wavelength}\idxe{wavelength!light}{wavelength} $\lambda$, coming from direction $\normvec{\omega}_{\text{i}}$, and $A$ is the area of the surface element that is being illuminated.
+where $E_{\text{i}}$ is the total spectral irradiance (or \idxs{incident}{power} per unit surface area and unit wavelength) of \index{light!wavelength}\idxe{wavelength!light}{wavelength} $\lambda$, coming from direction $\normvec{\omega}_{\text{i}}$, and $\Phi_{\text{i}}$ is the total spectral radiant flux (or \idxs{incident}{power} per unit wavelength) of \index{light!wavelength}\idxe{wavelength!light}{wavelength} $\lambda$, coming from direction $\normvec{\omega}_{\text{i}}$, and $A$ is the area of the surface element that is being illuminated. Note that when determining $A$, the surface is seen as perfectly flat, ignoring the microfacets.
 
 Here, $\opd L_{\text{o}}$ is the \infinitesimal increase in $L_{\text{o}}$, caused by $\opd E_{\text{i}}$ which is the \infinitesimal increase in $E_{\text{i}}$, or caused by $\opd \Phi_{\text{i}}$ which is the \infinitesimal increase in $\Phi_{\text{i}}$. \comment{, which in turn is caused by $\opd\normvec{\omega}_{\text{i}}$, which can be thought of as an infinitesimal increase in the solid angle of some light intake from which light can reach the surface}
 
@@ -558,49 +560,49 @@ which is basically the distribution density of the reflection direction $\normve
 
 But how will we know the distribution of the reflection direction for a ray that is being reflected? Well, we know that in order for a ray that comes from the direction $\normvec{\omega}_{\text{i}}$ to be reflected in the direction $\normvec{\omega}_{\text{o}}$, the surface has to be angeled in a certain way. Here, the surface we are talking about is the actual surface, or the surface of the \microfacet the ray is hitting, which is described by $\eta^*$, rather than the simplified surface which is described by $\eta$.
 
-The equation that describes the reflection is given by the \index{reflection!Householder|see{Householder transformation}}\idxs{Householder}{transformation}, which states that the reflection $\vec{r}'$ of a point $\vec{r}$ in a plane with the surface normal $\normvec{h}$, is given by
+The equation that describes the reflection is given by the \index{reflection!Householder|see{Householder transformation}}\idxs{Householder}{transformation}, which states that the reflection $\vec{r}'$ of a point $\vec{r}$ in a plane with the surface normal $\normvec{v}$, is given by
 
 \begin{equation}
 \vec{r}' \,=\, \vec{r} - 2(\normvec{v}^{\Hermitian}\vec{r})\normvec{v},
 \end{equation}
 
-where a superscripted $\Hermitian$ denotes the \idxs{Hermitian}{transpose} operator, which performs the normal transpose and conjugates the elements. The right hand side of this equation is referred to as the Householder transformation of $\vec{r}$. For surface normals with real-valued elements, this becomes
+where a superscripted $\Hermitian$ denotes the \idxs{Hermitian}{transpose} operator, which performs the normal transpose and conjugates the elements. The right hand side of this equation is referred to as the Householder transformation of $\vec{r}$. For ordinary surface normals, which has real-valued elements, this becomes
 
 \begin{equation}
 \vec{r}' \,=\, \vec{r} - 2(\normvec{v}\cdot\vec{r})\normvec{v}.
 \end{equation}
 
-In our case, we know that the reflection direction $\normvec{\omega}_{\text{o}}$, is the reflection of the incident direction, or the reflection of the opposite of the direction $\normvec{\omega}_{\text{i}}$ from which the incident ray came. Let's also refer to the normal the \microfacet would need to have in order for a ray that comes from the direction $\normvec{\omega}_{\text{i}}$ to be reflected in the direction $\normvec{\omega}_{\text{o}}$ as $\normvec{h}$. This will give us
+In our case, we know that the reflection direction $\normvec{\omega}_{\text{o}}$, is the reflection of the incident direction, or the reflection of the opposite of the direction $\normvec{\omega}_{\text{i}}$ from which the incident ray came. Let's also refer to the surface normal the \microfacet would need to have in order for a ray that comes from the direction $\normvec{\omega}_{\text{i}}$ to be reflected in the direction $\normvec{\omega}_{\text{o}}$ as $\normvec{h}$. This will give us
 
 \begin{equation} \label{eq:householder_equation}
 \normvec{\omega}_{\text{o}} \,=\, 2(\normvec{h}\cdot\normvec{\omega}_{\text{i}})\normvec{h} - \normvec{\omega}_{\text{i}}.
 \end{equation}
 
-Let's find what value $\normvec{h}$ must have in order for this equation to be satisfied. By rewriting  \eqref{eq:householder_equation}, we get
+Let's find what value $\normvec{h}$ must have in order for this equation to be satisfied. We can start by rewriting it as
 
 \begin{equation}
-\normvec{h} \,=\, \frac{1}{2(\normvec{h}\cdot\normvec{\omega}_{\text{i}})}\,(\normvec{\omega}_{\text{i}} + \normvec{\omega}_{\text{o}}).
+\normvec{h} \,=\, \frac{1}{2(\normvec{h}\cdot\normvec{\omega}_{\text{i}})}\,(\normvec{\omega}_{\text{i}} + \normvec{\omega}_{\text{o}}),
 \end{equation}
 
-By substituting $x$ for $(2(\normvec{h}\cdot\normvec{\omega}_{\text{i}}))^{-1}$, we get
+and by substituting $x$ for $(2(\normvec{h}\cdot\normvec{\omega}_{\text{i}}))^{-1}$, we get
 
 \begin{equation} \label{eq:householder_equation_x_introduced}
-\normvec{h} \,=\, x(\normvec{\omega}_{\text{i}} + \normvec{\omega}_{\text{o}}),
+\normvec{h} \,=\, x(\normvec{\omega}_{\text{i}} + \normvec{\omega}_{\text{o}}).
 \end{equation}
 
-and inserting this back into \eqref{eq:householder_equation} gives
+Inserting this back into \eqref{eq:householder_equation} gives
 
 \begin{equation}
 \normvec{\omega}_{\text{o}} \,=\, 2(x(\normvec{\omega}_{\text{i}} + \normvec{\omega}_{\text{o}})\cdot\normvec{\omega}_{\text{i}})x(\normvec{\omega}_{\text{i}} + \normvec{\omega}_{\text{o}}) - \normvec{\omega}_{\text{i}}
 \end{equation}
 
-which can easily be rewritten to
+which can easily be rewritten as
 
 \begin{equation} \label{eq:householder_x_second_order_with_vectors}
-\vec{0} \,=\, 2((\normvec{\omega}_{\text{i}} + \normvec{\omega}_{\text{o}})\cdot\normvec{\omega}_{\text{i}})x^2(\normvec{\omega}_{\text{i}} + \normvec{\omega}_{\text{o}}) - \normvec{\omega}_{\text{i}} - \normvec{\omega}_{\text{o}} \,=\, (2(\normvec{\omega}_{\text{i}} + \normvec{\omega}_{\text{o}})\cdot\normvec{\omega}_{\text{i}}\,x^2 - 1)(\normvec{\omega}_{\text{i}} + \normvec{\omega}_{\text{o}}).
+\vec{0} \,=\, (2(\normvec{\omega}_{\text{i}} + \normvec{\omega}_{\text{o}})\cdot\normvec{\omega}_{\text{i}}\,x^2 - 1)(\normvec{\omega}_{\text{i}} + \normvec{\omega}_{\text{o}}).
 \end{equation}
 
-Both $\normvec{\omega}_{\text{i}}$ and $\normvec{\omega}_{\text{o}}$ are located in $\Omega_{\textbf{r}}$ which is on the positive side of the surface, or in other words,
+Since both $\normvec{\omega}_{\text{i}}$ and $\normvec{\omega}_{\text{o}}$ are located in $\Omega_{\textbf{r}}$ which is on the positive side of the surface, we have
 
 \begin{equation} \label{eq:reflection_direction_and_direction_against_light_source_on_positive_side_of_surface_separate}
 \normvec{\omega}_{\text{i}}\cdot\normvec{h} > 0,\, \normvec{\omega}_{\text{o}}\cdot\normvec{h} > 0,
@@ -665,30 +667,70 @@ which is just the normalization of $\normvec{\omega}_{\text{i}}+\normvec{\omega}
 
 \eqref{eq:brdf_rewritten} can be rewritten to
 
-\begin{equation}
+\begin{equation} \label{eq:brdf_from_ratio_between_fluxes}
 \rho'_{\text{r}}(\normvec{\omega}_{\text{i}},\, \normvec{\omega}_{\text{o}}) \,=\, (\cos\theta_{\text{o}})^{-1}\, \frac{\opd \anormvec{h}}{\opd \normvec{\omega}_{\text{o}}}\,\frac{\opd}{\opd \anormvec{h}}\left(\frac{\opd \Phi_{\text{o}}(\normvec{\omega}_{\text{o}})}{\opd \Phi_{\text{i}}(\normvec{\omega}_{\text{i}})}\right).
 \end{equation}
 
-Here, the term $\opd\,(\opd \Phi_{\text{o}}(\normvec{\omega}_{\text{o}})/\!\opd \Phi_{\text{i}}(\normvec{\omega}_{\text{i}}))$ can be identified as the ratio between the \idxs{reflected}{radient flux}, that was reflected on a \microfacet with a surface \idx{anti-normal} withing $\opd \anormvec{h}$, and the \idxs{incident}{radient flux}, for radiation coming from the direction $\normvec{\omega}_{\text{i}}$.
+Here, the term $\opd\,(\opd \Phi_{\text{o}}(\normvec{\omega}_{\text{o}})/\!\opd \Phi_{\text{i}}(\normvec{\omega}_{\text{i}}))$ can be identified as the ratio between the \idxs{reflected}{radient flux} that was reflected on a \microfacet with a surface \idx{anti-normal} within $\opd \anormvec{h}$, and the \idxs{incident}{radient flux}, for radiation coming from the direction $\normvec{\omega}_{\text{i}}$.
 
 The anti-normal of the \microfacet is given by \eqref{eq:eta_anti_normal}, where the distribution of the first two elements is given by \eqref{eq:eta_grad_distribution_r_uniformly_distributed} for a \idxse{uniform}{distribution}{uniformly distributed} $\vec{r}$. However, here it is the incident rays that determine the distribution of $\vec{r}$, so $\vec{r}$ will not be uniformly distributed but somewhat \biased towards microfacets facing the light source.
 
-If a large surface, whose area when projected down to the horizontal plane is $A_{\text{h}}$, is subdivided into $n$ microfacets, all with a projected area $a_{\text{h}} = A_{\text{h}}/n$, the total project area of all microfacets whose gradient of the free surface elevation lies within $\opd\nabla\eta^*(\vec{r})$ will be
+If a large surface, whose area when projected down to the horizontal plane is $A_{\text{h}}$, is subdivided into many infinitesimal microfacets, the total project area of all microfacets whose gradient of the free surface elevation lies within $\opd\nabla\eta^*$ will be
 
 \begin{equation}
-\opd A_{\text{h}} \,=\, A_{\text{h}}\,f(\nabla\eta^*(\vec{r}))\opd \nabla\eta^*(\vec{r}).
+\opd A'_{\text{h}} \,=\, A_{\text{h}}\,f(\nabla\eta^*(\vec{r}))\opd \nabla\eta^*,
 \end{equation}
 
-When projected onto the plane $\Pi_i$ that is orthogonal to $\normvec{\omega}_{\text{i}}$, the total area of all microfacets will be
+where an apostrophe denotes that the gradients of the free surface elevation for the included microfacets is restricted. When projected onto the plane orthogonal to $\normvec{\omega}_{\text{i}}$, the total area of all microfacets will be
 
 \begin{equation}
-A_{\Pi_i} \,=\, A_{\text{h}}\,\normvec{\omega}_{\text{i}}\cdot\normvec{n}\,(\normvec{n}\cdot\normvec{z})^{-1} \,=\, A_{\text{h}}\,\normvec{\omega}_{\text{i}}\cdot\anormvec{n}
+A_{\text{i}} \,=\, A_{\text{h}}\,\normvec{\omega}_{\text{i}}\cdot\normvec{n}\,(\normvec{n}\cdot\normvec{z})^{-1} \,=\, A_{\text{h}}\,\normvec{\omega}_{\text{i}}\cdot\anormvec{n}
 \end{equation}
 
 and the total area of all microfacets whose gradient of the free surface elevation lies within $\opd\nabla\eta^*(\vec{r})$ will be
 
 \begin{equation}
-\opd A_{\Pi_i} \,=\, \opd A_{\text{h}}\,\normvec{\omega}_{\text{i}}\cdot\normvec{h}\,(\normvec{h}\cdot\normvec{z})^{-1} \,=\, \opd A_{\text{h}}\,\normvec{\omega}_{\text{i}}\cdot\anormvec{h},
+\opd A'_{\text{i}} \,=\, \opd A'_{\text{h}}\,\normvec{\omega}_{\text{i}}\cdot\normvec{h}\,(\normvec{h}\cdot\normvec{z})^{-1} \,=\, \opd A'_{\text{h}}\,\normvec{\omega}_{\text{i}}\cdot\anormvec{h},
 \end{equation}
 
-where $\normvec{h}$ is the normal the free surface elevation with the gradient around which $\opd\nabla\eta^*(\vec{r})$ is centered.
+since all microfacets have the same area when projected to the horizontal plane. Here, $\normvec{h}$ is the normal the free surface elevation with the gradient around which $\opd\nabla\eta^*(\vec{r})$ is centered. Therefore, the chance that a ray that comes from the direction $\normvec{\omega}_{\text{i}}$ and hits the surface will hit a \microfacet whose gradient of the free surface elevation lies within $\opd\nabla\eta^*$ will be
+
+\begin{equation} \label{eq:gradient_restricted_reflection_probability}
+\opd P'(\normvec{\omega}_{\text{i}}) \,=\, \frac{\opd A'_{\text{i}}}{A_{\text{i}}} \,=\, \frac{\opd A'_{\text{h}}\,\normvec{\omega}_{\text{i}}\cdot\anormvec{h}}{A_{\text{h}}\,\normvec{\omega}_{\text{i}}\cdot\anormvec{n}} \,=\, f(\nabla\eta^*(\vec{r}))\,\frac{\normvec{\omega}_{\text{i}}\cdot\anormvec{h}}{\normvec{\omega}_{\text{i}}\cdot\anormvec{n}}\opd \nabla\eta^*.
+\end{equation}
+
+So, for radiation coming from the direction $\normvec{\omega}_{\text{i}}$, with the \idxs{incident}{radient flux} $\opd \Phi_{\text{i}}(\normvec{\omega}_{\text{i}})$, the \idxs{reflected}{radient flux} that was reflected on a \microfacet with a free surface elevation whose gradient lies withing $\opd\nabla\eta^*$ --- $\opd^2 \Phi_{\text{o}}(\normvec{\omega}_{\text{i}})$ --- will be
+
+\begin{equation} \label{eq:gradient_restricted_reflected_flux}
+\opd^2 \Phi_{\text{o}}(\normvec{\omega}_{\text{o}}) \,=\, \opd \Phi_{\text{i}}(\normvec{\omega}_{\text{i}})\,\opd P'(\normvec{\omega}_{\text{i}})\,R_{\normvec{n},x}(\normvec{\omega}_{\text{i}}),
+\end{equation}
+
+where $R_{\normvec{n},x}(\normvec{\omega}_{\text{i}})$ is the \idxs{reflection}{coefficient}, predicted by the \idxs{Fresnel}{equations}, for a ray coming from the direction $\normvec{\omega}_{\text{i}}$, for a surface with the surface normal $\normvec{n}$ and for the light polarization $x$.
+
+In computer graphics, the reflection coefficient is often \approximated by using \idxs{Schlick's}{approximation}, which reduces the complexity of the expression as well as the time required to evaluate the expression. On the other hand, while the approximation works well as long as there is no filtering depending on the polarization direction involved, using the approximation when such a filtering \emph{is} involved will result in a poor end result since it doesn't take the polarization direction into account. In the case when filtering depending on the polarization direction is involved, the \idxs{Fresnel}{equations} can more accurately be \approximated by substituting low order polynomials for the square roots contained withing the expressions.
+
+Using \eqref{eq:gradient_restricted_reflection_probability} in \eqref{eq:gradient_restricted_reflected_flux} results in
+
+\begin{equation} \label{eq:gradient_restricted_reflected_flux_pre_incident_flux_per_unit_gradient_squared}
+\frac{\opd}{\opd \nabla\eta^*}\,\left(\frac{\opd \Phi_{\text{o}}(\normvec{\omega}_{\text{o}})}{\opd \Phi_{\text{i}}(\normvec{\omega}_{\text{i}})}\right) \,=\, f(\nabla\eta^*(\vec{r}))\,\frac{\normvec{\omega}_{\text{i}}\cdot\anormvec{h}}{\normvec{\omega}_{\text{i}}\cdot\anormvec{n}}\,R_{\normvec{n},x}(\normvec{\omega}_{\text{i}}).
+\end{equation}
+
+By realizing that the normal of the a \microfacet, $\normvec{n}^*$, needs to equal $\normvec{h}$ in order for a ray incoming from the direction $\normvec{\omega}_{\text{i}}$ to be reflected in the direction $\normvec{\omega}_{\text{o}}$, we can use \eqref{eq:eta_anti_normal} to conclude that 
+
+\begin{equation}
+\opd \anormvec{h} \,=\, \opd\nabla\eta^*
+\end{equation}
+
+(note that most --- if not all --- of the infinitesimal quantities used in this appendix are two-dimensional in their nature; in this case the minus sign in \eqref{eq:eta_anti_normal} gets squared and vanishes). By combining this with \eqref{eq:gradient_restricted_reflected_flux_pre_incident_flux_per_unit_gradient_squared}, we can rewrite  \eqref{eq:brdf_from_ratio_between_fluxes}
+
+\begin{equation}
+\rho'_{\text{r}}(\normvec{\omega}_{\text{i}},\, \normvec{\omega}_{\text{o}}) \,=\, (\cos\theta_{\text{o}})^{-1}\, \frac{\opd \anormvec{h}}{\opd \normvec{\omega}_{\text{o}}}\,f(\nabla\eta^*(\vec{r}))\,\frac{\normvec{\omega}_{\text{i}}\cdot\anormvec{h}}{\normvec{\omega}_{\text{i}}\cdot\anormvec{n}}\,R_{\normvec{n},x}(\normvec{\omega}_{\text{i}}).
+\end{equation}
+
+Since $\anormvec{h}$ has a constant z-component, and since the surface whose area is $\opd \normvec{\omega}_{\text{i}}$ has the normal $\normvec{\omega}_{\text{i}}$, we can conclude that
+
+\begin{equation}
+\frac{\opd \normvec{\omega}_{\text{o}}}{\opd \anormvec{h}} \,=\, \left(\left(J_{\normvec{\omega}_{\text{o}}}(\anormvec{h})\normvec{x}\right)\times\left(J_{\normvec{\omega}_{\text{o}}}(\anormvec{h})\normvec{y}\right)\right)\cdot\normvec{\omega}_{\text{o}},
+\end{equation}
+
+where $J_{\normvec{\omega}_{\text{o}}}(\anormvec{h})$ is the \idxs{Jacobian}{matrix}
