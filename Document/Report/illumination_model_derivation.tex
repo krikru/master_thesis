@@ -729,24 +729,24 @@ By realizing that the normal of the a \microfacet, $\normvec{n}^*$, needs to equ
 
 Since we have the restriction $\anormvec{h}\cdot\normvec{z}\equiv 1$, $\opd\anormvec{h}$ is here the size of an infinitesimal "quasi area" element. Let's \assume this element is an axis aligned rectangle with the sides $\opd x_{\anormvec{h}}^{\,}\normvec{x}$ and $\opd y_{\anormvec{h}}^{\,}\normvec{y}$ respectively. We can then describe the infinitesimal solid angle element $\opd\normvec{\omega}_{\text{o}}$ as a parallelogram with the sides $\opd x_{\anormvec{h}}^{\,}J_{\normvec{\omega}_{\text{o}}}(\anormvec{h})^{\,}\normvec{x}$ and $\opd y_{\anormvec{h}}^{\,}J_{\normvec{\omega}_{\text{o}}}(\anormvec{h})^{\,}\normvec{y}$ respectively, where $J_{\normvec{\omega}_{\text{o}}}(\anormvec{h})$ is the \idxs{Jacobian}{matrix} for $\opd\normvec{\omega}_{\text{o}}$ as a function of $\anormvec{h}$, which contains all the partial derivatives of $\opd\normvec{\omega}_{\text{o}}$, that is
 
-\begin{equation} \label{eq:jacobian}
+\begin{equation} \label{eq:jacobian_matrix}
 J_{\normvec{\omega}_{\text{o}}}(\anormvec{h}) \,=\, \renewcommand*{\arraystretch}{2} \left( \begin{array}{ccc}
-\displaystyle \frac{\partial(\normvec{\omega}_{\text{o}}\cdot\normvec{x})}{\partial(\anormvec{h}\cdot\normvec{x})} &
-\displaystyle \frac{\partial(\normvec{\omega}_{\text{o}}\cdot\normvec{x})}{\partial(\anormvec{h}\cdot\normvec{y})} &
-\displaystyle \frac{\partial(\normvec{\omega}_{\text{o}}\cdot\normvec{x})}{\partial(\anormvec{h}\cdot\normvec{z})} \\
-\displaystyle \frac{\partial(\normvec{\omega}_{\text{o}}\cdot\normvec{y})}{\partial(\anormvec{h}\cdot\normvec{x})} &
-\displaystyle \frac{\partial(\normvec{\omega}_{\text{o}}\cdot\normvec{y})}{\partial(\anormvec{h}\cdot\normvec{y})} &
-\displaystyle \frac{\partial(\normvec{\omega}_{\text{o}}\cdot\normvec{y})}{\partial(\anormvec{h}\cdot\normvec{z})} \\
-\displaystyle \frac{\partial(\normvec{\omega}_{\text{o}}\cdot\normvec{z})}{\partial(\anormvec{h}\cdot\normvec{x})} &
-\displaystyle \frac{\partial(\normvec{\omega}_{\text{o}}\cdot\normvec{z})}{\partial(\anormvec{h}\cdot\normvec{y})} &
-\displaystyle \frac{\partial(\normvec{\omega}_{\text{o}}\cdot\normvec{z})}{\partial(\anormvec{h}\cdot\normvec{z})}
-\end{array} \right) \,=\, (\nabla_{\anormvec{h}}\otimes\normvec{\omega}_{\text{o}})^{\T},
+\displaystyle \frac{\partial\omega_{\text{o},0}}{\partial h_0} &
+\displaystyle \frac{\partial\omega_{\text{o},0}}{\partial h_1} &
+\displaystyle \frac{\partial\omega_{\text{o},0}}{\partial h_2} \\
+\displaystyle \frac{\partial\omega_{\text{o},1}}{\partial h_0} &
+\displaystyle \frac{\partial\omega_{\text{o},1}}{\partial h_1} &
+\displaystyle \frac{\partial\omega_{\text{o},1}}{\partial h_2} \\
+\displaystyle \frac{\partial\omega_{\text{o},2}}{\partial h_0} &
+\displaystyle \frac{\partial\omega_{\text{o},2}}{\partial h_1} &
+\displaystyle \frac{\partial\omega_{\text{o},2}}{\partial h_2} 
+\end{array} \right)
 \end{equation}
 
-where in turn $\nabla_{\anormvec{h}}$ is the gradient operator containing all the partial derivatives with respect to the elements in $\anormvec{h}$, that is
+where in turn $\omega_{\text{o},i}$ is the $i$:th element of $\normvec{\omega}_{\text{o}}$ and $h_{j}$ is the $j$:th element of $\anormvec{h}$. The matrix element $(J_{\normvec{\omega}_{\text{o}}}(\anormvec{h}))_{ij}$, which is the element at row $i$ and in column $j$, can be written as
 
-\begin{equation}
-\nabla_{\anormvec{h}} \,=\, (\partial/\partial(\anormvec{h}\cdot\normvec{x}),\, \partial/\partial(\anormvec{h}\cdot\normvec{y}),\, \partial/\partial(\anormvec{h}\cdot\normvec{z}))^{\T}.
+\begin{equation} \label{eq:jacobian_matrix_component}
+(J_{\normvec{\omega}_{\text{o}}}(\anormvec{h}))_{ij} \,=\, \frac{\partial\omega_{\text{o},i}}{\partial h_{j}}.
 \end{equation}
 
 Using the fact that $\normvec{h} = \anormvec{h}\,\left|\anormvec{h}\right|^{-1}$, we can rewrite \eqref{eq:householder_equation} as
@@ -755,24 +755,45 @@ Using the fact that $\normvec{h} = \anormvec{h}\,\left|\anormvec{h}\right|^{-1}$
 \normvec{\omega}_{\text{o}} \,=\, \frac{2(\anormvec{h}\cdot\normvec{\omega}_{\text{i}})\anormvec{h}}{\anormvec{h}^2} - \normvec{\omega}_{\text{i}}
 \end{equation}
 
-and \eqref{eq:jacobian} can then be rewritten as
+and \eqref{eq:jacobian_matrix_component} can then be rewritten as
 
 \begin{equation}
 \renewcommand*{\arraystretch}{2}
-\begin{array}{c}
-\displaystyle (J_{\normvec{\omega}_{\text{o}}}(\anormvec{h}))^{\T} \,=\,  \nabla_{\anormvec{h}}\otimes\left(\frac{2(\anormvec{h}\cdot\normvec{\omega}_{\text{i}})\anormvec{h}}{\anormvec{h}^2} - \normvec{\omega}_{\text{i}}\right) \\
-\displaystyle =\, \frac{2\anormvec{h}\cdot\normvec{\omega}_{\text{i}}}{\anormvec{h}^2}\,I + \frac{2\anormvec{h}\otimes\normvec{\omega}_{\text{i}}}{\anormvec{h}^2} + \dots
+\begin{array}{l}
+\displaystyle (J_{\normvec{\omega}_{\text{o}}}(\anormvec{h}))_{ij} \,=\, \frac{\partial}{\partial h_{j}}\left(\frac{2\,(\anormvec{h}\cdot\normvec{\omega}_{\text{i}})\anormvec{h}}{\anormvec{h}^2} - \normvec{\omega}_{\text{i}}\right)_i  \,=\, \frac{\partial}{\partial h_{j}}\left(\frac{2\,(\anormvec{h}\cdot\normvec{\omega}_{\text{i}})h_i}{\anormvec{h}^2}\right) \\
+\displaystyle =\, 2\,\frac{\partial(\anormvec{h}\cdot\normvec{\omega}_{\text{i}})}{\partial h_{j}}\,\frac{h_i}{\anormvec{h}^2} +
+\frac{2\,(\anormvec{h}\cdot\normvec{\omega}_{\text{i}})}{\anormvec{h}^2}\,\frac{\partial h_i}{\partial h_{j}} +
+2\,(\anormvec{h}\cdot\normvec{\omega}_{\text{i}})h_i\frac{\partial(\anormvec{h}^2)^{-1}}{\partial h_{j}} \\
+\displaystyle =\, \frac{2\,\omega_{\text{i},j}h_i}{\anormvec{h}^2} +
+\frac{2\,(\anormvec{h}\cdot\normvec{\omega}_{\text{i}})}{\anormvec{h}^2}\,I_{ij} -
+2\,(\anormvec{h}\cdot\normvec{\omega}_{\text{i}})h_i(\anormvec{h}^2)^{-2} \frac{\partial\anormvec{h}^2}{\partial h_{j}} \\
+\displaystyle =\, \left(
+\frac{2\,\anormvec{h}\otimes\normvec{\omega}_{\text{i}}}{\anormvec{h}^2} +
+\frac{2\,(\anormvec{h}\cdot\normvec{\omega}_{\text{i}})}{\anormvec{h}^2}\,I\right)_{ij} -
+2\,(\anormvec{h}\cdot\normvec{\omega}_{\text{i}})h_i h^{-4}\,2\,\anormvec{h}\cdot\frac{\partial\anormvec{h}}{\partial h_{j}} \\
+\displaystyle =\, \left(
+\frac{2\,\anormvec{h}\otimes\normvec{\omega}_{\text{i}}}{\anormvec{h}^2} +
+\frac{2\,(\anormvec{h}\cdot\normvec{\omega}_{\text{i}})}{\anormvec{h}^2}\,I\right)_{ij} -
+\frac{4\,(\anormvec{h}\cdot\normvec{\omega}_{\text{i}})h_i}{h^4}\,\anormvec{h}\cdot\normvec{e}_j \\
+\displaystyle =\, \left(
+\frac{2\,\anormvec{h}\otimes\normvec{\omega}_{\text{i}}}{\anormvec{h}^2} +
+\frac{2\,(\anormvec{h}\cdot\normvec{\omega}_{\text{i}})}{\anormvec{h}^2}\,I\right)_{ij} -
+\frac{4\,(\anormvec{h}\cdot\normvec{\omega}_{\text{i}})}{h^4}\,h_i h_j \\
+\displaystyle =\, \left(
+\frac{2\,\anormvec{h}\otimes\normvec{\omega}_{\text{i}}}{\anormvec{h}^2} +
+\frac{2\,(\anormvec{h}\cdot\normvec{\omega}_{\text{i}})}{\anormvec{h}^2}\,I -
+\frac{4\,(\anormvec{h}\cdot\normvec{\omega}_{\text{i}})}{h^4}\,\anormvec{h}\otimes\anormvec{h}\right)_{ij},
 \end{array}
 \end{equation}
 
-\HRule
+we see that
 
-Using the product rule for the gradient operator,
-
-\begin{math}
-\nabla(\vec{u}\cdot\vec{v}) \,=\, (\vec{u} \cdot \nabla) \vec{v} + (\vec{v} \cdot \nabla) \vec{u} + \vec{u} \times (\nabla \times \vec{v}) + \vec{v} \times (\nabla \times \vec{u})
-\end{math}
-
+\begin{equation}
+\displaystyle J_{\normvec{\omega}_{\text{o}}}(\anormvec{h}) \,=\,
+\frac{2\,\anormvec{h}\otimes\normvec{\omega}_{\text{i}}}{\anormvec{h}^2} +
+\frac{2\,(\anormvec{h}\cdot\normvec{\omega}_{\text{i}})}{\anormvec{h}^2}\,I -
+\frac{4\,(\anormvec{h}\cdot\normvec{\omega}_{\text{i}})}{h^4}\,\anormvec{h}\otimes\anormvec{h}.
+\end{equation}
 
 
 
