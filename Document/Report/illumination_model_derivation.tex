@@ -678,28 +678,28 @@ The anti-normal of the \microfacet is given by \eqref{eq:eta_anti_normal}, where
 If a large surface, whose area when projected down to the horizontal plane is $A_{\text{h}}$, is subdivided into many infinitesimal microfacets, the total project area of all microfacets whose gradient of the free surface elevation lies within $\opd\nabla\eta^*$ will be
 
 \begin{equation}
-\opd A'_{\text{h}} \,=\, A_{\text{h}}\,f(\nabla\eta^*(\vec{r}))\opd \nabla\eta^*,
+\opd A'_{\text{h}} \,=\, A_{\text{h}}\,f(\nabla\eta^*(\vec{r}))\opd\nabla\eta^*,
 \end{equation}
 
-where an apostrophe denotes that the gradients of the free surface elevation for the included microfacets is restricted. When projected onto the plane orthogonal to $\normvec{\omega}_{\text{i}}$, the total area of all microfacets will be
+where an apostrophe denotes a restriction on the gradients of the free surface elevation on the included microfacets, and $f(\nabla\eta^*(\vec{r}))\opd \nabla\eta^*$ is the chance for a single microfacet that its free surface elevation gradient within $\opd\nabla\eta^*$. When projected onto the plane orthogonal to $\normvec{\omega}_{\text{i}}$, the total area of all microfacets will be
 
 \begin{equation}
 A_{\text{i}} \,=\, A_{\text{h}}\,\normvec{\omega}_{\text{i}}\cdot\normvec{n}\,(\normvec{n}\cdot\normvec{z})^{-1} \,=\, A_{\text{h}}\,\normvec{\omega}_{\text{i}}\cdot\anormvec{n}
 \end{equation}
 
-and the total area of all microfacets whose gradient of the free surface elevation lies within $\opd\nabla\eta^*(\vec{r})$ will be
+and the total area of all microfacets whose gradient of the free surface elevation lies within $\opd\nabla\eta^*$ will be
 
 \begin{equation}
 \opd A'_{\text{i}} \,=\, \opd A'_{\text{h}}\,\normvec{\omega}_{\text{i}}\cdot\normvec{h}\,(\normvec{h}\cdot\normvec{z})^{-1} \,=\, \opd A'_{\text{h}}\,\normvec{\omega}_{\text{i}}\cdot\anormvec{h},
 \end{equation}
 
-since all microfacets have the same area when projected to the horizontal plane. Here, $\normvec{h}$ is the normal the free surface elevation with the gradient around which $\opd\nabla\eta^*(\vec{r})$ is centered. Therefore, the chance that a ray that comes from the direction $\normvec{\omega}_{\text{i}}$ and hits the surface will hit a \microfacet whose gradient of the free surface elevation lies within $\opd\nabla\eta^*$ will be
+since all microfacets have the same area when projected to the horizontal plane. Here, $\normvec{h}$ is the normal the free surface elevation with the gradient around which $\opd\nabla\eta^*$ is centered. Therefore, the chance that a ray that comes from the direction $\normvec{\omega}_{\text{i}}$ and hits the surface will hit a \microfacet whose gradient of the free surface elevation lies within $\opd\nabla\eta^*$ will be
 
 \begin{equation} \label{eq:gradient_restricted_reflection_probability}
 \opd P'(\normvec{\omega}_{\text{i}}) \,=\, \frac{\opd A'_{\text{i}}}{A_{\text{i}}} \,=\, \frac{\opd A'_{\text{h}}\,\normvec{\omega}_{\text{i}}\cdot\anormvec{h}}{A_{\text{h}}\,\normvec{\omega}_{\text{i}}\cdot\anormvec{n}} \,=\, f(\nabla\eta^*(\vec{r}))\,\frac{\normvec{\omega}_{\text{i}}\cdot\anormvec{h}}{\normvec{\omega}_{\text{i}}\cdot\anormvec{n}}\opd \nabla\eta^*.
 \end{equation}
 
-So, for radiation coming from the direction $\normvec{\omega}_{\text{i}}$, with the \idxs{incident}{radient flux} $\opd \Phi_{\text{i}}(\normvec{\omega}_{\text{i}})$, the \idxs{reflected}{radient flux} that was reflected on a \microfacet with a free surface elevation whose gradient lies withing $\opd\nabla\eta^*$ --- $\opd^2 \Phi_{\text{o}}(\normvec{\omega}_{\text{i}})$ --- will be
+For an increase in the radiation coming from the direction $\normvec{\omega}_{\text{i}}$, with the \idxs{incident}{radient flux} $\opd \Phi_{\text{i}}(\normvec{\omega}_{\text{i}})$, the increase in \idxs{reflected}{radient flux}, $\opd^2 \Phi_{\text{o}}(\normvec{\omega}_{\text{i}})$, that was reflected on a \microfacet with a free surface elevation whose gradient lies withing $\opd\nabla\eta^*$ will be
 
 \begin{equation} \label{eq:gradient_restricted_reflected_flux}
 \opd^2 \Phi_{\text{o}}(\normvec{\omega}_{\text{o}}) \,=\, \opd \Phi_{\text{i}}(\normvec{\omega}_{\text{i}})\,\opd P'(\normvec{\omega}_{\text{i}})\,R_{\normvec{n},x}(\normvec{\omega}_{\text{i}}),
@@ -707,7 +707,7 @@ So, for radiation coming from the direction $\normvec{\omega}_{\text{i}}$, with 
 
 where $R_{\normvec{n},x}(\normvec{\omega}_{\text{i}})$ is the \idxs{reflection}{coefficient}, predicted by the \idxs{Fresnel}{equations}, for a ray coming from the direction $\normvec{\omega}_{\text{i}}$, for a surface with the surface normal $\normvec{n}$ and for the light polarization $x$.
 
-In computer graphics, the reflection coefficient is often \approximated by using \idxs{Schlick's}{approximation}, which reduces the complexity of the expression as well as the time required to evaluate the expression. On the other hand, while the approximation works well as long as there is no filtering depending on the polarization direction involved, using the approximation when such a filtering \emph{is} involved will result in a poor end result since it doesn't take the polarization direction into account. In the case when filtering depending on the polarization direction is involved, the \idxs{Fresnel}{equations} can more accurately be \approximated by substituting low order polynomials for the square roots contained withing the expressions.
+In computer graphics, the reflection coefficient is often \approximated by using \idxs{Schlick's}{approximation}, which reduces the complexity of the expression as well as the time required to evaluate the expression. On the other hand, while the approximation works well as long as there is no filtering depending on the polarization direction involved, using the approximation when such a filtering \emph{is} involved will result in a poor end result since it doesn't take the polarization direction into account. In the case when filtering depending on the polarization direction is involved, the \idxs{Fresnel}{equations} can more accurately be \approximated by substituting low order polynomials for the square roots contained within the expressions.
 
 Using \eqref{eq:gradient_restricted_reflection_probability} in \eqref{eq:gradient_restricted_reflected_flux} results in
 
@@ -715,17 +715,81 @@ Using \eqref{eq:gradient_restricted_reflection_probability} in \eqref{eq:gradien
 \frac{\opd}{\opd \nabla\eta^*}\,\left(\frac{\opd \Phi_{\text{o}}(\normvec{\omega}_{\text{o}})}{\opd \Phi_{\text{i}}(\normvec{\omega}_{\text{i}})}\right) \,=\, f(\nabla\eta^*(\vec{r}))\,\frac{\normvec{\omega}_{\text{i}}\cdot\anormvec{h}}{\normvec{\omega}_{\text{i}}\cdot\anormvec{n}}\,R_{\normvec{n},x}(\normvec{\omega}_{\text{i}}).
 \end{equation}
 
-By realizing that the normal of the a \microfacet, $\normvec{n}^*$, needs to equal $\normvec{h}$ in order for a ray incoming from the direction $\normvec{\omega}_{\text{i}}$ to be reflected in the direction $\normvec{\omega}_{\text{o}}$, we can use \eqref{eq:eta_anti_normal} to conclude that 
+By realizing that the normal of the a \microfacet, $\normvec{n}^*$, needs to equal $\normvec{h}$ in order for a ray coming from the direction $\normvec{\omega}_{\text{i}}$ to be reflected in the direction $\normvec{\omega}_{\text{o}}$, we can use \eqref{eq:eta_anti_normal} to conclude that in this case, we can make the substitution
 
 \begin{equation}
 \opd \anormvec{h} \,=\, \opd\nabla\eta^*
 \end{equation}
 
-(note that most --- if not all --- of the infinitesimal quantities used in this appendix are two-dimensional in their nature; in this case the minus sign in \eqref{eq:eta_anti_normal} gets squared and vanishes). By combining this with \eqref{eq:gradient_restricted_reflected_flux_pre_incident_flux_per_unit_gradient_squared}, we can rewrite  \eqref{eq:brdf_from_ratio_between_fluxes}
+(note that most infinitesimal quantities used in this appendix are two-dimensional in their nature; in this case the minus sign in \eqref{eq:eta_anti_normal} is squared and vanishes). By applying this to \eqref{eq:gradient_restricted_reflected_flux_pre_incident_flux_per_unit_gradient_squared}, we can rewrite  \eqref{eq:brdf_from_ratio_between_fluxes}
 
 \begin{equation}
-\rho'_{\text{r}}(\normvec{\omega}_{\text{i}},\, \normvec{\omega}_{\text{o}}) \,=\, (\cos\theta_{\text{o}})^{-1}\, \frac{\opd \anormvec{h}}{\opd \normvec{\omega}_{\text{o}}}\,f(\nabla\eta^*(\vec{r}))\,\frac{\normvec{\omega}_{\text{i}}\cdot\anormvec{h}}{\normvec{\omega}_{\text{i}}\cdot\anormvec{n}}\,R_{\normvec{n},x}(\normvec{\omega}_{\text{i}}).
+\rho'_{\text{r}}(\normvec{\omega}_{\text{i}},\, \normvec{\omega}_{\text{o}}) \,=\, (\cos\theta_{\text{o}})^{-1}\, \frac{\opd\anormvec{h}}{\opd\normvec{\omega}_{\text{o}}}\,f(\nabla\eta^*(\vec{r}))\,\frac{\normvec{\omega}_{\text{i}}\cdot\anormvec{h}}{\normvec{\omega}_{\text{i}}\cdot\anormvec{n}}\,R_{\normvec{n},x}(\normvec{\omega}_{\text{i}}).
 \end{equation}
+
+Since we have the restriction $\anormvec{h}\cdot\normvec{z}\equiv 1$, $\opd\anormvec{h}$ is here the size of an infinitesimal "quasi area" element. Let's \assume this element is an axis aligned rectangle with the sides $\opd x_{\anormvec{h}}^{\,}\normvec{x}$ and $\opd y_{\anormvec{h}}^{\,}\normvec{y}$ respectively. We can then describe the infinitesimal solid angle element $\opd\normvec{\omega}_{\text{o}}$ as a parallelogram with the sides $\opd x_{\anormvec{h}}^{\,}J_{\normvec{\omega}_{\text{o}}}(\anormvec{h})^{\,}\normvec{x}$ and $\opd y_{\anormvec{h}}^{\,}J_{\normvec{\omega}_{\text{o}}}(\anormvec{h})^{\,}\normvec{y}$ respectively, where $J_{\normvec{\omega}_{\text{o}}}(\anormvec{h})$ is the \idxs{Jacobian}{matrix} for $\opd\normvec{\omega}_{\text{o}}$ as a function of $\anormvec{h}$, which contains all the partial derivatives of $\opd\normvec{\omega}_{\text{o}}$, that is
+
+\begin{equation} \label{eq:jacobian}
+J_{\normvec{\omega}_{\text{o}}}(\anormvec{h}) \,=\, \renewcommand*{\arraystretch}{2} \left( \begin{array}{ccc}
+\displaystyle \frac{\partial(\normvec{\omega}_{\text{o}}\cdot\normvec{x})}{\partial(\anormvec{h}\cdot\normvec{x})} &
+\displaystyle \frac{\partial(\normvec{\omega}_{\text{o}}\cdot\normvec{x})}{\partial(\anormvec{h}\cdot\normvec{y})} &
+\displaystyle \frac{\partial(\normvec{\omega}_{\text{o}}\cdot\normvec{x})}{\partial(\anormvec{h}\cdot\normvec{z})} \\
+\displaystyle \frac{\partial(\normvec{\omega}_{\text{o}}\cdot\normvec{y})}{\partial(\anormvec{h}\cdot\normvec{x})} &
+\displaystyle \frac{\partial(\normvec{\omega}_{\text{o}}\cdot\normvec{y})}{\partial(\anormvec{h}\cdot\normvec{y})} &
+\displaystyle \frac{\partial(\normvec{\omega}_{\text{o}}\cdot\normvec{y})}{\partial(\anormvec{h}\cdot\normvec{z})} \\
+\displaystyle \frac{\partial(\normvec{\omega}_{\text{o}}\cdot\normvec{z})}{\partial(\anormvec{h}\cdot\normvec{x})} &
+\displaystyle \frac{\partial(\normvec{\omega}_{\text{o}}\cdot\normvec{z})}{\partial(\anormvec{h}\cdot\normvec{y})} &
+\displaystyle \frac{\partial(\normvec{\omega}_{\text{o}}\cdot\normvec{z})}{\partial(\anormvec{h}\cdot\normvec{z})}
+\end{array} \right) \,=\, (\nabla_{\anormvec{h}}\otimes\normvec{\omega}_{\text{o}})^{\T},
+\end{equation}
+
+where in turn $\nabla_{\anormvec{h}}$ is the gradient operator containing all the partial derivatives with respect to the elements in $\anormvec{h}$, that is
+
+\begin{equation}
+\nabla_{\anormvec{h}} \,=\, (\partial/\partial(\anormvec{h}\cdot\normvec{x}),\, \partial/\partial(\anormvec{h}\cdot\normvec{y}),\, \partial/\partial(\anormvec{h}\cdot\normvec{z}))^{\T}.
+\end{equation}
+
+Using the fact that $\normvec{h} = \anormvec{h}\,\left|\anormvec{h}\right|^{-1}$, we can rewrite \eqref{eq:householder_equation} as
+
+\begin{equation} 
+\normvec{\omega}_{\text{o}} \,=\, \frac{2(\anormvec{h}\cdot\normvec{\omega}_{\text{i}})\anormvec{h}}{\anormvec{h}^2} - \normvec{\omega}_{\text{i}}
+\end{equation}
+
+and \eqref{eq:jacobian} can then be rewritten as
+
+\begin{equation}
+\renewcommand*{\arraystretch}{2}
+\begin{array}{c}
+\displaystyle (J_{\normvec{\omega}_{\text{o}}}(\anormvec{h}))^{\T} \,=\,  \nabla_{\anormvec{h}}\otimes\left(\frac{2(\anormvec{h}\cdot\normvec{\omega}_{\text{i}})\anormvec{h}}{\anormvec{h}^2} - \normvec{\omega}_{\text{i}}\right) \\
+\displaystyle =\, \frac{2\anormvec{h}\cdot\normvec{\omega}_{\text{i}}}{\anormvec{h}^2}\,I + \frac{2\anormvec{h}\otimes\normvec{\omega}_{\text{i}}}{\anormvec{h}^2} + \dots
+\end{array}
+\end{equation}
+
+\HRule
+
+Using the product rule for the gradient operator,
+
+\begin{math}
+\nabla(\vec{u}\cdot\vec{v}) \,=\, (\vec{u} \cdot \nabla) \vec{v} + (\vec{v} \cdot \nabla) \vec{u} + \vec{u} \times (\nabla \times \vec{v}) + \vec{v} \times (\nabla \times \vec{u})
+\end{math}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\HRule
 
 Since $\anormvec{h}$ has a constant z-component, and since the surface whose area is $\opd \normvec{\omega}_{\text{i}}$ has the normal $\normvec{\omega}_{\text{i}}$, we can conclude that
 
