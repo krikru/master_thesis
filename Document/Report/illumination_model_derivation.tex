@@ -13,7 +13,7 @@
 
 %To be written \comment
 {
-If we simplify a water surface by cutting off a part of the \idxs{wave}{spectrum}, such as the part containing all frequencies over the \idxs{Nyquist}{frequency}, we will loose surface details which we --- for \visualization purposes --- need to compensate for by making \reflections in the water surface \idxse{diffuse}{reflection}{diffuse}.
+If we simplify a water surface by cutting off a part of the \idxs{wave}{spectrum}, such as the part containing all frequencies over the \idxs{Nyquist}{frequency}, we will loose details on the surface which we --- for \visualization purposes --- need to compensate for by making \reflections in the water surface \idxse{diffuse}{reflection}{diffuse}.
 
 For that reason, an \idxs{illumination}{model} --- which was developed outside of the scope of \thismasterthesiswork\ \,---\ \,is derived in this appendix, and it models this diffuseness.
 
@@ -727,7 +727,19 @@ By realizing that the normal of the a \microfacet, $\normvec{n}^*$, needs to equ
 \rho'_{\text{r}}(\normvec{\omega}_{\text{i}},\, \normvec{\omega}_{\text{o}}) \,=\, (\cos\theta_{\text{o}})^{-1}\, \frac{\opd\anormvec{h}}{\opd\normvec{\omega}_{\text{o}}}\,f(\nabla\eta^*(\vec{r}))\,\frac{\normvec{\omega}_{\text{i}}\cdot\anormvec{h}}{\normvec{\omega}_{\text{i}}\cdot\anormvec{n}}\,R_{\normvec{n},x}(\normvec{\omega}_{\text{i}}).
 \end{equation}
 
-Since we have the restriction $\anormvec{h}\cdot\normvec{z}\equiv 1$, $\opd\anormvec{h}$ is here the size of an infinitesimal "quasi area" element. Let's \assume this element is an axis aligned rectangle with the sides $\opd x_{\anormvec{h}}^{\,}\normvec{x}$ and $\opd y_{\anormvec{h}}^{\,}\normvec{y}$ respectively. We can then describe the infinitesimal solid angle element $\opd\normvec{\omega}_{\text{o}}$ as a parallelogram with the sides $\opd x_{\anormvec{h}}^{\,}J_{\normvec{\omega}_{\text{o}}}(\anormvec{h})^{\,}\normvec{x}$ and $\opd y_{\anormvec{h}}^{\,}J_{\normvec{\omega}_{\text{o}}}(\anormvec{h})^{\,}\normvec{y}$ respectively, where $J_{\normvec{\omega}_{\text{o}}}(\anormvec{h})$ is the \idxs{Jacobian}{matrix} for $\opd\normvec{\omega}_{\text{o}}$ as a function of $\anormvec{h}$, which contains all the partial derivatives of $\opd\normvec{\omega}_{\text{o}}$, that is
+Since we have the restriction $\anormvec{h}\cdot\normvec{z}\equiv 1$, $\opd\anormvec{h}$ is here the size of an infinitesimal "quasi area" element. Let's \assume this element is an axis aligned rectangle with the sides $\opd x_{\anormvec{h}}^{\,}\normvec{x}$ and $\opd y_{\anormvec{h}}^{\,}\normvec{y}$ respectively. We can then describe the infinitesimal solid angle element $\opd\normvec{\omega}_{\text{o}}$ as a parallelogram with the sides
+
+\begin{equation} \label{eq:domega0}
+\opd\normvec{\omega}_{\text{o},0} \,=\, \opd x_{\anormvec{h}}^{\,}J_{\normvec{\omega}_{\text{o}}}(\anormvec{h})^{\,}\normvec{x}
+\end{equation}
+
+and
+
+\begin{equation} \label{eq:domega1}
+\opd\normvec{\omega}_{\text{o},1} = \opd y_{\anormvec{h}}^{\,}J_{\normvec{\omega}_{\text{o}}}(\anormvec{h})^{\,}\normvec{y}
+\end{equation}
+
+respectively, where $J_{\normvec{\omega}_{\text{o}}}(\anormvec{h})$ is the \idxs{Jacobian}{matrix} for $\opd\normvec{\omega}_{\text{o}}$ as a function of $\anormvec{h}$, which contains all the partial derivatives of $\opd\normvec{\omega}_{\text{o}}$, that is
 
 \begin{equation} \label{eq:jacobian_matrix}
 J_{\normvec{\omega}_{\text{o}}}(\anormvec{h}) \,=\, \renewcommand*{\arraystretch}{2} \left( \begin{array}{ccc}
@@ -762,60 +774,121 @@ and \eqref{eq:jacobian_matrix_component} can then be rewritten as
 \begin{array}{l}
 \displaystyle (J_{\normvec{\omega}_{\text{o}}}(\anormvec{h}))_{ij} \,=\, \frac{\partial}{\partial h_{j}}\left(\frac{2\,(\anormvec{h}\cdot\normvec{\omega}_{\text{i}})\anormvec{h}}{\anormvec{h}^2} - \normvec{\omega}_{\text{i}}\right)_i  \,=\, \frac{\partial}{\partial h_{j}}\left(\frac{2\,(\anormvec{h}\cdot\normvec{\omega}_{\text{i}})h_i}{\anormvec{h}^2}\right) \\
 \displaystyle =\, 2\,\frac{\partial(\anormvec{h}\cdot\normvec{\omega}_{\text{i}})}{\partial h_{j}}\,\frac{h_i}{\anormvec{h}^2} +
-\frac{2\,(\anormvec{h}\cdot\normvec{\omega}_{\text{i}})}{\anormvec{h}^2}\,\frac{\partial h_i}{\partial h_{j}} +
-2\,(\anormvec{h}\cdot\normvec{\omega}_{\text{i}})h_i\frac{\partial(\anormvec{h}^2)^{-1}}{\partial h_{j}} \\
+\frac{2\,\anormvec{h}\cdot\normvec{\omega}_{\text{i}}}{\anormvec{h}^2}\,\frac{\partial h_i}{\partial h_{j}} +
+2\,\anormvec{h}\cdot\normvec{\omega}_{\text{i}}h_i\frac{\partial(\anormvec{h}^2)^{-1}}{\partial h_{j}} \\
 \displaystyle =\, \frac{2\,\omega_{\text{i},j}h_i}{\anormvec{h}^2} +
-\frac{2\,(\anormvec{h}\cdot\normvec{\omega}_{\text{i}})}{\anormvec{h}^2}\,I_{ij} -
-2\,(\anormvec{h}\cdot\normvec{\omega}_{\text{i}})h_i(\anormvec{h}^2)^{-2} \frac{\partial\anormvec{h}^2}{\partial h_{j}} \\
+\frac{2\,\anormvec{h}\cdot\normvec{\omega}_{\text{i}}}{\anormvec{h}^2}\,I_{ij} -
+2\,\anormvec{h}\cdot\normvec{\omega}_{\text{i}}h_i(\anormvec{h}^2)^{-2} \frac{\partial\anormvec{h}^2}{\partial h_{j}} \\
 \displaystyle =\, \left(
 \frac{2\,\anormvec{h}\otimes\normvec{\omega}_{\text{i}}}{\anormvec{h}^2} +
-\frac{2\,(\anormvec{h}\cdot\normvec{\omega}_{\text{i}})}{\anormvec{h}^2}\,I\right)_{ij} -
-2\,(\anormvec{h}\cdot\normvec{\omega}_{\text{i}})h_i h^{-4}\,2\,\anormvec{h}\cdot\frac{\partial\anormvec{h}}{\partial h_{j}} \\
+\frac{2\,\anormvec{h}\cdot\normvec{\omega}_{\text{i}}}{\anormvec{h}^2}\,I\right)_{ij} -
+2\,\anormvec{h}\cdot\normvec{\omega}_{\text{i}}h_i h^{-4}\,2\,\anormvec{h}\cdot\frac{\partial\anormvec{h}}{\partial h_{j}} \\
 \displaystyle =\, \left(
 \frac{2\,\anormvec{h}\otimes\normvec{\omega}_{\text{i}}}{\anormvec{h}^2} +
-\frac{2\,(\anormvec{h}\cdot\normvec{\omega}_{\text{i}})}{\anormvec{h}^2}\,I\right)_{ij} -
-\frac{4\,(\anormvec{h}\cdot\normvec{\omega}_{\text{i}})h_i}{h^4}\,\anormvec{h}\cdot\normvec{e}_j \\
+\frac{2\,\anormvec{h}\cdot\normvec{\omega}_{\text{i}}}{\anormvec{h}^2}\,I\right)_{ij} -
+\frac{4\,\anormvec{h}\cdot\normvec{\omega}_{\text{i}}h_i}{\anormvec{h}^4}\,\anormvec{h}\cdot\normvec{e}_j \\
 \displaystyle =\, \left(
 \frac{2\,\anormvec{h}\otimes\normvec{\omega}_{\text{i}}}{\anormvec{h}^2} +
-\frac{2\,(\anormvec{h}\cdot\normvec{\omega}_{\text{i}})}{\anormvec{h}^2}\,I\right)_{ij} -
-\frac{4\,(\anormvec{h}\cdot\normvec{\omega}_{\text{i}})}{h^4}\,h_i h_j \\
+\frac{2\,\anormvec{h}\cdot\normvec{\omega}_{\text{i}}}{\anormvec{h}^2}\,I\right)_{ij} -
+\frac{4\,\anormvec{h}\cdot\normvec{\omega}_{\text{i}}}{\anormvec{h}^4}\,h_i h_j \\
 \displaystyle =\, \left(
 \frac{2\,\anormvec{h}\otimes\normvec{\omega}_{\text{i}}}{\anormvec{h}^2} +
-\frac{2\,(\anormvec{h}\cdot\normvec{\omega}_{\text{i}})}{\anormvec{h}^2}\,I -
-\frac{4\,(\anormvec{h}\cdot\normvec{\omega}_{\text{i}})}{h^4}\,\anormvec{h}\otimes\anormvec{h}\right)_{ij},
+\frac{2\,\anormvec{h}\cdot\normvec{\omega}_{\text{i}}}{\anormvec{h}^2}\,I -
+\frac{4\,\anormvec{h}\cdot\normvec{\omega}_{\text{i}}}{\anormvec{h}^4}\,\anormvec{h}\otimes\anormvec{h}\right)_{ij},
 \end{array}
 \end{equation}
 
-we see that
+so we see that
 
 \begin{equation}
-\displaystyle J_{\normvec{\omega}_{\text{o}}}(\anormvec{h}) \,=\,
+J_{\normvec{\omega}_{\text{o}}}(\anormvec{h}) \,=\,
 \frac{2\,\anormvec{h}\otimes\normvec{\omega}_{\text{i}}}{\anormvec{h}^2} +
-\frac{2\,(\anormvec{h}\cdot\normvec{\omega}_{\text{i}})}{\anormvec{h}^2}\,I -
-\frac{4\,(\anormvec{h}\cdot\normvec{\omega}_{\text{i}})}{h^4}\,\anormvec{h}\otimes\anormvec{h}.
+\frac{2\,\anormvec{h}\cdot\normvec{\omega}_{\text{i}}}{\anormvec{h}^2}\,I -
+\frac{4\,\anormvec{h}\cdot\normvec{\omega}_{\text{i}}}{\anormvec{h}^4}\,\anormvec{h}\otimes\anormvec{h}.
 \end{equation}
 
+Since $\opd\normvec{\omega}_{\text{o}}$ is a surface element with the normal $\normvec{\omega}$, we can use  \eqref{eq:domega0} and \eqref{eq:domega1} to conclude that 
 
+\begin{equation} \label{eq:domega}
+\renewcommand*{\arraystretch}{2}
+\begin{array}{l}
+\displaystyle \opd\normvec{\omega}_{\text{o}} \,=\, \left(\opd\normvec{\omega}_{\text{o},0}\times\opd\normvec{\omega}_{\text{o},1}\right)\cdot\normvec{\omega}_{\text{o}} \\
+=\, \left(\left(\opd x_{\anormvec{h}}^{\,}J_{\normvec{\omega}_{\text{o}}}(\anormvec{h})\normvec{x}\right)\times\left(\opd y_{\anormvec{h}}^{\,}J_{\normvec{\omega}_{\text{o}}}(\anormvec{h})\normvec{y}\right)\right)\cdot\normvec{\omega}_{\text{o}} \\
+=\, \left(\left(J_{\normvec{\omega}_{\text{o}}}(\anormvec{h})\normvec{x}\right)\times\left(J_{\normvec{\omega}_{\text{o}}}(\anormvec{h})\normvec{y}\right)\right)\cdot\normvec{\omega}_{\text{o}}\opd\anormvec{h}.
+\end{array}
+\end{equation}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-\HRule
-
-Since $\anormvec{h}$ has a constant z-component, and since the surface whose area is $\opd \normvec{\omega}_{\text{i}}$ has the normal $\normvec{\omega}_{\text{i}}$, we can conclude that
+By dividing by $\opd\anormvec{h}$, this becomes
 
 \begin{equation}
-\frac{\opd \normvec{\omega}_{\text{o}}}{\opd \anormvec{h}} \,=\, \left(\left(J_{\normvec{\omega}_{\text{o}}}(\anormvec{h})\normvec{x}\right)\times\left(J_{\normvec{\omega}_{\text{o}}}(\anormvec{h})\normvec{y}\right)\right)\cdot\normvec{\omega}_{\text{o}},
+\renewcommand*{\arraystretch}{2}
+\begin{array}{l}
+\displaystyle \frac{\opd\normvec{\omega}_{\text{o}}}{\opd\anormvec{h}} \,=\, \left(\left(J_{\normvec{\omega}_{\text{o}}}(\anormvec{h})\normvec{x}\right)\times\left(J_{\normvec{\omega}_{\text{o}}}(\anormvec{h})\normvec{y}\right)\right)\cdot\normvec{\omega}_{\text{o}} \\
+\displaystyle =\, \left(\left(\left(\frac{2\,\anormvec{h}\otimes\normvec{\omega}_{\text{i}}}{\anormvec{h}^2} +
+\frac{2\,\anormvec{h}\cdot\normvec{\omega}_{\text{i}}}{\anormvec{h}^2}\,I -
+\frac{4\,\anormvec{h}\cdot\normvec{\omega}_{\text{i}}}{\anormvec{h}^4}\,\anormvec{h}\otimes\anormvec{h}\right)\normvec{x}\right)\times\right. \\
+\displaystyle \left.\left(\left(\frac{2\,\anormvec{h}\otimes\normvec{\omega}_{\text{i}}}{\anormvec{h}^2} +
+\frac{2\,\anormvec{h}\cdot\normvec{\omega}_{\text{i}}}{\anormvec{h}^2}\,I -
+\frac{4\,\anormvec{h}\cdot\normvec{\omega}_{\text{i}}}{\anormvec{h}^4}\,\anormvec{h}\otimes\anormvec{h}\right)\normvec{y}\right)\right)\cdot\normvec{\omega}_{\text{o}} \\
+\displaystyle =\, \left(\left(\frac{2\,\anormvec{h}\,\omega_{\text{i},\normvec{x}}}{\anormvec{h}^2} +
+\frac{2\,\anormvec{h}\cdot\normvec{\omega}_{\text{i}}}{\anormvec{h}^2}\,\normvec{x} -
+\frac{4\,\anormvec{h}\cdot\normvec{\omega}_{\text{i}}}{\anormvec{h}^4}\,\anormvec{h}\,h_{\normvec{x}}\right)\times\right. \\
+\displaystyle \left.\left(\frac{2\,\anormvec{h}\,\omega_{\text{i},\normvec{y}}}{\anormvec{h}^2} +
+\frac{2\,\anormvec{h}\cdot\normvec{\omega}_{\text{i}}}{\anormvec{h}^2}\,\normvec{y} -
+\frac{4\,\anormvec{h}\cdot\normvec{\omega}_{\text{i}}}{\anormvec{h}^4}\,\anormvec{h}\,h_{\normvec{y}}\right)\right)\cdot\normvec{\omega}_{\text{o}} \\
+\displaystyle \begin{array}{rccccccc}
+=\, \Bigg(\!\!\!\!\! &
+\displaystyle 0 & + &
+\displaystyle \frac{4\,\anormvec{h}\cdot\normvec{\omega}_{\text{i}}\,\omega_{\text{i},\normvec{x}}}{\anormvec{h}^4}\anormvec{h}\times\normvec{y} & + &
+\displaystyle 0 & \\ + & 
+\displaystyle \frac{4\,\anormvec{h}\cdot\normvec{\omega}_{\text{i}}\,\omega_{\text{i},\normvec{y}}}{\anormvec{h}^4}\normvec{x}\times\anormvec{h} & + &
+\displaystyle \frac{4(\anormvec{h}\cdot\normvec{\omega}_{\text{i}})^2}{\anormvec{h}^4}\normvec{z} & - &
+\displaystyle \frac{8(\anormvec{h}\cdot\normvec{\omega}_{\text{i}})^2h_{\normvec{y}}}{\anormvec{h}^6}\normvec{x}\times\anormvec{h} & \\ + &
+\displaystyle 0 & - &
+\displaystyle \frac{8(\anormvec{h}\cdot\normvec{\omega}_{\text{i}})^2h_{\normvec{x}}}{\anormvec{h}^6}\anormvec{h}\times\normvec{y} & + &
+\displaystyle 0 &
+\!\!\!\!\!\Bigg)\cdot\normvec{\omega}_{\text{o}}
+\end{array} \\
+\displaystyle =\, \left(\frac{4(\anormvec{h}\cdot\normvec{\omega}_{\text{i}})^2}{\anormvec{h}^4}\normvec{z} + \frac{4\,\anormvec{h}\cdot\normvec{\omega}_{\text{i}}}{\anormvec{h}^4}\left(\omega_{\text{i},\normvec{y}}\,\normvec{x}-\omega_{\text{i},\normvec{x}}\,\normvec{y}\right)\times\anormvec{h} \right. \\
+\displaystyle \left. - \frac{8(\anormvec{h}\cdot\normvec{\omega}_{\text{i}})^2}{\anormvec{h}^6}(h_{\normvec{y}}\normvec{x}-h_{\normvec{x}}\normvec{y})\times\anormvec{h}\right)\cdot\normvec{\omega}_{\text{o}} \\
+\displaystyle =\, \left(\frac{4(\anormvec{h}\cdot\normvec{\omega}_{\text{i}})^2}{\anormvec{h}^4}\normvec{z} + \left(\frac{4\,\anormvec{h}\cdot\normvec{\omega}_{\text{i}}}{\anormvec{h}^4}\,\normvec{\omega}_{\text{i}}\times\normvec{z} - \frac{8(\anormvec{h}\cdot\normvec{\omega}_{\text{i}})^2}{\anormvec{h}^6}\,\anormvec{h}\times\normvec{z}\right)\times\anormvec{h}\right)\cdot\normvec{\omega}_{\text{o}} \\
+\displaystyle =\, \left(\frac{4(\anormvec{h}\cdot\normvec{\omega}_{\text{i}})^2}{\anormvec{h}^4}\normvec{z} - \frac{4\,\anormvec{h}\cdot\normvec{\omega}_{\text{i}}}{\anormvec{h}^4}\left(\left(\frac{2\,\anormvec{h}\cdot\normvec{\omega}_{\text{i}}}{\anormvec{h}^2}\,\anormvec{h} - \normvec{\omega}_{\text{i}}\right)\times\normvec{z}\right)\times\anormvec{h}\right)\cdot\normvec{\omega}_{\text{o}},
+\end{array}
 \end{equation}
 
-where $J_{\normvec{\omega}_{\text{o}}}(\anormvec{h})$ is the \idxs{Jacobian}{matrix}
+which by using \eqref{eq:householder_equation} and the fact that $\normvec{h} = \anormvec{h}\,\left|\anormvec{h}\right|^{-1}$ can be written as
+
+\begin{equation} \label{eq:domega_dh}
+\renewcommand*{\arraystretch}{2}
+\begin{array}{l}
+\displaystyle \frac{\opd\normvec{\omega}_{\text{o}}}{\opd\anormvec{h}} \,=\, \left(\frac{4(\anormvec{h}\cdot\normvec{\omega}_{\text{i}})^2}{\anormvec{h}^4}\normvec{z} - \frac{4\,\anormvec{h}\cdot\normvec{\omega}_{\text{i}}}{\anormvec{h}^4}\left(\normvec{\omega}_{\text{o}}\times\normvec{z}\right)\times\anormvec{h}\right)\cdot\normvec{\omega}_{\text{o}}.
+\end{array}
+\end{equation}
+
+Here, we can identify the \idxs{vector}{triple product}\index{product!triple, vector|see{vector triple product}}, which can be rewritten as
+
+\begin{equation}
+(\vec{a}\times \vec{b})\times \vec{c} \,=\, -\vec{c}\times(\vec{a}\times \vec{b}) \,=\, -(\vec{c}\cdot\vec{b})\,\vec{a} + (\vec{c}\cdot\vec{a})\,\vec{b}.
+\end{equation}
+
+By using this substitution, \eqref{eq:domega_dh} becomes
+
+\begin{equation}
+\renewcommand*{\arraystretch}{2}
+\begin{array}{l}
+\displaystyle \frac{\opd\normvec{\omega}_{\text{o}}}{\opd\anormvec{h}} \,=\, \left(\frac{4(\anormvec{h}\cdot\normvec{\omega}_{\text{i}})^2}{\anormvec{h}^4}\normvec{z} - \frac{4\,\anormvec{h}\cdot\normvec{\omega}_{\text{i}}}{\anormvec{h}^4}((\anormvec{h}\cdot\normvec{\omega}_{\text{o}})\,\normvec{z} -(\anormvec{h}\cdot\normvec{z})\,\normvec{\omega}_{\text{o}})\right)\cdot\normvec{\omega}_{\text{o}} \\
+=\, \displaystyle \frac{4\,\anormvec{h}\cdot\normvec{\omega}_{\text{i}}}{\anormvec{h}^4}(\anormvec{h}\cdot\normvec{z})(\normvec{\omega}_{\text{o}}\cdot\normvec{\omega}_{\text{o}}).
+\end{array}
+\end{equation}
+
+Since $\normvec{\omega}_{\text{o}}$ is normalized, and since the $\normvec{z}$-component of an anti-normalized vector by definition is 1 (see \eqref{eq:anti_normal_definition}), this can be rewritten as 
+
+\begin{equation}
+\renewcommand*{\arraystretch}{2}
+\begin{array}{l}
+\displaystyle \frac{\opd\normvec{\omega}_{\text{o}}}{\opd\anormvec{h}} \,=\, \frac{4\,\anormvec{h}\cdot\normvec{\omega}_{\text{i}}}{\anormvec{h}^4}\,.
+\end{array}
+\end{equation}
+
+This equation can be reached much more quickly using geometry instead of using the householder equation, but it requires more explaining.
+
