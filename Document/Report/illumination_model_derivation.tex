@@ -2,17 +2,6 @@
 \chapter{An illumination model for sea surfaces}
 \label{chap:illumination_model_derivation}
 
-\begin{itemize}
-\item Reflection coefficient
-\item Transmission term
-\item Slope of the surface
-\item Chance of shading/hiding
-\end{itemize}
-
-\HRule
-
-%To be written \comment
-{
 If we simplify a water surface by cutting off a part of the \idxs{wave}{spectrum}, such as the part containing all frequencies over the \idxs{Nyquist}{frequency}, we will loose details on the surface which we --- for \visualization purposes --- need to compensate for by making \reflections in the water surface \idxse{diffuse}{reflection}{diffuse}.
 
 For that reason, an \idxs{illumination}{model} --- which was developed outside of the scope of \thismasterthesiswork\ \,---\ \,is derived in this appendix, and it models this diffuseness.
@@ -876,7 +865,7 @@ By dividing by $\opd\anormvec{h}$, this becomes
 
 which by using \eqref{eq:householder_equation} and the fact that $\normvec{h} = \anormvec{h}\,\left|\anormvec{h}\right|^{-1}$ can be written as
 
-\begin{equation} \label{eq:domega_dh}
+\begin{equation} \label{eq:domegao_dh_complicated}
 \renewcommand*{\arraystretch}{2}
 \begin{array}{l}
 \displaystyle \frac{\opd\normvec{\omega}_{\text{o}}}{\opd\anormvec{h}} \,=\, \left(\frac{4(\anormvec{h}\cdot\normvec{\omega}_{\text{i}})^2}{\anormvec{h}^4}\normvec{z} - \frac{4\,\anormvec{h}\cdot\normvec{\omega}_{\text{i}}}{\anormvec{h}^4}\left(\normvec{\omega}_{\text{o}}\times\normvec{z}\right)\times\anormvec{h}\right)\cdot\normvec{\omega}_{\text{o}}.
@@ -889,7 +878,7 @@ Here, we can identify the \idxs{vector}{triple product}\index{product!triple, ve
 (\vec{a}\times \vec{b})\times \vec{c} \,=\, -\vec{c}\times(\vec{a}\times \vec{b}) \,=\, -(\vec{c}\cdot\vec{b})\,\vec{a} + (\vec{c}\cdot\vec{a})\,\vec{b}.
 \end{equation}
 
-By using this identity, \eqref{eq:domega_dh} becomes
+By using this identity, \eqref{eq:domegao_dh_complicated} becomes
 
 \begin{equation}
 \renewcommand*{\arraystretch}{2}
@@ -919,17 +908,19 @@ By using the fact that
 \renewcommand*{\arraystretch}{2}
 \begin{aligned}
 \displaystyle \rho'_{\text{r}}(\normvec{\omega}_{\text{i}},\, \normvec{\omega}_{\text{o}}) \,=\, & \displaystyle |\anormvec{n}|\,\frac{\anormvec{h}^4}{4\,\anormvec{h}\cdot\normvec{\omega}_{\text{i}}}\,f(\nabla\eta^*(\vec{r}))\,\frac{\normvec{\omega}_{\text{i}}\cdot\anormvec{h}}{(\normvec{\omega}_{\text{i}}\cdot\anormvec{n})(\normvec{\omega}_{\text{o}}\cdot\anormvec{n})}\,R_{\normvec{n}^*\!,x}(\normvec{\omega}_{\text{o}}) \\
-\displaystyle =\, & \displaystyle |\anormvec{n}|\,\frac{\anormvec{h}^4}{4(\normvec{\omega}_{\text{i}}\cdot\anormvec{n})(\normvec{\omega}_{\text{o}}\cdot\anormvec{n})}\,f(\nabla\eta^*(\vec{r}))\,R_{\normvec{n}^*\!,x}(\normvec{\omega}_{\text{o}}).
+\displaystyle =\, & \displaystyle |\anormvec{n}|\,\frac{\anormvec{h}^4}{4(\normvec{\omega}_{\text{i}}\cdot\anormvec{n})(\normvec{\omega}_{\text{o}}\cdot\anormvec{n})}\,f(\nabla\eta^*(\vec{r}))\,R_{\normvec{n}^*\!,x}(\normvec{\omega}_{\text{o}}),
 \end{aligned}
 \end{equation}
 
-By using this result and \eqref{eq:normal_from_anti_normal}, we can rewrite \eqref{eq:rendering_equation_reduced_rhor_rhot} as
+and we can conclude that $\rho'_{\text{r}}$ displays the symmetric property $\rho'_{\text{r}}(\normvec{\omega}_{\text{i}},\, \normvec{\omega}_{\text{o}}) = \rho'_{\text{r}}(\normvec{\omega}_{\text{o}},\, \normvec{\omega}_{\text{i}})$.
+
+By using this equation and \eqref{eq:normal_from_anti_normal}, we can rewrite \eqref{eq:rendering_equation_reduced_rhor_rhot} as
 
 \begin{equation} \label{eq:rendering_equation_reduced_rhot}
 \renewcommand*{\arraystretch}{1.5}
 \begin{array}{cl}
 L_{\text{o}}(\normvec{\omega}_{\text{o}}) \,= \\
-\displaystyle \int_{\Omega_{\text{r}}} \frac{\anormvec{h}^4}{4\,\normvec{\omega}_{\text{o}}\cdot\anormvec{n}}\,f(\nabla\eta^*(\vec{r}))\,R_{\normvec{n}^*\!,x}(\normvec{\omega}_{\text{o}})\, L_{\text{i}}(\normvec{\omega}_{\text{i}})\, \opd \normvec{\omega}_{\text{i}} \ + \\[1ex]
+\displaystyle \frac{1}{4}\int_{\Omega_{\text{r}}} \frac{\anormvec{h}^4}{\normvec{\omega}_{\text{o}}\cdot\anormvec{n}}\,f(\nabla\eta^*(\vec{r}))\,R_{\normvec{n}^*\!,x}(\normvec{\omega}_{\text{o}})\, L_{\text{i}}(\normvec{\omega}_{\text{i}})\, \opd \normvec{\omega}_{\text{i}} \ + \\[1ex]
 \displaystyle \int_{\Omega_{\text{t}}} \rho'_{\text{t}}(\normvec{\omega}_{\text{i}},\, \normvec{\omega}_{\text{o}})\, L_{\text{i}}(\normvec{\omega}_{\text{i}})\, (\normvec{\omega}_{\text{i}}\,\cdot\,(-\normvec{n}))\, \opd \normvec{\omega}_{\text{i}}\,.
 \end{array}
 \end{equation}
@@ -947,23 +938,32 @@ If we \assume that the spectral radiance varies very slowly between different di
 
 where $\delta$ is the \idxs{Kronecker}{delta} for which any integral $\int_{\Omega}\delta_{\normvec{\omega}_1,\normvec{\omega}_2}\opd \normvec{\omega}_2$ is 1 if $\normvec{\omega}_1 \in\, \Omega$ and 0 otherwise, $\normvec{\omega}_{\text{i},\normvec{n},\text{t}}(\normvec{\omega}_{\text{o}})$ is the direction from which incoming light will be transmitted in the direction $\normvec{\omega}_{\text{o}}$, and $T_{\normvec{n}^*\!,x}(\normvec{\omega}_{\text{o}})$ is the \idxs{transmission}{coefficient} which is predicted by the \idxs{Fresnel}{equations}, for a ray being transmitted in the direction $\normvec{\omega}_{\text{o}}$, for a surface with the surface normal $\normvec{n}^*$ and for the light polarization $x$. Using this \approximation, we simplify \eqref{eq:rendering_equation_reduced_rhot} to
 
-\begin{equation} \label{eq:rendering_equation_reduced}
+\begin{equation} \label{eq:rendering_equation_simplified}
 \renewcommand*{\arraystretch}{2}
 \begin{array}{cl}
 L_{\text{o}}(\normvec{\omega}_{\text{o}}) \,= \\
-\displaystyle \int_{\Omega_{\text{r}}} \frac{\anormvec{h}^4}{4\,\normvec{\omega}_{\text{o}}\cdot\anormvec{n}}\,f(\nabla\eta^*(\vec{r}))\,R_{\normvec{n}^*\!,x}(\normvec{\omega}_{\text{o}})\, L_{\text{i}}(\normvec{\omega}_{\text{i}})\, \opd \normvec{\omega}_{\text{i}} \ + \\[1ex]
-\displaystyle T_{\normvec{n},x}(\normvec{\omega}_{\text{i},\normvec{n},\text{t}}(\normvec{\omega}_{\text{o}}))\, L_{\text{i}}(\normvec{\omega}_{\text{i},\normvec{n},\text{t}}(\normvec{\omega}_{\text{o}}))\,.
+\displaystyle \frac{1}{4}\int_{\Omega_{\text{r}}} \frac{\anormvec{h}^4}{\normvec{\omega}_{\text{o}}\cdot\anormvec{n}}\,f(\nabla\eta^*(\vec{r}))\,R_{\normvec{n}^*\!,x}(\normvec{\omega}_{\text{o}})\, L_{\text{i}}(\normvec{\omega}_{\text{i}})\,\opd \normvec{\omega}_{\text{i}} \ + \\[1ex]
+\displaystyle T_{\normvec{n},x}(\normvec{\omega}_{\text{i},\normvec{n},\text{t}}(\normvec{\omega}_{\text{o}}))\, L_{\text{i}}(\normvec{\omega}_{\text{i},\normvec{n},\text{t}}(\normvec{\omega}_{\text{o}}))
 \end{array}
 \end{equation}
 
-For a \idxs{point}{light source} (a light source) with the total \idxs{spectral}{radiant intensity}\index{intensity!spectral radiant|see{spectral radiant intensity}} (power per unit solid angle and unit wavelength) $I$, located at the distance $d$ in the direction $\normvec{\omega}_{\text{s}}$ above the water surface, the total spectral radiance directed outward along direction $\normvec{\omega}_{\text{o}}$ will be
+which is a general equation that can be used to render the water surface as long as the integral over $\Omega_{\text{r}}$ can be calculated efficiently.
+
+For a \idxs{point}{light source} (a light source) with the total \idxs{spectral}{radiant intensity}\index{intensity!spectral radiant|see{spectral radiant intensity}} (power per unit solid angle and unit wavelength) $I$, located at the distance $d$ in the direction $\normvec{\omega}_{\text{s}}$ above the water surface in such a way that $\omega_{\text{s}} \in \Omega_{\text{r}}$, the incident spectral radiance $L_{\text{i}}(\normvec{\omega}_{\text{i}})$ turns into $\delta_{\normvec{\omega}_{\text{i}},\normvec{\omega}_{\text{s}}}\,I/d^2$ and the total spectral radiance directed outward along direction $\normvec{\omega}_{\text{o}}$ will be
 
 \begin{equation} \label{eq:spectral_radience_reflected_point_light_source}
 \renewcommand*{\arraystretch}{2}
 \begin{aligned}
-\displaystyle L_{\text{o}}(\normvec{\omega}_{\text{o}}) \,=\, & \int_{\Omega_{\text{r}}} \frac{\anormvec{h}^4}{4\,\normvec{\omega}_{\text{o}}\cdot\anormvec{n}}\,f(\nabla\eta^*(\vec{r}))\,R_{\normvec{n}^*\!,x}(\normvec{\omega}_{\text{o}})\,\frac{\delta_{\normvec{\omega}_{\text{i}},\normvec{\omega}_{\text{s}}}\,I}{d^2}\, \opd \normvec{\omega}_{\text{i}}. \\
-\displaystyle =\, & \frac{\anormvec{h}^4}{4\,\normvec{\omega}_{\text{o}}\cdot\anormvec{n}}\,f(\nabla\eta^*(\vec{r}))\,R_{\normvec{n}^*\!,x}(\normvec{\omega}_{\text{o}})\,\frac{I}{d^2},
+\displaystyle L_{\text{o}}(\normvec{\omega}_{\text{o}}) \,=\, & \frac{1}{4}\,\frac{\anormvec{h}^4}{\normvec{\omega}_{\text{o}}\cdot\anormvec{n}}\,f(\nabla\eta^*(\vec{r}))\,R_{\normvec{n}^*\!,x}(\normvec{\omega}_{\text{o}})\,\frac{I}{d^2},
 \end{aligned}
 \end{equation}
 
-where the restriction $\normvec{\omega}_{\text{i}} = \normvec{\omega}_{\text{s}}$ is made in order to calculate $\anormvec{h}$ and $\nabla\eta^*(\vec{r})$ in the last expression.
+where $\normvec{\omega}_{\text{i}}$ is identified as $\normvec{\omega}_{\text{s}}$ in order to calculate $\anormvec{h}$ and $\nabla\eta^*(\vec{r})$ in the right hand side of the equation.
+
+\section{Discussion about the illumination model}
+
+Comparing this \idxs{shading}{model} (\eqrefs \ref{eq:rendering_equation_simplified} and \ref{eq:spectral_radience_reflected_point_light_source}) to the \idxs{Blinn--Phong}{shading model} --- although Blinn--Phong shading model is a generic shading model for rough surfaces while this is a shading model specifically developed for water surfaces, which is for example why this equation depends on the \idxs{reflection}{coefficient}, which the Blinn--Phong shading model doesn't --- one may notice that if the \idxs{wave}{spectra} $S$ is \idxse{circular}{symmetry}{circularly symmetric}, the factor $f(\nabla\eta^*(\vec{r}))$ (described by \eqref{eq:eta_grad_distribution_r_uniformly_distributed}), which is what gives the shape of the reflection of the point light source, becomes practically equivalent to the specular reflection term in the Blinn--Phong shading model, except from a constant factor.
+
+For symmetric wave spectra and for almost smooth surfaces (when the diffusion in the reflection of objects becomes very small), all factors in \eqref{eq:spectral_radience_reflected_point_light_source} except from $f(\nabla\eta^*(\vec{r}))$ become more or less constant, and the right hand side of the equation can be \approximated as just a constant times $f(\nabla\eta^*(\vec{r}))$. Hence, the result of using \eqref{eq:spectral_radience_reflected_point_light_source} becomes very similar to the result of using the Blinn--Phong shading model, with the only practical difference that the reflection of a point light source when using the shading model derived in this appendix varies in intensity depending on how steep the angle is with which the observer sees the reflection, according to the factors $\anormvec{h}^4/(\normvec{\omega}_{\text{o}}\cdot\anormvec{n})$ and $R_{\normvec{n}^*\!,x}(\normvec{\omega}_{\text{o}})$ which are not included in the specular term in the Blinn--Phong shading model.
+
+However, when the point light source is located low and the reflection comes relatively close to the horizon in comparison to the vertical spread of the reflection, the factor $\anormvec{h}^4/(\normvec{\omega}_{\text{o}}\cdot\anormvec{n})$ will vary more noticeably. This becomes especially apparent when the reflection can be considered to "reach" the horizon, in which case the radiance directed against the observer visibly will go to infinity when $\normvec{\omega}_{\text{o}}\cdot\anormvec{n}$ goes to 0, which occurs at the horizon. Although this theoretically always happens (always at the horizon) no matter how far from the surface the light source is located, the bright part of the horizon will be practically invisible when the light source is located far away from the horizon, since the vertical extension of that part will be extremely small thanks to the $f(\nabla\eta^*(\vec{r}))$, besides, the horizontal extension will go to 0. in the same speed as $\normvec{\omega}_{\text{o}}\cdot\anormvec{n}$. One may have to watch out for the singular point though, not to accidentally get a pixel that end up exactly at that point, which could potentially lead to unexpected behavior.
