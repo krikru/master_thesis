@@ -30,6 +30,7 @@ _ReSharper*/
 
 #Ignoring Qt builds
 *-build-*
+build-*
 
 #Ignore files build by Qt Creator
 *.autosave
