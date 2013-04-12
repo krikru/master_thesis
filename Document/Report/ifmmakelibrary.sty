@@ -1,5 +1,4 @@
-% ifmmaketitle.sty is a LaTeX package to create title pages following the IFM specifications.
-% This package is derived from the popular non-standard package titlepic.
+% ifmmakelibrary.sty is a LaTeX package to create a library page following the IFM specifications.
 % By Kristofer Krus <krikr808@student.liu.se>. Free software, no warranty of any kind.
 % 
 % V. 0.1
@@ -9,7 +8,7 @@
 \NeedsTeXFormat{LaTeX2e}
 
 % Package identification and version number.
-\ProvidesPackage{ifmmaketitle}[2012/05/28 0.1 Package creating title pages following the IFM specifications]
+\ProvidesPackage{ifmmakelibrary}[2013/04/12 0.1 Package creating a library page following the IFM specifications]
 
 % Package used
 \RequirePackage{fancyhdr} % Use the fancyhdr package to create headers and footers
@@ -23,7 +22,6 @@
 \ProcessOptions
 
 % Additional commands for defining parameters used by this package.
-% Very similar to the definition of \title, etc.
 % \ifmlogo
 \def\ifmlogo#1{\gdef\@ifmlogo{#1}}
 \def\@ifmlogo{\textcolor{red}{\framebox[0.6\textwidth]{\raisebox{-0.2\textwidth}{\textit{Logo}}\raisebox{-0.4\textwidth}{}}}}
@@ -69,17 +67,22 @@
 \def\shortyear{\expandafter\@YYYYTOYY\the\year}
 \def\@YYYYTOYY#1#2#3#4{#3#4}
 
-% If title pages were requested from the document class (article/report/book),
-% define \ifmmaketitle.
-\if@titlepage
-\newcommand\ifmmaketitle{
-    \begin{titlepage}%
+% If a library page was requested from the document class (article/report/book),
+% define \ifmmakelibrary.
+%\if@titlepage
+\newcommand\ifmmakelibrary{
+	
+	Tutti frutti
+	\clearpage
+	
+\comment{
+    %\begin{titlepage}%
         \let\footnotesize\small
         \let\footnoterule\relax
         \let \footnote \thanks
         \renewcommand{\headrulewidth}{0pt} % Remove horozontal ruler under header
         \fancyhfoffset[]{\dimexpr\marginparsep+\marginparwidth\relax} % Make header and footer wider. \RequirePackage{calc} can be used instead of using \dimexpr and \relax.
-        \begin{center}% Make the font on the title pages get a bold face and center the content
+        \begin{center}% Make the font on the library page get a bold face and center the content
             \bf \large
             
             % Page 1
@@ -131,7 +134,7 @@
             \vfil
         \end{center}\par
         \@thanks
-    \end{titlepage}%
+    %\end{titlepage}%
     \setcounter{footnote}{0}%
     \global\let\thanks\relax
     \global\let\maketitle\relax
@@ -145,5 +148,6 @@
     \global\let\date\relax
     \global\let\and\relax
     \global\let\titlepic\relax
+} % comment
 }
-\fi
+%\fi

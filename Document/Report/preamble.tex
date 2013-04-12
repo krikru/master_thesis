@@ -43,24 +43,14 @@
 \fi
 
 % Referencing
-\iffalse
-\usepackage[round, authoryear, comma]{natbib} % Harward style referencing
-%\bibliographystyle{unsrtnat}
-%\bibliographystyle{plain}
+%\usepackage[round , authoryear, comma]{natbib}
+\usepackage[square, authoryear, comma]{natbib}
+%\usepackage[square, numbers   , comma]{natbib}
+
+%\bibliographystyle{ieeetr} % Not supported by natbib
 \bibliographystyle{plainnat}
-\else
-\iftrue
-\usepackage[square, authoryear, comma]{natbib} % Harward style referencing
+%\bibliographystyle{abbrvnat}
 %\bibliographystyle{unsrtnat}
-%\bibliographystyle{plain}
-\bibliographystyle{plainnat}
-\else
-\usepackage[square, numbers, comma]{natbib} %
-\bibliographystyle{ieeetr}
-%\bibliographystyle{plain}
-%\bibliographystyle{plainnat}
-\fi
-\fi
 
 % Indexing
 \usepackage{makeidx}
@@ -74,8 +64,9 @@
 % For more math symbols, see The Comprehensive LaTeX Symbol List (http://ctan.uib.no/info/symbols/comprehensive/symbols-a4.pdf)
 \usepackage{cancel} % To be able to cancel out parts of an equation
 
-% Title page
+% Title and library pages
 \usepackage{ifmmaketitle}
+\usepackage{ifmmakelibrary}
 
 % Graphics
 \usepackage{graphicx} % Necessary in order to include images
