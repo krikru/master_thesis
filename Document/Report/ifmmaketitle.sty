@@ -9,9 +9,9 @@
 \NeedsTeXFormat{LaTeX2e}
 
 % Package identification and version number.
-\ProvidesPackage{ifmmaketitle}[2012/05/28 0.1 Package creating title pages following the IFM specifications]
+\ProvidesPackage{ifmmaketitle}[2012/05/28 0.1 Package to create title pages following the IFM specifications]
 
-% Package used
+% Packages used
 \RequirePackage{fancyhdr} % Use the fancyhdr package to create headers and footers
 \RequirePackage{color} % Use the color package to mark unentered fields
 
@@ -20,7 +20,7 @@
 \DeclareOption{tc}{\gdef\@tptopspace{}\gdef\@tpsepspace{\vfil}}
 \DeclareOption{cc}{\gdef\@tptopspace{\null\vfil}\gdef\@tpsepspace{\vskip 3em}}
 \ExecuteOptions{cc}
-\ProcessOptions
+\ProcessOptions*
 
 % Additional commands for defining parameters used by this package.
 % Very similar to the definition of \title, etc.
