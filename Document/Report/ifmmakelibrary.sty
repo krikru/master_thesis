@@ -70,26 +70,28 @@
 % define \ifmmakelibrary.
 %\if@titlepage
 \newcommand\ifmmakelibrary{
-	
-	\fboxrule=0.4pt
-	\fbox{\begin{minipage}{\textwidth}
-		\fbox{\begin{minipage}[t][3cm][t]{0.25\textwidth}
-		\@ifmlanguage
-		\end{minipage}}
-		\fbox{\begin{minipage}[t][3cm][t]{0.4\textwidth}
-		Subject
-		\end{minipage}}
-		\fbox{\begin{minipage}[t][3cm][t]{0.25\textwidth}
-		test
-		\end{minipage}}
-		\fbox{\begin{minipage}[t][3cm][t]{0.25\textwidth}
-		test
-		\end{minipage}}
-	\end{minipage}}
+    \clearpage
+    %\thispagestyle{empty}
+    \fboxrule=0.4pt
+    \fbox{\begin{minipage}{\textwidth}
+        \fbox{\begin{minipage}[t][3cm][t]{0.25\textwidth}
+        \@ifmlanguage
+        \end{minipage}}
+        \fbox{\begin{minipage}[t][3cm][t]{0.4\textwidth}
+        Subject
+        \end{minipage}}
+        \fbox{\begin{minipage}[t][3cm][t]{0.25\textwidth}
+        test
+        \end{minipage}}
+        \fbox{\begin{minipage}[t][3cm][t]{0.25\textwidth}
+        test
+        \end{minipage}}
+    \end{minipage}}
 
-	\clearpage
-	Tutti frutti
-	\clearpage
+    \clearpage
+    %\thispagestyle{empty}
+    Tutti frutti
+    \clearpage
 
 \comment{
     %\begin{titlepage}%

@@ -73,65 +73,65 @@
 % define \ifmmaketitle.
 \if@titlepage
 \newcommand\ifmmaketitle{
-    \begin{titlepage}%
-        \let\footnotesize\small
-        \let\footnoterule\relax
-        \let \footnote \thanks
-        \renewcommand{\headrulewidth}{0pt} % Remove horozontal ruler under header
-        \fancyhfoffset[]{\dimexpr\marginparsep+\marginparwidth\relax} % Make header and footer wider. \RequirePackage{calc} can be used instead of using \dimexpr and \relax.
-        \begin{center}% Make the font on the title pages get a bold face and center the content
-            \bf \large
-            
-            % Page 1
-            \thispagestyle{fancy} %TODO: Check why just pagestyle doesn't work
-            \chead{\bf \large \@ifmdepartment}
-            \cfoot{\bf \normalsize \@ifmdepartment\\ \@ifmuniversity\\ \@ifmpostaladdress}
-            \@tptopspace%
-            \@ifmwork
-            \vskip 1em%
-            {\LARGE \@title \par}%
-            \vskip 3em%
-            \lineskip .75em%
-            \begin{tabular}[t]{c}%
-                \@author \\
-                \@ifmwork\ carried out at \@ifmcompany \\
-                \@date
-            \end{tabular}\par%
-            \vskip 1.5em%
-            LITH-IFM-\@ifmx-EX-{}-\@ifmyy/\@ifmxxxx---SE
-            \@tpsepspace%
-            {\centering\@ifmlogo\par}
-            \clearpage
-            
-            % Page 2
-            \thispagestyle{fancy}
-            \cfoot{}
-            \@tptopspace%
-            {\LARGE \@title \par}%
-            \vskip 3em%
-            \lineskip .75em%
-            \begin{tabular}[t]{c}%
-                \@author \\ \\
-                \@ifmwork\ carried out at \@ifmcompany \\ \\
-                \@date
-            \end{tabular}\par%
-            \vskip 1.5em%
-            \ifx \@ifmsupervisors \undefined
-                Supervisor: \\
-                \@ifmsupervisor
-            \else
-                Supervisors: \\
-                \@ifmsupervisors
-            \fi
-            \vskip 1em%
-            Examiner: \\
-            \@ifmexaminer
-            \@tpsepspace%
-            {\centering\@ifmlogo\par}
-            \vfil
-        \end{center}\par
-        \@thanks
-    \end{titlepage}%
+    % First title page
+    \let\footnotesize\small
+    \let\footnoterule\relax
+    \let \footnote \thanks
+    \renewcommand{\headrulewidth}{0pt} % Remove horozontal ruler under header
+    \fancyhfoffset[]{\dimexpr\marginparsep+\marginparwidth\relax} % Make header and footer wider. \RequirePackage{calc} can be used instead of using \dimexpr and \relax.
+    \begin{center}% Make the font on the title pages get a bold face and center the content
+        \bf \large
+
+        % Page 1
+        %\thispagestyle{fancy} %TODO: Check why just pagestyle doesn't work
+        \chead{\bf \large \@ifmdepartment}
+        \cfoot{\bf \normalsize \@ifmdepartment\\ \@ifmuniversity\\ \@ifmpostaladdress}
+        \@tptopspace%
+        \@ifmwork
+        \vskip 1em%
+        {\LARGE \@title \par}%
+        \vskip 3em%
+        \lineskip .75em%
+        \begin{tabular}[t]{c}%
+            \@author \\
+            \@ifmwork\ carried out at \@ifmcompany \\
+            \@date
+        \end{tabular}\par%
+        \vskip 1.5em%
+        LITH-IFM-\@ifmx-EX-{}-\@ifmyy/\@ifmxxxx---SE
+        \@tpsepspace%
+        {\centering\@ifmlogo\par}
+        \clearpage
+
+        % Second title page
+        %\thispagestyle{fancy}
+        \cfoot{}
+        \@tptopspace%
+        {\LARGE \@title \par}%
+        \vskip 3em%
+        \lineskip .75em%
+        \begin{tabular}[t]{c}%
+            \@author \\ \\
+            \@ifmwork\ carried out at \@ifmcompany \\ \\
+            \@date
+        \end{tabular}\par%
+        \vskip 1.5em%
+        \ifx \@ifmsupervisors \undefined
+            Supervisor: \\
+            \@ifmsupervisor
+        \else
+            Supervisors: \\
+            \@ifmsupervisors
+        \fi
+        \vskip 1em%
+        Examiner: \\
+        \@ifmexaminer
+        \@tpsepspace%
+        {\centering\@ifmlogo\par}
+        \vfil
+    \end{center}\par
+    \@thanks
+    % Title pages created, clean up some macros
     \setcounter{footnote}{0}%
     \global\let\thanks\relax
     \global\let\maketitle\relax
