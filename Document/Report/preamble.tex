@@ -285,6 +285,28 @@
 \newrobustcmd{\IFNOTPAPERPRINT     }[1]{\nottoggle{PAPERPRINT}{#1}{  }}
 \newrobustcmd{\IFNOTPAPERPRINTHELSE}[2]{\nottoggle{PAPERPRINT}{#1}{#2}}
 
+% % % % % % % % %
+% ENVIRONMENTS  %
+% % % % % % % % %
+
+% Redefine the abstract-environment to prevent it from resetting the pagenumber
+\makeatletter
+\renewenvironment{abstract}{%
+  \if@twocolumn
+    \section*{\abstractname}%
+  \else
+    \small
+    \begin{center}%
+      {\bfseries \abstractname\vspace{-.5em}\vspace{\z@}}%
+    \end{center}%
+    \quotation
+  \fi
+  \thispagestyle{empty}%
+  %\setcounter{page}\z@ %remove the counter reset
+  }
+  {\if@twocolumn\else\endquotation\fi}
+\makeatother
+
 % % % % % % % % % % % % % % % % % % % %
 % OPTIONS FOR COMPILING THE DOCUMENT  %
 % % % % % % % % % % % % % % % % % % % %

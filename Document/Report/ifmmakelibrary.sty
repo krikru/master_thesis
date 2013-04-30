@@ -72,11 +72,11 @@
 \newcommand\ifmmakelibrary{
     \clearpage
     %\thispagestyle{empty}
-    \fboxrule=0.4pt
+    %\fboxrule=0.4pt
     \fbox{\begin{minipage}{\textwidth}
-        \fbox{\begin{minipage}[t][3cm][t]{0.25\textwidth}
+        \fbox{\fbox{\begin{minipage}[t][3cm][t]{0.25\textwidth}
         \@ifmlanguage
-        \end{minipage}}
+        \end{minipage}}}
         \fbox{\begin{minipage}[t][3cm][t]{0.4\textwidth}
         Subject
         \end{minipage}}

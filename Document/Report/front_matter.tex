@@ -1,5 +1,9 @@
-%\pagenumbering{Alph}
-%\pagestyle{empty}
+% % % % % % % % % % % % % % %
+% Start "unnumbered" pages  %
+% % % % % % % % % % % % % % %
+\pagenumbering{Alph}
+\pagestyle{empty}
+
 \include{title_pages}
 %\blankpage
 \include{library_page}
@@ -7,8 +11,13 @@
 \include{abstract}
 %\include{acknowledgments}
 
-% Table of contents
+% % % % % % % % % % % % % % % %
+% Start Roman-numbered pages  %
+% % % % % % % % % % % % % % % %
 \pagenumbering{roman}
+\pagestyle{plain}
+
+% Table of contents
 \pdfbookmark[0]{\contentsname}{thecontentsanchor}
 \tableofcontents
 

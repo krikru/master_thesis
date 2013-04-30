@@ -17,7 +17,7 @@
 %\usepackage[bookmarks]{hyperref}
 %\hypersetup{colorlinks=true, pagebackref=page, citecolor=blue, menucolor=red}
 %\usepackage{natbib} 
-%\usepackage{hypernat} 
+%\usepackage{hypernat}
 
 \documentclass[]{report}
 %\documentclass[a4paper]{report}
@@ -63,12 +63,13 @@
 
 \input{front_matter}
 
-\newpage
-\pagenumbering{arabic}
-
 % % % % % % % %
 % MAIN MATTER %
 % % % % % % % %
+
+% Start Arabic-numbered pages
+\pagenumbering{arabic}
+\pagestyle{plain}
 
 \input{introduction}
 \input{theoretical_background}
