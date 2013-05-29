@@ -2,13 +2,13 @@
 
 \section{Wave dispersion and non-linearity}
 
-One of the greatest challenges with simulating an ocean is \idxs{wave}{dispersion}, also known as \indexify{frequency dispersion}\index{frequency dispersion!see{dispersion}}, which means that waves with different \wavelengths or \frequencies travel with different speeds. This means that the wave equation,
+One of the greatest challenges when simulating an ocean is \idxs{wave}{dispersion}, also known as \indexify{frequency dispersion}\index{frequency dispersion!see{dispersion}}, which means that waves with different \wavelengths or \frequencies travel with different speeds. This means that the wave equation,
 
 \begin{equation} \label{eq:wave_equation}
 \frac{\partial^2 \eta}{\partial t^2} \,=\, c^2\nabla^2\eta,
 \end{equation}
 
-a \PDE which both has a simple definition and is simple to solve numerically, cannot be used. Here, $\eta$ is the free surface elevation, $t$ is the time, $c$ is the speed of the propagation of waves and $\nabla$ is the \idxs{del}{operator}\index{$\nabla$|see{del operator}}, commonly used in \idxs{vector}{algebra}.
+--- a \PDE\xspace --- which otherwise both has a simple definition and is simple to solve numerically, cannot be used, since it assumes a single speed $c$ of the propagation of waves for all wavelengths. Here, $\eta$ is the free surface elevation, $t$ is the time and $\nabla$ is the \idxs{del}{operator}\index{$\nabla$|see{del operator}} which is commonly used in \idxs{vector}{algebra}.
 
 Besides, unless the \idxs{wave}{amplitude} is much smaller than the wavelength or the \idxs{water}{depth}, strong \idxse{non-linear}{phenomenon}{non-linear phenomena} takes place. This is the cause of for example \idxs{wave}{breaking}.
 
