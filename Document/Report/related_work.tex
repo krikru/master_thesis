@@ -29,7 +29,34 @@ This method ensures the time complexity $O(N\,\log(N))$ per time step for trivia
 
 \subsection{Laplacian Pyramid Decomposition}
 
-A method that just like the Fourier synthesis method handles \idxs{wave}{dispersion} well but, unlike it, operates in the \idxs{spatial}{domain}, was presented in a work from \citeyear{Ottosson2011} \citep{Ottosson2011} and uses \LPD to decompose the free surface elevation. This means that different parts of the wave spectrum is stored on different \grids arranged in a hierarchy, where each grid has half the \resolution of the grid one level down in the hierarchy, unless it is the bottom level grid. Each grid therefore contains a unique \idxsp{band-pass}{filter}{ing} of the free surface elevation --- or in other words --- waves with different speeds are simulated on different grids. It then becomes possible to \approximate the dispersion very well by concentrating on the part of the spectrum associated with each grid. The second time-derivative of the band-pass filtered free surface elevation, $\eta_i$, beloning to the $i$th grid, is expressed as a low order \polynomial of the \idxs{Laplace}{operator}, $\nabla^2$, operating on $\eta_i$. The non-filtered free surface elevation is then composed according to
+A method that, just like the Fourier synthesis method, handles \idxs{wave}{dispersion} well but, unlike it, operates in the \idxs{spatial}{domain} and hence can handle local variations in the topography was presented in a work by \citeauthor{Ottosson2011} \citep{Ottosson2011}.
+
+The general idea behind the method (not necessarily fully described in the work by \citeauthor{Ottosson2011}) is to use a hierarchy of grids, where in the simplest case all grids cover the same surface, and where one step down in the hierarchy means a doubling in grid resolution or a division by two of the grid cell size, which in practice also means a division by two of the minimum wavelength that can be efficiently simulated on the specific grid.
+
+Each grid is therefore responsible to store and process a specific set of wave vectors corresponding to this minimum wavelength. Any wave with a wave vector within that set should propagate well on the grid, and it should be easy to create a good reconstruction of the wave from its discretization on the grid. This set must also not contain any of the wave vectors that are processed on the grid one level up in the hierarchy. Together, all sets of wave vectors form a large set of wave vectors (including the zero vector) in which a very detailed free surface elevation can be represented. The top level grid is only a few cells across and is responsible for processing all the shortest wave vectors.
+
+In order to decompose the free surface elevation into the components that are to be processed on the different grids, the method uses \LPD, which is a general decomposition method that can operate on a field of any number of dimensions, although is in this case used on a discretized two-dimensional field. An \LPD closely resembles the \idxs{wavelet}{transform} (although unlike wavelets, which are somewhat localized both in the spatial domain and in the frequency domain, the components of a Laplacian pyramid are only somewhat localized in the frequency domain and generally completely delocalized in the spatial domain).
+
+Since each grid is only responsible for processing a limited range of wavelengths, it becomes possible to describe the time evolution of the $i$th free surface elevation component --- $\eta_i$ --- represented on the $i$th grid with a \PDE represented in the spatial domain and still include dispersion. By substituting $f$ for $\omega^2$ and $x$ for $k^2$ in \eqref{eq:dispersion}, we obtain the relation
+
+\begin{equation} \label{eq:dispersion}
+f(x) \,=\, \left(g\,+\,\frac{\gamma}{\rho}\,x\right)\,\sqrt{x}\,\tanh(\sqrt{x}\,h).
+\end{equation}
+
+Now, since the wavelengths that are represented on the $i$th grid in the method are restricted to a certain range, 
+
+
+This is enabled since the dispersion relation, \, can be approximated as a low order Taylor series
+
+This is achieved by expressing the second time-derivative of $\eta_i$ as a low order Taylor series of the \idxs{Laplace}{operator}, $\nabla^2$, operating on $\eta_i$, that is
+
+\begin{equation} 
+\frac{\partial^2 \eta_i(\vec{r})}{\partial t^2} \,=\, (a_{i0} + a_{i1}\nabla^2 + a_{i2}\nabla^4 + \dots + a_{in_{i}}\nabla^{2n_{i}})\eta_i(\vec{r}),
+\end{equation}
+
+where $a_{ij}$ is the $j$th coefficient 
+
+Each grid therefore contains a unique \idxsp{band-pass}{filter}{ing} of the free surface elevation, and so waves with much different speeds are simulated on different grids. It then becomes possible to \approximate the dispersion reasonably well by concentrating on the part of the spectrum associated with each grid. The second time-derivative of the band-pass filtered free surface elevation, $\eta_i$, belonging to the $i$th grid, is expressed as a low order \polynomial of the \idxs{Laplace}{operator}, $\nabla^2$, operating on $\eta_i$. The non-filtered free surface elevation is then composed according to
 
 \begin{equation} \label{eq:laplacian_pyramid_composition}
 \eta \,=\, \sum_i \eta_i

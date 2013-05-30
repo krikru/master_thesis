@@ -7,11 +7,11 @@ In this appendix, I will present a new \idx{two-dimensional} \index{dimensionali
 
 The equation is derived from the \idxs{dispersion}{relation} that is obtained in \idxs{Airy wave}{theory}\index{wave theory!Airy|see{Airy wave theory}} \citep{temp}, namely:
 
-\begin{equation} \label{eq:dispersion}
+\begin{equation} \label{eq:dispersion_again}
 \omega^2(k) \,=\, \left(g\,+\,\frac{\gamma}{\rho}\,k^2\right)\,k\,\tanh(k\,h),
 \end{equation}
 
-where $k$ is the \idx{wavenumber} of one \idxs{wave}{component}, $\omega$ is the \idxs{angular}{freequency} of the component, $g$ is the \idxs{gravitational}{acceleration}, $h$ is the \idxs{water}{depth} and $\gamma$ is the \idxs{surface}{tension}. Since this equation describes waves of a single \idx{wavelength}, we can assume that the \idxs{free surface}{elevation} for one wave component can be described by
+where $k$ is the \idx{wavenumber} of one \idxs{wave}{component}, $\omega$ is the \idxs{angular}{frequency} of the component, $g$ is the \idxs{gravitational}{acceleration}, $h$ is the \idxs{water}{depth} and $\gamma$ is the \idxs{surface}{tension}. Since this equation describes waves of a single \idx{wavelength}, we can assume that the \idxs{free surface}{elevation} for one wave component can be described by
 
 \begin{equation} \label{eq:component}
 \eta(\vec{r},\,t) \,=\, A\,e^{i(\vec{k}\cdot\vec{r}\,-\,\omega\,t)},
@@ -86,7 +86,7 @@ and we see that
 \end{equation}
 \end{samepage}
 
-for a wave component described by \eqref{eq:component}. By multiplying both sides of \eqref{eq:dispersion} with $\eta$, we obtain
+for a wave component described by \eqref{eq:component}. By multiplying both sides of \eqref{eq:dispersion_again} with $\eta$, we obtain
 
 \begin{equation}
 \omega^2\,\eta \,=\, \left(g\,+\,\frac{\gamma}{\rho}\,k^2\right)\,k\,\tanh(k\,h)\,\eta
@@ -309,7 +309,7 @@ which is a \PDE completely free from variables in the frequency domain and which
 \frac{\partial^2}{\partial t^2}\,\eta \,=\, a_{h_e}^{-1/2}\,\left(g\,-\,\frac{\gamma}{\rho}\,\nabla^2\right)\,\nabla^2\,\frac{\displaystyle\int_{\mathbb{R}^2}K\left(\frac{\Delta\vec{r}}{h_e(\vec{r},\,\vec{r}-\Delta\vec{r})}\right)\,\eta(\vec{r}-\Delta\vec{r},\,t)\,\opd\Delta\vec{r}}{\displaystyle\int_{\mathbb{R}^2}K\left(\frac{\Delta\vec{r}}{h_e(\vec{r},\,\vec{r}-\Delta\vec{r})}\right) \opd\Delta\vec{r}}.
 \end{equation}
 
-Note that the order of the operators matters when we use this definition for $C$, contrary to in \eqref{eq:dispersion} which we started from, where the order of the factors on the right hand side doesn't matter. If, for example, \eqref{eq:diffeqcomplete} is modified so that $C_{h_e}$ is placed furthest to the left, we end up with the \PDE
+Note that the order of the operators matters when we use this definition for $C$, contrary to in \eqref{eq:dispersion_again} which we started from, where the order of the factors on the right hand side doesn't matter. If, for example, \eqref{eq:diffeqcomplete} is modified so that $C_{h_e}$ is placed furthest to the left, we end up with the \PDE
 
 \begin{equation} \label{eq:diffeqnouserdefinedoperatorsvariant}
 \frac{\partial^2}{\partial t^2}\,\eta \,=\, \frac{\displaystyle\int_{\mathbb{R}^2}K\left(\frac{\Delta\vec{r}}{h_e(\vec{r},\,\vec{r}-\Delta\vec{r})}\right)\,\left(g\,-\,\frac{\gamma}{\rho}\,\nabla^2\right)\,\nabla^2\,\eta(\vec{r}-\Delta\vec{r},\,t)\,\opd\Delta\vec{r}}{\sqrt{\displaystyle\int_{\mathbb{R}^2}K\left(\frac{\Delta\vec{r}}{h_e(\vec{r},\,\vec{r}-\Delta\vec{r})}\right) \opd\Delta\vec{r}}}

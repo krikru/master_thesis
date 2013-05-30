@@ -2,15 +2,25 @@
 
 \section{Wave dispersion and non-linearity}
 
-One of the greatest challenges when simulating an ocean is \idxs{wave}{dispersion}, also known as \indexify{frequency dispersion}\index{frequency dispersion!see{dispersion}}, which means that waves with different \wavelengths or \frequencies travel with different speeds. This means that the wave equation,
+One of the greatest challenges when simulating an ocean is the fact that ocean waves are subject to \idxs{wave}{dispersion}, also known as \indexify{frequency dispersion}\index{frequency dispersion!see{dispersion}}, which means that waves with different \wavelengths travel with different speeds. This means that the wave equation,
 
 \begin{equation} \label{eq:wave_equation}
-\frac{\partial^2 \eta}{\partial t^2} \,=\, c^2\nabla^2\eta,
+\frac{\partial^2 \eta(\vec{r})}{\partial t^2} \,=\, c^2\nabla^2\eta(\vec{r}),
 \end{equation}
 
---- a \PDE\xspace --- which otherwise both has a simple definition and is simple to solve numerically, cannot be used, since it assumes a single speed $c$ of the propagation of waves for all wavelengths. Here, $\eta$ is the free surface elevation, $t$ is the time and $\nabla$ is the \idxs{del}{operator}\index{$\nabla$|see{del operator}} which is commonly used in \idxs{vector}{algebra}.
+--- a \PDE\xspace --- which otherwise both has a simple definition and is simple to solve numerically, cannot be used, since it assumes that waves of all wavelengths travel with a single speed, $c$. Here, $\eta(\vec{r})$ is the free surface elevation on the location $\vec{r}$, $t$ is the time and $\nabla$ is the \idxs{del}{operator}\index{$\nabla$|see{del operator}} which is commonly used in \idxs{vector}{algebra}.
 
-Besides, unless the \idxs{wave}{amplitude} is much smaller than the wavelength or the \idxs{water}{depth}, strong \idxse{non-linear}{phenomenon}{non-linear phenomena} takes place. This is the cause of for example \idxs{wave}{breaking}.
+In Airy wave theory, which threats the propagation of surface waves, the dispersion relation
+
+\begin{equation} \label{eq:dispersion}
+\omega^2(k) \,=\, \left(g\,+\,\frac{\gamma}{\rho}\,k^2\right)\,k\,\tanh(k\,h),
+\end{equation}
+
+is derived. Here, $k$ is the \idx{wavenumber} of the \idxs{wave}{component}, $\omega$ is the \idxs{angular}{frequency} of the component, $g$ is the \idxs{gravitational}{acceleration}, $h$ is the \idxs{water}{depth} and $\gamma$ is the \idxs{surface}{tension}.
+
+While this equation describes the propagation of a wave composed of a single wavelength very well, it cannot tell how a free surface elevation, $\eta(\vec{r})$, consisting of multiple wavelengths will evolve. Only if the wave amplitude is very small, typically such that $|\nabla\eta(\vec{r})| \ll 1$, can the surface be approximated as linear, and waves of different wavelengths can be individually described by \eqref{eq:dispersion} and superposed on top of each other to form the free surface elevation, without introducing too much error. If the \idxs{wave}{amplitude} on the other hand is not that small, strong non-linear phenomena are likely to take place, including for example \idxs{wave}{breaking}.
+
+What is maybe even worse is that there is no simple way of turning this equation into a \PDE represented in the spatial domain (like \eqref{eq:wave_equation}). This increases the difficulty to describe the evolution of the free surface elevation significantly, even for a surface that has already been linearized.
 
 \section{Fluid--Structure Interaction}
 
