@@ -2,7 +2,7 @@
 
 %TODO: Why is CFD needed for this thesis work? (maybe this should go under motivation)
 
-\CFD is a well established area of research, and a large number of widely differing methods have been developed during the years. This \levelname will present and briefly discuss some of the most common methods for modeling and simulating fluids, and how suitable they are for \thisprojectwork.
+In computational physics, \CFD is a well established area of research, and a large number of widely differing methods have been developed within this field over the years. This \levelname will present and briefly discuss some of the most common methods for modeling and simulating fluids, and how suitable they are for \thisprojectwork.
 
 \section{Two-dimensional methods}
 
@@ -33,38 +33,87 @@ A method that, just like the Fourier synthesis method, handles \idxs{wave}{dispe
 
 The general idea behind the method (not necessarily fully described in the work by \citeauthor{Ottosson2011}) is to use a hierarchy of grids, where in the simplest case all grids cover the same surface, and where one step down in the hierarchy means a doubling in grid resolution or a division by two of the grid cell size, which in practice also means a division by two of the minimum wavelength that can be efficiently simulated on the specific grid.
 
-Each grid is therefore responsible to store and process a specific set of wave vectors corresponding to this minimum wavelength. Any wave with a wave vector within that set should propagate well on the grid, and it should be easy to create a good reconstruction of the wave from its discretization on the grid. This set must also not contain any of the wave vectors that are processed on the grid one level up in the hierarchy. Together, all sets of wave vectors form a large set of wave vectors (including the zero vector) in which a very detailed free surface elevation can be represented. The top level grid is only a few cells across and is responsible for processing all the shortest wave vectors.
+Each grid is therefore responsible to store and process a specific set of wave vectors corresponding to this minimum wavelength. It should be easy to reconstruct any wave with a wave vector within that set, from its discretization on the grid. This set must also not contain any of the wave vectors that are processed on the grid one level up in the hierarchy. Together, all sets of wave vectors form a large set of wave vectors (including the zero vector) in which a very detailed free surface elevation, $\eta$, can be represented. The top level grid is only a few cells across and is responsible for processing all the shortest wave vectors. The free surface elevation is then reconstructed as the sum of all components, that is
 
-In order to decompose the free surface elevation into the components that are to be processed on the different grids, the method uses \LPD, which is a general decomposition method that can operate on a field of any number of dimensions, although is in this case used on a discretized two-dimensional field. An \LPD closely resembles the \idxs{wavelet}{transform} (although unlike wavelets, which are somewhat localized both in the spatial domain and in the frequency domain, the components of a Laplacian pyramid are only somewhat localized in the frequency domain and generally completely delocalized in the spatial domain).
+\begin{equation} \label{eq:laplacian_pyramid_composition}
+\eta \,=\, \sum_i \eta_i,
+\end{equation}
 
-Since each grid is only responsible for processing a limited range of wavelengths, it becomes possible to describe the time evolution of the $i$th free surface elevation component --- $\eta_i$ --- represented on the $i$th grid with a \PDE represented in the spatial domain and still include dispersion. By substituting $f$ for $\omega^2$ and $x$ for $k^2$ in \eqref{eq:dispersion}, we obtain the relation
+where $\eta_i$ is the component represented on the $i$th grid.
 
-\begin{equation} \label{eq:dispersion}
+In order to decompose the free surface elevation into the components that are to be processed on the different grids, the method uses \LPD, which is a general decomposition method that can operate on a field of any number of dimensions (but is in this case used on a discretized two-dimensional field). An \LPD closely resembles the \idxs{wavelet}{transform} (although unlike wavelets, which are somewhat localized both in the spatial domain and in the frequency domain, the components of a Laplacian pyramid are somewhat localized in the frequency domain, but generally completely delocalized in the spatial domain).
+
+This decomposition makes it possible to describe the time evolution of the free surface elevation component represented on each grid with a \PDE represented in the spatial domain, and still include dispersion. By substituting $f$ for $\omega^2$ and $x$ for $k^2$ in \eqref{eq:dispersion} and by realizing that $\omega, k \geq 0$, we obtain the relation
+
+\begin{equation} \label{eq:dispersion_modified}
 f(x) \,=\, \left(g\,+\,\frac{\gamma}{\rho}\,x\right)\,\sqrt{x}\,\tanh(\sqrt{x}\,h).
 \end{equation}
 
-Now, since the wavelengths that are represented on the $i$th grid in the method are restricted to a certain range, 
+Since the wavelengths that are represented on the $i$th grid in the method are restricted to a certain range, $x$ also becomes restricted to a certain range, and we can \approximate $f$ as a low order Taylor series around a value $a_i$ chosen to be somewhere in that range. That is
 
-
-This is enabled since the dispersion relation, \, can be approximated as a low order Taylor series
-
-This is achieved by expressing the second time-derivative of $\eta_i$ as a low order Taylor series of the \idxs{Laplace}{operator}, $\nabla^2$, operating on $\eta_i$, that is
-
-\begin{equation} 
-\frac{\partial^2 \eta_i(\vec{r})}{\partial t^2} \,=\, (a_{i0} + a_{i1}\nabla^2 + a_{i2}\nabla^4 + \dots + a_{in_{i}}\nabla^{2n_{i}})\eta_i(\vec{r}),
+\begin{equation} \label{eq:dispersion_modified_taylor}
+\renewcommand*{\arraystretch}{2}
+\begin{array}{c}
+\displaystyle f(x) \,=\, f(a_i) \,+\, \frac{f'(a_i)}{1!}(x-a_i)^1 \,+\, \frac{f''(a_i)}{2!}(x-a_i)^2 \,+\, \dots \\
+\displaystyle +\, \frac{f^{(n_i)}(a_i)}{n_i!}(x-a_i)^{n_i},
+\end{array}
 \end{equation}
 
-where $a_{ij}$ is the $j$th coefficient 
+where $n_i$ is the order of the Taylor series, and by substituting back $\omega^2$ for $f(x)$ and $k^2$ for $x$ we obtain
 
-Each grid therefore contains a unique \idxsp{band-pass}{filter}{ing} of the free surface elevation, and so waves with much different speeds are simulated on different grids. It then becomes possible to \approximate the dispersion reasonably well by concentrating on the part of the spectrum associated with each grid. The second time-derivative of the band-pass filtered free surface elevation, $\eta_i$, belonging to the $i$th grid, is expressed as a low order \polynomial of the \idxs{Laplace}{operator}, $\nabla^2$, operating on $\eta_i$. The non-filtered free surface elevation is then composed according to
-
-\begin{equation} \label{eq:laplacian_pyramid_composition}
-\eta \,=\, \sum_i \eta_i
+\begin{equation} \label{eq:dispersion_taylor}
+\renewcommand*{\arraystretch}{2}
+\begin{array}{c}
+\displaystyle \omega^2 \,=\, f(a_i) \,+\, \frac{f'(a_i)}{1!}(k^2-a_i)^1 \,+\, \frac{f''(a_i)}{2!}(k^2-a_i)^2 \,+\, \dots \\
+\displaystyle +\, \frac{f^{(n_i)}(a_i)}{n_i!}(k^2-a_i)^{n_i}.
+\end{array}
 \end{equation}
 
-which also serves as a definition of $\eta$.
+Since a wave of a single wavelength can be expressed on the form
 
-This method is easily extended to handle \FSI, and ensures the time complexity $O(N)$ per time step, where $N$ is the number of \idxs{surface}{grid points} in the grid with the highest resolution. If the \idxs{level of}{detail} depends on the location on the surface, why the grid with the highest resolution would not stretch over the entire simulated region, $N$ is the number of grid points located on a grid and on a location for which there are no grid with higher resolution, stretching over the same region.
+\begin{equation} \label{eq:component_sin}
+\eta_{\vec{k}}(\vec{r},\,t) \,=\, A\,\sin(\alpha + \vec{k}\cdot\vec{r}\,-\,\omega\,t),
+\end{equation}
+
+where $\eta_{\vec{k}}$ is the free surface elevation consisting only of a wave with the wave vector $\vec{k}$, $A$ is the amplitude of the wave, and $\alpha$ is the phase of the wave, we can conclude that
+
+\begin{equation} \label{eq:component_second_time_derivative}
+\frac{\partial^2}{\partial t^2}\eta_{\vec{k}} \,=\, -\omega^2 A\,\sin(\alpha + \vec{k}\cdot\vec{r}\,-\,\omega\,t) \,=\, -\omega^2\eta_{\vec{k}},
+\end{equation}
+
+and 
+
+\begin{equation} \label{eq:component_laplacian}
+\nabla^2\eta_{\vec{k}} \,=\, -k^2 A\,\sin(\alpha + \vec{k}\cdot\vec{r}\,-\,\omega\,t) \,=\, -k^2\eta_{\vec{k}}.
+\end{equation}
+
+If we multiply both sides of \eqref{eq:dispersion_taylor} with $\eta$, we can use \eqref{eq:component_second_time_derivative} and \eqref{eq:component_laplacian} to obtain
+
+\begin{equation} \label{eq:taylor_pde}
+\renewcommand*{\arraystretch}{2}
+\begin{array}{c}
+\displaystyle \frac{\partial^2}{\partial t^2}\eta_{i,\vec{k}} \,=\, -\left(f(a_i) \,+\, \frac{f'(a_i)}{1!}(-\nabla^2-a_i)^1 \,+\, \frac{f''(a_i)}{2!}(-\nabla^2-a_i)^2 \,+\, \dots \right.\\
+\displaystyle \left. +\, \frac{f^{(n_i)}(a_i)}{n_i!}(-\nabla^2-a_i)^{n_i}\right)\eta_{i,\vec{k}},
+\end{array}
+\end{equation}
+
+where an $i$ has been added to the index of $\eta$ to indicate that this \PDE is only valid for waves that are described by \eqref{eq:component_sin} and are represented in $\eta_i$. Since this \PDE otherwise holds for all $\omega$ and $\vec{k}$, if we assume that the surface is linear, the superposition principle tells us that the equation can be used to describe the time evolution of $\eta_i$, and we can remove the $\vec{k}$ completely from the equation.
+
+However, one has to keep in mind that $f$, as well as all of its derivatives, depend on the water depth $h$, which in turn can vary between different locations $\vec{r}$ and times $t$. If $k\,h \gg 1$, the $\tanh$ factor in \eqref{eq:dispersion_modified} can be \approximated as 1 and then the $h$ dependence vanishes. But if there exists waves with wavelengths comparable or longer than the water depth, this can be problematic. In that case, for the coarser grids, on which waves are represented for which this is the case, as well as on finer grids close to the shoreline where the water is shallow, the derivatives of $f$ used in the Taylor series may have to be computed separately for each grid point, and perhaps also recomputed at even intervals if the water is not calm and the water depth changes much.
+
+Another problem, that it is easy to overlook, is the discretization of the $\nabla^2$ operator. To use a naive three-point second order derivative operator $D^2$ in each dimension in $\nabla^2$ is not sufficient. To illustrate, if $D^2$ operates on a one-dimensional wave, $\sin(k\,x)$, the result will be
+
+\begin{equation}
+\renewcommand*{\arraystretch}{2}
+\begin{array}{c}
+\displaystyle D^2\sin(k\,x) \,=\, \frac{\sin(k\,(x-\Delta x)) - 2\,\sin(k\,x) + \sin(k\,(x+\Delta x))}{\Delta x^2} \\
+\displaystyle \,=\, -\sin(k\,x)\,\frac{2\,(1-\cos(k\,\Delta x))}{\Delta x^2},
+\end{array}
+\end{equation}
+
+where $\Delta x$ is the grid cell size. Hence, $D^2$ will underestimate the real second order derivative which is $-k^2\sin(k\,x)$ (this is especially true for high $k$-values). A more suitable operator can be constructed as an $n_i$th order polynomial of $D^2$. When \eqref{eq:taylor_pde} is then discretized, this polynomial is substituted for $\nabla^2$, and any terms containing powers of $D^2$ with an exponent higher than $n_i$, after the powers in \eqref{eq:taylor_pde} have been expanded, are simply neglected because they are of too high order.
+
+This method can be extended to handle \FSI \citep{Ottosson2011}, and by assuming that all grids cover the same surface, it has the time complexity $O(N)$ per time step, where $N$ is the number of \idxs{surface}{grid points} in the grid with the highest resolution. If the \idxs{level of}{detail} depends on the location on the surface, why the grid with the highest resolution would not stretch over the entire simulated region, $N$ is the number of grid points located on a grid and on a location for which there are no grid with higher resolution, stretching over the same region.
 
 \section{Three-dimensional methods}
 
@@ -96,9 +145,9 @@ This method is ideal for simulating flowing water when the main focus does not l
 
 \subsection{Finite Volume Method on an octree grid}
 
-The aim of this method, is the same as the aim of the restricted tall cell grid approach, to reduce the number of cells that are needed in the simulation. It does so by modeling the grid with an \octree \citep[probably done first by][later also by \citealp{Losasso2004}]{Popinet2003}, which allows for easy \idxs{adaptive}{mesh refinement}. The fluid in important regions of the simulation, such as that closest to a surface, is therefore modeled with a fine grid to capture the small scale visual detail, while fluid further away from such regions are modeled with increasingly larger cell sizes the further away they get.
+The aim of this method, is the same as the aim of the restricted tall cell grid approach, to reduce the number of cells that are needed in the simulation. It does so by modeling the grid with an \octree which allows for easy \idxs{adaptive}{mesh refinement}. This method was probably first implemented in \citeyear{Popinet2003} \citep{Popinet2003}, but has since been implemented a number of times \citep[e.g][]{Losasso2004,openfoam}. The fluid in important regions of the simulation, such as that closest to a surface, is therefore modeled with a fine grid to capture the small scale visual detail, while fluid further away from such regions are modeled with increasingly larger cell sizes the further away they get.
 
-Using this method to simulate surface waves propagating on a large body of water allows an arbitrarily high accuracy, depending on how quickly the cells grow in size when the get farther away from regions of high importance to the simulation, no matter how large the wavelength is. However, it may, just like any other method that discretizes a set of \PDEs, have some problems with getting the correct wave speed for waves with a wavelength close to the \idxs{Nyquist}{frequency}.
+Using this method to simulate surface waves propagating on a large body of water allows an arbitrarily high accuracy, depending on how quickly the cells grow in size when the get farther away from regions of high importance to the simulation, no matter how large the wavelength is. However, it may, just like any other method that discretizes a set of \PDEs represented in the spatial domain, have some problems with getting the correct wave speed for waves with wavelengths close to the \idxs{Nyquist}{frequency}.
 
 It also guarantees that the number of cells that are used in the simulation is $O(N_{\text{s}})$, where $N_{\text{s}}$ is the number of cells visible on the surface, so it ensures the time complexity $O(N_{\text{s}})$ per time step.
 
@@ -106,16 +155,16 @@ It also guarantees that the number of cells that are used in the simulation is $
 
 \idxse{two-dimensional}{method}{Two-dimensional methods} is usually much faster than \idxsp{three-dimensional}{method}{s}. On the other hand, three-dimensional methods often have a level of realism that you can't find among two-dimensional methods, and are able to simulate phenomena such as splashes or wave breaking, and the mathematical model describing \FSI often follows naturally. For that reason, \idxe{hybrid method}{hybrid two-dimensional and three-dimensional methods} have been developed, which aim to combine the strengths of two-dimensional and three-dimensional methods and overcome their weaknesses by simulating regions with more complex water motion using with three-dimensional method and regions with less complex water motion with a two-dimensional method, and then couple these simulations with each other. Regions with complex water motion as close to a moving structure such as a ship, and close to the \shoreline if \idxs{wave}{breaking} or \idxs{wave}{shoaling} is important.
 
-In one specific implementation \citep{Thurey2006}, a method known as the \idxs{Lattice-Boltzmann}{method}, which is similar to the \FVM, was used to simulate water in a small box, and was coupled to an \SWS taking place outside of the box. It turned out that with a two-dimensional region covering an area 35 times the size of the area over the three-dimensional region, the three-dimensional region still required more than two thirds of the entire simulation time, and updating a three-dimensional cell took in average three times as long as updating a two-dimensional cell. Although the simulation didn't run in real-time, it was further concluded that given enough computational resources, and in combination with adaptive grids, parallelization and low grid-resolutions, this could be used for interactive, real-time simulations of large water surfaces.
+In an implementation from \citeyear{Thurey2006} \citep{Thurey2006}, a method known as the \idxs{Lattice-Boltzmann}{method}, which is similar to the \FVM, was used to simulate water in a small box, and was coupled to an \SWS taking place outside of the box. It turned out that with a two-dimensional region covering an area 35 times the size of the area over the three-dimensional region, the three-dimensional region still required more than two thirds of the entire simulation time, and updating a three-dimensional cell took in average three times as long as updating a two-dimensional cell. Although the simulation didn't run in real-time, it was further concluded that given enough computational resources, and in combination with adaptive grids, parallelization and low grid-resolutions, this could be used for interactive, real-time simulations of large water surfaces.
 
 \section{Miscellaneous other methods}
 
 Except from the methods already covered in this chapter, there are a few other methods commonly used in \CFD which for selected reasons are not suitable for simulating oceans.
 
-We have the \LBM which has connections to cellular automata. The \LBM solved the \idxs{discrete}{Boltzmann equation}\index{equation!discrete Boltzmann|see{discrete Boltzmann equation}} and is basically a less powerful \CFD method than the \FVM.
+We have the \LBM which has connections to cellular automata. The \LBM solves the \idxs{discrete}{Boltzmann equation}\index{equation!discrete Boltzmann|see{discrete Boltzmann equation}} and is basically a less powerful \CFD method than the \FVM.
 
-We have the \MAC method, which is a \FVM simulation in which many small, massless marker particles initially are homogeneously distributed in the fluid and then carried with the flow to mark the presence of fluid, but this is basically a less powerful method than the \indexs{volume of fluid}{method}.
+We have the \MAC method, which is a \FVM simulation in which many small, massless marker particles are initially homogeneously distributed in the fluid and then carried with the flow to mark the presence of fluid, but this is basically a less powerful method than the \idxs{volume of fluid}{method}.
 
-We have the \BEM in which the equations of motion are converted to \idxsp{integral}{equation}{s} and solved solely from the \boundaries, and has some interesting potential for the simulation of surface waves. However, it belongs to the category of computationally expensive methods and is for that reason not suitable for simulating the surface of a large body of water in real-time.
+We have the \BEM in which the equations of motion are converted to \idxsp{integral}{equation}{s} and solved solely from the \boundaries, and has some interesting potential for the simulation of surface waves \citep{advancesinnumericalsimulationofnonlinearwaterwaves}. However, it belongs to the category of computationally expensive methods and is for that reason not suitable for simulating the surface of a large body of water in real-time.
 
-We also have the \FEM which is the Lagrangian correspondence to the \FVM, where the simulated region is divided into many small elements which move along with the flow instead of letting the flow go through the cell walls. The \FEM have some advantages over the \FVM, like using the Lagrangian versions of the equations of motion, which don't contain advection terms and hence are unaffected by smearing, and it naturally provides a representation of fluid interfaces. However, it is more complicated to implement than the \FVM, and comes with some nasty surprises like cells being stretched out which makes remeshing necessary, and is still not guaranteed to give results wich have better or even the same quality as results gained with the \FVM. In the field of \CFD, the \FEM is also not that well established, while the \FVM is somewhat of an industry standard.
+We also have the \FEM which is the Lagrangian correspondence to the \FVM, where (like in the \FVM) the simulated region is divided into many small elements, or cells, but where (unlike in the \FVM) the cells follow the flow instead of being stationary and letting the flow pass through the cell walls. The \FEM have some advantages over the \FVM, like using the Lagrangian versions of the equations of motion which in contrast to the Euclidean versions don't contain advection terms and hence are not subject to smearing. It also naturally provides a representation of fluid interfaces. However, the \FEM is more complicated to implement than the \FVM. Cells change shape and are stretched out, which makes re-meshing necessary, and the \FEM is still not guaranteed to give results better than, or even as good as, those of the \FVM. Besides, the \FEM, which is very often used in solid state mechanics simulations, is not that well established in the field of \CFD, while the \FVM is somewhat of an industry standard.
