@@ -30,6 +30,8 @@ Search for (texfind):
 * compare to (point out similarities), compare with (point out differences)
 * assume, assumption, etc. approximate, approximation, etc.
 * lying (located?)
+* due to (= caused by)
+* leviate (should be "alleviate"?)
 
 Estethic improvements:
 * \vec{k}^2 -> \vec{k}^{\,2}
