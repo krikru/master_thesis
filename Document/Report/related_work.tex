@@ -28,12 +28,13 @@ However, this method has been noted to be incompatible with \FSI \citep{Chentane
 This method ensures the time complexity $O(N\,\log(N))$ per time step for trivial grid setups, where $N$ is the number of \idxs{surface}{grid points}.
 
 \subsection{Laplacian Pyramid Decomposition}
+\label{sec:lacplacian_pyramid_decomposition}
 
-A method that, just like the Fourier synthesis method, handles \idxs{wave}{dispersion} well but, unlike it, operates in the \idxs{spatial}{domain} and hence can handle local variations in the topography has recently been presented in a number of different works \citep{Ottosson2011,temp} \textit{\href{http://dice.se/wp-content/uploads/InteractiveWater_Lennartsson_dice.pdf}{Data Oriented Interactive Water}}.
+A method that, just like the Fourier synthesis method, handles \idxs{wave}{dispersion} well but, unlike it, operates in the \idxs{spatial}{domain} and hence can handle local variations in the topography has recently been presented in a couple of works \citep{Ottosson2011,temp} \textit{\href{http://dice.se/wp-content/uploads/InteractiveWater_Lennartsson_dice.pdf}{Data Oriented Interactive Water}}.
 
-The general idea behind the method (not necessarily fully described in the work by \citeauthor{Ottosson2011}) is to use a hierarchy of grids, where in the simplest case all grids cover the same surface, and where one step down in the hierarchy means a doubling in grid resolution or a division by two of the grid cell size, which in practice also means a division by two of the minimum wavelength that can be efficiently simulated on the specific grid.
+The general idea behind the method is to use a hierarchy of grids, where in the simplest case all grids cover the same surface. One step down in the hierarchy means a doubling in grid resolution or a division by two of the grid cell size, which in practice also means a division by two of the minimum wavelength that can be efficiently simulated on the specific grid.
 
-Each grid is therefore responsible to store and process a specific set of wave vectors corresponding to this minimum wavelength. It should be easy to reconstruct any wave with a wave vector within that set, from its discretization on the grid. This set must also not contain any of the wave vectors that are processed on the grid one level up in the hierarchy. Together, all sets of wave vectors form a large set of wave vectors (including the zero vector) in which a very detailed free surface elevation, $\eta$, can be represented. The top level grid is only a few cells across and is responsible for processing all the shortest wave vectors. The free surface elevation is then reconstructed as the sum of all components, that is
+Each grid is therefore responsible to store and process a specific set of wave vectors, that corresponds to this minimum wavelength. It should be easy to reconstruct any wave with a wave vector within that set, from the wave's discretization on the grid. The set must also not contain any of the wave vectors that are processed on the grid one level up in the hierarchy. The top level grid is only a few cells across and is responsible for processing all the shortest wave vectors. Together, all sets of wave vectors that are processed on the different grids form a large set of wave vectors (including the zero vector) in which a very detailed free surface elevation, $\eta$, can be represented. The free surface elevation is then reconstructed as the sum of all components, that is
 
 \begin{equation} \label{eq:laplacian_pyramid_composition}
 \eta \,=\, \sum_i \eta_i,
@@ -92,16 +93,14 @@ If we multiply both sides of \eqref{eq:dispersion_taylor} with $\eta$, we can us
 \begin{equation} \label{eq:taylor_pde}
 \renewcommand*{\arraystretch}{2}
 \begin{array}{c}
-\displaystyle \frac{\partial^2}{\partial t^2}\eta_{i,\vec{k}} \,=\, -\left(f(a_i) \,+\, \frac{f'(a_i)}{1!}(-\nabla^2-a_i)^1 \,+\, \frac{f''(a_i)}{2!}(-\nabla^2-a_i)^2 \,+\, \dots \right.\\
-\displaystyle \left. +\, \frac{f^{(n_i)}(a_i)}{n_i!}(-\nabla^2-a_i)^{n_i}\right)\eta_{i,\vec{k}},
+\displaystyle \frac{\partial^2}{\partial t^2}\eta_{i\vec{k}} \,=\, -\left(f(a_i) \,+\, \frac{f'(a_i)}{1!}(-\nabla^2-a_i)^1 \,+\, \frac{f''(a_i)}{2!}(-\nabla^2-a_i)^2 \,+\, \dots \right.\\
+\displaystyle \left. +\, \frac{f^{(n_i)}(a_i)}{n_i!}(-\nabla^2-a_i)^{n_i}\right)\eta_{i\vec{k}},
 \end{array}
 \end{equation}
 
 where an $i$ has been added to the index of $\eta$ to indicate that this \PDE is only valid for waves that are described by \eqref{eq:component_sin} and are represented in $\eta_i$. Since this \PDE otherwise holds for all $\omega$ and $\vec{k}$, if we assume that the surface is linear, the superposition principle tells us that the equation can be used to describe the time evolution of $\eta_i$, and we can remove the $\vec{k}$ completely from the equation.
 
-However, one has to keep in mind that $f$, as well as all of its derivatives, depend on the water depth $h$, which in turn can vary between different locations $\vec{r}$ and times $t$. If $k\,h \gg 1$, the $\tanh$ factor in \eqref{eq:dispersion_modified} can be \approximated as 1 and then the $h$ dependence vanishes. But if there exists waves with wavelengths comparable or longer than the water depth, this can be problematic. In that case, for the coarser grids, on which waves are represented for which this is the case, as well as on finer grids close to the shoreline where the water is shallow, the derivatives of $f$ used in the Taylor series may have to be computed separately for each grid point, and perhaps also recomputed at even intervals if the water is not calm and the water depth changes much.
-
-Another problem, that it is easy to overlook, is the discretization of the $\nabla^2$ operator. To use a naive three-point second order derivative operator $D^2$ in each dimension in $\nabla^2$ is not sufficient. To illustrate, if $D^2$ operates on a one-dimensional wave, $\sin(k\,x)$, the result will be
+A problem that it is easy to overlook is the discretization of the $\nabla^2$ operator. To use a naive three-point second order derivative operator $D^2$ in each dimension in $\nabla^2$ is not sufficient. To illustrate, if $D^2$ operates on a one-dimensional wave, $\sin(k\,x)$, the result will be
 
 \begin{equation}
 \renewcommand*{\arraystretch}{2}
@@ -111,9 +110,20 @@ Another problem, that it is easy to overlook, is the discretization of the $\nab
 \end{array}
 \end{equation}
 
-where $\Delta x$ is the grid cell size. Hence, $D^2$ will underestimate the real second order derivative which is $-k^2\sin(k\,x)$ (this is especially true for high $k$-values). A more suitable operator can be constructed as an $n_i$th order polynomial of $D^2$. When \eqref{eq:taylor_pde} is then discretized, this polynomial is substituted for $\nabla^2$, and any terms containing powers of $D^2$ with an exponent higher than $n_i$, after the powers in \eqref{eq:taylor_pde} have been expanded, are simply neglected because they are of too high order.
+where $\Delta x$ is the grid cell size. Hence, $D^2$ will underestimate the real second order derivative which is $-k^2\sin(k\,x)$ (this is especially true for high $k$-values). A more suitable operator can be constructed as an $n_i$th order polynomial of $D^2$. When \eqref{eq:taylor_pde} is then discretized, this polynomial is substituted for $\nabla^2$, and any terms containing powers of $D^2$ with an exponent higher than $n_i$, after the powers in \eqref{eq:taylor_pde} have been expanded, are simply neglected. After doing this substitution, $(\partial^2/\partial t^2)\eta_i$ will be given on the form
 
-This method can be extended to handle \FSI \citep{Ottosson2011}, and by assuming that all grids cover the same surface, it has the time complexity $O(N)$ per time step, where $N$ is the number of \idxs{surface}{grid points} in the grid with the highest resolution. If the \idxs{level of}{detail} depends on the location on the surface, why the grid with the highest resolution would not stretch over the entire simulated region, $N$ is the number of grid points located on a grid and on a location for which there are no grid with higher resolution, stretching over the same region.
+\begin{equation} \label{eq:polynomial_pde}
+\renewcommand*{\arraystretch}{2}
+\begin{array}{c}
+\displaystyle \frac{\partial^2}{\partial t^2}\eta_i \,=\, \left(C_{i0} \,+\, C_{i1}(D^2)^1 \,+\, \dots \,+\, C_{in_i}(D^2)^{n_i}\right)\eta_i,
+\end{array}
+\end{equation}
+
+where $C_{ij},\,j=0,\dots,n_i$ are a sequence of polynomial coefficients used in the \PDE for describing $\eta_i$, and $j$ is an index used to specify one of those coefficients.
+
+It also has to be considered that $f$, as well as all of its derivatives, depend on the water depth $h$, which in turn can vary between different locations $\vec{r}$ and times $t$. Hence, $C_{ij}$ also depends on $h$ and this has a direct effect on \eqref{eq:polynomial_pde}. If $k\,h \gg 1$, the factor $\tanh(\sqrt{x}\,h)$ in \eqref{eq:dispersion_modified} can be \approximated as 1 and the $h$ dependence vanishes. But for the coarser grids, on which waves with very long wavelengths are represented, or close to the shoreline where the water is shallow, $\tanh(\sqrt{x}\,h)$ cannot be \approximated as 1 and the coefficients $C_{ij}$ may have to be computed separately for each grid point, and perhaps also recomputed at even intervals if the water is not calm and the water depth changes much. If that is the case, a \idxs{lookup}{table} for each coefficient $C_{ij}$ may be used, in which \interpolation between lookup elements can be performed, to speed up the calculation of $C_{ij}$ for different values of $h$.
+
+This method can be extended to handle \FSI \citep{Ottosson2011}, and by using the method proposed in this report to obtain \PDEs on the form given by \eqref{eq:polynomial_pde}, arbitrary accuracy for the simulation can be obtained by choosing a high enough $n_i$ for each component. By choosing a fixed order $n_i$ for the each polynomial in \eqref{eq:polynomial_pde}, the method has the time complexity $O(N)$ per time step. Here, $N$ is the number of grid points that are located on a location on a grid for which there doesn't exist any other grid with higher resolution that stretch over the same location. For a simple case where the \idxs{level of}{detail} doesn't depend on location, and all grids hence cover the same surface, This means that $N$ is the number of grid points on the finest grid.
 
 \section{Three-dimensional methods}
 
@@ -145,11 +155,13 @@ This method is ideal for simulating flowing water when the main focus does not l
 
 \subsection{Finite Volume Method on an octree grid}
 
-The aim of this method, is the same as the aim of the restricted tall cell grid approach, to reduce the number of cells that are needed in the simulation. It does so by modeling the grid with an \octree which allows for easy \idxs{adaptive}{mesh refinement}. This method was probably first implemented in \citeyear{Popinet2003} \citep{Popinet2003}, but has since been implemented a number of times \citep[e.g][]{Losasso2004,openfoam}. The fluid in important regions of the simulation, such as that closest to a surface, is therefore modeled with a fine grid to capture the small scale visual detail, while fluid further away from such regions are modeled with increasingly larger cell sizes the further away they get.
+The aim of this method, is the same as the aim of the restricted tall cell grid approach, to reduce the number of cells that are needed in the simulation. It does so by modeling the grid with an \octree which allows for easy \idxs{adaptive}{mesh refinement}. This method was probably first implemented in \citeyear{Popinet2003} \citep{Popinet2003}, but has since been implemented a number of times after that \citep[e.g][]{Losasso2004,openfoam}.
 
-Using this method to simulate surface waves propagating on a large body of water allows an arbitrarily high accuracy, depending on how quickly the cells grow in size when the get farther away from regions of high importance to the simulation, no matter how large the wavelength is. However, it may, just like any other method that discretizes a set of \PDEs represented in the spatial domain, have some problems with getting the correct wave speed for waves with wavelengths close to the \idxs{Nyquist}{frequency}.
+Numerically important regions, such as those close to the surface, are modeled with a fine grid in order to capture small scale details, while other regions are modeled with increasingly larger cell sizes the less important they become, which usually means the farther away they get from important regions. For the case of surface wave simulations, this means a grid cell size that depends on the relative positioning to the camera on the surface, and an increasing cell size for the subsurface cells the farther they get from the surface.
 
-It also guarantees that the number of cells that are used in the simulation is $O(N_{\text{s}})$, where $N_{\text{s}}$ is the number of cells visible on the surface, so it ensures the time complexity $O(N_{\text{s}})$ per time step.
+Using this method to simulate surface waves propagating on a large body of water allows an arbitrarily high accuracy, depending on how quickly the cells grow in size when the get farther away from regions of high importance. However, it may, just like any other method that discretizes a set of \PDEs represented in the spatial domain, have some problems with getting the correct wave speed for waves with wavelengths close to the \idxs{Nyquist}{frequency}, for reasons related to the problem of discretizing the $\nabla^2$ operator discussed in \secref{sec:lacplacian_pyramid_decomposition}.
+
+This method guarantees that the number of cells used in the simulation is $O(N_{\text{s}})$, where $N_{\text{s}}$ is the number of cells located on the surface; hence it ensures the time complexity $O(N_{\text{s}})$ per time step.
 
 \section{Hybrid two- and three-dimensional methods}
 
