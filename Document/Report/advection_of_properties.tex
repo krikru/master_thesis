@@ -16,15 +16,15 @@ It is also often desired that the advection scheme damps the frequencies of the 
 
 \subsection{Error reduction for linear advection schemes}
 
-A method that was originally intended to improve the quality of the \LS method, known as \BFECC, was first described in \textit{\href{http://www.google.se/url?sa=t&rct=j&q=&esrc=s&source=web&cd=1&cad=rja&ved=0CC0QFjAA&url=http\%3A\%2F\%2Fciteseerx.ist.psu.edu\%2Fviewdoc\%2Fdownload\%3Fdoi\%3D10.1.1.115.7663\%26rep\%3Drep1\%26type\%3Dpdf&ei=XHnwUOjlJoOK4ATAg4GgAg&usg=AFQjCNE4DIndzRfCNysW63F-FevKcuXxUA&bvm=bv.1357700187,d.bGE}{BACK AND FORTH ERROR COMPENSATION AND CORRECTION METHODS FOR SEMI-LAGRANGIAN SCHEMES WITH APPLICATION TO LEVEL SET INTERFACE COMPUTATIONS}} \citep{temp} and can be used to reduce the error of a non-ideal, linear operator $A$ acting on a smooth field $\Phi$ (or a vector or any other object on which it makes sense to apply a linear operator), which is an \approximation of an ideal (at least theoretically existing) operator $A^*$ which is both stable and doesn't introduce damping. Let's assume that our goal is to improve the operator $A$ in such a way that the damping is reduced. \BFECC works under the circumstances that $A$ has a corresponding operator $A'$ which is an \approximation of $(A^*)^{-1}$ and has an equally damping effect on the frequencies in the field as $A$ has, or more specifically, $A'$ has the same \eigenfunctions as $A$ and
+A method that was originally intended to improve the quality of the \LS method, known as \BFECC, was first described in a publication in \citeyear{Dupont2003} \citep{Dupont2003} and can be used to reduce the error of a non-ideal, linear operator $A$ acting on a smooth field $\Phi$ (or a vector or any other object on which it makes sense to apply a linear operator), which is an \approximation of an ideal (at least theoretically existing) operator $A^*$ which is both stable and doesn't introduce damping. Let's assume that our goal is to improve the operator $A$ in such a way that the damping is reduced. \BFECC works under the circumstances that $A$ has a corresponding reverse operator $A'$ which is an \approximation of $(A^*)^{-1}$ and has an equal damping effect on the frequencies in the field as $A$, or more specifically, $A'$ has the same \eigenfunctions as $A$, with the corresponding eigenvalues
 
 \begin{equation}
 \lambda'_i \,=\, \overline{\lambda_i}, \,\forall\,i,
 \end{equation}
 
-where $\lambda'_i$ is the eigenvalue of the $i$th \eigenfunction of $A'$. For a linear advection scheme, if $A$ is an operator that advects the field in a specific way, $A'$ is simply the operator that uses the same advection scheme as $A$ and that takes a field that has been advected by $A$ back to the position it came from.
+where $\lambda'_i$ is the eigenvalue of the $i$th \eigenfunction of $A'$. For a linear advection scheme, if $A$ is an operator that advects the field in a specific way, $A'$ is simply the operator that uses the same advection scheme as $A$ but that takes a field that has been advected by $A$ back to the position it came from.
 
-In \BFECC, $\Phi$ is first updated forward in time, and then backwards to get another copy of the field, $\Phi_1$, such that $\Phi_1 = A'A\,\Phi$. If there would have been no numerical error, $A'$ would have been the inverse of $A$ and $\Phi$ and $\Phi_1$ would have been equal. The idea is to use $\Phi_1-\Phi$ as information about the error, which can be used to compensate $\Phi$ before applying $A$. Since the error is introduced twice when calculating $\Phi_1$, a compensated variable $\Phi_2$ is calculated using only half of $\Phi_1-\Phi$, or
+In \BFECC, $\Phi$ is first updated forward in time, and then backwards to get another copy of the field, $\Phi_1$, such that $\Phi_1 = A'A\,\Phi$. If there would have been no numerical error, $A'$ would have been the inverse of $A$ and $\Phi$ and $\Phi_1$ would have been equal. The idea is to use the difference $\Phi_1-\Phi$ as information about the error, which can be used to compensate $\Phi$ before applying $A$. Since the error is introduced twice when calculating $\Phi_1$, a compensated variable $\Phi_2$ is calculated using only half of $\Phi_1-\Phi$, or
 
 \begin{equation}
 \Phi_2 \,=\, \Phi - \tfrac{1}{2}(\Phi_1 \,-\, \Phi).
@@ -39,7 +39,7 @@ A\,\Phi_2 \,=\, A\,\left(\Phi \,-\, \tfrac{1}{2}(\Phi_1 \,-\, \Phi)\right) \,=\,
 \end{array}
 \end{equation}
 
-where $\tilde{A}$ is defined by
+where $\tilde{A}$ is defined as
 
 \begin{equation} \label{eq:compensated_advection_operator}
 \tilde{A} \,=\, A\,\left(\tfrac{3}{2} \,-\, \tfrac{1}{2}A'A\right)
@@ -57,7 +57,7 @@ where $\tilde{\lambda} = \lambda/|\lambda|\,\left(\tfrac{3}{2}\,|\lambda| \,-\, 
 |\lambda| \,=\, 1 - h, \quad h \leq 1
 \end{equation}
 
-where $h$ is the damping introduced by $A$, we see that
+where $h$ is a measure of the amount of damping introduced by $A$, we see that
 
 \begin{equation}
 \begin{array}{c}
@@ -74,9 +74,9 @@ The damping introduced by $\tilde{A}$ is given by $\tilde{h} = 1 - |\tilde{\lamb
 
 and we see that the damping introduced by $\tilde{A}$ is of second order if we consider the damping introduced by $A$ to be of first order. We can also notice that if $A$ is unstable, which means that $h < 0$ (although still very small), $\tilde{h}$ will still be positive, which means that $\tilde{A}$ is stable. \BFECC will therefore both heavily reduce damping as well as fix small instabilities in $A$.
 
-Similar schemes of even higher order can be obtained by extending the \polynomial that $\tilde{A}$ is partially composed of with even more terms of type $(A'A)^n$. Since we desire that $\tilde{\lambda} = \lambda/|\lambda|$, we require that the polynomial will result in a division with $|\lambda|$ when acting on $\phi$. This result is \approximated if we let the polynomial be an approximation of $1/\sqrt{A'A}$. The polynomial can therefore be expressed as a \idxs{Taylor}{polynomial} of $1/\sqrt{A'A}$ centered around the point $A'A = 1$. The Taylor polynomial in turn is given by the first terms of the \idxs{binomial}{series} of $(1+x)^{-\frac{1}{2}}$, where $x = A'A - 1$. All these schemes will be stable as long as $A$ is stable, and all schemes with even order will also stabilize the advection process if $A$ contains instabilities that are small enough.
+Similar schemes of even higher order can be obtained by extending the \polynomial that $\tilde{A}$ is partially composed of with even more terms of type $(A'A)^n$. Since we desire that $\tilde{\lambda} = \lambda/|\lambda|$, we require that the polynomial will result in a division by $|\lambda|$ when acting on $\phi$. This result is \approximated if we let the polynomial be an approximation of $1/\sqrt{A'A}$. The polynomial can therefore be expressed as a \idxs{Taylor}{polynomial} of $1/\sqrt{A'A}$ centered around the point $A'A = 1$. The Taylor polynomial in turn is given by the first terms of the \idxs{binomial}{series} of $(1+x)^{-\frac{1}{2}}$, where $x = A'A - 1$. All these schemes will be stable as long as $A$ is stable, and all schemes with even order will also stabilize the advection process if $A$ contains instabilities that are small enough.
 
-Another approach to increase the order of the advection scheme is to apply \BFECC multiple times to improve the already improved approximation of $A^*$, each time doubling the order of the scheme, but also tripling the number of times $A$ and $A'$ has to be applied. This method is more bulletproof than the method using a Taylor polynomial as it theoretically can stabilize advection schemes with eigenvalues whose absolute values are up to (but less than) $\sqrt{5}$, while the method using a Taylor polynomial tends to decrease the stabilizing abilities the higher the order of the method becomes. On the other hand, it faster becomes slower as it needs to use $A$ and $A'$\ \ $3^n$ times to obtain the order $2^n$, where $n$ is an integer, while the method using a Taylor polynomial only needs to use $A$ and $A'$\ \ $2\cdot 2^n - 1$ times to reach the same order.
+Another approach to increase the order of the advection scheme is to apply \BFECC multiple times to improve the already improved approximation of $A^*$, each time doubling the order of the scheme, but also tripling the number of times $A$ and $A'$ has to be applied. This method is more bulletproof than the method using a Taylor polynomial as it theoretically can stabilize advection schemes with eigenvalues whose absolute values are up to (but less than) $\sqrt{5}$, while the stabilizing abilities of the method using a Taylor polynomial decreases in strength the higher the order of the method becomes. On the other hand, it faster becomes slower as it needs to use $A$ and $A'$\ \ $3^n$ times to obtain the order $2^n$, where $n$ is an integer, while the method using a Taylor polynomial only needs to use $A$ and $A'$\ \ $2\cdot 2^n - 1$ times to reach the same low order of the measure $\tilde{h}$ of the damping introduced by $\tilde{A}$ on $\phi$.
 
 \section{Advection of the phase fraction}
 

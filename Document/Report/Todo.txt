@@ -32,6 +32,7 @@ Search for (texfind):
 * lying (located?)
 * due to (= caused by)
 * leviate (should be "alleviate"?)
+* rate of convergence (lower rate = higher speed)
 
 Estethic improvements:
 * \vec{k}^2 -> \vec{k}^{\,2}
