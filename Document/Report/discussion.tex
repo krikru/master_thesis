@@ -4,9 +4,9 @@ As mentioned in the last chapter, there were quite many issues that needed to be
 
 \begin{itemize}
     \item Dynamical creation/destruction of surface cells and determination of properties in the new cells,
-    \item Handling of high Courant numbers (described in \citep{Stam1999}),
+    \item Handling of high Courant numbers (described by \citeauthor{Stam1999} \citep{Stam1999}),
     \item Solving \idxs{pressure Poisson}{equation} (described in a large amount of research papers, see \secref{sec:pressure_poison_equation_solution}),
-    \item Handling of high speeds of sound if the fluids are assumed to be compressible (described in \citep{Kwatra2009}),
+    \item Handling of high speeds of sound if the fluids are assumed to be compressible (described by \citeauthor{Kwatra2009} \citep{Kwatra2009}),
     \item Keeping the interface sharp (described in a large amount of research papers, see \secref{sec:advection_of_phase_fraction}), and
     \item Making it work in real-time.
 \end{itemize}
@@ -25,6 +25,6 @@ However, \thismethod has a very high time constant associated with the big O not
 
 \section{Already existing software}
 
-There is a number of software dedicated for simulating fluids under various licenses. A few of the free software \idxsp{CFD}{package}{s} that exist are \OpenFOAM (originally \idx{FOAM}, for \textit{\idxs{field}{operation and manipulation}}\index{field operation and manipulation|see{FOAM}}, outlined in an article from \citeyear{Weller1998} \citep{Weller1998}, which is free and open source, and \Gerris \citep{Popinet2003}, published under the Free Software GPL license. There are several commercial CFD solvers as well, including \RealFlow and \idxs{ANNSYS}{Fluent}. %For a larger list of available software, see \textit{\href{http://www.cfd-online.com/Links/soft.html}{CFD Online: Links - Software}} \citep{temp}.
+There is a number of software dedicated for simulating fluids under various licenses. A few of the free \CFD software packages that exist are \OpenFOAM (originally \idx{FOAM}, for \textit{\idxs{field}{operation and manipulation}}\index{field operation and manipulation|see{FOAM}}, outlined in an article from \citeyear{Weller1998} \citep{Weller1998}), which is free and open source, and \Gerris \citep{Popinet2003}, published under the Free Software GPL license. There are several commercial CFD solvers as well, including \RealFlow and \idxs{ANNSYS}{Fluent}. %For a larger list of available software, see \textit{\href{http://www.cfd-online.com/Links/soft.html}{CFD Online: Links - Software}} \citep{temp}.
 
 However, the majority of existing CFD packages are designed to produce generic, high quality simulations to be used for analysis or by artists, and are not aimed towards \realtime simulations.

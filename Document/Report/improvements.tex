@@ -29,7 +29,7 @@ On the other hand, when it comes to advection, many advection schemes tend to be
 
 A remedy for this dilemma is to use semi-Lagrangian advection, which works by calculating which locations will end up on the \idxsp{discretization}{point}{s} in the end of the time step, and assigning interpolations of the field in those locations to the discretization points in the end of the time step.
 
-All of these instability issues are remedied in \citep{Stam1999}.
+All of these instability issues can be remedied \citep{Stam1999}.
 
 \subsection{Rendering}
 
@@ -43,7 +43,7 @@ In \thisprojectwork, the scalar field that tells where the surface is located is
 
 If the \VOF method for tracing the surface would be switched to using the \LS method instead, a signed distance function, $\phi$, would be used instead of $\alpha$, and $c = 0$ would define where the surface is located. The discretization points for $\phi$ would be in the cell corners, so there would be no need for defining a new set of cubes in order for the marching cubes algorithm to work. However, the marching cubes algorithm would have apparent problems to generate the surface in \idxsp{LOD}{transition}{s}, since, in it's original form, requires that all cubes are of the same size, otherwise glitches may occur.
 
-The problem of generating the isosurface with the marching cubes algorithm when the domain that is to be rendered contains LOD transitions is well known, and remedies exist. For example, the one in \textit{\href{http://www.terathon.com/lengyel/Lengyel-VoxelTerrain.pdf}{Voxel-Based Terrain for Real-Time Virtual Simulations} + \href{http://www.terathon.com/voxels/}{The Transvoxel$^{\textbf{TM}}$ Algorithm}} (Lengyel, Eric. "Voxel-Based Terrain for Real-Time Virtual Simulations". PhD diss., University of California at Davis, 2010.) \citep{temp} remedies this, but only for cases where the cubes used by the algorithm can be fit into an \octree.
+The problem of generating the isosurface with the marching cubes algorithm when the domain that is to be rendered contains LOD transitions is well known, and remedies exist. For example, the one in \textit{\href{http://www.terathon.com/lengyel/Lengyel-VoxelTerrain.pdf}{Voxel-Based Terrain for Real-Time Virtual Simulations} + \href{http://www.terathon.com/voxels/}{The Transvoxel$^{\textbf{TM}}$ Algorithm}} (Lengyel, Eric. "Voxel-Based Terrain for Real-Time Virtual Simulations". PhD diss., University of California at Davis, 2010.) \citep{temp} remedies this, but only for cases where the cubes used by the algorithm are modeled as an \octree.
 
 \subsection{Parallelization}
 
