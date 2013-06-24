@@ -3,12 +3,12 @@
 As mentioned in the last chapter, there were quite many issues that needed to be dealt with in order to make \thismethod, which was the method implemented in \thisprojectwork, work well. Although the method very well can simulate phenomenas such as turbulence, nonlinearity, breaking waves, splashes, sound waves, etc., just given enough computational power and enough time to improve it, these phenomenons do not need to be simulated in a flight simulator, and there are other methods, such as the \LPD method, that are simpler to implement, run faster and still have all the required properties. Some of the difficulties with the method includes:
 
 \begin{itemize}
+    \item Making the simulation go in real-time, including having a high enough frame rate,
     \item Dynamical creation/destruction of surface cells and determination of properties in the new cells,
-    \item Handling of high Courant numbers (described by \citeauthor{Stam1999} \citep{Stam1999}),
-    \item Solving \idxs{pressure Poisson}{equation} (described in a large amount of research papers, see \secref{sec:pressure_poison_equation_solution}),
-    \item Handling of high speeds of sound if the fluids are assumed to be compressible (described by \citeauthor{Kwatra2009} \citep{Kwatra2009}),
-    \item Keeping the interface sharp (described in a large amount of research papers, see \secref{sec:advection_of_phase_fraction}), and
-    \item Making it work in real-time.
+    \item Handling of large Courant numbers (described by among others \citeauthor{Stam1999} \citep{Stam1999} and \citeauthor{Lentine2012} \citep{Lentine2012}),
+    \item Solving \idxs{pressure Poisson}{equation} (see \secref{sec:pressure_poison_equation_solution}),
+    \item Handling of high speeds of sound if the fluids are assumed to be compressible (described by \citeauthor{Kwatra2009} \citep{Kwatra2009}), and
+    \item Keeping the interface sharp (see \secref{sec:advection_of_phase_fraction}).
 \end{itemize}
 
 \section{Other methods to use}

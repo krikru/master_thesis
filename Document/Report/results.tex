@@ -1,14 +1,28 @@
 \chapter{Results}
 
+\
+
 \newlength{\screenshotwidth}
 \setlength{\screenshotwidth}{.475\textwidth}
+%\setlength{\screenshotwidth}{.45\textwidth}
 
 \newlength{\screenshotunitlength}
-\setlength{\screenshotunitlength}{.325\textwidth}
+%\setlength{\screenshotunitlength}{.325\textwidth}
+\setlength{\screenshotunitlength}{.305\textwidth}
 
 \newlength{\initiallinewidth}
 \setlength{\initiallinewidth}{.25pt}
 
+% 1 --- l
+% 2 --- Z
+% 3 --- E
+% 4 --- A
+% 5 --- S
+% 6 --- G
+% 7 --- T
+% 8 --- B
+% 9 --- g
+% 0 --- O
 \begin{figure}
     \centering
     \subcaptionbox{$t = 0 \text{ s}$}[\screenshotwidth]{
@@ -26,7 +40,7 @@
        \input{Images/Screenshots/screenshot_alpha_at_0.15}
        \end{tikzpicture}
     }
-    \subcaptionbox{$t = 0.3 \text{ s}$}[\screenshotwidth]{
+    \subcaptionbox{\label{fig:screenshots_alpha_O_E}$t = 0.3 \text{ s}$}[\screenshotwidth]{
         \begin{tikzpicture}[x={(\screenshotunitlength,0)},y={(0,\screenshotunitlength)}]
         \input{Images/Screenshots/screenshot_alpha_at_0.3}
         \end{tikzpicture}
@@ -46,12 +60,12 @@
         \input{Images/Screenshots/screenshot_alpha_at_1.25}
         \end{tikzpicture}
     }
-    \subcaptionbox{$t = 1.75 \text{ s}$}[\screenshotwidth]{
+    \subcaptionbox{\label{fig:screenshots_alpha_l_TS}$t = 1.75 \text{ s}$}[\screenshotwidth]{
         \begin{tikzpicture}[x={(\screenshotunitlength,0)},y={(0,\screenshotunitlength)}]
         \input{Images/Screenshots/screenshot_alpha_at_1.75}
         \end{tikzpicture}
     }
-    \caption{Phase fraction, $\alpha$}
+    \caption{Phase fraction, $\alpha$. Red indicates only water, while blue indicates only air. The colors in between indicates a mix between water and air. White indicates cells that have not been brought into the simulation yet.}
     \label{fig:screenshots_alpha}
 \end{figure}
 
@@ -97,7 +111,7 @@
         \input{Images/Screenshots/screenshot_water_volume_coefficient_at_1.75}
         \end{tikzpicture}
     }
-    \caption{Water volume coefficient}
+    \caption{Water density coefficient. Red indicates the water density that is required to get atmospheric pressure if no air is mixed with the water; a shift against purple indicates a higher water density and a shift against blue indicates a lower water density. Blue indicates no water. White indicates cells that have not been brought into the simulation yet.}
     \label{fig:screenshots_water_volume_coefficient}
 \end{figure}
 
@@ -143,30 +157,30 @@
         \input{Images/Screenshots/screenshot_air_volume_coefficient_at_1.75}
         \end{tikzpicture}
     }
-    \caption{Air volume coefficient}
+    \caption{Air density coefficient. Red indicates the air density that is required to get atmospheric pressure if no water is mixed with the air; a shift against purple indicates a higher air density and a shift against blue indicates a lower air density. Blue indicates no air. White indicates cells that have not been brought into the simulation yet.}
     \label{fig:screenshots_air_volume_coefficient}
 \end{figure}
 
 % Pros:
 
-The program that was developed could successfully simulate water and air and keep the two phases separated, with a region of cells containing a mix of both water and air in between. Pressure waves could be propagated within the fluids, and gravity waves, or surface waves, propagating on the surface in the interface between the water and the air were successfully simulated.
+The program that was developed could successfully simulate water and air and keep the two phases separated, with a region of cells containing a mix of both water and air in between the two phases. Pressure waves, or acoustic waves, within the fluids as well as gravity waves, or surface waves, on the surface in the interface between the water and the air were successfully simulated.
 
 % Cons:
 
-However, the method chosen to simulate water waves in real-time, which was the \FVM on an \octree data structure together with the \VOF, proved to be quite advanced and difficult to implemented properly within the time frame for \thismasterthesiswork, which was \masterthesisworktime. The simulations suffered from numerous problems for which there wasn't enough time to implement any remedy. Here is a list containing those issues:
+However, the method that was chosen, which was the \FVM on an \octree data structure together with the \VOF method, proved to be quite advanced and difficult to implemented properly within the time frame for \thismasterthesiswork. The simulations suffered from numerous problems for which there wasn't enough time to implement any remedy. Here is a list over those issues:
 
 %The limitation of the Courant number is a big problem, as it prevents the simulation from taking as large time steps as it would have to; this could maybe be remedied by switching from explicit to implicit methods. On the other hand, it can now manage to propagate surface waves.
 
 \begin{itemize}
-    \item Vacuum could suddenly occur in the air regions, causing a numerical instability that would spread through the entire simulation domain and "eat up" the contents of all other cells.
+    \item Vacuum could suddenly occur in the air regions, causing a numerical instability that would spread as a wildfire through the entire simulation domain and "eat up" the contents of all other cells.
     
-    Specifically, the problem was that the vacuum cells caused velocities to go to infinity. With constant time step, this would lead to numerical instabilities, while with an adaptive time step, it would lead to that the simulation went slower and slower the closer the content of a cell came to total vacuum, and it would eventually freeze completely. No matter which case, one of the cells would eventually lose all its content, starting a numerical instability that quickly would spread through all other cells and "eat up" all air and water.
+    Specifically, the problem was that the vacuum cells caused velocities to go to infinity. With constant time step, this would lead to numerical instabilities, while with an adaptive time step, it would lead to that the \timestep would go to zero as the cell density went to zero, and the simulation would eventually freeze completely. No matter which case, one of the cells would eventually lose all its content, starting a numerical instability that quickly would spread through all other cells and "eat up" all air and water.
     
-    \item The simulation speed was extremely low. Even though the tests carried out during the development of the program were only held in two dimensions, which heavily reduced the number of cells that had to be processed every time step, the simulation still went many times slower than real-time speed. This was partly due to the fact that no optimization or parallelization of the code was made, and partly due to the fact that the time step was restricted by the \CFL condition, which forced the time step to be as low as 0.3~ms which corresponds to a \idx{frame rate} of 3333~\FPS, while the frame rate only needed to be at \flightsimulatorfps~\FPS.
+    \item The simulation speed was extremely low. Even though the tests carried out during the development of the program were only held in two dimensions, which heavily reduced the number of cells that had to be processed every time step, the simulation still went many times slower than real-time speed. This was partly due to the fact that no optimization, including parallelization of the code, ever was made, and partly due to the fact that the time step was restricted by the \CFL condition, which forced the time step to be as low as 0.3~ms for which 3333 time steps per second would have been necessary in order to obtain a real-time speed.
     
-    \item There were problems with keeping the interface intact. The variant of the \idx{Hyper-C} advection scheme that was implemented in \thisprojectwork did not keep the interface compressed and water was churned up in the air and formed something that resembled a kind of mist, which is very non-ideal for several reasons. First, visualization becomes more difficult, since the thicker the interface is the more difficult it becomes to determine the location of the surface. Second, all cells that contain some water have to be processed, which means that a thick interface, will decrease the simulation speed significantly, especially since it is in the interface the \idxs{cell}{density} is as highest. Third, a thick interface is a bad \approximation of a real surface interface, which practically has no thickness, and numerical errors will be introduced as a result of that.
+    \item There were problems with keeping the interface intact (see \figrefs \mbox{\ref{fig:screenshots_alpha_O_E}--\subref{fig:screenshots_alpha_l_TS}}). The variant of the \idx{Hyper-C} advection scheme that was implemented did not keep the interface compressed and water was churned up in the air and formed something that most closely resembled a kind of mist, which is very non-ideal for several reasons. First, visualization becomes more difficult since it becomes more difficult to determine where the surface is located. Second, since all cells that are at least partially filled with water have to be processed, a thick interface will require more processing each frame than a thin interface, which decreases the simulation speed significantly since it is in the interface the majority of cells are located. Third, the quality of the simulation will suffer, since a thick interface is a bad approximation of a real interface between two immiscible fluids, which practically has no thickness. This naturally leads to numerical errors in the simulation, for example incorrect wave speeds for short wavelengths.
     
-    It is unknown whether the fact that the interface grew so large is a property of the Hyper-C advection scheme, if it was because the Hyper-C advection scheme was implemented incorrectly, or just because it is difficult to generalize these kinds of interface compressing advection schemes from only \idxsp{incompressible}{flow}{s} to \idxsp{compressible}{flow}{s}. It is also unknown whether the thickness of the interface would grow arbitrarily large if the simulation would continue to go on without suffering from numerical instability, or if the thickness would eventually stabilize at a certain level.
+    It is unknown whether the fact that the interface grew so thick is a property of the Hyper-C advection scheme, if it was because the advection scheme was implemented incorrectly, or if it is a complication that easily arises when trying to generalize these kinds of interface compressing advection schemes from only \idxsp{incompressible}{flow}{s} to \idxsp{compressible}{flow}{s}. % It is also unknown whether the thickness of the interface would grow arbitrarily large if the simulation would continue to go on without suffering from numerical instability, or if the thickness would eventually stabilize at a certain level.
 \end{itemize}
 
-As was discovered when studying earlier, similar implementations, the majority of all implementations today uses \idxs{Fourier}{synthesis}, and probably all of the rest of the implementations use methods that are \idx{two-dimensional} in nature, such as the \LPD method. It was noted that \LPD would probably fit the best for this problem of all methods studied, since it is easy to model \FSI, which is claimed to be impossible for the Fourier synthesis method.
+As was discovered when studying today's existing implementations for real-time simulation of water surface waves, the majority uses \idxs{Fourier}{synthesis}, and probably the vast majority of the rest of the implementations use methods that are \idx{two-dimensional} in nature, such as the \LPD method. It was noted that \LPD would perhaps fit best for this problem of all methods studied, since it is capable of simulating \FSI, which is claimed to be impossible for the Fourier synthesis method, and can simulate dispersion in variable water depths.

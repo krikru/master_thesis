@@ -216,7 +216,7 @@ Taking the gradient of this yields
 \end{array}
 \end{equation}
 
-Let's \assume that the components of the gradient of the free surface elevation are \idxse{normal}{distribution}{normally distributed}. For vectors, the corresponding distribution is the \textit{\href{http://en.wikipedia.org/wiki/Multivariate\_normal\_distribution\#Non-degenerate\_case}{multivariate normal distribution}} which is a generalization of the normal distribution, so let's assume that $\nabla\psi$ is multivariate normal distributed.
+Let's \assume that the components of the gradient of the free surface elevation are \idxse{normal}{distribution}{normally distributed}. For vectors, the corresponding distribution is the multivariate normal distribution, which is a generalization of the ordinary normal distribution, so let's assume that $\nabla\psi$ is multivariate normal distributed.
 
 Just like the normal distribution, the multivariate normal distribution requires that the \mean is known, but instead of relying on the variance, it relies on the \idxs{covariance}{matrix} of the vector, which is a generalization of the variance with the only difference that the ordinary \idxs{product}{operator} has been replaced by the \idxs{outer product}{operator} $\otimes$, which is defined as
 
@@ -694,9 +694,9 @@ For an increase in the radiation coming from the direction $\normvec{\omega}_{\t
 \opd^2 \Phi_{\text{o}}(\normvec{\omega}_{\text{o}}) \,=\, \opd \Phi_{\text{i}}(\normvec{\omega}_{\text{i}})\,\opd P'(\normvec{\omega}_{\text{i}})\,R_{\normvec{n}^*\!,x}(\normvec{\omega}_{\text{o}}),
 \end{equation}
 
-where $R_{\normvec{n}^*\!,x}(\normvec{\omega}_{\text{o}})$ is the \idxs{reflection}{coefficient} which is predicted by the \idxs{Fresnel}{equations}, for a ray that is reflected in the direction $\normvec{\omega}_{\text{o}}$, for a surface with the surface normal $\normvec{n}^*$ and for the light polarization $x$.
+where $R_{\normvec{n}^*\!,x}(\normvec{\omega}_{\text{o}})$ is the \idxs{reflection}{coefficient} which is predicted by the \idxs{Fresnel}{equations}, for a ray that is reflected in the direction $\normvec{\omega}_{\text{o}}$, for a surface with the surface normal $\normvec{n}^*$ and for the light polarization $x$. Thanks to $R_{\normvec{n}^*\!,x}(\normvec{\omega}_{\text{o}})$, the \idxs{Fresnel}{effect} is simulated, which means that the amount of reflectance on the surface depends on the viewing angle.
 
-In computer graphics, the reflection coefficient is often \approximated by using \idxs{Schlick's}{approximation}, which reduces the complexity of the expression as well as the time required to evaluate the expression. On the other hand, while the approximation works well as long as there is no filtering depending on the polarization direction involved, using the approximation when such a filtering \emph{is} involved will result in a poor end result since it doesn't take the polarization direction into account. In the case when filtering depending on the polarization direction is involved, the \idxs{Fresnel}{equations} can more accurately be \approximated by substituting low order polynomials for the square roots contained within the expressions.
+In computer graphics, the reflection coefficient is often \approximated by using \idxs{Schlick's}{approximation}, which reduces the complexity of the expression as well as the time required to evaluate the expression. On the other hand, while the approximation works well as long as there is no filtering depending on the polarization direction involved, using the approximation when such a filtering \emph{is} involved will result in a poor end result since it doesn't take the polarization direction into account. In the case when filtering depending on the polarization direction is involved, the \idxs{Fresnel}{equations} can more accurately be \approximated by substituting low order \idxsp{Taylor}{polynomial}{s} for the square roots contained within the expressions.
 
 Using \eqref{eq:gradient_restricted_reflection_probability} in \eqref{eq:gradient_restricted_reflected_flux} results in
 

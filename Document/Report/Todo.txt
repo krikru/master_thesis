@@ -33,6 +33,8 @@ Search for (texfind):
 * due to (= caused by)
 * leviate (should be "alleviate"?)
 * rate of convergence (lower rate = higher speed)
+* steep angle (glancing angle)
+* Taylor expansion (Taylor polynomial (has a finite amount of terms))
 
 Estethic improvements:
 * \vec{k}^2 -> \vec{k}^{\,2}

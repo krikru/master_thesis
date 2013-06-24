@@ -29,7 +29,7 @@ On the other hand, when it comes to advection, many advection schemes tend to be
 
 A remedy for this dilemma is to use semi-Lagrangian advection, which works by calculating which locations will end up on the \idxsp{discretization}{point}{s} in the end of the time step, and assigning interpolations of the field in those locations to the discretization points in the end of the time step.
 
-All of these instability issues have remedies, at least on a regular grid \citep{Stam1999}, but these can probably also be extended for octree grids.
+All of these instability issues have remedies, at least for simulations on a regular grid \citep{Stam1999,Lentine2012}, but these remedies can probably also be extended for octree grids.
 
 \subsection{Rendering}
 
@@ -47,24 +47,20 @@ The problem of generating the isosurface with the marching cubes algorithm when 
 
 \subsection{Parallelization}
 
-In order to obtain a simulation speed-up that is almost certainly needed, it can be processed on multiple \CPUs simultaneously, as well as on the \GPU (if the \octree traversal is implemented to run without recursion, since \GPUs generally don't have any stack which means that they can't do recursion). This is generally referred to as \parallelization. For parallelization to be possible, the \idxs{simulation}{domain} first has to be \partitioned, so that a small part of the domain can be processed on each core and on each \idxs{GPU}{process}.
+In order to obtain a simulation speed-up that is almost certainly needed if the simulation is to run in real-time, it can be processed on multiple \CPUs simultaneously, as well as on the \GPU (if the \octree traversal is implemented to run without recursion, since \GPUs generally don't have any stack which means that they can't do recursion). This is generally referred to as \parallelization. For parallelization to be possible, the \idxs{simulation}{domain} first has to be \partitioned, so that a small part of the domain can be processed on each core and on each \idxs{GPU}{process}.
 
 Since the process that takes the longest time to run will decide the speed of the simulation, the size of the partitions should be roughly the same. Besides, access to data that is located outside of the partition takes extra long time, so it is desired that the number of neighbors cells for each partition that lies outside of the partition itself is kept low, which is somewhat similar to the problem of minimizing the area between the partitions. For a structured grid, the partitioning can be effectively achieved by cutting the simulation domain into square or cubic pieces. However, for an \idxs{unstructured}{grid} like an \octree, the partitioning is more difficult, but still possible.
 
-For octrees, there are some very convenient algorithms that can be used which make use of \idxsp{space-filling}{curve}{s} and which are fast, easy to implement and still produce very acceptable results (see e.g. \textit{\href{http://j.teresco.org/research/publications/octpart02/octpart02.pdf}{Dynamic Octree Load Balancing Using Space-Filling Curves}} \citep{temp} and \textit{\href{http://downloads.isrn.com/journals/appmath/2012/246491.pdf}{Parallel Adaptive Mesh Refinement Combined with Additive Multigrid for the Efficient Solution of the Poisson Equation}} \citep{temp}). Another kind of partitioning is also performed in \textit{\href{http://gfs.sourceforge.net/papers/agbaglah2011.pdf}{Parallel simulation of multiphase flows using octree adaptivity and the volume-of-fluid method}} \citep{temp} which uses \idxs{domain}{decomposition}.
+For octrees, there are algorithms that can be used that make use of \idxsp{space-filling}{curve}{s} and are fast, easy to implement and produce very acceptable results \citep{Valgaerts,Ji2012}. There also exists another kind of partitioning method that uses \idxs{domain}{decomposition} \citep{Fuster2011,Agbaglah2011}.
 
 \subsection{Fluid--Structure Interaction}
 
 In \thisprojectwork, no interaction between ships and the surface waves was ever modeled, in other words, no \FSI was modeled. Modeling and simulating \FSI is necessary in order to make large waves affect ships so that they start to rock forth and back, as well as in order for ships to give rise to two \idxsp{wake}{line}{s} as they \sail on the water.
     
-Some of the methods for modeling \FSI includes the \IB method (reference \textit{\href{http://www4.ncsu.edu/~zhilin/TEACHING/MA798Z/Peskin1.pdf}{The immersed boundary method}} \citep{temp} or \textit{\href{http://www.cecs.wright.edu/~haibo.dong/wp-content/themes/publications/IBM_JCP_2007.pdf}{A sharp interface immersed boundary method for compressible viscous flows}} \citep{temp}), the \VOS method (reference \textit{The simulation of fluid-rigid body interaction} \citep{temp}, also described in \textit{Numerical Modeling of Deforming Bubble Transport Related to Cavitating Hydraulic Turbines} \citep{temp}) and the \idxs{rigid fluid}{method}\index{fluid!rigid|see{rigid fluid method}} (reference: \textit{\href{http://www.amath.unc.edu/Faculty/mucha/Reprints/siggraph04.pdf}{Rigid Fluid: Animating the Interplay Between Rigid Bodies and Fluid}} \citep{temp})
+Some of the methods for modeling \FSI includes the \IB method \citep{Peskin2002,Ghias2007}, the \VOS method and the \idxs{rigid fluid}{method}\index{fluid!rigid|see{rigid fluid method}} \citep{Carlson2004}.
 %See e.g.: \item \textit{\href{http://physbam.stanford.edu/~fedkiw/papers/stanford2010-04.pdf}{Numerically Stable Fluid-Structure Interactions Between Compressible Flow and Solid Structures}} \item \textit{\href{http://efdl.as.ntu.edu.tw/research/papers/JCP03GCIBM.pdf}{A ghost-cell immersed boundary method for flow in complex geometry}} \item \textit{\href{http://www.cs.columbia.edu/~batty/papers/Batty07.pdf}{A Fast Variational Framework for Accurate Solid-Fluid Coupling}} (solid fraction, non-stick to walls)
 
-\subsubsection{Rotation of rigid bodies}
-
-The \idxs{rotation of a}{rigid body}, in this case the rotation of a \ship that is floating on the surface of the water when it is hit by large waves, depends both on the forces that acts on the \idxs{rigid}{body} as well as well as the  \idxs{moment of}{inertia} of the rigid body.
-
-The dynamics of a rigid body is described by \textit{\href{http://en.wikipedia.org/wiki/Euler\%27s_equations_\%28rigid_body_dynamics\%29}{Euler's equations (rigid body dynamics)}} \citep{temp}.
+The \idxs{rotation of a}{rigid body}, in this case the rotation of a \ship that is floating on the surface of the water when it is hit by large waves, depends both on the forces that acts on the \idxs{rigid}{body} as well as well as the  \idxs{moment of}{inertia} of the rigid body. The dynamics of a rigid body is described by Euler's equations for rigid bodies.
 
 \section{Desired improvements}
 
@@ -82,11 +78,12 @@ On scenes simulated on an arbitrary grid though, the reflections corresponding t
 
 \subsubsection{Perfectly matched layers}
 
-One method for greatly reducing spurious reflections at the border of a structured grid is to use \idxs{perfeclty matched}{layers}. See e.g. \textit{\href{http://liu.diva-portal.org/smash/get/diva2:359805/FULLTEXT01}{Memory Efficient Methods for Eulerian Free Surface Fluid Animation}} \citep{temp}, which explains explicit dampening, implicit dampening, and wave absorbing boundaries --- the perfectly matched layer approach, and evaluates the methods.
+One method for greatly reducing spurious reflections at the border of a structured grid is to use \idxs{perfeclty matched}{layers}, which are described by among others \citeauthor{Soderstrom2010} in  a work from \citeyear{Soderstrom2010} \citep{Soderstrom2010} which explains explicit dampening, implicit dampening, and wave absorbing boundaries --- the perfectly matched layer approach --- and evaluates the methods.
 
 \subsubsection{Other absorbing boundary conditions}
 
-Another method that works when the waves have a common speed is to use absorbing boundary conditions (see \citep{temp}). This method works ideally in the \idx{one-dimensional} case if all wavelengths have the same simulated speed, and performs decently well in the \idx{two-dimensional} or \idx{three-dimensional} case. See e.g. \textit{\href{http://www.ce.ncsu.edu/centers/cmg/AWWE/}{the AWWE equations}} \citep{temp}.
+A method that can be used when there is no wave dispersion, that is, waves of different wavelengths have the same speed, is to use open boundary conditions \citep{Muller-Fischer2008}. This method works ideally in the \idx{one-dimensional} case, but performs poorly in the \idxe{two-dimensional}{two-} and \idx{three-dimensional} cases when the waves come against the boundary at a glancing angle. Yet another method that can be used to prevent waves from being reflected at boundaries are the \AWWE \citep{Guddati2005}, in which the propagation of waves is only simulated in one direction; hence the waves are naturally prevented from propagating back from a boundary into the simulation domain. This is basically also what happens when the open boundary conditions are used, but since those are derived from the one-dimensional case, they only work well for waves hitting the boundary from an almost orthogonal direction, while the \AWWE assume an arbitrary angle for the incoming wave and hence can obtain a high accuracy for waves hitting the boundary from within a wide range of angles.
+
 \subsection{Wind waves}
 
 In order to obtain a realistic \idxs{sea}{state}\index{state of sea|see{sea state}} in a simulation, it is desirable that the \idxs{water}{surface} \interacts with the \wind in order to give rise to \idxsp{wind}{wave}{s}. In this way, the sea state will be a reflection of the \idxs{wind}{velocity}.

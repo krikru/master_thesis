@@ -1,6 +1,24 @@
 % This file was created with JabRef 2.8.1.
 % Encoding: Cp1252
 
+@ARTICLE{Agbaglah2011,
+  author = {Agbaglah, Gilou and Delaux, Sébastien and Fuster, Daniel and Hoepffner,
+	Jérôme and Josserand, Christophe and Popinet, Stéphane and Ray, Pascal
+	and Scardovelli, Ruben and Zaleski, Stéphane},
+  title = {Parallel simulation of multiphase flows using octree adaptivity and
+	the volume-of-fluid method},
+  journal = {Comptes Rendus M\'{e}canique},
+  year = {2011},
+  volume = {339},
+  pages = {194--207},
+  number = {2--3},
+  month = {February},
+  doi = {10.1016/j.crme.2010.12.006},
+  owner = {Kristofer},
+  timestamp = {2013.06.23},
+  url = {http://gfs.sourceforge.net/papers/agbaglah2011.pdf}
+}
+
 @MISC{Alivewithpassion2007,
   author = {Alivewithpassion},
   title = {S-3 {V}iking carrier landing(inside)},
@@ -73,6 +91,17 @@
   note = {See (2.20)},
   owner = {Kristofer},
   timestamp = {2012.08.07}
+}
+
+@INPROCEEDINGS{Carlson2004,
+  author = {Mark Carlson and Peter J. Mucha and Greg Turk},
+  title = {Rigid fluid: animating the interplay between rigid bodies and fluid},
+  booktitle = {SIGGRAPH '04 ACM SIGGRAPH 2004 Papers},
+  year = {2004},
+  pages = {377--384},
+  owner = {Kristofer},
+  timestamp = {2013.06.23},
+  url = {http://www.amath.unc.edu/Faculty/mucha/Reprints/siggraph04.pdf}
 }
 
 @MISC{cebasVT2010,
@@ -231,6 +260,55 @@
   url = {https://smartech.gatech.edu/bitstream/handle/1853/29473/2002-389.pdf?sequence=1}
 }
 
+@INPROCEEDINGS{Fuster2011,
+  author = {Daniel Fuster and Jerome Hoepffner and Stephane Popinet and Stephane
+	Zaleski},
+  title = {Parallel simulation of multiphase flows using octree adaptivity and
+	the volume-of-fluid method --- Revised},
+  booktitle = {Proceedings of ASME-JSME-KSME Joint Fluid Conference 2011},
+  year = {2011},
+  month = {July},
+  publisher = {ASME},
+  note = {July 24--29, 2011, Hamamatsu, Japan},
+  owner = {Kristofer},
+  timestamp = {2013.06.23},
+  url = {http://www.lmm.jussieu.fr/~zaleski/Papers/11KSME.pdf}
+}
+
+@ARTICLE{Ghias2007,
+  author = {R. Ghias and R. Mittal and H. Dong},
+  title = {A sharp interface immersed boundary method for compressible viscous
+	flows},
+  journal = {Journal of Computational Physics},
+  year = {2007},
+  volume = {225},
+  pages = {528--553},
+  abstract = {An immersed boundary method for computing viscous, subsonic compressible
+	flows with complex shaped stationary immersed boundaries is presented.
+	The method employs a ghost-cell technique for imposing the boundary
+	conditions on the immersed boundaries. The current approach leads
+	to a sharp representation of the immersed boundaries, a property
+	that is especially useful for flow simulations at high Reynolds numbers.
+	Another unique feature of the method is that it can be applied on
+	Cartesian as well as generalized body non-conformal curvilinear meshes.
+	A mixed second-order central difference-QUICK scheme is used which
+	allows a high degree of control over the numerical damping. A bilinear
+	interpolation scheme used in conjunction with the ghost-cell approach
+	results in second-order global as well as local spatial accuracy.
+	The solver is parallelized for distributed memory platforms using
+	domain decomposition and message passing interface (MPI) and salient
+	features of the parallel algorithm are presented. The accuracy, fidelity
+	and efficiency of the solver are examined by simulating flow past
+	circular cylinders and airfoils and comparing against experimental
+	data and other established results. Finally, we present results from
+	a simulation of wing-tip flow at a relatively high Reynolds number
+	in order to demonstrate the ability of the solver to model complex,
+	non-canonical three-dimensional flows.},
+  owner = {Kristofer},
+  timestamp = {2013.06.23},
+  url = {http://www.cecs.wright.edu/~haibo.dong/wp-content/themes/publications/IBM_JCP_2007.pdf}
+}
+
 @PHDTHESIS{Greengard1987a,
   author = {L. Greengard},
   title = {The Rapid Evaluation of Potential Fields in Particle Systems},
@@ -266,6 +344,34 @@
   pages = {187--207},
   owner = {Kristofer},
   timestamp = {2012.06.05}
+}
+
+@ARTICLE{Guddati2005,
+  author = {Murthy N. Guddati and A. Homayoun Heidari},
+  title = {Migration with arbitrarily wide-angle wave equations},
+  journal = {Geophysics},
+  year = {2005},
+  volume = {70},
+  pages = {1--10},
+  number = {3},
+  month = {May--June},
+  abstract = {We develop a new scalar migration technique that is highly accurate
+	for imaging steep dips in heterogeneous media. This method is based
+	on arbitrarily wideangle wave equations (AWWEs) that are highly accurate
+	space-domain one-way wave equations and have a form similar to the
+	15$^{\circ}$ equation. The accuracy of the proposed method is increased
+	by introducing auxiliary variables, as well as adjusting the parameters
+	of the approximation. Poststack migration is carried out by downward
+	continuation using the AWWE, for which we have developed a stable,
+	explicit, double-marching scheme. Up to 80$^{\circ}$ accuracy is
+	achieved by second- order AWWE migration with only 2.3 times the
+	com- putational effort of the 15$^{\circ}$ equation and requiring
+	almost the same storage. We illustrate the performance of AWWE migration
+	using impulse-response graphs, a single-dipping reflector, and a
+	slice of the SEG/EAGE salt model.},
+  owner = {Kristofer},
+  timestamp = {2013.06.24},
+  url = {http://www.ce.ncsu.edu/centers/cmg/AWWE/Files/AWWEGeophysics.pdf}
 }
 
 @ARTICLE{Harlow1965,
@@ -327,6 +433,21 @@
   volume = {2012},
   pages = {24~pages},
   number = {246491},
+  abstract = {Three different speed-up methods (viz., additive multigrid method,
+	adaptive mesh refinement (AMR), and parallelization) have been combined
+	in order to provide a highly efficient parallel solver for the Poisson
+	equation. Rather than using an ordinary tree data structure to organize
+	the information on the adaptive Cartesian mesh, a modified form of
+	the fully threaded tree (FTT) data structure is used. The Hilbert
+	space-filling curve (SFC) approach has been adopted for dynamic grid
+	partitioning (resulting in a partitioning that is near optimal with
+	respect to load balancing on a parallel computational platform).
+	Finally, an additive multigrid method (BPX preconditioner), which
+	itself is parallelizable to a certain extent, has been used to solve
+	the linear equation system arising from the discretization. Our numerical
+	experiments show that the proposed parallel AMR algorithm based on
+	the FTT data structure, Hilbert SFC for grid partitioning, and additive
+	multigrid method is highly efficient.},
   bibsource = {OAI-PMH server at www.doaj.org},
   doi = {10.5402/2012/246491},
   issn = {20905564},
@@ -465,6 +586,16 @@
   url = {http://dice.se/wp-content/uploads/InteractiveWater_Lennartsson_dice.pdf}
 }
 
+@MISC{Lentine2012,
+  author = {Michael Lentine and Matthew Cong and Saket Patkar and Ronald Fedkiw},
+  title = {Simulating Free Surface Flow with Very Large Time Steps},
+  year = {2012},
+  note = {Eurographics/ ACM SIGGRAPH Symposium on Computer Animation (2012)},
+  owner = {Kristofer},
+  timestamp = {2013.06.23},
+  url = {http://physbam.stanford.edu/~fedkiw/papers/stanford2012-02.pdf}
+}
+
 @ARTICLE{Leonard1988,
   author = {B. P. Leonard},
   title = {The ULTIMATE conservative difference scheme applied to unsteady one-dimensional
@@ -510,6 +641,15 @@
   bibdate = {2006-02-09},
   bibsource = {DBLP, http://dblp.uni-trier.de/db/journals/tog/tog23.html#LosassoGF04},
   url = {http://physbam.stanford.edu/~fedkiw/papers/stanford2004-02.pdf}
+}
+
+@MISC{Muller-Fischer2008,
+  author = {Matthias M\"uller-Fischer},
+  title = {Fast Water Simulation for Games Using Height Fields},
+  year = {2008},
+  note = {Game Developers' Conference 08},
+  owner = {Kristofer},
+  timestamp = {2013.06.24}
 }
 
 @ARTICLE{Mastin1987,
@@ -658,6 +798,19 @@
   url = {http://www.youtube.com/watch?v=3YW9WFwD-rI}
 }
 
+@ARTICLE{Peskin2002,
+  author = {Charles S. Peskin},
+  title = {The immersed boundary method},
+  journal = {Acta Numerica},
+  year = {2002},
+  volume = {11},
+  pages = {479--517},
+  owner = {Kristofer},
+  publisher = {Engg Journals Publication},
+  timestamp = {2013.06.23},
+  url = {http://www4.ncsu.edu/~zhilin/TEACHING/MA798Z/Peskin1.pdf}
+}
+
 @ARTICLE{Popinet2003,
   author = {S. Popinet},
   title = {Gerris: a tree-based adaptive solver for the incompressible {E}uler
@@ -737,6 +890,17 @@
   url = {http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.27.8649&rep=rep1&type=pdf}
 }
 
+@PHDTHESIS{Soderstrom2010,
+  author = {Andreas S\"oderstr\"om},
+  title = {Memory Efficient Methods for Eulerian Free Surface Fluid Animation},
+  school = {The Institute of Technology at Link\"oping University},
+  year = {2010},
+  type = {Dissertation},
+  address = {Link\"oping University, SE-581 83 Link\"oping, Sweden},
+  owner = {Kristofer},
+  timestamp = {2013.06.23}
+}
+
 @INPROCEEDINGS{Sethian1995,
   author = {J. A. Sethian},
   title = {A Fast Marching Level Set Method for Monotonically Advancing Fronts},
@@ -813,6 +977,24 @@
   day = {20},
   owner = {Kristofer},
   timestamp = {2012.09.09}
+}
+
+@MISC{Valgaerts,
+  author = {Levi Valgaerts},
+  title = {Dynamic Load Balancing Using Space-Filling Curves},
+  note = {Technische Universit\"at M\"unchen, Institut f\"ur Informatik},
+  abstract = {Space-filling curves (SFCs) provide a continuous mapping from a one-dimensional
+	to a d-dimensional space and have been used to linearize spatially
+	distributed data for partitioning, memory management and image processing.
+	This paper gives a short introduction to the concept of SFCs and
+	highlights some of the applications found in computer science. The
+	main focus will be on dynamic distribution and load balancing techniques
+	for adaptive grid hierarchies based on SFCs. These methods may be
+	used whenever it is necessary to parallelize the solution of partial
+	differential equations on a distributed system.},
+  owner = {Kristofer},
+  timestamp = {2013.06.23},
+  url = {http://www5.in.tum.de/lehre/seminare/clust_comp/SS05/papers/topic09.doc}
 }
 
 @ARTICLE{Weller1998,
