@@ -21,6 +21,7 @@ Search for (texfind):
 * \href
 * \url
 * \citep{temp}
+* \citeyear, \citeauthor (use \citet)
 * TODO
 * \levelname
 * two-dimensional, three-dimensional
@@ -31,10 +32,12 @@ Search for (texfind):
 * assume, assumption, etc. approximate, approximation, etc.
 * lying (located?)
 * due to (= caused by)
-* leviate (should be "alleviate"?)
+* leviate, leviating (should be "alleviate"?)
 * rate of convergence (lower rate = higher speed)
 * steep angle (glancing angle)
 * Taylor expansion (Taylor polynomial (has a finite amount of terms))
+* dependence, dependency (dependency is a state, i.e. either true or false; dependence focuses on the quality of the dependency, i.e. what is it like?)
+* presented -> described (?)
 
 Estethic improvements:
 * \vec{k}^2 -> \vec{k}^{\,2}
