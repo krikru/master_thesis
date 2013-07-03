@@ -1,0 +1,61 @@
+Kenneth
+-------
+
+Inte gjorda än:
+
+
+* Det blir lite korta kapitel ibland. Ett alternativ är att låta delarna vara kapitel och dina kapitel underkapitel. Det innebär dock att du kommer ned till rubriknivå x.y.z.w i vissa fall. Frågan om denna nivå behövs.
+Jag har dock inga större problem med nuvarande kapitelindelning.
+
+* Källor till bilder måste tas med. I vissa fall behöver du också tillstånd. Det kanske är mest SAAB-material?
+
+* Har nu inte läst i detalj men jag upplever att resultat och diskussionsdelen (kap 9 och 10) är förhållandevis korta. Du nämner ju också att du lagt in figurer i resultatdelen ännu utan text så jag misstänker att du planerar att utvidga detta. Fig 9.1-9.3 måste det gå att diskutera mycket runt.
+Om du upplever det svårt att separera resultat och diskussion så är det inget nederlag att lägga dem i samma kapitel.
+
+---------------------------------------
+
+Gjorda:
+
+* Handledare / Examinator: Trodde jag var examinator. Jag har sex stycken exjobb parallellt där jag är handledare eller examinator så jag kan ha blandat ihop det. Magnus vet (jag har frågat honom förut!).
+
+* Ser ut som sökord är svagt lila i texten. Vill du ha det så eller är det någon "bieffekt"?
+
+* Referenser: Vanligt med enkel numrering i de texter jag oftast handskas med. "Författarnamn, år" fungerar också. Är dock personligen inte så förtjust i att väva in referenserna i texten. Tex., i meningen "The FVM was first used on a restricted tall cell grid in [Chentanez and Müller, 2011]." tar jag helst bort "in". I de flesta fall är det enkelt att åtgärda i andra fall kan det behövas en liten omformulering av meningen.
+
+* Du har också en del hyperlänkar direkt från text till webbsidor (en hel del i kap 11 tex). Det blir på så sätt två olika referenssystem. Här bör du lägga in dessa i referenslistan och ge länken från listan (ge då hela adressen).
+
+---------------------------------------
+
+Kommer inte göra:
+
+==============================================================================
+
+Jag
+---
+
+Inte gjorda än:
+
+* Jag saknar exjobbsnummer
+
+* Jag saknar bibliotekssida
+
+* Jag måste konvertera några referenser som är skrivna som länkar direkt till internetsidor (mest pdf:er) till referenser som hamnar längst bak bland de andra referenserna
+
+* Jag ska lägga in en eller ett par screen-shots från mitt eget program på lämpligt ställe
+
+* Jag ska möjligtvis lägga in några fler bilder tagna från wikipedia eller liknande för att illustrera och kompletera den jag har skrivit, eftersom jag har lite dåligt med bilder för nuvarande men ganska mycket text
+
+* Jag måste ge bekräftelse till de som har tagit/skapat bilderna jag använder i de fall de inte är publicerade i den publika domänen
+
+---------------------------------------
+
+Gjorda:
+
+* Jag ska skriva ett appendix om härledningen av en belysningsmodel för rendering av havsytor som jag gjort (5–10 sidor till?)
+
+---------------------------------------
+
+Kommer inte göra:
+
+* Jag ska uppdatera min Nomeclature eftersom den inte innehåller alla variabler jag har anvärt mig av (eller blir det för många variaber kanske? Svårt att välja vilka jag ska ha med i sådana fall om jag bara ska ha med vissa)
+
