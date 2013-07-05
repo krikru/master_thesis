@@ -43,6 +43,7 @@ Search for (texfind):
 * dependence, dependency (dependency is a state, i.e. either true or false; dependence focuses on the quality of the dependency, i.e. what is it like?)
 * presented -> described (?)
 * aircrafts (it's "aircraft" even in plural)
+* free surface elevation ( -> surface elevation? )
 
 Estethic improvements:
 * \vec{k}^2 -> \vec{k}^{\,2}
