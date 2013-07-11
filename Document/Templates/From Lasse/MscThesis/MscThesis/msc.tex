@@ -1,0 +1,120 @@
+\documentclass[a4paper,english,10pt,ifm,crop]{liuthesis}
+% The option ifm will automatically include information specific for
+% IFM.  The option crop show crop marks, useful in drafts, but should
+% be removed for the version to send to printing.
+
+% ====================================================================
+% Included packages --------------------------------------------------
+% ====================================================================
+\usepackage{physymb}
+
+% Use the following command to get clickable references in your
+% pdf-files.  Nb, it has to be put after all \usepackage-commands in
+% order to work properly!
+\useHyperRef
+
+% ====================================================================
+% Definitions required for the thesis --------------------------------
+% ====================================================================
+
+% Declare that this is a Master's thesis.
+\thesisCategory{MSc}
+
+\author{Alexander~Lindmaa}
+
+% Title, both Swedish and English titles required.
+\title{Svensk titel}{English title}
+
+% Date of presentation. (month, day, year)
+\thesisDate{9}{1}{2011}
+
+% Thesis ISRN number.
+\ISRN{LiTH-IFM-EX-XXXX}
+
+% Division at which the thesis was carried out, e.g., Computational
+% Physics.
+\thesisDivision{Thesis Division}
+
+% Name of the examiner and where he's employed.  Several examiners
+% can be specified by using the command \AND and list them.
+\examiner{Examiner's name \AT Department}
+
+% Name of the supervisor/advisor and where he's employed.  Several
+% examiners % can be specified by using the command \AND and list
+% them.
+\supervisor{Advisor One \AT Department \AND
+            Advisor Two \AT Company A}
+
+% Subject of the thesis, e.g., Computational Physics.
+\subject{Thesis subject}
+
+% What keywords to be put on the library page
+\keywords{Put your keywords here}
+
+% URL for electronic publishing, if there is any.  Two URLs can be
+% specified, the primary one given in {} and the one in [] is
+% optional.
+\URL[]{}
+
+% If there is anyone you want to dedicate the thesis to, e.g.,
+% girlfriend/boyfriend, husband/wife, etc., or any other wise things
+% you want to have on a page in the beginning is written here.  If you
+% don't want anything, remove this statement completely, otherwise it
+% won't work!!!
+\dedication{\Large To lovely Björn}
+
+% Import file containing your abstract.
+\input{abstract}
+
+% Import file containing your acknowledgements.
+\input{acknow}
+
+% ====================================================================
+% Begining of actual document ----------------------------------------
+% ====================================================================
+
+\begin{document}
+
+% Create all interesting things you want in the beginning of your
+% document;  Front page, title page, library page, dedication (if
+% there is one), abstract, acknowledgements, and Table of Contents.
+\makeFrontMatter
+
+% ====================================================================
+% Main content -------------------------------------------------------
+% ====================================================================
+
+% Start writing your text here.  For clarity it's advisable that you
+% write each chapter in a separate file and include them here using
+% \include{}.
+
+
+% ====================================================================
+% Bibliography -------------------------------------------------------
+% ====================================================================
+
+% \bibliographystyle{plain}
+% \bibliography{}
+% \cleardoublepage
+
+% ====================================================================
+% Appendices ---------------------------------------------------------
+% ====================================================================
+
+%\appendix
+
+% ====================================================================
+% Copyright Notice for Electronic Press ------------------------------
+% ====================================================================
+
+% Uncomment the lines below to include a copyright notice before
+% generating a document for submission to Electronic Press.
+
+%\cleardoublepage
+%\makeCopyright
+
+% ====================================================================
+% All done -----------------------------------------------------------
+% ====================================================================
+
+\end{document}

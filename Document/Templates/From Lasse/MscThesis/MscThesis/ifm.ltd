@@ -1,0 +1,218 @@
+% !TEX encoding = UTF-8 Unicode
+%%
+%% This is file `ifm.ltd',
+%% generated with the docstrip utility.
+%%
+%% The original source files were:
+%%
+%% liuthesis.dtx  (with options: `ifm')
+%%   Style file to be used when writing a master thesis at LiTH
+\ProvidesFile{ifm.ldt}[2002/01/08 liuthesis defintion for IFM]
+\liuthesisDefinition{IFM}{Department of Physics, Chemistry and Biology\\%
+  Linköpings universitet, SE-581~83 Linköping, Sweden}
+
+%%%%%%%%%
+%% MSC %%
+%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%
+%%     Front page     %%
+%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newcommand{\makeMScFrontPage}{%
+  \begingroup\normalfont%
+  \clearpage%
+  %
+  \thispagestyle{empty}%
+  \vspace*{-15mm}\hspace*{-24.5mm}%
+  \raisebox{\z@}[\z@][\z@]{%
+    \begin{minipage}[t][230mm]{161.5mm}%
+      \centering%
+      \ifLanguageInUse{swedish}{%
+        {\LARGE Institutionen för Fysik, Kemi och Biologi}\\[\stretch{2 }]%
+        {\Large Examensarbete}\\%
+        \vspace*{\stretch{3 }}%
+        {\parbox{13cm}{\centering\Large\bfseries\swe@title}}\\[\stretch{3 }]%
+        {\Large \@author}\\[\baselineskip]%
+        \thesis@ISRN\\[.5\baselineskip]%
+        \vspace*{\stretch{2 }}%
+        \parbox[b][115mm]{145mm}{\centering%
+          \parbox{138mm}{\centering%
+              \vspace*{15mm}\strut\\%
+              \includegraphics[scale=0.8]{lith-sv-black}\\%
+              \vspace*{15mm}%
+          }\\[.5\baselineskip]%
+        Institutionen för fysik och mätteknik\\%
+        Linköpings universitet\\%
+        581~83 Linköping%
+        }\medskip}{%
+        {\LARGE Department of Physics, Chemistry and Biology}\\[\stretch{2 }]%
+        {\Large Master's Thesis}\\%
+        \vspace*{\stretch{3 }}%
+        {\parbox{13cm}{\centering\Large\bfseries\@title}}\\[\stretch{3 }]%
+        {\Large \@author}\\[\baselineskip]%
+        \thesis@ISRN\\[.5\baselineskip]%
+        \vspace*{\stretch{2 }}%
+        \parbox[b][115mm]{145mm}{\centering%
+          \parbox{138mm}{\centering%
+            \vspace*{15mm}\strut\\%
+            \includegraphics[scale=0.8]{lith-en-black}\\%
+            \vspace*{15mm}%
+          }\\[.5\baselineskip]%
+        \@address\\[\baselineskip]%
+      }\medskip}%
+    \end{minipage}%
+  }%
+  \endgroup \clearpage%
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%
+%%     Title page     %%
+%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newcommand*{\makeMScTitlePage}{%
+  \clearpage \thispagestyle{empty} \normalfont%
+  \vspace*{-25mm}\hspace*{-27.8mm}\hspace*{3mm}%
+  \raisebox{\z@}[\z@][\z@]{%
+    \begin{minipage}[t][230mm]{158.5mm}%
+      \centering \vspace*{\stretch{1 }}%
+      \ifLanguageInUse{swedish}{Examensarbete}{Master's Thesis}\\%
+      \thesis@ISRN\\[.5\baselineskip]%
+%      {\large \thesis@subject}\\[1.5\baselineskip]%
+      \vspace*{\stretch{1 }}%
+      {\parbox{13cm}{\centering\noindent\Large\bfseries%
+          \ifLanguageInUse{swedish}{\swe@title}{\@title}}}\\%
+      \vspace*{\stretch{1 }}%
+      {\large \@author}\\[\baselineskip]%
+      \vspace*{\stretch{4 }}%
+      \parbox{10cm}{\raggedright%
+        \rule{10cm}{\z@}%
+        \begin{tabbing}%
+          \hspace*{25mm}\=\quad\=\kill%
+          \ifLanguageInUse{swedish}{Handledare:}{Adviser:}\>\bfseries
+          \@supervisor\\[.5\baselineskip]%
+          \ifLanguageInUse{swedish}{Examinator:}{Examiner:}\>\bfseries \@examiner%
+        \end{tabbing}%
+      }\\[.5\baselineskip]%
+      Linköping, \thesis@day\ \monthName{\thesis@month}, \thesis@year%
+    \end{minipage}%
+  } \clearpage%
+}
+
+
+%%%%%%%%%
+%% Lic %%
+%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%
+%%     Front page     %%
+%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newcommand{\makeLicFrontPage}{%
+  \begingroup\normalfont%
+  \clearpage%
+  %
+  \thispagestyle{empty}%
+  \vspace*{-15mm}\hspace*{-24.5mm}%
+  \raisebox{\z@}[\z@][\z@]{%
+    \begin{minipage}[t][220mm]{161.5mm}%
+      \centering%
+        {\large \thesis@series}\\%
+        \vspace*{\stretch{1 }}%
+        {\parbox{13cm}{\centering\Large\bfseries\@title}}\\[\stretch{1 }]%
+        {\Large \@author}\\%
+        \vspace*{\stretch{1 }}%
+        \parbox[b][115mm]{145mm}{\centering%
+          \parbox{138mm}{\centering%
+            \vspace*{15mm}\strut\\%
+            \includegraphics[scale=0.5]{lith-en-black}\\%
+            \vspace*{15mm}%
+          }\\[.5\baselineskip]%
+        \thesis@ISRN\\[.2\baselineskip]%
+        \@address\\[\baselineskip]%
+        Link{\"o}ping \thesis@year%
+      }\medskip%
+    \end{minipage}%
+  }%
+  \endgroup \clearpage%
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%
+%%     Title page     %%
+%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newcommand*{\makeLicTitlePage}{%
+  \makeLicFrontPage%
+  \vspace*{\stretch{3 }}%
+  {\centering\parbox{.6\textwidth}{\thesis@frontpageImage}\\}%
+  \vspace*{\stretch{1 }}%
+  \noindent\parbox{\textwidth}{\centering%
+    ISBN \thesis@ISBN\\%
+    ISSN \thesis@ISSN\\[\baselineskip]%
+    \thesis@printshop}%
+}
+
+
+%%%%%%%%%
+%% PhD %%
+%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%
+%%     Title page     %%
+%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newcommand{\makePhDTitlePage}{%
+  \begingroup\normalfont%
+  \clearpage%
+  %
+  \thispagestyle{empty}%
+  \vspace*{-15mm}\hspace*{-24.5mm}%
+  \raisebox{\z@}[\z@][\z@]{%
+    \begin{minipage}[t][220mm]{161.5mm}%
+      \centering%
+        {\large \thesis@series}\\%
+        \vspace*{\stretch{1 }}%
+        {\parbox{13cm}{\centering\Large\bfseries\@title}}\\[\stretch{1 }]%
+        {\Large \@author}\\%
+        \vspace*{\stretch{1 }}%
+        \parbox[b][115mm]{145mm}{\centering%
+          \parbox{138mm}{\centering%
+            \vspace*{15mm}\strut\\%
+            \includegraphics[scale=0.5]{lith-en-black}\\%
+            \vspace*{15mm}%
+          }\\[.5\baselineskip]%
+        \@address\\[\baselineskip]%
+        Link{\"o}ping \thesis@year%
+      }\medskip%
+    \end{minipage}%
+  }%
+  \endgroup \clearpage%
+  \vspace*{\stretch{3 }}%
+  {\centering\parbox{.6\textwidth}{\thesis@frontpageImage}\\}%
+  \vspace*{\stretch{1 }}%
+  \noindent\parbox{\textwidth}{\centering%
+    ISBN \thesis@ISBN\\%
+    ISSN \thesis@ISSN\\[\baselineskip]%
+    \thesis@printshop}%
+}
+
+
+
+%% \CharacterTable
+%%  {Upper-case    \A\B\C\D\E\F\G\H\I\J\K\L\M\N\O\P\Q\R\S\T\U\V\W\X\Y\Z
+%%   Lower-case    \a\b\c\d\e\f\g\h\i\j\k\l\m\n\o\p\q\r\s\t\u\v\w\x\y\z
+%%   Digits        \0\1\2\3\4\5\6\7\8\9
+%%   Exclamation   \!     Double quote  \"     Hash (number) \#
+%%   Dollar        \$     Percent       \%     Ampersand     \&
+%%   Acute accent  \'     Left paren    \(     Right paren   \)
+%%   Asterisk      \*     Plus          \+     Comma         \,
+%%   Minus         \-     Point         \.     Solidus       \/
+%%   Colon         \:     Semicolon     \;     Less than     \<
+%%   Equals        \=     Greater than  \>     Question mark \?
+%%   Commercial at \@     Left bracket  \[     Backslash     \\
+%%   Right bracket \]     Circumflex    \^     Underscore    \_
+%%   Grave accent  \`     Left brace    \{     Vertical bar  \|
+%%   Right brace   \}     Tilde         \~}
+\endinput
+%%
+%% End of file `ifm.ltd'.

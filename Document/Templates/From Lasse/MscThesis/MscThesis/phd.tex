@@ -1,0 +1,267 @@
+% !TEX TS-program = pdflatex
+
+\documentclass[a4paper,english,10pt,ifm]{liuthesis}
+% The option ifm will automatically include information specific for
+% IFM.  The option crop show crop marks, useful in drafts, but should
+% be removed for the version to send to printing.
+
+% ====================================================================
+% Included packages --------------------------------------------------
+% ====================================================================
+%\usepackage[swedish]{babel}
+\usepackage[Sonny]{fncychap}
+%\usepackage[Lenny]{fncychap}
+%\usepackage[Glenn]{fncychap}
+%\usepackage[Conny]{fncychap}
+%\usepackage[Rejne]{fncychap}
+%\usepackage[Bjarne]{fncychap}
+
+\usepackage{graphicx}% Include figure files
+\usepackage{psfrag,wrapfig}
+\usepackage{bm}
+\usepackage{subfigure}
+\usepackage{float}
+\usepackage{booktabs}
+
+
+\usepackage[rightcaption]{sidecap} % Makes it possible to have captions beside floats
+\sidecaptionvpos{figure}{t} % Defines the alignment of the figure-caption [b,c,t]
+\sidecaptionvpos{table}{t} % Defines the alignment of the table-caption [b,c,t]
+
+%\usepackage[usenames,dvipsnames]{color}
+\usepackage{color}
+%\usepackage{doublespace}
+
+% Use the following command to get clickable references in your
+% pdf-files.  Nb, it has to be put after all \usepackage-commands in
+% order to work properly!
+\useHyperRef
+
+%\makeatletter
+%
+%\newcommand*{\ps@refhead}{%
+%  \renewcommand*{\@oddfoot}{}%
+%  \renewcommand*{\@evenfoot}{}%
+%  \renewcommand*{\@evenhead}{%
+%    \parbox{\textwidth}{\bfseries \thepage\hfill%
+%      \vspace*{2\p@}\hrule}}%
+%  \renewcommand*{\@oddhead}{%
+%    \parbox{\textwidth}{\thepage%
+%      \vspace*{2\p@}\hrule}
+%}}
+%
+%\makeatother
+
+% ====================================================================
+% Own definitions and commands ---------------------------------------
+% ====================================================================
+%\setcounter{tocdepth}{1}% Set the depth of table of contents (1<-> Inclusion of \section, 2<->inclusion of \subsection and so forth)
+\def \etal{{\it{et~al.}}}
+\def \eg{e.g., }
+\def \ie{i.e., }
+\def \eq{Eq.}
+\def \eqs{Eqs.}
+
+\newcommand{\ud}{\mathrm{d}}
+\newcommand{\beq}{\begin{equation}}
+\newcommand{\eeq}{\end{equation}}
+\newcommand{\tm}[1]{\textrm{#1}}
+\newtheorem{thm}{Theorem}
+
+
+\definecolor{PAPERCOVER}{RGB}{191,191,191}% Same grey color as on the frontpage
+%\definecolor{PAPERCOVER}{RGB}{125,125,125}% grey 49
+%\definecolor{PAPERCOVER}{RGB}{36,36,36}% 
+% ====================================================================
+% Definitions required for the thesis --------------------------------
+% ====================================================================
+
+% Declare type of thesis.
+\thesisCategory{PhD}
+
+\author{Name}
+\title{Svensk titel}{Eng  titel}
+
+
+% Date of presentation. (month, date, year)
+\thesisDate{12}{17}{2010}
+
+% Series of the thesis.
+\series{Series}
+
+% Thesis ISBN number
+\ISBN{ISBN}
+
+%\URL{url}
+
+% Thesis ISSN number
+\ISSN{ISSN}
+
+% This is the information about where the thesis have been printed.
+% It will be typeset on the back of the title page.
+\printshop{Printed by LiU-Tryck, Link{\"o}ping 2010}
+
+% If you have a picture on the front page that you want to explain,
+% you can write it here and it will be put on the back of the title
+% page.
+\frontpageImage{%The picture of the frontpage show...
+}
+
+% Division at which the thesis was carried out, e.g., Computational
+% Physics.
+\thesisDivision{Theoretical and Computational Physics}
+\supervisor{Igor Abrikosov \AT Theoretical and Computational Physics}
+%\examiner{Igor Abrikosov \AT Theoretical and Computational Physics}
+
+% Subject of the thesis, e.g., Computational Physics.
+\subject{Theoretical and Computational Physics}
+
+% What keywords to be put on the library page
+\keywords{Keywords}
+
+% If there is anyone you want to dedicate the thesis to, e.g.,
+% girlfriend/boyfriend, husband/wife, etc., or any other wise things
+% you want to have on a page in the beginning is written here.  If you
+% don't want anything, remove this statement completely, otherwise it
+% won't work!!!
+%\dedication{\Large To my wife {\&} our\\ lovely daughter}
+\dedication{\large To Bj\"orn}
+
+% Import file containing your abstract.
+\input{abstract}
+
+% Import file containing your acknowledgements.
+\input{acknow} 
+
+% ====================================================================
+% Begining of the document -------------------------------------------
+% ====================================================================
+
+\begin{document}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Create the loose abstract to be supplied with all copies of the PhD
+% thesis.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\makeLooseAbstract{\noindent som f\"or avl\"aggande av teknologie
+%  doktorsexamen vid Link\"opings universitet kommer att offentligt
+%  f\"orsvaras i h\"orsal Planck, Fysikhuset, Link\"opings universitet,
+%  fredagen den 17 december 2010, kl. 10.15. 
+%  Opponent \"ar Prof.~Josef~Kudrnovsk\'y, 
+%  Institute of Physics, Academy of Sciences of the Czech Republic.} 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%  Na Slovance 2, CZ-182 21 Prague 8, Czech Republic.}
+
+% Create all interesting things you want in the beginning of your
+% document;  Front page, title page, dedication (if there is one),
+% abstract, preface, and Table of Contents.
+
+\makeFrontMatter
+
+% ====================================================================
+% Main content -----------------------------------------------------
+% ====================================================================
+
+% Start writing your text here.  For clarity it's advisable that you
+% write each chapter, included paper etc. into separate files and
+% include them here.  Below the examples are written out here to
+% minimize the number of files to include.
+
+
+\chapter{Introduction}
+%\label{cha:introduction}
+%\input{./chapters/introduction.tex}
+\clearpage
+
+%\chapter{Density-functional theory}
+%\label{cha:dft}
+%\input{./chapters/dft.tex}
+\clearpage
+
+% ====================================================================
+% Bibliography -------------------------------------------------------
+% ====================================================================
+%\thispagestyle{refhead}
+
+%\bibliographystyle{unsrt}
+%\bibliography{references}
+
+\cleardoublepage
+
+% ====================================================================
+% List of publications -----------------------------------------------
+% ====================================================================
+
+% Since I haven't found a proper way of mastering BibTeX to generate
+% this in a nice way, I do it the foul way.  It's not nice but it
+% works.  Following is a short description on how to do it, if you
+% don't understand, ask!  I'll try to fix this up asap, so that it
+% works in a fashion similar to the bibliography, see above, but it
+% might be a bit trickier than I thought.  Help and all suggestions
+% are welcome.
+%
+% 1) Create a .bib-file containing only your papers (here called
+%    own_papers.bib. 
+%
+% 2) Look in the file lop-gen.aux.  This one contains three lines:
+%    \citation{*} makes all entries go into the list of publications
+%    \bibdata{} tells the name of the .bib-file created in 1).
+%    \bibstyle tells the wanted bibliography style
+%
+% 3) Run bibtex on lop-gen.aux.  This will generate the lop-gen.bbl
+%    ouput file.
+%
+% 4) Open the lop-gen.bbl file, copy the content into a .tex-file to
+%    be included here (here called lop.tex), but change the
+%    environment from thebibliography to thelistofpublications.
+%
+% 5) You're all done and you automatically have your own BibTeX styled
+%    list of publications.
+
+% \include{papers/own_bib/lop}
+ \cleardoublepage
+% ====================================================================
+% Papers -------------------------------------------------------------
+% ====================================================================
+
+% Here you start an environment for including papers.
+%: SECTION:PAPERS
+%\papers
+
+% To get an automatically generated front page for each included paper
+% use the command \paper, it takes as arguments the title, the
+% authors, and the journal.  The thumb indices are generated so that
+% ten will fit on a page no matter how many papers you have.  If you
+% have more than ten, the thumb indices will wrap around and start at
+% the top of the page.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% PAPER I -- PAPER V: LEE in BULK (CLS + Auger)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 1
+%\pagecolor{PAPERCOVER}
+
+% ====================================================================
+% Appendices ---------------------------------------------------------
+% ====================================================================
+
+%\appendix
+
+
+% ====================================================================
+% Library page -------------------------------------------------------
+% ====================================================================
+
+% The library page will be automatically filled out using submitted
+% information.  On general request it is added at the end.
+
+\cleardoublepage
+
+% Kommentera detta om du inte vill ha ngt biblioteksblad i slutet
+%\makeLibraryPage \thispagestyle{empty}
+
+% ====================================================================
+% All done -----------------------------------------------------------
+% ====================================================================
+
+\end{document}
