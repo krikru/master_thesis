@@ -4,9 +4,9 @@ A fluid flow with a free surface in the form of a \idxs{sharp}{interface} betwee
 
 In \thisprojectwork, a method known as the \VOF method has been used, together with a variant of an \idxs{advection}{scheme} called \idxse{Hyper-C}{advection scheme}{Hyper-C}. The \VOF method and a few other methods for modeling the free surface will be covered briefly in this \levelname.
 
-%\textit{\href{http://physbam.stanford.edu/~fedkiw/papers/stanford2002-07.pdf}{Robust Treatment of Interfaces for Fluid Flows and Computer Graphics}}
+%http://physbam.stanford.edu/~fedkiw/papers/stanford2002-07.pdf (Robust Treatment of Interfaces for Fluid Flows and Computer Graphics)
 
-%Lecture: \textit{\href{http://www.ims.nus.edu.sg/Programs/fluiddynamic/files/Lecture1-basics.pdf}{Moving Interface Problems: Methods \& Applications Tutorial Lecture I}}
+%Lecture: http://www.ims.nus.edu.sg/Programs/fluiddynamic/files/Lecture1-basics.pdf (Moving Interface Problems: Methods \& Applications Tutorial Lecture I)
 
 \section{Mesh based surface tracking methods}
 
@@ -69,13 +69,13 @@ Note that this definition of the interface will not result in a surface, but in 
 In contrast to the \LS method, for which it is almost given that the interface is going to be constructed from the discretized signed distance function by using the marching cubes algorithm, it is when using the \VOF method a non-trivial task to construct the interface from $\alpha$; in many cases, however, it is not necessary. Besides, \VOF methods are rarely used in computer graphics applications because of \idxse{flotsam}{artifact}{flotsam} and \idxse{jetsam}{artifact}{jetsam artifacts} \citep{Wojtan2009}. However, there do exist various methods for constructing an interface from $\alpha$, of which most are used mainly to assist in the advection of $\alpha$ in order to keep the interface sharp, but are not very useful when visualizing the surface.
 
 %\begin{itemize}
-%    \item Comparsion: \textit{\href{http://capfluidicslit.mme.pdx.edu/reference/Numerics/Gopala_ChemEngJ2008_VOFMethodsFreeSurfaceFlow.pdf}{Volume of fluid methods for immiscible-fluid and free-surface flows}}
+%    \item Comparsion: http://capfluidicslit.mme.pdx.edu/reference/Numerics/Gopala_ChemEngJ2008_VOFMethodsFreeSurfaceFlow.pdf (Volume of fluid methods for immiscible-fluid and free-surface flows)
 %\end{itemize}
 
 %\subsection{VOF vs. Pseudo VOF}
 
 %\begin{itemize}
-%    \item Explanation: \textit{\href{http://www.flow3d.com/cfd-101/cfd-101-VOF.html}{VOF (Volume of Fluid) - What's in a Name?}}
+%    \item Explanation: http://www.flow3d.com/cfd-101/cfd-101-VOF.html (VOF (Volume of Fluid) - What's in a Name?)
 %\end{itemize}
 
 %\subsection{Interface reconstruction}

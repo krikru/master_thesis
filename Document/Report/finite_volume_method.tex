@@ -322,10 +322,10 @@ Then there is a class of methods called \idxsp{iterative}{method}{s}, which star
 
 \subsubsection{The Preconditioned Conjugate Gradient Method}
 
-%See also \textit{Incomplete Cholesky Preconditioned Conjugate Gradients method}, described in \textit{\href{http://www.cs.ubc.ca/~rbridson/fluidbook/}{Fluid Simulation for Computer Graphics}}. This method uses the \textit{\href{http://en.wikipedia.org/wiki/Incomplete_Cholesky_factorization}{incomplete Cholesky factorization}} as preconditioner.
+%See also \textit{Incomplete Cholesky Preconditioned Conjugate Gradients method}, described in http://www.cs.ubc.ca/~rbridson/fluidbook/ (Fluid Simulation for Computer Graphics). This method uses the http://en.wikipedia.org/wiki/Incomplete_Cholesky_factorization (incomplete Cholesky factorization) as preconditioner.
 
 One iterative method is the \PCG method, which requires the matrix formulation of the system to be symmetric and positive-definite. It can work both as a direct method if run for $N$ iterations, or as an iterative method if the iterations stop earlier, but will often yield very fast convergence. In a work by \citet{Losasso2004}, this method was noted to require only about 20 iterations to converge to an \accuracy of \idxs{machine}{precision} and that the pressure solver that was used only accounted for \mbox{25 \%} of the simulation time. However, it also noted that if the equation formulation is nonsymetric, it requires nonoptimal preconditioners which easily leads to an order of magnitude slowdown, and in the worst case, even problems with robustly finding a solution at all.
-% The \textit{Incomplete Cholesky Preconditioned Conjugate Gradients method} is described in \textit{\href{http://www.cs.ubc.ca/~rbridson/fluidbook/}{Fluid Simulation for Computer Graphics}}.
+% The \textit{Incomplete Cholesky Preconditioned Conjugate Gradients method} is described in http://www.cs.ubc.ca/~rbridson/fluidbook/ (Fluid Simulation for Computer Graphics).
 
 \subsubsection{The Jacobi Method and the Gauss--Seidel Method}
 

@@ -5,7 +5,7 @@
 
 In this appendix, I will present a new \idx{two-dimensional} \index{dimensionality!two|see{two-dimensional}} \PDE in the \idxs{spatial}{domain}, describing the \qidxs{time evolution of}{surface waves} for intermediate, mildly varying water depths. The equation could efficiently be solved with a \idx{time complexity} of $O(N)$\indexs{big O}{notation} per \idx{time step}, where $N$ is the number of \idxsp{surface}{grid point}{s}, using the \CFMM \citep{White1994}. It has not been solved numerically so its behavior is unknown.
 
-The equation is derived from the \idxs{dispersion}{relation} that is obtained in \idxs{Airy wave}{theory}\index{wave theory!Airy|see{Airy wave theory}} \citep{temp}, namely:
+The equation is derived from the \idxs{dispersion}{relation} that is obtained in \idxs{Airy wave}{theory}\index{wave theory!Airy|see{Airy wave theory}}, namely:
 
 \begin{equation} \label{eq:dispersion_again}
 \omega^2(k) \,=\, \left(g\,+\,\frac{\gamma}{\rho}\,k^2\right)\,k\,\tanh(k\,h),
@@ -137,8 +137,8 @@ which is a \PDE completely free from variables in the frequency domain. Combinin
 \{f\,*\,\eta\}(\vec{r},\,t) \,=\, \fdfunc{K}(\vec{k}\,h)\,\eta(\vec{r},\,t).
 \end{equation}
 
-The \idx{convolution theorem} \citep{temp} (\textit{there is a constant factor involved here too, is this 1 for this version of the Fourier transform?) states that
-}
+The \idx{convolution theorem} states that
+
 \begin{equation} \label{eq:convolutiontheorem}
 \mathcal{F}\{f\,*\,g\} \,=\, \mathcal{F}\{f\}\,\cdot\,\mathcal{F}\{g\},
 \end{equation}
@@ -237,7 +237,7 @@ where $^*$ denotes an \estimate. A comparison between $\fdfunc{K}^*$ when $K^*$ 
     \centering
     \subcaptionbox{\label{fig:transformedkernelcomparison}}[.43\textwidth]{\input{Images/Plots/comparison}}
     \subcaptionbox{\label{fig:transformedkernelratio}}[.53\textwidth]{\input{Images/Plots/ratio}}
-    \caption{Comparison of the \idxs{impulse}{response} of \eqref{eq:empirical} and the impulse response of an ideal kernel. The fluctuations for the higher values of $\xi$ in \subrefp{fig:transformedkernelratio} are purely due to \idxs{numerical}{errors}.}
+    \caption{Comparison of the \idxs{impulse}{response} of \eqref{eq:empirical} and the impulse response of an ideal kernel. The fluctuations for the higher values of $\xi$ in \subrefp{fig:transformedkernelratio} are purely due to \idxs{numerical}{errors} in the solution of \eqref{eq:kerneltofdkernelmodified}.}
     \label{fig:transformedkernel}
 \end{figure}
 

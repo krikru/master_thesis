@@ -449,7 +449,7 @@ where $\vec{\mu} = \E[\nabla\eta^*(\vec{r})]$ is given by \eqref{eq:nabla_eta_ex
 
 \section{The rendering equation}
 
-When doing \idxs{physically based}{rendering}, one often starts from an equation known as the \idxs{rendering}{equation}. This equation is what ties everything that has been covered in this appendix together. It was simultaneously introduced in \idxs{computer}{graphics} in \citep{temp} and \citep{temp}, and is given as
+When doing \idxs{physically based}{rendering}, one often starts from an equation known as the \idxs{rendering}{equation}. This equation gives the light intensity of a point on the surface as a function of viewing angle, light source distribution and the \BRDF of the surface \citep{Nicodemus1965}, and ties everything that has been covered in this appendix together. The rendering equation was simultaneously introduced in \idxs{computer}{graphics} by \citet{Immel1986} and by \citet{Kajiya1986}, and is given as
 
 \begin{equation} \label{eq:rendering_equation_original}
 \renewcommand*{\arraystretch}{1.5}
@@ -459,7 +459,7 @@ L_{\text{o}}(\vec{r},\,\normvec{\omega}_{\text{o}},\, \lambda,\, t) \,= \\
 \end{array}
 \end{equation}
 
-where $L_{\text{o}}$ is the total \idxs{spectral}{radiance} (or power per unit solid-angle-in-the-direction-of-a-ray and unit projected-area-perpendicular-to-the-ray and unit wavelength) of \index{light!wavelength}\idxe{wavelength!light}{wavelength} $\lambda$ directed outward along direction $\normvec{\omega}_{\text{o}}$ at time $t$, from location $\vec{r}$ at the surface; $L_{\text{e}}$ is the spectral radiance emitted by the surface itself, $\rho'_{\text{r}}$ is the \BRDF which was first defined in \citep{temp} and describes how light from different directions are reflected on the surface, $L_{\text{i}}$ is the \idxs{spectral}{radiance} incoming from direction $\normvec{\omega}_{\text{i}}$, $\normvec{n}$ is the \idxs{surface}{normal}, and $\Omega$ is the \idxs{unit}{hemisphere} containing all possible directions from which the incoming light can come before it is reflected, and thus all possible values for $\normvec{\omega}_{\text{i}}$ (which also happens to be all possible values for $\normvec{\omega}_{\text{o}}$). Note that both $\normvec{\omega}_{\text{i}}$ and $\normvec{\omega}_{\text{o}}$ are directed outwards from the surface.
+where $L_{\text{o}}$ is the total \idxs{spectral}{radiance} (or power per unit solid-angle-in-the-direction-of-a-ray and unit projected-area-perpendicular-to-the-ray and unit wavelength) of \index{light!wavelength}\idxe{wavelength!light}{wavelength} $\lambda$ directed outward along direction $\normvec{\omega}_{\text{o}}$ at time $t$, from location $\vec{r}$ at the surface; $L_{\text{e}}$ is the spectral radiance emitted by the surface itself, $\rho'_{\text{r}}$ is the \BRDF of the surface, which describes how light from different directions are reflected on the surface, $L_{\text{i}}$ is the \idxs{spectral}{radiance} incoming from direction $\normvec{\omega}_{\text{i}}$, $\normvec{n}$ is the \idxs{surface}{normal}, and $\Omega$ is the \idxs{unit}{hemisphere} containing all possible directions from which the incoming light can come before it is reflected, and thus all possible values for $\normvec{\omega}_{\text{i}}$ (which also happens to be all possible values for $\normvec{\omega}_{\text{o}}$). Note that both $\normvec{\omega}_{\text{i}}$ and $\normvec{\omega}_{\text{o}}$ are directed outwards from the surface.
 
 While this equation can lay the foundation for many very realistic renderings of \threedimensional scenes, and can make the reflective properties of a surface vary for different positions, for different points in time, for different wavelengths, which allows the surface to have a color and not just a gray-scale, and even for different rotations of the surface, there are several aspects of light it can't grasp. Some of these aspects, which are relevant to \surfacewaterrendering, include
 
@@ -603,10 +603,10 @@ which also leads to the inequality
 (\normvec{\omega}_{\text{i}} + \normvec{\omega}_{\text{o}})\cdot\normvec{h} > 0.
 \end{equation}
 
-This means that $\normvec{\omega}_{\text{i}} + \normvec{\omega}_{\text{o}} \neq \vec{0}$, otherwise we would have $(\normvec{\omega}_{\text{i}} + \normvec{\omega}_{\text{o}})\cdot\normvec{h} = \vec{0}\cdot\normvec{h} \not > 0$. Since $\normvec{\omega}_{\text{i}} + \normvec{\omega}_{\text{o}} \neq \vec{0}$, we can rewrite \eqref{eq:householder_x_second_order_with_vectors} as
+This means that $\normvec{\omega}_{\text{i}} + \normvec{\omega}_{\text{o}} \neq \vec{0}$. Hence, the leftmost factor in the right hand side of \eqref{eq:householder_x_second_order_with_vectors} must be zero, that is
 
 \begin{equation}
-2(\normvec{\omega}_{\text{i}} + \normvec{\omega}_{\text{o}})\cdot\normvec{\omega}_{\text{i}}\,x^2 = 1,
+2(\normvec{\omega}_{\text{i}} + \normvec{\omega}_{\text{o}})\cdot\normvec{\omega}_{\text{i}}\,x^2 - 1 = 0,
 \end{equation}
 
 which means that
@@ -962,7 +962,7 @@ where $\normvec{\omega}_{\text{i}}$ is identified as $\normvec{\omega}_{\text{s}
 
 \section{Discussion about the illumination model}
 
-By comparing this \idxs{shading}{model} (\eqrefs \ref{eq:rendering_equation_simplified} and \ref{eq:spectral_radience_reflected_point_light_source}) to the \idxs{Blinn--Phong}{shading model}, it may be noticed that if the \idxs{wave}{spectra} $S$ is \idxse{circular}{symmetry}{circularly symmetric}, the factor $f(\nabla\eta^*(\vec{r}))$ (described by \eqref{eq:eta_grad_distribution_r_uniformly_distributed}), which is what gives the reflection of the point light source its shape, becomes practically equivalent to the specular reflection term in the Blinn--Phong shading model, except from a constant factor. This fact holds even though the Blinn--Phong shading model is based on experimental measurements of reflections from real surfaces and is developed mainly for solids, while this is a shading model specifically derived for water surfaces.
+By comparing this \idxs{shading}{model} (\eqrefs \ref{eq:rendering_equation_simplified} and \ref{eq:spectral_radience_reflected_point_light_source}) to the \idxs{Blinn--Phong}{shading model} \citep{Blinn1977}, it may be noticed that if the \idxs{wave}{spectra} $S$ is \idxse{circular}{symmetry}{circularly symmetric}, the factor $f(\nabla\eta^*(\vec{r}))$ (described by \eqref{eq:eta_grad_distribution_r_uniformly_distributed}), which is what gives the reflection of the point light source its shape, becomes practically equivalent to the specular reflection term in the Blinn--Phong shading model, except from a constant factor. This fact holds even though the Blinn--Phong shading model is based on experimental measurements of reflections from real surfaces and is developed mainly for solids, while this is a shading model specifically derived for water surfaces.
 
 For symmetric wave spectra and for almost smooth surfaces (when the diffusion in the reflection of objects becomes very small), all factors in \eqref{eq:spectral_radience_reflected_point_light_source} except from $f(\nabla\eta^*(\vec{r}))$ varies very slowly in comparison to $f(\nabla\eta^*(\vec{r}))$ unless the surface is viewed from a glancing angle, and the shape of the specular reflection can be \approximated as just a constant times $f(\nabla\eta^*(\vec{r}))$. Hence, the result of using \eqref{eq:spectral_radience_reflected_point_light_source} becomes very similar to the result of using the Blinn--Phong shading model, with the only practical difference that the reflection of a point light source according to the shading model derived in this appendix varies in intensity depending on how steep the angle is with which the observer sees the reflection, according to the factors $\anormvec{h}^4/(\normvec{\omega}_{\text{o}}\cdot\anormvec{n})$ and $R_{\normvec{n}^*\!,x}(\normvec{\omega}_{\text{o}})$ which are not included in the specular term in the Blinn--Phong shading model.
 
