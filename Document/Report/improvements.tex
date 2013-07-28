@@ -2,21 +2,23 @@
 
 There are a lot of improvements of the method that was implemented in \thisprojectwork that can be performed, many of them which are necessary  to make the method be practically useful in a real-time flight simulator.
 
-\section{Required improvements}
+%\section{Required improvements}
 
-In this section, some of the improvements that are required to make the method practically useful are presented.
+%In this section, some of the improvements that are required to make the method practically useful are presented.
 
-\subsection{Adaptive Mesh Refinement}
+\section{Adaptive Mesh Refinement}
 
 The \LOD needs to be adapted to the \idxs{camera}{placement} and the \FOV/\idxs{viewing}{frustum} as well as the water depth in order to greatly reduce the number of cells used by the \FVM in the simulation, in order to only use the minimum amount of cells that are actually needed. This is referred to as \AMR.
 
 Without \AMR it would be impossible to simulate larges bodies of water and fine surface details real-time in the same scene, as these would require heaps of orders of magnitude more cells to still be able to simulate waves with the same short \wavelength as with \AMR.
 
-\subsubsection{No simulation of air} In \thisprojectwork, not just the water was simulated, but also the air, which meant that the simulation domain needed to have a boundary in the air. This introduced the additional problem of choosing where the boundary should be located, and what boundary conditions it should have. Additionally, this meant extra computational work since more cells had to be simulated which reduced the simulation speed significantly, and it introduced the phenomenon that velocities could suddenly go to infinity, which froze the simulation.
+%\subsection{No simulation of air}
+
+In \thisprojectwork, not just the water was simulated, but also the air, which meant that the simulation domain needed to have a boundary in the air. This introduced the additional problem of choosing where the boundary should be located, and what boundary conditions it should have. Additionally, this meant extra computational work since more cells had to be simulated which reduced the simulation speed significantly, and it introduced the phenomenon that velocities could suddenly go to infinity, which froze the simulation.
 
 A better solution would be to exclude the air region and treat that as vacuum, and move the boundary to the interface between the water and the vacuum/air region.
 
-\subsection{Unconditionally stable flows}
+\section{Unconditionally stable flows}
 
 In order to make a \FVM simulation become practically useful for \idxsp{real-time}{simulation}{s}, it is required that the flow is \idxse{unconditionally stable}{flow}{unconditionally stable}\index{stable flow!unconditionally|see{unconditionally stable flows}}. This implies that it is necessary that arbitrarily large \timesteps can be taken without making the simulation unstable.
 
@@ -31,11 +33,11 @@ A remedy for this dilemma is to use semi-Lagrangian advection, which works by ca
 
 All of these instability issues have remedies, at least for simulations on a regular grid \citep{Stam1999,Lentine2012}, but these remedies can probably also be extended for octree grids.
 
-\subsection{Rendering}
+\section{Rendering}
 
 In \thisprojectwork, the water surface is not rendered. To render the surface properly, an isosurface needs to be extracted from the \idxs{phase fraction}{data}.
 
-\subsubsection{Marching Cubes}
+\subsection{Marching Cubes}
 
 In order to find where the \idxs{water}{surface} is located, the \idxs{marching}{cubes} \idxe{algorithm!marching cubes|see{marching cubes}}{algorithm} can be used. Marching cubes is an algorithm for finding \isosurfaces from a \idxs{scalar}{field}, and works by looping over a set of adjacent cubes tiled closely together which just covers the domain that is about to be rendered. For each cube, the algorithm looks at the value of the scalar field in all eight of the cube's corners. If the field values in the corners all lie at the same side of the value $c$ that the isosurface represents, it figures that the surface doesn't cross through that cube, otherwise it does and the algorithm adapts a surface consisting of a finite number of polygons through the cube depending on what the field values in the corners are.
 
@@ -45,7 +47,7 @@ If the \VOF method for tracing the surface would be switched to using the \LS me
 
 The problem of generating the isosurface with the marching cubes algorithm when the domain that is to be rendered contains LOD transitions is well known, and remedies exist. For example, in a work by \citet{Lengyel2010}, this is remedied for the case where the cubes used by the algorithm are modeled as an \octree.
 
-\subsection{Parallelization}
+\section{Parallelization}
 
 In order to obtain a simulation speed-up that is almost certainly needed if the simulation is to run in real-time, it can be processed on multiple \CPUs simultaneously, as well as on the \GPU (if the \octree traversal is implemented to run without recursion, since \GPUs generally don't have any stack which means that they can't do recursion). This is generally referred to as \parallelization. For parallelization to be possible, the \idxs{simulation}{domain} first has to be \partitioned, so that a small part of the domain can be processed on each core and on each \idxs{GPU}{process}.
 
@@ -53,7 +55,7 @@ Since the process that takes the longest time to run will decide the speed of th
 
 For octrees, there are algorithms that can be used that make use of \idxsp{space-filling}{curve}{s} and are fast, easy to implement and produce very acceptable results \citep{Valgaerts,Ji2012}. There also exists another kind of partitioning method that uses \idxs{domain}{decomposition} \citep{Fuster2011,Agbaglah2011}.
 
-\subsection{Fluid--Structure Interaction}
+\section{Fluid--Structure Interaction}
 
 In \thisprojectwork, no interaction between ships and the surface waves was ever modeled, in other words, no \FSI was modeled. Modeling and simulating \FSI is necessary in order to make large waves affect ships so that they start to rock forth and back, as well as in order for ships to give rise to two \idxsp{wake}{line}{s} as they \sail on the water.
     
@@ -62,11 +64,11 @@ Some of the methods for modeling \FSI includes the \IB method \citep{Peskin2002,
 
 The \idxs{rotation of a}{rigid body}, in this case the rotation of a \ship that is floating on the surface of the water when it is hit by large waves, depends both on the forces that acts on the \idxs{rigid}{body} as well as well as the  \idxs{moment of}{inertia} of the rigid body. The dynamics of a rigid body is described by Euler's equations for rigid bodies.
 
-\section{Desired improvements}
+%\section{Desired improvements}
 
-In this \levelname, some improvements that are not required in order to make the method practically useful, but still desired in order to improve the quality of the simulation, are presented.
+%In this \levelname, some improvements that are not required in order to make the method practically useful, but still desired in order to improve the quality of the simulation, are presented.
 
-\subsection{Reduction of spurious reflections in LOD transitions}
+\section{Reduction of spurious reflections in LOD transitions}
 
 When a wave hits a boundary to a region where it propagates with a different speed, or cannot propagate at all, a partial or total reflection of the wave will occur. In natural scenes, this typically happens when the depth of the water changes abruptly from deep water to shallow, or when the wave hits a cliff or similar.
 
@@ -76,53 +78,52 @@ In scenes simulated on an \octree based \grid, this also happens in \LOD transit
 
 On scenes simulated on an arbitrary grid though, the reflections corresponding to the reflections that takes place in LOD transitions are often less noticeable as the surface of reflection is less well-defined, which causes the waves to be reflected at multiple locations and become scattered in many directions, although the waves are still eventually totally reflected.
 
-\subsubsection{Perfectly matched layers}
+\subsection{Perfectly matched layers}
 
 One method for greatly reducing spurious reflections at the border of a structured grid is to use \idxs{perfeclty matched}{layers}, which are described in among others a work by \citet{Soderstrom2010} that explains explicit dampening, implicit dampening, and wave absorbing boundaries --- the perfectly matched layer approach --- and evaluates the methods.
 
-\subsubsection{Other absorbing boundary conditions}
+\subsection{Other absorbing boundary conditions}
 
-A method that can be used when there is no wave dispersion, that is, waves of different wavelengths have the same speed, is to use open boundary conditions \citep{Muller-Fischer2008}. This method works ideally in the \idx{one-dimensional} case, but performs poorly in the \idxe{two-dimensional}{two-} and \idx{three-dimensional} cases when the waves come against the boundary at a glancing angle. Yet another method that can be used to prevent waves from being reflected at boundaries are the \AWWE \citep{Guddati2005}, in which the propagation of waves is only simulated in one direction, meaning that for every pair of wave vectors $\vec{k}$ and $-\vec{k}$, only one of them is considered in the simulation. Hence the waves are naturally prevented from propagating back from a boundary into the simulation domain. This is basically also what happens when the open boundary conditions are used, but since those are derived from the one-dimensional case, they only work well for waves hitting the boundary from an almost orthogonal direction, while the \AWWE assume an arbitrary angle for the incoming wave and hence can obtain a high accuracy for waves hitting the boundary from within a wide range of angles.
+Another method, that can be used when there is no wave dispersion, that is, waves of different wavelengths have the same speed, is to use open boundary conditions \citep{Muller-Fischer2008}. This method works ideally in the \idx{one-dimensional} case, but performs poorly in the \idxe{two-dimensional}{two-} and \idx{three-dimensional} cases when the waves come against the boundary at a glancing angle. Yet another method that can be used to prevent waves from being reflected at boundaries are the \AWWE \citep{Guddati2005}, in which the propagation of waves is only simulated in one direction, meaning that for every pair of wave vectors $\vec{k}$ and $-\vec{k}$, only one of them is considered in the simulation. Hence the waves are naturally prevented from propagating back from a boundary into the simulation domain. This is basically also what happens when the open boundary conditions are used, but since those are derived from the one-dimensional case, they only work well for waves hitting the boundary from an almost orthogonal direction, while the \AWWE assume an arbitrary angle for the incoming wave and hence can obtain a high accuracy for waves hitting the boundary from within a wide range of angles.
 
-\subsection{Wind waves}
+\section{Wind waves}
 
 In order to obtain a realistic \idxs{sea}{state}\index{state of sea|see{sea state}} in a simulation, it is desirable that the \idxs{water}{surface} \interacts with the \wind in order to give rise to \idxsp{wind}{wave}{s}. In this way, the sea state will be a reflection of the \idxs{wind}{velocity}.
 
-\subsubsection{Spectral methods}
+\subsection{Spectral methods}
 
 A very cheap and easy way to simulate wind waves is to use a wind dependent \idxs{wave}{spectrum}. A wave spectrum tells how the wave amplitude is \distributed as a function of wavelength, and from that distribution the \idxs{Fourier}{transform} of the free surface elevation can easily be \generated simply by \sampling it. This is then used to \initialize the \idxs{sea}{state} in the simulation.
 
 There are different models for describing the wave spectrum for a certain wind velocity, most of which are \empirical. Some of these spectra take into account the wind direction for increased alignment between the surface and the wind, for example the \idxs{Philips}{spectrum}, which is used and tweaked by \citet{Tessendorf2001}, or the \idxs{Pierson--Moskowitz}{spectrum}, which was supposedly developed in 1964 and is described by \citet{Premovze2001}. Another commonly used wave spectrum which builds up over time is the \JONSWAP spectrum\index{spectrum!JONSWAP|see{JONSWAP}} \citep{Journee2001b,WikiWaves2013}.
 
-\subsubsection{Air-water interaction}
+\subsection{Air--water interaction}
 
 Another (somewhat dubious) alternative would be to simulate both the \water and the \air using the \FVM. This method would be slower that using a wave spectrum since it has to simulate more cells, and would probably give a quite poor result since it is difficult to catch the correct interaction between the water and the air for short \wavelengths.
 
-\subsection{Improved rendering}
+\section{Improved rendering}
 
-In order to improve the rendering from what is just necessary (which would look almost plastic) to what is actually desired, a realistic \idxs{shading}{model} needs to be implemented.
+In order to create a realistic rendering of the water surface, there are a number of aspects that has to be considered. Below follows a few of those.
 
-\subsubsection{Light reflectivity and transmissivity}
+\subsection{Light reflectivity and transmissivity}
 
 When \light hits the \idxs{water}{surface}, not all light is transmitted into the water. Some of the light is reflected, and the amount of light that is reflected depends on the angle of incidence as well as the polarization of the light, according to the \idxs{Fresnel}{equations}.
 
 Normally however, when rendering a \scene with \idxs{computer}{graphics}, one doesn't usually start from the light source when calculating the brightness of an object, but from the observer. On the other hand, according to the \idxs{Helmholtz}{reciprocity principle}\index{principle!Helmholtz reciprocity|see{Helmholtz reciprocity principle}}, one can use the Fresnel equations not only to calculate how much of the light is being reflected, but also the other way around to calculate how much of the light that comes from the surface originally hit the surface from above and was reflected, and how much of it hit the surface from below and was transmitted. In that way it is possible to account also for the light that has been reflected under the water, which has been filtered by the objects it has been reflected on under the surface of the water.
 
-\subsubsection{Illumination model for water surfaces}
+\subsection{Statistical treatment of short wavelengths}
 
-Typically, when rendering an \idxs{ocean}{scene}, not the entire wave spectrum is used but only the lowest frequencies of it, since too high frequencies will give rise to \folding which may in turn give rise to unwanted effects such as \idxsp{Moire}{pattern}{s}. Besides, because of the limited resolution of the \grid, short \wavelengths will automatically be removed even if the rendering would allow shorter wavelengths. Therefore, not all frequencies will be used in the \idxs{rendered}{image}. If much of the \idxs{wave}{energy} in a \idxs{sea}{state} lies in the part of the \idxs{wave}{spectrum} that will not be used when rendering the image, such as when the surface is viewed from a far distance, this can become very evident.
+Typically, when creating a wire frame model for a sea surface, which is needed in rendering of the surface, only wavelengths that are long enough are included since wavelengths that are too short will give rise to folding. Besides, not all wavelengths are present in the simulation because of the limited resolution of the \grid, so it is not possible to include all wavelengths anyway, simply because much of them are unavailable. If much of the \idxs{wave}{energy} in a \idxs{sea}{state} is excluded from the wire frame model, which it if will for example the surface is viewed from a far distance, the surface will appear much smoother in the rendered image than what it really is, unless extra treatment is taken for the excluded wavelengths.
 
-Since the \idxs{surface}{normal} of the water surface depends on the \gradient of the \idxs{free surface}{elevation}, all surface waves will help to build up a variance in the surface normal. If viewed from a distance that is just large enough, the surface waves themselves will be too small to be visible, but the variance of the normal that is created by the surface waves will be visible since it will give rise to a blur in \reflections in the surface. This is for example what often causes the reflection of the \sun in the sea to look like a long vertical stripe under the sun instead of something that looks like a sun. So if certain wavelengths are removed from the water surface, they should be accounted for by blurring out the image that is reflected in the water, of course in the correct way, or the rendered water will look too \smooth.
+A naive shading model will use the surface normal of the wire frame model when calculating the light intensity of the surface, and completely ignore the part of the wave spectrum that is not in it. A more sophisticated shading model will estimate the probability density of the normal of the actual water surface, given the surface normal of the wire frame model in combination with the known statistics of the excluded wavelengths. The distribution of the normal vector is in turn used to model the distribution of the surface light intensity, from which the expectation value is calculated and used as the light intensity of the surface in the rendered image. This will effectively prevent the water surface from looking too smooth.
 
-A derivation of an illumination model for sea surfaces is found in \appref{chap:illumination_model_derivation}.
+The derivation of a simple illumination model for sea surfaces is found in \appref{chap:illumination_model_derivation}.
+\section{Visual effects}
 
-\subsection{Visual effects}
-
-\subsubsection{Choppy waves}
+\subsection{Choppy waves}
 
 Waves of a single frequency is not a perfect \sinusoidal, but a \trochoid, which makes the curvature greater at the \idxs{wave}{crest} and lesser at the \idxs{wave}{valley}, which makes the waves look more \idxse{choppy}{waves}{choppy}. By letting sinusoidals displace the water surface, not only vertically, but also horizontally, trochoids can effectively be created and a more realistic look of the water surface is obtained. These waves are called \idxsp{Gerstner}{wave}{s} and were first found as an approximate solution to the fluid dynamic equations almost 200 years ago, as noted by \citet{Tessendorf2001}, and is today used extensively used in computer graphics for animating water surfaces. What is claimed to be an implementation of Gerstner waves can be seen in an animation on the web by \citet{ceribral2012}.
 
-\subsubsection{Splash and foam}
+\subsection{Splash and foam}
 
 In rough weather conditions, the waves will become higher and choppier, and their crests will break more easily, forming white foam where they break, as can be seen in \figref{fig:sea_storm}, which is known as oceanic whitecaps, or just whitecaps. When high waves hit the side of a ship, they will also shatter and form a spray of small particles in the air, usually just referred to as splashes.
 

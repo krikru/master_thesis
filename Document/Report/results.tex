@@ -1,6 +1,6 @@
 \chapter{Results}
 
-\
+\section{The program}
 
 \newlength{\screenshotwidth}
 \setlength{\screenshotwidth}{.475\textwidth}
@@ -163,7 +163,7 @@
 
 % Pros:
 
-The program that was developed could successfully simulate water and air and keep the two phases separated, with a region of cells containing a mix of both water and air in between the two phases. Pressure waves, or acoustic waves, within the fluids as well as gravity waves, or surface waves, on the surface in the interface between the water and the air were successfully simulated.
+The program that was created could successfully simulate water and air and keep the two phases separated, with a region of cells containing a mix of both water and air in between the two phases. Pressure waves, or acoustic waves, within the fluids as well as gravity waves, or surface waves, on the surface in the interface between the water and the air were successfully simulated.
 
 % Cons:
 
@@ -176,11 +176,17 @@ However, the method that was chosen, which was the \FVM on an \octree data struc
     
     Specifically, the problem was that the vacuum cells caused velocities to go to infinity. With constant time step, this would lead to numerical instabilities, while with an adaptive time step, it would lead to that the \timestep would go to zero as the cell density went to zero, and the simulation would eventually freeze completely. No matter which case, one of the cells would eventually lose all its content, starting a numerical instability that quickly would spread through all other cells and "eat up" all air and water.
     
-    \item The simulation speed was extremely low. Even though the tests carried out during the development of the program were only held in two dimensions, which heavily reduced the number of cells that had to be processed every time step, the simulation still went many times slower than real-time speed. This was partly due to the fact that no optimization, including parallelization of the code, ever was made, and partly due to the fact that the time step was restricted by the \CFL condition, which forced the time step to be as low as 0.3~ms for which 3333 time steps per second would have been necessary in order to obtain a real-time speed.
+    \item The simulation speed was extremely low. Even though the tests carried out during the development of the program were only held in two dimensions, which heavily reduced the number of cells that had to be processed every time step, the simulation still went many times slower than real-time speed. This was partly due to the fact that no optimization, including parallelization of the code, ever was made, and partly due to the fact that the time step was restricted by the \CFL condition, which forced the time step to be as low as 0.3~ms for which more than \mbox{3,000} time steps per second would have been necessary in order to obtain a real-time speed.
     
     \item There were problems with keeping the interface intact (see \figrefs \mbox{\ref{fig:screenshots_alpha_O_E}--\subref{fig:screenshots_alpha_l_TS}}). The variant of the \idx{Hyper-C} advection scheme that was implemented did not keep the interface compressed and water was churned up in the air and formed something that most closely resembled a kind of mist, which is very non-ideal for several reasons. First, visualization becomes more difficult since it becomes more difficult to determine where the surface is located. Second, since all cells that are at least partially filled with water have to be processed, a thick interface will require more processing each frame than a thin interface, which decreases the simulation speed significantly since it is in the interface the majority of cells are located. Third, the quality of the simulation will suffer, since a thick interface is a bad approximation of a real interface between two immiscible fluids, which practically has no thickness. This naturally leads to numerical errors in the simulation, for example incorrect wave speeds for short wavelengths.
     
     It is unknown whether the fact that the interface grew so thick is a property of the Hyper-C advection scheme, if it was because the advection scheme was implemented incorrectly, or if it is a complication that easily arises when trying to generalize these kinds of interface compressing advection schemes from only \idxsp{incompressible}{flow}{s} to \idxsp{compressible}{flow}{s}. % It is also unknown whether the thickness of the interface would grow arbitrarily large if the simulation would continue to go on without suffering from numerical instability, or if the thickness would eventually stabilize at a certain level.
 \end{itemize}
 
-As was discovered when studying today's existing implementations for real-time simulation of water surface waves, the majority uses \idxs{Fourier}{synthesis}, and probably the vast majority of the rest of the implementations use methods that are \idx{two-dimensional} in nature, such as the \LPD method. It was noted that \LPD would perhaps fit best for this problem of all methods studied, since it is capable of simulating \FSI, which is claimed to be impossible for the Fourier synthesis method, and can simulate dispersion in variable water depths.
+Any measurements of the performance of the program, or of the simulation accuracy, were never really taken, since the program went so slow anyway, and suffered from so many problems that needed to be fixed, which made the program practically unusable for real-time simulations. Hence, such measurements just felt irrelevant and unnecessary.
+
+\section{Study of other methods}
+
+Parallel to implementing the program that was the topic of last section, a great deal of literature was studied in order to acquire the knowledge required to develop the technology necessary for the method to work, this naturally also lead to reading literature that was related to the objective of \thismasterthesiswork, but not completely related to the method used in the program.
+
+As was discovered, the majority of today's existing implementations for real-time simulation of water surface waves use \idxs{Fourier}{synthesis}, and probably the vast majority of the rest of the implementations use methods that are \idx{two-dimensional} in nature, such as the \LPD method or the shallow water equations. It was noted that \LPD would perhaps fit best for this problem of all methods studied, since it is capable of simulating \FSI, as well as dispersion and wave shoaling. If wave shoaling is not a requirement, the Fourier synthesis method could perhaps be used, assuming it can simulate \FSI, which tentatively can be achieved with some of the methods covered in \secref{sec:illumination_model_derivation}.
