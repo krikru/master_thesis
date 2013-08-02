@@ -449,98 +449,60 @@ where $\vec{\mu} = \E[\nabla\eta^*(\vec{r})]$ is given by \eqref{eq:nabla_eta_ex
 
 \section{The rendering equation}
 
-%\comment
-{
 \begin{figure}
     \setlength{\unitlength}{.175\textwidth}
     \centering
-    \subcaptionbox{\label{fig:kokoka}}[.415\textwidth]{
-        \begin{tikzpicture}[x=\unitlength,y=\unitlength,font=\large]
-            % Draw hemisphere roof
-            \draw (1,0) arc (0:180:1);
-            % Draw hemisphere bottom
-            %\draw (0,0) ellipse (1 and 0.3);
-            
-            % Draw vectors
-            %\coordinate (O) at (0,0);
-            % omega_i
-            %\draw (O) -- ++(30:1.5)
-            
-            
-            % Eye
-            %\draw (-2,1) -- ++(-60:.5)
-            %      (-2,1) -- ++(-30:.5);
-            %\draw (-2,1) ++(-60:.4) arc (-60:-30:.4);
-            
-        \end{tikzpicture}
-    }
-    \subcaptionbox{\label{fig:kokokb}}[.575\textwidth]{
-        \begin{tikzpicture}[x={(.035\textwidth,0)},y={(0,.035\textwidth)},z={(-.385*.035\textwidth,-.385*.035\textwidth)}]
-            % Front side
-            \draw[fill=white!100!black] (0,0,1) \threedimsquarepath{1} {1}{0}{0} {0}{1}{0};
-            % Level 1
-            \drawthreedimplus{0}{0}{1} {1} {1}{0}{0} {0}{1}{0}
-            % Level 2
-            \drawthreedimplus{1/2}{1/2}{1} {1/2} {1}{0}{0} {0}{1}{0}
-            \drawthreedimplus{1/2}{0/2}{1} {1/2} {1}{0}{0} {0}{1}{0}
-            \drawthreedimplus{0/2}{1/2}{1} {1/2} {1}{0}{0} {0}{1}{0}
-            % Level 3
-            \drawthreedimplus{2/4}{3/4}{1} {1/4} {1}{0}{0} {0}{1}{0}
-            \drawthreedimplus{3/4}{3/4}{1} {1/4} {1}{0}{0} {0}{1}{0}
-            \drawthreedimplus{2/4}{1/4}{1} {1/4} {1}{0}{0} {0}{1}{0}
-            % Level 4
-            \drawthreedimplus{5/8}{7/8}{1} {1/8} {1}{0}{0} {0}{1}{0}
-            \drawthreedimplus{6/8}{7/8}{1} {1/8} {1}{0}{0} {0}{1}{0}
-            \drawthreedimplus{5/8}{6/8}{1} {1/8} {1}{0}{0} {0}{1}{0}
-            \drawthreedimplus{6/8}{6/8}{1} {1/8} {1}{0}{0} {0}{1}{0}
-            % Level 5
-            \drawthreedimplus{12/16}{14/16}{1} {1/16} {1}{0}{0} {0}{1}{0}
-            \drawthreedimplus{11/16}{14/16}{1} {1/16} {1}{0}{0} {0}{1}{0}
-            \drawthreedimplus{11/16}{13/16}{1} {1/16} {1}{0}{0} {0}{1}{0}
-            \drawthreedimplus{10/16}{13/16}{1} {1/16} {1}{0}{0} {0}{1}{0}
-            
-            % Top side
-            \draw[fill=white!98!black] (0,1,0) \threedimsquarepath{1} {1}{0}{0} {0}{0}{1};
-            % Level 1
-            \drawthreedimplus{0}{1}{0} {1} {1}{0}{0} {0}{0}{1}
-            % Level 2
-            \drawthreedimplus{0/2}{1}{1/2} {1/2} {1}{0}{0} {0}{0}{1}
-            \drawthreedimplus{1/2}{1}{1/2} {1/2} {1}{0}{0} {0}{0}{1}
-            \drawthreedimplus{1/2}{1}{0/2} {1/2} {1}{0}{0} {0}{0}{1}
-            % Level 3
-            \drawthreedimplus{2/4}{1}{3/4} {1/4} {1}{0}{0} {0}{0}{1}
-            \drawthreedimplus{3/4}{1}{3/4} {1/4} {1}{0}{0} {0}{0}{1}
-            \drawthreedimplus{2/4}{1}{2/4} {1/4} {1}{0}{0} {0}{0}{1}
-            % Level 4
-            \drawthreedimplus{5/8}{1}{7/8} {1/8} {1}{0}{0} {0}{0}{1}
-            \drawthreedimplus{6/8}{1}{7/8} {1/8} {1}{0}{0} {0}{0}{1}
-            \drawthreedimplus{5/8}{1}{5/8} {1/8} {1}{0}{0} {0}{0}{1}
-            
-            % Right side
-            \draw[fill=white!90!black] (1,0,0) \threedimsquarepath{1} {0}{1}{0} {0}{0}{1};
-            % Level 1
-            \drawthreedimplus{1}{0}{0} {1} {0}{1}{0} {0}{0}{1}
-            % Level 2
-            \drawthreedimplus{1}{1/2}{1/2} {1/2} {0}{1}{0} {0}{0}{1}
-            \drawthreedimplus{1}{0/2}{1/2} {1/2} {0}{1}{0} {0}{0}{1}
-            \drawthreedimplus{1}{1/2}{0/2} {1/2} {0}{1}{0} {0}{0}{1}
-            \drawthreedimplus{1}{0/2}{0/2} {1/2} {0}{1}{0} {0}{0}{1}
-            % Level 3
-            \drawthreedimplus{1}{3/4}{3/4} {1/4} {0}{1}{0} {0}{0}{1}
-            \drawthreedimplus{1}{2/4}{2/4} {1/4} {0}{1}{0} {0}{0}{1}
-            \drawthreedimplus{1}{2/4}{1/4} {1/4} {0}{1}{0} {0}{0}{1}
-            \drawthreedimplus{1}{1/4}{2/4} {1/4} {0}{1}{0} {0}{0}{1}
-            \drawthreedimplus{1}{1/4}{1/4} {1/4} {0}{1}{0} {0}{0}{1}
-            % Level 4
-            \drawthreedimplus{1}{3/8}{3/8} {1/8} {0}{1}{0} {0}{0}{1}
-            \drawthreedimplus{1}{4/8}{3/8} {1/8} {0}{1}{0} {0}{0}{1}
-            \drawthreedimplus{1}{4/8}{4/8} {1/8} {0}{1}{0} {0}{0}{1}
-        \end{tikzpicture}
-    }
-    \caption{\subrefp{fig:quadtree} A \quadtree used to partition two-dimensional space. \subrefp{fig:octree} An \octree used to partition three-dimensional space. Note that an octree is essentially an extension of a quadtree from two to three dimensions. In this illustration, only half of the surface of the octree is visible.}
-    \label{fig:kokok}
+    \begin{tikzpicture}[x=\unitlength,y=\unitlength,font=\large]
+        % Origin
+        \coordinate (O) at (0,0);
+        % Angles
+        \def\inangle{30}
+        \def\outangle{135}
+        \def\eyeangle{45}
+        \def\hemispheresymbolangle{60}
+        % Lengths
+        \def\hemispherebaseheight{0.3}
+        \def\hemispheresymboldistance{.7}
+        \def\nveclength{1.5}
+        \def\eyesize{.5}
+        \def\eyeradius{\eyesize*.8}
+        \def\eyedistance{\nveclength+1.618*\eyesize}
+        \def\pupilradius{\eyeradius/5}
+        \def\pupildistance{\eyeradius+\pupilradius/2}
+    
+        % Draw hemisphere roof
+        \draw (1,0) arc (0:180:1);
+        % Draw hemisphere bottom
+        \draw (0,0) ellipse (1 and \hemispherebaseheight);
+        
+        % Draw vectors and symbols
+        % omega_i
+        \draw [-latex] (O) -- ++(\inangle:\nveclength) node[below right]{$\normvec{\omega}_{\textbf{i}}$};
+        % omega_o
+        \draw [-latex] (O) -- ++(\outangle:\nveclength) node[below left]{$\normvec{\omega}_{\textbf{o}}$};
+        % normal
+        \draw [-latex] (O) -- ++(90:\nveclength) node[left]{$\normvec{n}~$};
+        % Draw hemisphere symbol
+        \draw (O) \skipit{--} ++(\hemispheresymbolangle:\hemispheresymboldistance) node{$\Omega_{\text{r}}$};
+        
+        % Clip away arrows
+        %\draw [-latex] (O) -- ++(\inangle:\nveclength);
+        %\draw [-latex] (O) -- ++(\outangle:\nveclength;
+        %\draw [-latex] (O) -- ++(90:\nveclength);
+        
+        % Draw eye
+        \draw (O) \skipit{--} ++(\outangle:\eyedistance) -- ++(\outangle+180-\eyeangle/2:\eyesize)
+              (O) \skipit{--} ++(\outangle:\eyedistance) -- ++(\outangle+180+\eyeangle/2:\eyesize);
+        \draw (O) \skipit{--} ++(\outangle:\eyedistance) ++(\outangle+180-\eyeangle/2:\eyeradius) arc (\outangle+180-\eyeangle/2:\outangle+180+\eyeangle/2:\eyeradius);
+        % Pupil
+        \begin{scope}
+            \clip (O) \skipit{--} ++(\outangle:\eyedistance) circle(\eyeradius);
+            \filldraw[black] (O) \skipit{--} ++(\outangle:\eyedistance) ++(\outangle+180:\pupildistance) circle  (\pupilradius);
+        \end{scope}
+    \end{tikzpicture}
+    \caption{The rendering equation gives the total radiance from a surface directed outward along direction $\normvec{\omega}_{\text{o}}$ as an integral of a function of $\normvec{\omega}_{\text{i}}$, $\normvec{\omega}_{\text{o}}$, $\normvec{n}$, the \idxs{spectral}{radiance} incoming from direction $\normvec{\omega}_{\text{i}}$ and the bidirectional reflectance distribution function (BRDF) of the surface, taken over $\normvec{\omega}_{\text{i}}$ which is restricted to the unit hemisphere, $\Omega_{\textbf{r}}$, that is placed on a surface with the normal $\normvec{n}$. The vector lengths in this image have been exaggerated. $\normvec{\omega}_{\text{i}}$, $\normvec{\omega}_{\text{o}}$ and $\normvec{n}$ can be linearly independent of each other.}
+    \label{fig:renderingequation}
 \end{figure}
-}
 
 When doing \idxs{physically based}{rendering}, one often starts from an equation known as the \idxs{rendering}{equation}. This equation gives the light intensity of a point on the surface as a function of viewing angle, light source distribution and the \BRDF of the surface \citep{Nicodemus1965}, and ties everything that has been covered in this appendix together. The rendering equation was simultaneously introduced in \idxs{computer}{graphics} by \citet{Immel1986} and by \citet{Kajiya1986}, and is given as
 
