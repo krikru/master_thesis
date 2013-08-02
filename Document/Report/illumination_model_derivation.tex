@@ -449,6 +449,99 @@ where $\vec{\mu} = \E[\nabla\eta^*(\vec{r})]$ is given by \eqref{eq:nabla_eta_ex
 
 \section{The rendering equation}
 
+%\comment
+{
+\begin{figure}
+    \setlength{\unitlength}{.175\textwidth}
+    \centering
+    \subcaptionbox{\label{fig:kokoka}}[.415\textwidth]{
+        \begin{tikzpicture}[x=\unitlength,y=\unitlength,font=\large]
+            % Draw hemisphere roof
+            \draw (1,0) arc (0:180:1);
+            % Draw hemisphere bottom
+            %\draw (0,0) ellipse (1 and 0.3);
+            
+            % Draw vectors
+            %\coordinate (O) at (0,0);
+            % omega_i
+            %\draw (O) -- ++(30:1.5)
+            
+            
+            % Eye
+            %\draw (-2,1) -- ++(-60:.5)
+            %      (-2,1) -- ++(-30:.5);
+            %\draw (-2,1) ++(-60:.4) arc (-60:-30:.4);
+            
+        \end{tikzpicture}
+    }
+    \subcaptionbox{\label{fig:kokokb}}[.575\textwidth]{
+        \begin{tikzpicture}[x={(.035\textwidth,0)},y={(0,.035\textwidth)},z={(-.385*.035\textwidth,-.385*.035\textwidth)}]
+            % Front side
+            \draw[fill=white!100!black] (0,0,1) \threedimsquarepath{1} {1}{0}{0} {0}{1}{0};
+            % Level 1
+            \drawthreedimplus{0}{0}{1} {1} {1}{0}{0} {0}{1}{0}
+            % Level 2
+            \drawthreedimplus{1/2}{1/2}{1} {1/2} {1}{0}{0} {0}{1}{0}
+            \drawthreedimplus{1/2}{0/2}{1} {1/2} {1}{0}{0} {0}{1}{0}
+            \drawthreedimplus{0/2}{1/2}{1} {1/2} {1}{0}{0} {0}{1}{0}
+            % Level 3
+            \drawthreedimplus{2/4}{3/4}{1} {1/4} {1}{0}{0} {0}{1}{0}
+            \drawthreedimplus{3/4}{3/4}{1} {1/4} {1}{0}{0} {0}{1}{0}
+            \drawthreedimplus{2/4}{1/4}{1} {1/4} {1}{0}{0} {0}{1}{0}
+            % Level 4
+            \drawthreedimplus{5/8}{7/8}{1} {1/8} {1}{0}{0} {0}{1}{0}
+            \drawthreedimplus{6/8}{7/8}{1} {1/8} {1}{0}{0} {0}{1}{0}
+            \drawthreedimplus{5/8}{6/8}{1} {1/8} {1}{0}{0} {0}{1}{0}
+            \drawthreedimplus{6/8}{6/8}{1} {1/8} {1}{0}{0} {0}{1}{0}
+            % Level 5
+            \drawthreedimplus{12/16}{14/16}{1} {1/16} {1}{0}{0} {0}{1}{0}
+            \drawthreedimplus{11/16}{14/16}{1} {1/16} {1}{0}{0} {0}{1}{0}
+            \drawthreedimplus{11/16}{13/16}{1} {1/16} {1}{0}{0} {0}{1}{0}
+            \drawthreedimplus{10/16}{13/16}{1} {1/16} {1}{0}{0} {0}{1}{0}
+            
+            % Top side
+            \draw[fill=white!98!black] (0,1,0) \threedimsquarepath{1} {1}{0}{0} {0}{0}{1};
+            % Level 1
+            \drawthreedimplus{0}{1}{0} {1} {1}{0}{0} {0}{0}{1}
+            % Level 2
+            \drawthreedimplus{0/2}{1}{1/2} {1/2} {1}{0}{0} {0}{0}{1}
+            \drawthreedimplus{1/2}{1}{1/2} {1/2} {1}{0}{0} {0}{0}{1}
+            \drawthreedimplus{1/2}{1}{0/2} {1/2} {1}{0}{0} {0}{0}{1}
+            % Level 3
+            \drawthreedimplus{2/4}{1}{3/4} {1/4} {1}{0}{0} {0}{0}{1}
+            \drawthreedimplus{3/4}{1}{3/4} {1/4} {1}{0}{0} {0}{0}{1}
+            \drawthreedimplus{2/4}{1}{2/4} {1/4} {1}{0}{0} {0}{0}{1}
+            % Level 4
+            \drawthreedimplus{5/8}{1}{7/8} {1/8} {1}{0}{0} {0}{0}{1}
+            \drawthreedimplus{6/8}{1}{7/8} {1/8} {1}{0}{0} {0}{0}{1}
+            \drawthreedimplus{5/8}{1}{5/8} {1/8} {1}{0}{0} {0}{0}{1}
+            
+            % Right side
+            \draw[fill=white!90!black] (1,0,0) \threedimsquarepath{1} {0}{1}{0} {0}{0}{1};
+            % Level 1
+            \drawthreedimplus{1}{0}{0} {1} {0}{1}{0} {0}{0}{1}
+            % Level 2
+            \drawthreedimplus{1}{1/2}{1/2} {1/2} {0}{1}{0} {0}{0}{1}
+            \drawthreedimplus{1}{0/2}{1/2} {1/2} {0}{1}{0} {0}{0}{1}
+            \drawthreedimplus{1}{1/2}{0/2} {1/2} {0}{1}{0} {0}{0}{1}
+            \drawthreedimplus{1}{0/2}{0/2} {1/2} {0}{1}{0} {0}{0}{1}
+            % Level 3
+            \drawthreedimplus{1}{3/4}{3/4} {1/4} {0}{1}{0} {0}{0}{1}
+            \drawthreedimplus{1}{2/4}{2/4} {1/4} {0}{1}{0} {0}{0}{1}
+            \drawthreedimplus{1}{2/4}{1/4} {1/4} {0}{1}{0} {0}{0}{1}
+            \drawthreedimplus{1}{1/4}{2/4} {1/4} {0}{1}{0} {0}{0}{1}
+            \drawthreedimplus{1}{1/4}{1/4} {1/4} {0}{1}{0} {0}{0}{1}
+            % Level 4
+            \drawthreedimplus{1}{3/8}{3/8} {1/8} {0}{1}{0} {0}{0}{1}
+            \drawthreedimplus{1}{4/8}{3/8} {1/8} {0}{1}{0} {0}{0}{1}
+            \drawthreedimplus{1}{4/8}{4/8} {1/8} {0}{1}{0} {0}{0}{1}
+        \end{tikzpicture}
+    }
+    \caption{\subrefp{fig:quadtree} A \quadtree used to partition two-dimensional space. \subrefp{fig:octree} An \octree used to partition three-dimensional space. Note that an octree is essentially an extension of a quadtree from two to three dimensions. In this illustration, only half of the surface of the octree is visible.}
+    \label{fig:kokok}
+\end{figure}
+}
+
 When doing \idxs{physically based}{rendering}, one often starts from an equation known as the \idxs{rendering}{equation}. This equation gives the light intensity of a point on the surface as a function of viewing angle, light source distribution and the \BRDF of the surface \citep{Nicodemus1965}, and ties everything that has been covered in this appendix together. The rendering equation was simultaneously introduced in \idxs{computer}{graphics} by \citet{Immel1986} and by \citet{Kajiya1986}, and is given as
 
 \begin{equation} \label{eq:rendering_equation_original}
@@ -949,7 +1042,7 @@ L_{\text{o}}(\normvec{\omega}_{\text{o}}) \,= \\
 
 which is a general equation that can be used to render the water surface as long as the integral over $\Omega_{\text{r}}$ can be calculated efficiently.
 
-For a \idxs{point}{light source} (a light source) with the total \idxs{spectral}{radiant intensity}\index{intensity!spectral radiant|see{spectral radiant intensity}} (power per unit solid angle and unit wavelength) $I$, located at the distance $d$ in the direction $\normvec{\omega}_{\text{s}}$ above the water surface in such a way that $\omega_{\text{s}} \in \Omega_{\text{r}}$, the incident spectral radiance $L_{\text{i}}(\normvec{\omega}_{\text{i}})$ turns into $\delta_{\normvec{\omega}_{\text{i}},\normvec{\omega}_{\text{s}}}\,I/d^2$ and the total spectral radiance directed outward along direction $\normvec{\omega}_{\text{o}}$ will be
+For a \idxs{point}{light source} (a light source located at a certain location but with no spatial extension) with the total \idxs{spectral}{radiant intensity}\index{intensity!spectral radiant|see{spectral radiant intensity}} (power per unit solid angle and unit wavelength) $I$, located at the distance $d$ in the direction $\normvec{\omega}_{\text{s}}$ above the water surface in such a way that $\omega_{\text{s}} \in \Omega_{\text{r}}$, the incident spectral radiance $L_{\text{i}}(\normvec{\omega}_{\text{i}})$ turns into $\delta_{\normvec{\omega}_{\text{i}},\normvec{\omega}_{\text{s}}}\,I/d^2$ and the total spectral radiance directed outward along direction $\normvec{\omega}_{\text{o}}$ will be
 
 \begin{equation} \label{eq:spectral_radience_reflected_point_light_source}
 \renewcommand*{\arraystretch}{2}
@@ -958,11 +1051,11 @@ For a \idxs{point}{light source} (a light source) with the total \idxs{spectral}
 \end{aligned}
 \end{equation}
 
-where $\normvec{\omega}_{\text{i}}$ is identified as $\normvec{\omega}_{\text{s}}$ in order to calculate $\anormvec{h}$ and $\nabla\eta^*(\vec{r})$ in the right hand side of the equation. Note that $L_{\text{o}}(\normvec{\omega}_{\text{o}})$ in this equation only includes reflected light from the point light source, and no light reflected from other objects
+where $\normvec{\omega}_{\text{i}}$ is identified as $\normvec{\omega}_{\text{s}}$ in order to calculate $\anormvec{h}$ and $\nabla\eta^*(\vec{r})$ in the right hand side of the equation. Note that $L_{\text{o}}(\normvec{\omega}_{\text{o}})$ in this equation only includes light from the point light source that has been reflected only once.
 
 \section{Discussion about the illumination model}
 
-By comparing this \idxs{shading}{model} (\eqrefs \ref{eq:rendering_equation_simplified} and \ref{eq:spectral_radience_reflected_point_light_source}) to an adaption of the Phong shading model \citep{Phong1975} made made by \citet{Blinn1977}, which is generally referred to as the \idxs{Blinn--Phong}{shading model}, it may be noticed that if the \idxs{wave}{spectra} $S$ is \idxse{circular}{symmetry}{circularly symmetric}, the factor $f(\nabla\eta^*(\vec{r}))$ (described by \eqref{eq:eta_grad_distribution_r_uniformly_distributed}), which is what gives the reflection of the point light source its shape, becomes practically equivalent to the specular reflection term in the Blinn--Phong shading model, except from a constant factor. This fact holds even though the Blinn--Phong shading model is based on experimental measurements of reflections from real surfaces and is developed mainly for solids, while this is a shading model specifically derived for water surfaces.
+By comparing this \idxs{shading}{model} (\eqrefs \ref{eq:rendering_equation_simplified} and \ref{eq:spectral_radience_reflected_point_light_source}) to an adaption of the Phong shading model \citep{Phong1975} made by \citet{Blinn1977} --- which is generally referred to as the \idxs{Blinn--Phong}{shading model} --- it may be noticed that if the \idxs{wave}{spectra} $S$ is \idxse{circular}{symmetry}{circularly symmetric}, the factor $f(\nabla\eta^*(\vec{r}))$ (described by \eqref{eq:eta_grad_distribution_r_uniformly_distributed}), which is what gives the reflection of the point light source its shape, becomes practically equivalent to the specular reflection term in the Blinn--Phong shading model except from a constant factor. This holds even though the Blinn--Phong shading model is based on experimental measurements of reflections from real surfaces and is developed mainly for solids, while this is a shading model specifically derived for water surfaces.
 
 For symmetric wave spectra and for almost smooth surfaces (when the diffusion in the reflection of objects becomes very small), all factors in \eqref{eq:spectral_radience_reflected_point_light_source} except from $f(\nabla\eta^*(\vec{r}))$ varies very slowly in comparison to $f(\nabla\eta^*(\vec{r}))$ unless the surface is viewed from a glancing angle, and the shape of the specular reflection can be \approximated as just a constant times $f(\nabla\eta^*(\vec{r}))$. Hence, the result of using \eqref{eq:spectral_radience_reflected_point_light_source} becomes very similar to the result of using the Blinn--Phong shading model, with the only practical difference that the reflection of a point light source according to the shading model derived in this appendix varies in intensity depending on how steep the angle is with which the observer sees the reflection, according to the factors $\anormvec{h}^4/(\normvec{\omega}_{\text{o}}\cdot\anormvec{n})$ and $R_{\normvec{n}^*\!,x}(\normvec{\omega}_{\text{o}})$ which are not included in the specular term in the Blinn--Phong shading model.
 
