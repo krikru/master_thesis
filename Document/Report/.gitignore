@@ -1,6 +1,5 @@
 # Compiled documents
-Report.pdf
-Report - copy.pdf
+Report*.pdf
 Report.dvi
 Report.ps
 Report.out.ps
@@ -18,7 +17,7 @@ Test2.ps
 Test2.out.ps
 
 # Compiled tikz images
-Report*.pdf
+Report-figure*.pdf
 *.dpth
 
 # Miscellaneous files

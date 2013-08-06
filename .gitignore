@@ -28,6 +28,10 @@ obj/
 _ReSharper*/
 [Tt]est[Rr]esult*
 
+#Ignore Qt project files
+*.pro.user
+*.pro.user.2.5pre1
+
 #Ignoring Qt builds
 *-build-*
 build-*
