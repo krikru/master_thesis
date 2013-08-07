@@ -48,7 +48,7 @@ A method that, just like the Fourier synthesis method, handles \idxs{wave}{dispe
 
 The general idea behind the method is to use a hierarchy of grids, where in the simplest case all grids cover the same surface. One step down in the hierarchy means a doubling in grid resolution, or a division by two of the grid cell size, which in practice also means a division by two of the minimum wavelength that can be efficiently simulated on the specific grid.
 
-Each grid is therefore responsible to store and process a specific set of wave vectors, that corresponds to this minimum wavelength. It should be easy to reconstruct any wave with a wave vector within that set, from the wave's discretization on the grid. The set must also not contain any of the wave vectors that are processed on the grid one level up in the hierarchy. The top level grid is only a few cells across and is responsible for processing all the shortest wave vectors. Together, all sets of wave vectors that are processed on the different grids form a large set of wave vectors (including the zero vector) in which a very detailed free surface elevation, $\eta$, can be represented. The free surface elevation is then reconstructed as the sum of all components, that is
+Each grid is therefore responsible to store and process a specific set of wave vectors, that corresponds to this minimum wavelength. It should be easy to reconstruct any wave that has a wave vector within that set, from the wave's discretization on the grid. The set must also not contain any of the wave vectors that are processed on the grid one level up in the hierarchy. The top level grid is only a few cells across and is responsible for processing all the shortest wave vectors. Together, all sets of wave vectors that are processed on the different grids form a large set of wave vectors (including the zero vector) in which a very detailed free surface elevation, $\eta$, can be represented. The free surface elevation is then reconstructed as the sum of all components, that is
 
 \begin{equation} \label{eq:laplacian_pyramid_composition}
 \eta \,=\, \sum_i \eta_i,
@@ -84,13 +84,13 @@ where $n_i$ is the order of the Taylor series, and by substituting back $\omega^
 \end{array}
 \end{equation}
 
-Since a wave of a single wavelength can be expressed on the form
+A wave of a single wavelength can be expressed on the form
 
 \begin{equation} \label{eq:component_sin}
 \eta_{\vec{k}}(\vec{r},\,t) \,=\, A\,\sin(\alpha + \vec{k}\cdot\vec{r}\,-\,\omega\,t),
 \end{equation}
 
-where $\eta_{\vec{k}}$ is the free surface elevation consisting only of a wave with the wave vector $\vec{k}$, $A$ is the amplitude of the wave, and $\alpha$ is the phase of the wave, we can conclude that
+where $\eta_{\vec{k}}$ is the free surface elevation consisting only of a wave with the wave vector $\vec{k}$, $A$ is the amplitude of the wave, and $\alpha$ is the phase of the wave. Hence, we can conclude that
 
 \begin{equation} \label{eq:component_second_time_derivative}
 \frac{\partial^2}{\partial t^2}\eta_{\vec{k}} \,=\, -\omega^2 A\,\sin(\alpha + \vec{k}\cdot\vec{r}\,-\,\omega\,t) \,=\, -\omega^2\eta_{\vec{k}},
@@ -137,7 +137,7 @@ where $C_{ij},\,j=0,\dots,n_i$ are a sequence of polynomial coefficients used in
 
 It also has to be considered that $f$, as well as all of its derivatives, depend on the water depth $h$, which in turn can vary between different locations $\vec{r}$ and times $t$. Hence, $C_{ij}$ also depends on $h$ and this has a direct effect on \eqref{eq:polynomial_pde}. If $k\,h \gg 1$, the factor $\tanh(\sqrt{x}\,h)$ in \eqref{eq:dispersion_modified} can be \approximated as 1 and the $h$ dependence vanishes. But for the coarser grids, on which waves with very long wavelengths are represented, or close to the shoreline where the water is shallow, $\tanh(\sqrt{x}\,h)$ cannot be \approximated as 1 and the coefficients $C_{ij}$ may have to be computed separately for each grid point, and perhaps also recomputed at even intervals if the water is not calm and the water depth changes much. If that is the case, a \idxs{lookup}{table} for each coefficient $C_{ij}$ may be used, in which \interpolation between lookup elements can be performed, to speed up the calculation of $C_{ij}$ for different values of $h$.
 
-By building on the idea presented in this report, that is, \approximating \eqref{eq:dispersion_modified} as a Taylor expansion to obtain \PDEs on the form given by \eqref{eq:polynomial_pde}, arbitrary accuracy for the speed of the various wavelengths can potentially be obtained by choosing a high enough $n_i$ for each component. However, it is unknown whether this methods conserves mass and energy, or --- if it doesn't --- if there exists a similar method with corresponding performance and accuracy that does conserve mass and energy.
+By building on the idea presented in this report (that in which this clarification is made), that is, \approximating \eqref{eq:dispersion_modified} as a Taylor expansion to obtain \PDEs on the form given by \eqref{eq:polynomial_pde}, arbitrary accuracy for the speed of the various wavelengths can potentially be obtained by choosing a high enough $n_i$ for each component. However, it is unknown whether this methods conserves mass and energy, or --- if it doesn't --- if there exists a similar method with corresponding performance and accuracy that does conserve mass and energy.
 
 If there would be a problem with the conservation of mass, it could possibly be solved by introducing a momentum field in which the vertically integrated momentum per horizontally projected unit area of surface was stored. This would lead to a natural conservation of mass since mass no longer is introduced or destructed anywhere. It would also require that the \PDE for the free surface elevation in some way was converted to a \PDE for the momentum field, and that another \PDE was introduced, namely that the time derivative of the free surface elevation is equal to the negative divergence of the momentum field divided by density of the water.
 

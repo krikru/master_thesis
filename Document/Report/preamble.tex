@@ -4,7 +4,7 @@
 %
 % "LaTeX Font Warning: Some font shapes were not available, defaults substituted. " -- \usepackage[T1]{fontenc} (\usepackage{t1enc} ?)
 % "No file OMScmtt.fd. on input line 10." -- \usepackage[T1]{fontenc} OR \usepackage{t1enc}
-% NOTE: \usepackage[T1]{fontenc} and \usepackage{t1enc} loads an ugly bitmap font by default. Install package cm-super (have not tries) using the MikTeX package manager (if you use Windows) to get around this problem, or \usepackage{lmodern} which replaces the bitmap font with teh Latin Modern font.
+% NOTE: \usepackage[T1]{fontenc} and \usepackage{t1enc} loads an ugly bitmap font by default. Install package cm-super (have not tries) using the MikTeX package manager (if you use Windows) to get around this problem, or \usepackage{lmodern} which replaces the bitmap font with the Latin Modern font.
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
 
 
@@ -211,7 +211,7 @@
 \newrobustcmd{\qidxsp }[3]{\Bidxsp{\qindexify}{#1}{#2}{#3}} % The quite split plural version macro
 
 \newrobustcmd{\indexs}[2]{\iftoggle{REVERTINDEXORDEROFSPLITKEYS}%
-{\index{#2!#1}\index{#1 #2|see{#2}}}% Index key has the reeversed order of the parts
+{\index{#2!#1}\index{#1 #2|see{#2}}}% Index key has the reversed order of the parts
 {\index{#1 #2}\index{#2!#1|see{#1 #2}}}% Index key has the natural order of the parts
 }
 
@@ -249,7 +249,7 @@
 \newrobustcmd{\declareabbreviationqi} [3][]{\expandafter\newabbrev\csname #2\endcsname{#1\qidx{#3}}}
 \newrobustcmd{\declareabbreviationqis}[4][]{\expandafter\newabbrev\csname #2\endcsname{#1\qidxs{#3}{#4}}}
 \def\simpleabbrev{\declareabbreviation}
-%TODO: Find some better way to denote plural form (one macro would be better since acronyms are indexed verbosely only ocne)
+%TODO: Find some better way to denote plural form (one macro would be better since acronyms are indexed verbosely only cone)
 % Allow pluralform of abbreviations
 %\newrobustcmd{\s}  {\nspace s\xspace} % For abbreviations that are not indexed
 %\newrobustcmd{\qsi}{\nspace\qindexify{s}\xspace} % For abbreviations that are indexed quietly
