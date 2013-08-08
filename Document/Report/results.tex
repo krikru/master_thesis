@@ -1,4 +1,5 @@
 \chapter{Results}
+\label{chap:results}
 
 \section{The program}
 
@@ -6,7 +7,8 @@
 %\setlength{\screenshotwidth}{.45\textwidth}
 
 %\setlength{\screenshotunitlength}{.325\textwidth}
-\setlength{\screenshotunitlength}{.305\textwidth}
+%\setlength{\screenshotunitlength}{.305\textwidth}
+\setlength{\screenshotunitlength}{.295\textwidth}
 
 %\setlength{\initiallinewidth}{.25pt}
 \setlength{\initiallinewidth}{.20pt}
@@ -185,7 +187,7 @@ Any measurements of the performance of the program, or of the simulation accurac
 
 \section{The two-dimensional PDE for water waves at varying water depths}
 
-In \appref{chap:pde_derivation}, a two-dimensional \PDE in the spatial domain, describing the time evolution of surface waves for intermediate, mildly varying water depths was developed. As it turned out, the \PDE required an operator that used the convolution between a convolution kernel and the free surface elevation. Furthermore, the convolution kernel was not constant, but depended on the location on the surface at which the concolution was to be calculated. While the convolution could probably have been calculated in $O(N)$ time for the entire surface --- where $N$ is the number of surface grid points --- using the continuous fast multipole method (CFMM), CFMM itself uses a quite complex algorithm, and it was assumed that altogether, solving the \PDE numerically would be too computationally expensive and would therefore not have been possible in real-time, so the method was abandoned.
+In \appref{apdx:pde_derivation}, a two-dimensional \PDE in the spatial domain, describing the time evolution of surface waves for intermediate, mildly varying water depths was developed. As it turned out, the \PDE required an operator that used the convolution between a convolution kernel and the free surface elevation. Furthermore, the convolution kernel was not constant, but depended on the location on the surface at which the concolution was to be calculated. While the convolution could probably have been calculated in $O(N)$ time for the entire surface --- where $N$ is the number of surface grid points --- using the continuous fast multipole method (CFMM), CFMM itself uses a quite complex algorithm, and it was assumed that altogether, solving the \PDE numerically would be too computationally expensive and would therefore not have been possible in real-time, so the method was abandoned.
 
 \section{Study of other methods}
 

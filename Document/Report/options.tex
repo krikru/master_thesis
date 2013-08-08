@@ -192,7 +192,10 @@
 %\endgroup}
 \fi
 
-% Referencing
+% Cross-referencing
+% Parts
+\newrobustcmd  {\partref}   [1]{Part~\ref{#1}}
+\newrobustcmd  {\partrefs}  [1]{Parts\xspace}
 % Chapters
 \newrobustcmd  {\chapref}   [1]{Chapter~\ref{#1}}
 \newrobustcmd  {\chaprefs}  [1]{Chapters\xspace}
@@ -295,7 +298,7 @@
 \declareacronyms{FOV}   {field of}{view}
 \declareacronym {FPS}   {frames per second}
 \declareacronyms{FSI}   {fluid--structure}{interaction}
-\declareacronyms{FSM}   {free surface}{modeling}
+\declareacronyms{FSM}   {free-surface}{modeling}
 \declareacronyms{FVM}   {finite volume}{method}
 \declareacronyms{GPU}   {graphics}{processing unit}
 \def            \GPUs   {\mbox{\GPU\nspace s}\xspace}

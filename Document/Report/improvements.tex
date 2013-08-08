@@ -1,4 +1,5 @@
 \chapter{Improvements}
+\label{chap:improvements}
 
 There are a lot of improvements of the method that was implemented in \thisprojectwork that can be performed, many of them which are necessary  to make the method be practically useful in a real-time flight simulator.
 
@@ -63,7 +64,7 @@ In \thisprojectwork, no interaction between ships and the surface waves was ever
 Some of the methods for modeling \FSI includes the \IB method \citep{Peskin2002,Ghias2007}, the \VOS method and the \idxs{rigid fluid}{method}\index{fluid!rigid|see{rigid fluid method}} \citep{Carlson2004}.
 %See e.g.: \item http://physbam.stanford.edu/~fedkiw/papers/stanford2010-04.pdf (Numerically Stable Fluid-Structure Interactions Between Compressible Flow and Solid Structures) \item http://efdl.as.ntu.edu.tw/research/papers/JCP03GCIBM.pdf (A ghost-cell immersed boundary method for flow in complex geometry) \item http://www.cs.columbia.edu/~batty/papers/Batty07.pdf (A Fast Variational Framework for Accurate Solid-Fluid Coupling) (solid fraction, non-stick to walls)
 
-The \idxs{rotation of a}{rigid body}, in this case the rotation of a \ship that is floating on the surface of the water when it is hit by large waves, depends both on the forces that acts on the \idxs{rigid}{body} as well as well as the  \idxs{moment of}{inertia} of the rigid body. The dynamics of a rigid body is described by Euler's equations for rigid bodies (not to be confused with the Euler equations, which are discussed in \chapref{chap:ns_equations}).
+The \idxs{rotation of a}{rigid body}, in this case the rotation of a \ship that is floating on the surface of the water when it is hit by large waves, depends both on the forces that acts on the \idxs{rigid}{body} as well as well as the  \idxs{moment of}{inertia} of the rigid body. The dynamics of a rigid body is described by Euler's equations for rigid bodies (not to be confused with the Euler equations, which are discussed in \chapref{chap:thefinitevolumemethod}).
 
 %\section{Desired improvements}
 
@@ -117,7 +118,7 @@ Typically, when creating a wire frame model for a sea surface, which is needed i
 
 A naive shading model will use the surface normal of the wire frame model when calculating the light intensity of the surface, and completely ignore the part of the wave spectrum that is not in it. A more sophisticated shading model will estimate the probability density of the normal of the actual water surface, given the surface normal of the wire frame model in combination with the known statistics of the excluded wavelengths. The distribution of the normal vector is in turn used to model the distribution of the surface light intensity, from which the expectation value is calculated and used as the light intensity of the surface in the rendered image. This will effectively prevent the water surface from looking too smooth.
 
-The derivation of a simple illumination model for sea surfaces is found in \appref{chap:illumination_model_derivation}.
+The derivation of a simple, physically based illumination model for sea surfaces is found in \appref{apdx:illumination_model_derivation}.
 \section{Visual effects}
 
 \subsection{Choppy waves}

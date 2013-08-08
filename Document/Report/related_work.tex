@@ -1,4 +1,5 @@
 \chapter{Related work}
+\label{chap:relatedwork}
 
 %TODO: Why is CFD needed for this thesis work? (maybe this should go under motivation)
 
@@ -30,7 +31,7 @@ On the other hand, the wave equation does work for simulating very weak, low-fre
 
 Most of these method ensure the time complexity $O(N)$ per time step, where $N$ is the number of \idxs{surface}{grid points}.
 
-In \appref{chap:pde_derivation}, a (family of) new two-dimensional \PDEs are derived and discussed, in an attempt to create something that could be used to simulate water waves at varying, arbitrary water depths.
+In \appref{apdx:pde_derivation}, a (family of) new two-dimensional \PDEs are derived and discussed, in an attempt to create something that could be used to simulate water waves at varying, arbitrary water depths.
 
 \subsection{Fourier Synthesis}
 %\subsection{Spectral methods}
@@ -159,7 +160,7 @@ For a grid with a random access time complexity of $O(1)$ and for particles that
 
 \subsection{Finite Volume Method}
 
-The \FVM is a highly realistic model that solves a set of \PDEs by dividing the region of interest into small \idxsp{volume}{element}{s}, and by discretizing the fields that are described by the \PDEs into points in the volume elements or on the border of the volume elements, usually with a fixed number of points per volume element, as well as discretizing the \PDEs into a number of \ODEs that describe the evolution of the discretized fields. The volume elements are commonly referred to as \cells. The \FVM and its usage in \CFD is described in greater detail in \chapref{chap:ns_equations}.
+The \FVM is a highly realistic model that solves a set of \PDEs by dividing the region of interest into small \idxsp{volume}{element}{s}, and by discretizing the fields that are described by the \PDEs into points in the volume elements or on the border of the volume elements, usually with a fixed number of points per volume element, as well as discretizing the \PDEs into a number of \ODEs that describe the evolution of the discretized fields. The volume elements are commonly referred to as \cells. The \FVM and its usage in \CFD is described in greater detail in \chapref{chap:thefinitevolumemethod}.
 
 The \FVM ensures the time complexity $O(N)$ per time step, where $N$ is the number of cells.
 
