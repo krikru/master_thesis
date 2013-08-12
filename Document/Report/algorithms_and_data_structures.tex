@@ -57,7 +57,8 @@
             %every picture/.style={ultra thick},
             every node/.style={anchor=north},
             %null/.style={\path (0,0) -- +(0,.65em) node {$\emptyset$};},
-            simple/.style={draw,fill=white!100!black,minimum size=4*\wdbox,scale=1},
+            octree/.style={draw,fill=white!100!black,minimum size=2*\wdbox-\pgflinewidth,scale=1},
+            octcell/.style={draw,fill=white!100!black,minimum size=4*\wdbox-\pgflinewidth,scale=1},
             array/.style={%
                 draw,
                 fill=white!90!black,
@@ -81,11 +82,13 @@
             }
         }
         \begin{tikzpicture}[x=\wdbox,y=\wdbox]
-        \node[simple] (1) {};
+        \node[octree] (0) {};
+        \draw[->] (0.center)  -- +( 0,-4) node[octcell]  (1)  {};
+        %\node[octcell] (1) {};
         \draw[->] (1.center)  -- +( 0,-4) node[array]  (2)  {};
-        \draw[->] (c0 2)      -- +(-6,-4) node[simple] (3)  {};
-        \draw[->] (c1 2)      -- +(-2,-4) node[simple] (4)  {};
-        \draw[->] (c2 2)      -- +(+2,-4) node[simple] (5)  {};
+        \draw[->] (c0 2)      -- +(-6,-4) node[octcell] (3)  {};
+        \draw[->] (c1 2)      -- +(-2,-4) node[octcell] (4)  {};
+        \draw[->] (c2 2)      -- +(+2,-4) node[octcell] (5)  {};
         %\draw[->] (c3 2)      -- +(+6,-4) node         (6)  {}; \path (6) -- +(0,.65em) node {$\emptyset$};
         \path (c3 2) -- +(0,.75em) node {$\emptyset$};
         %\draw[->] (3.center)  -- +( 0,-4) node         (7)  {$\emptyset$};
@@ -93,9 +96,9 @@
         \draw[->] (4.center)  -- +( 0,-4) node[array]  (8)  {};
         %\draw[->] (5.center)  -- +( 0,-4) node         (9)  {$\emptyset$};
         \path (5.center) -- +(0,.75em) node {$\emptyset$};
-        \draw[->] (c0 8)      -- +(-4,-4) node[simple] (10) {};
-        \draw[->] (c1 8)      -- +(-0,-4) node[simple] (11) {};
-        \draw[->] (c2 8)      -- +(+4,-4) node[simple] (12) {};
+        \draw[->] (c0 8)      -- +(-4,-4) node[octcell] (10) {};
+        \draw[->] (c1 8)      -- +(-0,-4) node[octcell] (11) {};
+        \draw[->] (c2 8)      -- +(+4,-4) node[octcell] (12) {};
         %\draw[->] (c3 8)      -- +(+8,-4) node         (13) {$\emptyset$};
         %\draw[->] (10.center) -- +( 0,-4) node         (14) {$\emptyset$};
         %\draw[->] (11.center) -- +( 0,-4) node         (15) {$\emptyset$};
@@ -107,15 +110,15 @@
         %\draw (0,1)--(0,1);
         \end{tikzpicture}
     }
-    \caption{An octree configuration. \subrefp{fig:octree_child_array_example_layout} The spatial layout of the octree. A striped square denotes a non-existing cell on that location. \subrefp{fig:octree_child_array_example_data} The internal data representation of the octree. The large squares are cells, the rectangles split into four parts are arrays containing four elements and the arrows are pointers. A $\emptyset$ sign denotes a \NULL pointer, i.e. a pointer whos value is zero.}
+    \caption{An octree configuration. Note that the term octree here refers to a $D$-dimensional generalization of an octree, and that these images depict a 2-dimensional version for simplicity. \subrefp{fig:octree_child_array_example_layout} The spatial layout of the octree. A striped square denotes a non-existing cell on that location. \subrefp{fig:octree_child_array_example_data} The internal data representation of the octree. The small, white square is the tree object, the large, white squares are cell objects, the gray rectangles split into $2^D$ (four in this illustration) parts are child arrays and the arrows are pointers. A $\emptyset$ sign denotes a \NULL pointer, i.e. a pointer whose value is zero, which codes for a non-existing cell or child array.}
     \label{fig:octree_child_array_example}
 \end{figure}
 
-Although an octree is a \idxs{three-dimensional}{data structure} and a tree in which all \idxsp{parent}{node}{s} has exactly eight \idxsp{child}{node}{s}, the octree implementation used in \thisprojectwork is a generalized version of an octree that works for any number $d$ of \dimensions and where each \idxs{parent}{cell} (a \cell is a \node with a physical representation) has between 1 and $2^d$ \idxsp{child}{node}{s}. 
+Although an octree is a \idxs{three-dimensional}{data structure} and a tree in which all \idxsp{parent}{node}{s} has exactly eight \idxsp{child}{node}{s}, the octree implementation used in \thisprojectwork is a generalized version of an octree and works for any number $d$ of \dimensions and where each \idxs{parent}{cell} (a \cell is a \node with a physical representation) has between 1 and $2^d$ \idxsp{child}{node}{s}. 
 
 The \octree itself just consists of a \pointer to the \idxs{root}{cell}\indexs{root}{node} and a few \methods for manipulating the \cells in the tree. If the octree is empty, the value of the pointer is \NULL.
 
-Each cell in the tree then contains a pointer to a \idxs{child}{array}, which is an array of pointers to the child cells. If a cell is a \idxs{leaf}{cell}, it doesn't have any children and the value of the pointer to the child array is \NULL. If the cell does have children, the pointer points to an actual array consisting of \numchildren pointers to \idxsp{octree}{cell}{s}. If such a pointer is \NULL, it means that the corresponding child doesn't exist. The index $i$ of an array element corresponds to the position of the child cell relative the parent cell according to
+Each cell in the tree then contains a pointer to a \idxs{child}{array}, which is an array of pointers to the child cells. If a cell is a \idxs{leaf}{cell}, it doesn't have any children and the value of the pointer to the child array is \NULL. If the cell does have children, the pointer points to an actual array consisting of \numchildren pointers to \idxsp{octree}{cell}{s}. If such a pointer is \NULL, it means that the corresponding child doesn't exist; otherwise, the pointer points to the child cell. The index $i$ of an array element corresponds to the position of the child cell relative the parent cell according to
 
 \begin{equation} \label{eq:child_node_index_general}
 i \,=\, \sum_{j=0}^{d-1} \,2^j\,i_j,
@@ -127,9 +130,11 @@ where $i_j$ is an index that is either 0 or 1 and corresponds to the position of
 i \,=\, i_0 + 2\,i_1 + 4\,i_2.
 \end{equation}
 
+This structure is illustrated in \figref{fig:octree_child_array_example}.
+
 \section{Neighbor connections}
 
-In \thisprojectwork, \idxse{neighbor}{cell}{neighboring cells} are physically linked to each other, and each cell contains five \idxsp{doubly linked}{list}{s}\indexs{doubly}{lined list} whit \idxse{neighbor}{connection}{connections} to neighbor cells. The reason why doubly linked lists are used to store the connections is because their content changes all the time because of the constantly moving \idxs{water}{surface} and the dynamically changing \LODs, which both cause the grid to constantly have to \remesh itself and update its neighbors, and any nieghbor connection can have to be removed at any moment, not just the last or the first one in the list. The five doubly linked lists contains connections to
+In \thisprojectwork, \idxse{neighbor}{cell}{neighboring cells} are physically linked to each other, and each cell contains five \idxsp{doubly linked}{list}{s}\indexs{doubly}{lined list} whit \idxse{neighbor}{connection}{connections} to neighbor cells. The reason why doubly linked lists are used to store the connections is because their content is constantly changing because of the dynamic \idxs{water}{surface} and the dynamically changing \LODs, which both cause the grid to constantly have to \remesh itself and update its neighbors, and any nieghbor connection can have to be removed at any moment. The five doubly linked lists contains connections to
 
 \begin{enumerate}
     \item \idxse{leaf}{cell}{Leaf cells} at the next lower \LOD,
@@ -139,9 +144,9 @@ In \thisprojectwork, \idxse{neighbor}{cell}{neighboring cells} are physically li
     \item Cells at the next higher \LOD
 \end{enumerate}
 
-respectively. The reason connections both to leaf cells and to parent cells are stored is because it was originally planned to use the \idxs{multigrid}{method} for solving the \idxs{pressure}{Poisson equation} that arises when the flow is choosen to be \idxse{incompressible}{flow}{incompressible} (while what actually happened was that the flow was choosen to be \idxse{compressible}{flow}{compressible}).
+respectively. The reason connections both to leaf cells and to parent cells are stored is because it was originally planned to use the \idxs{multigrid}{method} for solving the \idxs{pressure}{Poisson equation} that needs to be solved when the flow is \idxse{incompressible}{flow}{incompressible} (while what actually happened was that the flow was choosen to be \idxse{compressible}{flow}{compressible}).
 
-Since using the \idxs{multigrid}{method} involved coarsening the grid, parent cells suddenly turn into leaf cells and existing leaf cells are removed. In order to avoid having to generate a new neighbor connection each time one of a cell's neighbors turns into a leaf cell (which happens a lot of times since the process of coarsening the grid to the coarsest level and then refining it again is a process that is repeated a number of times), those neighbor connections are already present, and in order to avoid having to add and remove cells to the gird, coarsening is never actually carried out; it is merly simulated by treating cells that are on a too high \LOD as if they didn't exist and instead treat their parent cells as leaf cells unless they are also on a too high \LOD.
+Since using the \idxs{multigrid}{method} involves coarsening the grid, parent cells are suddenly turned into leaf cells and existing leaf cells are removed. In order to avoid having to generate a new neighbor connection each time one of a cell's neighbors turns into a leaf cell (which happens a lot of times since the process of coarsening the grid to the coarsest level and then refining it again lies at the core of the multigrid method), those neighbor connections are already present, and in order to avoid having to add and remove cells to the gird, coarsening is never actually carried out; it is merly simulated by treating cells that are on a too high \LOD as if they didn't exist and instead treat their parent cells as leaf cells unless they are also on a too high \LOD.
 
 When it is desired to loop through all of a leaf cell's neighbors that also are leaf cells, each of the lists lists 1, 3 and 5 are simply looped through. For a leaf cell, each neighbor at a higher \LOD is guaranteed to also be a leaf cell.
 
@@ -157,7 +162,7 @@ Advection of the velocity is particularly tricky, mainly because the \idxs{veloc
     \centering
     \newlength{\arrowlength}
     \setlength\arrowlength{0.04\textwidth}
-    \subcaptionbox{\label{fig:cell_faces_non_structured}}[.315\textwidth]{
+    \subcaptionbox{\label{fig:cell_faces_non_structured}}[.36\textwidth]{
         \def\unitlength{0.05\textwidth}
         \begin{tikzpicture}[x={(\unitlength,0)},y={(0,\unitlength)}]
         % Main cell
@@ -173,11 +178,11 @@ Advection of the velocity is particularly tricky, mainly because the \idxs{veloc
         \coordinate (c7)  at ($(c6)!0.5\arrowlength!-90:(c2)$);
         \coordinate (c8)  at ($ 0.5*(c2)+0.5*(c3) $);
         \coordinate (c9)  at ($(c8)!0.5\arrowlength!-90:(c3)$);
-        \coordinate (c10)  at ($ 0.5*(c3)+0.5*(c4) $);
+        \coordinate (c10) at ($ 0.5*(c3)+0.5*(c4) $);
         \coordinate (c11) at ($(c10)!0.5\arrowlength!-90:(c4)$);
-        \coordinate (c12)  at ($ 0.5*(c4)+0.5*(c5) $);
+        \coordinate (c12) at ($ 0.5*(c4)+0.5*(c5) $);
         \coordinate (c13) at ($(c12)!0.5\arrowlength!-90:(c5)$);
-        \coordinate (c14)  at ($ 0.5*(c5)+0.5*(c1) $);
+        \coordinate (c14) at ($ 0.5*(c5)+0.5*(c1) $);
         \coordinate (c15) at ($(c14)!0.5\arrowlength!-90:(c1)$);
         
         \draw[->] ($2*(c6) -(c7) $) -- (c7) ;
@@ -188,7 +193,7 @@ Advection of the velocity is particularly tricky, mainly because the \idxs{veloc
         
         \end{tikzpicture}
     }
-    \subcaptionbox{\label{fig:cell_face_control_volumes}}[.675\textwidth]{
+    \subcaptionbox{\label{fig:cell_face_control_volumes}}[.63\textwidth]{
         \def\unitlength{0.2\textwidth}
         \begin{tikzpicture}[x={(\unitlength,0)},y={(0,\unitlength)}]
         %\def\arrowlength{0.2}
@@ -211,7 +216,7 @@ Advection of the velocity is particularly tricky, mainly because the \idxs{veloc
         \draw (1,0) \squarepath{1};
         \end{tikzpicture}
     }
-    \caption{The velocity field discretized on a staggered grid. \subrefp{fig:cell_faces_non_structured} On a \idxs{non-structured}{grid}, estimating the \idxs{velocity}{vector} in a cell given a number of \idx{face-centered} \idxs{velocity}{scalars} is non-trivial. \subrefp{fig:cell_face_control_volumes} On an axis-aligned \idxs{orthogonal}{grid}, the cell faces can be divided into groups depending on the direction of the \idxs{cell face}{normal} and meaningful \idxsp{control}{volume}{s} belonging to the cell faces can be defined. In this case the control volumes of all cell faces with normals parallel to the x-axis have been outlined with dashed lines. Note that every point in the simulation domain corresponds to exactly one control volume, as can be seen in the middle cell. Only the control volumes in the horizontal direction have been illustrated in the figure.}
+    \caption{The velocity field discretized on a staggered grid. \subrefp{fig:cell_faces_non_structured} On a \idxs{non-structured}{grid}, estimating the \idxs{velocity}{vector} in a cell given a number of \idx{face-centered} \idxs{velocity}{scalars} is non-trivial. \subrefp{fig:cell_face_control_volumes} On an axis-aligned \idxs{orthogonal}{grid}, the cell faces can be divided into groups depending on the direction of the \idxs{cell face}{normal}, which simplifies the estimation of the velocity vector. Besides, meaningful \idxsp{control}{volume}{s} associated with the cell faces can be defined. In this case, the control volumes of all cell faces with normals parallel to the x-axis have been outlined with dashed lines. Note that every point in the simulation domain corresponds to exactly one control volume per dimension, as can be seen in the middle cell; this has no correspondence on a non-structured grid. Only control volumes for cells with horizontal face normals have been drawn in the figure.}
     \label{fig:velocity_advection}
 \end{figure}
 
@@ -224,13 +229,15 @@ Advection of the velocity is particularly tricky, mainly because the \idxs{veloc
 However, following these steps directly would \idxs{low-pass}{filter} the \idxs{velocity}{field} each time step, since it involves converting it from one set of points (the \idxsp{face}{center}{s}) to another set of points (the \idxsp{cell}{center}{s}), which low-pass filters the field, and then converting it back again, which also low-pass filters the field, so details in the velocity field would very quickly vanish. Instead, the last of these steps is modified so that just the momentum mismatch between the cell-centered momentum vectors and the face-centered velocity scalars is distributed on the cell faces. The method can be summarized as taking the following steps:
 
 \begin{enumerate}
-    \item Calculate the cell-centered velocity vectors by averaging the face-centered velocity scalars, tentatively using the area of the cell faces times the sum of the densities in the two adjacent cells for averaging (as done in this case). For simplicity, let's make the (incorrect) assumption that the velocity field in every cell face $S_i$ is equal to the cell-centered velocity vector $\vec{u}_0$ for the specific cell. We can use \eqref{eq:fi_flat_cell_face}, substitute $\vec{u}_0$ for $\vec{F}$ and rewrite the equation as
+    \item Calculate the cell-centered velocity vectors by averaging the face-centered velocity scalars, tentatively using the area of the cell faces times the sum of the densities in the two adjacent cells for averaging (as done in this case). For an orthogonal grid, the implementation is quite straightforward, while for arbitrary grids which we will assume here, the implementation is far less intuitive; this difference is illustrated in \figref{fig:octree_child_array_example}.
+    
+    For simplicity, let's make the (incorrect) assumption that the velocity field in every cell face $S_i$ is equal to the cell-centered velocity vector $\vec{u}_0$ for the specific cell. We can use \eqref{eq:fi_flat_cell_face}, substitute $\vec{u}_0$ for $\vec{F}$ and rewrite the equation as
     
     \begin{equation} \label{eq:u_scalar_i_from_u_vec}
     u_i \,=\, \normvec{n}_i\cdot\vec{u}_0.
     \end{equation}
     
-    Let's define the \idxs{help}{variable} $\vec{u}_0^*$ as
+    Let's define a \idxs{help}{variable} $\vec{u}_0^*$ as
     
     \begin{equation} \label{eq:u_vec_help_variable}
     \vec{u}_0^* \,=\, \sum_{S_i}w_i\,\normvec{n}_i\,u_i,
@@ -270,19 +277,21 @@ However, following these steps directly would \idxs{low-pass}{filter} the \idxs{
     
     \item Calculate the face-centered \idxsp{velocity}{vector}{s} from the cell-centered velocity vectors, by using a bounded advection scheme since these are the vectors that are going to be advected. In \thisprojectwork, the \UPWIND scheme has been used, for which this step is simply a means of picking the cell-centered velocity vector in the cell the flow is comming from and assigning that to the cell face. If the flow is parallel to the cell face or stands still, i.e. $u_i = 0$, it doesn't matter what the face-centered velocity vector is set to as long as it is not undefined.
     
-    \item Convert the face-centered velocity vectors into \idxsp{quasi-momentum}{vector}{s} by multiplying with the face-centered density (the density of the fluxed volume). Therefore, before this step can be done, the mass that is going to be advected has to be calculated so that the face-centered density can be calculated.
+    \item Convert the face-centered velocity vectors into \idxsp{quasi-momentum}{vector}{s} (momentum per unit volume) by multiplying with the face-centered density (the density of the fluxed volume). It is therefore necessary that the mass that is going to be advected is calculated so that the face-centered density can be calculated.
     
     \item Calculate the net momentum inflow in each cell as a vector quantity during the advection step. This is also when all mass is advected.
     
-    \item Since the momentum in one cell automatically changes when the mass in the cell changes, calculate how much of the net momentum inflow it is that is actually a consequence of the mass inflow. When doing so on an \idxs{orthogonal}{grid}, use only the part of the cell face \idxsp{control}{volume}{s} that lie within the cell (see \figref{fig:cell_face_control_volumes}) and consider the mass to have been distributed homogenously within the cell. Note that the control volumes together cover each point in the cell exactly once. For an \idxs{unstructured}{grid}, it is not possible to use control volumes in this way.
+    \item Since the momentum in one cell automatically changes when the mass in the cell changes, calculate how much of the net momentum inflow it is that is actually a consequence of the mass inflow. When doing so on an \idxs{orthogonal}{grid}, use only the part of the cell face \idxsp{control}{volume}{s} that lie within the cell (see \figref{fig:cell_face_control_volumes}) and consider the mass to have been distributed homogenously within the cell. Note that the control volumes together cover each point in the cell exactly once. For an \idxs{unstructured}{grid}, it is not possible to use control volumes in this way; see \figref{fig:velocity_advection}.
     
-    Since this part of the net momentum inflow has effectively already heen added to the cell, subtract it from the net momentum inflow to obtain the part of the net momentum inflow that still has to be distributed on the cell faces.
+    Since this part of the net momentum inflow has effectively already been added to the cell, subtract it from the net momentum inflow to obtain the part of the net momentum inflow that still has to be added to the cell.
     
-    \item Calculate face-centered \idxsp{momentum}{scalar}{s} by multiplying the face-cen\-tered velocity scalars with the total mass contained within the control volume of the cell face the velocity scalar is stored on.
+    \item Calculate face-centered \idxsp{momentum}{scalar}{s} by multiplying the face-cen\-tered velocity scalars with the total mass contained within the control volume of the cell face the velocity scalar is stored on. Use the entire control volume this time.
     
-    \item Distribute the part of the net momentum inflow that still has to be distributed, on the face-centered momentum-scalars by using the mass of the part of the cell face control volume that lie within the cell as weight. Note that this is equivalent to using the volume of the part of the cell face control volume that lies within the cell as weight, since mass was considered to be distributed homogenously within the cell. In \thisprojectwork, since the cells are cubic and the control volume extends through half the cell, the volume of the part of the cell face control volume that lies within the cell is proportional to the cell face area, so in this case the weight is simply the cell face area.
+    \item Distribute the part of the net momentum inflow that still has to be distributed, on the face-centered momentum-scalars by using the mass of the part of the cell face control volume that lie within the cell as weight. Note that this is equivalent to using the volume of the part of the cell face control volume that lies within the cell as weight, since mass was considered to be distributed homogenously within the cell.
     
-    \item Calculate the updated face-centered velocity scalars by dividing the face-centered momentum scalars with the total mass contained withing the entire control volume of the cell face on which the velocity scalar is stored.
+    In \thisprojectwork, since the cells are cubic and the control volume extends through half the cell, the volume of the part of the cell face control volume that lies within the cell is proportional to the cell face area, so in this case the weight is simply the cell face area.
+    
+    \item Calculate the updated face-centered velocity scalars by dividing the face-centered momentum scalars with the total mass contained within the entire control volume of the cell face on which the velocity scalar is stored.
 \end{enumerate}
 
 It can easily be shown that this method conserves momentum in case of an \idxs{orthogonal}{grid}.

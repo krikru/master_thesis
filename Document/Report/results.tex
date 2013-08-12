@@ -185,7 +185,7 @@ However, the method that was chosen, which was the \FVM on an \octree data struc
 
 Any measurements of the performance of the program, or of the simulation accuracy, were never really taken, since the program went so slow anyway, and suffered from so many problems that needed to be fixed, which made the program practically unusable for real-time simulations. Hence, such measurements just felt irrelevant and unnecessary.
 
-\section{The two-dimensional PDE for water waves at varying water depths}
+\section{A two-dimensional PDE for water waves at varying water depths}
 
 In \appref{apdx:pde_derivation}, a two-dimensional \PDE in the spatial domain, describing the time evolution of surface waves for intermediate, mildly varying water depths was developed. As it turned out, the \PDE required an operator that used the convolution between a convolution kernel and the free surface elevation. Furthermore, the convolution kernel was not constant, but depended on the location on the surface at which the concolution was to be calculated. While the convolution could probably have been calculated in $O(N)$ time for the entire surface --- where $N$ is the number of surface grid points --- using the continuous fast multipole method (CFMM), CFMM itself uses a quite complex algorithm, and it was assumed that altogether, solving the \PDE numerically would be too computationally expensive and would therefore not have been possible in real-time, so the method was abandoned.
 
