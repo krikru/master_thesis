@@ -65,7 +65,7 @@
         \input{Images/Screenshots/screenshot_alpha_at_1.75}
         \end{tikzpicture}
     }
-    \caption{Phase fraction, $\alpha$. Red indicates only water, while blue indicates only air. The colors in between indicates a mix between water and air. White indicates cells that have not been brought into the simulation yet.}
+    \caption{Phase fraction, $\alpha$, for certain values of the time since simulation start, in a dam break simulation. Red indicates only water, while blue indicates only air. The colors in between indicates a mix between water and air. White indicates cells that have not been brought into the simulation yet.}
     \label{fig:screenshots_alpha}
 \end{figure}
 
@@ -111,7 +111,7 @@
         \input{Images/Screenshots/screenshot_water_volume_coefficient_at_1.75}
         \end{tikzpicture}
     }
-    \caption{Water density coefficient. Red indicates the water density that is required to get atmospheric pressure if no air is mixed with the water; a shift against purple indicates a higher water density and a shift against blue indicates a lower water density. Blue indicates no water. White indicates cells that have not been brought into the simulation yet.}
+    \caption{Water density coefficient for certain values of the time since simulation start, in a dam break simulation. Red indicates the water density that is required to get atmospheric pressure if no air is mixed with the water; a shift against purple or against blue indicates a higher or a lower water density, respectively. Blue indicates no water. White indicates cells that have not been brought into the simulation yet.}
     \label{fig:screenshots_water_volume_coefficient}
 \end{figure}
 
@@ -152,12 +152,12 @@
         \input{Images/Screenshots/screenshot_air_volume_coefficient_at_1.25}
         \end{tikzpicture}
     }
-    \subcaptionbox{$t = 1.75 \text{ s}$}[\screenshotwidth]{
+    \subcaptionbox{\label{fig:screenshots_almost_vacuum}$t = 1.75 \text{ s}$}[\screenshotwidth]{
         \begin{tikzpicture}[x={(\screenshotunitlength,0)},y={(0,\screenshotunitlength)}]
         \input{Images/Screenshots/screenshot_air_volume_coefficient_at_1.75}
         \end{tikzpicture}
     }
-    \caption{Air density coefficient. Red indicates the air density that is required to get atmospheric pressure if no water is mixed with the air; a shift against purple indicates a higher air density and a shift against blue indicates a lower air density. Blue indicates no air. White indicates cells that have not been brought into the simulation yet.}
+    \caption{Air density coefficient for certain values of the time since simulation start, in a dam break simulation. Red indicates the air density that is required to get atmospheric pressure if no water is mixed with the air; a shift against purple or against blue indicates a higher or a lower air density, respectively. Blue indicates no air. White indicates cells that have not been brought into the simulation yet.}
     \label{fig:screenshots_air_volume_coefficient}
 \end{figure}
 
@@ -176,9 +176,17 @@ However, the method that was chosen, which was the \FVM on an \octree data struc
     
     Specifically, the problem was that the vacuum cells caused velocities to go to infinity. With constant time step, this would lead to numerical instabilities, while with an adaptive time step, it would lead to that the \timestep would go to zero as the cell density went to zero, and the simulation would eventually freeze completely. No matter which case, one of the cells would eventually lose all its content, starting a numerical instability that quickly would spread through all other cells and "eat up" all air and water.
     
+    This can be seen in \figref{fig:screenshots_air_volume_coefficient}, in which the air density divided by a fixed reference value has been rendered for a dam break simulation, for certain time values after the simulation start. In \figref{fig:screenshots_almost_vacuum}, the air has almost turned to a vacuum in the upper right corner.
+    
     \item The simulation speed was extremely low. Even though the tests carried out during the development of the program were only held in two dimensions, which heavily reduced the number of cells that had to be processed every time step, the simulation still went many times slower than real-time speed. This was partly due to the fact that no optimization, including parallelization of the code, ever was made, and partly due to the fact that the time step was restricted by the \CFL condition, which forced the time step to be as low as 0.3~ms for which more than \mbox{3,000} time steps per second would have been necessary in order to obtain a real-time speed.
     
-    \item There were problems with keeping the interface intact (see \figrefs \mbox{\ref{fig:screenshots_alpha_O_E}--\subref{fig:screenshots_alpha_l_TS}}). The variant of the \idx{Hyper-C} advection scheme that was implemented did not keep the interface compressed and water was churned up in the air and formed something that most closely resembled a kind of mist, which is very non-ideal for several reasons. First, visualization becomes more difficult since it becomes more difficult to determine where the surface is located. Second, since all cells that are at least partially filled with water have to be processed, a thick interface will require more processing each frame than a thin interface, which decreases the simulation speed significantly since it is in the interface the majority of cells are located. Third, the quality of the simulation will suffer, since a thick interface is a bad approximation of a real interface between two immiscible fluids, which practically has no thickness. This naturally leads to numerical errors in the simulation, for example incorrect wave speeds for short wavelengths.
+    \item There were problems with keeping the interface intact (see \figrefs \mbox{\ref{fig:screenshots_alpha_O_E}--\subref{fig:screenshots_alpha_l_TS}}). The variant of the \idx{Hyper-C} advection scheme that was implemented did not keep the interface compressed and water was churned up in the air and formed something that most closely resembled a kind of mist, which is very non-ideal for several reasons.
+    
+    First, visualization becomes more difficult since it becomes more difficult to determine where the surface is located.
+    
+    Second, since all cells that are at least partially filled with water have to be processed, a thick interface will require more processing each frame than a thin interface, which decreases the simulation speed significantly since it is in the interface the majority of cells are located. This is illustrated in the screen shots of a dam break simulation, \figrefs \ref{fig:screenshots_alpha}--\ref{fig:screenshots_air_volume_coefficient}, where cells that are processed are colored whilst cells that are not are white. Notice how the amount of cells that are processed grows continuously, until they cover the entire simulation domain.
+    
+    Third, the quality of the simulation will suffer, since a thick interface is a bad approximation of a real interface between two immiscible fluids, which practically has no thickness. This naturally leads to numerical errors in the simulation, for example incorrect wave speeds for short wavelengths.
     
     It is unknown whether the fact that the interface grew so thick is a property of the Hyper-C advection scheme, if it was because the advection scheme was implemented incorrectly, or if it is a complication that easily arises when trying to generalize these kinds of interface compressing advection schemes from only \idxsp{incompressible}{flow}{s} to \idxsp{compressible}{flow}{s}. % It is also unknown whether the thickness of the interface would grow arbitrarily large if the simulation would continue to go on without suffering from numerical instability, or if the thickness would eventually stabilize at a certain level.
 \end{itemize}
