@@ -10,6 +10,12 @@ Jag har dock inga större problem med nuvarande kapitelindelning.
 * Har nu inte läst i detalj men jag upplever att resultat och diskussionsdelen (kap 9 och 10) är förhållandevis korta. Du nämner ju också att du lagt in figurer i resultatdelen ännu utan text så jag misstänker att du planerar att utvidga detta. Fig 9.1-9.3 måste det gå att diskutera mycket runt.
 Om du upplever det svårt att separera resultat och diskussion så är det inget nederlag att lägga dem i samma kapitel.
 
+...
+
+- sid v. Radbryt så att "Technical terms" hänger ihop.
+- Jag tycker fortfarande att resultat och diskussionsdelarna känns lite korta med lite text jämfört med figurer men det är nog snarare omfattningen av hela rapporten som gör att intrycket blir så. Dessutom är ju din studie av olika metoder och diskussion vilka som passar bäst ett resultat i sig.
+
+
 ---------------------------------------
 
 Gjorda:
@@ -23,6 +29,71 @@ Gjorda:
 * Du har också en del hyperlänkar direkt från text till webbsidor (en hel del i kap 11 tex). Det blir på så sätt två olika referenssystem. Här bör du lägga in dessa i referenslistan och ge länken från listan (ge då hela adressen).
 
 * Källor till bilder måste tas med. I vissa fall behöver du också tillstånd. Det kanske är mest SAAB-material?
+
+- Jag stavar Järrendahl med h.
+
+- Kanske bättre att skriva "Linköping University" som affiliation på mig och Magnus?
+
+---------------------------------------
+
+Kommer inte göra:
+
+==============================================================================
+
+Magnus
+-------
+
+Inte gjorda än:
+
+- I Sec. 2.1 vill jag ha en referens till var man kan finna någon härledning/motivering av (2.2). Dessutom definierar du inte \rho här.
+
+- Sec.3.1.2: Vill gärna se en referens till användandet av Boussinesq-ekvationen i simuleringar. Som jag förstår det så skiljer du på Boussinesq och "shallow water equations" (även om väl även Boussinesq i princip är en "shallow water equation"?), och den referensen du ger verkar inte gälla Boussinesq?
+
+- Sec. 3.4 saknas också en del referenser, till LBM, MAC och FEM. Du bör ge läsaren åtminstone någon referens på varje, där man kan läsa vidare om man är intresserad (kan iofs vara samma referens om det finns något standardverk?).
+
+- Vill även ha ytterligare referenser i Sec. 4.6:
+CFL condition i 4.6.1;
+Eq. (4.29) "it turns out that" (ej uppenbart för mig..);
+s.29 "wavelengths around 2 cell sizes will be those that decrease the quickest in strength";
+SOR på samma sida.
+
+- Kapitel 9: Som Kenneth tidigare nämnt så tycker jag också nu att resultat-kapitlet känns lite tunt. Jag tycker åtminstone att du bör ha en diskussion om Fig.9.1-9.3 i huvudtexten (nu nämner du bara 9.1d-h). Diskutera vad figurerna illustrerar, och förklara för läsaren vad som är viktigt att notera!
+
+- Sec. 11.6: Liknande kommentar om Nyquist-frekvensen: kanske borde du haft en definition av den första gången den nämns i rapporten?
+
+- Conclusions: Här tycker jag också du bör nämna de problem du diskuterar i Sec.9.1 med instabiliteter och ytans form.
+
+- s.71, punkt 2: Är "UPWIND" en förkortning? (Finns ej med i din lista.) Borde nog ha en referens här också.
+
+- Sec. B.1.1: Tycker att definitionen av multivariate normal distribution (B.36) hellre borde kommit två sidor tidigare, efter (B.25).
+
+- s.94, under (B.97): Är inte det du kallar "Kronecker delta" snarare ett "Dirac delta"?
+
+---------------------------------------
+
+Gjorda:
+
+- Eftersom rapporten är så pass lång, så tycker jag att du bör ha en "Outline of the thesis" eller liknande någonstans i början, där du kortfattat beskriver vad som kommer att behandlas i de olika delarna (inklusive de tre appendixen).
+
+- s.13, ungefär mitt på: "By building on the idea presented in this report.." syftar på din egen rapport, eller Ottosson och/eller Lennartsson?
+
+- Eq. (4.12) och därunder: ska indexet i börja på 0 eller 1?
+
+- Allmänt: Alla figurer bör också ha ett omnämnande i huvudtexten, så att läsaren vet när man ska titta på figuren, och vad man speciellt ska lägga märke till. Nu är det många figurer som bara "finns" där, utan att ha någon omedelbar koppling till texten. T.ex. 5.1, 9.2, 9.3, A.2, A.3, B.1, B.2. För samtliga dessa bör du inkludera någon hänvisning "Fig. 5.1 illustrates.." e.d. i huvudtexten.
+
+- Sec. 5.1, s.33: Känns lite onödigt att du talar om vad ett "LOD layer" är två gånger på samma sida.
+
+- Sec. 6.2 "marching cubes algorithm". Här kunde det vara på sin plats att påpeka, att det kommer en mer detaljerad beskrivning av denna i Sec.11.3.1.
+
+- s.43: Förkortningen CICSAM bör förklaras första gången den nämns i 7.2.1, i stället för i 7.2.2.
+
+- Kap. 11.5: Kanske korkad kommentar, men är inte säker på att alla vet att de Euler-ekvationer du diskuterar där inte är samma som de du diskuterade i Sec.4.....
+
+- Ytterligare en korkad kommentar ang. figurtexten till A.2: Kan en rektangel ha runda hörn...?
+
+- s.109, Lennartssons referens: "Linkping"...
+
+- OK, jag ger dig ett stavfel till, bara för att det kan leda till en ödesdiger förväxling i Frankrike...;-): Rubriken i 4.6.3: "Poison"
 
 ---------------------------------------
 
