@@ -1,26 +1,16 @@
 \documentclass{beamer}
 \usetheme{default}
 
-% Miscellaneous
-\usepackage{etoolbox}
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
+% DOCUMENT PROPERTIES
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
 
-% Layout
+\title{Wave Model and Watercraft Model for Simulation of Sea State} % The title of the report
+\author{Kristofer Krus} % Your name
+%\date{\today} % The date of ... (?)
+\date{\mbox{August 23}, 2013} % The date of ... (?)
 
-% Graphics
-\usepackage[footnotesize]{caption} % For captions
-%\usepackage{caption} % For subcaptions
-\usepackage{subcaption} % For subcaptions
-\usepackage{tikz} % For advanced graphics functions
-\usepackage{pgfplots}
-
-% TikZ
-% Two-dimensional versions
-\newrobustcmd{\drawplus}[3]{;\draw (#1+#3/2,#2) -- (#1+#3/2,#2+#3); \draw (#1,#2+#3/2) -- (#1+#3,#2+#3/2);}
-\newrobustcmd{\squarepath}[1]{-- ++(#1,0) -- ++(0,#1) -- ++(-#1,0) -- cycle}
-% Three-dimensional versions
-\newrobustcmd{\drawthreedimplus}[4]{\def\cx{#1} \def\cy{#2} \def\cz{#3} \def\s{#4} \drawthreedimplushelper}
-\newrobustcmd{\drawthreedimplushelper}[6]{;\draw (\cx+\s*#1/2,\cy+\s*#2/2,\cz+\s*#3/2) -- +(\s*#4,\s*#5,\s*#6); \draw (\cx+\s*#4/2,\cy+\s*#5/2,\cz+\s*#6/2) -- +(\s*#1,\s*#2,\s*#3);}
-\newrobustcmd{\threedimsquarepath}[7]{-- ++(#1*#2,#1*#3,#1*#4) -- ++(#1*#5,#1*#6,#1*#7) -- ++(-#1*#2,-#1*#3,-#1*#4) -- cycle}
+\input{preamble}
 
 \begin{document}
 

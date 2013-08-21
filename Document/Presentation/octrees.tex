@@ -1,47 +1,28 @@
 \subsubsection{Octrees}
 
 \begin{frame}
-\frametitle{Octrees 1}
+\frametitle{Octrees --- What is an octree?}
 \begin{columns}[c]
 
 \column{.5\textwidth}
 
-\begin{itemize}[<+->]
+\begin{itemize}[<+(1)->]
 \item A tree data structure
 \item Each node corresponds to a physical cube
-\item Each node has place for eight child nodes
 \item The child nodes represents cubes half the size of their parent's
+\item Each node has place for eight child nodes
 \end{itemize}
 
-%Hej
-
-\column{.5\textwidth}
+\column{.45\textwidth}
 \begin{figure}
 \centering
 \includegraphics[width=\textwidth]{Images/Attribute/Octree/2000px_Octree2_svg}
 \caption{Retrieved from http://commons.wikimedia.org/\allowbreak wiki/\allowbreak File:Octree2.svg}
-\end{figure}
-
-\end{columns}
-\end{frame}
-
-
-\begin{frame}
-\frametitle{Octrees 2}
-\begin{columns}[c]
-
-\column{.6\textwidth}
-
-\begin{itemize}[<+->]
-\item<2-> \emph{Pro}: Adaptive grid resolution
-\item<3-> \emph{Con}:   Unstructured grid
-\end{itemize}
-
-\column{.4\textwidth}
-\begin{figure}
+%\end{figure}
+%\begin{figure}
     \centering
     %\subcaptionbox{\label{fig:quadtree}}[\textwidth]{
-        \begin{tikzpicture}[x={(.45\textwidth,0)},y={(0,.45\textwidth)}]
+        \begin{tikzpicture}[x={(.3\textwidth,0)},y={(0,.3\textwidth)}]
             % Front side
             \draw (0,0,1) \threedimsquarepath{1} {1}{0}{0} {0}{1}{0};
             % Level 1
@@ -66,9 +47,10 @@
             \drawthreedimplus{10/16}{13/16}{1} {1/16} {1}{0}{0} {0}{1}{0}
         \end{tikzpicture}
     %}
-    \vskip 1em
+    \quad
+    %\vskip 1em
     %\subcaptionbox{\label{fig:octree}}[\textwidth]{
-        \begin{tikzpicture}[x={(.45\textwidth,0)},y={(0,.45\textwidth)},z={(-.385*.45\textwidth,-.385*.45\textwidth)}]
+        \begin{tikzpicture}[x={(.3\textwidth,0)},y={(0,.3\textwidth)},z={(-.385*.3\textwidth,-.385*.3\textwidth)}]
             % Front side
             \draw[fill=white!100!black] (0,0,1) \threedimsquarepath{1} {1}{0}{0} {0}{1}{0};
             % Level 1
@@ -91,7 +73,7 @@
             \drawthreedimplus{11/16}{14/16}{1} {1/16} {1}{0}{0} {0}{1}{0}
             \drawthreedimplus{11/16}{13/16}{1} {1/16} {1}{0}{0} {0}{1}{0}
             \drawthreedimplus{10/16}{13/16}{1} {1/16} {1}{0}{0} {0}{1}{0}
-            
+            %
             % Top side
             \draw[fill=white!98!black] (0,1,0) \threedimsquarepath{1} {1}{0}{0} {0}{0}{1};
             % Level 1
@@ -108,7 +90,7 @@
             \drawthreedimplus{5/8}{1}{7/8} {1/8} {1}{0}{0} {0}{0}{1}
             \drawthreedimplus{6/8}{1}{7/8} {1/8} {1}{0}{0} {0}{0}{1}
             \drawthreedimplus{5/8}{1}{5/8} {1/8} {1}{0}{0} {0}{0}{1}
-            
+            %
             % Right side
             \draw[fill=white!90!black] (1,0,0) \threedimsquarepath{1} {0}{1}{0} {0}{0}{1};
             % Level 1
@@ -135,4 +117,28 @@
 \end{figure}
 
 \end{columns}
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Octrees --- Pros/Cons}
+%\begin{columns}[c]
+
+%\column{.6\textwidth}
+
+\begin{itemize}[<+(1)->]
+\proitem \emph{Pro}: Adaptive grid refinement (necessity!)
+\conitem \emph{Con}: Unstructured grid
+\end{itemize}
+
+
+%\column{.5\textwidth}
+
+\begin{figure}
+\centering
+\includegraphics[width=\textwidth]{Images/Attribute/AMR/Amr}
+\caption{Retrieved from http://commons.wikimedia.org/\allowbreak wiki/File:Amr.png}
+\end{figure}
+
+%\end{columns}
 \end{frame}
