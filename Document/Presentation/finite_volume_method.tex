@@ -1,3 +1,5 @@
+\subsubsection{Finite Volume Method (FVM)}
+
 \newcounter{nonstaggeredpauses}
 \newcounter{staggeredpauses}
 
@@ -7,12 +9,25 @@
 
 \column{.6\textwidth}
 \begin{itemize}[<+(1)->]
-\item The space is divided into a finite number of volume elements
-\item Properties are stored on discretized points in the cells
+\item Volume elements
+\item Grid
+\begin{itemize}[<+(1)->]
+\item Non-staggered
 \setcounter{nonstaggeredpauses}{\thebeamerpauses}
-\item Vector fields can sometimes be discretized to cell faces (known as \emph{staggered grid})
+\item Staggered
 \setcounter{staggeredpauses}{\thebeamerpauses}
+\end{itemize}
 %\let\b\thebeamerpauses
+\item Equations of motion
+\begin{itemize}[<+(1)->]
+\item Navier--Stokes equations
+\item Euler equations
+\end{itemize}
+\item Pressure calculation
+\begin{itemize}[<+(1)->]
+\item Incompressible flow $\Rightarrow$ Poisson equation
+\item Compressible flow
+\end{itemize}
 \end{itemize}
 
 \column{.45\textwidth}
