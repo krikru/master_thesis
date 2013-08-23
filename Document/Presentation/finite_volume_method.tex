@@ -1,4 +1,4 @@
-\subsubsection{Finite Volume Method (FVM)}
+\subsection{Finite Volume Method (FVM)}
 
 \newcounter{nonstaggeredpauses}
 \newcounter{staggeredpauses}
@@ -9,25 +9,24 @@
 
 \column{.6\textwidth}
 \begin{itemize}[<+(1)->]
-\item Volume elements
-\item Grid
-\begin{itemize}[<+(1)->]
-\item Non-staggered
-\setcounter{nonstaggeredpauses}{\thebeamerpauses}
-\item Staggered
-\setcounter{staggeredpauses}{\thebeamerpauses}
-\end{itemize}
-%\let\b\thebeamerpauses
+\item Volume elements (cells)
 \item Equations of motion
-\begin{itemize}[<+(1)->]
-\item Navier--Stokes equations
-\item Euler equations
-\end{itemize}
+%\begin{itemize}[<+(1)->]
+%\item Navier--Stokes equations
+%\item Euler equations
+%\end{itemize}
+\item Discretization
+%\begin{itemize}[<+(1)->]
+%\item Non-staggered grid
+\setcounter{nonstaggeredpauses}{\thebeamerpauses}
+%\item Staggered grid
+\setcounter{staggeredpauses}{\thebeamerpauses}
+%\end{itemize}
 \item Pressure calculation
-\begin{itemize}[<+(1)->]
-\item Incompressible flow $\Rightarrow$ Poisson equation
-\item Compressible flow
-\end{itemize}
+%\begin{itemize}[<+(1)->]
+%\item Incompressible flow $\Rightarrow$ Poisson equation
+%\item Compressible flow
+%\end{itemize}
 \end{itemize}
 
 \column{.45\textwidth}

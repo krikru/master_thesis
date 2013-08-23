@@ -1,4 +1,22 @@
-\subsubsection{Free-Surface Modeling (FSM)}
-\begin{frame}
+\subsection{Free-Surface Modeling (FSM)}
+\begin{frame}[<+(1)->]
 \frametitle{Free-Surface Modeling (FSM)}
+
+\uncover<+(1)->{Volume Of Fluid (VOF) method}
+\begin{itemize}
+\item Each cell contains an $\alpha$-value
+\item Requires an advection scheme (modified Hyper-C in my case)
+\conitem Interfaces can get smeared out
+\conitem Awkward for visualization
+\end{itemize}
+
+\vskip 1em
+
+\uncover<+(1)->{Other approaches}
+\begin{itemize}
+\item Mesh-based surfaces
+\item Level Set (LS) method
+\item Coupled Level Set/Volume Of Fluid (CLSVOF) method
+\end{itemize}
+
 \end{frame}
