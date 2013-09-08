@@ -4,8 +4,9 @@
 
 \uncover<+(1)->{Volume Of Fluid (VOF) method}
 \begin{itemize}
-\item Each cell contains an $\alpha$-value
-\item Requires an advection scheme (modified Hyper-C in my case)
+%\item Each cell contains an $\alpha$-value
+\item An auxiliary $\alpha$-field
+\item Modified Hyper-C advection scheme
 \conitem Interfaces can get smeared out
 \conitem Awkward for visualization
 \end{itemize}
@@ -14,7 +15,7 @@
 
 \uncover<+(1)->{Other approaches}
 \begin{itemize}
-\item Mesh-based surfaces
+%\item Mesh-based surfaces
 \item Level Set (LS) method
 \item Coupled Level Set/Volume Of Fluid (CLSVOF) method
 \end{itemize}

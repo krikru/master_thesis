@@ -1,3 +1,4 @@
+\subsection{Results}
 
 \newlength{\screenshotwidth}
 \setlength{\screenshotwidth}{.23\textwidth}
@@ -7,7 +8,7 @@
 
 \begin{figure}
 \centering
-\only<+(1)>{
+\only<+>{
 \includegraphics[width=\screenshotwidth]{Images/Screenshots/alpha/Report-figure2}\ \ 
 \includegraphics[width=\screenshotwidth]{Images/Screenshots/alpha/Report-figure3}\ \ 
 \includegraphics[width=\screenshotwidth]{Images/Screenshots/alpha/Report-figure4}\ \ 
@@ -18,7 +19,7 @@
 \includegraphics[width=\screenshotwidth]{Images/Screenshots/alpha/Report-figure8}\ \ 
 \includegraphics[width=\screenshotwidth]{Images/Screenshots/alpha/Report-figure9}
 }
-\only<+(1)>{
+\only<+>{
 \includegraphics[width=\screenshotwidth]{Images/Screenshots/water_coefficient/Report-figure10}\ \ 
 \includegraphics[width=\screenshotwidth]{Images/Screenshots/water_coefficient/Report-figure11}\ \ 
 \includegraphics[width=\screenshotwidth]{Images/Screenshots/water_coefficient/Report-figure12}\ \ 
@@ -29,7 +30,7 @@
 \includegraphics[width=\screenshotwidth]{Images/Screenshots/water_coefficient/Report-figure16}\ \ 
 \includegraphics[width=\screenshotwidth]{Images/Screenshots/water_coefficient/Report-figure17}
 }
-\only<+(1)>{
+\only<+>{
 \includegraphics[width=\screenshotwidth]{Images/Screenshots/air_coefficient/Report-figure18}\ \ 
 \includegraphics[width=\screenshotwidth]{Images/Screenshots/air_coefficient/Report-figure19}\ \ 
 \includegraphics[width=\screenshotwidth]{Images/Screenshots/air_coefficient/Report-figure20}\ \ 
@@ -41,21 +42,21 @@
 \includegraphics[width=\screenshotwidth]{Images/Screenshots/air_coefficient/Report-figure25}
 }
 \addtocounter{beamerpauses}{-3}
-\only<+(1)>{\caption{$\alpha$-value}}
-\only<+(1)>{\caption{Water coefficient}}
-\only<+(1)>{\caption{Air coefficient}}
+\only<+>{\caption{$\alpha$-value}}
+\only<+>{\caption{Water coefficient}}
+\only<+>{\caption{Air coefficient}}
 \end{figure}
 
 \end{frame}
 
 \begin{frame}[<+(1)->]
-\frametitle{Results in short}
+\frametitle{Results --- continued}
 
 \begin{itemize}
 \item Poor speed
-\item Poor surface intactness
-\item Numerical instability
-\item Many functionality still missing
+%\item Poor surface intactness
+\item Numerical instabilities caused by vacuum
+\item Much functionality still missing
 \item Generic flow solver ($n$-dimensional flows)
 \end{itemize}
 
