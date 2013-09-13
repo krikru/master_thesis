@@ -108,6 +108,9 @@ Lasse
 
 Inte gjorda än:
 
+Numrerade:
+----------
+
 * På sidan 17 omnämns Lattice Boltzann method som en mindre kraftfull metod än FVM men i avsnittet innan verkar den ha vissa fördelar. Finns det någon ej omnämnd hake som gör den sämre än FVM?
 
 * På sidan 25: borde inte 4.28 följa direkt av att densiteten är konstant istället för att följa ur 4.26 och 4.27?
@@ -127,6 +130,9 @@ Inte gjorda än:
 * På sidan 70 hänvisas det till figur A2 men det borde nog vara A3.
 
 * På sidan 85, borde inte total reflected spectral power vara total spectral power, alltså bestå av både bidrag som har transmitterats och reflekterats genom ytan? Båda delarna ingår ju i L_0.
+
+Onumrerade:
+-----------
 
 * Kort beskrivning av Hyper-C vore bra.
 
