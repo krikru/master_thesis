@@ -124,8 +124,6 @@ Inte gjorda än:
 
 * På sidan 59: Spektralmetoden används ju för att låta vågorna påverkas av vinden. Adderas vågorna från det vindberoende vågspektrat ovanpå de ursprungliga vågorna?
 
-* På sidan 70 hänvisas det till figur A2 men det borde nog vara A3.
-
 * På sidan 85, borde inte total reflected spectral power vara total spectral power, alltså bestå av både bidrag som har transmitterats och reflekterats genom ytan? Båda delarna ingår ju i L_0.
 
 * Kort beskrivning av Hyper-C vore bra.
@@ -137,6 +135,8 @@ Inte gjorda än:
 ---------------------------------------
 
 Gjorda:
+
+* På sidan 70 hänvisas det till figur A2 men det borde nog vara A3.
 
 ---------------------------------------
 

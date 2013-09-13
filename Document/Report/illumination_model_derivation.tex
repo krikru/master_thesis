@@ -2,15 +2,15 @@
 \chapter{An illumination model for sea surfaces}
 \label{apdx:illumination_model_derivation}
 
-In this appendix, an analytical model of the optical properties of water surfaces is derived. If a part of the \idxs{wave}{spectrum} is cut away, such as the part containing all frequencies over the \idxs{Nyquist}{frequency}, details on the water surface will be lost which --- for \visualization purposes --- need compensation in the form of increased \idxse{diffuse}{reflection}{diffuseness} in the \reflections on the water surface.
+In this appendix, an analytical model of the optical properties of water surfaces is derived. If a part of the \idxs{wave}{spectrum} is discarded, such as the part containing all frequencies over the \idxs{Nyquist}{frequency}, details on the water surface will be lost which --- for \visualization purposes --- need compensation in the form of increased \idxse{diffuse}{reflection}{diffuseness} in the \reflections on the water surface.
 
-The model will compensate for this loss of detail, and is based on the statistical distribution of the gradient of the free surface elevation. What started out as a simple idea was written down on paper and tried out, and soon resulted in a long chain of equations --- a work that was done outside of the scope of \thismasterthesiswork. Furthermore --- as it turned out, similar analytical models had already been developed earlier, for example by \citet{Caillault2007}. Anyway, what follows in this appendix is the derivation of a new model.
+The model derived here will compensate for this loss of detail, and is based on the statistical distribution of the gradient of the free surface elevation. What started out as a simple idea was written down on paper and tried out, and soon resulted in a long chain of equations --- a work that was done outside of the scope of this thesis work. Furthermore, as it turned out, similar analytical models had already been developed earlier, for example by \citet{Caillault2007}. Anyway, what follows in this appendix is the derivation of a new model.
 
 \section{Microfacets}
 
-Although some of the frequencies has been removed from the rendering, and hence become impossible to treat directly, it is still possible to treat them statistically.
+If we assume that some of the frequencies have been removed from the rendering, it becomes impossible to treat these directly. However, it is still possible to treat them statistically.
 
-To model the water surface, we will use something known as \microfacets, which are basically infinitesimal surface elements, tiled one after another, for which the \idxs{surface}{normal} is \assumed to be \stochastically distributed with a known \idxs{probability}{distribution} --- we will cover this later. These microfacets are on a much smaller \scale than what is actually represented in the \rendering.
+To model the water surface, we will use something known as \microfacets. These are basically are infinitesimal surface elements, tiled one after another, and are on a much smaller \scale than what is represented in the \rendering. The \idxs{surface}{normal} of these microfacets is \assumed to be \stochastically distributed with a known \idxs{probability}{distribution} --- we will cover this later.
 
 The idea is that if we know the \idxs{probability}{distribution} for all removed frequencies, we can calculate the distribution for the surface normal. This makes it possible to calculate the distribution for the \idxs{reflection}{direction} of a \ray that is \reflected on the water surface, for a certain \idxs{incident}{direction}, which in turn makes it possible to calculate the likelihood that the object of which the reflection can be seen in a specific point on the surface is --- for example --- the \sun.
 
