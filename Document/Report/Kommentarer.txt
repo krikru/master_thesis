@@ -113,16 +113,6 @@ Numrerade:
 
 * På sidan 17 omnämns Lattice Boltzann method som en mindre kraftfull metod än FVM men i avsnittet innan verkar den ha vissa fördelar. Finns det någon ej omnämnd hake som gör den sämre än FVM?
 
-* På sidan 25: borde inte 4.28 följa direkt av att densiteten är konstant istället för att följa ur 4.26 och 4.27?
-
-* På sidan 27 beskrivs Courantnumret som volymfraktionen av en cell som ersätts under ett tidssteg. Detta kan ju ha olika betydelse beroende på om man (1) ser hur mycket vatten som bytts ut kontinuerligt under tidssteget, eller om man (2) tittar på det diskret och endast jämför cellen vid tidsstegets slut med cellen vid tidsstegets början. Jag antar att det förstnämnda åsyftas då det senare i arbetet framgår att C > 1 är möjligt, men tycker att ett förtydligande vore bra.
-
-* På sidan 28 omnämns Preconditioned Conjugate Gradient method som att den kan vara direkt eller iterativ beroende på hur många iterationer som görs. Det låter motsägelsefullt.
-
-* På sidan 40, så står det att 7.4 är en improved approximation of A, men det bör nog vara of A*.
-
-* På sidan 42: Vad menas med att volymer förflyttas ("fluxed") mer än en gång?
-
 * På sidan 55 nämns baklänges Runge Kutta. Hur skiljer den sig från vanlig Runge Kutta?
 
 * På sidan 59: Spektralmetoden används ju för att låta vågorna påverkas av vinden. Adderas vågorna från det vindberoende vågspektrat ovanpå de ursprungliga vågorna?
@@ -141,6 +131,16 @@ Onumrerade:
 ---------------------------------------
 
 Gjorda:
+
+* På sidan 25: borde inte 4.28 följa direkt av att densiteten är konstant istället för att följa ur 4.26 och 4.27?
+
+* På sidan 27 beskrivs Courantnumret som volymfraktionen av en cell som ersätts under ett tidssteg. Detta kan ju ha olika betydelse beroende på om man (1) ser hur mycket vatten som bytts ut kontinuerligt under tidssteget, eller om man (2) tittar på det diskret och endast jämför cellen vid tidsstegets slut med cellen vid tidsstegets början. Jag antar att det förstnämnda åsyftas då det senare i arbetet framgår att C > 1 är möjligt, men tycker att ett förtydligande vore bra.
+
+* På sidan 28 omnämns Preconditioned Conjugate Gradient method som att den kan vara direkt eller iterativ beroende på hur många iterationer som görs. Det låter motsägelsefullt.
+
+* På sidan 40, så står det att 7.4 är en improved approximation of A, men det bör nog vara of A*.
+
+* På sidan 42: Vad menas med att volymer förflyttas ("fluxed") mer än en gång?
 
 * På sidan 70 hänvisas det till figur A2 men det borde nog vara A3.
 
