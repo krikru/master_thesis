@@ -162,7 +162,7 @@ For a \idxs{control}{volume} $V$ with surface $S$ and a surface normal $\normal$
 where $m$ is the mass of the fluid in $V$. By using the \idxs{divergence}{theorem} (\eqref{eq:divergence_theorem}) and dividing with $V$, we can rewrite \eqref{eq:mass_flux_surface_integral} as
 
 \begin{equation} \label{eq:mass_flux_volume_integral}
-\frac{\opd (m/V)}{\opd t} \,=\, -\frac{1}{V}\iiint_V\nabla\cdot(\rho\vec{u})\,\opd V
+\frac{\opd\,(m/V)}{\opd t} \,=\, -\frac{1}{V}\iiint_V\nabla\cdot(\rho\vec{u})\,\opd V
 \end{equation}
 
 and in the limit where $V \,\rightarrow\, 0$, this equation turns into
@@ -232,7 +232,7 @@ By combining \eqref{eq:density_divergence_incompressible_flow} and \eqref{eq:vel
 {\rho_{n+1} \,=\, \rho_n}
 \end{equation}
 
-and becomes superfluous. Furthermore, it turns out that when the flow is incompressible, we have
+and becomes superfluous, since this simplified equation also follows directly from \eqref{eq:density_partial_time_derivative_incompressible_flow}. Furthermore, it turns out that when the flow is incompressible, we have
 
 \begin{equation} \label{eq:deviatoric_stress_tensor_incompressible_flow}
 \nabla\cdot\boldsymbol{\mathsf{T}} \,=\, \mu\nabla^2\vec{u},
@@ -278,13 +278,19 @@ Perfect satisfaction of \eqref{eq:density_conservation} will not take place due 
 \nabla\cdot\vec{u}_{n+1} \,=\, \frac{1-\rho_{n+1}^{-1}\,\rho_{n+2}}{\Delta t} \,-\, \rho_{n+1}^{-1}\,\vec{u}_{n+1}\cdot\nabla\rho_{n+1}.
 \end{equation}
 
-If we assume that the \idxs{Courant}{number} $C$, which is basically the volume fraction of a cell that is replaced during one \timestep because of flow through the cell walls, is much lower than one, that is
+Now, the \idxs{Courant}{number} $C$ is defined as
+
+\begin{equation}
+C \,=\, \sum_{i=0}^{d-1} \frac{|u_i|\Delta t}{\Delta r_i},
+\end{equation}
+
+where $u_i$ is the $i$th velocity component, that is $u_i = \normvec{e}_i\cdot\vec{u}$. The Courant number can basically be thought of as the volume fraction of a cell that is replaced during one \timestep because of flow through the cell walls. If we assume that this number is much smaller than one, that is
 
 \begin{equation}
 C \ll 1,
 \end{equation}
 
-or if we assume that $C$ is limited and the \spectrum of $\rho_{n+1}$ is dominated by frequencies much lower than the \idxs{Nyquist}{frequency}, $\rho_{n+1}^{-1}\,\vec{u}_{n+1}\cdot\nabla\rho_{n+1}$ will be a minor term in \eqref{eq:velocity_divergence_density_conservation_premature} and can therefore be \neglected. Furthermore, since $\rho_{n+1}$ is close to $1$, we can \approximate $\rho_{n+1}^{-1}$ as the first-order \idxs{Taylor}{polynomial} centered around the value $1$, which is $2-\rho_{n+1}$. Hence, by using \eqref{eq:density_conservation}, we can rewrite \eqref{eq:velocity_divergence_density_conservation_premature} as
+or if we assume that $C$ is limited and the \spectrum of $\rho_{n+1}$ is dominated by frequencies much lower than the \idxs{Nyquist}{frequency}, $\rho_{n+1}^{-1}\,\vec{u}_{n+1}\cdot\nabla\rho_{n+1}$ will be a minor term in \eqref{eq:velocity_divergence_density_conservation_premature} and can therefore be \approximated as zero. Furthermore, since $\rho_{n+1}$ is close to $1$, we can \approximate $\rho_{n+1}^{-1}$ as the first-order \idxs{Taylor}{polynomial} centered around the value $1$, which is $2-\rho_{n+1}$. Hence, by using \eqref{eq:density_conservation}, we can rewrite \eqref{eq:velocity_divergence_density_conservation_premature} as
 
 \begin{equation} \label{eq:velocity_divergence_density_conservation}
 \nabla\cdot\vec{u}_{n+1} \,=\, \frac{\rho_{n+1}-1}{\Delta t}.
@@ -324,7 +330,9 @@ Then there is a class of methods called \idxsp{iterative}{method}{s}, which star
 
 %See also \textit{Incomplete Cholesky Preconditioned Conjugate Gradients method}, described in http://www.cs.ubc.ca/~rbridson/fluidbook/ (Fluid Simulation for Computer Graphics). This method uses the http://en.wikipedia.org/wiki/Incomplete_Cholesky_factorization (incomplete Cholesky factorization) as preconditioner.
 
-One iterative method is the \PCG method, which requires the matrix formulation of the system to be symmetric and positive-definite. It can work both as a direct method if run for $N$ iterations, or as an iterative method if the iterations stop earlier, but will often yield very fast convergence. In a work by \citet{Losasso2004}, this method was noted to require only about 20 iterations to converge to an \accuracy of \idxs{machine}{precision} and that the pressure solver that was used only accounted for \mbox{25 \%} of the simulation time. However, it also noted that if the equation formulation is nonsymmetric, it requires nonoptimal preconditioners which easily leads to an order of magnitude slowdown, and in the worst case, even problems with robustly finding a solution at all.
+One iterative method is the \PCG method, which requires the matrix formulation of the system to be symmetric and positive-definite. This method will reach the exact solution if run for $N$ iterations, and can hence be used as a direct method. On the other hand, it will often produce a very accurate approximation even for a small number of iterations, and is therefore often used as an iterative method and stopped relatively early.
+
+In a work by \citet{Losasso2004}, this method was noted to require only about 20 iterations to converge to an \accuracy of \idxs{machine}{precision} and that the pressure solver that was used only accounted for \mbox{25 \%} of the simulation time. However, it also noted that if the equation formulation is nonsymmetric, it requires nonoptimal preconditioners which easily leads to an order of magnitude slowdown, and in the worst case, even problems with robustly finding a solution at all.
 % The \textit{Incomplete Cholesky Preconditioned Conjugate Gradients method} is described in http://www.cs.ubc.ca/~rbridson/fluidbook/ (Fluid Simulation for Computer Graphics).
 
 \subsubsection{The Jacobi Method and the Gauss--Seidel Method}
