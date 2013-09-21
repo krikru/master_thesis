@@ -28,11 +28,11 @@ When it comes to physical quantities with a non-damped \oscillating behavior, si
 In \thisprojectwork, a kind of \idxs{leapfrog}{integration} has been used to model the time evolution of the velocity and the pressure, but even \idxs{leapfrog}{integration} has to obey the \CFL condition, and it becomes numerically unstable when the \period of the oscillations becomes too small in relation to the \timestep. To solve this problem, many methods \approximate the fluid or the fluids as \incompressible, whilst other use \idxse{implicit}{Euler integration}{backwards (or implicit) Euler integration}\index{integration!implicit Euler|see{implicit Euler integration}} (see 
 \secref{sec:pressure_calculation} for a more detailed discussion about this).
 
-On the other hand, when it comes to advection, many advection schemes tend to become numerically unstable when the \idxs{Courant}{number} $C$ becomes too large (this normally means larger than one). Whilst most \idxsp{explicit}{Runge--Kutta method}{s}\index{method!explicit Runge--Kutta|see{explicit Runge--Kutta method}} for advecting any form of field tend to damp high frequent features in the field for $C < 1$, they do the opposite for $C > 1$ and instead enhance the high frequent features and become unstable. If a \idxs{backwards}{Runge--Kutta method}\index{method!backwards Runge--Kutta|see{backwards Runge--Kutta method}} is used instead, in an attempt to remedy this instability, the behaviors will be the reversed and high frequent features will be damped for $C > 1$, hence making the simulation stable in those regions, whilst they will be enhanced for $C < 1$, hence still making the simulation unstable.
+On the other hand, when it comes to advection, many advection schemes tend to become numerically unstable when the \idxs{Courant}{number} $C$ becomes too large (this normally means larger than one). Whereas most \idxsp{explicit}{Runge--Kutta method}{s}\index{method!explicit Runge--Kutta|see{explicit Runge--Kutta method}} for advecting any form of field tend to damp high frequent features in the field for $C < 1$, they do the opposite for $C > 1$ and instead enhance the high frequent features and become unstable. If a \idxs{backwards}{Runge--Kutta method}\index{method!backwards Runge--Kutta|see{backwards Runge--Kutta method}} is used in an attempt to remedy this instability, the behaviors will just be reversed and high frequent features will be damped for $C > 1$, hence making the simulation stable in those regions, while they will be enhanced for $C < 1$, hence still making the simulation unstable.
 
 A remedy for this dilemma is to use semi-Lagrangian advection, which works by calculating which locations will end up on the \idxsp{discretization}{point}{s} in the end of the time step, and assigning interpolations of the field in those locations to the discretization points in the end of the time step.
 
-All of these instability issues have remedies, at least for simulations on a regular grid \citep{Stam1999,Lentine2012}, but these remedies can probably also be extended for octree grids.
+All of these instability issues have remedies, at least for simulations on a regular grid \citep{Stam1999,Lentine2012}, but those remedies can probably also be extended for octree grids.
 
 \section{Rendering}
 
@@ -90,11 +90,11 @@ Another method, that can be used when there is no wave dispersion, that is, wave
 
 \section{Wind waves}
 
-In order to obtain a realistic \idxs{sea}{state}\index{state of sea|see{sea state}} in a simulation, it is desirable that the \idxs{water}{surface} \interacts with the \wind in order to give rise to \idxsp{wind}{wave}{s}. In this way, the sea state will be a reflection of the \idxs{wind}{velocity}.
+In order to obtain a realistic \idxs{sea}{state}\index{state of sea|see{sea state}} in a simulation, it is desirable that the \idxs{water}{surface} is affected by the \wind in order to give rise to waves; such waves are commonly referred to as \idxsp{wind}{wave}{s}.
 
 \subsection{Spectral methods}
 
-A very cheap and easy way to simulate wind waves is to use a wind dependent \idxs{wave}{spectrum}. A wave spectrum tells how the wave amplitude is \distributed as a function of wavelength, and from that distribution the \idxs{Fourier}{transform} of the free surface elevation can easily be \generated simply by \sampling it. This is then used to \initialize the \idxs{sea}{state} in the simulation.
+A very cheap and easy way to simulate wind waves is to use a wind dependent \idxs{wave}{spectrum} to initialize the sea state with wind waves already in it when the simulation starts. A wave spectrum tells how the wave amplitude is \distributed as a function of wavelength, and from that distribution the \idxs{Fourier}{transform} of the free surface elevation can easily be \generated simply by \sampling it. This is then used to \initialize the \idxs{sea}{state} in the simulation.
 
 There are different models for describing the wave spectrum for a certain wind velocity, most of which are \empirical. Some of these spectra take into account the wind direction for increased alignment between the surface and the wind, for example the \idxs{Philips}{spectrum}, which is used and tweaked by \citet{Tessendorf2001}, or the \idxs{Pierson--Moskowitz}{spectrum}, which was supposedly developed in 1964 and is described by \citet{Premovze2001}. Another commonly used wave spectrum which builds up over time is the \JONSWAP spectrum\index{spectrum!JONSWAP|see{JONSWAP}} \citep{Journee2001b,WikiWaves2013}.
 

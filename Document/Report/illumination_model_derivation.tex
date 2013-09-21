@@ -8,21 +8,21 @@ The model derived here will compensate for this loss of detail, and is based on 
 
 \section{Microfacets}
 
-If we assume that some of the frequencies have been removed from the rendering, it becomes impossible to treat these directly. However, it is still possible to treat them statistically.
+If we assume that some of the frequencies have been removed from the rendering, it becomes impossible to treat those frequencies directly. However, it is still possible to treat them statistically.
 
 To model the water surface, we will use something known as \microfacets. These are basically are infinitesimal surface elements, tiled one after another, and are on a much smaller \scale than what is represented in the \rendering. The \idxs{surface}{normal} of these microfacets is \assumed to be \stochastically distributed with a known \idxs{probability}{distribution} --- we will cover this later.
 
-The idea is that if we know the \idxs{probability}{distribution} for all removed frequencies, we can calculate the distribution for the surface normal. This makes it possible to calculate the distribution for the \idxs{reflection}{direction} of a \ray that is \reflected on the water surface, for a certain \idxs{incident}{direction}, which in turn makes it possible to calculate the likelihood that the object of which the reflection can be seen in a specific point on the surface is --- for example --- the \sun.
+The idea is that if we know the \idxs{probability}{distribution} for all removed frequencies, we can calculate the distribution for the surface normal. This makes it possible to calculate the distribution for the \idxs{reflection}{direction} of a \ray that is \reflected on the water surface, for a certain \idxs{incident}{direction}. This in turn makes it possible to calculate the likelihood that the object of which the reflection that can be seen in a specific point on the surface is --- for example --- the \sun.
 
-This means that we can calculate the average brightness of a point on the surface as perceived by the observer. Besides, if we \assume that the removed frequencies correspond to waves that are so short that the wave tips become indistinguishable from one another (it helps if the observer has a bad sight), the average brightness will probably also be a good approximation of the actual brightness perceived by the observer. But before we can start to calculate this value, we need to make a few \assumptions.
+This means that we can calculate the average brightness of a point on the surface as perceived by the observer. Besides, if we \assume that the removed frequencies correspond to waves that are so short that the crests become indistinguishable from one another (this is more likely if the observer has bad sight), the average brightness will probably also be a good approximation of the actual brightness perceived by the observer. But before we can start to calculate the average brightness, we need to make a few \assumptions.
 
-First, let's \assume that all frequencies of the wave spectrum are \superposed linearly on top of each other. This implies that there is no \idxs{horizontal}{displacement} --- that is, either the waves are not \idxsp{Gerstner}{wave}{s}, or the \idxs{wave}{amplitude} is so much smaller than the \wavelength that whether the waves are Gerstner waves or not is considered negligible.
+First, let's \assume that all frequencies of the wave spectrum are \superposed linearly on top of each other. This implies that there is no \idxs{horizontal}{displacement} --- that is, either the waves are not \idxsp{Gerstner}{wave}{s}, or the \idxs{wave}{amplitude} is so much smaller than the \wavelength that we can neglect whether the waves are Gerstner waves or not.
 
 Second, to make things simpler, let's \assume that both the fraction of the water surface that is masked behind other waves, and hence is not visible to the observer, and the fraction of the surface that is \shadowed by other waves, are so close to zero they can be neglected. In other words, our \microfacets can be assumed to not hide any of the other microfacets, either from the sun or from the observer.
 
 Third, let's also assume that no light will ever be reflected twice on the water surface before reaching the observer.
 
-Now, let's denote the \index{elevation!free surface|see{free surface elevation}}\idxs{free}{surface elevation} of the actual water surface as $\eta^*$, and the free surface elevation of the simplified surface (from which a part of the wave spectrum has been cut off) as $\eta$, and make them functions of $\vec{r}$, which is a \twodimensional vector in the horizontal plane. We can start by noting that $\eta$ is less detailed and contains less information about the actual water surface than $\eta^*$, and that $\eta$ is known, whereas $\eta^*$ is not.
+Now, let's denote the \index{elevation!free surface|see{free surface elevation}}\idxs{free}{surface elevation} of the actual water surface as $\eta^*$, and the free surface elevation of the simplified surface (from which a part of the wave spectrum has been discarded) as $\eta$, and let these be functions of $\vec{r}$, which is a \twodimensional vector in the horizontal plane. We can start by noting that $\eta$ is less detailed than $\eta^*$, and that it doesn't contain all information about the actual water surface, whereas $\eta^*$ does. Furthermore, while $\eta$ is known, $\eta^*$ is not.
 
 We can therefore only calculate the normal of the simplified surface --- let's call this normal $\normvec{n}$. Let's also define the \idx{anti-normalization} $\anormvec{\xi}$ of a vector $\vec{\xi}$ as
 
@@ -30,13 +30,13 @@ We can therefore only calculate the normal of the simplified surface --- let's c
 \anormvec{\xi} \,=\, \frac{\vec{\xi}}{\normvec{z}\cdot\vec{\xi}}\,,
 \end{equation}
 
-where $\normvec{z}$ is the \idxs{unit}{vector} in the positive vertical direction (which is the negation of the direction of the \idxs{gravitational acceleration}{vector}, or the normal of a flat water surface). This implies that the $\normvec{z}$-component of an anti-normalized vector always is 1. Note that the anti-normalization of a vector is only defined if the original vector has a non-zero $\normvec{z}$-component, and that when it is defined, it is parallel to the original vector. The \idx{anti-normal} $\anormvec{n}$ of the surface $\eta$ becomes
+where $\normvec{z}$ is the \idxs{unit}{vector} in the positive vertical direction (which is the negation of the direction of the \idxs{gravitational acceleration}{vector}, or the normal of a flat water surface). This implies that the $\normvec{z}$-component of an anti-normalized vector always is 1. Note that the anti-normalization of a vector is only defined if the original vector has a non-zero $\normvec{z}$-component, and that it --- when defined --- is parallel to the original vector. The \idx{anti-normal} $\anormvec{n}$ of the surface $\eta$ becomes
 
 \begin{equation} \label{eq:anti_normal_from_gradient}
 \anormvec{n} \,=\, \left(\!\!\!\begin{array}{c}-\nabla\eta(\vec{r}) \\ 1\end{array}\!\!\!\right),
 \end{equation}
 
-where the last component is the $\normvec{z}$-component. The \gradient in turn can be rewritten as
+where the last component is the $\normvec{z}$-component. The \gradient in turn can be written as
 
 \begin{equation}
 \nabla\eta(\vec{r}) \,=\, \nabla\mathcal{F}^{-1}\{\fdfunc{\eta}(\vec{k})\}(\vec{r}) \,=\, \mathcal{F}^{-1}\{\vec{k}\,\fdfunc{\eta}(\vec{k})\}(\vec{r}),
@@ -519,9 +519,9 @@ L_{\text{o}}(\vec{r},\,\normvec{\omega}_{\text{o}},\, \lambda,\, t) \,= \\
 \end{array}
 \end{equation}
 
-where $L_{\text{o}}$ is the total \idxs{spectral}{radiance} (or power per unit solid-angle-in-the-direction-of-a-ray and unit projected-area-perpendicular-to-the-ray and unit wavelength) of \index{light!wavelength}\idxe{wavelength!light}{wavelength} $\lambda$ directed outward along direction $\normvec{\omega}_{\text{o}}$ at time $t$, from location $\vec{r}$ at the surface; $L_{\text{e}}$ is the spectral radiance emitted by the surface itself, $\rho'_{\text{r}}$ is the \BRDF of the surface, which describes how light from different directions are reflected on the surface, $L_{\text{i}}$ is the \idxs{spectral}{radiance} incoming from direction $\normvec{\omega}_{\text{i}}$, $\normvec{n}$ is the \idxs{surface}{normal}, and $\Omega$ is the \idxs{unit}{hemisphere} containing all possible directions from which the incoming light can come before it is reflected, and thus all possible values for $\normvec{\omega}_{\text{i}}$ (which also happens to be all possible values for $\normvec{\omega}_{\text{o}}$); see \figref{fig:renderingequation} for reference. Note that both $\normvec{\omega}_{\text{i}}$ and $\normvec{\omega}_{\text{o}}$ are directed outwards from the surface.
+where $L_{\text{o}}$ is the total \idxs{spectral}{radiance} (or power per unit solid-angle-in-the-direction-of-a-ray and unit projected-area-perpendicular-to-the-ray and unit wavelength) of \index{light!wavelength}\idxe{wavelength!light}{wavelength} $\lambda$ directed outward along direction $\normvec{\omega}_{\text{o}}$ at time $t$, from location $\vec{r}$ at the surface; $L_{\text{e}}$ is the spectral radiance emitted by the surface itself, $\rho'_{\text{r}}$ is the \BRDF of the surface, which describes how light from different directions are reflected on the surface, $L_{\text{i}}$ is the \idxs{spectral}{radiance} incoming from direction $\normvec{\omega}_{\text{i}}$, $\normvec{n}$ is the \idxs{surface}{normal}, and $\Omega$ is the \idxs{unit}{hemisphere} containing all possible directions from which the incoming light can come before it is reflected, and thus all possible values for $\normvec{\omega}_{\text{i}}$ (which also happens to be all possible values for $\normvec{\omega}_{\text{o}}$); see \figref{fig:renderingequation} for reference. Note that both $\normvec{\omega}_{\text{i}}$ and $\normvec{\omega}_{\text{o}}$ are directed outwards from the surface, as is illustrated in \figref{fig:renderingequation}.
 
-While this equation can lay the foundation for many very realistic renderings of \threedimensional scenes, and can make the reflective properties of a surface vary for different positions, for different points in time, for different wavelengths, which allows the surface to have a color and not just a gray-scale, and even for different rotations of the surface, there are several aspects of light it can't grasp. Some of these aspects, which are relevant to \surfacewaterrendering, include
+This equation can lay the foundation for very realistic renderings of \threedimensional scenes. It can make the reflective properties of a surface vary between different positions, between different points in time, and between different wavelengths, which allows the surface to have a color of its own and not just reflect the color of the light it is hit by. It can even make the reflective properties vary between different rotations of the surface. However, there are several aspects of light it cannot grasp. Some of these aspects, which are relevant to \surfacewaterrendering, include
 
 \begin{itemize}
 \item \textbf{\idxe{polarisation}{Polarization}:} Light polarized differently will sometimes have different reflection distributions, as in the case of light being reflected at a water surface.
@@ -533,7 +533,7 @@ While this equation can lay the foundation for many very realistic renderings of
 However, it is not necessary to account specifically for this in the rendering equation if it includes transmission, since that will effectively also include light scattered under the surface, even if the rendering equation still doesn't provide a model for how the light is scattering under the surface.
 \end{itemize}
 
-Of these aspects, polarization and transmission are the two aspects that are the easiest to model. Subsurface scattering also plays a role, though, but it is not going to be modeled in this appendix.
+Of these aspects, polarization and transmission are the two aspects that are the easiest to model. Subsurface scattering on the other hand, is more difficult to model and is hence not going to be treated explicitly in this appendix, even if it also plays a role.
 
 Other aspects of light, which are not relevant to \surfacewaterrendering (but are still included in this report for leisure reading), include
 
@@ -544,7 +544,7 @@ If the absorption and the emission occurs at the same point in time, but with di
     
 \item \textbf{\idxe{interference}{Interference}:} This can occur if the wave properties of light are exhibited, for example when light is passing though a \idxs{thin}{slit} or a \idxs{double}{slit}.
     
-\item \textbf{\idxse{non-linear}{effect}{Non-linear effects}:} If the light is very intensive, two or more photons can sometimes hit the same electron in a material at the same time, increasing the energy of the electron with more than the energy of the individual photons. When the electron makes a transition back to a lower energy level, emission of a photon with a higher frequency is possible.
+\item \textbf{\idxse{non-linear}{effect}{Non-linear effects}:} If the light is very intensive, two or more photons can sometimes hit the same electron in a material at the same time, increasing the energy of the electron with more than the energy of the individual photons. It is thus possible that a photon with a higher frequency is emitted when the electron makes a transition back to a lower energy level.
     
 \item \textbf{\index{\idxse{effect!relativistic Doppler|see{relativistic Doppler effect}}}\idxse{relativistic}{Doppler effect}{Relativistic Doppler effect}:} Light that is reflected on an object that is moving with a very high speed relative to the reference frame (or to something that is observing the light) will get its wavelength changed. If the light is reflected on an object that is moving towards it, the impact will compress the photons, making the wavelength shorter which in turn makes the light blueshifted. The photons will also be packed more closely, so the photon flux will be increased. If the light instead is reflected on an object that is moving away from it, the opposite thing will happen.
 \end{itemize}
@@ -560,7 +560,7 @@ L_{x,\text{o}}(\vec{r},\,\normvec{\omega}_{\text{o}},\, \lambda,\, t) \,=\, L_{x
 \end{array}
 \end{equation}
 
-where $x$ is the light polarization, which is either s or p, depending on if the light is s or p polarized, $\Omega_{\text{r}}$ is the \idxs{unit}{hemisphere} containing all possible directions from which the incoming light which is going to be reflected in direction $\normvec{\omega}_{\textbf{o}}$ can come, $\Omega_{\text{t}}$ is the \idxs{unit}{hemisphere} containing all possible directions from which the incoming light which is going to be transmitted in direction $\normvec{\omega}_{\textbf{o}}$ can come (which is also the \idxs{relative}{complement} of $\Omega_{\text{r}}$ in the \idxs{unit}{sphere}, i.e. all points in the unit sphere that are not contained in $\Omega_{\text{r}}$), and $\rho'_{\text{t}}$ is the \BTDF which describes how light from different directions are transmitted through the surface.
+where $x$ is the light polarization, which is either s or p, depending on whether the light is s or p polarized, $\Omega_{\text{r}}$ is the \idxs{unit}{hemisphere} containing all possible directions from which the incoming light which is going to be reflected in direction $\normvec{\omega}_{\textbf{o}}$ can come, $\Omega_{\text{t}}$ is the \idxs{unit}{hemisphere} containing all possible directions from which the incoming light which is going to be transmitted in direction $\normvec{\omega}_{\textbf{o}}$ can come (which is also the \idxs{relative}{complement} of $\Omega_{\text{r}}$ in the \idxs{unit}{sphere}, i.e. all points in the unit sphere that are not contained in $\Omega_{\text{r}}$), and $\rho'_{\text{t}}$ is the \BTDF which describes how light from different directions are transmitted through the surface.
 
 The parameters $x$, $\vec{r}$, $t$ and $\lambda$ can be removed from the equation since they are of no importance to the derivation of the illumination model; one will just have to keep in mind that the functions depend on $x$, $\vec{r}$, $t$ and $\lambda$. Even the term $L_{x, \text{e}}$ can safely be removed since water surfaces is generally not considered to emit any electromagnetic radiation. We can therefore simplify \eqref{eq:rendering_equation_improved} to
 
@@ -589,13 +589,13 @@ Since \radiance is power per unit projected-area-perpendicular-to-a-ray and unit
 L_{\text{o}} \,=\, \frac{\opd \Phi_{\text{o}}(\normvec{\omega}_{\text{o}})(A\cos\theta_{\text{o}})^{-1}}{\opd \normvec{\omega}_{\text{o}}},
 \end{equation}
 
-where $\Phi_{\text{o}}$ is the total reflected spectral power (or \idxs{reflected}{power} per unit wavelength), and $\theta_{\text{o}}$ is the angle between $\normvec{\omega}_{\text{o}}$ and the surface normal $\normvec{n}$. We can write $\normvec{n}$ as
+where $\Phi_{\text{o}}$ is the total outgoing spectral power (or power per unit wavelength), and $\theta_{\text{o}}$ is the angle between $\normvec{\omega}_{\text{o}}$ and the surface normal $\normvec{n}$. We can write $\normvec{n}$ as
 
 \begin{equation} \label{eq:normal_from_antinormal}
 \normvec{n} \,=\, \frac{\anormvec{n}}{|\anormvec{n}|},
 \end{equation}
 
-where $\anormvec{n}$ is given by \eqref{eq:anti_normal_from_gradient}. In \eqref{eq:outgoing_radiance_definition}, $\opd \Phi_{\text{o}}$ is the infinitesimal increase in $\Phi_{\text{o}}$, caused by $\opd \normvec{\omega}_{\text{o}}$, which can be thought of as an infinitesimal increase in the solid angle of some light outlet through which the spectral power of the reflected light is measured. By using \eqref{eq:anti_normal_from_gradient}, we can rewrite \eqref{eq:brdf_definition} as
+where $\anormvec{n}$ is given by \eqref{eq:anti_normal_from_gradient}. In \eqref{eq:outgoing_radiance_definition}, $\opd \Phi_{\text{o}}$ is the infinitesimal increase in $\Phi_{\text{o}}$, caused by $\opd \normvec{\omega}_{\text{o}}$, which can be thought of as an infinitesimal increase in the solid angle of some light outlet through which the spectral power of the outgoing light is measured. By using \eqref{eq:anti_normal_from_gradient}, we can rewrite \eqref{eq:brdf_definition} as
 
 \begin{equation} \label{eq:brdf_rewritten}
 \renewcommand*{\arraystretch}{2}
@@ -605,9 +605,9 @@ where $\anormvec{n}$ is given by \eqref{eq:anti_normal_from_gradient}. In \eqref
 \end{array}
 \end{equation}
 
-which is basically the distribution density of the reflection direction $\normvec{\omega}_{\text{o}}$ for the reflection of a ray that comes from the direction $\normvec{\omega}_{\text{i}}$, divided by $\cos\theta_{\text{o}}$.
+which is basically the distribution density of the outgoing direction $\normvec{\omega}_{\text{o}}$ for the reflection of a ray that comes from the direction $\normvec{\omega}_{\text{i}}$, divided by $\cos\theta_{\text{o}}$.
 
-But how will we know the distribution of the reflection direction for a ray that is being reflected? Well, we know that in order for a ray that comes from the direction $\normvec{\omega}_{\text{i}}$ to be reflected in the direction $\normvec{\omega}_{\text{o}}$, the surface has to be angeled in a certain way. Here, the surface we are talking about is the actual surface, or the surface of the \microfacet the ray is hitting, which is described by $\eta^*$, rather than the simplified surface which is described by $\eta$.
+But how can we find the distribution of the outgoing direction for a ray that is being reflected? Well, we know that in order for a ray that comes from the direction $\normvec{\omega}_{\text{i}}$ to be reflected in the direction $\normvec{\omega}_{\text{o}}$, the surface has to be angeled in a certain way. Here, the surface we are talking about is the actual surface, or the surface of the \microfacet the ray is hitting, which is described by $\eta^*$, rather than the simplified surface which is described by $\eta$.
 
 The equation that describes the reflection is given by the \index{reflection!Householder|see{Householder transformation}}\idxs{Householder}{transformation}, which states that the reflection $\vec{r}'$ of a point $\vec{r}$ in a plane with the surface normal $\normvec{v}$, is given by
 
@@ -615,13 +615,13 @@ The equation that describes the reflection is given by the \index{reflection!Hou
 \vec{r}' \,=\, \vec{r} - 2(\normvec{v}^{\Hermitian}\vec{r})\normvec{v},
 \end{equation}
 
-where a superscripted $\Hermitian$ denotes the \idxs{Hermitian}{transpose} operator, which performs the normal transpose and conjugates the elements. The right hand side of this equation is referred to as the Householder transformation of $\vec{r}$. For ordinary surface normals, which has real-valued elements, this becomes
+where a superscripted $\Hermitian$ denotes the \idxs{Hermitian}{transpose} operator, or the conjugate transpose operator, which performs the ordinary transpose of the operand and conjugates its elements. The right hand side of this equation is referred to as the Householder transformation of $\vec{r}$. For surface normals, which has real-valued elements, this becomes
 
 \begin{equation}
 \vec{r}' \,=\, \vec{r} - 2(\normvec{v}\cdot\vec{r})\normvec{v}.
 \end{equation}
 
-In our case, we know that the reflection direction $\normvec{\omega}_{\text{o}}$, is the reflection of the incident direction, or the reflection of the opposite of the direction $\normvec{\omega}_{\text{i}}$ from which the incident ray came. Let's also refer to the surface normal the \microfacet would need to have in order for a ray that comes from the direction $\normvec{\omega}_{\text{i}}$ to be reflected in the direction $\normvec{\omega}_{\text{o}}$ as $\normvec{h}$. This will give us
+In our case, the outgoing direction $\normvec{\omega}_{\text{o}}$ is the reflection of the incident direction, or the reflection of the opposite of the direction $\normvec{\omega}_{\text{i}}$ from which the incident ray came. Let's also refer to the surface normal the \microfacet would need to have in order for a ray that comes from the direction $\normvec{\omega}_{\text{i}}$ to be reflected in the direction $\normvec{\omega}_{\text{o}}$ as $\normvec{h}$. This will give us
 
 \begin{equation} \label{eq:householder_equation}
 \normvec{\omega}_{\text{o}} \,=\, 2(\normvec{h}\cdot\normvec{\omega}_{\text{i}})\normvec{h} - \normvec{\omega}_{\text{i}}.
