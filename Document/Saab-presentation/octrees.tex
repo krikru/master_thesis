@@ -1,0 +1,142 @@
+\subsection{Octrees}
+
+\begin{frame}
+%\frametitle{Octrees --- What is an octree?}
+\frametitle{Octrees}
+\begin{columns}[c]
+
+\column{.5\textwidth}
+
+%\begin{itemize}[<+(1)->]
+%\item A tree data structure
+%\item Each node has place for eight child nodes
+%\item Each node corresponds to a physical cube
+%end{itemize}
+
+
+\begin{figure}
+\centering
+\includegraphics[width=\textwidth]{../Presentation/Images/Attribute/Octree/Octree2.pdf}
+\end{figure}
+
+\column{.5\textwidth}
+\begin{figure}
+    \centering
+    %\subcaptionbox{\label{fig:quadtree}}[\textwidth]{
+        \begin{tikzpicture}[x={(.3\textwidth,0)},y={(0,.3\textwidth)}]
+            % Front side
+            \draw (0,0,1) \threedimsquarepath{1} {1}{0}{0} {0}{1}{0};
+            % Level 1
+            \drawthreedimplus{0}{0}{1} {1} {1}{0}{0} {0}{1}{0}
+            % Level 2
+            \drawthreedimplus{1/2}{1/2}{1} {1/2} {1}{0}{0} {0}{1}{0}
+            \drawthreedimplus{1/2}{0/2}{1} {1/2} {1}{0}{0} {0}{1}{0}
+            \drawthreedimplus{0/2}{1/2}{1} {1/2} {1}{0}{0} {0}{1}{0}
+            % Level 3
+            \drawthreedimplus{2/4}{3/4}{1} {1/4} {1}{0}{0} {0}{1}{0}
+            \drawthreedimplus{3/4}{3/4}{1} {1/4} {1}{0}{0} {0}{1}{0}
+            \drawthreedimplus{2/4}{1/4}{1} {1/4} {1}{0}{0} {0}{1}{0}
+            % Level 4
+            \drawthreedimplus{5/8}{7/8}{1} {1/8} {1}{0}{0} {0}{1}{0}
+            \drawthreedimplus{6/8}{7/8}{1} {1/8} {1}{0}{0} {0}{1}{0}
+            \drawthreedimplus{5/8}{6/8}{1} {1/8} {1}{0}{0} {0}{1}{0}
+            \drawthreedimplus{6/8}{6/8}{1} {1/8} {1}{0}{0} {0}{1}{0}
+            % Level 5
+            \drawthreedimplus{12/16}{14/16}{1} {1/16} {1}{0}{0} {0}{1}{0}
+            \drawthreedimplus{11/16}{14/16}{1} {1/16} {1}{0}{0} {0}{1}{0}
+            \drawthreedimplus{11/16}{13/16}{1} {1/16} {1}{0}{0} {0}{1}{0}
+            \drawthreedimplus{10/16}{13/16}{1} {1/16} {1}{0}{0} {0}{1}{0}
+        \end{tikzpicture}
+    %}
+    \quad
+    %\vskip 1em
+    %\subcaptionbox{\label{fig:octree}}[\textwidth]{
+        \begin{tikzpicture}[x={(.3\textwidth,0)},y={(0,.3\textwidth)},z={(-.385*.3\textwidth,-.385*.3\textwidth)}]
+            % Front side
+            \draw[fill=white!100!black] (0,0,1) \threedimsquarepath{1} {1}{0}{0} {0}{1}{0};
+            % Level 1
+            \drawthreedimplus{0}{0}{1} {1} {1}{0}{0} {0}{1}{0}
+            % Level 2
+            \drawthreedimplus{1/2}{1/2}{1} {1/2} {1}{0}{0} {0}{1}{0}
+            \drawthreedimplus{1/2}{0/2}{1} {1/2} {1}{0}{0} {0}{1}{0}
+            \drawthreedimplus{0/2}{1/2}{1} {1/2} {1}{0}{0} {0}{1}{0}
+            % Level 3
+            \drawthreedimplus{2/4}{3/4}{1} {1/4} {1}{0}{0} {0}{1}{0}
+            \drawthreedimplus{3/4}{3/4}{1} {1/4} {1}{0}{0} {0}{1}{0}
+            \drawthreedimplus{2/4}{1/4}{1} {1/4} {1}{0}{0} {0}{1}{0}
+            % Level 4
+            \drawthreedimplus{5/8}{7/8}{1} {1/8} {1}{0}{0} {0}{1}{0}
+            \drawthreedimplus{6/8}{7/8}{1} {1/8} {1}{0}{0} {0}{1}{0}
+            \drawthreedimplus{5/8}{6/8}{1} {1/8} {1}{0}{0} {0}{1}{0}
+            \drawthreedimplus{6/8}{6/8}{1} {1/8} {1}{0}{0} {0}{1}{0}
+            % Level 5
+            \drawthreedimplus{12/16}{14/16}{1} {1/16} {1}{0}{0} {0}{1}{0}
+            \drawthreedimplus{11/16}{14/16}{1} {1/16} {1}{0}{0} {0}{1}{0}
+            \drawthreedimplus{11/16}{13/16}{1} {1/16} {1}{0}{0} {0}{1}{0}
+            \drawthreedimplus{10/16}{13/16}{1} {1/16} {1}{0}{0} {0}{1}{0}
+            %
+            % Top side
+            \draw[fill=white!98!black] (0,1,0) \threedimsquarepath{1} {1}{0}{0} {0}{0}{1};
+            % Level 1
+            \drawthreedimplus{0}{1}{0} {1} {1}{0}{0} {0}{0}{1}
+            % Level 2
+            \drawthreedimplus{0/2}{1}{1/2} {1/2} {1}{0}{0} {0}{0}{1}
+            \drawthreedimplus{1/2}{1}{1/2} {1/2} {1}{0}{0} {0}{0}{1}
+            \drawthreedimplus{1/2}{1}{0/2} {1/2} {1}{0}{0} {0}{0}{1}
+            % Level 3
+            \drawthreedimplus{2/4}{1}{3/4} {1/4} {1}{0}{0} {0}{0}{1}
+            \drawthreedimplus{3/4}{1}{3/4} {1/4} {1}{0}{0} {0}{0}{1}
+            \drawthreedimplus{2/4}{1}{2/4} {1/4} {1}{0}{0} {0}{0}{1}
+            % Level 4
+            \drawthreedimplus{5/8}{1}{7/8} {1/8} {1}{0}{0} {0}{0}{1}
+            \drawthreedimplus{6/8}{1}{7/8} {1/8} {1}{0}{0} {0}{0}{1}
+            \drawthreedimplus{5/8}{1}{5/8} {1/8} {1}{0}{0} {0}{0}{1}
+            %
+            % Right side
+            \draw[fill=white!90!black] (1,0,0) \threedimsquarepath{1} {0}{1}{0} {0}{0}{1};
+            % Level 1
+            \drawthreedimplus{1}{0}{0} {1} {0}{1}{0} {0}{0}{1}
+            % Level 2
+            \drawthreedimplus{1}{1/2}{1/2} {1/2} {0}{1}{0} {0}{0}{1}
+            \drawthreedimplus{1}{0/2}{1/2} {1/2} {0}{1}{0} {0}{0}{1}
+            \drawthreedimplus{1}{1/2}{0/2} {1/2} {0}{1}{0} {0}{0}{1}
+            \drawthreedimplus{1}{0/2}{0/2} {1/2} {0}{1}{0} {0}{0}{1}
+            % Level 3
+            \drawthreedimplus{1}{3/4}{3/4} {1/4} {0}{1}{0} {0}{0}{1}
+            \drawthreedimplus{1}{2/4}{2/4} {1/4} {0}{1}{0} {0}{0}{1}
+            \drawthreedimplus{1}{2/4}{1/4} {1/4} {0}{1}{0} {0}{0}{1}
+            \drawthreedimplus{1}{1/4}{2/4} {1/4} {0}{1}{0} {0}{0}{1}
+            \drawthreedimplus{1}{1/4}{1/4} {1/4} {0}{1}{0} {0}{0}{1}
+            % Level 4
+            \drawthreedimplus{1}{3/8}{3/8} {1/8} {0}{1}{0} {0}{0}{1}
+            \drawthreedimplus{1}{4/8}{3/8} {1/8} {0}{1}{0} {0}{0}{1}
+            \drawthreedimplus{1}{4/8}{4/8} {1/8} {0}{1}{0} {0}{0}{1}
+        \end{tikzpicture}
+    %}
+\end{figure}
+
+\end{columns}
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Octrees -- För/Mot}
+%\begin{columns}[c]
+
+%\column{.6\textwidth}
+
+\begin{itemize}[<+(1)->]
+\proitem \emph{För}: Adaptiv gridförfining
+\conitem \emph{Mot}: Ostrukturerad grid
+\end{itemize}
+
+
+%\column{.5\textwidth}
+
+\begin{figure}
+\centering
+\includegraphics[width=\textwidth]{../Presentation/Images/Attribute/AMR/Amr}
+\end{figure}
+
+%\end{columns}
+\end{frame}

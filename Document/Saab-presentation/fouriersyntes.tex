@@ -1,0 +1,39 @@
+\subsection{Fouriersyntes}
+
+\begin{frame}
+\frametitle{Fouriersyntes}
+
+\begin{itemize}[<+(1)->]
+\item Vattnet modelleras som en höjdkarta: $h(\vec{x})$
+\item Simulering sker i frekvensdomänen: $H(\vec{k\,})$
+\item Uppdatering av vattenytan: $\displaystyle H_{n+1}(\vec{k\,}) = e^{i\Delta t\sqrt{gk}}*H_{n}(\vec{k\,})$
+%$\displaystyle \widetilde{h}(\vec{k\,}) \,*=\, (\cos(\sqrt{gk}) + i*\sin(\sqrt{gk}))
+\item Snabb invers fouriertransform för att få höjdkartan 
+    \begin{itemize}[<+(1)->]
+    \item Ignorera imaginär komponent
+    \end{itemize}
+\item $\text{FFT}^{-1} \Rightarrow O(n \log n)$
+\item Pseudokod för uppdatering: \texttt{\\
+for all k\_vec in H's domain \{         \\
+\ \ \ \ float k = k\_vec.length();      \\
+\ \ \ \ H(k\_vec) *=                    \\
+\ \ \ \ \ \ \ \ \ \ cos(dt*sqrt(g*k)) + \\
+\ \ \ \ \ \ \ \   i*sin(dt*sqrt(g*k)) ; \\
+\}                                      \\
+h = Re(invFFT(H));                      \\
+}
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Fouriersyntes, videos}
+
+\begin{itemize}
+\item \href{http://www.youtube.com/watch?v=sf6EVn2Zgk4}{MerCUDA, a real time GPU-based ocean simulator}
+\item \href{http://www.youtube.com/watch?v=Lj_V5-bTvK0}{Offshore rescue}
+\item \href{http://www.youtube.com/watch?v=3YW9WFwD-rI}{Real time stormy ocean 3D}
+\item \href{http://www.youtube.com/watch?v=ocHyTiHEphg}{Ship Simulator Extremes Gameplay}
+\end{itemize}
+
+\end{frame}

@@ -1,0 +1,14 @@
+# Compiled documents
+Presentation*.pdf
+Presentation.dvi
+Presentation.nav
+Presentation.ps
+Presentation.out.ps
+Presentation.snm
+
+# Compiled tikz images
+Presentation-figure*.pdf
+*.dpth
+
+# Miscellaneous files
+*.auxlock

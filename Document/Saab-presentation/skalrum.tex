@@ -1,0 +1,18 @@
+\subsection{Skalrum}
+
+\begin{frame}
+\frametitle{Skalrum}
+
+\begin{itemize}[<+(1)->]
+\item Vattnet modelleras som en höjdkarta: $h(\vec{x})$
+\item Olika våglängder sparas på olika griddar
+\item Gridupplösningen avgörs av kortaste våglängden
+    \begin{itemize}[<+(1)->]
+    \item T.ex. 1--2 m, 2--4 m, 4--8 m, o.s.v.
+    \end{itemize}
+\item Vågekvationen löses separat på varje grid
+\item Höjdkartan ges av summan av alla griddar
+\item Geometrisk summa $\Rightarrow O(n)$
+\end{itemize}
+
+\end{frame}

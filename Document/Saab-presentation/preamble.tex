@@ -1,0 +1,73 @@
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+% COMPILE SETTINGS
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+
+\listfiles % Lists package versions in the end of the log file
+
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+% PACKAGES
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+
+% Formatting
+%\usepackage[utf8]{inputenc} % Get å, ä, ö, Å, Ä, Ö
+
+% Fonts
+%\usepackage{lmodern}% http://ctan.org/pkg/lm, to make font shape `OT1/cmss/m/n' in size <4> available
+
+% Formatting
+\usepackage[resetfonts]{cmap} % Help reader with interpreting ligatures (if you use cmap, you must use it before fontenc)
+\usepackage[T1]{fontenc} % Gets rid of warning "No file OMScmtt.fd. on input line 10." but loads an ugly bitmap font
+\usepackage[utf8]{inputenc} % Get å, ä, ö, Å, Ä, Ö (NOTE! Use package before any input text comes!)
+%\usepackage{t1enc} % Gets rid of the warning "No file OMScmtt.fd. on input line 10.", but loads an ugly bitmap font.
+\usepackage{lmodern} % Replaces the default bitmap font used by t1enc and fontenc with the Latin Modern font
+%\usepackage{multicol} % An environment that enables a different number of columns, locally.
+\usepackage{courier} % Get monospaced font
+\usepackage{longtable,tabu} % Handles long tables and text wrapping, see http://ctan.uib.no/macros/latex/required/tools/longtable.pdf and  http://mirror.ctan.org/macros/latex/contrib/tabu/tabu.pdf
+\usepackage[section]{placeins} % Makes sure floats are placed after the section they are defined in starts
+%\usepackage{needspace} % Tried to fix an error with a page break right after a nonumsubsubsection heading. Didn't work.
+
+% Miscellaneous
+\usepackage{etoolbox}
+
+% Links
+\usepackage{hyperref}
+
+% Layout
+
+% Graphics
+\DeclareGraphicsExtensions{.pdf,.png,.jpg}
+\usepackage[footnotesize]{caption} % For captions
+%\usepackage{caption} % For subcaptions
+\usepackage{subcaption} % For subcaptions
+\usepackage{tikz} % For advanced graphics functions
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.7}
+
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+% SETTINGS
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+
+\hypersetup{
+    pdfborder = {0 0 0}, % Remove the frame around links
+    colorlinks=true, % Make links colored
+    citecolor=blue, %Used for links to the bibliography
+    linkcolor=black, %Used for internal links to labels
+    urlcolor=blue, %Used for external links
+}
+
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+% USER EDEFINED COMMANDS
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+
+% Lists
+\newrobustcmd*\proitem{\item[\color{green}\scalebox{0.9}{\textbullet}]}
+\newrobustcmd*\conitem{\item[\color{red}\scalebox{0.9}{\textbullet}]}
+
+% TikZ
+% Two-dimensional versions
+\newrobustcmd{\drawplus}[3]{;\draw (#1+#3/2,#2) -- (#1+#3/2,#2+#3); \draw (#1,#2+#3/2) -- (#1+#3,#2+#3/2);}
+\newrobustcmd{\squarepath}[1]{-- ++(#1,0) -- ++(0,#1) -- ++(-#1,0) -- cycle}
+% Three-dimensional versions
+\newrobustcmd{\drawthreedimplus}[4]{\def\cx{#1} \def\cy{#2} \def\cz{#3} \def\s{#4} \drawthreedimplushelper}
+\newrobustcmd{\drawthreedimplushelper}[6]{\draw (\cx+\s*#1/2,\cy+\s*#2/2,\cz+\s*#3/2) -- +(\s*#4,\s*#5,\s*#6); \draw (\cx+\s*#4/2,\cy+\s*#5/2,\cz+\s*#6/2) -- +(\s*#1,\s*#2,\s*#3);}
+\newrobustcmd{\threedimsquarepath}[7]{-- ++(#1*#2,#1*#3,#1*#4) -- ++(#1*#5,#1*#6,#1*#7) -- ++(-#1*#2,-#1*#3,-#1*#4) -- cycle}
