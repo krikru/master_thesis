@@ -1,11 +1,18 @@
 \subsection{Fouriersyntes}
 
+\newcounter{frequencydomainpauses}
+
 \begin{frame}
 \frametitle{Fouriersyntes}
+
+\begin{columns}[c]
+
+\column{.7\textwidth}
 
 \begin{itemize}[<+(1)->]
 \item Vattnet modelleras som en höjdkarta: $h(\vec{x})$
 \item Simulering sker i frekvensdomänen: $H(\vec{k\,})$
+    \setcounter{frequencydomainpauses}{\thebeamerpauses}
 \item Uppdatering av vattenytan: $\displaystyle H_{n+1}(\vec{k\,}) = e^{i\Delta t\sqrt{gk}}*H_{n}(\vec{k\,})$
 %$\displaystyle \widetilde{h}(\vec{k\,}) \,*=\, (\cos(\sqrt{gk}) + i*\sin(\sqrt{gk}))
 \item Snabb invers fouriertransform för att få höjdkartan 
@@ -13,16 +20,41 @@
     \item Ignorera imaginär komponent
     \end{itemize}
 \item $\text{FFT}^{-1} \Rightarrow O(n \log n)$
-\item Pseudokod för uppdatering: \texttt{\\
+\end{itemize}
+
+\column{.3\textwidth}
+
+\uncover<\thefrequencydomainpauses->{
+\begin{figure}
+\centering
+\includegraphics[width=\textwidth]{Images/Other/Fourier_transform}
+\end{figure}%\vfil{1em}
+\begin{figure}
+\centering
+\includegraphics[width=\textwidth]{Images/Other/spectrum_res_increment}
+\end{figure}
+
+}
+
+\end{columns}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Fouriersyntes, pseudokod}
+
+\begin{itemize}[<+(1)->]
+\item Uppdatering av vattenytan: $\displaystyle H_{n+1}(\vec{k\,}) = e^{i\Delta t\sqrt{gk}}*H_{n}(\vec{k\,})$
+\item Pseudokod: \texttt{\\
 for all k\_vec in H's domain \{         \\
 \ \ \ \ float k = k\_vec.length();      \\
-\ \ \ \ H(k\_vec) *=                    \\
-\ \ \ \ \ \ \ \ \ \ cos(dt*sqrt(g*k)) + \\
-\ \ \ \ \ \ \ \   i*sin(dt*sqrt(g*k)) ; \\
+\ \ \ \ float a = dt*sqrt(g*k);         \\
+\ \ \ \ H(k\_vec) *= cos(a) + i*sin(a); \\
 \}                                      \\
 h = Re(invFFT(H));                      \\
 }
 \end{itemize}
+
 
 \end{frame}
 
