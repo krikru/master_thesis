@@ -113,6 +113,8 @@ Numrerade:
 
 * På sidan 17 omnämns Lattice Boltzann method som en mindre kraftfull metod än FVM men i avsnittet innan verkar den ha vissa fördelar. Finns det någon ej omnämnd hake som gör den sämre än FVM?
 
+* (På sidan 33:) I formeln för antalet celler i simulationen på sidan 33 förklaras det inte vad parametern d innebär.
+
 * På sidan 55 nämns baklänges Runge Kutta. Hur skiljer den sig från vanlig Runge Kutta?
 
 Onumrerade:
@@ -121,8 +123,6 @@ Onumrerade:
 * Kort beskrivning av Hyper-C vore bra.
 
 * Vid presentationen av Navier-Stokes ekvation så vore det lämpligt om det framgick vilken som är advektionstermen då den refereras ofta till i arbetet.
-
-* I formeln för antalet celler i simulationen på sidan 33 förklaras det inte vad parametern d innebär.
 
 ---------------------------------------
 
