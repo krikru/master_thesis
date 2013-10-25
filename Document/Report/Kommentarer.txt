@@ -115,8 +115,6 @@ Numrerade:
 
 * (På sidan 33:) I formeln för antalet celler i simulationen på sidan 33 förklaras det inte vad parametern d innebär.
 
-* På sidan 55 nämns baklänges Runge Kutta. Hur skiljer den sig från vanlig Runge Kutta?
-
 Onumrerade:
 -----------
 
@@ -137,6 +135,8 @@ Gjorda:
 * På sidan 40, så står det att 7.4 är en improved approximation of A, men det bör nog vara of A*.
 
 * På sidan 42: Vad menas med att volymer förflyttas ("fluxed") mer än en gång?
+
+* På sidan 55 nämns baklänges Runge Kutta. Hur skiljer den sig från vanlig Runge Kutta?
 
 * På sidan 59: Spektralmetoden används ju för att låta vågorna påverkas av vinden. Adderas vågorna från det vindberoende vågspektrat ovanpå de ursprungliga vågorna?
 
