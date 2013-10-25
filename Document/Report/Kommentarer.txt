@@ -113,8 +113,6 @@ Numrerade:
 
 * På sidan 17 omnämns Lattice Boltzann method som en mindre kraftfull metod än FVM men i avsnittet innan verkar den ha vissa fördelar. Finns det någon ej omnämnd hake som gör den sämre än FVM?
 
-* (På sidan 33:) I formeln för antalet celler i simulationen på sidan 33 förklaras det inte vad parametern d innebär.
-
 Onumrerade:
 -----------
 
@@ -131,6 +129,8 @@ Gjorda:
 * På sidan 27 beskrivs Courantnumret som volymfraktionen av en cell som ersätts under ett tidssteg. Detta kan ju ha olika betydelse beroende på om man (1) ser hur mycket vatten som bytts ut kontinuerligt under tidssteget, eller om man (2) tittar på det diskret och endast jämför cellen vid tidsstegets slut med cellen vid tidsstegets början. Jag antar att det förstnämnda åsyftas då det senare i arbetet framgår att C > 1 är möjligt, men tycker att ett förtydligande vore bra.
 
 * På sidan 28 omnämns Preconditioned Conjugate Gradient method som att den kan vara direkt eller iterativ beroende på hur många iterationer som görs. Det låter motsägelsefullt.
+
+* (På sidan 33:) I formeln för antalet celler i simulationen på sidan 33 förklaras det inte vad parametern d innebär.
 
 * På sidan 40, så står det att 7.4 är en improved approximation of A, men det bör nog vara of A*.
 
