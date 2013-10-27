@@ -111,8 +111,6 @@ Inte gjorda än:
 Numrerade:
 ----------
 
-* På sidan 17 omnämns Lattice Boltzann method som en mindre kraftfull metod än FVM men i avsnittet innan verkar den ha vissa fördelar. Finns det någon ej omnämnd hake som gör den sämre än FVM?
-
 Onumrerade:
 -----------
 
@@ -123,6 +121,8 @@ Onumrerade:
 ---------------------------------------
 
 Gjorda:
+
+* På sidan 17 omnämns Lattice Boltzann method som en mindre kraftfull metod än FVM men i avsnittet innan verkar den ha vissa fördelar. Finns det någon ej omnämnd hake som gör den sämre än FVM?
 
 * På sidan 25: borde inte 4.28 följa direkt av att densiteten är konstant istället för att följa ur 4.26 och 4.27?
 
