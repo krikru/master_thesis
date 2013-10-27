@@ -188,7 +188,7 @@ where $\rho_n$ denotes the density in \timestep $n$.
 \section{Pressure calculation}
 \label{sec:pressure_calculation}
 
-Neither the Euler equations nor the Navier--Stokes equations specify how the pressure should be calculated, so when solving either of these two sets of equations one is essentially free to calculate the pressure in whichever way desired. Together with a \idxs{pressure}{model}, the two sets of equations come in two major forms which usually differs significantly in implementation and stability: The \indexs{compressible Navier--Stokes}{equations}\indexs{compressible Euler}{equations}\compressible forms and the \indexs{incompressible Navier--Stokes}{equations}\indexs{incompressible Euler}{equations}\incompressible forms. For \thisprojectwork, the compressible Euler equations are solved.
+Neither the Euler equations nor the Navier--Stokes equations specify how the pressure is updated, so when solving either of these two sets of equations one is essentially free to calculate the pressure in whichever way one desires. Together with a \idxs{pressure}{model}, the two sets of equations come in two major forms which usually differs significantly in implementation and stability: The \indexs{compressible Navier--Stokes}{equations}\indexs{compressible Euler}{equations}\compressible forms and the \indexs{incompressible Navier--Stokes}{equations}\indexs{incompressible Euler}{equations}\incompressible forms. For \thisprojectwork, the compressible Euler equations are solved.
 
 \subsection{Compressible flow}
 
