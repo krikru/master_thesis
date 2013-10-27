@@ -137,7 +137,9 @@ By \idxse{time}{discretization}{time discretizing} and rewriting \eqref{eq:navie
 \vec{u}_{n+1}  = \vec{u}_{n} + \Delta t\left(-\vec{u}_{n}\cdot\nabla\vec{u}_{n} \,+\, \frac{-\nabla p + \nabla\cdot\boldsymbol{\mathsf{T}} + \vec{f}}{\rho}\right),
 \end{equation}
 
-where $\vec{u}_{n}$ denotes the velocity in time step $n$. Using a method described e.g.\ by \citet{Losasso2004}, this \PDE can be solved in two steps. First, an auxiliary velocity $\vec{u}^*_n$ that ignores the pressure term is calculated, that is
+where $\vec{u}_{n}$ denotes the velocity in time step $n$. Here, $\vec{u}_{n}\cdot\nabla\vec{u}_{n}$ can be identified as the advection term for this \PDE and is responsible for transporting the field with the flow and giving waves a correct speed when the medium is moving.
+
+Using a method described e.g.\ by \citet{Losasso2004}, \eqref{eq:navier_stokes_time_discretized} can be solved in two steps. First, an auxiliary velocity $\vec{u}^*_n$ that ignores the pressure term is calculated, that is
 
 \begin{equation} \label{eq:auxiliary_velocity}
 \vec{u}^*_n  = \vec{u}_{n} + \Delta t\left(-\vec{u}_{n}\cdot\nabla\vec{u}_{n} \,+\, \frac{\nabla\cdot\boldsymbol{\mathsf{T}} + \vec{f}}{\rho}\right),

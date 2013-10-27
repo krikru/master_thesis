@@ -116,8 +116,6 @@ Onumrerade:
 
 * Kort beskrivning av Hyper-C vore bra.
 
-* Vid presentationen av Navier-Stokes ekvation så vore det lämpligt om det framgick vilken som är advektionstermen då den refereras ofta till i arbetet.
-
 ---------------------------------------
 
 Gjorda:
@@ -143,6 +141,8 @@ Gjorda:
 * På sidan 70 hänvisas det till figur A2 men det borde nog vara A3.
 
 * På sidan 85, borde inte total reflected spectral power vara total spectral power, alltså bestå av både bidrag som har transmitterats och reflekterats genom ytan? Båda delarna ingår ju i L_0.
+
+* Vid presentationen av Navier-Stokes ekvation så vore det lämpligt om det framgick vilken som är advektionstermen då den refereras ofta till i arbetet.
 
 ---------------------------------------
 
