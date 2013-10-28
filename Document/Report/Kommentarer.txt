@@ -45,8 +45,6 @@ Magnus
 
 Inte gjorda än:
 
-- Sec.3.1.2: Vill gärna se en referens till användandet av Boussinesq-ekvationen i simuleringar. Som jag förstår det så skiljer du på Boussinesq och "shallow water equations" (även om väl även Boussinesq i princip är en "shallow water equation"?), och den referensen du ger verkar inte gälla Boussinesq?
-
 - Sec. 3.4 saknas också en del referenser, till LBM, MAC och FEM. Du bör ge läsaren åtminstone någon referens på varje, där man kan läsa vidare om man är intresserad (kan iofs vara samma referens om det finns något standardverk?).
 
 - Vill även ha ytterligare referenser i Sec. 4.6:
@@ -96,6 +94,8 @@ Gjorda:
 - OK, jag ger dig ett stavfel till, bara för att det kan leda till en ödesdiger förväxling i Frankrike...;-): Rubriken i 4.6.3: "Poison"
 
 - I Sec. 2.1 vill jag ha en referens till var man kan finna någon härledning/motivering av (2.2). Dessutom definierar du inte \rho här.
+
+- Sec.3.1.2: Vill gärna se en referens till användandet av Boussinesq-ekvationen i simuleringar. Som jag förstår det så skiljer du på Boussinesq och "shallow water equations" (även om väl även Boussinesq i princip är en "shallow water equation"?), och den referensen du ger verkar inte gälla Boussinesq?
 
 ---------------------------------------
 
