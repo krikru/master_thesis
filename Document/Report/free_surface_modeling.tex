@@ -41,6 +41,8 @@ On the other hand, probably the greatest weakness with this method is that, afte
 
 \section{Volume of Fluid method}
 
+\label{sec:vof}
+
 Another very commonly used way of tracking interfaces between two immiscible fluids is the \VOF method, first described by \citet{Hirt1981}. For a non-discretized \PDE, the \VOF method uses a \idxs{phase}{fraction} $\alpha^*$ that is either $0$ or $1$ to designate the \phase. If the two phases are air and water, $\alpha^* = 0$ usually designates air and $\alpha^* = 1$ designates water, so that for a non-discretized \PDE, $\alpha^*$ can be expressed as
 
 \begin{equation} \label{eq:phase_fraction_continuous}

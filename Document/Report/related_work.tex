@@ -194,7 +194,7 @@ Except from the methods already covered in this chapter, there are a few other m
 
 We have the \LBM, which originates from \idxs{cellular}{automata} and which solves the \idxs{discrete}{Boltzmann equation}\index{equation!discrete Boltzmann|see{discrete Boltzmann equation}}. As stated by \citet{Thurey2006}, the \LBM approximates the Navier--Stokes equations without the need for an iterative solver by relaxing the incompressibility constraint.
 
-We have the \MAC method, which is a \FVM simulation in which many small, massless marker particles are initially homogeneously distributed in the fluid and then carried with the flow to mark the presence of fluid, which is an alternative to the \idxs{volume of fluid}{method}.
+We have the \MAC method, which was first described by \citet{Harlow1965}. The \MAC method is a \FVM simulation in which many small, massless marker particles are initially homogeneously distributed in the fluid, and then carried with the flow. The marker particles mark the presence of fluid, just like the $\alpha$ field does in the \idxs{volume of fluid}{method} (this method is described in \secref{sec:vof}).
 
 We have the \BEM in which the equations of motion are converted to \idxsp{integral}{equation}{s} and solved solely from the \boundaries, and has some interesting potential for the simulation of surface waves \citep{Grilli2009}. However, it can't handle breaking waves, and it is still too computationally expensive, so for that reason it is not a suitable method for real-time simulation of the surface of a large body of water.
 
