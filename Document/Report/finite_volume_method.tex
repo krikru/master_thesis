@@ -125,11 +125,27 @@ where $\Delta r_i$ is the grid spacing in $\normvec{e}_i$-direction. By combinin
 
 The \idxs{Navier--Stokes}{equations} are a statement of the conservation of momentum for a fluid. The \idxse{general form of the}{equations of fluid motion}{general form of the} equations reads
 
-\begin{equation} \label{eq:navier_stokes}
-\rho\left(\frac{\partial\vec{u}}{\partial t} + \vec{u}\cdot\nabla\vec{u}\right) = -\nabla p + \nabla\cdot\boldsymbol{\mathsf{T}} + \vec{f},
+\begin{equation} \label{eq:navier_stokes_material_derivative}
+\rho\frac{D\vec{u}}{Dt} = -\nabla p + \nabla\cdot\boldsymbol{\mathsf{T}} + \vec{f},
 \end{equation}
 
-where $\rho$ is the density, $\vec{u}$ is the velocity, $p$ is the pressure, $\devstressten$ is the \index{stress tensor|see{deviatoric stress tensor}}\idxs{deviatoric stress}{tensor}, which includes \idxsp{viscous}{force}{s}, and $\vec{f}$ is the external forces per unit volume. For the case of \idxs{Eulerian}{flow}, ${\boldsymbol{\mathsf{T}} = 0}$ so ${\nabla\cdot\boldsymbol{\mathsf{T}}}$ vanishes from the equation. It should be noted that these equations do not fully describe the behavior of the fluid; for example, they do not model the effects of \idxs{surface}{tension} or describe diffusion of various properties such as \temperature within the fluid, nor do they describe how to obtain any of the fields $p$, $\boldsymbol{\mathsf{T}}$ or $\vec{f}$ that are needed in order to solve the Navier--Stokes equations.
+where $\rho$ is the density, $\vec{u}$ is the velocity, $p$ is the pressure, $\devstressten$ is the \index{stress tensor|see{deviatoric stress tensor}}\idxs{deviatoric stress}{tensor}, which includes \idxsp{viscous}{force}{s}, and $\vec{f}$ is the external forces per unit volume. $Dx/Dt$, where $x$ is a scalar or vector field, denotes the material derivative of $x$ and is the time derivative of the property $x$ for a material element following the flow (thus having the velocity $\vec{u}$). The right hand side of this equation is the net force per unit volume acting on the fluid. By multiplying both of the sides with an arbitrary volume, it becomes apparent that the equation is just another form of Newton's second law.
+
+The material derivative of a scalar or vector field $x$ is defined as
+
+\begin{equation} \label{eq:material_derivative}
+\frac{Dx}{Dt} = \frac{\partial x}{\partial t} + \vec{u}\cdot\nabla x,
+\end{equation}
+
+and substituting this in \eqref{eq:navier_stokes_material_derivative} yields
+
+\begin{equation} \label{eq:navier_stokes}
+\rho\left(\frac{\partial\vec{u}}{\partial t} + \vec{u}\cdot\nabla\vec{u}\right) = -\nabla p + \nabla\cdot\boldsymbol{\mathsf{T}} + \vec{f}.
+\end{equation}
+
+For the case of \idxs{Eulerian}{flow}, ${\boldsymbol{\mathsf{T}} = 0}$, so ${\nabla\cdot\boldsymbol{\mathsf{T}}}$ vanishes from the equation. When the right hand side of \eqref{eq:material_derivative} appears in a \PDE, the term $\vec{u}\cdot\nabla x$ is generally referred to as the \emph{advection term} in the \PDE and is responsible for transporting the field with the flow. In \eqref{eq:navier_stokes}, this term is needed in order to give waves their correct speed when the medium is moving.
+
+It should be noted that these equations do not fully describe the behavior of the fluid; for example, they do not model the effects of \idxs{surface}{tension} or describe diffusion of various properties such as \temperature within the fluid, nor do they describe how to obtain any of the fields $p$, $\boldsymbol{\mathsf{T}}$ or $\vec{f}$ that are needed in order to solve the Navier--Stokes equations.
 
 By \idxse{time}{discretization}{time discretizing} and rewriting \eqref{eq:navier_stokes}, and choosing the value of $\vec{u}$ in \timestep $n$ and the value of $\partial\vec{u}/\partial t$ in \timestep $n+\frac{1}{2}$, thus introducing an $O(\Delta t)$ error where $\Delta t$ is the length of the time step, we obtain
 
@@ -137,9 +153,7 @@ By \idxse{time}{discretization}{time discretizing} and rewriting \eqref{eq:navie
 \vec{u}_{n+1}  = \vec{u}_{n} + \Delta t\left(-\vec{u}_{n}\cdot\nabla\vec{u}_{n} \,+\, \frac{-\nabla p + \nabla\cdot\boldsymbol{\mathsf{T}} + \vec{f}}{\rho}\right),
 \end{equation}
 
-where $\vec{u}_{n}$ denotes the velocity in time step $n$. Here, $\vec{u}_{n}\cdot\nabla\vec{u}_{n}$ can be identified as the advection term for this \PDE and is responsible for transporting the field with the flow and giving waves a correct speed when the medium is moving.
-
-Using a method described e.g.\ by \citet{Losasso2004}, \eqref{eq:navier_stokes_time_discretized} can be solved in two steps. First, an auxiliary velocity $\vec{u}^*_n$ that ignores the pressure term is calculated, that is
+where $\vec{u}_{n}$ denotes the velocity in time step $n$. Using a method described e.g.\ by \citet{Losasso2004}, \eqref{eq:navier_stokes_time_discretized} can be solved in two steps. First, an auxiliary velocity $\vec{u}^*_n$ that ignores the pressure term is calculated, that is
 
 \begin{equation} \label{eq:auxiliary_velocity}
 \vec{u}^*_n  = \vec{u}_{n} + \Delta t\left(-\vec{u}_{n}\cdot\nabla\vec{u}_{n} \,+\, \frac{\nabla\cdot\boldsymbol{\mathsf{T}} + \vec{f}}{\rho}\right),
