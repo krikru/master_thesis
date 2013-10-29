@@ -155,13 +155,9 @@ Jag
 
 Inte gjorda än:
 
-* Jag saknar exjobbsnummer
-
 * Jag saknar bibliotekssida
 
-* Jag ska lägga in en eller ett par screen-shots från mitt eget program på lämpligt ställe
-
-* Jag ska möjligtvis lägga in några fler bilder tagna från Wikipedia eller liknande för att illustrera och kompletera den jag har skrivit, eftersom jag har lite dåligt med bilder för nuvarande men ganska mycket text
+* Motverka radinskjutningar efter ekvationer (skriv "%" på de blanka raderna runt ekvationerna för att hindra nya stycken att bildas)
 
 ---------------------------------------
 
@@ -172,6 +168,12 @@ Gjorda:
 * Jag måste konvertera några referenser som är skrivna som länkar direkt till internetsidor (mest pdf:er) till referenser som hamnar längst bak bland de andra referenserna
 
 * Jag måste ge bekräftelse till de som har tagit/skapat bilderna jag använder i de fall de inte är publicerade i den publika domänen
+
+* Jag ska lägga in en eller ett par screen-shots från mitt eget program på lämpligt ställe
+
+* Jag ska möjligtvis lägga in några fler bilder tagna från Wikipedia eller liknande för att illustrera och kompletera den jag har skrivit, eftersom jag har lite dåligt med bilder för nuvarande men ganska mycket text
+
+* Jag saknar exjobbsnummer
 
 ---------------------------------------
 
