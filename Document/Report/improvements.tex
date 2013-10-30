@@ -135,10 +135,16 @@ In a work by \citet{Ihmsen2012}, "diffuse particles" are generated based on the 
 In turn, in the work by \citet{Takahashi2003}, it is concluded that there seems to be "few papers on handling of effects of splashes and foam with fluid", even though it mentions a paper by \citet{Premovze2001} as one of them, which it claims "makes crude approximations". However, this paper includes an empirical formula for the "fractional area of the wind-blown water surface that is covered by foam" (the time-averaged area of the foam divided by the total area of the water surface), $f$, that looks like
 %
 \begin{equation} \label{eq:fractional_area_naiive}
-f = 1.59 \times 10^{-5}U^{2.55}\exp[0.0861(T_w - T_a)],
+f(U,\, T_{\text{a}},\, T_{\text{w}}) = 1.59 \times 10^{-5}U^{2.55}\exp[0.0861(T_{\text{w}} - T_{\text{a}})],
 \end{equation}
 %
-where $U$ is the wind speed, $T_w$ is the water temperature and $T_a$ is the air temperature (this equation is in turn claimed to have been taken from a book by \citet{Monahan1986}). This kind of information has been obtained by doing \idxsp{satellite}{measurement}{s}. However, according to the \idxs{Beaufort}{scale}, crests don't begin to break until there is at least a gentle breeze, which starts at about \mbox{3.4 m/s}, while according to \eqref{eq:fractional_area_naiive}, there would always be some whitecaps area. As a remedy, one could subtract a small value ${f_0 = f(U=U_0,\, T_w-T_a=\Delta T_0)}$ (where, tentatively, ${U_0 = 3.4\text{ m/s}}$ and ${\Delta T_0 = 0}$) and create a corrected estimate $f^*$ of the fractional area, defined as
+where $U$ is the wind speed, $T_{\text{w}}$ is the water temperature and $T_{\text{a}}$ is the air temperature (this equation is in turn claimed to have been taken from a book by \citet{Monahan1986}). This kind of information has been obtained by doing \idxsp{satellite}{measurement}{s}. However, according to the \idxs{Beaufort}{scale}, crests don't begin to break until there is at least a gentle breeze, which starts at about \mbox{3.4 m/s}, while according to \eqref{eq:fractional_area_naiive}, there would always be some whitecaps area. As a remedy, one could subtract a small value
+%
+\begin{equation}
+f_0 = f(U_0,\, T_{\text{a}},\, T_{\text{a}}+\Delta T_0)
+\end{equation}
+%
+(where, tentatively, ${U_0 = 3.4\text{ m/s}}$ and ${\Delta T_0 = 0}$; note that $f_0$ is independent of the choice of $T_{\text{a}}$) and create a corrected estimate $f^*$ of the fractional area, defined as
 %
 \begin{equation}
 f^* = max(f-f_0,\,0).

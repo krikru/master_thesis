@@ -49,7 +49,7 @@ where $i$ is an index, $S_i$ is the \area of the cell face to the $i$th neighbor
 F_i \,=\, \frac{1}{S_i}\oiint_{S_i}(\vec{F}\cdot\normal)\,\opd S.
 \end{equation}
 %
-In the \FVM, cell faces are usually flat, which means that the normal vector $\normal$ is constant for a certain cell face $S_i$. \eqref{eq:fi_integral} can therefore be rewritten as
+Besides, cell faces in the \FVM are usually flat, which means that the normal vector $\normal$ is constant for a certain cell face $S_i$. \eqref{eq:fi_integral} can therefore be rewritten as
 %
 \begin{equation} \label{eq:fi_flat_cell_face}
 F_i \,=\, \frac{1}{S_i}\,\normal_i\cdot\oiint_{S_i}\vec{F}\,\opd S,
@@ -111,14 +111,12 @@ such that $r_i = \normvec{e}_i\cdot\vec{r}$. Since we are on an orthogonal grid,
 \end{cases}\ ,
 \end{equation}
 %
-%\begin{samepage}
 where $\Delta r_i$ is the grid spacing in $\normvec{e}_i$-direction. By combining \eqrefs \ref{eq:phi_derivative_final}, \ref{eq:gradient_orthogonal} and \ref{eq:neighboring_locations}, we can write the gradient of $\phi$ as
 %
 \begin{equation} \label{eq:gradient_final}
 \nabla\phi(\vec{r}) \,=\,
 \sum_{i=0}^{d-1}\frac{\phi(\vec{r}_{\normvec{e}_i^+})-\phi(\vec{r}_{\normvec{e}_i^-})}{2\,\Delta r_i}\,\normvec{e}_i.
 \end{equation}
-%\end{samepage}
 
 \section{Navier--Stokes equations}
 \label{sec:ns_equations}
@@ -242,7 +240,7 @@ and
 \nabla\cdot\vec{u} \,=\, 0.
 \end{equation}
 
-By combining \eqref{eq:density_divergence_incompressible_flow} and \eqref{eq:velocity_divergence_incompressible_flow}, \eqref{eq:continuity_equation_time_discretized} turns into just
+By using \eqref{eq:density_divergence_incompressible_flow} and \eqref{eq:velocity_divergence_incompressible_flow}, \eqref{eq:continuity_equation_time_discretized} turns into just
 %
 \begin{equation} \label{eq:continuity_equation_superfluous}
 {\rho_{n+1} \,=\, \rho_n}
@@ -288,7 +286,7 @@ which is underdetermined since $\vec{u}_{n+1}$ also is unknown. We can therefore
 \rho_{n+2} \,=\, 1.
 \end{equation}
 
-Perfect satisfaction of \eqref{eq:density_conservation} will not take place due to an imperfectly solved pressure equation, but it is still the goal and also what we are going to assume. By rearranging \eqref{eq:continuity_equation_time_discretized_postponed} and expanding the divergence, we obtain
+Perfect satisfaction of \eqref{eq:density_conservation} will not take place due to an imperfectly solved pressure equation, but is still the goal and also what we are going to assume. By rearranging \eqref{eq:continuity_equation_time_discretized_postponed} and expanding the divergence, we obtain
 %
 \begin{equation} \label{eq:velocity_divergence_density_conservation_premature}
 \nabla\cdot\vec{u}_{n+1} \,=\, \frac{1-\rho_{n+1}^{-1}\,\rho_{n+2}}{\Delta t} \,-\, \rho_{n+1}^{-1}\,\vec{u}_{n+1}\cdot\nabla\rho_{n+1}.
@@ -318,7 +316,9 @@ By rewriting \eqref{eq:velocity_update}, taking the divergence of both sides and
 \nabla^2 p_{n+1} \,=\, \frac{\nabla\cdot\vec{u}^*_n}{\Delta t} - \frac{\rho_{n+1} - 1}{\Delta t^2}.
 \end{equation}
 
-If, on the other hand the pressure equation is solved to a very high accuracy, or perfect \idxs{conservation of}{mass} is not something very important, \eqref{eq:pressure_poisson_equation_incompressible_flow} can equally well be used and then the \idxs{density}{field} becomes superfluous. For \simulation purposes, conservation of mass to this high degree is not important and hence the density field can be omitted. No matter if we need to conserve mass perfectly or not, we will obtain a \idxs{Poisson}{equation} for the \idxs{pressure}{field}, which can be written on the form
+If, on the other hand the pressure equation is solved to a very high accuracy, or perfect \idxs{conservation of}{mass} is not of especially important, \eqref{eq:pressure_poisson_equation_incompressible_flow} can equally well be used and then the \idxs{density}{field} becomes superfluous. For \simulation purposes, conservation of mass to this high degree is often not important and hence the density field can be omitted.
+
+No matter if we need to conserve mass perfectly or not, we will obtain a \idxs{Poisson}{equation} for the \idxs{pressure}{field}, which can be written on the form
 %
 \begin{equation} \label{eq:pressure_poisson_equation_general}
 \nabla^2 p \,=\, q(\vec{r}),

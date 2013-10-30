@@ -50,7 +50,12 @@ where $\tilde{A}$ is defined as
 and is an improved approximation of $A^*$. As can be seen, $\tilde{A}$ is the product of $A$ and a \polynomial of $A'A$, and the polynomial could if desired easily be extended with more terms as discussed in the end of this \levelname. Now, if we let this operator act on an \eigenfunction $\phi$, whose \eigenvalue is $\lambda$ when $A$ is acting on it and $\lambda' = \overline{\lambda}$ when $A'$ is acting on it, we see that 
 %
 \begin{equation}
-\tilde{A}\,\phi \,=\, A\,\left(\tfrac{3}{2} \,-\, \tfrac{1}{2}A'A\right)\,\phi \,=\, \lambda\,\left(\tfrac{3}{2} \,-\, \tfrac{1}{2}\overline{\lambda}\lambda\right)\,\phi \,=\, \frac{\lambda}{|\lambda|}\,\left(\tfrac{3}{2}\,|\lambda| \,-\, \tfrac{1}{2}|\lambda|^3\right)\,\phi \,=\, \tilde{\lambda}\,\phi,
+\renewcommand*{\arraystretch}{1.5}
+\begin{array}{c}
+\displaystyle
+\tilde{A}\,\phi \,=\, A\,\left(\tfrac{3}{2} \,-\, \tfrac{1}{2}A'A\right)\,\phi \,=\, \lambda\,\left(\tfrac{3}{2} \,-\, \tfrac{1}{2}\overline{\lambda}\lambda\right)\,\phi \\
+\displaystyle =\, \frac{\lambda}{|\lambda|}\,\left(\tfrac{3}{2}\,|\lambda| \,-\, \tfrac{1}{2}|\lambda|^3\right)\,\phi \,=\, \tilde{\lambda}\,\phi,
+\end{array}
 \end{equation}
 %
 where $\tilde{\lambda} = \lambda/|\lambda|\,\left(\tfrac{3}{2}\,|\lambda| \,-\, \tfrac{1}{2}|\lambda|^3\right)$ is the eigenvalue of $\phi$ when $\tilde{A}$ is acting on it. If $|\lambda|$ is written as
@@ -62,6 +67,7 @@ where $\tilde{\lambda} = \lambda/|\lambda|\,\left(\tfrac{3}{2}\,|\lambda| \,-\, 
 where $h$ is a measure of the amount of damping introduced by $A$, we see that
 %
 \begin{equation}
+\renewcommand*{\arraystretch}{1.5}
 \begin{array}{c}
 |\tilde{\lambda}| \,=\, \left|\tfrac{3}{2}\,|\lambda| \,-\, \tfrac{1}{2}|\lambda|^3\right| \,=\, \left|\tfrac{3}{2}\,(1-h) \,-\, \tfrac{1}{2}(1-h)^3\right| \\
 =\, \left|\tfrac{3}{2}-\tfrac{3}{2}\,h \,-\, \tfrac{1}{2} + \tfrac{3}{2}\,h - \tfrac{3}{2}\,h^2 + \tfrac{1}{2}\,h^3\right| \,=\, \left|1 - \displaystyle\frac{3\,h^2 - 1\,h^3}{2}\right|.
@@ -93,6 +99,7 @@ In contrast to smooth fields, the phase fraction field $\alpha$ is supposed to b
 \end{enumerate}
 
 \subsection{Geometric advection schemes}
+\label{sec:geometric_advection_schemes}
 
 \idxse{geometric}{advection scheme}{Geometric advection schemes} work by constructing a geometry for the surface from the discretized \idxs{phase fraction}{field}, and by using the generated geometry to calculate the fluxes between each adjacent pair of cells.
 

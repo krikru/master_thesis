@@ -190,7 +190,7 @@ and if we define $\Delta\vec{k}_{m,n}$ as a square that has the side $d$, is ali
 \fdfunc{\psi}_{\Delta\vec{k}_{m,n}}(\vec{k}) \,=\, \fdfunc{\psi}_{m,n}(\vec{k}).
 \end{equation}
 %
-It follows naturally to do the same thing with the real space representation, $\psi(\vec{r})$, and write it as
+It follows naturally to do the same thing with the real space representation, $\psi(\vec{r})$, and write that as
 %
 \begin{equation} \label{eq:eta_series_reduced}
 \psi(\vec{r}) \,=\, \sum_{m=-\infty}^{+\infty}\sum_{n=-\infty}^{+\infty} \psi_{m,n}(\vec{r}),
@@ -579,9 +579,8 @@ Here, $\rho'_{\text{r}}(\normvec{\omega}_{\text{i}},\, \normvec{\omega}_{\text{o
 \rho'_{\text{r}}(\normvec{\omega}_{\text{i}},\, \normvec{\omega}_{\text{o}}) \,=\, \frac{\opd L_{\text{o}}(\normvec{\omega}_{\text{o}})}{\opd E_{\text{i}}(\normvec{\omega}_{\text{i}})} \,=\, \frac{\opd L_{\text{o}}(\normvec{\omega}_{\text{o}})}{\opd \Phi_{\text{i}}(\normvec{\omega}_{\text{i}})A^{-1}},
 \end{equation}
 %
-where $E_{\text{i}}$ is the total spectral irradiance (or \idxs{incident}{power} per unit surface area and unit wavelength) of \index{light!wavelength}\idxe{wavelength!light}{wavelength} $\lambda$, coming from direction $\normvec{\omega}_{\text{i}}$, and $\Phi_{\text{i}}$ is the total spectral radiant flux (or \idxs{incident}{power} per unit wavelength) of \index{light!wavelength}\idxe{wavelength!light}{wavelength} $\lambda$, coming from direction $\normvec{\omega}_{\text{i}}$, and $A$ is the area of the surface element that is being illuminated. Note that when determining $A$, the surface is seen as perfectly flat, ignoring the microfacets.
-
-Here, $\opd L_{\text{o}}$ is the \infinitesimal increase in $L_{\text{o}}$, caused by $\opd E_{\text{i}}$ which is the \infinitesimal increase in $E_{\text{i}}$, or caused by $\opd \Phi_{\text{i}}$ which is the \infinitesimal increase in $\Phi_{\text{i}}$. \comment{, which in turn is caused by $\opd\normvec{\omega}_{\text{i}}$, which can be thought of as an infinitesimal increase in the solid angle of some light intake from which light can reach the surface}
+where $E_{\text{i}}$ is the total spectral irradiance (or \idxs{incident}{power} per unit surface area and unit wavelength) of \index{light!wavelength}\idxe{wavelength!light}{wavelength} $\lambda$, coming from direction $\normvec{\omega}_{\text{i}}$, and $\Phi_{\text{i}}$ is the total spectral radiant flux (or \idxs{incident}{power} per unit wavelength) of \index{light!wavelength}\idxe{wavelength!light}{wavelength} $\lambda$, coming from direction $\normvec{\omega}_{\text{i}}$. $\opd L_{\text{o}}$ is the \infinitesimal increase in $L_{\text{o}}$, caused by $\opd E_{\text{i}}$ which is the \infinitesimal increase in $E_{\text{i}}$, or caused by $\opd \Phi_{\text{i}}$ which is the \infinitesimal increase in $\Phi_{\text{i}}$. % \comment{, which in turn is caused by $\opd\normvec{\omega}_{\text{i}}$, which can be thought of as an infinitesimal increase in the solid angle of some light intake from which light can reach the surface}
+$A$ is the area of the surface element that is being illuminated. Note that when determining $A$, the surface is seen as perfectly flat, thus ignoring the microfacets.
 
 Since \radiance is power per unit projected-area-perpendicular-to-a-ray and unit solid angle, we can rewrite $L_{\text{o}}$ as
 %
@@ -770,7 +769,7 @@ By realizing that the normal of the a \microfacet, $\normvec{n}^*$, needs to equ
 \opd \anormvec{h} \,=\, \opd\nabla\eta^*
 \end{equation}
 %
-(note that most infinitesimal quantities used in this appendix are two-dimensional in their nature; in this case the minus sign in \eqref{eq:eta_anti_normal} is squared and vanishes). By applying this to \eqref{eq:gradient_restricted_reflected_flux_pre_incident_flux_per_unit_gradient_squared}, we can rewrite  \eqref{eq:brdf_from_ratio_between_fluxes}
+(note that most infinitesimal quantities used in this appendix are two-dimen\-sional in their nature; in this case the minus sign in \eqref{eq:eta_anti_normal} is squared and vanishes). By applying this to \eqref{eq:gradient_restricted_reflected_flux_pre_incident_flux_per_unit_gradient_squared}, we can rewrite  \eqref{eq:brdf_from_ratio_between_fluxes}
 %
 \begin{equation}  \label{eq:brdf_from_eta_gradient_distribution_cos_thetao_and_derivative}
 \rho'_{\text{r}}(\normvec{\omega}_{\text{i}},\, \normvec{\omega}_{\text{o}}) \,=\, (\cos\theta_{\text{o}})^{-1}\, \frac{\opd\anormvec{h}}{\opd\normvec{\omega}_{\text{o}}}\,f(\nabla\eta^*(\vec{r}))\,\frac{\normvec{\omega}_{\text{i}}\cdot\anormvec{h}}{\normvec{\omega}_{\text{i}}\cdot\anormvec{n}}\,R_{\normvec{n}^*\!,x}(\normvec{\omega}_{\text{o}}).
@@ -788,7 +787,7 @@ we can express $\cos(\theta_{\text{o}})$ as
 \cos(\theta_{\text{o}}) \,=\, \normvec{\omega}_{\text{o}}\cdot\normvec{n} \,=\, \normvec{\omega}_{\text{o}}\cdot\frac{\anormvec{n}}{|\anormvec{n}|},
 \end{equation}
 %
-\eqref{eq:brdf_from_eta_gradient_distribution_cos_thetao_and_derivative} can be rewritten further as
+and \eqref{eq:brdf_from_eta_gradient_distribution_cos_thetao_and_derivative} can be rewritten further as
 %
 \begin{equation}  \label{eq:brdf_from_eta_gradient_distribution_derivative}
 \rho'_{\text{r}}(\normvec{\omega}_{\text{i}},\, \normvec{\omega}_{\text{o}}) \,=\, |\anormvec{n}|\,\frac{\opd\anormvec{h}}{\opd\normvec{\omega}_{\text{o}}}\,f(\nabla\eta^*(\vec{r}))\,\frac{\normvec{\omega}_{\text{i}}\cdot\anormvec{h}}{(\normvec{\omega}_{\text{i}}\cdot\anormvec{n})(\normvec{\omega}_{\text{o}}\cdot\anormvec{n})}\,R_{\normvec{n}^*\!,x}(\normvec{\omega}_{\text{o}}).
@@ -1007,7 +1006,7 @@ L_{\text{o}}(\normvec{\omega}_{\text{o}}) \,= \\
 \end{array}
 \end{equation}
 %
-which is a general equation that can be used to render the water surface as long as the integral over $\Omega_{\text{r}}$ can be calculated efficiently.
+which is a generic equation that can be used to render the water surface as long as the integral over $\Omega_{\text{r}}$ can be calculated efficiently.
 
 For a \idxs{point}{light source} (a light source located at a certain location but with no spatial extension) with the total \idxs{spectral}{radiant intensity}\index{intensity!spectral radiant|see{spectral radiant intensity}} (power per unit solid angle and unit wavelength) $I$, located at the distance $d$ in the direction $\normvec{\omega}_{\text{s}}$ above the water surface in such a way that $\omega_{\text{s}} \in \Omega_{\text{r}}$, the incident spectral radiance $L_{\text{i}}(\normvec{\omega}_{\text{i}})$ turns into $\delta_{\normvec{\omega}_{\text{i}},\normvec{\omega}_{\text{s}}}\,I/d^2$ and the total spectral radiance directed outward along direction $\normvec{\omega}_{\text{o}}$ will be
 %

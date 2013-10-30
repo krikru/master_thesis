@@ -65,7 +65,7 @@ Let's define the \idxse{vector}{operator}{vector} and \idxsp{scalar}{operator}{s
 %
 \begin{samepage}%
 \begin{equation} \label{eq:opkvec}
-\vop{k} \,=\, -i\,\nabla
+\phantom{and\quad}\vop{k} \,=\, -i\,\nabla\quad\text{and}
 \end{equation}
 %
 \begin{equation} \label{eq:opk2}
@@ -77,7 +77,7 @@ and we see that
 %
 \begin{samepage}%
 \begin{equation} \label{eq:opkvec1action}
-\phantom{and}\quad\vop{k}\,\eta \,=\, \vec{k}\,\eta,\quad\text{and}
+\phantom{and\quad}\vop{k}\,\eta \,=\, \vec{k}\,\eta\quad\text{and}
 %\vop{k}\,\eta \,=\, \vec{k}\,\eta,
 \end{equation}
 %
@@ -149,13 +149,13 @@ where $\mathcal{F}$ denotes the \idxs{non-unitary}{Fourier transform} and $\cdot
 \mathcal{F}\{f\}(\vec{k})\ \mathcal{F}\{\eta\}(\vec{k},\,t) \,=\, \fdfunc{K}(\vec{k}\,h)\ \mathcal{F}\{\eta\}(\vec{k},\,t)
 \end{equation}
 %
-which can be rewritten as
+which by dividing by $\mathcal{F}\{\eta\}(\vec{k},\,t)$ on both sides is reduced to
 %
 \begin{equation} \label{eq:ffourier}
-\mathcal{F}\{f\}(\vec{k}) \,=\, \fdfunc{K}(\vec{k}\,h)
+\mathcal{F}\{f\}(\vec{k}) \,=\, \fdfunc{K}(\vec{k}\,h).
 \end{equation}
 %
-by canceling out $\mathcal{F}\{\eta\}(\vec{k},\,t)$ on both sides. For scaling of a function with a real, non-zero number $a$, the non-unitary Fourier transform has the following property:
+For scaling of a function with a real, non-zero number $a$, the non-unitary Fourier transform has the following property:
 %
 \begin{equation} \label{eq:fourierscaling}
 \mathcal{F}\{h\}(\vec{\xi}) \,=\, \frac{1}{|a|^d}\,\mathcal{F}\{f\}\left(\frac{\vec{\xi}}{a}\right)
@@ -163,7 +163,9 @@ by canceling out $\mathcal{F}\{\eta\}(\vec{k},\,t)$ on both sides. For scaling o
 h(\vec{x}) \,=\, f(a\vec{x})\ \forall\ \vec{x},
 \end{equation}
 %
-where $d$ is the number of dimensions and $\vec{x}$ is a vector with dimensionless values in the \idxs{spatial}{domain}. Let's define the function
+where $d$ is the number of dimensions and $\vec{x}$ is a vector with dimensionless values in the \idxs{spatial}{domain}.
+
+Let's define the function
 %
 \begin{equation} \label{eq:ftokernel}
 K(\vec{x}) \,=\, h^2\,f(h\,\vec{x}).
@@ -297,7 +299,7 @@ By using the effective water depth $h_e$, and $\sop{C}_{h_e}$, which is the most
 \sop{\omega}^2\,\eta \,=\, h\,\left(g\,+\,\frac{\gamma}{\rho}\,\sop{k^2}\right)\,\sop{k^2}\,\sop{C}_{h_e}\,\eta
 \end{equation}
 %
-which still contains $h$ at one place. Using \eqref{eq:aofh}, we can substitute $h$ for $a_{h_e}^{-1/2}$ and obtain
+which still contains $h$ at one place. Using \eqref{eq:aofh}, we can substitute $a_{h_e}^{-1/2}$ for $h$ and obtain
 %
 \begin{equation} \label{eq:diffeqcomplete}
 \sop{\omega}^2\,\eta \,=\, a_{h_e}^{-1/2}\,\left(g\,+\,\frac{\gamma}{\rho}\,\sop{k^2}\right)\,\sop{k^2}\,\sop{C}_{h_e}\,\eta
