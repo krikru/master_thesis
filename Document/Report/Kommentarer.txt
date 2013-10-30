@@ -63,8 +63,6 @@ SOR på samma sida.
 
 - Sec. B.1.1: Tycker att definitionen av multivariate normal distribution (B.36) hellre borde kommit två sidor tidigare, efter (B.25).
 
-- s.94, under (B.97): Är inte det du kallar "Kronecker delta" snarare ett "Dirac delta"?
-
 + Kommentarer skrivna direkt i blocket.
 
 ---------------------------------------
@@ -96,6 +94,8 @@ Gjorda:
 - I Sec. 2.1 vill jag ha en referens till var man kan finna någon härledning/motivering av (2.2). Dessutom definierar du inte \rho här.
 
 - Sec.3.1.2: Vill gärna se en referens till användandet av Boussinesq-ekvationen i simuleringar. Som jag förstår det så skiljer du på Boussinesq och "shallow water equations" (även om väl även Boussinesq i princip är en "shallow water equation"?), och den referensen du ger verkar inte gälla Boussinesq?
+
+- s.94, under (B.97): Är inte det du kallar "Kronecker delta" snarare ett "Dirac delta"?
 
 ---------------------------------------
 

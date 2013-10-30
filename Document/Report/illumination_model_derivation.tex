@@ -990,19 +990,19 @@ If we \assume that the spectral radiance varies very slowly between different di
 \renewcommand*{\arraystretch}{2}
 \begin{array}{c}
 \displaystyle \int_{\Omega_{\text{t}}} \rho'_{\text{t}}(\normvec{\omega}_{\text{i}},\, \normvec{\omega}_{\text{o}})\, L_{\text{i}}(\normvec{\omega}_{\text{i}})\, (\normvec{\omega}_{\text{i}}\,\cdot\,(-\normvec{n}))\, \opd \normvec{\omega}_{\text{i}} \\
-\displaystyle =\, \int_{\Omega_{\text{t}}} \frac{\delta_{\normvec{\omega}_{\text{i}},\normvec{\omega}_{\text{i},\normvec{n},\text{t}}(\normvec{\omega}_{\text{o}})}}{\normvec{\omega}_{\text{i}}\,\cdot\,(-\normvec{n})}\,T_{\normvec{n}^*\!,x}(\normvec{\omega}_{\text{o}})\, L_{\text{i}}(\normvec{\omega}_{\text{i}})\, (\normvec{\omega}_{\text{i}}\,\cdot\,(-\normvec{n}))\, \opd \normvec{\omega}_{\text{i}} \\
-\displaystyle =\, T_{\normvec{n},x}(\normvec{\omega}_{\text{i},\normvec{n},\text{t}}(\normvec{\omega}_{\text{o}}))\, L_{\text{i}}(\normvec{\omega}_{\text{i},\normvec{n},\text{t}}(\normvec{\omega}_{\text{o}}))
+\displaystyle =\, \int_{\Omega_{\text{t}}} \frac{\delta(\normvec{\omega}_{\text{i}},\,\normvec{\omega}_{\text{i},\normvec{n},\text{t}}(\normvec{\omega}_{\text{o}}))}{\normvec{\omega}_{\text{i}}\,\cdot\,(-\normvec{n})}\,T_{\normvec{n},x}(\normvec{\omega}_{\text{o}})\, L_{\text{i}}(\normvec{\omega}_{\text{i}})\, (\normvec{\omega}_{\text{i}}\,\cdot\,(-\normvec{n}))\, \opd \normvec{\omega}_{\text{i}} \\
+\displaystyle =\, T_{\normvec{n},x}(\normvec{\omega}_{\text{o}})\, L_{\text{i}}(\normvec{\omega}_{\text{i},\normvec{n},\text{t}}(\normvec{\omega}_{\text{o}}))
 \end{array}
 \end{equation}
 %
-where $\delta$ is the \idxs{Kronecker}{delta} for which any integral $\int_{\Omega}\delta_{\normvec{\omega}_1,\normvec{\omega}_2}\opd \normvec{\omega}_2$ is 1 if $\normvec{\omega}_1 \in\, \Omega$ and 0 otherwise, $\normvec{\omega}_{\text{i},\normvec{n},\text{t}}(\normvec{\omega}_{\text{o}})$ is the direction from which incoming light will be transmitted in the direction $\normvec{\omega}_{\text{o}}$, and $T_{\normvec{n}^*\!,x}(\normvec{\omega}_{\text{o}})$ is the \idxs{transmission}{coefficient} which is predicted by the \idxs{Fresnel}{equations}, for a ray being transmitted in the direction $\normvec{\omega}_{\text{o}}$, for a surface with the surface normal $\normvec{n}^*$ and for the light polarization $x$. Using this \approximation, we simplify \eqref{eq:rendering_equation_reduced_rhot} to
+where $\delta$ is the \idxs{Dirac}{delta function} for which any integral $\int_{\Omega}\delta(\normvec{\omega}_1,\normvec{\omega}_2)\opd \normvec{\omega}_2$ is 1 if $\normvec{\omega}_1 \in\, \Omega$ and 0 otherwise, $\normvec{\omega}_{\text{i},\normvec{n},\text{t}}(\normvec{\omega}_{\text{o}})$ is the direction from which incoming light will be transmitted in the direction $\normvec{\omega}_{\text{o}}$, and $T_{\normvec{n},x}(\normvec{\omega}_{\text{o}})$ is the \idxs{transmission}{coefficient} which is predicted by the \idxs{Fresnel}{equations}, for a ray being transmitted in the direction $\normvec{\omega}_{\text{o}}$, for a surface with the surface normal $\normvec{n}$ and for the light polarization $x$. Using this \approximation, we simplify \eqref{eq:rendering_equation_reduced_rhot} to
 %
 \begin{equation} \label{eq:rendering_equation_simplified}
 \renewcommand*{\arraystretch}{2}
 \begin{array}{cl}
 L_{\text{o}}(\normvec{\omega}_{\text{o}}) \,= \\
 \displaystyle \frac{1}{4}\int_{\Omega_{\text{r}}} \frac{\anormvec{h}^4}{\normvec{\omega}_{\text{o}}\cdot\anormvec{n}}\,f(\nabla\eta^*(\vec{r}))\,R_{\normvec{n}^*\!,x}(\normvec{\omega}_{\text{o}})\, L_{\text{i}}(\normvec{\omega}_{\text{i}})\,\opd \normvec{\omega}_{\text{i}} \ + \\[1ex]
-\displaystyle T_{\normvec{n},x}(\normvec{\omega}_{\text{i},\normvec{n},\text{t}}(\normvec{\omega}_{\text{o}}))\, L_{\text{i}}(\normvec{\omega}_{\text{i},\normvec{n},\text{t}}(\normvec{\omega}_{\text{o}}))
+\displaystyle T_{\normvec{n},x}(\normvec{\omega}_{\text{o}})\, L_{\text{i}}(\normvec{\omega}_{\text{i},\normvec{n},\text{t}}(\normvec{\omega}_{\text{o}}))
 \end{array}
 \end{equation}
 %
