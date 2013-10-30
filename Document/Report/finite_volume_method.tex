@@ -26,94 +26,94 @@ In simulations where the viscous force plays a big role, the Euler equations are
 \section{Divergence calculation}
 
 In the \PDEs, in order to calculate the \divergence of a \idxs{vector}{field}, the \idxs{divergence}{theorem} is used and a \idxs{volume}{integral} of the divergence of the field is converted to a \idxs{surface}{integral} of the vector field itself. The divergence theorem states that
-
+%
 \begin{equation} \label{eq:divergence_theorem}
 \iiint_V\nabla\cdot\vec{F}(\vec{r'})\,\opd V \,=\, \oiint_S(\vec{F}(\vec{r'})\cdot\normal)\,\opd S
 \end{equation}
-
+%
 where $\vec{F}$ is a vector field, $V$ is a \idxs{control}{volume}, which in our case is the cell surrounding the point $\vec{r}$ in which the divergence is to be calculated, $S$ is the surface of $V$, with \idxs{normal}{vector} pointing outwards, $\opd V$ and $\opd S$ are \infinitesimal elements in $V$ and $S$ respectively, $\normal$ is the normal of $\opd S$ and $\vec{r'}$ is the position of $\opd V$ and $\opd S$ respectively. The divergence of $\vec{F}(\vec{r})$ is then \approximated as the \average divergence of $\vec{F}$ in $V$ and calculated as
-
+%
 \begin{equation} \label{eq:divergence_surface_integral}
 \nabla\cdot\vec{F}(\vec{r}) \,=\, \frac{1}{V}\,\oiint_S(\vec{F}\cdot\normal)\,\opd S.
 \end{equation}
 
 In the \FVM, the surface of a cell consists of \idxsp{cell}{face}{s}, $S_i$, between the cell itself and \neighboring cells, so \eqref{eq:divergence_surface_integral} can be rewritten as
-
+%
 \begin{equation} \label{eq:divergence_cell_face_sum}
 \nabla\cdot\vec{F}(\vec{r})\ =\ \frac{1}{V}\,\sum_{S_i} \oiint_{S_i}(\vec{F}\cdot\normal)\,\opd S\ =\ \frac{1}{V}\,\sum_{S_i} F_i\,S_i,
 \end{equation}
-
+%
 where $i$ is an index, $S_i$ is the \area of the cell face to the $i$th neighbor cell and $F_i$ is the average \idxs{field}{flux} through $S_i$, defined as
-
+%
 \begin{equation} \label{eq:fi_integral}
 F_i \,=\, \frac{1}{S_i}\oiint_{S_i}(\vec{F}\cdot\normal)\,\opd S.
 \end{equation}
-
+%
 In the \FVM, cell faces are usually flat, which means that the normal vector $\normal$ is constant for a certain cell face $S_i$. \eqref{eq:fi_integral} can therefore be rewritten as
-
+%
 \begin{equation} \label{eq:fi_flat_cell_face}
 F_i \,=\, \frac{1}{S_i}\,\normal_i\cdot\oiint_{S_i}\vec{F}\,\opd S,
 \end{equation}
-
+%
 where $\normal_i$ is the normal of $S_i$. $F_i$, which is now just the $\normal_i$-component of the average value of the field on the cell face $S_i$, is on a staggered grid stored directly on $S_i$.
 
 \section{Gradient calculation}
 
 For \idxsp{orthogonal}{grid}{s}, the \gradient of a \idxs{scalar}{field} is calculated in a similar way, but in this case the \idxs{gradient}{theorem} is used. The gradient theorem states that
-
+%
 \begin{equation} \label{eq:gradient_theorem}
 \phi(\vec{r}_2)-\phi(\vec{r}_1) \,=\, \int_\gammapath\nabla\phi(\vec{r'})\cdot \opd\vec{r'},
 \end{equation}
-
+%
 where $\phi$ is a scalar field, \textgammapath is a path within $\phi$'s domain, connecting the vectors $\vec{r}_1$ and $\vec{r}_2$ and $\int_\gammapath$ denotes a \idxs{path}{integral} along \textgammapath. By dividing both sides of \eqref{eq:gradient_theorem} with \mbox{$\Delta r = |\vec{r}_2\,-\,\vec{r}_1|$}, we obtain
-
+%
 \begin{equation} \label{eq:gradient_theorem_divided}
 \frac{\phi(\vec{r}_2)-\phi(\vec{r}_1)}{\Delta r} \,=\, \frac{\int_\gammapath\nabla\phi(\vec{r'})\cdot \opd\vec{r'}}{\Delta r} \,=\, \frac{\int_\gammapath\nabla\phi(\vec{r'})\cdot\frac{\Delta\vec{r}}{|\Delta\vec{r}|} \opd r'}{\Delta r}
 \end{equation}
-
+%
 where $\Delta\vec{r} = \vec{r}_2 -  \vec{r}_1$ and
-
+%
 \begin{equation}
 \nabla\phi(\vec{r})\cdot\frac{\Delta\vec{r}}{|\Delta\vec{r}|} = \phi'_{\Delta\vec{r}}(\vec{r}),
 \end{equation}
-
+%
 where $\phi'_{\vec{v}}$ is the \derivative of $\phi$ in the direction of $\vec{v}$. By assuming the simplest path possible from $r_1$ to $r_2$, which is just a line segment, $\Delta r$ can be written as
-
+%
 \begin{equation}
 \Delta r = \int_\gammapath\opd r'
 \end{equation}
-
+%
 and \eqref{eq:gradient_theorem_divided} becomes
-
+%
 \begin{equation} \label{eq:phi_derivative_integral}
 \frac{\phi(\vec{r}_2)-\phi(\vec{r}_1)}{\Delta r} \,=\, \frac{\int_\gammapath\phi'_{\Delta\vec{r}}(\vec{r'})\opd r'}{\int_\gammapath\opd r'}
 \end{equation}
-
+%
 where the right hand side can be identified as the \average value of $\phi'_{\Delta\vec{r}}(\vec{r})$ along the path \textgammapath. Provided that $\vec{r}$ is close enough to \textgammapath (preferably equal to \mbox{$(\vec{r}_1\,+\,\vec{r}_2)/2$}), $\phi'_{\Delta\vec{r}}(\vec{r})$ can be \approximated as this average and calculated as
-
+%
 \begin{equation} \label{eq:phi_derivative_final}
 \phi'_{\Delta\vec{r}}(\vec{r}) \,=\, \frac{\phi(\vec{r}_2)-\phi(\vec{r}_1)}{\Delta r}.
 \end{equation}
 
 The gradient of a scalar field can be written as
-
+%
 \begin{equation} \label{eq:gradient_orthogonal}
 \nabla\phi(\vec{r}) \,=\, \left(\sum_{i=0}^{d-1}\frac{\partial}{\partial r_i}\,\normvec{e}_i\right) \phi(\vec{r}) \,=\, \sum_{i=0}^{d-1}\phi'_{\normvec{e}_i}(\vec{r})\,\normvec{e}_i,
 \end{equation}
-
+%
 where $\{\normvec{e}_i\}$ is an \idxs{orthonormal}{basis} for $\mathbb{R}^d$, where $d$ is the number of \dimensions and $i = 0,\,1,\,...\,,d-1$; $\normvec{e}_i$ is a \idxs{base}{vector} in $\{\normvec{e}_i\}$ that is aligned with the $i$th \idxs{grid}{axis} and $r_i$ is the $\normvec{e}_i$ component of $\vec{r}$,
 such that $r_i = \normvec{e}_i\cdot\vec{r}$. Since we are on an orthogonal grid, we can assume that the location $\vec{r}$ in which the gradient is to be calculated will be the center (or corner) of a cell with $2d$ neighboring cell centers (or cell corners):
-
+%
 \begin{equation} \label{eq:neighboring_locations}
 \begin{cases}
 \vec{r}_{\normvec{e}_i^-} \,=\, \vec{r} \,-\, \Delta r_i\,\normvec{e}_i\\[1ex]
 \vec{r}_{\normvec{e}_i^+} \,=\, \vec{r} \,+\, \Delta r_i\,\normvec{e}_i\\[1ex]
 \end{cases}\ ,
 \end{equation}
-
+%
 %\begin{samepage}
 where $\Delta r_i$ is the grid spacing in $\normvec{e}_i$-direction. By combining \eqrefs \ref{eq:phi_derivative_final}, \ref{eq:gradient_orthogonal} and \ref{eq:neighboring_locations}, we can write the gradient of $\phi$ as
-
+%
 \begin{equation} \label{eq:gradient_final}
 \nabla\phi(\vec{r}) \,=\,
 \sum_{i=0}^{d-1}\frac{\phi(\vec{r}_{\normvec{e}_i^+})-\phi(\vec{r}_{\normvec{e}_i^-})}{2\,\Delta r_i}\,\normvec{e}_i.
@@ -124,21 +124,21 @@ where $\Delta r_i$ is the grid spacing in $\normvec{e}_i$-direction. By combinin
 \label{sec:ns_equations}
 
 The \idxs{Navier--Stokes}{equations} are a statement of the conservation of momentum for a fluid. The \idxse{general form of the}{equations of fluid motion}{general form of the} equations reads
-
+%
 \begin{equation} \label{eq:navier_stokes_material_derivative}
 \rho\frac{D\vec{u}}{Dt} = -\nabla p + \nabla\cdot\boldsymbol{\mathsf{T}} + \vec{f},
 \end{equation}
-
+%
 where $\rho$ is the density, $\vec{u}$ is the velocity, $p$ is the pressure, $\devstressten$ is the \index{stress tensor|see{deviatoric stress tensor}}\idxs{deviatoric stress}{tensor}, which includes \idxsp{viscous}{force}{s}, and $\vec{f}$ is the external forces per unit volume. $Dx/Dt$, where $x$ is a scalar or vector field, denotes the material derivative of $x$ and is the time derivative of the property $x$ for a material element following the flow (thus having the velocity $\vec{u}$). The right hand side of this equation is the net force per unit volume acting on the fluid. By multiplying both of the sides with an arbitrary volume, it becomes apparent that the equation is just another form of Newton's second law.
 
 The material derivative of a scalar or vector field $x$ is defined as
-
+%
 \begin{equation} \label{eq:material_derivative}
 \frac{Dx}{Dt} = \frac{\partial x}{\partial t} + \vec{u}\cdot\nabla x,
 \end{equation}
-
+%
 and substituting this in \eqref{eq:navier_stokes_material_derivative} yields
-
+%
 \begin{equation} \label{eq:navier_stokes}
 \rho\left(\frac{\partial\vec{u}}{\partial t} + \vec{u}\cdot\nabla\vec{u}\right) = -\nabla p + \nabla\cdot\boldsymbol{\mathsf{T}} + \vec{f}.
 \end{equation}
@@ -148,57 +148,57 @@ For the case of \idxs{Eulerian}{flow}, ${\boldsymbol{\mathsf{T}} = 0}$, so ${\na
 It should be noted that these equations do not fully describe the behavior of the fluid; for example, they do not model the effects of \idxs{surface}{tension} or describe diffusion of various properties such as \temperature within the fluid, nor do they describe how to obtain any of the fields $p$, $\boldsymbol{\mathsf{T}}$ or $\vec{f}$ that are needed in order to solve the Navier--Stokes equations.
 
 By \idxse{time}{discretization}{time discretizing} and rewriting \eqref{eq:navier_stokes}, and choosing the value of $\vec{u}$ in \timestep $n$ and the value of $\partial\vec{u}/\partial t$ in \timestep $n+\frac{1}{2}$, thus introducing an $O(\Delta t)$ error where $\Delta t$ is the length of the time step, we obtain
-
+%
 \begin{equation} \label{eq:navier_stokes_time_discretized}
 \vec{u}_{n+1}  = \vec{u}_{n} + \Delta t\left(-\vec{u}_{n}\cdot\nabla\vec{u}_{n} \,+\, \frac{-\nabla p + \nabla\cdot\boldsymbol{\mathsf{T}} + \vec{f}}{\rho}\right),
 \end{equation}
-
+%
 where $\vec{u}_{n}$ denotes the velocity in time step $n$. Using a method described e.g.\ by \citet{Losasso2004}, \eqref{eq:navier_stokes_time_discretized} can be solved in two steps. First, an auxiliary velocity $\vec{u}^*_n$ that ignores the pressure term is calculated, that is
-
+%
 \begin{equation} \label{eq:auxiliary_velocity}
 \vec{u}^*_n  = \vec{u}_{n} + \Delta t\left(-\vec{u}_{n}\cdot\nabla\vec{u}_{n} \,+\, \frac{\nabla\cdot\boldsymbol{\mathsf{T}} + \vec{f}}{\rho}\right),
 \end{equation}
-
+%
 and second, the velocity update is calculated as
-
+%
 \begin{equation} \label{eq:velocity_update}
 \vec{u}_{n+1} \,=\, \vec{u}^*_n - \Delta t\nabla p_{n+1},
 \end{equation}
-
+%
 where $p_n$ denotes the pressure in time step $n$.
 
 \section{Continuity equation}
 
 For a \idxs{control}{volume} $V$ with surface $S$ and a surface normal $\normal$ pointing outwards, the amount of \idxs{mass}{flux} $\opd m/\opd t$ entering the control volume can be described by
-
+%
 \begin{equation} \label{eq:mass_flux_surface_integral}
 \frac{\opd m}{\opd t} \,=\, -\oiint_S(\rho\vec{u}\cdot\normal)\,\opd S,
 \end{equation}
-
+%
 where $m$ is the mass of the fluid in $V$. By using the \idxs{divergence}{theorem} (\eqref{eq:divergence_theorem}) and dividing with $V$, we can rewrite \eqref{eq:mass_flux_surface_integral} as
-
+%
 \begin{equation} \label{eq:mass_flux_volume_integral}
 \frac{\opd\,(m/V)}{\opd t} \,=\, -\frac{1}{V}\iiint_V\nabla\cdot(\rho\vec{u})\,\opd V
 \end{equation}
-
+%
 and in the limit where $V \,\rightarrow\, 0$, this equation turns into
-
+%
 \begin{equation} \label{eq:density_partial_time_derivative}
 \frac{\partial \rho}{\partial t} \,=\, -\nabla\cdot(\rho\vec{u}),
 \end{equation}
-
+%
 where the density is defined as $\rho = \opd m/\opd V$. This can be rewritten as
-
+%
 \begin{equation} \label{eq:continuity_equation}
 \frac{\partial \rho}{\partial t} + \nabla\cdot(\rho\vec{u}) \,=\, 0.
 \end{equation}
-
+%
 This is known as the \idxs{continuity}{equation} and has to be satisfied in order to ensure \idxs{conservation of}{mass}. \idxse{time}{discretization}{Time discretizing} this equation, and choosing to use the values of $\rho$ and $\vec{u}$ in \timestep $n$ and the value of $\partial \rho/\partial t$ in time step $n+\frac{1}{2}$, thus introducing an $O(\Delta t)$ error, gives
-
+%
 \begin{equation} \label{eq:continuity_equation_time_discretized}
 \rho_{n+1} \,=\, \rho_{n} - \Delta t\,\nabla\cdot(\rho_{n}\vec{u}_{n}),
 \end{equation}
-
+%
 where $\rho_n$ denotes the density in \timestep $n$.
 
 \section{Pressure calculation}
@@ -209,11 +209,11 @@ Neither the Euler equations nor the Navier--Stokes equations specify how the pre
 \subsection{Compressible flow}
 
 In nature, all fluids are compressible, so a physically correct \idxs{pressure}{model} will let the fluids contract and expand which means that for \indexs{compressible}{fluid}\idxs{compressible}{flow}, the \divergence of the \idxs{velocity}{field} is allowed to be non-zero. The \pressure is then usually expressed as a function of the density, sometimes also taking into account the \temperature and other \properties that may affect the pressure, that is
-
+%
 \begin{equation} \label{eq:pressure_compressible_flow}
 p = p\,(\rho,\,T,\,\text{other material properties}),
 \end{equation}
-
+%
 where $T$ is the temperature.
 
 However, the set of fluid motion equations including \eqref{eq:pressure_compressible_flow} is \idxse{stiff}{equation}{stiff}, meaning that if an ordinary \idxs{explicit}{method} such as the \idxs{forward Euler}{method} is used, the \timestep has to be taken to be extremely small, or the method will be unstable. Ordinary \idxsp{numerical}{method}{s} for solving this set of equations are known to give rise to \idxs{spurious}{oscillations} in the solutions when the \idxs{speed of}{sound} multiplied by the \idx{time step} becomes too large in relation to the \idxs{characteristic}{length} of the \cells, making the numerical method \unstable. More generally, this stringent restriction of the \timestep is known as the \CFL condition.
@@ -225,49 +225,49 @@ Still, not all solvers for compressible flow suffers from this problem. In a wor
 When acoustic waves is of no significant importance to the simulation, it is probably most common to model the fluids as \indexs{incompressible}{fluid}\indexs{incompressible}{flow}\incompressible. When simulating incompressible flow, a different approach is taken to calculate the \idxs{pressure}{field}.
 
 Since the flow is incompressible, the density will be constant, which means that \derivatives of $\rho$ vanishes, that is
-
+%
 \begin{equation} \label{eq:density_partial_time_derivative_incompressible_flow}
 \frac{\partial \rho}{\partial t} \,=\, 0
 \end{equation}
-
+%
 and
-
+%
 \begin{equation} \label{eq:density_divergence_incompressible_flow}
 \nabla\rho \,=\, \vec{0}.
 \end{equation}
-
+%
 \eqref{eq:continuity_equation} will then turn into
-
+%
 \begin{equation} \label{eq:velocity_divergence_incompressible_flow}
 \nabla\cdot\vec{u} \,=\, 0.
 \end{equation}
 
 By combining \eqref{eq:density_divergence_incompressible_flow} and \eqref{eq:velocity_divergence_incompressible_flow}, \eqref{eq:continuity_equation_time_discretized} turns into just
-
+%
 \begin{equation} \label{eq:continuity_equation_superfluous}
 {\rho_{n+1} \,=\, \rho_n}
 \end{equation}
-
+%
 and becomes superfluous, since this simplified equation also follows directly from \eqref{eq:density_partial_time_derivative_incompressible_flow}. Furthermore, it turns out that when the flow is incompressible, we have
-
+%
 \begin{equation} \label{eq:deviatoric_stress_tensor_incompressible_flow}
 \nabla\cdot\boldsymbol{\mathsf{T}} \,=\, \mu\nabla^2\vec{u},
 \end{equation}
-
+%
 where $\mu$ is the (dynamic) \index{dynamic viscosity|see{viscosity}}\viscosity. For simplicity, we can assume that we use a set of units where $\rho = 1$. \eqref{eq:auxiliary_velocity} can then be rewritten as
-
+%
 \begin{equation} \label{eq:auxiliary_velocity_reduced}
 \vec{u}^*_n \,= \, \vec{u}_{n} + \Delta t(- \vec{u}_{n}\cdot\nabla\vec{u}_{n} \,+\, \mu\nabla^2\vec{u}_{n} + \vec{f}),
 \end{equation}
-
+%
 which can be directly solved assuming that $\mu$ and $\vec{f}$ are known.
 
 However, \eqref{eq:velocity_update}, which is used to update the velocity, contains $p$ which is a second unknown and must be calculated before $\vec{u}$ can be calculated. Following standard procedure \citep{Losasso2004}, by rewriting \eqref{eq:velocity_update}, taking the divergence of both sides and using \eqref{eq:velocity_divergence_incompressible_flow} to get rid of $\nabla\cdot\vec{u}$, we obtain the \idxs{Poisson}{equation}
-
+%
 \begin{equation} \label{eq:pressure_poisson_equation_incompressible_flow}
 \nabla^2 p_{n+1} \,=\, \frac{\nabla\cdot\vec{u}^*_n}{\Delta t}
 \end{equation}
-
+%
 which needs to be solved before we can update the velocity completely.
 
 When \idxse{spatial}{discretization}{discretizing} this equation spatially a \idxs{system of linear}{equations} is obtained, for which there exist many solution methods with varying speed and accuracy. As a comparison, it can be noted that the naive \idxs{Gaussian}{elimination}\index{algorithm!Gaussian elimination|see{Gaussian elimination}} algorithm, or the \idxs{Gauss--Jordan}{elimination}\index{algorithm!Gauss--Jordan elimination|see{Gauss--Jordan elimination}} algorithm for a \idx{multi-core} system, has a \idxs{time}{complexity} of $O(N^3)$ for an $N\times N$ \idx{matrix}, where the $O$ symbol indicates \idxs{big O}{notation}\index{O!big O notation|see{big O notation}} and $N$ is the number of unknowns. However, an $O(N^3)$ time for solving the pressure Poisson equation would slow down the simulation tremendously, since it otherwise runs in $O(N)$ time per timestep.
@@ -277,37 +277,37 @@ Since \incompressibility is only an \approximate \property of the fluid, it is a
 If the pressure equation is only solved approximately, \eqref{eq:velocity_divergence_incompressible_flow} is not perfectly satisfied, and hence \eqref{eq:continuity_equation_superfluous} doesn't hold. If perfect \idxs{conservation of}{mass} is essential, the deviation of mass has to be recorded so that they can be accounted for, and \eqref{eq:continuity_equation_time_discretized} has to be used again.
 
 Instead of trying to satisfy \eqref{eq:velocity_divergence_incompressible_flow}, which obviously doesn't work too well and would lead to uncontrolled fluctuations in density, one would rather prefer that the density very quickly becomes one again. The time $n+1$ density is given by \eqref{eq:continuity_equation_time_discretized} which is fully determined since $\rho_{n+1}$ is the only unknown in the equation, but the time $n+2$ density is given by substituting $n+1$ for $n$ in \eqref{eq:continuity_equation_time_discretized}, that is
-
+%
 \begin{equation} \label{eq:continuity_equation_time_discretized_postponed}
 \rho_{n+2} \,=\, \rho_{n+1} - \Delta t\,\nabla\cdot(\rho_{n+1}\vec{u}_{n+1})
 \end{equation}
-
+%
 which is underdetermined since $\vec{u}_{n+1}$ also is unknown. We can therefore make the requirement that
-
+%
 \begin{equation} \label{eq:density_conservation}
 \rho_{n+2} \,=\, 1.
 \end{equation}
 
 Perfect satisfaction of \eqref{eq:density_conservation} will not take place due to an imperfectly solved pressure equation, but it is still the goal and also what we are going to assume. By rearranging \eqref{eq:continuity_equation_time_discretized_postponed} and expanding the divergence, we obtain
-
+%
 \begin{equation} \label{eq:velocity_divergence_density_conservation_premature}
 \nabla\cdot\vec{u}_{n+1} \,=\, \frac{1-\rho_{n+1}^{-1}\,\rho_{n+2}}{\Delta t} \,-\, \rho_{n+1}^{-1}\,\vec{u}_{n+1}\cdot\nabla\rho_{n+1}.
 \end{equation}
-
+%
 Now, the \idxs{Courant}{number} $C$ is defined as
-
+%
 \begin{equation}
 C \,=\, \sum_{i=0}^{d-1} \frac{|u_i|\Delta t}{\Delta r_i},
 \end{equation}
-
+%
 where $u_i$ is the $i$th velocity component, that is $u_i = \normvec{e}_i\cdot\vec{u}$. The Courant number can basically be thought of as the volume fraction of a cell that is replaced during one \timestep because of flow through the cell walls. If we assume that this number is much smaller than one, that is
-
+%
 \begin{equation}
 C \ll 1,
 \end{equation}
-
+%
 or if we assume that $C$ is limited and the \spectrum of $\rho_{n+1}$ is dominated by frequencies much lower than the \idxs{Nyquist}{frequency}, $\rho_{n+1}^{-1}\,\vec{u}_{n+1}\cdot\nabla\rho_{n+1}$ will be a minor term in \eqref{eq:velocity_divergence_density_conservation_premature} and can therefore be \approximated as zero. Furthermore, since $\rho_{n+1}$ is close to $1$, we can \approximate $\rho_{n+1}^{-1}$ as the first-order \idxs{Taylor}{polynomial} centered around the value $1$, which is $2-\rho_{n+1}$. Hence, by using \eqref{eq:density_conservation}, we can rewrite \eqref{eq:velocity_divergence_density_conservation_premature} as
-
+%
 \begin{equation} \label{eq:velocity_divergence_density_conservation}
 \nabla\cdot\vec{u}_{n+1} \,=\, \frac{\rho_{n+1}-1}{\Delta t}.
 \end{equation}
@@ -319,11 +319,11 @@ By rewriting \eqref{eq:velocity_update}, taking the divergence of both sides and
 \end{equation}
 
 If, on the other hand the pressure equation is solved to a very high accuracy, or perfect \idxs{conservation of}{mass} is not something very important, \eqref{eq:pressure_poisson_equation_incompressible_flow} can equally well be used and then the \idxs{density}{field} becomes superfluous. For \simulation purposes, conservation of mass to this high degree is not important and hence the density field can be omitted. No matter if we need to conserve mass perfectly or not, we will obtain a \idxs{Poisson}{equation} for the \idxs{pressure}{field}, which can be written on the form
-
+%
 \begin{equation} \label{eq:pressure_poisson_equation_general}
 \nabla^2 p \,=\, q(\vec{r}),
 \end{equation}
-
+%
 where $q$ is a known function of $\vec{r}$.
 
 \subsection{Solution of the pressure Poisson equation}
@@ -331,11 +331,11 @@ where $q$ is a known function of $\vec{r}$.
 \label{sec:pressure_poisson_equation_solution}
 
 There are a number of ways to solve the pressure Poisson equation. To begin with, we can realize that since the system is discretized, and since the Poisson equation is linear by nature, the equation can be written as a system of linear equations, that is
-
+%
 \begin{equation} \label{eq:pressure_poisson_equation_matrix}
 \mathbf{A\,p} \,=\, \mathbf{q},
 \end{equation}
-
+%
 where $\mathbf{p}$ is the vector containing the pressure in all cells, $\mathbf{q}$ is the vector containing $q(\vec{r})$ for all cells, and $\mathbf{A}$ is a sparse $N\times N$ \idx{matrix} containing the coefficients for the system of linear equations.
 
 First, there is a class of methods called \idxsp{direct}{method}{s}, which will solve the system of linear equations completely. An example is the naive \idxs{Gaussian}{elimination} algorithm, or the \idxs{Gauss--Jordan}{elimination} algorithm for a \idx{multi-core} system, having a \idxs{time}{complexity} of $O(N^3)$ operations in total in the general case for a system of $N$ unknowns, which is (as already mentioned) unacceptably slow.
@@ -356,13 +356,13 @@ In a work by \citet{Losasso2004}, this method was noted to require only about 20
 Another iterative method is the \idxs{Jacobi}{method}, where in each iteration, each equation in the system is solved independently of all other equations, by isolating the unknown central to the equation and by replacing the other unknowns with the values obtained for them from the previous iteration.
 
 If $\mathbf{A}$ is decomposed into a diagonal component $\mathbf{D}$ and the reminder $\mathbf{R}$, such that $\mathbf{A} = \mathbf{D} + \mathbf{R}$, this method can be expressed as
-
+%
 \begin{equation} \label{eq:jacobi_method}
 \mathbf{p}^{(k+1)} \,=\, \mathbf{D}^{-1}(\mathbf{q} - \mathbf{R}\mathbf{p}^{(k)}).
 \end{equation}
-
+%
 By subtracting $\mathbf{p}$ from both sides, we get
-
+%
 \begin{equation}
 \begin{array}{c}
 \mathbf{p}^{(k+1)} - \mathbf{p} \\
@@ -370,19 +370,19 @@ By subtracting $\mathbf{p}$ from both sides, we get
 =\, \mathbf{D}^{-1}(\mathbf{q} - \mathbf{A}\,\mathbf{p} - \mathbf{R}(\mathbf{p}^{(k)} - \mathbf{p})) \,=\, -\mathbf{D}^{-1}\mathbf{R}(\mathbf{p}^{(k)} - \mathbf{p}).
 \end{array}
 \end{equation}
-
+%
 If we define the error of the pressure in each iteration as
-
+%
 \begin{equation} \label{eq:pressure_error}
 \mathbf{\epsilon}^{(k)} \,=\, \mathbf{p}^{(k)} - \mathbf{p},
 \end{equation}
-
+%
 we see that
-
+%
 \begin{equation} \label{eq:jacobi_method_error}
 \mathbf{\epsilon}^{(k+1)} \,=\, -\mathbf{D}^{-1}\mathbf{R}\mathbf{\epsilon}^{(k)},
 \end{equation}
-
+%
 which tells us that the error will decrease exponentially to the number of iterations, and that the error is composed of different \eigenvectors that decrease with different speeds. In fact, the eigenvector will represent different wave shapes, and can be assigned approximate \wavelengths in number of cells, where on a three-dimensional grid, wavelengths around 2 cell sizes will be those that decreases the quickest in strength.
 
 However, eigenvectors with shorter wavelength than so will \overshoot the \idxs{zero}{vector} and oscillate around it a few times before they converge to the desired accuracy. The shorter the wavelength the more the eigenvector will overshoot, and the eigenvector with the shortest corresponding wavelength will only converge extremely slowly. An eigenvector with the wavelength $2/\sqrt{d}$ would overshoot so much that it just changes sign, and \oscillate forth and back between two vectors and never converge.

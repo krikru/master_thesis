@@ -107,24 +107,24 @@ In \thisprojectwork, an octree has been used to partition the \idxs{computationa
 Ideally, although not implemented in \thisprojectwork, the surface will have a higher \LOD where the \idxsp{surface}{detail}{s} are more important to the simulation, such as close to the \camera where they can be seen more clearly, and a lower \LOD far away from the camera where the cells take up little \idxse{screen}{space}{space on the screen}, or where they are out of the \FOV.
 
 The total number of cells $N_{\text{t}}$ used in the simulation can be \approximated by a \idxs{double}{series} containing the thicknesses of the different LOD layers and the number of cells visible at the surface that belong to each \LOD, according to
-
+%
 \begin{equation} \label{eq:number_of_cells_total_sum}
 N_{\text{t}} \,=\, \sum_{i\,=\,0}^\infty N_{\text{s},i}\sum_{j\,=\,i}^\infty a_j\cdot 2^{-(d-1)(j-i)},
 \end{equation}
-
+%
 where $N_{\text{s},i}$ is the number of cells visible on the surface belonging to \idxs{LOD}{layer} $i$, $a_j$ is the thickness in number of cells of LOD layer $j$, where LOD layer $0$ corresponds to the highest \LOD and an increasing LOD layer index corresponds to a lower \LOD, and $d$ is the dimensionality of the system. Different LOD layers can have different thickness; if this is the case, it will also be reflected in the simulation, and waves with different wavelengths will be simulated with different \accuracy. In \thisprojectwork, all LOD layers have been given the same thickness, $a$. \eqref{eq:number_of_cells_total_sum} therefore turns into an equation containing a \idxs{geometric}{series},
-
+%
 \begin{equation} \label{eq:number_of_cells_total}
 N_{\text{t}} \,=\, a\sum_{i\,=\,0}^\infty N_{\text{s},i}\sum_{k\,=\,0}^\infty 2^{-(d-1)k} \,=\, a\,N_{\text{s}}\,\frac{1}{1-2^{-(d-1)}} \,=\, \frac{2^{d-1}}{2^{d-1}-1}\,a\,N_{\text{s}},
 \end{equation}
-
+%
 where $k = j-i$ and $N_{\text{s}}$ is the total number of cells visible on the surface. We can therefore in this case conclude that
-
+%
 \begin{equation} \label{eq:number_of_cells_total_ordo}
 N_{\text{t}} \,=\, O(N_{\text{s}}).
 \end{equation}
-\index{big O notation}
-
+\index{big O notation}%
+%
 Hence, the \idxs{computational}{time} required for updating the \idxs{fluid}{flow} one \idx{time step} is roughly proportional to the number of \idxsp{surface}{cell}{s} $N_{\text{s}}$, but the simulation still catches all motion under the surface, with decaying \accuracy at increasing \idxsp{water}{depth}{s}.
 
 %\section{The differentiating problem}

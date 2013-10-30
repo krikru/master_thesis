@@ -50,23 +50,23 @@ A method that, just like the Fourier synthesis method, handles \idxs{wave}{dispe
 The general idea behind the method is to use a hierarchy of grids, where in the simplest case all grids cover the same surface. One step down in the hierarchy means a doubling in grid resolution, or a division by two of the grid cell size, which in practice also means a division by two of the minimum wavelength that can be efficiently simulated on the specific grid.
 
 Each grid is therefore responsible to store and process a specific set of wave vectors, that corresponds to this minimum wavelength. It should be easy to reconstruct any wave that has a wave vector within that set, from the wave's discretization on the grid. The set must also not contain any of the wave vectors that are processed on the grid one level up in the hierarchy. The top level grid is only a few cells across and is responsible for processing all the shortest wave vectors. Together, all sets of wave vectors that are processed on the different grids form a large set of wave vectors (including the zero vector) in which a very detailed free surface elevation, $\eta$, can be represented. The free surface elevation is then reconstructed as the sum of all components, that is
-
+%
 \begin{equation} \label{eq:laplacian_pyramid_composition}
 \eta \,=\, \sum_i \eta_i,
 \end{equation}
-
+%
 where $\eta_i$ is the component represented on the $i$th grid.
 
 In order to decompose the free surface elevation into the components that are to be processed on the different grids, the method uses \LPD, which is a general decomposition method that can operate on a field of any number of dimensions (but is in this case used on a discretized two-dimensional field). An \LPD closely resembles the \idxs{wavelet}{transform} (although unlike wavelets, which are somewhat localized both in the spatial domain and in the frequency domain, the components of a Laplacian pyramid are somewhat localized in the frequency domain, but generally completely delocalized in the spatial domain).
 
 This decomposition makes it possible to describe the time evolution of the free surface elevation component represented on each grid with a \PDE represented in the spatial domain, and still include dispersion. Let's \assume that \eqref{eq:dispersion} is a good \approximation for the local water surface, using the local water depth, even though the equation was originally derived for constant water depths. By substituting $f$ for $\omega^2$ and $x$ for $k^2$ in \eqref{eq:dispersion} and by realizing that $\omega, k \geq 0$, we obtain the relation
-
+%
 \begin{equation} \label{eq:dispersion_modified}
 f(x) \,=\, \left(g\,+\,\frac{\gamma}{\rho}\,x\right)\,\sqrt{x}\,\tanh(\sqrt{x}\,h).
 \end{equation}
-
+%
 Since the wavelengths that are represented on the $i$th grid in the method are restricted to a certain range, $x$ also becomes restricted to a certain range, and we can \approximate $f$ as a low order Taylor series around a value $a_i$ chosen to be somewhere in that range. That is
-
+%
 \begin{equation} \label{eq:dispersion_modified_taylor}
 \renewcommand*{\arraystretch}{2}
 \begin{array}{c}
@@ -74,9 +74,9 @@ Since the wavelengths that are represented on the $i$th grid in the method are r
 \displaystyle +\, \frac{f^{(n_i)}(a_i)}{n_i!}(x-a_i)^{n_i},
 \end{array}
 \end{equation}
-
+%
 where $n_i$ is the order of the Taylor series, and by substituting back $\omega^2$ for $f(x)$ and $k^2$ for $x$ we obtain
-
+%
 \begin{equation} \label{eq:dispersion_taylor}
 \renewcommand*{\arraystretch}{2}
 \begin{array}{c}
@@ -84,27 +84,27 @@ where $n_i$ is the order of the Taylor series, and by substituting back $\omega^
 \displaystyle +\, \frac{f^{(n_i)}(a_i)}{n_i!}(k^2-a_i)^{n_i}.
 \end{array}
 \end{equation}
-
+%
 A wave of a single wavelength can be expressed on the form
-
+%
 \begin{equation} \label{eq:component_sin}
 \eta_{\vec{k}}(\vec{r},\,t) \,=\, A\,\sin(\alpha + \vec{k}\cdot\vec{r}\,-\,\omega\,t),
 \end{equation}
-
+%
 where $\eta_{\vec{k}}$ is the free surface elevation consisting only of a wave with the wave vector $\vec{k}$, $A$ is the amplitude of the wave, and $\alpha$ is the phase of the wave. Hence, we can conclude that
-
+%
 \begin{equation} \label{eq:component_second_time_derivative}
 \frac{\partial^2}{\partial t^2}\eta_{\vec{k}} \,=\, -\omega^2 A\,\sin(\alpha + \vec{k}\cdot\vec{r}\,-\,\omega\,t) \,=\, -\omega^2\eta_{\vec{k}},
 \end{equation}
-
+%
 and 
-
+%
 \begin{equation} \label{eq:component_laplacian}
 \nabla^2\eta_{\vec{k}} \,=\, -k^2 A\,\sin(\alpha + \vec{k}\cdot\vec{r}\,-\,\omega\,t) \,=\, -k^2\eta_{\vec{k}}.
 \end{equation}
-
+%
 If we multiply both sides of \eqref{eq:dispersion_taylor} with $\eta$, we can use \eqref{eq:component_second_time_derivative} and \eqref{eq:component_laplacian} to obtain
-
+%
 \begin{equation} \label{eq:taylor_pde}
 \renewcommand*{\arraystretch}{2}
 \begin{array}{c}
@@ -112,11 +112,11 @@ If we multiply both sides of \eqref{eq:dispersion_taylor} with $\eta$, we can us
 \displaystyle \left. +\, \frac{f^{(n_i)}(a_i)}{n_i!}(-\nabla^2-a_i)^{n_i}\right)\eta_{i\vec{k}},
 \end{array}
 \end{equation}
-
+%
 where an $i$ has been added to the index of $\eta$ to indicate that this \PDE is only valid for waves that are described by \eqref{eq:component_sin} and are represented in $\eta_i$. Since this \PDE otherwise holds for all $\omega$ and $\vec{k}$, if we assume that the surface is linear, the superposition principle tells us that the equation can be used to describe the time evolution of $\eta_i$, and we can remove the $\vec{k}$ completely from the equation.
 
 A problem that is easily overlooked is the problem of discretizing the $\nabla^2$ operator. To use a naive three-point second order derivative operator $D^2$ in each dimension in $\nabla^2$ is not sufficient. To illustrate, if $D^2$ operates on a one-dimensional wave, $\sin(k\,x)$, the result will be
-
+%
 \begin{equation}
 \renewcommand*{\arraystretch}{2}
 \begin{array}{c}
@@ -124,16 +124,16 @@ A problem that is easily overlooked is the problem of discretizing the $\nabla^2
 \displaystyle \,=\, -\sin(k\,x)\,\frac{2\,(1-\cos(k\,\Delta x))}{\Delta x^2},
 \end{array}
 \end{equation}
-
+%
 where $\Delta x$ is the grid cell size. Hence, $D^2$ will underestimate the real second order derivative which is $-k^2\sin(k\,x)$ (this is especially true for high $k$-values). A more suitable operator can be constructed as an $n_i$th order polynomial of $D^2$. When then discretizing \eqref{eq:taylor_pde}, this polynomial is substituted for $\nabla^2$, and any terms containing powers of $D^2$ with an exponent higher than $n_i$, after the powers in \eqref{eq:taylor_pde} have been expanded, are simply neglected. After doing this substitution, $(\partial^2/\partial t^2)\eta_i$ will be given on the form
-
+%
 \begin{equation} \label{eq:polynomial_pde}
 \renewcommand*{\arraystretch}{2}
 \begin{array}{c}
 \displaystyle \frac{\partial^2}{\partial t^2}\eta_i \,=\, \left(C_{i0} \,+\, C_{i1}(D^2)^1 \,+\, \dots \,+\, C_{in_i}(D^2)^{n_i}\right)\eta_i,
 \end{array}
 \end{equation}
-
+%
 where $C_{ij},\,j=0,\dots,n_i$ are a sequence of polynomial coefficients used in the \PDE for describing $\eta_i$, and $j$ is an index used to specify one of those coefficients. A drawback with using this discretization method, though, is that the higher $n_i$ is, the more difficult it becomes to calculate the derivatives close to boundaries, since they will depend on values of node points that lie outside of the boundaries, and those values are generally not known. A possible remedy could be to reduce the order of the expressions close to boundaries to remove that dependency.
 
 It also has to be considered that $f$, as well as all of its derivatives, depend on the water depth $h$, which in turn can vary between different locations $\vec{r}$ and times $t$. Hence, $C_{ij}$ also depends on $h$ and this has a direct effect on \eqref{eq:polynomial_pde}. If $k\,h \gg 1$, the factor $\tanh(\sqrt{x}\,h)$ in \eqref{eq:dispersion_modified} can be \approximated as 1 and the $h$ dependence vanishes. But for the coarser grids, on which waves with very long wavelengths are represented, or close to the shoreline where the water is shallow, $\tanh(\sqrt{x}\,h)$ cannot be \approximated as 1 and the coefficients $C_{ij}$ may have to be computed separately for each grid point, and perhaps also recomputed at even intervals if the water is not calm and the water depth changes much. If that is the case, a \idxs{lookup}{table} for each coefficient $C_{ij}$ may be used, in which \interpolation between lookup elements can be performed, to speed up the calculation of $C_{ij}$ for different values of $h$.

@@ -157,8 +157,6 @@ Inte gjorda än:
 
 * Jag saknar bibliotekssida
 
-* Motverka radinskjutningar efter ekvationer (skriv "%" på de blanka raderna runt ekvationerna för att hindra nya stycken att bildas)
-
 ---------------------------------------
 
 Gjorda:
@@ -180,4 +178,6 @@ Gjorda:
 Kommer inte göra:
 
 * Jag ska uppdatera min Nomeclature eftersom den inte innehåller alla variabler jag har anvärt mig av (eller blir det för många variaber kanske? Svårt att välja vilka jag ska ha med i sådana fall om jag bara ska ha med vissa)
+
+* Motverka radinskjutningar efter ekvationer (skriv "%" på de blanka raderna runt ekvationerna för att hindra nya stycken att bildas)
 

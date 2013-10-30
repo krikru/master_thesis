@@ -19,48 +19,48 @@ It is also often desired that the advection scheme damps the frequencies of the 
 \subsection{Error reduction for linear advection schemes}
 
 A method that was originally intended to improve the quality of the \LS method, known as \BFECC, was first described in a publication by \citet{Dupont2003}. However, \BFECC can also be used to improve the energy preservation in any non-ideal, linear operator $A$ acting on a smooth field $\Phi$ (or a vector or any other object on which it makes sense to apply a linear operator), where A is an \approximation of an ideal (at least theoretically existing) operator $A^*$. This ideal operator is both stable and doesn't introduce damping. Let's assume that our goal is to improve the operator $A$ in such a way that the damping is reduced. \BFECC works under the circumstances that $A$ has a corresponding reverse operator $A'$ which is an \approximation of $(A^*)^{-1}$ and has an equal damping effect on the frequencies in the field as $A$, or more specifically, $A'$ has the same \eigenfunctions as $A$, with the corresponding eigenvalues
-
+%
 \begin{equation}
 \lambda'_i \,=\, \overline{\lambda_i}, \,\forall\,i,
 \end{equation}
-
+%
 where $\lambda'_i$ is the eigenvalue of the $i$th \eigenfunction of $A'$, and an overline denotes a complex conjugation. For a linear advection scheme, if $A$ is an operator that advects the field in a specific way, $A'$ is simply the operator that uses the same advection scheme as $A$ but that takes a field that has been advected by $A$ back to the position it came from.
 
 In \BFECC, $\Phi$ is first updated forward in time, and then backwards to get another copy of the field, $\Phi_1$, such that $\Phi_1 = A'A\,\Phi$. If there would have been no numerical error, $A'$ would have been the inverse of $A$ and $\Phi$ and $\Phi_1$ would have been equal. The idea is to use the difference $\Phi_1-\Phi$ as information about the error, and use this information to compensate $\Phi$ before applying $A$. Since the error is introduced twice when calculating $\Phi_1$, a compensated variable $\Phi_2$ is calculated using only half of $\Phi_1-\Phi$, or
-
+%
 \begin{equation}
 \Phi_2 \,=\, \Phi - \tfrac{1}{2}(\Phi_1 \,-\, \Phi).
 \end{equation}
-
+%
 $A^*\Phi$ can then more accurately be \approximated as $A\,\Phi_2$, which in turn can be expanded to
-
+%
 \begin{equation}
 \begin{array}{c}
 A\,\Phi_2 \,=\, A\,\left(\Phi \,-\, \tfrac{1}{2}(\Phi_1 \,-\, \Phi)\right) \,=\, A\,\Phi \,-\, \tfrac{1}{2}(A\,A'A\,\Phi \,-\, A\,\Phi) \\
 =\, A\,\left(\tfrac{3}{2} \,-\, \tfrac{1}{2}A'A\right)\,\Phi \,=\, \tilde{A}\,\Phi,
 \end{array}
 \end{equation}
-
+%
 where $\tilde{A}$ is defined as
-
+%
 \begin{equation} \label{eq:compensated_advection_operator}
 \tilde{A} \,=\, A\,\left(\tfrac{3}{2} \,-\, \tfrac{1}{2}A'A\right)
 \end{equation}
- 
+ %
 and is an improved approximation of $A^*$. As can be seen, $\tilde{A}$ is the product of $A$ and a \polynomial of $A'A$, and the polynomial could if desired easily be extended with more terms as discussed in the end of this \levelname. Now, if we let this operator act on an \eigenfunction $\phi$, whose \eigenvalue is $\lambda$ when $A$ is acting on it and $\lambda' = \overline{\lambda}$ when $A'$ is acting on it, we see that 
-
+%
 \begin{equation}
 \tilde{A}\,\phi \,=\, A\,\left(\tfrac{3}{2} \,-\, \tfrac{1}{2}A'A\right)\,\phi \,=\, \lambda\,\left(\tfrac{3}{2} \,-\, \tfrac{1}{2}\overline{\lambda}\lambda\right)\,\phi \,=\, \frac{\lambda}{|\lambda|}\,\left(\tfrac{3}{2}\,|\lambda| \,-\, \tfrac{1}{2}|\lambda|^3\right)\,\phi \,=\, \tilde{\lambda}\,\phi,
 \end{equation}
-
+%
 where $\tilde{\lambda} = \lambda/|\lambda|\,\left(\tfrac{3}{2}\,|\lambda| \,-\, \tfrac{1}{2}|\lambda|^3\right)$ is the eigenvalue of $\phi$ when $\tilde{A}$ is acting on it. If $|\lambda|$ is written as
-
+%
 \begin{equation}
 |\lambda| \,=\, 1 - h, \quad h \leq 1
 \end{equation}
-
+%
 where $h$ is a measure of the amount of damping introduced by $A$, we see that
-
+%
 \begin{equation}
 \begin{array}{c}
 |\tilde{\lambda}| \,=\, \left|\tfrac{3}{2}\,|\lambda| \,-\, \tfrac{1}{2}|\lambda|^3\right| \,=\, \left|\tfrac{3}{2}\,(1-h) \,-\, \tfrac{1}{2}(1-h)^3\right| \\
@@ -69,11 +69,11 @@ where $h$ is a measure of the amount of damping introduced by $A$, we see that
 \end{equation}
 
 The damping introduced by $\tilde{A}$ is given by $\tilde{h} = 1 - |\tilde{\lambda}|$. If we assume that possible instabilities in $A$ are small, which means that $-h \ll 1$ if $h < 0$, and consider the fact that $h \leq 1$, $\tilde{h}$ can be expanded to
-
+%
 \begin{equation}
 \tilde{h} \,=\, 1 - |\tilde{\lambda}| \,=\, 1 - \frac{|\lambda|}{|\lambda|}\left|1 - \displaystyle\frac{3\,h^2 - 1\,h^3}{2}\right| \,=\, \displaystyle\frac{3\,h^2 - 1\,h^3}{2} \,=\, O(h^2),
 \end{equation}
-
+%
 and we see that the damping introduced by $\tilde{A}$ is of second order if we consider the damping introduced by $A$ to be of first order. We can also notice that if $A$ is unstable, which means that $h < 0$ (although still very small), $\tilde{h}$ will still be positive, which means that $\tilde{A}$ is stable. \BFECC will therefore both heavily reduce damping as well as fix small instabilities in $A$.
 
 Similar schemes of even higher order can be obtained by extending the \polynomial that $\tilde{A}$ is partially composed of with even more terms of type $(A'A)^n$. Since we desire that $\tilde{\lambda} = \lambda/|\lambda|$, we require that the polynomial will result in a division by $|\lambda|$ when acting on $\phi$. This result is \approximated if we let the polynomial be an approximation of $1/\sqrt{A'A}$. The polynomial can therefore be expressed as a \idxs{Taylor}{polynomial} of $1/\sqrt{A'A}$ centered around the point $A'A = 1$. The Taylor polynomial in turn is given by the first terms of the \idxs{binomial}{series} of $(1+x)^{-\frac{1}{2}}$, where $x = A'A - 1$. All these schemes will be stable as long as $A$ is stable, and all schemes with even order will also stabilize the advection process if $A$ contains instabilities that are small enough.
