@@ -45,8 +45,6 @@ Magnus
 
 Inte gjorda än:
 
-- Sec. 3.4 saknas också en del referenser, till LBM, MAC och FEM. Du bör ge läsaren åtminstone någon referens på varje, där man kan läsa vidare om man är intresserad (kan iofs vara samma referens om det finns något standardverk?).
-
 - Vill även ha ytterligare referenser i Sec. 4.6:
 CFL condition i 4.6.1;
 Eq. (4.29) "it turns out that" (ej uppenbart för mig..);
@@ -72,6 +70,8 @@ Gjorda:
 - Eftersom rapporten är så pass lång, så tycker jag att du bör ha en "Outline of the thesis" eller liknande någonstans i början, där du kortfattat beskriver vad som kommer att behandlas i de olika delarna (inklusive de tre appendixen).
 
 - s.13, ungefär mitt på: "By building on the idea presented in this report.." syftar på din egen rapport, eller Ottosson och/eller Lennartsson?
+
+- Sec. 3.4 saknas också en del referenser, till LBM, MAC och FEM. Du bör ge läsaren åtminstone någon referens på varje, där man kan läsa vidare om man är intresserad (kan iofs vara samma referens om det finns något standardverk?).
 
 - Eq. (4.12) och därunder: ska indexet i börja på 0 eller 1?
 
