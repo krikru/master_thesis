@@ -12,7 +12,6 @@ Om du upplever det svårt att separera resultat och diskussion så är det inget ne
 
 ...
 
-- sid v. Radbryt så att "Technical terms" hänger ihop.
 - Jag tycker fortfarande att resultat och diskussionsdelarna känns lite korta med lite text jämfört med figurer men det är nog snarare omfattningen av hela rapporten som gör att intrycket blir så. Dessutom är ju din studie av olika metoder och diskussion vilka som passar bäst ett resultat i sig.
 
 
@@ -33,6 +32,8 @@ Gjorda:
 - Jag stavar Järrendahl med h.
 
 - Kanske bättre att skriva "Linköping University" som affiliation på mig och Magnus?
+
+- sid v. Radbryt så att "Technical terms" hänger ihop.
 
 ---------------------------------------
 
