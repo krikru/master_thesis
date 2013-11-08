@@ -216,9 +216,7 @@ Taking the gradient of this yields
 \end{array}
 \end{equation}
 
-Let's \assume that the components of the gradient of the free surface elevation are \idxse{normal}{distribution}{normally distributed}. For vectors, the corresponding distribution is the multivariate normal distribution, which is a generalization of the ordinary normal distribution, so let's assume that $\nabla\psi$ is multivariate normal distributed.
-
-Just like the normal distribution, the multivariate normal distribution requires that the \mean is known, but instead of relying on the variance, it relies on the \idxs{covariance}{matrix} of the vector, which is a generalization of the variance with the only difference that the ordinary \idxs{product}{operator} has been replaced by the \idxs{outer product}{operator} $\otimes$, which is defined as
+Let's \assume that the components of the gradient of the free surface elevation are \idxse{normal}{distribution}{normally distributed}. For vectors, the corresponding distribution is the multivariate normal distribution, which is a generalization of the ordinary normal distribution, so let's assume that $\nabla\psi$ is multivariate normally distributed. Just like the normal distribution, the multivariate normal distribution requires that the \mean is known, but instead of relying on the variance, which is only defined for scalar variables, it relies on the \idxs{covariance}{matrix} of the vector. This matrix is a generalization of the variance with the only difference that the ordinary \idxs{product}{operator} has been replaced by the \idxs{outer product}{operator} $\otimes$, which is defined as
 %
 \begin{equation} \label{eq:outer_product_definition}
 \vec{x}\otimes\vec{y} \,=\, \vec{x}\,\vec{y}^{\,\T} \,=\,
@@ -244,7 +242,15 @@ the covariance matrix, $\Sigma$, of a stochastic vector $\vec{x}$ is defined as
 %
 Here, a superscripted $\otimes n$ denotes the $n$th \idxs{tensor}{power}, which is simply ordinary $n$th power exponentiation where the ordinary product operator has been replaced by the \idxs{tensor}{product} which for vectors is the same as the outer product.
 
-Isolating the element at row $i$ and in column $j$ in $\Sigma$ --- $\Sigma_{i,j}$ --- yields
+The multivariate normal distribution density $f$ of a stochastic vector $\vec{x}$ is given by
+%
+\begin{equation} \label{eq:multivariate_normal_distribution_density}
+f(\vec{x}) \,=\, \frac{1}{(2\pi)^{d/2}|\Sigma|^{1/2}}\exp\left(-\frac{1}{2}(\vec{x}-\vec{\mu})^{\T}\Sigma^{-1}(\vec{x}-\vec{\mu})\right),
+\end{equation}
+%
+where $d$ is the \dimensionality of $\vec{x}$, $\vec{\mu} = \E[\vec{x}]$ is the expectation value of $\vec{x}$, $\Sigma = \Sigma(\vec{x})$ is the covariance matrix of $\vec{x}$, $|\Sigma|$ is the \determinant of $\Sigma$, and $\exp$ is the \idxs{exponential}{function}.
+
+Isolating the element at row $i$ and in column $j$ in the covariance matrix --- $\Sigma_{i,j}$ --- yields
 %
 \begin{equation} \label{eq:covariance_matrix_element}
 \Sigma_{i,j}(\vec{x}) \,=\, \Cov(x_i,\,x_j) \,=\, \E[(x_i - \E[x_i])(x_j - \E[x_j])],
@@ -341,21 +347,15 @@ Additionally, by differentiating \eqref{eq:zero_expectation_value_real_space_wit
 \E_{\vec{r}}[\nabla\psi] \,=\, 0,\ \forall\ \vec{r},
 \end{equation}
 %
-so we know the expectation value of $\nabla\psi$ as well, which means that we know the distribution of $\nabla\psi$ since we assumed it was multivariate normal distributed. The multivariate normal distribution density $f$ of a stochastic vector $\vec{x}$ is given by
-%
-\begin{equation} \label{eq:multivariate_normal_distribution_density}
-f(\vec{x}) \,=\, \frac{1}{(2\pi)^{d/2}|\Sigma|^{1/2}}\exp\left(-\frac{1}{2}(\vec{x}-\vec{\mu})^{\T}\Sigma^{-1}(\vec{x}-\vec{\mu})\right),
-\end{equation}
-%
-where $d$ is the \dimensionality of $\vec{x}$, $\vec{\mu} = \E[\vec{x}]$ is the expectation value of $\vec{x}$, $\Sigma = \Sigma(\vec{x})$ is the covariance matrix of $\vec{x}$, $|\Sigma|$ is the \determinant of $\Sigma$, and $\exp$ is the \idxs{exponential}{function}.
+so we know the expectation value of $\nabla\psi$ as well, which means that we know the distribution of $\nabla\psi$ since we assumed it was multivariate normal distributed.
 
-The distribution density $f$ of $\nabla\psi$ is therefore given by
+By using \eqref{eq:multivariate_normal_distribution_density}, the distribution density $f$ of $\nabla\psi$ is given by
 %
 \begin{equation} \label{eq:psi_grad_distribution}
 f(\nabla\psi(\vec{r})) \,=\, \frac{1}{2\pi|\Sigma|^{1/2}}\exp\left(-\frac{1}{2}(\nabla\psi(\vec{r})-\vec{\mu})^{\T}\Sigma^{-1}(\nabla\psi(\vec{r})-\vec{\mu})\right),
 \end{equation}
 %
-where $\vec{\mu} = \E[\nabla\psi(\vec{r})]$, and $\Sigma = \Sigma(\nabla\psi(\vec{r}))$ is given by \eqref{eq:covariance_matrix_gradient_eta_final}.
+where $\vec{\mu} = \E_{\vec{r}}[\nabla\psi(\vec{r})]$ which is given by \eqref{eq:psi_of_r_expectation_value}, and $\Sigma = \Sigma(\nabla\psi(\vec{r}))$ is given by \eqref{eq:covariance_matrix_gradient_eta_final}.
 
 \comment
 {

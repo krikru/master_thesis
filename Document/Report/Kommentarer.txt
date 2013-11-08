@@ -12,7 +12,6 @@ Om du upplever det svårt att separera resultat och diskussion så är det inget ne
 
 ...
 
-- sid v. Radbryt så att "Technical terms" hänger ihop.
 - Jag tycker fortfarande att resultat och diskussionsdelarna känns lite korta med lite text jämfört med figurer men det är nog snarare omfattningen av hela rapporten som gör att intrycket blir så. Dessutom är ju din studie av olika metoder och diskussion vilka som passar bäst ett resultat i sig.
 
 
@@ -34,6 +33,8 @@ Gjorda:
 
 - Kanske bättre att skriva "Linköping University" som affiliation på mig och Magnus?
 
+- sid v. Radbryt så att "Technical terms" hänger ihop.
+
 ---------------------------------------
 
 Kommer inte göra:
@@ -44,8 +45,6 @@ Magnus
 -------
 
 Inte gjorda än:
-
-- Sec. 3.4 saknas också en del referenser, till LBM, MAC och FEM. Du bör ge läsaren åtminstone någon referens på varje, där man kan läsa vidare om man är intresserad (kan iofs vara samma referens om det finns något standardverk?).
 
 - Vill även ha ytterligare referenser i Sec. 4.6:
 CFL condition i 4.6.1;
@@ -61,10 +60,6 @@ SOR på samma sida.
 
 - s.71, punkt 2: Är "UPWIND" en förkortning? (Finns ej med i din lista.) Borde nog ha en referens här också.
 
-- Sec. B.1.1: Tycker att definitionen av multivariate normal distribution (B.36) hellre borde kommit två sidor tidigare, efter (B.25).
-
-- s.94, under (B.97): Är inte det du kallar "Kronecker delta" snarare ett "Dirac delta"?
-
 + Kommentarer skrivna direkt i blocket.
 
 ---------------------------------------
@@ -74,6 +69,8 @@ Gjorda:
 - Eftersom rapporten är så pass lång, så tycker jag att du bör ha en "Outline of the thesis" eller liknande någonstans i början, där du kortfattat beskriver vad som kommer att behandlas i de olika delarna (inklusive de tre appendixen).
 
 - s.13, ungefär mitt på: "By building on the idea presented in this report.." syftar på din egen rapport, eller Ottosson och/eller Lennartsson?
+
+- Sec. 3.4 saknas också en del referenser, till LBM, MAC och FEM. Du bör ge läsaren åtminstone någon referens på varje, där man kan läsa vidare om man är intresserad (kan iofs vara samma referens om det finns något standardverk?).
 
 - Eq. (4.12) och därunder: ska indexet i börja på 0 eller 1?
 
@@ -97,6 +94,10 @@ Gjorda:
 
 - Sec.3.1.2: Vill gärna se en referens till användandet av Boussinesq-ekvationen i simuleringar. Som jag förstår det så skiljer du på Boussinesq och "shallow water equations" (även om väl även Boussinesq i princip är en "shallow water equation"?), och den referensen du ger verkar inte gälla Boussinesq?
 
+- Sec. B.1.1: Tycker att definitionen av multivariate normal distribution (B.36) hellre borde kommit två sidor tidigare, efter (B.25).
+
+- s.94, under (B.97): Är inte det du kallar "Kronecker delta" snarare ett "Dirac delta"?
+
 ---------------------------------------
 
 Kommer inte göra:
@@ -113,8 +114,6 @@ Numrerade:
 
 Onumrerade:
 -----------
-
-* Kort beskrivning av Hyper-C vore bra.
 
 ---------------------------------------
 
@@ -143,6 +142,8 @@ Gjorda:
 * På sidan 85, borde inte total reflected spectral power vara total spectral power, alltså bestå av både bidrag som har transmitterats och reflekterats genom ytan? Båda delarna ingår ju i L_0.
 
 * Vid presentationen av Navier-Stokes ekvation så vore det lämpligt om det framgick vilken som är advektionstermen då den refereras ofta till i arbetet.
+
+* Kort beskrivning av Hyper-C vore bra.
 
 ---------------------------------------
 
