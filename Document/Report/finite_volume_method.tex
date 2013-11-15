@@ -127,7 +127,7 @@ The \idxs{Navier--Stokes}{equations} are a statement of the conservation of mome
 \rho\frac{D\vec{u}}{Dt} = -\nabla p + \nabla\cdot\boldsymbol{\mathsf{T}} + \vec{f},
 \end{equation}
 %
-where $\rho$ is the density, $\vec{u}$ is the velocity, $p$ is the pressure, $\devstressten$ is the \index{stress tensor|see{deviatoric stress tensor}}\idxs{deviatoric stress}{tensor}, which includes \idxsp{viscous}{force}{s}, and $\vec{f}$ is the external forces per unit volume. $Dx/Dt$, where $x$ is a scalar or vector field, denotes the material derivative of $x$ and is the time derivative of the property $x$ for a material element following the flow (thus having the velocity $\vec{u}$). The right hand side of this equation is the net force per unit volume acting on the fluid. By multiplying both of the sides with an arbitrary volume, it becomes apparent that the equation is just another form of Newton's second law.
+where $\rho$ is the density, $\vec{u}$ is the velocity, $p$ is the pressure, $\devstressten$ is the \index{stress tensor|see{deviatoric stress tensor}}\idxs{deviatoric stress}{tensor}, which includes \idxsp{viscous}{force}{s}, and $\vec{f}$ is the external forces per unit volume. $Dx/Dt$, where $x$ is a scalar or vector field, denotes the material derivative of $x$ and is the time derivative of the property $x$ for a material element following the flow (thus having the velocity $\vec{u}$). The right hand side of this equation is the net force per unit volume acting on the fluid. By multiplying both of the sides with an arbitrary volume, it becomes apparent that the equation is a statement of Newton's second law.
 
 The material derivative of a scalar or vector field $x$ is defined as
 %
@@ -135,7 +135,7 @@ The material derivative of a scalar or vector field $x$ is defined as
 \frac{Dx}{Dt} = \frac{\partial x}{\partial t} + \vec{u}\cdot\nabla x,
 \end{equation}
 %
-and substituting this in \eqref{eq:navier_stokes_material_derivative} yields
+and by substituting this in \eqref{eq:navier_stokes_material_derivative}, we obtain
 %
 \begin{equation} \label{eq:navier_stokes}
 \rho\left(\frac{\partial\vec{u}}{\partial t} + \vec{u}\cdot\nabla\vec{u}\right) = -\nabla p + \nabla\cdot\boldsymbol{\mathsf{T}} + \vec{f}.
