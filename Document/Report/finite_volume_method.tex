@@ -214,7 +214,7 @@ p = p\,(\rho,\,T,\,\text{other material properties}),
 %
 where $T$ is the temperature.
 
-However, the set of fluid motion equations including \eqref{eq:pressure_compressible_flow} is \idxse{stiff}{equation}{stiff}, meaning that if an ordinary \idxs{explicit}{method} such as the \idxs{forward Euler}{method} is used, the \timestep has to be taken to be extremely small, or the method will be unstable. Ordinary \idxsp{numerical}{method}{s} for solving this set of equations are known to give rise to \idxs{spurious}{oscillations} in the solutions when the \idxs{speed of}{sound} multiplied by the \idx{time step} becomes too large in relation to the \idxs{characteristic}{length} of the \cells, making the numerical method \unstable. More generally, this stringent restriction of the \timestep is known as the \CFL condition.
+However, the set of fluid motion equations including \eqref{eq:pressure_compressible_flow} is \idxse{stiff}{equation}{stiff}, meaning that if an ordinary \idxs{explicit}{method} such as the \idxs{forward Euler}{method} is used, the \timestep has to be taken to be extremely small, or the method will be unstable. Ordinary \idxsp{numerical}{method}{s} for solving this set of equations are known to give rise to \idxs{spurious}{oscillations} in the solutions when the \idxs{speed of}{sound} times the \idx{time step} is too large in comparison to the \idxs{characteristic}{length} of the \cells, making the numerical method \unstable. More generally, this stringent restriction of the \timestep is known as the \CFL condition \citep{Courant1967}.
 
 Still, not all solvers for compressible flow suffers from this problem. In a work by \citet{Kwatra2009}, the \CFL condition is alleviated by introducing a \idxs{pressure}{field}, separated from the \idxs{density}{field}, for which a \PDE is derived. In this \PDE, an advection term is then identified, which can be calculated using either a \HO \ENO scheme or semi-Lagrangian advection. The reminding part of the \PDE is then discretized using the \index{implicit Euler method|see{backward Euler method}}\idxs{backward}{Euler method}. This is just the ordinary Euler method but for which the time derivative is calculated in the next time-step instead of in the current. For the pressure field, this time derivative involves the Laplacian of the pressure field in the next time-step, which is not known directly; hence, a \idxs{Poisson}{equation} arises. This technique doesn't lead to spurious acoustic oscillations and is similar to the technique used for solving incompressible flow, which also gives rise to a Poisson equation for solving the pressure field. In the limit where the speed of sound goes to infinity, it leads to the same Poisson equation as for incompressible flow \citep{Kwatra2009}.
 
@@ -380,10 +380,48 @@ If we define the error of the pressure in each iteration as
 we see that
 %
 \begin{equation} \label{eq:jacobi_method_error}
-\mathbf{\epsilon}^{(k+1)} \,=\, -\mathbf{D}^{-1}\mathbf{R}\mathbf{\epsilon}^{(k)},
+\mathbf{\epsilon}^{(k+1)} \,=\, -\mathbf{D}^{-1}\mathbf{R}\mathbf{\epsilon}^{(k)} \,=\, \mathbf{B}\mathbf{\epsilon}^{(k)},
 \end{equation}
 %
-which tells us that the error will decrease exponentially to the number of iterations, and that the error is composed of different \eigenvectors that decrease with different speeds. In fact, the eigenvector will represent different wave shapes, and can be assigned approximate \wavelengths in number of cells, where on a three-dimensional grid, wavelengths around 2 cell sizes will be those that decreases the quickest in strength.
+where $\mathbf{B} = -\mathbf{D}^{-1}\mathbf{R}$, and this in turn leads to
+%
+\begin{equation} \label{eq:jacobi_method_error_from_initial_error}
+\mathbf{\epsilon}^{(k)} \,=\, (\mathbf{B})^k\mathbf{\epsilon}^{(0)},
+\end{equation}
+%
+which tells us that the error will decrease exponentially to the number of iterations. The error can be seen as a linear combination of the \eigenvectors of $\mathbf{B}$, which will decrease with different speeds. In fact, an eigenvector of $\mathbf{B}$ will represent a wave shape, and can be assigned an approximate \wavelength in number of cells.
+
+The components in the error that decreases the quickest are the eigenvectors with the corresponding eigenvalues closest to 0. If we assume that $\mathbf{v}$ is an eigenvector with the eigenvalue 0, we find that 
+%
+\begin{equation}
+-\mathbf{D}^{-1}\mathbf{R}\mathbf{v} \,=\, 0\mathbf{v} \,=\, \mathbf{o},
+\end{equation}
+%
+where $\mathbf{o}$ is the zero vector, and by multiplying both sides with $-\mathbf{D}$ from the left, we obtain
+%
+\begin{equation} \label{eq:jacobian_fastest_convergence}
+\mathbf{R}\mathbf{v} \,=\, \mathbf{o}.
+\end{equation}
+%
+If we also assume that the grid is a $d$-dimensional, cubic --- or the corresponding if $d \neq 3$ --- grid with the grid spacing $\Delta r$ and with periodic boundaries, and that $\mathbf{v}$ is a vector on the form
+%
+\begin{equation} \label{eq:jacobi_regular_wave}
+v_j = e^{i\mathbf{k}^{\T}\mathbf{r}_j},
+\end{equation}
+%
+where $v_j$ is the $j$th element of $\mathbf{v}$, $\mathbf{k}$ is a wave vector associated with $\mathbf{v}$ and $\mathbf{r}_j$ is the position of the $j$th grid point, \eqref{eq:jacobian_fastest_convergence} can be rewritten as
+%
+\begin{equation}
+a\sum_{l=0}^{d-1} e^{i\mathbf{k}^{\T}(\mathbf{r}_j-\Delta r\mathbf{e}_{l})} + e^{i\mathbf{k}^{\T}(\mathbf{r}_j+\Delta r\mathbf{e}_{l})} \,=\, 0,\ \forall j,
+\end{equation}
+%
+where $a$ is a real number associated with $\mathbf{R}$ and $\mathbf{e}_l$ is the $l$th orthonormal basis vector. By dividing by $ae^{i\mathbf{k}^{\T}\mathbf{r}_j}$ at both sides, this system of linear equations reduces to just
+%
+\begin{equation}
+\sum_{l=0}^{d-1} e^{-i\mathbf{k}^{\T}\Delta r\mathbf{e}_{l}} + e^{i\mathbf{k}^{\T}\Delta r\mathbf{e}_{l}} \,=\, 2\sum_{l=0}^{d-1} \cos(\mathbf{k}^{\T}\Delta r\mathbf{e}_{l}) \,=\, 0.
+\end{equation}
+%
+On a three-dimensional grid, the solution of this equation will give a wavelength between $4/\sqrt{5}$ and $4/\sqrt{3}$ cell sizes. Any vector given by \eqref{eq:jacobi_regular_wave}, with a wavelength longer than $4/\sqrt{3}$ will have a positive eigenvalue, and any such eigenvector with a wavelength shorter than $4/\sqrt{5}$ will have a negative eigenvalue, so the wavelengths in $\mathbf{\epsilon}$ that decreases the quickest in strength are between $4/\sqrt{5}$ and $4/\sqrt{3}$ cell sizes.
 
 However, eigenvectors with shorter wavelength than so will \overshoot the \idxs{zero}{vector} and oscillate around it a few times before they converge to the desired accuracy. The shorter the wavelength the more the eigenvector will overshoot, and the eigenvector with the shortest corresponding wavelength will only converge extremely slowly. An eigenvector with the wavelength $2/\sqrt{d}$ would overshoot so much that it just changes sign, and \oscillate forth and back between two vectors and never converge.
 
