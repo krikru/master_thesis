@@ -320,8 +320,8 @@ If, on the other hand the pressure equation is solved to a very high accuracy, o
 
 No matter if we need to conserve mass perfectly or not, we will obtain a \idxs{Poisson}{equation} for the \idxs{pressure}{field}, which can be written on the form
 %
-\begin{equation} \label{eq:pressure_poisson_equation_general}
-\nabla^2 p \,=\, q(\vec{r}),
+\begin{equation} \label{eq:pressure_poisson_equation_continuous}
+\nabla^2 p(\vec{r}) \,=\, q(\vec{r}),
 \end{equation}
 %
 where $q$ is a known function of $\vec{r}$.
@@ -333,10 +333,10 @@ where $q$ is a known function of $\vec{r}$.
 There are a number of ways to solve the pressure Poisson equation. To begin with, we can realize that since the system is discretized, and since the Poisson equation is linear by nature, the equation can be written as a system of linear equations, that is
 %
 \begin{equation} \label{eq:pressure_poisson_equation_matrix}
-\mathbf{A\,p} \,=\, \mathbf{q},
+\mathbf{L\,p} \,=\, \mathbf{q},
 \end{equation}
 %
-where $\mathbf{p}$ is the vector containing the pressure in all cells, $\mathbf{q}$ is the vector containing $q(\vec{r})$ for all cells, and $\mathbf{A}$ is a sparse $N\times N$ \idx{matrix} containing the coefficients for the system of linear equations.
+where $\mathbf{p}$ is the vector containing the pressure in all cells, $\mathbf{q}$ is the vector containing $q(\vec{r})$ for all cells, and $\mathbf{L}$ is a sparse $N\times N$ \idx{matrix} containing the coefficients for the system of linear equations that are obtained when discretizing \eqref{eq:pressure_poisson_equation_continuous}. Since $\mathbf{L}$ is the matrix correspondence of the Laplace operator, $\nabla^2$, found in \eqref{eq:pressure_poisson_equation_continuous}, this particular matrix is also called the Laplacian matrix.
 
 First, there is a class of methods called \idxsp{direct}{method}{s}, which will solve the system of linear equations completely. An example is the naive \idxs{Gaussian}{elimination} algorithm, or the \idxs{Gauss--Jordan}{elimination} algorithm for a \idx{multi-core} system, having a \idxs{time}{complexity} of $O(N^3)$ operations in total in the general case for a system of $N$ unknowns, which is (as already mentioned) unacceptably slow.
 
@@ -355,19 +355,20 @@ In a work by \citet{Losasso2004}, this method was noted to require only about 20
 
 Another iterative method is the \idxs{Jacobi}{method}, where in each iteration, each equation in the system is solved independently of all other equations, by isolating the unknown central to the equation and by replacing the other unknowns with the values obtained for them from the previous iteration.
 
-If $\mathbf{A}$ is decomposed into a diagonal component $\mathbf{D}$ and the reminder $\mathbf{R}$, such that $\mathbf{A} = \mathbf{D} + \mathbf{R}$, this method can be expressed as
+If $\mathbf{L}$ is decomposed into a diagonal component $\mathbf{D}$ and the reminder $\mathbf{R}$, such that $\mathbf{L} = \mathbf{D} + \mathbf{R}$, this method can be expressed as
 %
 \begin{equation} \label{eq:jacobi_method}
 \mathbf{p}^{(k+1)} \,=\, \mathbf{D}^{-1}(\mathbf{q} - \mathbf{R}\mathbf{p}^{(k)}).
 \end{equation}
 %
-By subtracting $\mathbf{p}$ from both sides, we get
+Note that since $\mathbf{D}$ is a diagonal matrix, $\mathbf{D}^{-1}$ will also be a diagonal matrix, where the diagonal elements are the inverses of those in $\mathbf{D}$ at the same positions. By subtracting $\mathbf{p}$ from both sides of \eqref{eq:jacobi_method}, we get
 %
 \begin{equation}
+\renewcommand*{\arraystretch}{1.5}
 \begin{array}{c}
 \mathbf{p}^{(k+1)} - \mathbf{p} \\
-=\, \mathbf{D}^{-1}(\mathbf{q} - \mathbf{D}\,\mathbf{p} - \mathbf{R}\mathbf{p}^{(k)}) \,=\, \mathbf{D}^{-1}(\mathbf{q} - (\mathbf{D} + \mathbf{R})\,\mathbf{p} - \mathbf{R}(\mathbf{p}^{(k)} - \mathbf{p})) \\
-=\, \mathbf{D}^{-1}(\mathbf{q} - \mathbf{A}\,\mathbf{p} - \mathbf{R}(\mathbf{p}^{(k)} - \mathbf{p})) \,=\, -\mathbf{D}^{-1}\mathbf{R}(\mathbf{p}^{(k)} - \mathbf{p}).
+=\, \mathbf{D}^{-1}(\mathbf{q} - \mathbf{D}\,\mathbf{p} - \mathbf{R}\,\mathbf{p}^{(k)}) \,=\, \mathbf{D}^{-1}(\mathbf{q} - (\mathbf{D} + \mathbf{R})\,\mathbf{p} - \mathbf{R}(\mathbf{p}^{(k)} - \mathbf{p})) \\
+=\, \mathbf{D}^{-1}(\mathbf{q} - \mathbf{L}\,\mathbf{p} - \mathbf{R}(\mathbf{p}^{(k)} - \mathbf{p})) \,=\, -\mathbf{D}^{-1}\mathbf{R}(\mathbf{p}^{(k)} - \mathbf{p}).
 \end{array}
 \end{equation}
 %
@@ -380,30 +381,70 @@ If we define the error of the pressure in each iteration as
 we see that
 %
 \begin{equation} \label{eq:jacobi_method_error}
-\mathbf{\epsilon}^{(k+1)} \,=\, -\mathbf{D}^{-1}\mathbf{R}\mathbf{\epsilon}^{(k)} \,=\, \mathbf{B}\mathbf{\epsilon}^{(k)},
+\mathbf{\epsilon}^{(k+1)} \,=\, -\mathbf{D}^{-1}\mathbf{R}\,\mathbf{\epsilon}^{(k)} \,=\, \mathbf{B}\,\mathbf{\epsilon}^{(k)},
 \end{equation}
 %
-where $\mathbf{B} = -\mathbf{D}^{-1}\mathbf{R}$, and this in turn leads to
+where $\mathbf{B} = -\mathbf{D}^{-1}\mathbf{R}$, and by using induction, we find that
 %
 \begin{equation} \label{eq:jacobi_method_error_from_initial_error}
-\mathbf{\epsilon}^{(k)} \,=\, (\mathbf{B})^k\mathbf{\epsilon}^{(0)},
+\mathbf{\epsilon}^{(k)} \,=\, \mathbf{B}^k\mathbf{\epsilon}^{(0)}.
 \end{equation}
 %
-which tells us that the error will decrease exponentially to the number of iterations. The error can be seen as a linear combination of the \eigenvectors of $\mathbf{B}$, which will decrease with different speeds. In fact, an eigenvector of $\mathbf{B}$ will represent a wave shape, and can be assigned an approximate \wavelength in number of cells.
+This tells us that the error will decrease exponentially to the number of iterations. The error can be seen as a linear combination of the \eigenvectors of $\mathbf{B}$, which will decrease with different speeds. In fact, an eigenvector of $\mathbf{B}$ will represent a wave shape, and can be assigned an approximate \wavelength in number of cells. The components in the error that decreases the quickest are the eigenvectors with the corresponding eigenvalues closest to 0.
 
-The components in the error that decreases the quickest are the eigenvectors with the corresponding eigenvalues closest to 0. If we assume that $\mathbf{v}$ is an eigenvector with the eigenvalue 0, we find that 
+If we assume that $\mathbf{v}$ is an eigenvector of $\mathbf{B}$ with the eigenvalue $\lambda$, we find that 
 %
 \begin{equation}
--\mathbf{D}^{-1}\mathbf{R}\mathbf{v} \,=\, 0\mathbf{v} \,=\, \mathbf{o},
+-\mathbf{D}^{-1}\mathbf{R}\,\mathbf{v} \,=\, \lambda\,\mathbf{v},
 \end{equation}
 %
-where $\mathbf{o}$ is the zero vector, and by multiplying both sides with $-\mathbf{D}$ from the left, we obtain
+and by multiplying both sides with $-\mathbf{D}$ from the left, we obtain
 %
-\begin{equation} \label{eq:jacobian_fastest_convergence}
-\mathbf{R}\mathbf{v} \,=\, \mathbf{o}.
+\begin{equation}
+\mathbf{R}\,\mathbf{v} \,=\, -\lambda\,\mathbf{D}\,\mathbf{v},
 \end{equation}
 %
-If we also assume that the grid is a $d$-dimensional, cubic --- or the corresponding if $d \neq 3$ --- grid with the grid spacing $\Delta r$ and with periodic boundaries, and that $\mathbf{v}$ is a vector on the form
+and by adding $\mathbf{D}\,\mathbf{v}$ to both sides, we obtain
+%
+\begin{equation}
+\mathbf{L}\,\mathbf{v} \,=\, (1-\lambda)\mathbf{D}\,\mathbf{v}.
+\end{equation}
+
+\eqref{eq:pressure_poisson_equation_matrix} represents a spatial discretization of \eqref{eq:pressure_poisson_equation_continuous}. Performing this discretization involves \approximating the Laplace operator, $\nabla^2$; this approximation is itself discrete and is known as the discrete Laplace operator --- let's denote this $\nabla^2_{\text{D}}$.
+
+If we for the moment assume that the grid is a $d$-dimensional, cubic --- or the corresponding for $d \neq 3$ --- grid with the grid spacing $\Delta r$ and with periodic boundaries, the simplest useful definition of $\nabla^2_{\text{D}}$ would be
+%
+\begin{equation}
+\renewcommand*{\arraystretch}{2} 
+\begin{array}{c}
+\displaystyle \nabla^2_{\text{D}}\,\phi(\vec{r}) \,=\, \sum_{l=0}^{d-1} \frac{\phi(\vec{r}-\Delta r\,\normvec{e}_l)-2\,\phi(\vec{r})+\phi(\vec{r}+\Delta r\,\normvec{e}_l)}{\Delta r^2} \\
+\displaystyle =\frac{\,-2\,d\,\phi(\vec{r})}{\Delta r^2}+\sum_{l=0}^{d-1} \frac{\phi(\vec{r}-\Delta r\,\normvec{e}_l)+\phi(\vec{r}+\Delta r\,\normvec{e}_l)}{\Delta r^2},
+\end{array}
+\end{equation}
+%
+where $\phi(\vec{r})$ is an arbitrary scalar or vector field and $\mathbf{e}_l$ is the $l$th orthonormal basis vector. If we use this definition of $\nabla^2_{\text{D}}$ as substitute for $\nabla^2$ when discretizing \eqref{eq:pressure_poisson_equation_continuous}, we obtain
+%
+\begin{equation} \label{eq:pressure_poisson_equation_discretized}
+\frac{-2\,d\,p(\vec{r})}{\Delta r^2}+\sum_{l=0}^{d-1} \frac{p(\vec{r}-\Delta r\,\normvec{e}_l)+p(\vec{r}+\Delta r\,\normvec{e}_l)}{\Delta r^2} \,=\, q(\vec{r}).
+\end{equation}
+%
+By applying this equation to each point in the grid and comparing the resulting system of linear equations to \eqref{eq:pressure_poisson_equation_matrix}, and by remembering that $\mathbf{D}$ is the diagonal component of $\mathbf{L}$ and that $\mathbf{R}$ is the reminder, we can make the identifications
+%
+\begin{equation} \label{eq:diagonal_matrix_structured_grid}
+(\mathbf{D}\mathbf{p})_j \,=\, \frac{-2\,d\,p(\vec{r}_j)}{\Delta r^2} \,=\, \frac{-2\,d\,p_j}{\Delta r^2} \,=\, \left(\frac{-2\,d}{\Delta r^2}\mathbf{p}\right)_j
+\end{equation}
+%
+and
+%
+\begin{equation} \label{eq:diagonal_matrix_structured_grid}
+(\mathbf{R}\mathbf{p})_j \,=\, \sum_{l=0}^{d-1} \frac{p(\vec{r}_j-\Delta r\,\normvec{e}_l)+p(\vec{r}_j+\Delta r\,\normvec{e}_l)}{\Delta r^2},
+\end{equation}
+%
+where $\vec{r}_j$ is the location of, and $p_j$ is the pressure in, the $j$th grid point, respectively. Note that in this particular case, $\mathbf{D}$ reduces to just a scalar ($-2\,d\,\Delta r^{-2}$) times the identity matrix, $\mathbf{I}$. For a non-structured grid, this is typically not the case.
+
+\HRule
+
+and that $\mathbf{v}$ is a vector on the form
 %
 \begin{equation} \label{eq:jacobi_regular_wave}
 v_j = e^{i\mathbf{k}^{\T}\mathbf{r}_j},
