@@ -406,7 +406,7 @@ and by multiplying both sides with $-\mathbf{D}$ from the left, we obtain
 %
 and by adding $\mathbf{D}\,\mathbf{v}$ to both sides, we obtain
 %
-\begin{equation}
+\begin{equation} \label{eq:jacobian_error_eigenvector_equation}
 \mathbf{L}\,\mathbf{v} \,=\, (1-\lambda)\mathbf{D}\,\mathbf{v}.
 \end{equation}
 
@@ -414,59 +414,67 @@ and by adding $\mathbf{D}\,\mathbf{v}$ to both sides, we obtain
 
 If we for the moment assume that the grid is a $d$-dimensional, cubic --- or the corresponding for $d \neq 3$ --- grid with the grid spacing $\Delta r$ and with periodic boundaries, the simplest useful definition of $\nabla^2_{\text{D}}$ would be
 %
-\begin{equation}
+\begin{equation} \label{eq:grid_jacobian_simple}
 \renewcommand*{\arraystretch}{2} 
 \begin{array}{c}
-\displaystyle \nabla^2_{\text{D}}\,\phi(\vec{r}) \,=\, \sum_{l=0}^{d-1} \frac{\phi(\vec{r}-\Delta r\,\normvec{e}_l)-2\,\phi(\vec{r})+\phi(\vec{r}+\Delta r\,\normvec{e}_l)}{\Delta r^2} \\
-\displaystyle =\frac{\,-2\,d\,\phi(\vec{r})}{\Delta r^2}+\sum_{l=0}^{d-1} \frac{\phi(\vec{r}-\Delta r\,\normvec{e}_l)+\phi(\vec{r}+\Delta r\,\normvec{e}_l)}{\Delta r^2},
+\displaystyle \nabla^2_{\text{D}}\,\phi(\mathbf{r}) \,=\, \sum_{l=0}^{d-1} \frac{\phi(\mathbf{r}-\Delta r\,\mathbf{e}_l)-2\,\phi(\mathbf{r})+\phi(\mathbf{r}+\Delta r\,\mathbf{e}_l)}{\Delta r^2} \\
+\displaystyle =\frac{\,-2\,d\,\phi(\mathbf{r})}{\Delta r^2}+\sum_{l=0}^{d-1} \frac{\phi(\mathbf{r}-\Delta r\,\mathbf{e}_l)+\phi(\mathbf{r}+\Delta r\,\mathbf{e}_l)}{\Delta r^2},
 \end{array}
 \end{equation}
 %
-where $\phi(\vec{r})$ is an arbitrary scalar or vector field and $\mathbf{e}_l$ is the $l$th orthonormal basis vector. If we use this definition of $\nabla^2_{\text{D}}$ as substitute for $\nabla^2$ when discretizing \eqref{eq:pressure_poisson_equation_continuous}, we obtain
+where $\phi(\mathbf{r})$ is an arbitrary scalar or vector field, $\mathbf{r}$ is the location vector, and $\mathbf{e}_l$ is the $l$th orthonormal basis vector. If we use this definition of $\nabla^2_{\text{D}}$ as substitute for $\nabla^2$ when discretizing \eqref{eq:pressure_poisson_equation_continuous}, we obtain
 %
 \begin{equation} \label{eq:pressure_poisson_equation_discretized}
-\frac{-2\,d\,p(\vec{r})}{\Delta r^2}+\sum_{l=0}^{d-1} \frac{p(\vec{r}-\Delta r\,\normvec{e}_l)+p(\vec{r}+\Delta r\,\normvec{e}_l)}{\Delta r^2} \,=\, q(\vec{r}).
+\frac{-2\,d\,p(\mathbf{r})}{\Delta r^2}+\sum_{l=0}^{d-1} \frac{p(\mathbf{r}-\Delta r\,\mathbf{e}_l)+p(\mathbf{r}+\Delta r\,\mathbf{e}_l)}{\Delta r^2} \,=\, q(\mathbf{r}).
 \end{equation}
 %
 By applying this equation to each point in the grid and comparing the resulting system of linear equations to \eqref{eq:pressure_poisson_equation_matrix}, and by remembering that $\mathbf{D}$ is the diagonal component of $\mathbf{L}$ and that $\mathbf{R}$ is the reminder, we can make the identifications
 %
 \begin{equation} \label{eq:diagonal_matrix_structured_grid}
-(\mathbf{D}\mathbf{p})_j \,=\, \frac{-2\,d\,p(\vec{r}_j)}{\Delta r^2} \,=\, \frac{-2\,d\,p_j}{\Delta r^2} \,=\, \left(\frac{-2\,d}{\Delta r^2}\mathbf{p}\right)_j
+(\mathbf{D}\mathbf{p})_j \,=\, \frac{-2\,d\,p(\mathbf{r}_j)}{\Delta r^2} %\,=\, \frac{-2\,d\,p_j}{\Delta r^2} \,=\, \left(\frac{-2\,d}{\Delta r^2}\mathbf{p}\right)_j
 \end{equation}
 %
 and
 %
-\begin{equation} \label{eq:diagonal_matrix_structured_grid}
-(\mathbf{R}\mathbf{p})_j \,=\, \sum_{l=0}^{d-1} \frac{p(\vec{r}_j-\Delta r\,\normvec{e}_l)+p(\vec{r}_j+\Delta r\,\normvec{e}_l)}{\Delta r^2},
+\begin{equation} \label{eq:reminder_matrix_structured_grid}
+(\mathbf{R}\mathbf{p})_j \,=\, \sum_{l=0}^{d-1} \frac{p(\mathbf{r}_j-\Delta r\,\mathbf{e}_l)+p(\mathbf{r}_j+\Delta r\,\mathbf{e}_l)}{\Delta r^2},
 \end{equation}
 %
-where $\vec{r}_j$ is the location of, and $p_j$ is the pressure in, the $j$th grid point, respectively. Note that in this particular case, $\mathbf{D}$ reduces to just a scalar ($-2\,d\,\Delta r^{-2}$) times the identity matrix, $\mathbf{I}$. For a non-structured grid, this is typically not the case.
+where $\mathbf{r}_j$ is the location of, and $p_j$ is the pressure in, the $j$th grid point, respectively. Note that in this particular case, $\mathbf{D}$ reduces to just a scalar ($-2\,d\,\Delta r^{-2}$) times the identity matrix, $\mathbf{I}$. For a non-structured grid, this is typically not the case.
 
-\HRule
-
-and that $\mathbf{v}$ is a vector on the form
+If we assume that $\mathbf{v}$ is a vector on the form
 %
 \begin{equation} \label{eq:jacobi_regular_wave}
-v_j = e^{i\mathbf{k}^{\T}\mathbf{r}_j},
+v_j \,=\, v(\mathbf{r}_j) \,=\, e^{i\mathbf{k}^{\T}\mathbf{r}_j},
 \end{equation}
 %
-where $v_j$ is the $j$th element of $\mathbf{v}$, $\mathbf{k}$ is a wave vector associated with $\mathbf{v}$ and $\mathbf{r}_j$ is the position of the $j$th grid point, \eqref{eq:jacobian_fastest_convergence} can be rewritten as
+where $v_j$ is the $j$th element of $\mathbf{v}$, $\mathbf{k}$ is a wave vector associated with $\mathbf{v}$ and $\mathbf{r}_j$ is the position of the $j$th grid point, \eqref{eq:jacobian_error_eigenvector_equation} can, using \eqref{eq:diagonal_matrix_structured_grid} and \eqref{eq:reminder_matrix_structured_grid}, be rewritten as
 %
-\begin{equation}
-a\sum_{l=0}^{d-1} e^{i\mathbf{k}^{\T}(\mathbf{r}_j-\Delta r\mathbf{e}_{l})} + e^{i\mathbf{k}^{\T}(\mathbf{r}_j+\Delta r\mathbf{e}_{l})} \,=\, 0,\ \forall j,
+\begin{equation} \label{eq:jacobian_error_eigenvector_equation_discretized}
+\frac{-2\,d\,v(\mathbf{r}_j)}{\Delta r^2} + \sum_{l=0}^{d-1} \frac{v(\mathbf{r}_j-\Delta r\,\mathbf{e}_l)+v(\mathbf{r}_j+\Delta r\,\mathbf{e}_l)}{\Delta r^2} \,=\, (1-\lambda)\frac{-2\,d\,v(\mathbf{r}_j)}{\Delta r^2},
 \end{equation}
 %
-where $a$ is a real number associated with $\mathbf{R}$ and $\mathbf{e}_l$ is the $l$th orthonormal basis vector. By dividing by $ae^{i\mathbf{k}^{\T}\mathbf{r}_j}$ at both sides, this system of linear equations reduces to just
+and by removing $(\mathbf{D}\,\mathbf{v})_j$ from both sides and using \eqref{eq:jacobi_regular_wave}, we can rewrite this equation as
 %
-\begin{equation}
-\sum_{l=0}^{d-1} e^{-i\mathbf{k}^{\T}\Delta r\mathbf{e}_{l}} + e^{i\mathbf{k}^{\T}\Delta r\mathbf{e}_{l}} \,=\, 2\sum_{l=0}^{d-1} \cos(\mathbf{k}^{\T}\Delta r\mathbf{e}_{l}) \,=\, 0.
+\begin{equation} \label{eq:jacobian_error_eigenvector_equation_discretized_and_siplified}
+\sum_{l=0}^{d-1} \frac{e^{i\mathbf{k}^{\T}(\mathbf{r}_j-\Delta r\,\mathbf{e}_l)}+e^{i\mathbf{k}^{\T}(\mathbf{r}_j+\Delta r\,\mathbf{e}_l)}}{\Delta r^2} \,=\, \frac{2\,d\,\lambda\,e^{i\mathbf{k}^{\T}\mathbf{r}_j}}{\Delta r^2}.
 \end{equation}
 %
-On a three-dimensional grid, the solution of this equation will give a wavelength between $4/\sqrt{5}$ and $4/\sqrt{3}$ cell sizes. Any vector given by \eqref{eq:jacobi_regular_wave}, with a wavelength longer than $4/\sqrt{3}$ will have a positive eigenvalue, and any such eigenvector with a wavelength shorter than $4/\sqrt{5}$ will have a negative eigenvalue, so the wavelengths in $\mathbf{\epsilon}$ that decreases the quickest in strength are between $4/\sqrt{5}$ and $4/\sqrt{3}$ cell sizes.
+Finally, by using Euler's formula and dividing by $2\,d\,e^{i\mathbf{k}^{\T}\mathbf{r}_j}/\Delta r^2$, we obtain
+%
+\begin{equation} \label{eq:jacobian_error_eigenvector_equation_solved}
+\frac{1}{d}\sum_{l=0}^{d-1} \cos(\mathbf{k}^{\T}\Delta r\,\mathbf{e}_l) \,=\, \lambda
+\end{equation}
+%
+and we see that $\mathbf{v}$ is indeed an eigenvector of $\mathbf{B}$ with the eigenvalue $\lambda$, which is given by \eqref{eq:jacobian_error_eigenvector_equation_solved}.
 
-However, eigenvectors with shorter wavelength than so will \overshoot the \idxs{zero}{vector} and oscillate around it a few times before they converge to the desired accuracy. The shorter the wavelength the more the eigenvector will overshoot, and the eigenvector with the shortest corresponding wavelength will only converge extremely slowly. An eigenvector with the wavelength $2/\sqrt{d}$ would overshoot so much that it just changes sign, and \oscillate forth and back between two vectors and never converge.
+On a cubic grid, the solution of this equation shows that there are eigenvectors in the error that vanishes just after the first iteration, i.e. with $\lambda = 0$. These are waves with wavelengths ranging between $4/\sqrt{5}$ and $4/\sqrt{3}$ cell sizes.
 
-Besides, wavelengths much longer than the optimal will decrease in strength much slower. The number of iterations needed to for an eigenvector to reduce in strength with a certain amount is limited by $O(l^2)$, where $l$ is the wavelength of the eigenvector measured in number of cells, which means that this method quickly becomes extremely slow to use for a grid that consists of more than say 10 or 20 cells across, which most grids do.
+However, all waves with shorter wavelength than $4/\sqrt{5}$ cell sizes will have a negative eigenvalue and \overshoot the \idxs{zero}{vector} and oscillate around it a few times before reaching the desired accuracy. The shorter the wavelength the more the eigenvector will overshoot, and the eigenvector with the shortest corresponding wavelength will only converge extremely slowly. As can bee seen in \eqref{eq:jacobian_error_eigenvector_equation_solved}, the most high-frequent wave will have the eigenvalue -1 and \oscillate forth and back between two vectors and not converge at all.
+
+Besides, all waves with wavelengths longer than $4/\sqrt{3}$ cell sizes will have a positive eigenvalue, and very long waves will decrease in strength very slowly. The number of iterations needed to for an eigenvector to reduce in strength with a certain amount is limited by $O(l^2)$, where $l$ is the wavelength of the eigenvector measured in number of cells, which means that this method quickly becomes extremely slow to use for a grid that consists of more than say 10 or 20 cells across, which most grids do.
+
+In these calculations, the grid has for simplicity been assumed to be cubic (or the corresponding for $d \neq 3$), which is a very ideal case. For an octree grid (see \chapref{chap:octrees}) on the other hand, the cell size is not uniform, which means that \eqref{eq:grid_jacobian_simple} cannot be used to define $\nabla^2_{\text{D}}$, which makes the calculations much more complex. Still, the conclusion made about the slow convergence for some wavelengths still holds in principle even for an octree grid, even though the eigenvectors will look different from waves, and the notion of a wavelength becomes slightly diffused.
 
 On the other hand, both of these two issues with the Jacobi Method have remedies. The first one can be solved by switching from the Jacobi method to the \idxs{Gauss--Seidel}{method}, which is basically the same as the Jacobi method with the only difference that the unknowns that are replaced with the latest values obtained for them, which are either from the previous iteration or from the current iteration. One effect of using the Gauss--Seidel method instead of the Jacobi method is that the size of the overshoot for eigenvectors with short wavelengths is reduced significantly, and thus the rate of convergence is reduced from 1 to a value, and that the speed of the convergence for the eigenvectors with long wavelengths is increased by almost a factor 2. It will still take too long time for the eigenvectors with very long wavelength to converge, though.
 
