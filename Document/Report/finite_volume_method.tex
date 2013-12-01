@@ -392,27 +392,7 @@ where $\mathbf{B} = -\mathbf{D}^{-1}\mathbf{R}$, and by using induction, we find
 %
 This tells us that the error will decrease exponentially to the number of iterations. The error can be seen as a linear combination of the \eigenvectors of $\mathbf{B}$, which will decrease with different speeds. In fact, an eigenvector of $\mathbf{B}$ will represent a wave shape, and can be assigned an approximate \wavelength in number of cells. The components in the error that decreases the quickest are the eigenvectors with the corresponding eigenvalues closest to 0.
 
-If we assume that $\mathbf{v}$ is an eigenvector of $\mathbf{B}$ with the eigenvalue $\lambda$, we find that 
-%
-\begin{equation}
--\mathbf{D}^{-1}\mathbf{R}\,\mathbf{v} \,=\, \lambda\,\mathbf{v},
-\end{equation}
-%
-and by multiplying both sides with $-\mathbf{D}$ from the left, we obtain
-%
-\begin{equation}
-\mathbf{R}\,\mathbf{v} \,=\, -\lambda\,\mathbf{D}\,\mathbf{v},
-\end{equation}
-%
-and by adding $\mathbf{D}\,\mathbf{v}$ to both sides, we obtain
-%
-\begin{equation} \label{eq:jacobian_error_eigenvector_equation}
-\mathbf{L}\,\mathbf{v} \,=\, (1-\lambda)\mathbf{D}\,\mathbf{v}.
-\end{equation}
-
-\eqref{eq:pressure_poisson_equation_matrix} represents a spatial discretization of \eqref{eq:pressure_poisson_equation_continuous}. Performing this discretization involves \approximating the Laplace operator, $\nabla^2$; this approximation is itself discrete and is known as the discrete Laplace operator --- let's denote this $\nabla^2_{\text{D}}$.
-
-If we for the moment assume that the grid is a $d$-dimensional, cubic --- or the corresponding for $d \neq 3$ --- grid with the grid spacing $\Delta r$ and with periodic boundaries, the simplest useful definition of $\nabla^2_{\text{D}}$ would be
+\eqref{eq:pressure_poisson_equation_matrix} represents a spatial discretization of \eqref{eq:pressure_poisson_equation_continuous}. Performing this discretization involves \approximating the Laplace operator, $\nabla^2$; this approximation is itself discrete and is known as the discrete Laplace operator --- let's denote this $\nabla^2_{\text{D}}$. If we for the moment assume that the grid is a $d$-dimensional, cubic --- or the corresponding for $d \neq 3$ --- grid with the grid spacing $\Delta r$ and with periodic boundaries, the simplest useful definition of $\nabla^2_{\text{D}}$ would be
 %
 \begin{equation} \label{eq:grid_jacobian_simple}
 \renewcommand*{\arraystretch}{2} 
@@ -431,7 +411,7 @@ where $\phi(\mathbf{r})$ is an arbitrary scalar or vector field, $\mathbf{r}$ is
 By applying this equation to each point in the grid and comparing the resulting system of linear equations to \eqref{eq:pressure_poisson_equation_matrix}, and by remembering that $\mathbf{D}$ is the diagonal component of $\mathbf{L}$ and that $\mathbf{R}$ is the reminder, we can make the identifications
 %
 \begin{equation} \label{eq:diagonal_matrix_structured_grid}
-(\mathbf{D}\mathbf{p})_j \,=\, \frac{-2\,d\,p(\mathbf{r}_j)}{\Delta r^2} %\,=\, \frac{-2\,d\,p_j}{\Delta r^2} \,=\, \left(\frac{-2\,d}{\Delta r^2}\mathbf{p}\right)_j
+(\mathbf{D}\mathbf{p})_j \,=\, \frac{-2\,d\,p(\mathbf{r}_j)}{\Delta r^2} \,=\, \frac{-2\,d\,p_j}{\Delta r^2} \,=\, \left(-\frac{2\,d}{\Delta r^2}\mathbf{p}\right)_j,
 \end{equation}
 %
 and
@@ -440,33 +420,55 @@ and
 (\mathbf{R}\mathbf{p})_j \,=\, \sum_{l=0}^{d-1} \frac{p(\mathbf{r}_j-\Delta r\,\mathbf{e}_l)+p(\mathbf{r}_j+\Delta r\,\mathbf{e}_l)}{\Delta r^2},
 \end{equation}
 %
-where $\mathbf{r}_j$ is the location of, and $p_j$ is the pressure in, the $j$th grid point, respectively. Note that in this particular case, $\mathbf{D}$ reduces to just a scalar ($-2\,d\,\Delta r^{-2}$) times the identity matrix, $\mathbf{I}$. For a non-structured grid, this is typically not the case.
+where $\mathbf{r}_j$ is the location of, and $p_j$ is the pressure in, the $j$th grid point, respectively (note that in this particular case, $\mathbf{D}$ reduces to just a scalar, $-2\,d\,\Delta r^{-2}$, times the identity matrix, $\mathbf{I}$; for a non-structured grid, this is typically not the case). By considering \eqref{eq:diagonal_matrix_structured_grid} for all indexes $j$, we see that
+%
+\begin{equation}
+\mathbf{D}\mathbf{p} \,=\, -\frac{2\,d}{\Delta r^2}\mathbf{p},
+\end{equation}
+%
+and by multiplying both sides in this equation by $-\mathbf{D}^{-1}\Delta r^2/2\,d$, we obtain
+%
+\begin{equation} \label{eq:inverse_diagonal_matrix_structured_grid}
+\mathbf{D}^{-1}\mathbf{p} \,=\, -\frac{\Delta r^2}{2\,d}\mathbf{p}.
+\end{equation}
 
-If we assume that $\mathbf{v}$ is a vector on the form
+Let's assume that $\mathbf{x}$ is a vector on the form
 %
 \begin{equation} \label{eq:jacobi_regular_wave}
-v_j \,=\, v(\mathbf{r}_j) \,=\, e^{i\mathbf{k}^{\T}\mathbf{r}_j},
+x_j \,=\, x(\mathbf{r}_j) \,=\, e^{i\mathbf{k}^{\T}\mathbf{r}_j},
 \end{equation}
 %
-where $v_j$ is the $j$th element of $\mathbf{v}$, $\mathbf{k}$ is a wave vector associated with $\mathbf{v}$ and $\mathbf{r}_j$ is the position of the $j$th grid point, \eqref{eq:jacobian_error_eigenvector_equation} can, using \eqref{eq:diagonal_matrix_structured_grid} and \eqref{eq:reminder_matrix_structured_grid}, be rewritten as
+where $x_j$ is the $j$th element of $\mathbf{x}$ and $\mathbf{k}$ is a wave vector associated with $\mathbf{x}$. Multiplying $\mathbf{B}$ by this vector and by using \eqref{eq:inverse_diagonal_matrix_structured_grid} yields
 %
-\begin{equation} \label{eq:jacobian_error_eigenvector_equation_discretized}
-\frac{-2\,d\,v(\mathbf{r}_j)}{\Delta r^2} + \sum_{l=0}^{d-1} \frac{v(\mathbf{r}_j-\Delta r\,\mathbf{e}_l)+v(\mathbf{r}_j+\Delta r\,\mathbf{e}_l)}{\Delta r^2} \,=\, (1-\lambda)\frac{-2\,d\,v(\mathbf{r}_j)}{\Delta r^2},
+\begin{equation}
+\mathbf{B}\,\mathbf{x} \,=\, -\mathbf{D}^{-1}\mathbf{R}\,\mathbf{x} \,=\, \frac{\Delta r^2}{2\,d}\mathbf{R}\,\mathbf{x}
 \end{equation}
 %
-and by removing $(\mathbf{D}\,\mathbf{v})_j$ from both sides and using \eqref{eq:jacobi_regular_wave}, we can rewrite this equation as
+and by extracting the $j$th element and using \eqref{eq:reminder_matrix_structured_grid} we get
 %
-\begin{equation} \label{eq:jacobian_error_eigenvector_equation_discretized_and_siplified}
-\sum_{l=0}^{d-1} \frac{e^{i\mathbf{k}^{\T}(\mathbf{r}_j-\Delta r\,\mathbf{e}_l)}+e^{i\mathbf{k}^{\T}(\mathbf{r}_j+\Delta r\,\mathbf{e}_l)}}{\Delta r^2} \,=\, \frac{2\,d\,\lambda\,e^{i\mathbf{k}^{\T}\mathbf{r}_j}}{\Delta r^2}.
+\begin{equation}
+(\mathbf{B}\,\mathbf{x})_j \,=\, \frac{\Delta r^2}{2\,d}(\mathbf{R}\,\mathbf{x})_j \,=\, \sum_{l=0}^{d-1} \frac{x(\mathbf{r}_j-\Delta r\,\mathbf{e}_l)+x(\mathbf{r}_j+\Delta r\,\mathbf{e}_l)}{2\,d},
 \end{equation}
 %
-Finally, by using Euler's formula and dividing by $2\,d\,e^{i\mathbf{k}^{\T}\mathbf{r}_j}/\Delta r^2$, we obtain
+which, by using \eqref{eq:jacobi_regular_wave}, can be rewritten as
+%
+\begin{equation}
+(\mathbf{B}\,\mathbf{x})_j \,=\, \sum_{l=0}^{d-1} \frac{e^{-i\mathbf{k}^{\T}\Delta r\,\mathbf{e}_l}+e^{i\mathbf{k}^{\T}\Delta r\,\mathbf{e}_l}}{2\,d}x(\mathbf{r}_j).
+\end{equation}
+%
+Finally, by using Euler's formula and by considering the equation for all indexes $j$, we obtain
 %
 \begin{equation} \label{eq:jacobian_error_eigenvector_equation_solved}
-\frac{1}{d}\sum_{l=0}^{d-1} \cos(\mathbf{k}^{\T}\Delta r\,\mathbf{e}_l) \,=\, \lambda
+\mathbf{B}\,\mathbf{x} \,=\ \frac{1}{d}\sum_{l=0}^{d-1} \cos(\mathbf{k}^{\T}\Delta r\,\mathbf{e}_l) \mathbf{x}\, =\, \lambda\mathbf{x},
 \end{equation}
 %
-and we see that $\mathbf{v}$ is indeed an eigenvector of $\mathbf{B}$ with the eigenvalue $\lambda$, which is given by \eqref{eq:jacobian_error_eigenvector_equation_solved}.
+and we see that $\mathbf{x}$ is an eigenvector of $\mathbf{B}$, with the eigenvalue
+%
+\begin{equation}
+\lambda \,=\ \frac{1}{d}\sum_{l=0}^{d-1} \cos(\mathbf{k}^{\T}\Delta r\,\mathbf{e}_l).
+\end{equation}
+
+In order for $\mathbf{p}^{(k)}$ to converge to the solution, $\mathbf{p}$, the error $\mathbf{\epsilon}^{(k)}$ must converge to the zero vector, so in turn, every eigenvalue $\lambda$ of $\mathbf{B}$ must satisfy the inequality $|\lambda| < 1$, otherwise some components of the error will never vanish, and might even grow in amplitude instead of decrease. If a component in the error has an eigenvalue whose absolute value is very close to one, that component will decrease very slowly.
 
 On a cubic grid, the solution of this equation shows that there are eigenvectors in the error that vanishes just after the first iteration, i.e. with $\lambda = 0$. These are waves with wavelengths ranging between $4/\sqrt{5}$ and $4/\sqrt{3}$ cell sizes.
 
@@ -476,7 +478,7 @@ Besides, all waves with wavelengths longer than $4/\sqrt{3}$ cell sizes will hav
 
 In these calculations, the grid has for simplicity been assumed to be cubic (or the corresponding for $d \neq 3$), which is a very ideal case. For an octree grid (see \chapref{chap:octrees}) on the other hand, the cell size is not uniform, which means that \eqref{eq:grid_jacobian_simple} cannot be used to define $\nabla^2_{\text{D}}$, which makes the calculations much more complex. Still, the conclusion made about the slow convergence for some wavelengths still holds in principle even for an octree grid, even though the eigenvectors will look different from waves, and the notion of a wavelength becomes slightly diffused.
 
-On the other hand, both of these two issues with the Jacobi Method have remedies. The first one can be solved by switching from the Jacobi method to the \idxs{Gauss--Seidel}{method}, which is basically the same as the Jacobi method with the only difference that the unknowns that are replaced with the latest values obtained for them, which are either from the previous iteration or from the current iteration. One effect of using the Gauss--Seidel method instead of the Jacobi method is that the size of the overshoot for eigenvectors with short wavelengths is reduced significantly, and thus the rate of convergence is reduced from 1 to a value, and that the speed of the convergence for the eigenvectors with long wavelengths is increased by almost a factor 2. It will still take too long time for the eigenvectors with very long wavelength to converge, though.
+On the other hand, both of these two issues with the Jacobi Method have remedies. The issue with the short wavelengths, for which $\lambda$ is negative, can be solved by switching from the Jacobi method to the \idxs{Gauss--Seidel}{method}, which is basically the same as the Jacobi method with the only difference that the unknowns that are replaced with the latest values obtained for them, which are either from the previous iteration or from the current iteration. One effect of using the Gauss--Seidel method instead of the Jacobi method is that the size of the overshoot for eigenvectors with short wavelengths is reduced significantly, and thus the rate of convergence is reduced from 1 to a value, and that the speed of the convergence for the eigenvectors with long wavelengths is increased by almost a factor 2. It will still take too long time for the eigenvectors with very long wavelength to converge, though.
 
 Another technique that can be used to speed up the performance is \SOR, which can be applied to both the Jacobi method and the Gauss--Seidel method. In \SOR, the value that is normally used as the updated value for $\mathbf{p}$ is treated as an intermediate value, and the updated value is instead formed as a linear combination of the old value and this intermediate value. \SOR performs best if the coefficients used in the linear combination are varied between the iterations, and by calculating these coefficients from the \idxsp{Chebyshev}{node}{s}, \SOR can perform a very low rate of convergence for all eigenvectors with eigenvalues within a certain range (or in an ellipse in the complex plane if the eigenvalues are complex). However, this range must be located at a distance from 0 (on which side doesn't matter), which means that \SOR still performs poorly for eigenvectors with eigenvalues close to zero, which in this case corresponds to eigenvectors with long wavelengths.
 
