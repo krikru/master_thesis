@@ -11,7 +11,7 @@ The \FVM is a way of solving a \PDE, or a set of \PDEs, where the room is \discr
 
 \section{Fluid simulation}
 
-The \FVM can handle \simulation of fluids in a realistic way. It is natural to use this method to represent fluids, since it represents them in a continuous way, and since fluids are continuous medias (at least on the level they are simulated). This can be contrasted to representing the fluids as \idxse{fluid}{particles}{particles}, which are discrete.
+The \FVM can handle \simulation of fluids in a realistic way. It is natural to use this method to represent fluids, since it represents them in a continuous way, and since fluids are continuous media (at least on the macroscopic level on which they are simulated). This can be contrasted to representing the fluids as \idxse{fluid}{particles}{particles}, which are discrete.
 
 When using the \FVM, the simulation can be concentrated to the interesting parts of the flow by using \idxs{adaptive}{mesh refinement} \citep{Popinet2003,Losasso2004}, to speed up the simulation orders of magnitude without loosing orders of magnitude in numerical precision in the interesting parts of the flow. This doesn't really have any natural correspondence when using particles. It is possible to initialize the particles with different \idxsp{effective}{size}{s} in order to make some parts of flow have a lower \idxs{particle}{density} and hence require less \idxs{computational}{power} per unit volume; in that way \idxs{numerical}{precision} can be traded for speed. However, this introduces another problem --- as the flow evolves, \advection may cause large particles to end up at places in the flow where high numerical precision is desired and decrease the numerical precision to under the required level. Besides, if the particles have a high velocity relative to each other (a high \temperature), \diffusion will cause large and small particles to mix and the large particles will once again end up at places in the flow where high numerical precision is desired.
 
@@ -108,7 +108,7 @@ such that $r_i = \normvec{e}_i\cdot\vec{r}$. Since we are on an orthogonal grid,
 \begin{cases}
 \vec{r}_{\normvec{e}_i^-} \,=\, \vec{r} \,-\, \Delta r_i\,\normvec{e}_i\\[1ex]
 \vec{r}_{\normvec{e}_i^+} \,=\, \vec{r} \,+\, \Delta r_i\,\normvec{e}_i\\[1ex]
-\end{cases}\ ,
+\end{cases},
 \end{equation}
 %
 where $\Delta r_i$ is the grid spacing in $\normvec{e}_i$-direction. By combining \eqrefs \ref{eq:phi_derivative_final}, \ref{eq:gradient_orthogonal} and \ref{eq:neighboring_locations}, we can write the gradient of $\phi$ as
@@ -199,7 +199,7 @@ This is known as the \idxs{continuity}{equation} and has to be satisfied in orde
 %
 where $\rho_n$ denotes the density in \timestep $n$.
 
-\section{Pressure calculation}
+\section{Pressure equation}
 \label{sec:pressure_calculation}
 
 Neither the Euler equations nor the Navier--Stokes equations specify how the pressure is updated, so when solving either of these two sets of equations one is essentially free to calculate the pressure in whichever way one desires. Together with a \idxs{pressure}{model}, the two sets of equations come in two major forms which usually differs significantly in implementation and stability: The \indexs{compressible Navier--Stokes}{equations}\indexs{compressible Euler}{equations}\compressible forms and the \indexs{incompressible Navier--Stokes}{equations}\indexs{incompressible Euler}{equations}\incompressible forms. For \thisprojectwork, the compressible Euler equations are solved.
@@ -324,9 +324,9 @@ No matter if we need to conserve mass perfectly or not, we will obtain a \idxs{P
 \nabla^2 p(\vec{r}) \,=\, q(\vec{r}),
 \end{equation}
 %
-where $q$ is a known function of $\vec{r}$.
+where $q$ is a known function of $\vec{r}$. When the equation for describing the pressure takes this form, it is often referred to as the pressure Poisson equation.
 
-\subsection{Solution of the pressure Poisson equation}
+\section{Solution of the pressure Poisson equation}
 
 \label{sec:pressure_poisson_equation_solution}
 
@@ -342,7 +342,7 @@ First, there is a class of methods called \idxsp{direct}{method}{s}, which will 
 
 Then there is a class of methods called \idxsp{iterative}{method}{s}, which start with an initial, guessed value, $\mathbf{p}^{(0)}$, and then generate a sequence, $\{\mathbf{p}^{(n)}\}$, of improving \approximate solutions, where $n$ is the number of the iterations carried out. Different iterative methods converge at different rates to the real solution, $\mathbf{p}$. For functions that are continuous in time and are used in time-stepping methods to numerically solve differential equations, like the pressure field in the case of \CFD, a value that is often used as an initial guess is the solution of the same equation for the previous time step.
 
-\subsubsection{The Preconditioned Conjugate Gradient Method}
+\subsection{The Preconditioned Conjugate Gradient Method}
 
 %See also \textit{Incomplete Cholesky Preconditioned Conjugate Gradients method}, described in http://www.cs.ubc.ca/~rbridson/fluidbook/ (Fluid Simulation for Computer Graphics). This method uses the http://en.wikipedia.org/wiki/Incomplete_Cholesky_factorization (incomplete Cholesky factorization) as preconditioner.
 
@@ -351,7 +351,7 @@ One iterative method is the \PCG method, which requires the matrix formulation o
 In a work by \citet{Losasso2004}, this method was noted to require only about 20 iterations to converge to an \accuracy of \idxs{machine}{precision} and that the pressure solver that was used only accounted for \mbox{25 \%} of the simulation time. However, it also noted that if the equation formulation is nonsymmetric, it requires nonoptimal preconditioners which easily leads to an order of magnitude slowdown, and in the worst case, even problems with robustly finding a solution at all.
 % The \textit{Incomplete Cholesky Preconditioned Conjugate Gradients method} is described in http://www.cs.ubc.ca/~rbridson/fluidbook/ (Fluid Simulation for Computer Graphics).
 
-\subsubsection{The Jacobi Method}
+\subsection{The Jacobi Method}
 
 Another iterative method is the \idxs{Jacobi}{method}, where in each iteration, each equation in the system is solved independently of all other equations, by isolating the unknown central to the equation and by replacing the other unknowns with the values obtained for them from the previous iteration.
 
@@ -474,31 +474,25 @@ Eigenvalues equal to 0 corresponds to eigenvector that will vanish after only on
 
 However, all waves with $l < 4/\sqrt{5}$ will have a negative eigenvalue and \overshoot the \idxs{zero}{vector}. The shorter the wavelength the more the eigenvector will overshoot, and the waves with the shortest wavelength will only converge very slowly. As can bee seen in \eqref{eq:jacobian_error_eigenvector_equation_solved}, the most high-frequent wave will have the eigenvalue $-1$ and \oscillate forth and back between two vectors and not converge at all.
 
-Besides, all waves with $l > 4/\sqrt{3}$ will have positive eigenvalues. As can be seen by analyzing \eqref{eq:jacobian_b_eigenvalue}, the number of iterations needed for a wave to reduce in strength with a certain amount is limited by $\Theta(l^2)\ (l\to\infty)$, where the $\Theta$ symbol indicates big $\Theta$ (theta) notation which in contrast to the big O notation, which only limits upwards, limits both upwards and downwards. This means that the Jacobi method very quickly becomes slow as $l$ becomes large, and becomes extremely slow for grids that consist of more than say 10 or 20 cells across, which most grids do.
+Besides, all waves with $l > 4/\sqrt{3}$ will have positive eigenvalues. As can be seen by analyzing \eqref{eq:jacobian_b_eigenvalue}, the number of iterations needed for a wave to reduce in strength with a certain amount is limited by $O(l^2)\ (l\to\infty)$. This means that the Jacobi method very quickly becomes slow as $l$ becomes large, and becomes extremely slow for grids that consist of more than say 10 or 20 cells across, which most grids do.
 
 In these calculations, the grid has for simplicity been assumed to be cubic (or the corresponding for $d \neq 3$), which is a very ideal case. For an octree grid (see \chapref{chap:octrees}) on the other hand, the cell size is not uniform, which means that \eqref{eq:grid_jacobian_simple} cannot be used to define $\nabla^2_{\text{D}}$, which makes the calculations much more complex. Still, the conclusion made about the slow convergence for high and low values of $l$ still holds in principle even for an octree grid, even though the eigenvectors will look different from waves, which makes it impossible to calculate an exact value for $l$, since $l$ requires the eigenvectors to, locally, have a proper wavelength which the new eigenvectors do not have.
 
-\subsubsection{The Gauss--Seidel Method}
+\subsection{The Gauss--Seidel Method}
 
 Fortunately, there are remedies for both of the two issues mentioned when discussion the Jacobi Method. The issue with the short wavelengths can be remedied by switching from the Jacobi method to the \idxs{Gauss--Seidel}{method}, which is a variant of the Jacobi method. Just like in the Jacobi method, each equation corresponds to an unknown. But unlike in the Jacobi method, in the Gauss--Seidel method the order in which these equations are solved matter. For each equation that is being solved, the unknowns are replaced by the latest estimations of them, which means that the unknowns that correspond to equations that have already been solved in the current iteration will be replaced by the estimations from the current iteration, while the rest of the unknown, except from the unknown central to the equation that is being solved, are replaced by the estimations from the previous iteration.
 
 One effect of switching from the Jacobi method to the Gauss--Seidel method is that the size of the overshoots for eigenvectors with short wavelengths are reduced significantly, and there will no longer be any short wavelengths converging extremely slowly or not at all.
 
-Also, numerical analysis shows that the speed of the convergence for waves with long wavelengths is increased by almost a factor 2. However, this is just a constant factor, and convergence to a satisfactory level of these wavelengths will still require $\Theta(l^2)\ (l\to\infty)$ iterations which is much too slow for grids that are not very small.
+Also, numerical analysis shows that the speed of the convergence for waves with long wavelengths is increased by almost a factor 2. However, this is just a constant factor, and convergence to a satisfactory level of these wavelengths will still require $O(l^2)\ (l\to\infty)$ iterations which is much too slow for grids that are not very small.
 
-\subsubsection{Chebyshev accelerated Successive Over-Relaxation}
+\subsection{The Multigrid Method}
 
-Another technique that can be used to speed up the performance is \SOR \citep{Auzinger2011}, which can be applied to both the Jacobi method and the Gauss--Seidel method. In \SOR, the value that is normally used as the updated value for $\mathbf{p}$ is treated as an intermediate value, and the updated value is instead formed as a linear combination of the old value and this intermediate value. \SOR performs best if the coefficients used in the linear combination are varied between the iterations, and by calculating these coefficients from the \idxsp{Chebyshev}{node}{s}, \SOR can perform a very low rate of convergence for all eigenvectors with eigenvalues within a certain range (or in an ellipse in the complex plane if the eigenvalues are complex, if the coefficients are instead calculated from the poles in a type I Chebyshev filter). However, this range must be located at a distance from 0 (on which side doesn't matter), which means that \SOR still performs poorly for eigenvectors with eigenvalues close to zero, which in this case corresponds to eigenvectors with high values of $l$.
+We have concluded that neither the Jacobi method nor the Gauss--Seidel method can cope with eigenvectors with large $l$ very well, which needs to be tackled. Can we somehow overcome the $O(l^2)\ (l\to\infty)$ requirement for the number of iterations that affects eigenvectors with large $l$? Unfortunately not. Can we decrease $l$ somehow? Well, $l$ is the ratio of wavelength to cell size. We cannot decrease the wavelength, but it is possible to increase the cell size, simply by coarsening the grid.
 
-%Since we can't resolve the issue related to the eigenvectors with long wavelengths, we need another way to tackle it.
+In the \idxs{multigrid}{method}, the grid is continuously coarsened until a low enough grid resolution is obtained, usually meaning that the grid is just a few cells across. When applied to solving the pressure Poisson equation, the pressure field is downsampled into a new discretization each time the grid is coarsened, and a new set of linear equations is created for that discretization. Since the cell size increases each time the grid is coarsened, $l$ decreases and the convergence of long wavelengths is accelerated.
 
-\subsubsection{The Multigrid Method}
-
-We have concluded that in the Jacobi method (if using \SOR) or the Gauss--Seidel method, eigenvectors with small $l$ in the Jacobi method (if using \SOR) or the Gauss--Seidel method are not a problem, but that eigenvectors with high $l$ are, which needs to be tackled. Can we somehow overcome the $\Theta(l^2)\ (l\to\infty)$ requirement for the number of iterations that affects eigenvectors with large $l$? Unfortunately not. Can we decrease $l$ somehow? Well, $l$ is the ratio of wavelength to cell size. We cannot decrease the wavelength, but it is possible to increase the cell size, simply by coarsening the grid.
-
-In the \idxs{multigrid}{method}, the grid is continuously coarsened until a low enough grid resolution, usually meaning that the grid is just a few cells across, is obtained. When applied to solving the pressure Poisson equation, the pressure field is downsampled into a new discretization each time the grid is coarsened, and a new set of linear equations is created for that discretization. Since the cell size increases each time the grid is coarsened, the convergence of long wavelengths in the pressure field is accelerated as $l$ decreases.
-
-As already mentioned, the grid is continuously coarsened and the pressure field is downsampled until a desired resolution is obtained. Now, starting from the coarsest grid, one or a few iterations with the Gauss--Seidel method or with \SOR are carried out in order to find an \approximate solution of the pressure equation. The difference between the discretized pressure field stored on that level before and after the iterations is upsampled and added to the discretized pressure field stored on the second coarsest grid. A few iterations of the same iterative method are carried out and the difference in the discretized pressure field stored on that grid is upsampled and added to the third coarsest grid, and so on until the finest grid has been reached. Finally, a few iterations of the iterative method used on the other grids are carried out in order to approximately solve the pressure equation even on the finest level.
+As already mentioned, the grid is continuously coarsened and the pressure field is downsampled until a desired resolution is obtained. Now, starting from the coarsest grid, one or a few iterations with the Gauss--Seidel method are carried out in order to find an \approximate solution of the pressure equation. The difference between the discretized pressure field stored on that level before and after the iterations is upsampled and added to the discretized pressure field stored on the second coarsest grid. A few iterations of the same iterative method are carried out and the difference in the discretized pressure field stored on that grid is upsampled and added to the third coarsest grid, and so on until the finest grid has been reached. Finally, a few iterations of the iterative method used on the other grids are carried out in order to approximately solve the pressure equation even on the finest level.
 
 Because upsampling needs some way to interpolate the discretized pressure field, and often has a slight \idxsp{low-pass}{filter}{ing} effect simply because it tends to smear it out, additional errors are introduced in the pressure field. Hence, the entire process of coarsening and refining the grid usually has to be repeated a number of times before a solution of the desired accuracy can be reached.
 
@@ -506,6 +500,26 @@ Note that although a single grid is unable to quickly make long wavelengths in t
 
 Finally, although the multigrid method can be applied on an octree \citep{Popinet2003,Ji2012}, the implementation becomes slightly more complicated than on a regular grid. To ensure optimal performance in the general case, a special method that coarsens the grid on multiple levels simultaneously has to be used \citep{Popinet2003}.
 
-%\subsection{Semicompressible water}
+\subsection{Other acceleration methods}
 
-%\section{Boundary conditions}
+Except from the methods already mentioned here, there are other methods that can be used to speed up the convergence of iterative method even more. One example is Chebyshev acceleration \citep{Auzinger2011}, which uses the Chebyshev nodes to increase the convergence speed for eigenvectors with eigenvalues within a chosen interval, provided only that the interval does not contain 1. This method can be used to speed up the multigrid method, assumed that each iteration in the latter is carried out in the same way.
+
+%\subsection{Successive Over-Relaxation and Chebyshev acceleration}
+
+%Another technique that can be used to speed up the performance is \SOR . This technique was originally intended to be used for the Gauss--Seidel method, but can practically be used for any iterative method.
+
+%For linear, iterative methods for solving systems of linear equations, it is the eigenvector with the largest absolute eigenvalue that determines the speed of convergence. The smaller this absolute value is, the faster the convergence is.
+
+%In \SOR, the value that is normally used as the updated value for $\mathbf{p}$ --- $\mathbf{p}^{(n+1)}$ --- is treated as an intermediate value, $\mathbf{p}^{*(n)}$, and the updated value is instead formed as a linear combination of the old value and this intermediate value as
+%
+%\begin{equation}
+%\mathbf{p}^{(n+1)} \,=\, \mathbf{p}^{(n)} + \omega(\mathbf{p}^{*(n)} - \mathbf{p}^{(n)}),
+%\end{equation}
+%
+%where $\omega$ is an interpolation constant. The result is that if an eigenvector in the original method has eigenvalue $\lambda$, the same eigenvector will after \SOR of the method get the eigenvalue $1-\omega(1-\lambda)$. For each iterative method, there is a point $\lambda_{\textbf{center}}$ in the complex plane for which the farthest distance to any of the eigenvectors is the smallest. If this point is not the origin, \SOR can be used to speed up the iterative method by moving this point to the origin, which is achieved by solving the equation $1-\omega(1-\lambda_{\textbf{center}}) = 0$. If $\lambda_{\textbf{center}}$ already is 0, \SOR cannot be used to speed up the iterative method any further.
+
+%This can speed up the convergence of an iterative method if the sum of the minimum eigenvalue, $\lambda_{\textbf{min}}$ and the maximum eigenvalue, $\lambda_{\textbf{max}}$, is not 0, i.e. $\lambda_{\textbf{min}} + \lambda_{\textbf{max}} \new 0$, since it is the eigenvalue farthest away from 0 that determines. However, when this sum is zero, \SOR can not be used to speed up the convergence any further.
+
+%On the other hand, if the 
+
+%\SOR performs best if the coefficients used in the linear combination are varied between the iterations, and by calculating these coefficients from the \idxsp{Chebyshev}{node}{s}, \SOR can perform a very low rate of convergence for all eigenvectors with eigenvalues within a certain range (or in an ellipse in the complex plane if the eigenvalues are complex, if the coefficients are instead calculated from the poles in a type I Chebyshev filter). However, this range must be located at a distance from 0 (on which side doesn't matter), which means that \SOR still performs poorly for eigenvectors with eigenvalues close to zero, which in this case corresponds to eigenvectors with high values of $l$.

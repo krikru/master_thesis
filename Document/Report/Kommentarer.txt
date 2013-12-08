@@ -47,10 +47,10 @@ Magnus
 Inte gjorda än:
 
 - Vill även ha ytterligare referenser i Sec. 4.6:
-CFL condition i 4.6.1;
+(check) CFL condition i 4.6.1;
 Eq. (4.29) "it turns out that" (ej uppenbart för mig..);
-s.29 "wavelengths around 2 cell sizes will be those that decrease the quickest in strength";
-SOR på samma sida.
+(check) s.29 "wavelengths around 2 cell sizes will be those that decrease the quickest in strength";
+(check) SOR på samma sida.
 
 - Kapitel 9: Som Kenneth tidigare nämnt så tycker jag också nu att resultat-kapitlet känns lite tunt. Jag tycker åtminstone att du bör ha en diskussion om Fig.9.1-9.3 i huvudtexten (nu nämner du bara 9.1d-h). Diskutera vad figurerna illustrerar, och förklara för läsaren vad som är viktigt att notera!
 
