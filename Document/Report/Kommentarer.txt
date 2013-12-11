@@ -52,8 +52,6 @@ Inte gjorda än:
 
 - Conclusions: Här tycker jag också du bör nämna de problem du diskuterar i Sec.9.1 med instabiliteter och ytans form.
 
-- s.71, punkt 2: Är "UPWIND" en förkortning? (Finns ej med i din lista.) Borde nog ha en referens här också.
-
 + Kommentarer skrivna direkt i blocket.
 
 ---------------------------------------
@@ -97,6 +95,8 @@ CFL condition i 4.6.1;
 Eq. (4.29) "it turns out that" (ej uppenbart för mig..);
 s.29 "wavelengths around 2 cell sizes will be those that decrease the quickest in strength";
 SOR på samma sida.
+
+- s.71, punkt 2: Är "UPWIND" en förkortning? (Finns ej med i din lista.) Borde nog ha en referens här också.
 
 ---------------------------------------
 

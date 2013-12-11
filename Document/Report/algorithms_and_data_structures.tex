@@ -275,7 +275,7 @@ However, following these steps directly would \idxs{low-pass}{filter} the \idxs{
     \vec{u}_0 \,=\, \sum_{j=0}^{d-1} \frac{\sum_{S_i}|\normvec{n}_i\cdot\normvec{e}_j|\,w_i\,\normvec{n}_i\,u_i}{\sum_{S_i}|\normvec{n}_i\cdot\normvec{e}_j|\,w_i}.
     \end{equation}
     
-    \item Calculate the face-centered \idxsp{velocity}{vector}{s} from the cell-centered velocity vectors, by using a bounded advection scheme since these are the vectors that are going to be advected. In \thisprojectwork, the \UPWIND scheme has been used, for which this step is simply a means of picking the cell-centered velocity vector in the cell the flow is comming from and assigning that to the cell face. If the flow is parallel to the cell face or stands still, i.e. $u_i = 0$, it doesn't matter what the face-centered velocity vector is set to as long as it is not undefined.
+    \item Calculate the face-centered \idxsp{velocity}{vector}{s} from the cell-centered velocity vectors, by using a bounded advection scheme since these are the vectors that are going to be advected. In this thesis work, the face-centered velocity vector is chosen to be the cell-centered velocity vector in the cell the flow is coming from. If the flow is parallel to the cell face or stands still, i.e.\ $u_i = 0$, it doesn't matter what the rest of the face-centered velocity vector components are set to as long as they are defined.
     
     \item Convert the face-centered velocity vectors into \idxsp{quasi-momentum}{vector}{s} (momentum per unit volume) by multiplying with the face-centered density (the density of the fluxed volume). It is therefore necessary that the mass that is going to be advected is calculated so that the face-centered density can be calculated.
     
