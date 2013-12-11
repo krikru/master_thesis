@@ -46,12 +46,6 @@ Magnus
 
 Inte gjorda än:
 
-- Vill även ha ytterligare referenser i Sec. 4.6:
-(check) CFL condition i 4.6.1;
-Eq. (4.29) "it turns out that" (ej uppenbart för mig..);
-(check) s.29 "wavelengths around 2 cell sizes will be those that decrease the quickest in strength";
-(check) SOR på samma sida.
-
 - Kapitel 9: Som Kenneth tidigare nämnt så tycker jag också nu att resultat-kapitlet känns lite tunt. Jag tycker åtminstone att du bör ha en diskussion om Fig.9.1-9.3 i huvudtexten (nu nämner du bara 9.1d-h). Diskutera vad figurerna illustrerar, och förklara för läsaren vad som är viktigt att notera!
 
 - Sec. 11.6: Liknande kommentar om Nyquist-frekvensen: kanske borde du haft en definition av den första gången den nämns i rapporten?
@@ -97,6 +91,12 @@ Gjorda:
 - Sec. B.1.1: Tycker att definitionen av multivariate normal distribution (B.36) hellre borde kommit två sidor tidigare, efter (B.25).
 
 - s.94, under (B.97): Är inte det du kallar "Kronecker delta" snarare ett "Dirac delta"?
+
+- Vill även ha ytterligare referenser i Sec. 4.6:
+CFL condition i 4.6.1;
+Eq. (4.29) "it turns out that" (ej uppenbart för mig..);
+s.29 "wavelengths around 2 cell sizes will be those that decrease the quickest in strength";
+SOR på samma sida.
 
 ---------------------------------------
 
