@@ -77,9 +77,9 @@ When a wave hits a boundary to a region where it propagates with a different spe
 
 In scenes simulated with a grid of finite size, this usually happens on the border of the grid, unless special care has been taken to this when deciding which \idxsp{boundary}{condition}{s} to use. These reflections are unwanted and referred to as \idxs{spurious}{reflections} since they don't occur in nature.
 
-In scenes simulated on an \octree based \grid, this also happens in \LOD transitions, since different \idxsp{LOD}{level}{s} have different lowest wavelengths they can represent called the \idxs{Nyquist}{frequency} (which is double the cell size for rectangular cells), and the fact that a wavelength which can be represented on two different LOD levels often will propagate with different speeds on the two LOD levels, especially if the wavelength is close to the Nyquist frequency for one of the LOD levels but not close to the Nyquist frequency for the other LOD level.
+In scenes simulated on an \octree based \grid, this also happens in \LOD transitions, since different \idxsp{LOD}{level}{s} can represent different sets of wave frequencies, and the fact that a wavelength which can be represented on two different LOD levels often will propagate with different speeds on the two LOD levels, which will make part of the wave be reflected at the transition, and part of the wave be transmitted. The latter is especially apparent if the wavelength is close to the minimum wavelength that one of the LOD levels can represent but not close to the minimum wavelength for the other LOD level.
 
-On scenes simulated on an arbitrary grid though, the reflections corresponding to the reflections that takes place in LOD transitions are often less noticeable as the surface of reflection is less well-defined, which causes the waves to be reflected at multiple locations and become scattered in many directions, although the waves are still eventually totally reflected.
+%In scenes simulated on an arbitrary grid though, the reflections corresponding to the reflections that takes place in LOD transitions are often less noticeable as the surface of reflection is less well-defined, which causes the waves to be reflected at multiple locations and become scattered in many directions, although the waves are still eventually totally reflected.
 
 \subsection{Perfectly matched layers}
 

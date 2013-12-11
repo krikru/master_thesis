@@ -10,11 +10,11 @@ For a field with smooth changes and no sharp edges, which type the advection sch
 %\subsection{Stability of linear advection schemes}
 \subsection{Stability and energy preservation}
 
-For an advection scheme to be stable, no frequency, or eigenvector for an irregular grid, must be amplified, that is, any eigenvalue $\lambda_i$ of the $i$th eigenvector must have an absolute value less that or equal to one, i.e.\ $|\lambda_i| \leq 1$. When this requirement is not fulfilled, instability will occur, which is characterized by escalating oscillations and is usually the most evident for frequencies close to the Nyquist frequency.
+For an advection scheme to be stable, no frequency, or eigenvector for an irregular grid, must be amplified, that is, any eigenvalue $\lambda_i$ of the $i$th eigenvector must have an absolute value less that or equal to one, i.e.\ $|\lambda_i| \leq 1$. When this requirement is not fulfilled, instability will occur, which is characterized by escalating oscillations and is usually the most evident for short wavelengths.
 
 %\subsection{Smearing caused by linear advection schemes}
 
-It is also often desired that the advection scheme damps the frequencies of the field as little as possible in order to preserve the energy in the field. Just like the amplifying that occurs for an instable advection scheme, damping is usually strongest for frequencies close to the Nyquist frequency. The damping that occurs during advection is caused by the interpolation that is preformed when moving the discretized field, and is often referred to as \smearing because of its low-pass filtering character. This causes an energy loss which is often undesired, even though it in many cases is considered a minor issue since it only affects the fine level details. Damping occurs whenever an eigenvalue $\lambda_i$ has an absolute value less than one, i.e.\ $|\lambda_i| < 1$.
+It is also often desired that the advection scheme damps the frequencies of the field as little as possible in order to preserve the energy in the field. Just like the amplifying that occurs for an instable advection scheme, damping is usually strongest for short wavelengths. The damping that occurs during advection is caused by the interpolation that is preformed when moving the discretized field, and is often referred to as \smearing because of its low-pass filtering character. This causes an energy loss which is often undesired, even though it in many cases is considered a minor issue since it only affects the fine level details. Damping occurs whenever an eigenvalue $\lambda_i$ has an absolute value less than one, i.e.\ $|\lambda_i| < 1$.
 
 \subsection{Error reduction for linear advection schemes}
 

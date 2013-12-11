@@ -252,7 +252,13 @@ and becomes superfluous, since this simplified equation also follows directly fr
 \nabla\cdot\boldsymbol{\mathsf{T}} \,=\, \mu\nabla^2\vec{u},
 \end{equation}
 %
-where $\mu$ is the (dynamic) \index{dynamic viscosity|see{viscosity}}\viscosity \citep{Batchelor1967}. For simplicity, we can assume that we use a set of units where $\rho = 1$. \eqref{eq:auxiliary_velocity} can then be rewritten as
+where $\mu$ is the (dynamic) \index{dynamic viscosity|see{viscosity}}\viscosity \citep{Batchelor1967}. For simplicity, we can assume that we use a set of units where
+%
+\begin{equation} \label{eq:rho_is_one}
+\rho \,=\, 1.
+\end{equation}
+%
+\eqref{eq:auxiliary_velocity} can then be rewritten as
 %
 \begin{equation} \label{eq:auxiliary_velocity_reduced}
 \vec{u}^*_n \,= \, \vec{u}_{n} + \Delta t(- \vec{u}_{n}\cdot\nabla\vec{u}_{n} \,+\, \mu\nabla^2\vec{u}_{n} + \vec{f}),
@@ -285,8 +291,8 @@ which is underdetermined since $\vec{u}_{n+1}$ also is unknown. We can therefore
 \begin{equation} \label{eq:density_conservation}
 \rho_{n+2} \,=\, 1.
 \end{equation}
-
-Perfect satisfaction of \eqref{eq:density_conservation} will not take place due to an imperfectly solved pressure equation, but is still the goal and also what we are going to assume. By rearranging \eqref{eq:continuity_equation_time_discretized_postponed} and expanding the divergence, we obtain
+%
+Perfect satisfaction of \eqref{eq:density_conservation} will not take place due to an imperfectly solved pressure equation, but it is still the goal and also what we are going to assume. By rearranging \eqref{eq:continuity_equation_time_discretized_postponed} and expanding the divergence, we obtain
 %
 \begin{equation} \label{eq:velocity_divergence_density_conservation_premature}
 \nabla\cdot\vec{u}_{n+1} \,=\, \frac{1-\rho_{n+1}^{-1}\,\rho_{n+2}}{\Delta t} \,-\, \rho_{n+1}^{-1}\,\vec{u}_{n+1}\cdot\nabla\rho_{n+1}.
@@ -304,7 +310,7 @@ where $u_i$ is the $i$th velocity component, that is $u_i = \normvec{e}_i\cdot\v
 C \ll 1,
 \end{equation}
 %
-or if we assume that $C$ is limited and the \spectrum of $\rho_{n+1}$ is dominated by frequencies much lower than the \idxs{Nyquist}{frequency}, $\rho_{n+1}^{-1}\,\vec{u}_{n+1}\cdot\nabla\rho_{n+1}$ will be a minor term in \eqref{eq:velocity_divergence_density_conservation_premature} and can therefore be \approximated as zero. Furthermore, since $\rho_{n+1}$ is close to $1$, we can \approximate $\rho_{n+1}^{-1}$ as the first-order \idxs{Taylor}{polynomial} centered around the value $1$, which is $2-\rho_{n+1}$. Hence, by using \eqref{eq:density_conservation}, we can rewrite \eqref{eq:velocity_divergence_density_conservation_premature} as
+or if we assume that $C$ is limited and the \spectrum of $\rho_{n+1}$ is dominated by wavelengths much longer than the cell size, $\rho_{n+1}^{-1}\,\vec{u}_{n+1}\cdot\nabla\rho_{n+1}$ will be a relatively small term in \eqref{eq:velocity_divergence_density_conservation_premature} and can therefore be \approximated as zero. Furthermore, since $\rho_{n+1}$ is close to $1$, we can \approximate $\rho_{n+1}^{-1}$ as the first-order \idxs{Taylor}{polynomial} centered around the value $1$, which is $2-\rho_{n+1}$. Hence, by using \eqref{eq:density_conservation}, we can rewrite \eqref{eq:velocity_divergence_density_conservation_premature} as
 %
 \begin{equation} \label{eq:velocity_divergence_density_conservation}
 \nabla\cdot\vec{u}_{n+1} \,=\, \frac{\rho_{n+1}-1}{\Delta t}.
