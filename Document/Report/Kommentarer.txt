@@ -48,8 +48,6 @@ Inte gjorda än:
 
 - Kapitel 9: Som Kenneth tidigare nämnt så tycker jag också nu att resultat-kapitlet känns lite tunt. Jag tycker åtminstone att du bör ha en diskussion om Fig.9.1-9.3 i huvudtexten (nu nämner du bara 9.1d-h). Diskutera vad figurerna illustrerar, och förklara för läsaren vad som är viktigt att notera!
 
-- Conclusions: Här tycker jag också du bör nämna de problem du diskuterar i Sec.9.1 med instabiliteter och ytans form.
-
 + Kommentarer skrivna direkt i blocket.
 
 ---------------------------------------
@@ -97,6 +95,8 @@ SOR på samma sida.
 - s.71, punkt 2: Är "UPWIND" en förkortning? (Finns ej med i din lista.) Borde nog ha en referens här också.
 
 - Sec. 11.6: Liknande kommentar om Nyquist-frekvensen: kanske borde du haft en definition av den första gången den nämns i rapporten?
+
+- Conclusions: Här tycker jag också du bör nämna de problem du diskuterar i Sec.9.1 med instabiliteter och ytans form.
 
 ---------------------------------------
 
