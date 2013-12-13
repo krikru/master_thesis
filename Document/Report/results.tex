@@ -167,7 +167,7 @@ The program that was created could successfully simulate water and air and keep 
 
 % Cons:
 
-However, the method that was chosen, which was the \FVM on an \octree data structure together with the \VOF method, proved to be quite advanced and difficult to implemented properly within the time frame for \thismasterthesiswork. The simulations suffered from numerous problems for which there wasn't enough time to implement any remedy. Here is a list over those issues:
+However, the method that was chosen, which was the \FVM on an \octree data structure together with the \VOF method, proved to be quite advanced and difficult to implemented properly within the time frame for this thesis work. The simulations suffered from numerous problems for which there wasn't enough time to implement any remedy. Here is a list over those issues:
 
 %The limitation of the Courant number is a big problem, as it prevents the simulation from taking as large time steps as it would have to; this could maybe be remedied by switching from explicit to implicit methods. On the other hand, it can now manage to propagate surface waves.
 
@@ -201,6 +201,6 @@ In \appref{apdx:pde_derivation}, a two-dimensional \PDE in the spatial domain, d
 
 \section{Study of other methods}
 
-Parallel to implementing the program that was the topic of last section, a great deal of literature was studied in order to acquire the knowledge required to develop the technology necessary for the method to work, this naturally also lead to reading literature that was related to the objective of \thismasterthesiswork, but not completely related to the method used in the program.
+Parallel to implementing the program that was the topic of last section, a great deal of literature was studied in order to acquire the knowledge required to develop the technology necessary for the method to work, this naturally also lead to reading literature that was related to the objective of this thesis work, but not completely related to the method used in the program.
 
 As was discovered, the majority of today's existing implementations for real-time simulation of water surface waves use \idxs{Fourier}{synthesis}, and probably the vast majority of the rest of the implementations use methods that are \idx{two-dimensional} in nature, such as the \LPD method or the shallow water equations. It was noted that \LPD would perhaps fit best for this problem of all methods studied, since it is capable of simulating \FSI, as well as dispersion and wave shoaling. If wave shoaling is not a requirement, the Fourier synthesis method could perhaps be used, assuming it can simulate \FSI, which tentatively can be achieved with some of the methods covered in \secref{sec:illumination_model_derivation}.

@@ -1,7 +1,7 @@
 \chapter{Discussion}
 \label{chap:discussion}
 
-As mentioned in the last chapter, there were quite many issues that needed to be dealt with in order to make \thismethod, which was the method implemented in \thisprojectwork, work well. Although the method very well can simulate phenomenas such as turbulence, nonlinearity, breaking waves, splashes, sound waves, etc., just given enough computational power and enough time to improve it, these phenomenons do not need to be simulated in a flight simulator, and there are other methods, such as the \LPD method, that are simpler to implement, run faster and still have all the required properties. Some of the difficulties with the method includes:
+As mentioned in the last chapter, there were quite many issues that needed to be dealt with in order to make \thismethod, which was the method implemented in this thesis work, work well. Although the method very well can simulate phenomenas such as turbulence, nonlinearity, breaking waves, splashes, sound waves, etc., just given enough computational power and enough time to improve it, these phenomenons do not need to be simulated in a flight simulator, and there are other methods, such as the \LPD method, that are simpler to implement, run faster and still have all the required properties. Some of the difficulties with the method includes:
 
 \begin{itemize}
     \item Making the simulation go in real-time, including having a high enough frame rate,
@@ -20,7 +20,7 @@ On the other hand, if the \FVM is going to be used anyway, maybe a better approa
 
 \section{Speed}
 
-With its \idxs{linear}{running time}\index{time!running|see{running time}}, or $O(N)$ \idxs{time}{complexity}, where $N$ is the number of cells visible on the surface, the method implemented in \thisprojectwork places itself among the methods with the lowest time complexity, such as the \LPD method, even beating the Fourier synthesis method with its $O(N \log N)$ time complexity.
+With its \idxs{linear}{running time}\index{time!running|see{running time}}, or $O(N)$ \idxs{time}{complexity}, where $N$ is the number of cells visible on the surface, the method implemented in this thesis work places itself among the methods with the lowest time complexity, such as the \LPD method, even beating the Fourier synthesis method with its $O(N \log N)$ time complexity.
 
 However, \thismethod has a very high time constant associated with the big O notation, making it very slow, and it probably will not surpass the Fourier synthesis method in speed until a ridiculously large number of cells are being simulated, which is very impractical. The Fourier synthesis method ais still a very fast method, much thanks to its simplicity.
 
@@ -33,7 +33,7 @@ However, the majority of existing CFD packages are designed to produce generic, 
 \section{Improvements}
 \label{chap:improvements}
 
-There are a lot of improvements of the method that was implemented in \thisprojectwork that can be performed, many of them which are necessary  to make the method be practically useful in a real-time flight simulator.
+There are a lot of improvements of the method that was implemented in this thesis work that can be performed, many of them which are necessary to make the method be practically useful in a real-time flight simulator.
 
 %\subsection{Required improvements}
 
@@ -47,7 +47,7 @@ Without \AMR it would be impossible to simulate larges bodies of water and fine 
 
 %\subsubsection{No simulation of air}
 
-In \thisprojectwork, not just the water was simulated, but also the air, which meant that the simulation domain needed to have a boundary in the air. This introduced the additional problem of choosing where the boundary should be located, and what boundary conditions it should have. Additionally, this meant extra computational work since more cells had to be simulated which reduced the simulation speed significantly, and it introduced the phenomenon that velocities could suddenly go to infinity, which froze the simulation.
+In this thesis work, not just the water was simulated, but also the air, which meant that the simulation domain needed to have a boundary in the air. This introduced the additional problem of choosing where the boundary should be located, and what boundary conditions it should have. Additionally, this meant extra computational work since more cells had to be simulated which reduced the simulation speed significantly, and it introduced the phenomenon that velocities could suddenly go to infinity, which froze the simulation.
 
 A better solution would be to exclude the air region and treat that as vacuum, and move the boundary to the interface between the water and the vacuum/air region.
 
@@ -57,7 +57,7 @@ In order to make a \FVM simulation become practically useful for \idxsp{real-tim
 
 When it comes to physical quantities with a non-damped \oscillating behavior, simulations which use any kind of normal, \idxs{explicit}{time-stepping}\index{stepping!in time|see{time-stepping}} often tend to make them become unstable and create a \idxs{numerical}{explosion}.
 
-In \thisprojectwork, a kind of \idxs{leapfrog}{integration} has been used to model the time evolution of the velocity and the pressure, but even \idxs{leapfrog}{integration} has to obey the \CFL condition, and it becomes numerically unstable when the \period of the oscillations becomes too small in relation to the \timestep. To solve this problem, many methods \approximate the fluid or the fluids as \incompressible, while other use a combination of standard advection methods and \idxse{implicit}{Euler integration}{backwards (or implicit) Euler integration}\index{integration!implicit Euler|see{implicit Euler integration}} when updating the pressure (see \secref{sec:pressure_calculation} for a more detailed discussion about this).
+In this thesis work, a kind of \idxs{leapfrog}{integration} has been used to model the time evolution of the velocity and the pressure, but even \idxs{leapfrog}{integration} has to obey the \CFL condition, and it becomes numerically unstable when the \period of the oscillations becomes too small in relation to the \timestep. To solve this problem, many methods \approximate the fluid or the fluids as \incompressible, while other use a combination of standard advection methods and \idxse{implicit}{Euler integration}{backwards (or implicit) Euler integration}\index{integration!implicit Euler|see{implicit Euler integration}} when updating the pressure (see \secref{sec:pressure_calculation} for a more detailed discussion about this).
 
 %In backwards Euler integration, the equations for ordinary Euler integration are set up as if the flow would have been solved backwards in time (that is, as if one would want to calculate the state for one point in time from the state for a later point in time). These equations are then used to solve the flow forward in time. This effectively reverses all instability and turns it into damping, and vice versa.
 
@@ -69,14 +69,14 @@ All of these instability issues have remedies, at least for simulations on a reg
 
 \subsection{Rendering}
 
-In \thisprojectwork, the water surface is not rendered. To render the surface properly, an isosurface needs to be extracted from the \idxs{phase fraction}{data}.
+In this thesis work, the water surface is not rendered. To render the surface properly, an isosurface needs to be extracted from the \idxs{phase fraction}{data}.
 
 \subsubsection{Marching Cubes}
 \label{sec:marchingcubesdescription}
 
 In order to find where the \idxs{water}{surface} is located, the \idxs{marching}{cubes} \idxe{algorithm!marching cubes|see{marching cubes}}{algorithm} can be used. Marching cubes is an algorithm for finding \isosurfaces from a \idxs{scalar}{field}, and works by looping over a set of adjacent cubes tiled closely together which just covers the domain that is about to be rendered. For each cube, the algorithm looks at the value of the scalar field in all eight of the cube's corners. If the field values in the corners all lie at the same side of the value $c$ that the isosurface represents, it figures that the surface doesn't cross through that cube, otherwise it does and the algorithm adapts a surface consisting of a finite number of polygons through the cube depending on what the field values in the corners are.
 
-In \thisprojectwork, the scalar field that tells where the surface is located is the \idxs{phase fraction} {field}, $\alpha$, and since $\alpha$ crosses from 0 to 1 over the \interface, the isosurface can really bee chosen for any level $0 < c < 1$ and the marching cubes algorithm will produce an isosurface lying within the interface, although it probably makes more sense to choose $c = 0.5$ which lies in the middle of the interval and makes the isosurface generation symmetric in that sense. One problem though is that the $\alpha$ field isn't discretized in the cell corners, but in the cell centers. This can be remedied by defining a new set of cubes which have their corners in the centers of the cells. This will become a bit problematic in \idxsp{LOD}{transition}{s}, for which the cubes if created in this way will stretch over two different LODs and thus not have a very well defined size. Another possible solution is to interpolate the $\alpha$ field to the cell corners so that the cells can be used directly as the cubes needed by the algorithm.
+In this thesis work, the scalar field that tells where the surface is located is the \idxs{phase fraction} {field}, $\alpha$, and since $\alpha$ crosses from 0 to 1 over the \interface, the isosurface can really bee chosen for any level $0 < c < 1$ and the marching cubes algorithm will produce an isosurface lying within the interface, although it probably makes more sense to choose $c = 0.5$ which lies in the middle of the interval and makes the isosurface generation symmetric in that sense. One problem though is that the $\alpha$ field isn't discretized in the cell corners, but in the cell centers. This can be remedied by defining a new set of cubes which have their corners in the centers of the cells. This will become a bit problematic in \idxsp{LOD}{transition}{s}, for which the cubes if created in this way will stretch over two different LODs and thus not have a very well defined size. Another possible solution is to interpolate the $\alpha$ field to the cell corners so that the cells can be used directly as the cubes needed by the algorithm.
 
 If the \VOF method for tracing the surface would be switched to using the \LS method instead, a signed distance function, $\phi$, would be used instead of $\alpha$, and $c = 0$ would then define where the surface is located. The discretization points for $\phi$ would be in the cell corners, so there would be no need for defining a new set of cubes in order for the marching cubes algorithm to work. A class of fast marching methods related to the \LS method was developed in a work by \citet{Sethian1995}.
 
@@ -92,7 +92,7 @@ For octrees, there are algorithms that can be used that make use of \idxsp{space
 
 \subsection{Fluid--Structure Interaction}
 
-In \thisprojectwork, no interaction between ships and the surface waves was ever modeled, in other words, no \FSI was modeled. Modeling and simulating \FSI is necessary in order to make large waves affect ships so that they start to rock forth and back, as well as in order for ships to give rise to two \idxsp{wake}{line}{s} as they \sail on the water.
+In this thesis work, no interaction between ships and the surface waves was ever modeled, in other words, no \FSI was modeled. Modeling and simulating \FSI is necessary in order to make large waves affect ships so that they start to rock forth and back, as well as in order for ships to give rise to two \idxsp{wake}{line}{s} as they \sail on the water.
 
 Some of the methods for modeling \FSI includes the \IB method \citep{Peskin2002,Ghias2007}, the \VOS method and the \idxs{rigid fluid}{method}\index{fluid!rigid|see{rigid fluid method}} \citep{Carlson2004}.
 %See e.g.: \item http://physbam.stanford.edu/~fedkiw/papers/stanford2010-04.pdf (Numerically Stable Fluid-Structure Interactions Between Compressible Flow and Solid Structures) \item http://efdl.as.ntu.edu.tw/research/papers/JCP03GCIBM.pdf (A ghost-cell immersed boundary method for flow in complex geometry) \item http://www.cs.columbia.edu/~batty/papers/Batty07.pdf (A Fast Variational Framework for Accurate Solid-Fluid Coupling) (solid fraction, non-stick to walls)

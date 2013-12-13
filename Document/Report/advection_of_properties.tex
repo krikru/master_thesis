@@ -113,7 +113,7 @@ An alternative approach that avoids the complexity mentioned above is described 
 
 \subsection{Algebraic advection schemes}
 
-As opposed to geometric advection schemes, a geometric representation of the surface is never created in an \idxs{algebraic}{advection scheme}. This usually makes these methods a lot simpler than most geometric advection schemes, and the reduced complexity may lead to a performance boost. In \thisprojectwork, an algebraic advection scheme known as \idxs{Hyper-C}{flux limiter}, which was described by \citet{Leonard1988,Leonard1991} and which is optimal for \idx{one-dimensional}, \idxs{incompressible}{flow}, has been used in a form that has been modified to cope with \idxs{compressible}{flow}.
+As opposed to geometric advection schemes, a geometric representation of the surface is never created in an \idxs{algebraic}{advection scheme}. This usually makes these methods a lot simpler than most geometric advection schemes, and the reduced complexity may lead to a performance boost. In this thesis work, an algebraic advection scheme known as \idxs{Hyper-C}{flux limiter}, which was described by \citet{Leonard1988,Leonard1991} and which is optimal for \idx{one-dimensional}, \idxs{incompressible}{flow}, has been used in a form that has been modified to cope with \idxs{compressible}{flow}.
 
 There exist other algebraic advection schemes that more suitable for multidimensioal incompressible flow, like \CICSAM, which was first described by \citet{Ubbink1999}, and \STACS, which was probably first described at earliest in 2003 \citep{Darwish}. The Hyper-C flux limiter, \CICSAM and \STACS are all derived from something known as the \CBC which is a criterion that --- if followed --- guarantees that the advected field stays bounded.
 

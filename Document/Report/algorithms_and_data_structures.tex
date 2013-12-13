@@ -114,11 +114,11 @@
     \label{fig:octree_child_array_example}
 \end{figure}
 
-Although an octree is a \idxs{three-dimensional}{data structure} and a tree in which all \idxsp{parent}{node}{s} has exactly eight \idxsp{child}{node}{s}, the octree implementation used in \thisprojectwork is a generalized version of an octree and works for any number $d$ of \dimensions and where each \idxs{parent}{cell} (a \cell is a \node with a physical representation) has between 1 and $2^d$ \idxsp{child}{node}{s}. 
+Although an octree is a \idxs{three-dimensional}{data structure} and a tree in which all \idxsp{parent}{node}{s} has exactly eight \idxsp{child}{node}{s}, the octree implementation used in this thesis work is a generalized version of an octree and works for any number $d$ of \dimensions and where each \idxs{parent}{cell} (a \cell is a \node with a physical representation) has between 1 and $2^d$ \idxsp{child}{node}{s}. 
 
 The \octree itself just consists of a \pointer to the \idxs{root}{cell}\indexs{root}{node} and a few \methods for manipulating the \cells in the tree. If the octree is empty, the value of the pointer is \NULL.
 
-Each cell in the tree then contains a pointer to a \idxs{child}{array}, which is an array of pointers to the child cells. If a cell is a \idxs{leaf}{cell}, it doesn't have any children and the value of the pointer to the child array is \NULL. If the cell does have children, the pointer points to an actual array consisting of \numchildren pointers to \idxsp{octree}{cell}{s}. If such a pointer is \NULL, it means that the corresponding child doesn't exist; otherwise, the pointer points to the child cell. The index $i$ of an array element corresponds to the position of the child cell relative the parent cell according to
+Each cell in the tree then contains a pointer to a \idxs{child}{array}, which is an array of pointers to the child cells. If a cell is a \idxs{leaf}{cell}, it doesn't have any children and the value of the pointer to the child array is \NULL. If the cell does have children, the pointer points to an actual array consisting of $2^d$ pointers to \idxsp{octree}{cell}{s}. If such a pointer is \NULL, it means that the corresponding child doesn't exist; otherwise, the pointer points to the child cell. The index $i$ of an array element corresponds to the position of the child cell relative the parent cell according to
 %
 \begin{equation} \label{eq:child_node_index_general}
 i \,=\, \sum_{j=0}^{d-1} \,2^j\,i_j,
@@ -134,7 +134,7 @@ The octree data structure is illustrated in \figref{fig:octree_child_array_examp
 
 \section{Neighbor connections}
 
-In \thisprojectwork, \idxse{neighbor}{cell}{neighboring cells} are physically linked to each other, and each cell contains five \idxsp{doubly linked}{list}{s}\indexs{doubly}{lined list} whit \idxse{neighbor}{connection}{connections} to neighbor cells. The reason why doubly linked lists are used to store the connections is because their content is constantly changing because of the dynamic \idxs{water}{surface} and the dynamically changing \LODs, which both cause the grid to constantly have to \remesh itself and update its neighbors, and any nieghbor connection can have to be removed at any moment. The five doubly linked lists contains connections to
+In this thesis work, \idxse{neighbor}{cell}{neighboring cells} are physically linked to each other, and each cell contains five \idxsp{doubly linked}{list}{s}\indexs{doubly}{lined list} whit \idxse{neighbor}{connection}{connections} to neighbor cells. The reason why doubly linked lists are used to store the connections is because their content is constantly changing because of the dynamic \idxs{water}{surface} and the dynamically changing \LODs, which both cause the grid to constantly have to \remesh itself and update its neighbors, and any nieghbor connection can have to be removed at any moment. The five doubly linked lists contains connections to
 
 \begin{enumerate}
     \item \idxse{leaf}{cell}{Leaf cells} at the next lower \LOD,
@@ -156,7 +156,7 @@ List 2 is never used but is simply used to store connections that may be moved i
 
 \section{Velocity advection and conservation of momentum}
 
-Advection of the velocity is particularly tricky, mainly because the \idxs{velocity}{advection} term contains both the full velocity vector as well as the \idxs{velocity}{gradient}, which both are non-present in the \idxsp{cell}{face}{s} where the \idxsp{velocity}{scalar}{s} are stored and therefore need to be calculated before the velocity advection term can be calculated explicitly. Besides, transporting the velocity field by using the velocity advection term is not \idxse{conservation of}{momentum}{momentum conserving}. In \thisprojectwork, an approach that is based on fluxing momentum through the cell faces has been taken, which in principle builds on the following steps:
+Advection of the velocity is particularly tricky, mainly because the \idxs{velocity}{advection} term contains both the full velocity vector as well as the \idxs{velocity}{gradient}, which both are non-present in the \idxsp{cell}{face}{s} where the \idxsp{velocity}{scalar}{s} are stored and therefore need to be calculated before the velocity advection term can be calculated explicitly. Besides, transporting the velocity field by using the velocity advection term is not \idxse{conservation of}{momentum}{momentum conserving}. In this thesis work, an approach that is based on fluxing momentum through the cell faces has been taken, which in principle builds on the following steps:
 
 \begin{figure}
     \centering
@@ -243,7 +243,7 @@ However, following these steps directly would \idxs{low-pass}{filter} the \idxs{
     \vec{u}_0^* \,=\, \sum_{S_i}w_i\,\normvec{n}_i\,u_i,
     \end{equation}
     %
-    where $w_i$ is the weight of the velocity scalar at $S_i$, used in the averaging. In \thisprojectwork, $w_i$ has been defined as
+    where $w_i$ is the weight of the velocity scalar at $S_i$, used in the averaging. In this thesis work, $w_i$ has been defined as
     %
     \begin{equation}
     w_i \,=\, S_i\,(\rho_0 + \rho_i),
@@ -269,7 +269,7 @@ However, following these steps directly would \idxs{low-pass}{filter} the \idxs{
     %
     which can be used to calculate the cell-centered velocity vectors.
     
-    In \thisprojectwork, the cells are \idxe{axis alignment}{axis-aligned}, so $\sum_{S_i}w_i\,\normvec{n}_i\,\normvec{n}_i$ will be a diagonal matrix and the inverse will just be the matrix consisting of the inverse of the diagonal elements. In fact, $\vec{u}_0$ can simply be calculated by calculating the weighted average of all $\normvec{n}_i\,u_i$ for which $\normvec{n}_i\parallel \normvec{e}_j$, doing so for $j = 0,\, 1,\,...\,,\,d-1$ and adding the $d$ averages together, that is
+    In this thesis work, the cells are \idxe{axis alignment}{axis-aligned}, so $\sum_{S_i}w_i\,\normvec{n}_i\,\normvec{n}_i$ will be a diagonal matrix and the inverse will just be the matrix consisting of the inverse of the diagonal elements. In fact, $\vec{u}_0$ can simply be calculated by calculating the weighted average of all $\normvec{n}_i\,u_i$ for which $\normvec{n}_i\parallel \normvec{e}_j$, doing so for $j = 0,\, 1,\,...\,,\,d-1$ and adding the $d$ averages together, that is
     %
     \begin{equation}
     \vec{u}_0 \,=\, \sum_{j=0}^{d-1} \frac{\sum_{S_i}|\normvec{n}_i\cdot\normvec{e}_j|\,w_i\,\normvec{n}_i\,u_i}{\sum_{S_i}|\normvec{n}_i\cdot\normvec{e}_j|\,w_i}.
@@ -281,15 +281,15 @@ However, following these steps directly would \idxs{low-pass}{filter} the \idxs{
     
     \item Calculate the net momentum inflow in each cell as a vector quantity during the advection step. This is also when all mass is advected.
     
-    \item Since the momentum in one cell automatically changes when the mass in the cell changes, calculate how much of the net momentum inflow it is that is actually a consequence of the mass inflow. When doing so on an \idxs{orthogonal}{grid}, use only the part of the cell face \idxsp{control}{volume}{s} that lie within the cell (see \figref{fig:cell_face_control_volumes}) and consider the mass to have been distributed homogenously within the cell. Note that the control volumes together cover each point in the cell exactly once. For an \idxs{unstructured}{grid}, it is not possible to use control volumes in this way; see \figref{fig:velocity_advection}.
+    \item Since the momentum in one cell automatically changes when the mass in the cell changes, calculate how much of the net momentum inflow it is that is actually a consequence of the mass inflow. When doing so on an \idxs{orthogonal}{grid}, use only the part of the cell face \idxsp{control}{volume}{s} that lie within the cell (see \figref{fig:cell_face_control_volumes}) and consider the mass to have been distributed homogeneously within the cell. Note that the control volumes together cover each point in the cell exactly once. For an \idxs{unstructured}{grid}, it is not possible to use control volumes in this way; see \figref{fig:velocity_advection}.
     
     Since this part of the net momentum inflow has effectively already been added to the cell, subtract it from the net momentum inflow to obtain the part of the net momentum inflow that still has to be added to the cell.
     
     \item Calculate face-centered \idxsp{momentum}{scalar}{s} by multiplying the face-cen\-tered velocity scalars with the total mass contained within the control volume of the cell face the velocity scalar is stored on. Use the entire control volume this time.
     
-    \item Distribute the part of the net momentum inflow that still has to be distributed, on the face-centered momentum-scalars by using the mass of the part of the cell face control volume that lie within the cell as weight. Note that this is equivalent to using the volume of the part of the cell face control volume that lies within the cell as weight, since mass was considered to be distributed homogenously within the cell.
+    \item Distribute the part of the net momentum inflow that still has to be distributed, on the face-centered momentum-scalars by using the mass of the part of the cell face control volume that lie within the cell as weight. Note that this is equivalent to using the volume of the part of the cell face control volume that lies within the cell as weight, since mass was considered to be distributed homogeneously within the cell.
     
-    In \thisprojectwork, since the cells are cubic and the control volume extends through half the cell, the volume of the part of the cell face control volume that lies within the cell is proportional to the cell face area, so in this case the weight is simply the cell face area.
+    In this thesis work, since the cells are cubic and the control volume extends through half the cell, the volume of the part of the cell face control volume that lies within the cell is proportional to the cell face area, so in this case the weight is simply the cell face area.
     
     \item Calculate the updated face-centered velocity scalars by dividing the face-centered momentum scalars with the total mass contained within the entire control volume of the cell face on which the velocity scalar is stored.
 \end{enumerate}
