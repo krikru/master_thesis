@@ -1,4 +1,4 @@
-line="git push $@ origin master"
+line="git commit -m fixmeup"
 echo 
 echo "--------------------------------------------------"
 echo " $line"

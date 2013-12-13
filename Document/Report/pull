@@ -1,5 +1,6 @@
+line="git pull $@ origin master"
 echo 
 echo "--------------------------------------------------"
-echo " git pull origin master"
+echo " $line"
 echo 
-git pull origin master
+$line

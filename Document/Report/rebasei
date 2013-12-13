@@ -1,4 +1,4 @@
-line="git push $@ origin master"
+line="git rebase -i HEAD~20"
 echo 
 echo "--------------------------------------------------"
 echo " $line"
