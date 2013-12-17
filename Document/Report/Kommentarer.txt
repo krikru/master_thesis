@@ -1,3 +1,35 @@
+Sammanfattning kvarstående
+--------------------------
+
+
+Kenneth
+-------
+
+* Det blir lite korta kapitel ibland. Ett alternativ är att låta delarna vara kapitel och dina kapitel underkapitel. Det innebär dock att du kommer ned till rubriknivå x.y.z.w i vissa fall. Frågan om denna nivå behövs.
+Jag har dock inga större problem med nuvarande kapitelindelning.
+
+* Har nu inte läst i detalj men jag upplever att resultat och diskussionsdelen (kap 9 och 10) är förhållandevis korta. Du nämner ju också att du lagt in figurer i resultatdelen ännu utan text så jag misstänker att du planerar att utvidga detta. Fig 9.1-9.3 måste det gå att diskutera mycket runt.
+Om du upplever det svårt att separera resultat och diskussion så är det inget nederlag att lägga dem i samma kapitel.
+
+- Jag tycker fortfarande att resultat och diskussionsdelarna känns lite korta med lite text jämfört med figurer men det är nog snarare omfattningen av hela rapporten som gör att intrycket blir så. Dessutom är ju din studie av olika metoder och diskussion vilka som passar bäst ett resultat i sig.
+
+
+Magnus
+-------
+
+- Kapitel 9: Som Kenneth tidigare nämnt så tycker jag också nu att resultat-kapitlet känns lite tunt. Jag tycker åtminstone att du bör ha en diskussion om Fig.9.1-9.3 i huvudtexten (nu nämner du bara 9.1d-h). Diskutera vad figurerna illustrerar, och förklara för läsaren vad som är viktigt att notera!
+
++ Kommentarer skrivna direkt i blocket.
+
+
+Jag
+---
+
+* Jag saknar bibliotekssida
+
+
+==============================================================================
+
 Kenneth
 -------
 
