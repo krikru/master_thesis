@@ -11,7 +11,7 @@ In computational physics, \CFD is a well established area of research, and a lar
 
 \subsection{Two-dimensional Fluid--Structure Interaction}
 
-\label{sec:illumination_model_derivation}
+\label{sec:fluid_structure_interaction}
 
 Modeling \FSI with a two-dimensional method is much less straightforward than with a three-dimensional method, since \FSI essentially is a three-dimensional phenomenon. However, there still exist a few (very \approximating) ways of doing this even for two-dimensional methods, which has been considered to be somewhat of a miracle \citep{Tessendorf2004}.
 
@@ -27,7 +27,7 @@ In yet another method, covered by \citet{Muller2007}, a body floating on the sur
 
 There exist a number of different two-dimensional \PDEs which describe the evolution of the \idx{free surface elevation}, $\eta$. The ordinary wave equation, \eqref{eq:wave_equation}, will as concluded work badly for simulating surface waves in \idxs{deep}{water}, since it doesn't handle wave dispersion at all, which quickly becomes obvious when wave patters such as the \idxs{Kelvin}{wave pattern} has to be simulated. Besides, it assumes that the medium is stationary in the horizontal plane, and lacks the advection term that is required to transport the waves horizontally. Furthermore, would the water level rise or sink, the wave speed would change, which will not be reflected by the wave equation, unless the wave speed, $c$, is made a function of the water depth plus the free surface elevation, but that would make the equation non-linear, and there is no longer any guarantee that the equation preserves mass or energy.
 
-A set of equations that are better suited under these circumstances are the \idxs{shallow water}{equations}, even though these still don't catch the correct wave dispersion which makes them unable to simulate the Kelvin wake pattern. They are usually used to simulate waves whose \wavelength is similar to or greater than the overall \idxs{water}{height} \citep{Thurey2006}. A modified version of this set of equation was used by \citet{Kass1990} to do \SWS in computer graphics for the first time. \SWS can be used to simulate water flows such as dam breaks \citep{Brodtkorb2010,Brodtkorba2012}, storm surges and other types of floods, as well as tsunamis, but also non-water flows such as atmospheric flow and avalanches, as noted by \citet{Brodtkorb2011}.
+A set of equations that are better suited under these circumstances are the \idxs{shallow water}{equations}, even though these still don't catch the correct wave dispersion which makes them unable to simulate the Kelvin wake pattern. They are usually used to simulate waves whose \wavelength is similar to or greater than the overall \idxs{water}{height} \citep{Thurey2006}. A modified version of this set of equation was used by \citet{Kass1990} to do \SWS in computer graphics for the first time. \SWS can be used to simulate water flows such as dam breaks \citep{Brodtkorb2010,Brodtkorb2012}, storm surges and other types of floods, as well as tsunamis, but also non-water flows such as atmospheric flow and avalanches, as noted by \citet{Brodtkorb2011}.
 
 Most of the two-dimensional \PDEs ensure the time complexity $O(N)$ per time step, where $N$ is the number of \idxs{surface}{grid points}.
 

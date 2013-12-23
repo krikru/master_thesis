@@ -123,7 +123,7 @@ where $\E_{\vec{r}}$ is the \idxs{expectation value}{operator} with respect to t
 %
 where $f$ is an arbitrary function of $\vec{r}$ and $t$.
 
-Let's assume that $\psi$ is periodic in both horizontal dimensions with the period $P$ (this is a commit trick in \idxs{computer}{graphics}) with a large, square surface element $A$ (with \mbox{$|A| = P^2$}) that keeps repeating itself, such that
+Let's assume that $\psi$ is periodic in both of the horizontal dimensions with the period $P$ (this is a common trick in \idxs{computer}{graphics}) with a large, square surface element $A$ (with \mbox{$|A| = P^2$}) that keeps repeating itself, such that
 %
 \begin{equation} \label{eq:water_surface_periodicity}
 \psi(\vec{r}+P\normvec{x}) \,=\, \psi(\vec{r}+P\normvec{y}) \,=\, \psi(\vec{r}),\ \forall\ \vec{r},
@@ -324,7 +324,7 @@ If we combine \eqref{eq:variance_k_eta}, \eqref{eq:variance_k_eta_to_variance_et
 \begin{equation}
 \renewcommand*{\arraystretch}{2}
 \begin{array}{c}
-\displaystyle =\,\Var(\psi_{m,n}(\vec{r})) \,=\, \Var(\psi_{\Delta\vec{k}_{m,n}}(\vec{r})) \,=\, \Var_{\Delta\vec{k}_{m,n}}(\psi(\vec{r})) \\
+\displaystyle \Var(\psi_{m,n}(\vec{r})) \,=\, \Var(\psi_{\Delta\vec{k}_{m,n}}(\vec{r})) \,=\, \Var_{\Delta\vec{k}_{m,n}}(\psi(\vec{r})) \\
 \displaystyle =\, \int_{\Delta\vec{k}_{m,n}}S(\vec{k})\opd\vec{k},
 \end{array}
 \end{equation}
@@ -385,7 +385,7 @@ If the \idxs{wave}{spectrum} is known, $\Var_{\vec{k}}(\Delta\fdfunc{\eta}^*)$ i
 
 \subsection{Surface normal distribution}
 
-Since the \idxe{surface}{normal}{normal} of the water surface is the normalization of the \idx{anti-normal} $\anormvec{n}$ which is described by \eqref{eq:eta_anti_normal}, we need to know the distribution of $\nabla\eta^*$ in order to know the distribution of the surface normal. However, since we know $\eta$, which has been generated from a \idxs{wave}{spectrum} $S$ for simplified water surfaces, which is a reduced version of the full wave spectrum $S^*$ from which a part has been cut off, \eqref{eq:psi_grad_distribution} cannot be used, since it involves the free surface elevation $\psi$ which is completely unknown. Or more generically, if $\eta$ can be considered to be a \idxse{low-pass}{filter}{(low-pass) filter} version of $\eta^*$, with \idxs{transfer}{function} $H$, such that
+Since the \idxse{surface}{normal}{normal} of the water surface is the normalization of the \idx{anti-normal} $\anormvec{n}$ which is described by \eqref{eq:eta_anti_normal}, we need to know the distribution of $\nabla\eta^*$ in order to know the distribution of the surface normal. However, since we know $\eta$, which has been generated from a \idxs{wave}{spectrum} $S$ for simplified water surfaces, which is a reduced version of the full wave spectrum $S^*$ from which a part has been cut off, \eqref{eq:psi_grad_distribution} cannot be used, since it involves the free surface elevation $\psi$ which is completely unknown. Or more generically, if $\eta$ can be considered to be a \idxse{low-pass}{filter}{(low-pass) filter} version of $\eta^*$, with \idxs{transfer}{function} $H$, such that
 %
 \begin{equation}
 \fdfunc{\eta}(\vec{k}) \,=\, H(\vec{k})\fdfunc{\eta}^*(\vec{k}),
@@ -402,7 +402,7 @@ we can use \eqrefs \ref{eq:wave_spectrum_definition}--\ref{eq:fd_eta_delta_k_def
 \end{array}
 \end{equation}
 %
-where $\fdfunc{\eta}_{\opd\vec{k}}$ and $\fdfunc{\eta}^*_{\opd\vec{k}}$ are defined by \eqref{eq:fd_eta_delta_k_definition}, where $\Delta\vec{k}$ has been replaced by $\opd\vec{k}$ and where $\fdfunc{\phi}$ has been replaced by $\eta$ and $\eta^*$ respectively.
+where $\fdfunc{\eta}_{\opd\vec{k}}$ and $\fdfunc{\eta}^*_{\opd\vec{k}}$ are defined by \eqref{eq:fd_eta_delta_k_definition}, where $\Delta\vec{k}$ has been replaced by $\opd\vec{k}$ and where $\fdfunc{\psi}$ has been replaced by $\eta$ and $\eta^*$ respectively.
 
 Since $\Sigma(\vec{x}+\vec{y}) = \Sigma(\vec{x})+\Sigma(\vec{y})$ (according to \eqref{eq:covariance_matrix_sum}) for all stochastically independent vectors $\vec{x}$ and $\vec{y}$, we will \assume that the part of $\eta^*$ that is left out in $\eta$ can advantageously be simulated with a free surface elevation $\eta'$ that has a gradient with the \idxs{covariance}{matrix} $\Sigma(\nabla\eta'(\vec{r})) = \Sigma(\nabla\eta^*(\vec{r})) - \Sigma(\nabla\eta(\vec{r}))$. This matrix can according to  \eqref{eq:covariance_matrix_gradient_eta_final} be rewritten as
 %
@@ -421,7 +421,7 @@ where
 S'(\vec{k}) = S^*(\vec{k}) - S(\vec{k}) = (1-H^2(\vec{k}))S^*(\vec{k})
 \end{equation}
 %
-is the \idxs{wave}{spectrum} of $\eta'$, which is the simulated part of $\eta^*$. The expectation value for $\eta'(\vec{r})$, is according to \eqref{eq:psi_of_r_expectation_value} \assumed to be
+is the \idxs{wave}{spectrum} of $\eta'$, which is the simulated part of $\eta^*$. The expectation value for $\eta'(\vec{r})$ is according to \eqref{eq:psi_of_r_expectation_value} \assumed to be
 %
 \begin{equation}
 E[\eta'(\vec{r})] \,=\, 0.
@@ -443,7 +443,7 @@ and also
 \end{array}
 \end{equation}
 %
-The distribution of $\nabla\eta^*(\vec{r})$ is then given by replacing $\psi$ by $\eta^*$ \eqref{eq:psi_grad_distribution}, that is
+The distribution of $\nabla\eta^*(\vec{r})$ is then given by replacing $\psi$ by $\eta^*$ in \eqref{eq:psi_grad_distribution}, that is
 %
 \begin{equation} \label{eq:eta_grad_distribution_r_uniformly_distributed}
 f(\nabla\eta^*(\vec{r})) \,=\, \frac{1}{2\pi|\Sigma|^{1/2}}\exp\left(-\frac{1}{2}(\nabla\eta^*(\vec{r})-\vec{\mu})^{\T}\Sigma^{-1}(\nabla\eta^*(\vec{r})-\vec{\mu})\right),
@@ -528,7 +528,7 @@ This equation can lay the foundation for very realistic renderings of \threedime
 
 \item \textbf{\idxe{transmission}{Transmission}:} Occurs when light is transmitted through the surface, as when it hits a glass object or a water surface.
 
-\item \textbf{\idxse{subsurface}{scattering}{Subsurface scattering}:} Many materials exhibits the property that much of the incoming light is transmitted through the surface at one location, scattered, and transmitted back through the surface at a slightly different location. If such a material is rendered without taking subsurface scattering into account, it may appear plastic, and sometimes also unnaturally opaque.
+\item \textbf{\idxse{subsurface}{scattering}{Subsurface scattering}:} Many materials exhibit the property that much of the incoming light is transmitted through the surface at one location, scattered, and transmitted back through the surface at a slightly different location. If such a material is rendered without taking subsurface scattering into account, it may appear plastic, and sometimes also unnaturally opaque.
 
 However, it is not necessary to account specifically for this in the rendering equation if it includes transmission, since that will effectively also include light scattered under the surface, even if the rendering equation still doesn't provide a model for how the light is scattering under the surface.
 \end{itemize}
@@ -540,7 +540,7 @@ Other aspects of light, which are not relevant to the rendering of surface water
 \begin{itemize}
 \item \textbf{\idxe{phosphorescence}{Phosphorescence}:} Light or other electromagnetic radiation is sometimes absorbed at one point in time and emitted at a later point in time, usually with a lower frequency (unless the absorbed electromagnetic radiation is very intense).
 
-If the absorption and the emission occurs at the same point in time, but with different frequencies, this is called \idx{fluorescence}.
+If the absorption and the emission occur at the same point in time, but with different frequencies, this is called \idx{fluorescence}.
     
 \item \textbf{\idxe{interference}{Interference}:} This can occur if the wave properties of light are exhibited, for example when light is passing though a \idxs{thin}{slit} or a \idxs{double}{slit}.
     
@@ -614,7 +614,7 @@ The equation that describes the reflection is given by the \index{reflection!Hou
 \vec{r}' \,=\, \vec{r} - 2(\normvec{v}^{\Hermitian}\vec{r})\normvec{v},
 \end{equation}
 %
-where a superscripted $\Hermitian$ denotes the \idxs{Hermitian}{transpose} operator, or the conjugate transpose operator, which performs the ordinary transpose of the operand and conjugates its elements. The right hand side of this equation is referred to as the Householder transformation of $\vec{r}$. For surface normals, which has real-valued elements, this becomes
+where a superscripted $\Hermitian$ denotes the \idxs{Hermitian}{transpose} operator, or the conjugate transpose operator, which performs the ordinary transpose of the operand and conjugates its elements. The right hand side of this equation is referred to as the Householder transformation of $\vec{r}$. For surface normals, which have real-valued elements, this becomes
 %
 \begin{equation}
 \vec{r}' \,=\, \vec{r} - 2(\normvec{v}\cdot\vec{r})\normvec{v}.
@@ -723,13 +723,13 @@ Here, the term $\opd\,(\opd \Phi_{\text{o}}(\normvec{\omega}_{\text{o}})/\!\opd 
 
 The anti-normal of the \microfacet is given by \eqref{eq:eta_anti_normal}, where the distribution of the first two elements is given by \eqref{eq:eta_grad_distribution_r_uniformly_distributed} for a \idxse{uniform}{distribution}{uniformly distributed} $\vec{r}$. However, here it is the incident rays that determine the distribution of $\vec{r}$, so $\vec{r}$ will not be uniformly distributed but somewhat \biased towards microfacets facing the light source.
 
-If a large surface, whose area when projected down to the horizontal plane is $A_{\text{h}}$, is subdivided into many infinitesimal microfacets, the total project area of all microfacets whose gradient of the free surface elevation lies within $\opd\nabla\eta^*$ will be
+If a large surface, whose area when projected down to the horizontal plane is $A_{\text{h}}$, is subdivided into many infinitesimal microfacets, the total projected area, $\opd A'_{\text{h}}$, of all microfacets whose gradient of the free surface elevation lies within $\opd\nabla\eta^*$ will be
 %
 \begin{equation}
 \opd A'_{\text{h}} \,=\, A_{\text{h}}\,f(\nabla\eta^*(\vec{r}))\opd\nabla\eta^*,
 \end{equation}
 %
-where an apostrophe denotes a restriction on the gradients of the free surface elevation on the included microfacets, and $f(\nabla\eta^*(\vec{r}))\opd \nabla\eta^*$ is the chance for a single microfacet that its free surface elevation gradient within $\opd\nabla\eta^*$. When projected onto the plane orthogonal to $\normvec{\omega}_{\text{i}}$, the total area of all microfacets will be
+where an apostrophe ($'$) denotes that the gradients of the free surface elevation on the included microfacets has been restricted to $\opd\nabla\eta^*$, and $f(\nabla\eta^*(\vec{r}))\opd \nabla\eta^*$ is the chance which a single microfacet has that the gradient of its free surface elevation lies within $\opd\nabla\eta^*$. When projected onto the plane orthogonal to $\normvec{\omega}_{\text{i}}$, the total area of all microfacets will be
 %
 \begin{equation}
 A_{\text{i}} \,=\, A_{\text{h}}\,\normvec{\omega}_{\text{i}}\cdot\normvec{n}\,(\normvec{n}\cdot\normvec{z})^{-1} \,=\, A_{\text{h}}\,\normvec{\omega}_{\text{i}}\cdot\anormvec{n}
@@ -741,7 +741,7 @@ and the total area of all microfacets whose gradient of the free surface elevati
 \opd A'_{\text{i}} \,=\, \opd A'_{\text{h}}\,\normvec{\omega}_{\text{i}}\cdot\normvec{h}\,(\normvec{h}\cdot\normvec{z})^{-1} \,=\, \opd A'_{\text{h}}\,\normvec{\omega}_{\text{i}}\cdot\anormvec{h},
 \end{equation}
 %
-since all microfacets have the same area when projected to the horizontal plane. Here, $\normvec{h}$ is the normal the free surface elevation with the gradient around which $\opd\nabla\eta^*$ is centered. Therefore, the chance that a ray that comes from the direction $\normvec{\omega}_{\text{i}}$ and hits the surface will hit a \microfacet whose gradient of the free surface elevation lies within $\opd\nabla\eta^*$ will be
+since all microfacets have the same area when projected to the horizontal plane. Here, $\normvec{h}$ is the surface normal corresponding to the free surface elevation gradient around which $\opd\nabla\eta^*$ is centered. Therefore, the chance that a ray that comes from the direction $\normvec{\omega}_{\text{i}}$ and hits the surface will hit a \microfacet whose gradient of the free surface elevation lies within $\opd\nabla\eta^*$ will be
 %
 \begin{equation} \label{eq:gradient_restricted_reflection_probability}
 \opd P'(\normvec{\omega}_{\text{i}}) \,=\, \frac{\opd A'_{\text{i}}}{A_{\text{i}}} \,=\, \frac{\opd A'_{\text{h}}\,\normvec{\omega}_{\text{i}}\cdot\anormvec{h}}{A_{\text{h}}\,\normvec{\omega}_{\text{i}}\cdot\anormvec{n}} \,=\, f(\nabla\eta^*(\vec{r}))\,\frac{\normvec{\omega}_{\text{i}}\cdot\anormvec{h}}{\normvec{\omega}_{\text{i}}\cdot\anormvec{n}}\opd \nabla\eta^*.
@@ -763,13 +763,13 @@ Using \eqref{eq:gradient_restricted_reflection_probability} in \eqref{eq:gradien
 \frac{\opd}{\opd \nabla\eta^*}\,\left(\frac{\opd \Phi_{\text{o}}(\normvec{\omega}_{\text{o}})}{\opd \Phi_{\text{i}}(\normvec{\omega}_{\text{i}})}\right) \,=\, f(\nabla\eta^*(\vec{r}))\,\frac{\normvec{\omega}_{\text{i}}\cdot\anormvec{h}}{\normvec{\omega}_{\text{i}}\cdot\anormvec{n}}\,R_{\normvec{n}^*\!,x}(\normvec{\omega}_{\text{o}}).
 \end{equation}
 %
-By realizing that the normal of the a \microfacet, $\normvec{n}^*$, needs to equal $\normvec{h}$ in order for a ray coming from the direction $\normvec{\omega}_{\text{i}}$ to be reflected in the direction $\normvec{\omega}_{\text{o}}$, we can use \eqref{eq:eta_anti_normal} to conclude that in this case, we can make the substitution
+By realizing that the normal of a \microfacet, $\normvec{n}^*$, needs to equal $\normvec{h}$ in order for a ray coming from the direction $\normvec{\omega}_{\text{i}}$ to be reflected in the direction $\normvec{\omega}_{\text{o}}$, we can use \eqref{eq:eta_anti_normal} to conclude that in this case, we can make the substitution
 %
 \begin{equation}
-\opd \anormvec{h} \,=\, \opd\nabla\eta^*
+\opd \anormvec{h} \,=\, \opd\nabla\eta^*,
 \end{equation}
 %
-(note that most infinitesimal quantities used in this appendix are two-dimen\-sional in their nature; in this case the minus sign in \eqref{eq:eta_anti_normal} is squared and vanishes). By applying this to \eqref{eq:gradient_restricted_reflected_flux_pre_incident_flux_per_unit_gradient_squared}, we can rewrite  \eqref{eq:brdf_from_ratio_between_fluxes}
+Note that many infinitesimal quantities used in this appendix are two-dimen\-sional in their nature and therefore represent infinitesimal area elements. Also note that in this equation, the minus sign in \eqref{eq:eta_anti_normal} is squared and vanishes. By applying this to \eqref{eq:gradient_restricted_reflected_flux_pre_incident_flux_per_unit_gradient_squared}, we can rewrite  \eqref{eq:brdf_from_ratio_between_fluxes}
 %
 \begin{equation}  \label{eq:brdf_from_eta_gradient_distribution_cos_thetao_and_derivative}
 \rho'_{\text{r}}(\normvec{\omega}_{\text{i}},\, \normvec{\omega}_{\text{o}}) \,=\, (\cos\theta_{\text{o}})^{-1}\, \frac{\opd\anormvec{h}}{\opd\normvec{\omega}_{\text{o}}}\,f(\nabla\eta^*(\vec{r}))\,\frac{\normvec{\omega}_{\text{i}}\cdot\anormvec{h}}{\normvec{\omega}_{\text{i}}\cdot\anormvec{n}}\,R_{\normvec{n}^*\!,x}(\normvec{\omega}_{\text{o}}).
@@ -995,7 +995,7 @@ If we \assume that the spectral radiance varies very slowly between different di
 \end{array}
 \end{equation}
 %
-where $\delta$ is the \idxs{Dirac}{delta function} for which any integral $\int_{\Omega}\delta(\normvec{\omega}_1,\normvec{\omega}_2)\opd \normvec{\omega}_2$ is 1 if $\normvec{\omega}_1 \in\, \Omega$ and 0 otherwise, $\normvec{\omega}_{\text{i},\normvec{n},\text{t}}(\normvec{\omega}_{\text{o}})$ is the direction from which incoming light will be transmitted in the direction $\normvec{\omega}_{\text{o}}$, and $T_{\normvec{n},x}(\normvec{\omega}_{\text{o}})$ is the \idxs{transmission}{coefficient} which is predicted by the \idxs{Fresnel}{equations}, for a ray being transmitted in the direction $\normvec{\omega}_{\text{o}}$, for a surface with the surface normal $\normvec{n}$ and for the light polarization $x$. Using this \approximation, we simplify \eqref{eq:rendering_equation_reduced_rhot} to
+where $\delta$ is a variant of the \idxs{Dirac}{delta function}, defined so that any integral $\int_{\Omega}\delta(\normvec{\omega}_1,\normvec{\omega}_2)\opd \normvec{\omega}_2$ is 1 if $\normvec{\omega}_1 \in\, \Omega$ and 0 otherwise, $\normvec{\omega}_{\text{i},\normvec{n},\text{t}}(\normvec{\omega}_{\text{o}})$ is the direction from which incoming light will be transmitted in the direction $\normvec{\omega}_{\text{o}}$, and $T_{\normvec{n},x}(\normvec{\omega}_{\text{o}})$ is the \idxs{transmission}{coefficient} which is predicted by the \idxs{Fresnel}{equations}, for a ray being transmitted in the direction $\normvec{\omega}_{\text{o}}$, for a surface with the surface normal $\normvec{n}$ and for the light polarization $x$. Using this \approximation, we simplify \eqref{eq:rendering_equation_reduced_rhot} to
 %
 \begin{equation} \label{eq:rendering_equation_simplified}
 \renewcommand*{\arraystretch}{2}
@@ -1038,14 +1038,14 @@ For water surfaces, this gives rise to a specular highlight that is elliptical, 
 
 By comparing the \idxs{shading}{model} derived in this appendix (\eqrefs \ref{eq:rendering_equation_simplified} and \ref{eq:spectral_radience_reflected_point_light_source}) to the Blinn--Phong shading model, it may be noticed that if the \idxs{wave}{spectra} $S$ is \idxse{circular}{symmetry}{circularly symmetric}, the factor $f(\nabla\eta^*(\vec{r}))$ (described by \eqref{eq:eta_grad_distribution_r_uniformly_distributed}) --- which is what gives the reflection of the point light source its shape --- becomes practically equivalent to the specular reflection term in the Blinn--Phong shading model except from a constant factor. This holds even though the Blinn--Phong shading model is based on experimental measurements of reflections from real surfaces and is developed mainly for solids, while the shading model presented in this appendix is specifically derived for water surfaces.
 
-For symmetric wave spectra and for almost smooth surfaces (when the diffusion in the reflection of objects becomes very small), all factors in \eqref{eq:spectral_radience_reflected_point_light_source} except from $f(\nabla\eta^*(\vec{r}))$ varies very slowly in comparison to $f(\nabla\eta^*(\vec{r}))$ unless the surface is viewed from a glancing angle, and so the shape of the specular reflection can be \approximated as just a constant times $f(\nabla\eta^*(\vec{r}))$. Hence, the result of using \eqref{eq:spectral_radience_reflected_point_light_source} becomes very similar to the result of using the Blinn--Phong shading model, with the only practical difference that the reflection of a point light source according to the shading model derived in this appendix varies in intensity depending on how steep the angle is with which the observer sees the reflection, according to the factors $\anormvec{h}^4/(\normvec{\omega}_{\text{o}}\cdot\anormvec{n})$ and $R_{\normvec{n}^*\!,x}(\normvec{\omega}_{\text{o}})$; these are not included in the specular term in the Blinn--Phong shading model.
+For symmetric wave spectra and for almost smooth surfaces (when the diffusion in the reflection of objects becomes very small), all factors in \eqref{eq:spectral_radience_reflected_point_light_source} except from $f(\nabla\eta^*(\vec{r}))$ vary very slowly in comparison to $f(\nabla\eta^*(\vec{r}))$ unless the surface is viewed from a glancing angle, and so the shape of the specular reflection can be \approximated as just a constant times $f(\nabla\eta^*(\vec{r}))$. Hence, the result of using \eqref{eq:spectral_radience_reflected_point_light_source} becomes very similar to the result of using the Blinn--Phong shading model, with the only practical difference that the reflection of a point light source according to the shading model derived in this appendix varies in intensity depending on how steep the angle is with which the observer sees the reflection, according to the factors $\anormvec{h}^4/(\normvec{\omega}_{\text{o}}\cdot\anormvec{n})$ and $R_{\normvec{n}^*\!,x}(\normvec{\omega}_{\text{o}})$; these are not included in the specular term in the Blinn--Phong shading model.
 
 However, when the point light source is located low and the reflection comes relatively close to the horizon in comparison to the vertical spread of the reflection, the factor $\anormvec{h}^4/(\normvec{\omega}_{\text{o}}\cdot\anormvec{n})$ will vary more noticeably.
 
-This becomes especially apparent when the reflection almost reaches the horizon, in which case real waves would start to mask each other out at the top of the diffuse reflection of the light source. If the surface is assumed to consist of V-groove cavities \citep{Torrance1967}, this masking occurs roughly above one third from the horizon to the center of the reflection. Since our model don't account for masking, the radiance directed against the observer will go to infinity when $\normvec{\omega}_{\text{o}}\cdot\anormvec{n}$ goes to 0, which is an unphysical behavior.
+This becomes especially apparent when the reflection almost reaches the horizon, in which case real waves would start to mask each other out at the top of the diffuse reflection of the light source. If the surface is assumed to consist of V-groove cavities \citep{Torrance1967}, this masking occurs roughly above one third from the horizon to the center of the reflection. Since our model doesn't account for masking, the radiance directed against the observer will go to infinity when $\normvec{\omega}_{\text{o}}\cdot\anormvec{n}$ goes to 0, which is an unphysical behavior.
 
 Furthermore, when the light source is very close to the horizon, real waves would start to shadow each other. By modeling the surface as V-groove cavities, this would start to occur roughly below a distance from the horizon that is three times the distance between the horizon and the light source, and the radiance directed against the observer would go to zero when the distance between the horizon and the light source went to zero. This is not the case in our model since it doesn't account for shadowing.
 
-Masking and shadowing is generally referred to as geometric attenuation. \citet{Torrance1967} modeled the surface as a sequence of V-groove cavities, which allowed the attenuation to be modeled analytically. This V-groove cavity model has since been borrowed several times \citep{Blinn1977,Oren1994}, and could also be used to model geometric attenuation for the shading model derived in this appendix to prevent overly bright parts of the surface close to the horizon
+Masking and shadowing is generally referred to as geometric attenuation. \citet{Torrance1967} modeled the surface as a sequence of V-groove cavities, which allowed the attenuation to be modeled analytically. This V-groove cavity model has since been borrowed several times \citep{Blinn1977,Oren1994}, and could also be used to model geometric attenuation for the shading model derived in this appendix to prevent overly bright parts of the surface close to the horizon.
 
 However, even this model is a too crude approximation in certain cases, for example when the surface is viewed from an extremely grazing angle, like the thin strip closest to the horizon. From this angle, almost every visible part of the surface is at the crest of a wave, since the rest of the wave is hidden behind other waves. Since the crest is on the top of a wave, naturally the surface gradient will be very low, which makes the surface more mirror-like, as can be seen in \figref{fig:sunglintpyramid}. This is not the case for the V-groove cavity model, where the entire cavity has the same slope.

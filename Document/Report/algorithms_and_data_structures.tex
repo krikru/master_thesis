@@ -28,7 +28,7 @@
     \draw (-2*\@offset,.25) node{0};
     \draw (-2*\@offset,.75) node{1};
     \end{tikzpicture}
-    \caption{A parent cell with four child cells. The numbers written inside of the child cells are their corresponding indexes in their panet's child array.}
+    \caption{A parent cell with four child cells. The numbers written inside of the child cells are their corresponding indices in their parent's child array.}
     \label{fig:octree_child_indexes}
 \end{figure}
 
@@ -134,23 +134,23 @@ The octree data structure is illustrated in \figref{fig:octree_child_array_examp
 
 \section{Neighbor connections}
 
-In this thesis work, \idxse{neighbor}{cell}{neighboring cells} are physically linked to each other, and each cell contains five \idxsp{doubly linked}{list}{s}\indexs{doubly}{lined list} whit \idxse{neighbor}{connection}{connections} to neighbor cells. The reason why doubly linked lists are used to store the connections is because their content is constantly changing because of the dynamic \idxs{water}{surface} and the dynamically changing \LODs, which both cause the grid to constantly have to \remesh itself and update its neighbors, and any nieghbor connection can have to be removed at any moment. The five doubly linked lists contains connections to
+In this thesis work, \idxse{neighbor}{cell}{neighboring cells} are physically linked to each other, and each cell contains five \idxsp{doubly linked}{list}{s}\indexs{doubly}{lined list} with \idxse{neighbor}{connection}{connections} to neighbor cells. The reason why doubly linked lists are used to store the connections is because their content is constantly changing because of the dynamic \idxs{water}{surface} and the dynamically changing \LODs, which both cause the grid to constantly have to \remesh itself and update its neighbors, and any neighbor connection can have to be removed at any moment. The five doubly linked lists contain connections to
 
 \begin{enumerate}
-    \item \idxse{leaf}{cell}{Leaf cells} at the next lower \LOD,
+    \item \idxse{leaf}{cell}{Leaf cells} at the next lower (finer) \LOD,
     \item \idxse{parent}{cell}{Parent cells} at the next lower \LOD,
-    \item Leaf cells with at the same \LOD,
-    \item Parent cells with at the same \LOD, and
-    \item Cells at the next higher \LOD
+    \item Leaf cells at the same \LOD,
+    \item Parent cells at the same \LOD, and
+    \item Cells at the next higher (coarser) \LOD
 \end{enumerate}
 
-respectively. The reason connections both to leaf cells and to parent cells are stored is because it was originally planned to use the \idxs{multigrid}{method} for solving the \idxs{pressure}{Poisson equation} that needs to be solved when the flow is \idxse{incompressible}{flow}{incompressible} (while what actually happened was that the flow was choosen to be \idxse{compressible}{flow}{compressible}).
+respectively. The reason connections both to leaf cells and to parent cells are stored is because it was originally planned to use the \idxs{multigrid}{method} for solving the \idxs{pressure}{Poisson equation} that needs to be solved when the flow is \idxse{incompressible}{flow}{incompressible} (while what actually happened was that the flow was chosen to be \idxse{compressible}{flow}{compressible}).
 
-Since using the \idxs{multigrid}{method} involves coarsening the grid, parent cells are suddenly turned into leaf cells and existing leaf cells are removed. In order to avoid having to generate a new neighbor connection each time one of a cell's neighbors turns into a leaf cell (which happens a lot of times since the process of coarsening the grid to the coarsest level and then refining it again lies at the core of the multigrid method), those neighbor connections are already present, and in order to avoid having to add and remove cells to the gird, coarsening is never actually carried out; it is merly simulated by treating cells that are on a too high \LOD as if they didn't exist and instead treat their parent cells as leaf cells unless they are also on a too high \LOD.
+Since using the \idxs{multigrid}{method} involves coarsening the grid, parent cells are suddenly turned into leaf cells and existing leaf cells are removed. In order to avoid having to generate a new neighbor connection each time one of a cell's neighbors turns into a leaf cell (which happens a lot of times since the process of coarsening the grid to the coarsest level and then refining it again lies at the core of the multigrid method), those neighbor connections are already present, and in order to avoid having to add and remove cells to the grid, coarsening is never actually carried out; it is merely simulated by treating cells that are on a too high \LOD as if they didn't exist and instead treat their parent cells as leaf cells unless they are also on a too high \LOD.
 
-When it is desired to loop through all of a leaf cell's neighbors that also are leaf cells, each of the lists lists 1, 3 and 5 are simply looped through. For a leaf cell, each neighbor at a higher \LOD is guaranteed to also be a leaf cell.
+When it is desired to loop through all of a leaf cell's neighbors that also are leaf cells, each of the lists 1, 3 and 5 are simply looped through. For a leaf cell, each neighbor at a higher \LOD is guaranteed to also be a leaf cell.
 
-When the grid has been coarsened to a certain \LOD and it is desired to loop through all of the neighbors to a cell at that \LOD that are also currently leaf cells, each of the lists 1, 3 and 4 are looped through. Since the grid has been coarsened to the same \LOD as the cell in question, all cells connected through list 4 will be on that \LOD and consequencely also they will currently also be leaf cells.
+When the grid has been coarsened to a certain \LOD, and it is desired to loop through all of the neighbors of a leaf cell at that \LOD, each of the lists 1, 3 and 4 are looped through. Since the grid has been coarsened to the same \LOD as the cell in question, all cells connected through list 4 will be on that \LOD and consequently also be leaf cells, at least for the moment.
 
 List 2 is never used but is simply used to store connections that may be moved into list 1 if the local \LOD for the cells being connected would decrease and those cells would turn into leaf cells. No neighbor connections are ever created or removed unless new cells are created or cells are removed.
 
@@ -221,7 +221,7 @@ Advection of the velocity is particularly tricky, mainly because the \idxs{veloc
 \end{figure}
 
 \begin{enumerate}
-    \item Calculate \idx{cell-centered} \idxsp{momentum}{vector}{s} by using the the \idx{face-centered} \idxsp{velocity}{scalar}{s},
+    \item Calculate \idx{cell-centered} \idxsp{momentum}{vector}{s} by using the \idx{face-centered} \idxsp{velocity}{scalar}{s},
     \item Transport the momentum in an advection step, and
     \item Calculate the face-centered velocity scalars by calculating them from the momentum vectors.
 \end{enumerate}
@@ -287,7 +287,7 @@ However, following these steps directly would \idxs{low-pass}{filter} the \idxs{
     
     \item Calculate face-centered \idxsp{momentum}{scalar}{s} by multiplying the face-cen\-tered velocity scalars with the total mass contained within the control volume of the cell face the velocity scalar is stored on. Use the entire control volume this time.
     
-    \item Distribute the part of the net momentum inflow that still has to be distributed, on the face-centered momentum-scalars by using the mass of the part of the cell face control volume that lie within the cell as weight. Note that this is equivalent to using the volume of the part of the cell face control volume that lies within the cell as weight, since mass was considered to be distributed homogeneously within the cell.
+    \item Distribute the part of the net momentum inflow that still has to be distributed, on the face-centered momentum-scalars by using the mass of the part of the control volume of the cell face that lie within the cell as weight. Note that this is equivalent to using the volume of the part of the cell face control volume that lies within the cell as weight, since mass was considered to be distributed homogeneously within the cell.
     
     In this thesis work, since the cells are cubic and the control volume extends through half the cell, the volume of the part of the cell face control volume that lies within the cell is proportional to the cell face area, so in this case the weight is simply the cell face area.
     

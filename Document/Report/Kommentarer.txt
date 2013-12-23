@@ -19,7 +19,7 @@ Magnus
 
 - Kapitel 9: Som Kenneth tidigare nämnt så tycker jag också nu att resultat-kapitlet känns lite tunt. Jag tycker åtminstone att du bör ha en diskussion om Fig.9.1-9.3 i huvudtexten (nu nämner du bara 9.1d-h). Diskutera vad figurerna illustrerar, och förklara för läsaren vad som är viktigt att notera!
 
-+ Kommentarer skrivna direkt i blocket.
++ Kommentarer skrivna direkt i blocket. (Endast några som jag inte förstår kvar; dessa är markerade med frågetecken i dokumentet och sidnumrena är uppskrivna på framsidan)
 
 
 Jag
@@ -80,7 +80,7 @@ Inte gjorda än:
 
 - Kapitel 9: Som Kenneth tidigare nämnt så tycker jag också nu att resultat-kapitlet känns lite tunt. Jag tycker åtminstone att du bör ha en diskussion om Fig.9.1-9.3 i huvudtexten (nu nämner du bara 9.1d-h). Diskutera vad figurerna illustrerar, och förklara för läsaren vad som är viktigt att notera!
 
-+ Kommentarer skrivna direkt i blocket.
++ Kommentarer skrivna direkt i blocket. (Endast några som jag inte förstår kvar; dessa är markerade med frågetecken i dokumentet och sidnumrena är uppskrivna på framsidan)
 
 ---------------------------------------
 
