@@ -5,22 +5,6 @@ Things left to do, after importance
 High importance
 ---------------
 
-Needs to be written:
-* Library page
-
-Needs finishing:
-* Wave spectra (see "Sea surface microlayer" (SML) on Wikipedia. For increasing concentrations of "surfactant" in the SML there is an increasing critical wind speed necessary to create ocean waves, hence creating what is known as "slicks" on the surface where there are very little waves)
-* Results
-* Conclusions
-* Abstract
-(* Octrees)
-(* Laplacian pyramid)
-
-
-Add to abstract and to conclusions:
-* Derivation of 2D PDE
-* Derivation of illumination model
-
 Search for (texfind):
 * \href
 * \url
