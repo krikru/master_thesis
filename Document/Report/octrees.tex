@@ -3,7 +3,7 @@
 
 An \octree is a tree \idxs{data}{structure} in which each \idxs{internal}{node} has exactly eight \idxse{child}{node}{children}. Octrees are often used to represent \idxs{three-dimensional}{data}, for which each node corresponds to a \cube in \idxs{three-dimensional}{space}, and where each of those cubes that corresponds to a \idxs{parent}{node} is subdivided into eight smaller cubes with half the side, corresponding to the children of the node.
 
-Octrees are especially useful when the data that needs to be represented has different requirements for the \LOD in different parts of space. As in many other cases in science, the most fundamental building blocks are defined on the lowest level, and can be used to form new, composed building blocks on higher levels. Naturally, a low \LOD therefore implies that the cell size is small and that the amount of detail per unit volume is high, whereas a high \LOD have a large cube size and implies a smaller amount of detail per unit volume.
+Octrees are especially useful when the data that needs to be represented has different requirements for the \LOD in different parts of space. As in many other cases in science, the most fundamental building blocks are defined on the lowest level, and can be used to form new, composed building blocks on higher levels --- in this case, the building blocks are the cells in the octree. Naturally, a low \LOD therefore implies that the cell size is small and that the amount of detail per unit volume is high, whereas a high \LOD have a large cell size and implies a smaller amount of detail per unit volume.
 
 Octrees are a variant of \quadtrees. The latter has nodes with four children and are often used to represent \idxs{two-dimensional}{data}. \figref{fig:quadtree_and_octree} is an example of what a quadtree (\subref{fig:quadtree}) and an octree (\subref{fig:octree}) can look like, respectively.
 
@@ -106,23 +106,23 @@ In this report, an octree is going to be considered to be a spatial data structu
 
 \section{Varying level of detail}
 
-In this thesis work, an octree has been used to partition the \idxs{computational}{domain} (the space in which the simulation will be performed) into the \cells required by the \FVM. Since only the \surface of the water is visible in the \simulation, the \idxsp{surface}{cell}{s} have been given a low \LOD; the \LOD then increases as the water depth increases, staying a few \idxse{layer of}{cells}{layers of cells} a time on each \LOD, forming a \idxs{LOD}{layer} (a LOD layer is the set of all cells with a distinct given \LOD).
+In this thesis work, an octree has been used to partition the \idxs{computational}{domain} (the space in which the simulation will be performed) into the \cells required by the \FVM. Since only the \surface of the water is visible in the \simulation, the \idxsp{surface}{cell}{s} have been given a low \LOD; the \LOD then increases as the water depth increases, staying a few \idxse{layer of}{cells}{layers of cells} a time on each \LOD, forming a \idxs{LOD}{layer}. A LOD layer is the set of all cells with a distinct given \LOD.
 
 Ideally, although not implemented in this thesis work, the surface will have a lower \LOD where the \idxsp{surface}{detail}{s} are more important to the simulation, such as close to the \camera where they can be seen more clearly, and a higher \LOD far away from the camera where the cells take up little \idxse{screen}{space}{space on the screen}, or where they are out of the \FOV.
 
 The total number of cells $N_{\text{t}}$ used in the simulation can be \approximated by a \idxs{double}{series} containing the thicknesses of the different LOD layers and the number of cells visible at the surface that belong to each \LOD, according to
 %
 \begin{equation} \label{eq:number_of_cells_total_sum}
-N_{\text{t}} \,=\, \sum_{i\,=\,0}^\infty N_{\text{s},i}\sum_{j\,=\,i}^\infty a_j\cdot 2^{-(d-1)(j-i)},
+N_{\text{t}} \,\approx\, \sum_{i\,=\,-\infty}^\infty N_{\text{s},i}\sum_{j\,=\,i}^\infty a_j\cdot 2^{-(d-1)(j-i)},
 \end{equation}
 %
-where $N_{\text{s},i}$ is the number of cells visible on the surface belonging to \idxs{LOD}{layer} $i$, $a_j$ is the thickness in number of cells of LOD layer $j$, where LOD layer $0$ corresponds to the lowest \LOD and an increasing LOD layer index corresponds to a higher \LOD, and $d$ is the dimensionality of the system. Different LOD layers can have different thickness; if this is the case, it will also be reflected in the simulation, and waves with different wavelengths will be simulated with different \accuracy. In this thesis work, all LOD layers have been given the same thickness, $a$. \eqref{eq:number_of_cells_total_sum} therefore turns into an equation containing a \idxs{geometric}{series},
+where $N_{\text{s},i}$ is the number of cells visible on the surface belonging to \idxs{LOD}{layer} $i$, $a_j$ is the thickness in number of cells of LOD layer $j$, and $d$ is the dimensionality of the system. Here, a LOD layer with a low number corresponds to a low \LOD and an vice versa. Note that in this equation there is no lowest \LOD and no highest \LOD, meaning that the simulation basically can consist of cells of any size, although in practice these sizes will be restricted. Different LOD layers can have different thickness; if this is the case, it will also be reflected in the simulation, and waves with different wavelengths will be simulated with different \accuracy. In this thesis work, all LOD layers have been given the same thickness, $a$. \eqref{eq:number_of_cells_total_sum} therefore turns into an equation containing a \idxs{geometric}{series},
 %
 \begin{equation} \label{eq:number_of_cells_total}
-N_{\text{t}} \,=\, a\sum_{i\,=\,0}^\infty N_{\text{s},i}\sum_{k\,=\,0}^\infty 2^{-(d-1)k} \,=\, a\,N_{\text{s}}\,\frac{1}{1-2^{-(d-1)}} \,=\, \frac{2^{d-1}}{2^{d-1}-1}\,a\,N_{\text{s}},
+N_{\text{t}} \,\approx\, a\sum_{i\,=\,-\infty}^\infty N_{\text{s},i}\sum_{k\,=\,0}^\infty 2^{-(d-1)k} \,=\, \frac{1}{1-2^{-(d-1)}}\,a\,N_{\text{s}},
 \end{equation}
 %
-where $k = j-i$ and $N_{\text{s}}$ is the total number of cells visible on the surface. We can therefore in this case conclude that
+where $k = j-i$ and $N_{\text{s}}$ is the total number of cells visible on the surface. Assuming that this \approximation is not too crude, we can in this case conclude that
 %
 \begin{equation} \label{eq:number_of_cells_total_ordo}
 N_{\text{t}} \,=\, O(N_{\text{s}}).

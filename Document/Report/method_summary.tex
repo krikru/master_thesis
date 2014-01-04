@@ -5,7 +5,7 @@ To make things clear, this is a short summary of all methods that have been used
 
 The \FVM on a \idxs{staggered}{grid} has been used. The \PDEs that have been solved are the \idxs{Euler}{equations} and the flow has been considered to be \idxse{compressible}{flow}{compressible}.
 
-The grid has been modeled with an \octree. The \LOD of the \idxsp{water surface}{cell}{s}\indexs{surface}{cell} depends on how visually important they are, and the \LOD of the \idxsp{bulk}{cell}{s} decreases the further down under the surface the cells are located. This ensures that the total number $N_t$ of cells used in the simulation is roughly proportional to the number $N_s$ of cells visible on the surface according to \eqref{eq:number_of_cells_total_ordo}.
+The grid has been modeled with an \octree. The \LOD of the \idxsp{water surface}{cell}{s}\indexs{surface}{cell} depends on how visually important they are, and the \LOD of the \idxsp{bulk}{cell}{s} increases the further down under the surface the cells are located. This ensures that the total number $N_t$ of cells used in the simulation is roughly proportional to the number $N_s$ of cells visible on the surface according to \eqref{eq:number_of_cells_total_ordo}.
 
 The interface has been modeled using the \VOF method and the \idxs{advection}{scheme} used for transporting the \idxs{$\alpha$}{field} is a variant of the \idxs{Hyper-C}{flux limiter}\index{limiter!Hyper-C flux limiter|see{Hyper-C flux limiter}} that has been modified especially for compressible flow.
 
