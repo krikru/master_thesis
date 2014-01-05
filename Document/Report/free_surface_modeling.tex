@@ -22,10 +22,10 @@ On the other hand, the meshes constantly require remeshing, just like most metho
 The \LS method, which was first described by \citet{Osher1988}, is a general method for tracking interfaces and shapes and is one of the most common ways to track interfaces between two immiscible fluids. In the \LS method, a \idxs{signed distance}{function}\indexs{signed}{distance function}, also knows as \idxs{level set}{function}, $\phi$ is used to keep track of the distance to the surface. The absolute value of $\phi$ represents the distance to the interface, whereas the sign of $\phi$ designates the \phase. If the two phases are air and water, $\phi \leq 0$ usually designates water and $\phi > 0$ designates air, so that $\phi$ can be interpreted as the "height" when the system is in its \equilibrium position. The surface is then defined as the \isosurface, or \idxs{level}{set}, where $\phi = 0$, that is, as
 %
 \begin{equation} \label{eq:level_set}
-L_c(\phi) \,=\, \{\vec{r} \,\mid\, \phi(\vec{r})=c\}
+L_c(\phi) \,=\, \{\vec{r} \,\mid\, \phi(\vec{r}\,)=c\}
 \end{equation}
 %
-where $c$ is a distinct level of $\phi$ and $L_c(\phi)$ is the set of all locations $\vec{r}$ where $\phi(\vec{r}) = c$. In the \LS method, $c = 0$ is used to represent the surface.
+where $c$ is a distinct level of $\phi$ and $L_c(\phi)$ is the set of all locations $\vec{r}$ where $\phi(\vec{r}\,) = c$. In the \LS method, $c = 0$ is used to represent the surface.
 
 In each \idxs{time}{step}, $\phi$ is transported according to the equation
 %
@@ -46,13 +46,13 @@ On the other hand, probably the greatest weakness with this method is that, afte
 Another very commonly used way of tracking interfaces between two immiscible fluids is the \VOF method, first described by \citet{Hirt1981}. For a non-discretized \PDE, the \VOF method uses a \idxs{phase}{fraction} $\alpha^*$ that is either $0$ or $1$ to designate the \phase. If the two phases are air and water, $\alpha^* = 0$ usually designates air and $\alpha^* = 1$ designates water, so that for a non-discretized \PDE, $\alpha^*$ can be expressed as
 %
 \begin{equation} \label{eq:phase_fraction_continuous}
-\alpha^*(\vec{r}) \,=\, \lim_{\epsilon\,\rightarrow\,0} \frac{V_{\epsilon,\text{w}}}{V_{\epsilon,\text{t}}}\,(\vec{r}),
+\alpha^*(\vec{r}\,) \,=\, \lim_{\epsilon\,\rightarrow\,0} \frac{V_{\epsilon,\text{w}}}{V_{\epsilon,\text{t}}}\,(\vec{r}\,),
 \end{equation}
 %
 where $V_{\epsilon,\text{t}}$ is the volume of the sphere with radius $\epsilon$, centered in $\vec{r}$, and $V_{\epsilon,\text{w}}$ is the volume of the water contained within $V_{\epsilon,\text{t}}$. This fraction can only result in 0 or 1, since $\vec{r}$ cannot be partially emerged in water, except from in the case where $\vec{r}$ is located on the interface where $\alpha^*$ \idxse{discontinuous}{jump}{jumps discontinuously} from 0 to 1 or from 1 to 0 and hence doesn't have a well defined value. The interface using the non-discretized phase fraction, $I^*(\alpha^*)$, can therefore be defined as all locations where a transition takes place such that $\alpha^*$ makes this kind of jump, or in other words
 %
 \begin{equation} \label{eq:vof_interface_continuous}
-I^*(\alpha^*) \,=\, \{\vec{r} \,\mid\, \cancel{\exists}\,\alpha(\vec{r})\in\reals\},
+I^*(\alpha^*) \,=\, \{\vec{r} \,\mid\, \cancel{\exists}\,\alpha(\vec{r}\,)\in\reals\},
 \end{equation}
 %
 where $\reals$ is the set of \idxsp{real}{number}{s}. However, in this thesis work, $\alpha^*$ has been \discretized into $\alpha$ which is a sequence of \idxse{cell}{property}{cell properties} rather than a continuous function of location and which, because of its discrete nature, is unable to perfectly describe how the two phases are distributed. The value of $\alpha$ in a cell takes the whole cell into account and provides a value of how big ratio of the cell that is filled with water, rather than only looking at one point as is the case with other discretized properties. The definition of $\alpha$ is therefore the sequence of

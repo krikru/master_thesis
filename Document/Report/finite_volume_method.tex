@@ -29,16 +29,16 @@ In the \PDEs, in order to calculate the \divergence of a \idxs{vector}{field}, t
 \iiint_V\nabla\cdot\vec{F}(\vec{r'})\,\opd V \,=\, \oiint_S(\vec{F}(\vec{r'})\cdot\normal)\,\opd S
 \end{equation}
 %
-where $\vec{F}$ is a vector field, $V$ is a \idxs{control}{volume}, which in our case is the cell surrounding the point $\vec{r}$ in which the divergence is to be calculated, $S$ is the surface of $V$, with \idxs{normal}{vector} pointing outwards, $\opd V$ and $\opd S$ are \infinitesimal elements in $V$ and $S$ respectively, $\normal$ is the normal of $\opd S$ and $\vec{r'}$ is the position of $\opd V$ and $\opd S$ respectively. The divergence of $\vec{F}(\vec{r})$ is then \approximated as the \average divergence of $\vec{F}$ in $V$ and calculated as
+where $\vec{F}$ is a vector field, $V$ is a \idxs{control}{volume}, which in our case is the cell surrounding the point $\vec{r}$ in which the divergence is to be calculated, $S$ is the surface of $V$, with \idxs{normal}{vector} pointing outwards, $\opd V$ and $\opd S$ are \infinitesimal elements in $V$ and $S$ respectively, $\normal$ is the normal of $\opd S$ and $\vec{r'}$ is the position of $\opd V$ and $\opd S$ respectively. The divergence of $\vec{F}(\vec{r}\,)$ is then \approximated as the \average divergence of $\vec{F}$ in $V$ and calculated as
 %
 \begin{equation} \label{eq:divergence_surface_integral}
-\nabla\cdot\vec{F}(\vec{r}) \,=\, \frac{1}{V}\,\oiint_S(\vec{F}\cdot\normal)\,\opd S.
+\nabla\cdot\vec{F}(\vec{r}\,) \,=\, \frac{1}{V}\,\oiint_S(\vec{F}\cdot\normal)\,\opd S.
 \end{equation}
 
 In the \FVM, the surface of a cell consists of \idxsp{cell}{face}{s}, $S_i$, between the cell itself and \neighboring cells, so \eqref{eq:divergence_surface_integral} can be rewritten as
 %
 \begin{equation} \label{eq:divergence_cell_face_sum}
-\nabla\cdot\vec{F}(\vec{r})\ =\ \frac{1}{V}\,\sum_{S_i} \oiint_{S_i}(\vec{F}\cdot\normal)\,\opd S\ =\ \frac{1}{V}\,\sum_{S_i} F_i\,S_i,
+\nabla\cdot\vec{F}(\vec{r}\,)\ =\ \frac{1}{V}\,\sum_{S_i} \oiint_{S_i}(\vec{F}\cdot\normal)\,\opd S\ =\ \frac{1}{V}\,\sum_{S_i} F_i\,S_i,
 \end{equation}
 %
 where $i$ is an index, $S_i$ is the \area of the cell face to the $i$th neighbor cell and $F_i$ is the average \idxs{field}{flux} through $S_i$, defined as
@@ -72,7 +72,7 @@ where $\phi$ is a scalar field, \textgammapath is a path within $\phi$'s domain,
 where $\Delta\vec{r} = \vec{r}_2 -  \vec{r}_1$ and
 %
 \begin{equation}
-\nabla\phi(\vec{r})\cdot\frac{\Delta\vec{r}}{|\Delta\vec{r}|} = \phi'_{\Delta\vec{r}}(\vec{r}),
+\nabla\phi(\vec{r}\,)\cdot\frac{\Delta\vec{r}}{|\Delta\vec{r}|} = \phi'_{\Delta\vec{r}}(\vec{r}\,),
 \end{equation}
 %
 where $\phi'_{\vec{v}}$ is the \derivative of $\phi$ in the direction of $\vec{v}$. By assuming the simplest path possible from $r_1$ to $r_2$, which is just a line segment, $\Delta r$ can be written as
@@ -87,16 +87,16 @@ and \eqref{eq:gradient_theorem_divided} becomes
 \frac{\phi(\vec{r}_2)-\phi(\vec{r}_1)}{\Delta r} \,=\, \frac{\int_\gammapath\phi'_{\Delta\vec{r}}(\vec{r'})\opd r'}{\int_\gammapath\opd r'}
 \end{equation}
 %
-where the right hand side can be identified as the \average value of $\phi'_{\Delta\vec{r}}(\vec{r})$ along the path \textgammapath. Provided that $\vec{r}$ is close enough to \textgammapath (preferably equal to \mbox{$(\vec{r}_1\,+\,\vec{r}_2)/2$}), $\phi'_{\Delta\vec{r}}(\vec{r})$ can be \approximated as this average and calculated as
+where the right hand side can be identified as the \average value of $\phi'_{\Delta\vec{r}}(\vec{r}\,)$ along the path \textgammapath. Provided that $\vec{r}$ is close enough to \textgammapath (preferably equal to \mbox{$(\vec{r}_1\,+\,\vec{r}_2)/2$}), $\phi'_{\Delta\vec{r}}(\vec{r}\,)$ can be \approximated as this average and calculated as
 %
 \begin{equation} \label{eq:phi_derivative_final}
-\phi'_{\Delta\vec{r}}(\vec{r}) \,=\, \frac{\phi(\vec{r}_2)-\phi(\vec{r}_1)}{\Delta r}.
+\phi'_{\Delta\vec{r}}(\vec{r}\,) \,=\, \frac{\phi(\vec{r}_2)-\phi(\vec{r}_1)}{\Delta r}.
 \end{equation}
 
 The gradient of a scalar field can be written as
 %
 \begin{equation} \label{eq:gradient_orthogonal}
-\nabla\phi(\vec{r}) \,=\, \left(\sum_{i=0}^{d-1}\frac{\partial}{\partial r_i}\,\normvec{e}_i\right) \phi(\vec{r}) \,=\, \sum_{i=0}^{d-1}\phi'_{\normvec{e}_i}(\vec{r})\,\normvec{e}_i,
+\nabla\phi(\vec{r}\,) \,=\, \left(\sum_{i=0}^{d-1}\frac{\partial}{\partial r_i}\,\normvec{e}_i\right) \phi(\vec{r}\,) \,=\, \sum_{i=0}^{d-1}\phi'_{\normvec{e}_i}(\vec{r}\,)\,\normvec{e}_i,
 \end{equation}
 %
 where $\{\normvec{e}_i\}$ is an \idxs{orthonormal}{basis} for $\mathbb{R}^d$, where $d$ is the number of \dimensions and $i = 0,\,1,\,...\,,d-1$; $\normvec{e}_i$ is a \idxs{base}{vector} in $\{\normvec{e}_i\}$ that is aligned with the $i$th \idxs{grid}{axis} and $r_i$ is the $\normvec{e}_i$ component of $\vec{r}$,
@@ -112,7 +112,7 @@ such that $r_i = \normvec{e}_i\cdot\vec{r}$. Since we are on an orthogonal grid,
 where $\Delta r_i$ is the grid spacing in $\normvec{e}_i$-direction. By combining \eqrefs \ref{eq:phi_derivative_final}, \ref{eq:gradient_orthogonal} and \ref{eq:neighboring_locations}, we can write the gradient of $\phi$ as
 %
 \begin{equation} \label{eq:gradient_final}
-\nabla\phi(\vec{r}) \,=\,
+\nabla\phi(\vec{r}\,) \,=\,
 \sum_{i=0}^{d-1}\frac{\phi(\vec{r}_{\normvec{e}_i^+})-\phi(\vec{r}_{\normvec{e}_i^-})}{2\,\Delta r_i}\,\normvec{e}_i.
 \end{equation}
 
@@ -174,19 +174,19 @@ For a \idxs{control}{volume} $V$ with surface $S$ and a surface normal $\normal$
 where $m$ is the mass of the fluid in $V$. By using the \idxs{divergence}{theorem} (\eqref{eq:divergence_theorem}) and dividing with $V$, we can rewrite \eqref{eq:mass_flux_surface_integral} as
 %
 \begin{equation} \label{eq:mass_flux_volume_integral}
-\frac{\opd\,(m/V)}{\opd t} \,=\, -\frac{1}{V}\iiint_V\nabla\cdot(\rho\vec{u})\,\opd V
+\frac{\opd\,(m/V)}{\opd t} \,=\, -\frac{1}{V}\iiint_V\nabla\cdot(\rho\vec{u}\,)\,\opd V
 \end{equation}
 %
 and in the limit where $V \,\rightarrow\, 0$, this equation turns into
 %
 \begin{equation} \label{eq:density_partial_time_derivative}
-\frac{\partial \rho}{\partial t} \,=\, -\nabla\cdot(\rho\vec{u}),
+\frac{\partial \rho}{\partial t} \,=\, -\nabla\cdot(\rho\vec{u}\,),
 \end{equation}
 %
 where the density is defined as $\rho = \opd m/\opd V$. This can be rewritten as
 %
 \begin{equation} \label{eq:continuity_equation}
-\frac{\partial \rho}{\partial t} + \nabla\cdot(\rho\vec{u}) \,=\, 0.
+\frac{\partial \rho}{\partial t} + \nabla\cdot(\rho\vec{u}\,) \,=\, 0.
 \end{equation}
 %
 This is known as the \idxs{continuity}{equation} and has to be satisfied in order to ensure \idxs{conservation of}{mass}. \idxse{time}{discretization}{Time discretizing} this equation, and choosing to use the values of $\rho$ and $\vec{u}$ in \timestep $n$ and the value of $\partial \rho/\partial t$ in time step $n+\frac{1}{2}$, thus introducing an $O(\Delta t)$ error, gives
@@ -325,7 +325,7 @@ If, on the other hand the pressure equation is solved to a very high accuracy, o
 No matter if we need to conserve mass perfectly or not, we will obtain a \idxs{Poisson}{equation} for the \idxs{pressure}{field}, which can be written on the form
 %
 \begin{equation} \label{eq:pressure_poisson_equation_continuous}
-\nabla^2 p(\vec{r}) \,=\, q(\vec{r}),
+\nabla^2 p(\vec{r}\,) \,=\, q(\vec{r}\,),
 \end{equation}
 %
 where $q$ is a known function of $\vec{r}$. When the equation for describing the pressure takes this form, it is often referred to as the pressure Poisson equation.
@@ -340,7 +340,7 @@ There are a number of ways to solve the pressure Poisson equation. To begin with
 \mathbf{L\,p} \,=\, \mathbf{q},
 \end{equation}
 %
-where $\mathbf{p}$ is the vector containing the pressure in all cells, $\mathbf{q}$ is the vector containing $q(\vec{r})$ for all cells, and $\mathbf{L}$ is a sparse $N\times N$ \idx{matrix} containing the coefficients for the system of linear equations that are obtained when discretizing \eqref{eq:pressure_poisson_equation_continuous}. Since $\mathbf{L}$ is the matrix correspondence of the Laplace operator, $\nabla^2$, found in \eqref{eq:pressure_poisson_equation_continuous}, this particular matrix is also called the Laplacian matrix.
+where $\mathbf{p}$ is the vector containing the pressure in all cells, $\mathbf{q}$ is the vector containing $q(\vec{r}\,)$ for all cells, and $\mathbf{L}$ is a sparse $N\times N$ \idx{matrix} containing the coefficients for the system of linear equations that are obtained when discretizing \eqref{eq:pressure_poisson_equation_continuous}. Since $\mathbf{L}$ is the matrix correspondence of the Laplace operator, $\nabla^2$, found in \eqref{eq:pressure_poisson_equation_continuous}, this particular matrix is also called the Laplacian matrix.
 
 First, there is a class of methods called \idxsp{direct}{method}{s}, which will solve the system of linear equations completely. An example is the naive \idxs{Gaussian}{elimination} algorithm, or the \idxs{Gauss--Jordan}{elimination} algorithm for a \idx{multi-core} system, having a \idxs{time}{complexity} of $O(N^3)$ operations in total in the general case for a system of $N$ unknowns, which is (as already mentioned) unacceptably slow.
 

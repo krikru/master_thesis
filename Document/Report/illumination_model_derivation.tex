@@ -33,28 +33,28 @@ We can therefore only calculate the normal of the simplified surface --- let's c
 where $\normvec{z}$ is the \idxs{unit}{vector} in the positive vertical direction (which is the negation of the direction of the \idxs{gravitational acceleration}{vector}, or the normal of a flat water surface). This implies that the $\normvec{z}$-component of an anti-normalized vector always is 1. Note that the anti-normalization of a vector is only defined if the original vector has a non-zero $\normvec{z}$-component, and that it --- when defined --- is parallel to the original vector. The \idx{anti-normal} $\anormvec{n}$ of the surface $\eta$ becomes
 %
 \begin{equation} \label{eq:anti_normal_from_gradient}
-\anormvec{n} \,=\, \left(\!\!\!\begin{array}{c}-\nabla\eta(\vec{r}) \\ 1\end{array}\!\!\!\right),
+\anormvec{n} \,=\, \left(\!\!\!\begin{array}{c}-\nabla\eta(\vec{r}\,) \\ 1\end{array}\!\!\!\right),
 \end{equation}
 %
 where the last component is the $\normvec{z}$-component. The \gradient in turn can be written as
 %
 \begin{equation}
-\nabla\eta(\vec{r}) \,=\, \nabla\mathcal{F}^{-1}\{\fdfunc{\eta}(\vec{k})\}(\vec{r}) \,=\, \mathcal{F}^{-1}\{\vec{k}\,\fdfunc{\eta}(\vec{k})\}(\vec{r}),
+\nabla\eta(\vec{r}\,) \,=\, \nabla\mathcal{F}^{-1}\{\fdfunc{\eta}(\vec{k}\,)\}(\vec{r}\,) \,=\, \mathcal{F}^{-1}\{\vec{k}\,\fdfunc{\eta}(\vec{k}\,)\}(\vec{r}\,),
 \end{equation}
 %
-where $\mathcal{F}^{-1}$ is the \index{operator!inverse non-unitary Fourier transform|see{inverse non-unitary Fourier transform operator}}\index{non-unitary Fourier transform operator!inverse|see{inverse non-unitary Fourier transform operator}}\idxs{inverse non-unitary}{Fourier transform operator}, $\fdfunc{\eta}(\vec{k})$ is the \idxs{Fourier}{transform} of $\eta(\vec{r})$ and $\vec{k}$ is the \idxs{wave}{vector}. Since $\eta^*$ is unknown, the anti-normal of the real surface, $\anormvec{n}^*$, cannot be calculated, although it can still be written as
+where $\mathcal{F}^{-1}$ is the \index{operator!inverse non-unitary Fourier transform|see{inverse non-unitary Fourier transform operator}}\index{non-unitary Fourier transform operator!inverse|see{inverse non-unitary Fourier transform operator}}\idxs{inverse non-unitary}{Fourier transform operator}, $\fdfunc{\eta}(\vec{k}\,)$ is the \idxs{Fourier}{transform} of $\eta(\vec{r}\,)$ and $\vec{k}$ is the \idxs{wave}{vector}. Since $\eta^*$ is unknown, the anti-normal of the real surface, $\anormvec{n}^*$, cannot be calculated, although it can still be written as
 %
 \begin{equation} \label{eq:eta_anti_normal}
-\anormvec{n}^* \,=\, \left(\!\!\!\begin{array}{c}-\nabla\eta^*(\vec{r}) \\ 1\end{array}\!\!\!\right),
+\anormvec{n}^* \,=\, \left(\!\!\!\begin{array}{c}-\nabla\eta^*(\vec{r}\,) \\ 1\end{array}\!\!\!\right),
 \end{equation}
 %
 where the gradient in turn can be written as
 %
 \begin{equation}
-\nabla\eta^*(\vec{r}) \,=\, \mathcal{F}^{-1}\{\vec{k}\,\fdfunc{\eta}^*(\vec{k})\}(\vec{r}),
+\nabla\eta^*(\vec{r}\,) \,=\, \mathcal{F}^{-1}\{\vec{k}\,\fdfunc{\eta}^*(\vec{k}\,)\}(\vec{r}\,),
 \end{equation}
 %
-where $\fdfunc{\eta}^*(\vec{k})$ is the \idxs{Fourier}{transform} of $\eta^*$. However, only the part of $\fdfunc{\eta}^*(\vec{k})$ where the wave spectrum has not been cut off is known; in fact, this part is equal to $\fdfunc{\eta}(\vec{k})$, while the reminding part of $\fdfunc{\eta}^*(\vec{k})$ is unknown. On the other hand, if we know what the \idxs{wave}{spectrum} looks like, we can calculate the \idxs{probability}{distribution} of $\eta^*$.
+where $\fdfunc{\eta}^*(\vec{k}\,)$ is the \idxs{Fourier}{transform} of $\eta^*$. However, only the part of $\fdfunc{\eta}^*(\vec{k}\,)$ where the wave spectrum has not been cut off is known; in fact, this part is equal to $\fdfunc{\eta}(\vec{k}\,)$, while the reminding part of $\fdfunc{\eta}^*(\vec{k}\,)$ is unknown. On the other hand, if we know what the \idxs{wave}{spectrum} looks like, we can calculate the \idxs{probability}{distribution} of $\eta^*$.
 
 If $\vec{r}$ is assumed to be \idxse{uniform}{distribution}{uniformly distributed} over a large surface area, i.e. there is no \bias in the distribution of $\vec{r}$ regarding to the surface slope $\nabla\eta^*$, or any other local property of the surface for that matter, the distribution of $\fdfunc{\eta}^*$ is easily obtained by looking at the wave spectrum. And from that distribution we will be able to get something that is more valuable to us, namely the distribution of $\nabla\eta^*$.
 
@@ -65,7 +65,7 @@ When using a \idxs{wave}{spectrum}, the free surface elevation is considered ind
 If $S$ assumes that the wave components corresponding to the wave vectors are on the exponential form $e^{i(\vec{k}\cdot\vec{r}-\omega t)}$, which is what $\fdfunc{\psi}$ also assumes, rather than on the \sinusoidal form $\sin(\vec{k}\cdot\vec{r}-\omega t)$, which otherwise is a pretty common case in computer graphics, this means that
 %
 \begin{equation} \label{eq:wave_spectrum_definition}
-S(\vec{k}) \,=\, \frac{\opd \Var(\psi)}{\opd\vec{k}},
+S(\vec{k}\,) \,=\, \frac{\opd \Var(\psi)}{\opd\vec{k}},
 \end{equation}
 %
 where $\Var$ is the \idxs{variance}{operator} with respect to $\vec{r}$ ($\vec{r}$ is considered to be stochastically distributed), for a fixed time $t$, and $\opd\vec{k}$ is an \infinitesimal \idxs{reciprocal}{area} element, centered around $\vec{k}$. Here, $\opd\Var(\psi)$ denotes the additional variance within $\psi$ caused solely by the part of the wave spectrum specified by $\opd\vec{k}$.
@@ -73,7 +73,7 @@ where $\Var$ is the \idxs{variance}{operator} with respect to $\vec{r}$ ($\vec{r
 \eqref{eq:wave_spectrum_definition} implies that the additional variance in $\psi$ --- $\Var_{\Delta\vec{k}}(\psi)$ --- caused by a part of the wave spectrum specified by a reciprocal area element $\Delta\vec{k}$ is
 %
 \begin{equation} \label{eq:variance_k_eta}
-\Var_{\Delta\vec{k}}(\psi) \,=\, \int_{\Delta\vec{k}}\opd \Var(\psi) \,=\, \int_{\Delta\vec{k}}\frac{\opd \Var(\psi)}{\opd\vec{k}}\opd\vec{k} \,=\, \int_{\Delta\vec{k}}S(\vec{k})\opd\vec{k}.
+\Var_{\Delta\vec{k}}(\psi) \,=\, \int_{\Delta\vec{k}}\opd \Var(\psi) \,=\, \int_{\Delta\vec{k}}\frac{\opd \Var(\psi)}{\opd\vec{k}}\opd\vec{k} \,=\, \int_{\Delta\vec{k}}S(\vec{k}\,)\opd\vec{k}.
 \end{equation}
 
 Since the variance doesn't \correlate wave components of different \wavelengths, we have
@@ -85,19 +85,19 @@ Since the variance doesn't \correlate wave components of different \wavelengths,
 where $\psi_{\Delta\vec{k}}$ is defined as
 %
 \begin{equation} \label{eq:eta_k_of_fd_eta_k}
-\psi_{\Delta\vec{k}} \,=\, \mathcal{F}^{-1}\{\fdfunc{\psi}_{\Delta\vec{k}}(\vec{k})\},
+\psi_{\Delta\vec{k}} \,=\, \mathcal{F}^{-1}\{\fdfunc{\psi}_{\Delta\vec{k}}(\vec{k}\,)\},
 \end{equation}
 %
 where in turn
 %
 \begin{equation} \label{eq:fd_eta_delta_k_definition}
-\fdfunc{\psi}_{\Delta\vec{k}}(\vec{k}) \,=\, \begin{cases}
-\fdfunc{\psi}(\vec{k}), & \vec{k} \in \Delta\vec{k} \\
+\fdfunc{\psi}_{\Delta\vec{k}}(\vec{k}\,) \,=\, \begin{cases}
+\fdfunc{\psi}(\vec{k}\,), & \vec{k} \in \Delta\vec{k} \\
 0, & \text{otherwise}
 \end{cases}.
 \end{equation}
 
-Here, $\fdfunc{\psi}$ is the \idxs{non-unitary}{Fourier transform} of $\psi$, i.e.\ $\fdfunc{\psi}(\vec{k}) = \mathcal{F}\{\psi(\vec{r})\}(\vec{k})$. Besides, the time average of $\fdfunc{\psi}(\vec{k})$ is assumed to be 0 for any given wave vector $\vec{k}$, that is
+Here, $\fdfunc{\psi}$ is the \idxs{non-unitary}{Fourier transform} of $\psi$, i.e.\ $\fdfunc{\psi}(\vec{k}\,) = \mathcal{F}\{\psi(\vec{r}\,)\}(\vec{k}\,)$. Besides, the time average of $\fdfunc{\psi}(\vec{k}\,)$ is assumed to be 0 for any given wave vector $\vec{k}$, that is
 %
 \begin{equation} \label{eq:zero_expectation_value_reciprocal_space}
 \E_{\vec{k}}[\fdfunc{\psi}] \,=\, 0,\ \forall\ \vec{k},
@@ -126,7 +126,7 @@ where $f$ is an arbitrary function of $\vec{r}$ and $t$.
 Let's assume that $\psi$ is periodic in both of the horizontal dimensions with the period $P$ (this is a common trick in \idxs{computer}{graphics}) with a large, square surface element $A$ (with \mbox{$|A| = P^2$}) that keeps repeating itself, such that
 %
 \begin{equation} \label{eq:water_surface_periodicity}
-\psi(\vec{r}+P\normvec{x}) \,=\, \psi(\vec{r}+P\normvec{y}) \,=\, \psi(\vec{r}),\ \forall\ \vec{r},
+\psi(\vec{r}+P\normvec{x}) \,=\, \psi(\vec{r}+P\normvec{y}) \,=\, \psi(\vec{r}\,),\ \forall\ \vec{r},
 \end{equation}
 %
 where $\normvec{x}$ and $\normvec{y}$ are the \index{vector!orthonormal basis|see{orthonormal basis vector}}\idxsp{orthonormal}{basis vector}{s} generating the \idxs{horizontal}{plane}. This implies that $\fdfunc{\psi}$ is discrete, with \idxsp{Dirac}{impulse}{s} arranged in the intersection points of a square grid with the size $d = 2\pi/P$, such that
@@ -134,7 +134,7 @@ where $\normvec{x}$ and $\normvec{y}$ are the \index{vector!orthonormal basis|se
 \begin{equation} \label{eq:fd_eta_series}
 \renewcommand*{\arraystretch}{2}
 \begin{array}{c}
-\displaystyle \fdfunc{\psi}(\vec{k}) \,=\, 4\pi^2\sum_{m=-\infty}^{+\infty}\sum_{n=-\infty}^{+\infty} \fdfunc{\psi}(m,\,n)\,\delta(\vec{k} - md\normvec{x} - nd\normvec{y}) \\
+\displaystyle \fdfunc{\psi}(\vec{k}\,) \,=\, 4\pi^2\sum_{m=-\infty}^{+\infty}\sum_{n=-\infty}^{+\infty} \fdfunc{\psi}(m,\,n)\,\delta(\vec{k} - md\normvec{x} - nd\normvec{y}) \\
 \displaystyle =\, 4\pi^2\sum_{m=-\infty}^{+\infty}\sum_{n=-\infty}^{+\infty} \fdfunc{\psi}(m,\,n)\,\delta(\vec{k} - \vec{k}_{m,n}),
 \end{array}
 \end{equation}
@@ -155,7 +155,7 @@ where $\E_{A,t}$ denotes the \idxs{expectation value}{operator} with regard to  
 \E_{A,t}[f] \,=\, \frac{1}{|A|}\int_A f(\vec{r},\,t)\opd\vec{r}.
 \end{equation}
 
-By realizing that this \idxs{expectation}{value} will be time independent for $f(\vec{r}) = \varphi(\vec{r})$, where $\varphi$ is any periodic (obeying \eqref{eq:water_surface_periodicity}), free surface elevation that conserves mass, meaning that the integral over $A$ is time independent, we can use \eqref{eq:zero_expectation_value_real_space_with_regard_to_t} and \eqref{eq:expectation_value_with_regard_to_t_definition} to get
+By realizing that this \idxs{expectation}{value} will be time independent for $f(\vec{r}\,) = \varphi(\vec{r}\,)$, where $\varphi$ is any periodic (obeying \eqref{eq:water_surface_periodicity}), free surface elevation that conserves mass, meaning that the integral over $A$ is time independent, we can use \eqref{eq:zero_expectation_value_real_space_with_regard_to_t} and \eqref{eq:expectation_value_with_regard_to_t_definition} to get
 
 \begin{equation} \label{eq:zero_expectation_value_real_space_with_regard_to_r}
 \renewcommand*{\arraystretch}{2}
@@ -168,32 +168,32 @@ By realizing that this \idxs{expectation}{value} will be time independent for $f
 By using using \eqref{eq:expectation_value_with_regard_to_r_definition} and \eqref{eq:zero_expectation_value_real_space_with_regard_to_r}, \eqref{eq:variance_periodic_function_definition} becomes
 
 \begin{equation} \label{eq:variance_integral}
-\Var(\varphi) \,=\, \frac{1}{|A|}\int_A|\varphi(\vec{r})|^2\opd\vec{r}.
+\Var(\varphi) \,=\, \frac{1}{|A|}\int_A|\varphi(\vec{r}\,)|^2\opd\vec{r}.
 \end{equation}
 }
 
 \eqref{eq:fd_eta_series} can be reduced to
 %
 \begin{equation} \label{eq:fd_eta_series_reduced}
-\fdfunc{\psi}(\vec{k}) \,=\, \sum_{m=-\infty}^{+\infty}\sum_{n=-\infty}^{+\infty} \fdfunc{\psi}_{m,n}(\vec{k}),
+\fdfunc{\psi}(\vec{k}\,) \,=\, \sum_{m=-\infty}^{+\infty}\sum_{n=-\infty}^{+\infty} \fdfunc{\psi}_{m,n}(\vec{k}\,),
 \end{equation}
 %
 where
 %
 \begin{equation} \label{eq:fd_eta_mn_definition}
-\fdfunc{\psi}_{m,n}(\vec{k}) \,=\, 4\pi^2 \fdfunc{\psi}(m,\,n)\,\delta(\vec{k} - \vec{k}_{m,n}),
+\fdfunc{\psi}_{m,n}(\vec{k}\,) \,=\, 4\pi^2 \fdfunc{\psi}(m,\,n)\,\delta(\vec{k} - \vec{k}_{m,n}),
 \end{equation}
 %
 and if we define $\Delta\vec{k}_{m,n}$ as a square that has the side $d$, is aligned with $\normvec{x}$ and $\normvec{y}$ and is centered in $\vec{k}_{m,n}$, we see that
 %
 \begin{equation} \label{eq:fd_eta_dk_mn_definition}
-\fdfunc{\psi}_{\Delta\vec{k}_{m,n}}(\vec{k}) \,=\, \fdfunc{\psi}_{m,n}(\vec{k}).
+\fdfunc{\psi}_{\Delta\vec{k}_{m,n}}(\vec{k}\,) \,=\, \fdfunc{\psi}_{m,n}(\vec{k}\,).
 \end{equation}
 %
-It follows naturally to do the same thing with the real space representation, $\psi(\vec{r})$, and write that as
+It follows naturally to do the same thing with the real space representation, $\psi(\vec{r}\,)$, and write that as
 %
 \begin{equation} \label{eq:eta_series_reduced}
-\psi(\vec{r}) \,=\, \sum_{m=-\infty}^{+\infty}\sum_{n=-\infty}^{+\infty} \psi_{m,n}(\vec{r}),
+\psi(\vec{r}\,) \,=\, \sum_{m=-\infty}^{+\infty}\sum_{n=-\infty}^{+\infty} \psi_{m,n}(\vec{r}\,),
 \end{equation}
 %
 where
@@ -201,7 +201,7 @@ where
 \begin{equation} \label{eq:eta_mn_definition}
 \renewcommand*{\arraystretch}{1.5}
 \begin{array}{c}
-\displaystyle \psi_{m,n}(\vec{r}) \,=\, \mathcal{F}^{-1}\{\fdfunc{\psi}_{m,n}(\vec{k})\}(\vec{r}) \,=\, \frac{1}{(2\pi)^2} \int_{\mathbb{R}^2} \fdfunc{\psi}_{m,n}(\vec{k}) e^{i\vec{k}\cdot\vec{r}}\opd \vec{k} \\
+\displaystyle \psi_{m,n}(\vec{r}\,) \,=\, \mathcal{F}^{-1}\{\fdfunc{\psi}_{m,n}(\vec{k}\,)\}(\vec{r}\,) \,=\, \frac{1}{(2\pi)^2} \int_{\mathbb{R}^2} \fdfunc{\psi}_{m,n}(\vec{k}\,) e^{i\vec{k}\cdot\vec{r}}\opd \vec{k} \\
 \displaystyle =\, \frac{1}{4\pi^2} \int_{\mathbb{R}^2} 4\pi^2\,\fdfunc{\psi}(m,\,n)\,\delta(\vec{k} - md\normvec{x} - nd\normvec{y}) e^{i\vec{k}\cdot\vec{r}}\opd \vec{k} \,=\, \fdfunc{\psi}(m,\,n)\,e^{i\vec{k}_{m,n}\cdot\vec{r}}.
 \end{array}
 \end{equation}
@@ -211,8 +211,8 @@ Taking the gradient of this yields
 \begin{equation} \label{eq:grad_eta_one_dirac}
 \renewcommand*{\arraystretch}{1.5}
 \begin{array}{c}
-\displaystyle \nabla\psi_{m,n}(\vec{r}) \,=\, \nabla(\fdfunc{\psi}(m,\,n)\,e^{i\vec{k}_{m,n}\cdot\vec{r}}) \\
-\displaystyle =\, \vec{k}_{m,n}\,\fdfunc{\psi}(m,\,n)\,e^{i\vec{k}_{m,n}\cdot\vec{r}} \,=\, \vec{k}_{m,n}\,\psi_{m,n}(\vec{r}).
+\displaystyle \nabla\psi_{m,n}(\vec{r}\,) \,=\, \nabla(\fdfunc{\psi}(m,\,n)\,e^{i\vec{k}_{m,n}\cdot\vec{r}}) \\
+\displaystyle =\, \vec{k}_{m,n}\,\fdfunc{\psi}(m,\,n)\,e^{i\vec{k}_{m,n}\cdot\vec{r}} \,=\, \vec{k}_{m,n}\,\psi_{m,n}(\vec{r}\,).
 \end{array}
 \end{equation}
 
@@ -237,7 +237,7 @@ Var(x) \,=\, \E[(x - \E[x])^2],
 the covariance matrix, $\Sigma$, of a stochastic vector $\vec{x}$ is defined as
 %
 \begin{equation} \label{eq:covariance_matrix_definition}
-\Sigma(\vec{x}) \,=\, \E[(\vec{x} - \E[\vec{x}])^{\otimes 2}] \,=\, \E[(\vec{x} - \E[\vec{x}])\otimes(\vec{x} - \E[\vec{x}])].
+\Sigma(\vec{x}\,) \,=\, \E[(\vec{x} - \E[\vec{x}])^{\otimes 2}] \,=\, \E[(\vec{x} - \E[\vec{x}])\otimes(\vec{x} - \E[\vec{x}])].
 \end{equation}
 %
 Here, a superscripted $\otimes n$ denotes the $n$th \idxs{tensor}{power}, which is simply ordinary $n$th power exponentiation where the ordinary product operator has been replaced by the \idxs{tensor}{product} which for vectors is the same as the outer product.
@@ -245,15 +245,15 @@ Here, a superscripted $\otimes n$ denotes the $n$th \idxs{tensor}{power}, which 
 The multivariate normal distribution density $f$ of a stochastic vector $\vec{x}$ is given by
 %
 \begin{equation} \label{eq:multivariate_normal_distribution_density}
-f(\vec{x}) \,=\, \frac{1}{(2\pi)^{d/2}|\Sigma|^{1/2}}\exp\left(-\frac{1}{2}(\vec{x}-\vec{\mu})^{\T}\Sigma^{-1}(\vec{x}-\vec{\mu})\right),
+f(\vec{x}\,) \,=\, \frac{1}{(2\pi)^{d/2}|\Sigma|^{1/2}}\exp\left(-\frac{1}{2}(\vec{x}-\vec{\mu})^{\T}\Sigma^{-1}(\vec{x}-\vec{\mu})\right),
 \end{equation}
 %
-where $d$ is the \dimensionality of $\vec{x}$, $\vec{\mu} = \E[\vec{x}]$ is the expectation value of $\vec{x}$, $\Sigma = \Sigma(\vec{x})$ is the covariance matrix of $\vec{x}$, $|\Sigma|$ is the \determinant of $\Sigma$, and $\exp$ is the \idxs{exponential}{function}.
+where $d$ is the \dimensionality of $\vec{x}$, $\vec{\mu} = \E[\vec{x}]$ is the expectation value of $\vec{x}$, $\Sigma = \Sigma(\vec{x}\,)$ is the covariance matrix of $\vec{x}$, $|\Sigma|$ is the \determinant of $\Sigma$, and $\exp$ is the \idxs{exponential}{function}.
 
 Isolating the element at row $i$ and in column $j$ in the covariance matrix --- $\Sigma_{i,j}$ --- yields
 %
 \begin{equation} \label{eq:covariance_matrix_element}
-\Sigma_{i,j}(\vec{x}) \,=\, \Cov(x_i,\,x_j) \,=\, \E[(x_i - \E[x_i])(x_j - \E[x_j])],
+\Sigma_{i,j}(\vec{x}\,) \,=\, \Cov(x_i,\,x_j) \,=\, \E[(x_i - \E[x_i])(x_j - \E[x_j])],
 \end{equation}
 %
 and combining this with \eqref{eq:grad_eta_one_dirac} gives
@@ -261,7 +261,7 @@ and combining this with \eqref{eq:grad_eta_one_dirac} gives
 \begin{equation} \label{eq:covariance_matrix_gradient_eta_mn}
 \renewcommand*{\arraystretch}{2}
 \begin{array}{c}
-\Sigma(\nabla\psi_{m,n}(\vec{r})) \,=\, \Sigma(\vec{k}_{m,n}\,\psi_{m,n}(\vec{r})) \\
+\Sigma(\nabla\psi_{m,n}(\vec{r}\,)) \,=\, \Sigma(\vec{k}_{m,n}\,\psi_{m,n}(\vec{r}\,)) \\
 =\,
 \left[\renewcommand*{\arraystretch}{1}
 \begin{array}{cc}
@@ -269,7 +269,7 @@ and combining this with \eqref{eq:grad_eta_one_dirac} gives
 mnd^{\,2} & (nd)^2
 \end{array}
 \right]
-\Var(\psi_{m,n}(\vec{r})) \,=\, \vec{k}_{m,n}\otimes\vec{k}_{m,n} \Var(\psi_{m,n}(\vec{r})).
+\Var(\psi_{m,n}(\vec{r}\,)) \,=\, \vec{k}_{m,n}\otimes\vec{k}_{m,n} \Var(\psi_{m,n}(\vec{r}\,)).
 \end{array}
 \end{equation}
 
@@ -306,7 +306,7 @@ so for two stochastically independent vectors $\vec{x}$ and $\vec{y}$, we have
 which implies that
 %
 \begin{equation} \label{eq:covariance_matrix_sum}
-\Sigma(\vec{x} + \vec{y}) \,=\, \Sigma(\vec{x}) + \Sigma(\vec{y}).
+\Sigma(\vec{x} + \vec{y}) \,=\, \Sigma(\vec{x}\,) + \Sigma(\vec{y}).
 \end{equation}
 %
 Combining this with \eqref{eq:eta_series_reduced} and \eqref{eq:covariance_matrix_gradient_eta_mn} gives
@@ -314,8 +314,8 @@ Combining this with \eqref{eq:eta_series_reduced} and \eqref{eq:covariance_matri
 \begin{equation} \label{eq:covariance_matrix_gradient_eta}
 \renewcommand*{\arraystretch}{2}
 \begin{array}{c}
-\displaystyle \Sigma(\nabla\psi(\vec{r})) \,=\, \Sigma\left(\nabla\left(\sum_{m=-\infty}^{+\infty}\sum_{n=-\infty}^{+\infty} \psi_{m,n}(\vec{r})\right)\right) \\
-\displaystyle =\, \sum_{m=-\infty}^{+\infty}\sum_{n=-\infty}^{+\infty}\Sigma\left(\nabla\psi_{m,n}(\vec{r})\right) \\ \displaystyle =\, \sum_{m=-\infty}^{+\infty}\sum_{n=-\infty}^{+\infty}\vec{k}_{m,n}\otimes\vec{k}_{m,n} \Var(\psi_{m,n}(\vec{r})).
+\displaystyle \Sigma(\nabla\psi(\vec{r}\,)) \,=\, \Sigma\left(\nabla\left(\sum_{m=-\infty}^{+\infty}\sum_{n=-\infty}^{+\infty} \psi_{m,n}(\vec{r}\,)\right)\right) \\
+\displaystyle =\, \sum_{m=-\infty}^{+\infty}\sum_{n=-\infty}^{+\infty}\Sigma\left(\nabla\psi_{m,n}(\vec{r}\,)\right) \\ \displaystyle =\, \sum_{m=-\infty}^{+\infty}\sum_{n=-\infty}^{+\infty}\vec{k}_{m,n}\otimes\vec{k}_{m,n} \Var(\psi_{m,n}(\vec{r}\,)).
 \end{array}
 \end{equation}
 
@@ -324,21 +324,21 @@ If we combine \eqref{eq:variance_k_eta}, \eqref{eq:variance_k_eta_to_variance_et
 \begin{equation}
 \renewcommand*{\arraystretch}{2}
 \begin{array}{c}
-\displaystyle \Var(\psi_{m,n}(\vec{r})) \,=\, \Var(\psi_{\Delta\vec{k}_{m,n}}(\vec{r})) \,=\, \Var_{\Delta\vec{k}_{m,n}}(\psi(\vec{r})) \\
-\displaystyle =\, \int_{\Delta\vec{k}_{m,n}}S(\vec{k})\opd\vec{k},
+\displaystyle \Var(\psi_{m,n}(\vec{r}\,)) \,=\, \Var(\psi_{\Delta\vec{k}_{m,n}}(\vec{r}\,)) \,=\, \Var_{\Delta\vec{k}_{m,n}}(\psi(\vec{r}\,)) \\
+\displaystyle =\, \int_{\Delta\vec{k}_{m,n}}S(\vec{k}\,)\opd\vec{k},
 \end{array}
 \end{equation}
 %
 so \eqref{eq:covariance_matrix_gradient_eta} can be rewritten as
 %
 \begin{equation}
-\Sigma(\nabla\psi(\vec{r})) \,=\, \sum_{m=-\infty}^{+\infty}\sum_{n=-\infty}^{+\infty}\vec{k}_{m,n}\otimes\vec{k}_{m,n} \int_{\Delta\vec{k}_{m,n}}S(\vec{k})\opd\vec{k}
+\Sigma(\nabla\psi(\vec{r}\,)) \,=\, \sum_{m=-\infty}^{+\infty}\sum_{n=-\infty}^{+\infty}\vec{k}_{m,n}\otimes\vec{k}_{m,n} \int_{\Delta\vec{k}_{m,n}}S(\vec{k}\,)\opd\vec{k}
 \end{equation}
 %
 and since the unit of all reciprocal area elements $\Delta\vec{k}_{m,n}$ is $\mathbb{R}^2$ and since no two of them overlap, in the limit when $P\to\infty$ and $d\to 0$ we get
 %
 \begin{equation} \label{eq:covariance_matrix_gradient_eta_final}
-\Sigma(\nabla\psi(\vec{r})) \,=\, \int_{\mathbb{R}^2}\vec{k}\otimes\vec{k}\,S(\vec{k})\opd\vec{k}.
+\Sigma(\nabla\psi(\vec{r}\,)) \,=\, \int_{\mathbb{R}^2}\vec{k}\otimes\vec{k}\,S(\vec{k}\,)\opd\vec{k}.
 \end{equation}
 
 Additionally, by differentiating \eqref{eq:zero_expectation_value_real_space_with_regard_to_t}, we get
@@ -352,10 +352,10 @@ so we know the expectation value of $\nabla\psi$ as well, which means that we kn
 By using \eqref{eq:multivariate_normal_distribution_density}, the distribution density $f$ of $\nabla\psi$ is given by
 %
 \begin{equation} \label{eq:psi_grad_distribution}
-f(\nabla\psi(\vec{r})) \,=\, \frac{1}{2\pi|\Sigma|^{1/2}}\exp\left(-\frac{1}{2}(\nabla\psi(\vec{r})-\vec{\mu})^{\T}\Sigma^{-1}(\nabla\psi(\vec{r})-\vec{\mu})\right),
+f(\nabla\psi(\vec{r}\,)) \,=\, \frac{1}{2\pi|\Sigma|^{1/2}}\exp\left(-\frac{1}{2}(\nabla\psi(\vec{r}\,)-\vec{\mu})^{\T}\Sigma^{-1}(\nabla\psi(\vec{r}\,)-\vec{\mu})\right),
 \end{equation}
 %
-where $\vec{\mu} = \E_{\vec{r}}[\nabla\psi(\vec{r})]$ which is given by \eqref{eq:psi_of_r_expectation_value}, and $\Sigma = \Sigma(\nabla\psi(\vec{r}))$ is given by \eqref{eq:covariance_matrix_gradient_eta_final}.
+where $\vec{\mu} = \E_{\vec{r}}[\nabla\psi(\vec{r}\,)]$ which is given by \eqref{eq:psi_of_r_expectation_value}, and $\Sigma = \Sigma(\nabla\psi(\vec{r}\,))$ is given by \eqref{eq:covariance_matrix_gradient_eta_final}.
 
 \comment
 {
@@ -374,9 +374,9 @@ If the \idxs{wave}{spectrum} is known, $\Var_{\vec{k}}(\Delta\fdfunc{\eta}^*)$ i
 \begin{equation}
 \renewcommand*{\arraystretch}{1.5}
 \begin{array}{c}
-\vec{\mu} \,=\, \E[\nabla\eta^*(\vec{r})] \,=\, E\left[\mathcal{F}^{-1}\left\{\vec{k}\,\fdfunc{\eta}^*(\vec{k})\right\}(\vec{r})\right] \\
-=\, E\left[\mathcal{F}^{-1}\left\{\vec{k}\,\left(\fdfunc{\eta}(\vec{k})+\Delta\fdfunc{\eta}^*(\vec{k})\right)\right\}(\vec{r})\right] \\
-=\, \mathcal{F}^{-1}\left\{\vec{k}\,\left(\E_{\vec{k}}[\fdfunc{\eta}]+\E_{\vec{k}}[\Delta\fdfunc{\eta}^*]\right)\right\}(\vec{r}) \,=\, \mathcal{F}^{-1}\{\vec{k}\,\fdfunc{\eta}(\vec{k})\}(\vec{r}) \,=\, \nabla\eta(\vec{r})\,.
+\vec{\mu} \,=\, \E[\nabla\eta^*(\vec{r}\,)] \,=\, E\left[\mathcal{F}^{-1}\left\{\vec{k}\,\fdfunc{\eta}^*(\vec{k}\,)\right\}(\vec{r}\,)\right] \\
+=\, E\left[\mathcal{F}^{-1}\left\{\vec{k}\,\left(\fdfunc{\eta}(\vec{k}\,)+\Delta\fdfunc{\eta}^*(\vec{k}\,)\right)\right\}(\vec{r}\,)\right] \\
+=\, \mathcal{F}^{-1}\left\{\vec{k}\,\left(\E_{\vec{k}}[\fdfunc{\eta}]+\E_{\vec{k}}[\Delta\fdfunc{\eta}^*]\right)\right\}(\vec{r}\,) \,=\, \mathcal{F}^{-1}\{\vec{k}\,\fdfunc{\eta}(\vec{k}\,)\}(\vec{r}\,) \,=\, \nabla\eta(\vec{r}\,)\,.
 \end{array}
 \end{equation}
 
@@ -388,7 +388,7 @@ If the \idxs{wave}{spectrum} is known, $\Var_{\vec{k}}(\Delta\fdfunc{\eta}^*)$ i
 Since the \idxse{surface}{normal}{normal} of the water surface is the normalization of the \idx{anti-normal} $\anormvec{n}$ which is described by \eqref{eq:eta_anti_normal}, we need to know the distribution of $\nabla\eta^*$ in order to know the distribution of the surface normal. However, since we know $\eta$, which has been generated from a \idxs{wave}{spectrum} $S$ for simplified water surfaces, which is a reduced version of the full wave spectrum $S^*$ from which a part has been cut off, \eqref{eq:psi_grad_distribution} cannot be used, since it involves the free surface elevation $\psi$ which is completely unknown. Or more generically, if $\eta$ can be considered to be a \idxse{low-pass}{filter}{(low-pass) filter} version of $\eta^*$, with \idxs{transfer}{function} $H$, such that
 %
 \begin{equation}
-\fdfunc{\eta}(\vec{k}) \,=\, H(\vec{k})\fdfunc{\eta}^*(\vec{k}),
+\fdfunc{\eta}(\vec{k}\,) \,=\, H(\vec{k}\,)\fdfunc{\eta}^*(\vec{k}\,),
 \end{equation}
 %
 we can use \eqrefs \ref{eq:wave_spectrum_definition}--\ref{eq:fd_eta_delta_k_definition} and \eqref{eq:variance_definition} to conclude that
@@ -396,41 +396,41 @@ we can use \eqrefs \ref{eq:wave_spectrum_definition}--\ref{eq:fd_eta_delta_k_def
 \begin{equation} \label{spectrum_reduced_definition}
 \renewcommand*{\arraystretch}{2}
 \begin{array}{c}
-\displaystyle S(\vec{k}) \,=\, \frac{\opd \Var(\eta)}{\opd\vec{k}} \,=\, \frac{\Var(\eta_{\opd\vec{k}})}{\opd\vec{k}} \,=\, \frac{\E[(\eta_{\opd\vec{k}}-\E[\eta_{\opd\vec{k}}])^2]}{\opd\vec{k}} \\
-\displaystyle =\, \frac{\E[(H(\vec{k})\eta^*_{\opd\vec{k}}-\E[H(\vec{k})\eta^*_{\opd\vec{k}}])^2]}{\opd\vec{k}} \,=\, H(\vec{k})^2\frac{\E[(\eta^*_{\opd\vec{k}}-\E[\eta^*_{\opd\vec{k}}])^2]}{\opd\vec{k}} \\
-\displaystyle =\, H^2(\vec{k})\frac{\Var(\eta^*_{\opd\vec{k}})}{\opd\vec{k}} \,=\, H^2(\vec{k})S^*(\vec{k}),
+\displaystyle S(\vec{k}\,) \,=\, \frac{\opd \Var(\eta)}{\opd\vec{k}} \,=\, \frac{\Var(\eta_{\opd\vec{k}})}{\opd\vec{k}} \,=\, \frac{\E[(\eta_{\opd\vec{k}}-\E[\eta_{\opd\vec{k}}])^2]}{\opd\vec{k}} \\
+\displaystyle =\, \frac{\E[(H(\vec{k}\,)\eta^*_{\opd\vec{k}}-\E[H(\vec{k}\,)\eta^*_{\opd\vec{k}}])^2]}{\opd\vec{k}} \,=\, H(\vec{k}\,)^2\frac{\E[(\eta^*_{\opd\vec{k}}-\E[\eta^*_{\opd\vec{k}}])^2]}{\opd\vec{k}} \\
+\displaystyle =\, H^2(\vec{k}\,)\frac{\Var(\eta^*_{\opd\vec{k}})}{\opd\vec{k}} \,=\, H^2(\vec{k}\,)S^*(\vec{k}\,),
 \end{array}
 \end{equation}
 %
 where $\fdfunc{\eta}_{\opd\vec{k}}$ and $\fdfunc{\eta}^*_{\opd\vec{k}}$ are defined by \eqref{eq:fd_eta_delta_k_definition}, where $\Delta\vec{k}$ has been replaced by $\opd\vec{k}$ and where $\fdfunc{\psi}$ has been replaced by $\eta$ and $\eta^*$ respectively.
 
-Since $\Sigma(\vec{x}+\vec{y}) = \Sigma(\vec{x})+\Sigma(\vec{y})$ (according to \eqref{eq:covariance_matrix_sum}) for all stochastically independent vectors $\vec{x}$ and $\vec{y}$, we will \assume that the part of $\eta^*$ that is left out in $\eta$ can advantageously be simulated with a free surface elevation $\eta'$ that has a gradient with the \idxs{covariance}{matrix} $\Sigma(\nabla\eta'(\vec{r})) = \Sigma(\nabla\eta^*(\vec{r})) - \Sigma(\nabla\eta(\vec{r}))$. This matrix can according to  \eqref{eq:covariance_matrix_gradient_eta_final} be rewritten as
+Since $\Sigma(\vec{x}+\vec{y}) = \Sigma(\vec{x}\,)+\Sigma(\vec{y})$ (according to \eqref{eq:covariance_matrix_sum}) for all stochastically independent vectors $\vec{x}$ and $\vec{y}$, we will \assume that the part of $\eta^*$ that is left out in $\eta$ can advantageously be simulated with a free surface elevation $\eta'$ that has a gradient with the \idxs{covariance}{matrix} $\Sigma(\nabla\eta'(\vec{r}\,)) = \Sigma(\nabla\eta^*(\vec{r}\,)) - \Sigma(\nabla\eta(\vec{r}\,))$. This matrix can according to  \eqref{eq:covariance_matrix_gradient_eta_final} be rewritten as
 %
 \begin{equation}
 \renewcommand*{\arraystretch}{2}
 \begin{array}{c}
-\displaystyle \Sigma(\nabla\eta'(\vec{r})) \,=\, \Sigma(\nabla\eta^*(\vec{r})) - \Sigma(\nabla\eta(\vec{r})) \\
-\displaystyle =\, \int_{\mathbb{R}^2}\vec{k}\otimes\vec{k}\,S^*(\vec{k})\opd\vec{k} \,- \int_{\mathbb{R}^2}\vec{k}\otimes\vec{k}\,S(\vec{k})\opd\vec{k} \\
-\displaystyle =\, \int_{\mathbb{R}^2}\vec{k}\otimes\vec{k}\,(1-H^2(\vec{k}))S^*(\vec{k})\opd\vec{k} \,=\, \int_{\mathbb{R}^2}\vec{k}\otimes\vec{k}\,S'(\vec{k})\opd\vec{k},
+\displaystyle \Sigma(\nabla\eta'(\vec{r}\,)) \,=\, \Sigma(\nabla\eta^*(\vec{r}\,)) - \Sigma(\nabla\eta(\vec{r}\,)) \\
+\displaystyle =\, \int_{\mathbb{R}^2}\vec{k}\otimes\vec{k}\,S^*(\vec{k}\,)\opd\vec{k} \,- \int_{\mathbb{R}^2}\vec{k}\otimes\vec{k}\,S(\vec{k}\,)\opd\vec{k} \\
+\displaystyle =\, \int_{\mathbb{R}^2}\vec{k}\otimes\vec{k}\,(1-H^2(\vec{k}\,))S^*(\vec{k}\,)\opd\vec{k} \,=\, \int_{\mathbb{R}^2}\vec{k}\otimes\vec{k}\,S'(\vec{k}\,)\opd\vec{k},
 \end{array}
 \end{equation}
 %
 where
 %
 \begin{equation}
-S'(\vec{k}) = S^*(\vec{k}) - S(\vec{k}) = (1-H^2(\vec{k}))S^*(\vec{k})
+S'(\vec{k}\,) = S^*(\vec{k}\,) - S(\vec{k}\,) = (1-H^2(\vec{k}\,))S^*(\vec{k}\,)
 \end{equation}
 %
-is the \idxs{wave}{spectrum} of $\eta'$, which is the simulated part of $\eta^*$. The expectation value for $\eta'(\vec{r})$ is according to \eqref{eq:psi_of_r_expectation_value} \assumed to be
+is the \idxs{wave}{spectrum} of $\eta'$, which is the simulated part of $\eta^*$. The expectation value for $\eta'(\vec{r}\,)$ is according to \eqref{eq:psi_of_r_expectation_value} \assumed to be
 %
 \begin{equation}
-E[\eta'(\vec{r})] \,=\, 0.
+E[\eta'(\vec{r}\,)] \,=\, 0.
 \end{equation}
 
-Since $\eta$ is perfectly known when a scene is rendered, we have $\E[\nabla\eta(\vec{r})] = \nabla\eta(\vec{r})$ and $\Sigma(\nabla\eta(\vec{r})) \,=\, 0_{2,2}$, where $0_{2,2}$ is the $2\times 2$ matrix in which all elements are 0. Knowing this, since $\E[\vec{x}+\vec{y}] = \E[\vec{x}]+\E[\vec{y}]$ for all vectors $\vec{x}$ and $\vec{y}$, we have
+Since $\eta$ is perfectly known when a scene is rendered, we have $\E[\nabla\eta(\vec{r}\,)] = \nabla\eta(\vec{r}\,)$ and $\Sigma(\nabla\eta(\vec{r}\,)) \,=\, 0_{2,2}$, where $0_{2,2}$ is the $2\times 2$ matrix in which all elements are 0. Knowing this, since $\E[\vec{x}+\vec{y}] = \E[\vec{x}]+\E[\vec{y}]$ for all vectors $\vec{x}$ and $\vec{y}$, we have
 %
 \begin{equation} \label{eq:nabla_eta_expectation_value}
-\E[\nabla\eta^*(\vec{r})] \,=\, \E[\nabla\eta'(\vec{r})] + \E[\nabla\eta(\vec{r})] \,=\, \E[\nabla\eta(\vec{r})],
+\E[\nabla\eta^*(\vec{r}\,)] \,=\, \E[\nabla\eta'(\vec{r}\,)] + \E[\nabla\eta(\vec{r}\,)] \,=\, \E[\nabla\eta(\vec{r}\,)],
 \end{equation}
 %
 and also
@@ -438,18 +438,18 @@ and also
 \begin{equation} \label{eq:nabla_eta_covariance_matrix}
 \renewcommand*{\arraystretch}{2}
 \begin{array}{c}
-\displaystyle \Sigma(\nabla\eta^*(\vec{r})) \,=\, \Sigma(\nabla\eta'(\vec{r})) + \Sigma(\nabla\eta(\vec{r})) \,=\, \Sigma(\nabla\eta'(\vec{r})) \\
-\displaystyle =\, \int_{\mathbb{R}^2}\vec{k}\otimes\vec{k}\,S'(\vec{k})\opd\vec{k}.
+\displaystyle \Sigma(\nabla\eta^*(\vec{r}\,)) \,=\, \Sigma(\nabla\eta'(\vec{r}\,)) + \Sigma(\nabla\eta(\vec{r}\,)) \,=\, \Sigma(\nabla\eta'(\vec{r}\,)) \\
+\displaystyle =\, \int_{\mathbb{R}^2}\vec{k}\otimes\vec{k}\,S'(\vec{k}\,)\opd\vec{k}.
 \end{array}
 \end{equation}
 %
-The distribution of $\nabla\eta^*(\vec{r})$ is then given by replacing $\psi$ by $\eta^*$ in \eqref{eq:psi_grad_distribution}, that is
+The distribution of $\nabla\eta^*(\vec{r}\,)$ is then given by replacing $\psi$ by $\eta^*$ in \eqref{eq:psi_grad_distribution}, that is
 %
 \begin{equation} \label{eq:eta_grad_distribution_r_uniformly_distributed}
-f(\nabla\eta^*(\vec{r})) \,=\, \frac{1}{2\pi|\Sigma|^{1/2}}\exp\left(-\frac{1}{2}(\nabla\eta^*(\vec{r})-\vec{\mu})^{\T}\Sigma^{-1}(\nabla\eta^*(\vec{r})-\vec{\mu})\right),
+f(\nabla\eta^*(\vec{r}\,)) \,=\, \frac{1}{2\pi|\Sigma|^{1/2}}\exp\left(-\frac{1}{2}(\nabla\eta^*(\vec{r}\,)-\vec{\mu})^{\T}\Sigma^{-1}(\nabla\eta^*(\vec{r}\,)-\vec{\mu})\right),
 \end{equation}
 %
-where $\vec{\mu} = \E[\nabla\eta^*(\vec{r})]$ is given by \eqref{eq:nabla_eta_expectation_value} and $\Sigma = \Sigma(\nabla\eta^*(\vec{r}))$ is given by \eqref{eq:nabla_eta_covariance_matrix}.
+where $\vec{\mu} = \E[\nabla\eta^*(\vec{r}\,)]$ is given by \eqref{eq:nabla_eta_expectation_value} and $\Sigma = \Sigma(\nabla\eta^*(\vec{r}\,))$ is given by \eqref{eq:nabla_eta_covariance_matrix}.
 
 \section{The rendering equation}
 
@@ -608,16 +608,16 @@ which is basically the distribution density of the outgoing direction $\normvec{
 
 But how can we find the distribution of the outgoing direction for a ray that is being reflected? Well, we know that in order for a ray that comes from the direction $\normvec{\omega}_{\text{i}}$ to be reflected in the direction $\normvec{\omega}_{\text{o}}$, the surface has to be angeled in a certain way. Here, the surface we are talking about is the actual surface, or the surface of the \microfacet the ray is hitting, which is described by $\eta^*$, rather than the simplified surface which is described by $\eta$.
 
-The equation that describes the reflection is given by the \index{reflection!Householder|see{Householder transformation}}\idxs{Householder}{transformation}, which states that the reflection $\vec{r}'$ of a point $\vec{r}$ in a plane with the surface normal $\normvec{v}$, is given by
+The equation that describes the reflection is given by the \index{reflection!Householder|see{Householder transformation}}\idxs{Householder}{transformation}, which states that the reflection $\vec{r}\,'$ of a point $\vec{r}$ in a plane with the surface normal $\normvec{v}$, is given by
 %
 \begin{equation}
-\vec{r}' \,=\, \vec{r} - 2(\normvec{v}^{\Hermitian}\vec{r})\normvec{v},
+\vec{r}\,' \,=\, \vec{r} - 2(\normvec{v}^{\Hermitian}\vec{r}\,)\normvec{v},
 \end{equation}
 %
 where a superscripted $\Hermitian$ denotes the \idxs{Hermitian}{transpose} operator, or the conjugate transpose operator, which performs the ordinary transpose of the operand and conjugates its elements. The right hand side of this equation is referred to as the Householder transformation of $\vec{r}$. For surface normals, which have real-valued elements, this becomes
 %
 \begin{equation}
-\vec{r}' \,=\, \vec{r} - 2(\normvec{v}\cdot\vec{r})\normvec{v}.
+\vec{r}\,' \,=\, \vec{r} - 2(\normvec{v}\cdot\vec{r}\,)\normvec{v}.
 \end{equation}
 
 In our case, the outgoing direction $\normvec{\omega}_{\text{o}}$ is the reflection of the incident direction, or the reflection of the opposite of the direction $\normvec{\omega}_{\text{i}}$ from which the incident ray came. Let's also refer to the surface normal the \microfacet would need to have in order for a ray that comes from the direction $\normvec{\omega}_{\text{i}}$ to be reflected in the direction $\normvec{\omega}_{\text{o}}$ as $\normvec{h}$. This will give us
@@ -726,10 +726,10 @@ The anti-normal of the \microfacet is given by \eqref{eq:eta_anti_normal}, where
 If a large surface, whose area when projected down to the horizontal plane is $A_{\text{h}}$, is subdivided into many infinitesimal microfacets, the total projected area, $\opd A'_{\text{h}}$, of all microfacets whose gradient of the free surface elevation lies within $\opd\nabla\eta^*$ will be
 %
 \begin{equation}
-\opd A'_{\text{h}} \,=\, A_{\text{h}}\,f(\nabla\eta^*(\vec{r}))\opd\nabla\eta^*,
+\opd A'_{\text{h}} \,=\, A_{\text{h}}\,f(\nabla\eta^*(\vec{r}\,))\opd\nabla\eta^*,
 \end{equation}
 %
-where an apostrophe ($'$) denotes that the gradients of the free surface elevation on the included microfacets has been restricted to $\opd\nabla\eta^*$, and $f(\nabla\eta^*(\vec{r}))\opd \nabla\eta^*$ is the chance which a single microfacet has that the gradient of its free surface elevation lies within $\opd\nabla\eta^*$. When projected onto the plane orthogonal to $\normvec{\omega}_{\text{i}}$, the total area of all microfacets will be
+where an apostrophe ($'$) denotes that the gradients of the free surface elevation on the included microfacets has been restricted to $\opd\nabla\eta^*$, and $f(\nabla\eta^*(\vec{r}\,))\opd \nabla\eta^*$ is the chance which a single microfacet has that the gradient of its free surface elevation lies within $\opd\nabla\eta^*$. When projected onto the plane orthogonal to $\normvec{\omega}_{\text{i}}$, the total area of all microfacets will be
 %
 \begin{equation}
 A_{\text{i}} \,=\, A_{\text{h}}\,\normvec{\omega}_{\text{i}}\cdot\normvec{n}\,(\normvec{n}\cdot\normvec{z})^{-1} \,=\, A_{\text{h}}\,\normvec{\omega}_{\text{i}}\cdot\anormvec{n}
@@ -744,7 +744,7 @@ and the total area of all microfacets whose gradient of the free surface elevati
 since all microfacets have the same area when projected to the horizontal plane. Here, $\normvec{h}$ is the surface normal corresponding to the free surface elevation gradient around which $\opd\nabla\eta^*$ is centered. Therefore, the chance that a ray that comes from the direction $\normvec{\omega}_{\text{i}}$ and hits the surface will hit a \microfacet whose gradient of the free surface elevation lies within $\opd\nabla\eta^*$ will be
 %
 \begin{equation} \label{eq:gradient_restricted_reflection_probability}
-\opd P'(\normvec{\omega}_{\text{i}}) \,=\, \frac{\opd A'_{\text{i}}}{A_{\text{i}}} \,=\, \frac{\opd A'_{\text{h}}\,\normvec{\omega}_{\text{i}}\cdot\anormvec{h}}{A_{\text{h}}\,\normvec{\omega}_{\text{i}}\cdot\anormvec{n}} \,=\, f(\nabla\eta^*(\vec{r}))\,\frac{\normvec{\omega}_{\text{i}}\cdot\anormvec{h}}{\normvec{\omega}_{\text{i}}\cdot\anormvec{n}}\opd \nabla\eta^*.
+\opd P'(\normvec{\omega}_{\text{i}}) \,=\, \frac{\opd A'_{\text{i}}}{A_{\text{i}}} \,=\, \frac{\opd A'_{\text{h}}\,\normvec{\omega}_{\text{i}}\cdot\anormvec{h}}{A_{\text{h}}\,\normvec{\omega}_{\text{i}}\cdot\anormvec{n}} \,=\, f(\nabla\eta^*(\vec{r}\,))\,\frac{\normvec{\omega}_{\text{i}}\cdot\anormvec{h}}{\normvec{\omega}_{\text{i}}\cdot\anormvec{n}}\opd \nabla\eta^*.
 \end{equation}
 
 For an increase in the radiation coming from the direction $\normvec{\omega}_{\text{i}}$, with the \idxs{incident}{radient flux} $\opd \Phi_{\text{i}}(\normvec{\omega}_{\text{i}})$, the increase in \idxs{reflected}{radient flux}, $\opd^2 \Phi_{\text{o}}(\normvec{\omega}_{\text{i}})$, that was reflected on a \microfacet with a free surface elevation whose gradient lies withing $\opd\nabla\eta^*$ will be
@@ -760,7 +760,7 @@ In computer graphics, the reflection coefficient is often \approximated by using
 Using \eqref{eq:gradient_restricted_reflection_probability} in \eqref{eq:gradient_restricted_reflected_flux} results in
 %
 \begin{equation} \label{eq:gradient_restricted_reflected_flux_pre_incident_flux_per_unit_gradient_squared}
-\frac{\opd}{\opd \nabla\eta^*}\,\left(\frac{\opd \Phi_{\text{o}}(\normvec{\omega}_{\text{o}})}{\opd \Phi_{\text{i}}(\normvec{\omega}_{\text{i}})}\right) \,=\, f(\nabla\eta^*(\vec{r}))\,\frac{\normvec{\omega}_{\text{i}}\cdot\anormvec{h}}{\normvec{\omega}_{\text{i}}\cdot\anormvec{n}}\,R_{\normvec{n}^*\!,x}(\normvec{\omega}_{\text{o}}).
+\frac{\opd}{\opd \nabla\eta^*}\,\left(\frac{\opd \Phi_{\text{o}}(\normvec{\omega}_{\text{o}})}{\opd \Phi_{\text{i}}(\normvec{\omega}_{\text{i}})}\right) \,=\, f(\nabla\eta^*(\vec{r}\,))\,\frac{\normvec{\omega}_{\text{i}}\cdot\anormvec{h}}{\normvec{\omega}_{\text{i}}\cdot\anormvec{n}}\,R_{\normvec{n}^*\!,x}(\normvec{\omega}_{\text{o}}).
 \end{equation}
 %
 By realizing that the normal of a \microfacet, $\normvec{n}^*$, needs to equal $\normvec{h}$ in order for a ray coming from the direction $\normvec{\omega}_{\text{i}}$ to be reflected in the direction $\normvec{\omega}_{\text{o}}$, we can use \eqref{eq:eta_anti_normal} to conclude that in this case, we can make the substitution
@@ -772,7 +772,7 @@ By realizing that the normal of a \microfacet, $\normvec{n}^*$, needs to equal $
 Note that many infinitesimal quantities used in this appendix are two-dimen\-sional in their nature and therefore represent infinitesimal area elements. Also note that in this equation, the minus sign in \eqref{eq:eta_anti_normal} is squared and vanishes. By applying this to \eqref{eq:gradient_restricted_reflected_flux_pre_incident_flux_per_unit_gradient_squared}, we can rewrite  \eqref{eq:brdf_from_ratio_between_fluxes}
 %
 \begin{equation}  \label{eq:brdf_from_eta_gradient_distribution_cos_thetao_and_derivative}
-\rho'_{\text{r}}(\normvec{\omega}_{\text{i}},\, \normvec{\omega}_{\text{o}}) \,=\, (\cos\theta_{\text{o}})^{-1}\, \frac{\opd\anormvec{h}}{\opd\normvec{\omega}_{\text{o}}}\,f(\nabla\eta^*(\vec{r}))\,\frac{\normvec{\omega}_{\text{i}}\cdot\anormvec{h}}{\normvec{\omega}_{\text{i}}\cdot\anormvec{n}}\,R_{\normvec{n}^*\!,x}(\normvec{\omega}_{\text{o}}).
+\rho'_{\text{r}}(\normvec{\omega}_{\text{i}},\, \normvec{\omega}_{\text{o}}) \,=\, (\cos\theta_{\text{o}})^{-1}\, \frac{\opd\anormvec{h}}{\opd\normvec{\omega}_{\text{o}}}\,f(\nabla\eta^*(\vec{r}\,))\,\frac{\normvec{\omega}_{\text{i}}\cdot\anormvec{h}}{\normvec{\omega}_{\text{i}}\cdot\anormvec{n}}\,R_{\normvec{n}^*\!,x}(\normvec{\omega}_{\text{o}}).
 \end{equation}
 %
 Since $\theta_{\text{o}}$ is the angle between $\normvec{\omega}_{\text{o}}$ and the surface normal $\normvec{n}$ and by using the fact that
@@ -790,7 +790,7 @@ we can express $\cos(\theta_{\text{o}})$ as
 and \eqref{eq:brdf_from_eta_gradient_distribution_cos_thetao_and_derivative} can be rewritten further as
 %
 \begin{equation}  \label{eq:brdf_from_eta_gradient_distribution_derivative}
-\rho'_{\text{r}}(\normvec{\omega}_{\text{i}},\, \normvec{\omega}_{\text{o}}) \,=\, |\anormvec{n}|\,\frac{\opd\anormvec{h}}{\opd\normvec{\omega}_{\text{o}}}\,f(\nabla\eta^*(\vec{r}))\,\frac{\normvec{\omega}_{\text{i}}\cdot\anormvec{h}}{(\normvec{\omega}_{\text{i}}\cdot\anormvec{n})(\normvec{\omega}_{\text{o}}\cdot\anormvec{n})}\,R_{\normvec{n}^*\!,x}(\normvec{\omega}_{\text{o}}).
+\rho'_{\text{r}}(\normvec{\omega}_{\text{i}},\, \normvec{\omega}_{\text{o}}) \,=\, |\anormvec{n}|\,\frac{\opd\anormvec{h}}{\opd\normvec{\omega}_{\text{o}}}\,f(\nabla\eta^*(\vec{r}\,))\,\frac{\normvec{\omega}_{\text{i}}\cdot\anormvec{h}}{(\normvec{\omega}_{\text{i}}\cdot\anormvec{n})(\normvec{\omega}_{\text{o}}\cdot\anormvec{n})}\,R_{\normvec{n}^*\!,x}(\normvec{\omega}_{\text{o}}).
 \end{equation}
 
 Since we have the restriction $\anormvec{h}\cdot\normvec{z}\equiv 1$, $\opd\anormvec{h}$ is here the size of an infinitesimal "quasi area" element. Let's \assume this element is an axis aligned rectangle with the sides $\opd x_{\anormvec{h}}^{\,}\normvec{x}$ and $\opd y_{\anormvec{h}}^{\,}\normvec{y}$ respectively. We can then describe the infinitesimal solid angle element $\opd\normvec{\omega}_{\text{o}}$ as a parallelogram with the sides
@@ -966,8 +966,8 @@ By using the fact that
 \begin{equation}  \label{eq:brdf_from_eta_gradient_distribution}
 \renewcommand*{\arraystretch}{2}
 \begin{aligned}
-\displaystyle \rho'_{\text{r}}(\normvec{\omega}_{\text{i}},\, \normvec{\omega}_{\text{o}}) \,=\, & \displaystyle |\anormvec{n}|\,\frac{\anormvec{h}^4}{4\,\anormvec{h}\cdot\normvec{\omega}_{\text{i}}}\,f(\nabla\eta^*(\vec{r}))\,\frac{\normvec{\omega}_{\text{i}}\cdot\anormvec{h}}{(\normvec{\omega}_{\text{i}}\cdot\anormvec{n})(\normvec{\omega}_{\text{o}}\cdot\anormvec{n})}\,R_{\normvec{n}^*\!,x}(\normvec{\omega}_{\text{o}}) \\
-\displaystyle =\, & \displaystyle |\anormvec{n}|\,\frac{\anormvec{h}^4}{4(\normvec{\omega}_{\text{i}}\cdot\anormvec{n})(\normvec{\omega}_{\text{o}}\cdot\anormvec{n})}\,f(\nabla\eta^*(\vec{r}))\,R_{\normvec{n}^*\!,x}(\normvec{\omega}_{\text{o}}),
+\displaystyle \rho'_{\text{r}}(\normvec{\omega}_{\text{i}},\, \normvec{\omega}_{\text{o}}) \,=\, & \displaystyle |\anormvec{n}|\,\frac{\anormvec{h}^4}{4\,\anormvec{h}\cdot\normvec{\omega}_{\text{i}}}\,f(\nabla\eta^*(\vec{r}\,))\,\frac{\normvec{\omega}_{\text{i}}\cdot\anormvec{h}}{(\normvec{\omega}_{\text{i}}\cdot\anormvec{n})(\normvec{\omega}_{\text{o}}\cdot\anormvec{n})}\,R_{\normvec{n}^*\!,x}(\normvec{\omega}_{\text{o}}) \\
+\displaystyle =\, & \displaystyle |\anormvec{n}|\,\frac{\anormvec{h}^4}{4(\normvec{\omega}_{\text{i}}\cdot\anormvec{n})(\normvec{\omega}_{\text{o}}\cdot\anormvec{n})}\,f(\nabla\eta^*(\vec{r}\,))\,R_{\normvec{n}^*\!,x}(\normvec{\omega}_{\text{o}}),
 \end{aligned}
 \end{equation}
 %
@@ -979,7 +979,7 @@ By using this equation and \eqref{eq:normal_from_anti_normal}, we can rewrite \e
 \renewcommand*{\arraystretch}{1.5}
 \begin{array}{cl}
 L_{\text{o}}(\normvec{\omega}_{\text{o}}) \,= \\
-\displaystyle \frac{1}{4}\int_{\Omega_{\text{r}}} \frac{\anormvec{h}^4}{\normvec{\omega}_{\text{o}}\cdot\anormvec{n}}\,f(\nabla\eta^*(\vec{r}))\,R_{\normvec{n}^*\!,x}(\normvec{\omega}_{\text{o}})\, L_{\text{i}}(\normvec{\omega}_{\text{i}})\, \opd \normvec{\omega}_{\text{i}} \ + \\[1ex]
+\displaystyle \frac{1}{4}\int_{\Omega_{\text{r}}} \frac{\anormvec{h}^4}{\normvec{\omega}_{\text{o}}\cdot\anormvec{n}}\,f(\nabla\eta^*(\vec{r}\,))\,R_{\normvec{n}^*\!,x}(\normvec{\omega}_{\text{o}})\, L_{\text{i}}(\normvec{\omega}_{\text{i}})\, \opd \normvec{\omega}_{\text{i}} \ + \\[1ex]
 \displaystyle \int_{\Omega_{\text{t}}} \rho'_{\text{t}}(\normvec{\omega}_{\text{i}},\, \normvec{\omega}_{\text{o}})\, L_{\text{i}}(\normvec{\omega}_{\text{i}})\, (\normvec{\omega}_{\text{i}}\,\cdot\,(-\normvec{n}))\, \opd \normvec{\omega}_{\text{i}}\,.
 \end{array}
 \end{equation}
@@ -1001,7 +1001,7 @@ where $\delta$ is a variant of the \idxs{Dirac}{delta function}, defined so that
 \renewcommand*{\arraystretch}{2}
 \begin{array}{cl}
 L_{\text{o}}(\normvec{\omega}_{\text{o}}) \,= \\
-\displaystyle \frac{1}{4}\int_{\Omega_{\text{r}}} \frac{\anormvec{h}^4}{\normvec{\omega}_{\text{o}}\cdot\anormvec{n}}\,f(\nabla\eta^*(\vec{r}))\,R_{\normvec{n}^*\!,x}(\normvec{\omega}_{\text{o}})\, L_{\text{i}}(\normvec{\omega}_{\text{i}})\,\opd \normvec{\omega}_{\text{i}} \ + \\[1ex]
+\displaystyle \frac{1}{4}\int_{\Omega_{\text{r}}} \frac{\anormvec{h}^4}{\normvec{\omega}_{\text{o}}\cdot\anormvec{n}}\,f(\nabla\eta^*(\vec{r}\,))\,R_{\normvec{n}^*\!,x}(\normvec{\omega}_{\text{o}})\, L_{\text{i}}(\normvec{\omega}_{\text{i}})\,\opd \normvec{\omega}_{\text{i}} \ + \\[1ex]
 \displaystyle T_{\normvec{n},x}(\normvec{\omega}_{\text{o}})\, L_{\text{i}}(\normvec{\omega}_{\text{i},\normvec{n},\text{t}}(\normvec{\omega}_{\text{o}}))
 \end{array}
 \end{equation}
@@ -1013,11 +1013,11 @@ For a \idxs{point}{light source} (a light source located at a certain location b
 \begin{equation} \label{eq:spectral_radience_reflected_point_light_source}
 \renewcommand*{\arraystretch}{2}
 \begin{aligned}
-\displaystyle L_{\text{o}}(\normvec{\omega}_{\text{o}}) \,=\, & \frac{1}{4}\,\frac{\anormvec{h}^4}{\normvec{\omega}_{\text{o}}\cdot\anormvec{n}}\,f(\nabla\eta^*(\vec{r}))\,R_{\normvec{n}^*\!,x}(\normvec{\omega}_{\text{o}})\,\frac{I}{d^2},
+\displaystyle L_{\text{o}}(\normvec{\omega}_{\text{o}}) \,=\, & \frac{1}{4}\,\frac{\anormvec{h}^4}{\normvec{\omega}_{\text{o}}\cdot\anormvec{n}}\,f(\nabla\eta^*(\vec{r}\,))\,R_{\normvec{n}^*\!,x}(\normvec{\omega}_{\text{o}})\,\frac{I}{d^2},
 \end{aligned}
 \end{equation}
 %
-where $\normvec{\omega}_{\text{i}}$ is identified as $\normvec{\omega}_{\text{s}}$ in order to calculate $\anormvec{h}$ and $\nabla\eta^*(\vec{r})$ in the right hand side of the equation. Note that $L_{\text{o}}(\normvec{\omega}_{\text{o}})$ in this equation only includes light from the point light source that has been reflected only once.
+where $\normvec{\omega}_{\text{i}}$ is identified as $\normvec{\omega}_{\text{s}}$ in order to calculate $\anormvec{h}$ and $\nabla\eta^*(\vec{r}\,)$ in the right hand side of the equation. Note that $L_{\text{o}}(\normvec{\omega}_{\text{o}})$ in this equation only includes light from the point light source that has been reflected only once.
 
 \section{Discussion about the illumination model}
 
@@ -1036,9 +1036,9 @@ One of the most well known and popular shading models in computer graphics is an
 
 For water surfaces, this gives rise to a specular highlight that is elliptical, or slightly egg shaped, when the sun stands high in the sky, as can be seen in \figref{fig:sunglintegg}, and pyramid shaped when the sun is close to the horizon, with the sun in the top of the pyramid, as can be seen in \figref{fig:sunglintpyramid}.
 
-By comparing the \idxs{shading}{model} derived in this appendix (\eqrefs \ref{eq:rendering_equation_simplified} and \ref{eq:spectral_radience_reflected_point_light_source}) to the Blinn--Phong shading model, it may be noticed that if the \idxs{wave}{spectra} $S$ is \idxse{circular}{symmetry}{circularly symmetric}, the factor $f(\nabla\eta^*(\vec{r}))$ (described by \eqref{eq:eta_grad_distribution_r_uniformly_distributed}) --- which is what gives the reflection of the point light source its shape --- becomes practically equivalent to the specular reflection term in the Blinn--Phong shading model except from a constant factor. This holds even though the Blinn--Phong shading model is based on experimental measurements of reflections from real surfaces and is developed mainly for solids, while the shading model presented in this appendix is specifically derived for water surfaces.
+By comparing the \idxs{shading}{model} derived in this appendix (\eqrefs \ref{eq:rendering_equation_simplified} and \ref{eq:spectral_radience_reflected_point_light_source}) to the Blinn--Phong shading model, it may be noticed that if the \idxs{wave}{spectra} $S$ is \idxse{circular}{symmetry}{circularly symmetric}, the factor $f(\nabla\eta^*(\vec{r}\,))$ (described by \eqref{eq:eta_grad_distribution_r_uniformly_distributed}) --- which is what gives the reflection of the point light source its shape --- becomes practically equivalent to the specular reflection term in the Blinn--Phong shading model except from a constant factor. This holds even though the Blinn--Phong shading model is based on experimental measurements of reflections from real surfaces and is developed mainly for solids, while the shading model presented in this appendix is specifically derived for water surfaces.
 
-For symmetric wave spectra and for almost smooth surfaces (when the diffusion in the reflection of objects becomes very small), all factors in \eqref{eq:spectral_radience_reflected_point_light_source} except from $f(\nabla\eta^*(\vec{r}))$ vary very slowly in comparison to $f(\nabla\eta^*(\vec{r}))$ unless the surface is viewed from a glancing angle, and so the shape of the specular reflection can be \approximated as just a constant times $f(\nabla\eta^*(\vec{r}))$. Hence, the result of using \eqref{eq:spectral_radience_reflected_point_light_source} becomes very similar to the result of using the Blinn--Phong shading model, with the only practical difference that the reflection of a point light source according to the shading model derived in this appendix varies in intensity depending on how steep the angle is with which the observer sees the reflection, according to the factors $\anormvec{h}^4/(\normvec{\omega}_{\text{o}}\cdot\anormvec{n})$ and $R_{\normvec{n}^*\!,x}(\normvec{\omega}_{\text{o}})$; these are not included in the specular term in the Blinn--Phong shading model.
+For symmetric wave spectra and for almost smooth surfaces (when the diffusion in the reflection of objects becomes very small), all factors in \eqref{eq:spectral_radience_reflected_point_light_source} except from $f(\nabla\eta^*(\vec{r}\,))$ vary very slowly in comparison to $f(\nabla\eta^*(\vec{r}\,))$ unless the surface is viewed from a glancing angle, and so the shape of the specular reflection can be \approximated as just a constant times $f(\nabla\eta^*(\vec{r}\,))$. Hence, the result of using \eqref{eq:spectral_radience_reflected_point_light_source} becomes very similar to the result of using the Blinn--Phong shading model, with the only practical difference that the reflection of a point light source according to the shading model derived in this appendix varies in intensity depending on how steep the angle is with which the observer sees the reflection, according to the factors $\anormvec{h}^4/(\normvec{\omega}_{\text{o}}\cdot\anormvec{n})$ and $R_{\normvec{n}^*\!,x}(\normvec{\omega}_{\text{o}})$; these are not included in the specular term in the Blinn--Phong shading model.
 
 However, when the point light source is located low and the reflection comes relatively close to the horizon in comparison to the vertical spread of the reflection, the factor $\anormvec{h}^4/(\normvec{\omega}_{\text{o}}\cdot\anormvec{n})$ will vary more noticeably.
 
