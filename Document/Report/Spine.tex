@@ -1,0 +1,168 @@
+\documentclass[]{report}
+\input{preamble}
+\usepackage[landscape]{geometry}
+\usepackage{graphicx,calc}
+
+\newcommand{\getscale}[1]{%
+  {#1*\ratio{\fontcharht\font`l}{\fontcharht\font`l+\fontchardp\font`p}}%
+}
+
+\newcommand{\bigfont}[2]{% #1 is the global size, #2 is the text
+  \resizebox{!}{\getscale{#1}}{\rule{0pt}{\fontcharht\font`l}#2}%
+}
+
+\newcommand{\fontbydim}[1]{%
+  \setlength{\dimen0}{10pt*\ratio{#1}{\fontcharht\font`l+\fontchardp\font`p}}%
+  \fontsize{\dimen0}{1.2\dimen0}\selectfont
+}
+
+\begin{document}
+
+\pagestyle{empty} % Remove page numbering
+
+\comment
+{
+Normal
+
+\vskip 2ex
+
+\noindent % Prevent indentation at first row in paragraph
+\makebox[0pt][l]{Kristofer Krus}%
+\makebox[\textwidth][c]{Wave Model and Watercraft Model for Simulation of Sea State}%
+\makebox[0pt][r]{Linköping 2014}
+
+\vskip 2ex
+
+\noindent % Prevent indentation at first row in paragraph
+\makebox[0pt][l]{Kristofer Krus}%
+\makebox[\textwidth][c]{Wave Model and Watercraft Model for Simulation of Sea State}%
+}
+
+%\comment
+{
+\large
+
+\vskip 2ex
+
+large
+
+\vskip 2ex
+
+\noindent % Prevent indentation at first row in paragraph
+\makebox[0pt][l]{Kristofer Krus}%
+\makebox[\textwidth][c]{Wave Model and Watercraft Model for Simulation of Sea State}%
+\makebox[0pt][r]{Linköping 2014}
+
+\vskip 2ex
+
+\noindent % Prevent indentation at first row in paragraph
+\makebox[0pt][l]{Kristofer Krus}%
+\makebox[\textwidth][c]{Wave Model and Watercraft Model for Simulation of Sea State}%
+}
+
+%\comment
+{
+\Large
+
+\vskip 2ex
+
+Large
+
+\vskip 2ex
+
+\noindent % Prevent indentation at first row in paragraph
+\makebox[0pt][l]{Kristofer Krus}%
+\makebox[\textwidth][r]{Wave Model and Watercraft Model for Simulation of Sea State}%
+
+\vskip 2ex
+
+\noindent % Prevent indentation at first row in paragraph
+\makebox[\textwidth][l]{Wave Model and Watercraft Model for Simulation of Sea State}%
+\makebox[0pt][r]{Kristofer Krus}%
+
+%\makeatletter\f@size\makeatother
+}
+
+%\comment
+{
+\fontsize{16.1}{1.2em}\selectfont
+
+\vskip 2ex
+
+16.1
+
+\vskip 2ex
+
+\noindent % Prevent indentation at first row in paragraph
+\makebox[0pt][l]{Kristofer Krus}%
+\makebox[\textwidth][r]{Wave Model and Watercraft Model for Simulation of Sea State}%
+
+\vskip 2ex
+
+\noindent % Prevent indentation at first row in paragraph
+\makebox[\textwidth][l]{Wave Model and Watercraft Model for Simulation of Sea State}%
+\makebox[0pt][r]{Kristofer Krus}%
+
+%\makeatletter\f@size\makeatother
+}
+
+%\comment
+{
+\LARGE
+
+\vskip 2ex
+
+\textbackslash qquad and \textbackslash resizebox
+
+\vskip 2ex
+
+\noindent\resizebox{\textwidth}{!}{Kristofer Krus \qquad Wave Model and Watercraft Model for Simulation of Sea State}
+
+\vskip 2ex
+
+\noindent\resizebox{\textwidth}{!}{Wave Model and Watercraft Model for Simulation of Sea State \qquad Kristofer Krus}
+}
+
+%\comment
+{
+\LARGE
+
+\vskip 2ex
+
+LARGE
+
+\vskip 2ex
+
+\noindent % Prevent indentation at first row in paragraph
+\makebox[0pt][l]{Kristofer Krus}%
+\makebox[\textwidth][r]{Wave Model and Watercraft Model for Simulation of Sea State}%
+
+\vskip 2ex
+
+\noindent % Prevent indentation at first row in paragraph
+\makebox[\textwidth][l]{Wave Model and Watercraft Model for Simulation of Sea State}%
+\makebox[0pt][r]{Kristofer Krus}%
+
+%\makeatletter\f@size\makeatother
+}
+
+\comment
+{
+\LARGE
+
+\vskip 2ex
+
+\noindent % Prevent indentation at first row in paragraph
+\makebox[0pt][l]{\bigfont{0.5cm}{Kristofer Krus}}%
+\makebox[\textwidth][r]{\bigfont{0.5cm}{Wave Model and Watercraft Model for Simulation of Sea State}}%
+
+\vskip 2ex
+
+\noindent % Prevent indentation at first row in paragraph
+\makebox[\textwidth][l]{\bigfont{0.5cm}{Wave Model and Watercraft Model for Simulation of Sea State}}%
+\makebox[0pt][r]{\bigfont{0.5cm}{Kristofer Krus}}%
+
+%\makeatletter\f@size\makeatother
+}
+
+\end{document}
